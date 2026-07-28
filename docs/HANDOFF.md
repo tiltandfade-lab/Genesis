@@ -1,10 +1,37 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-07-27
+updated: 2026-07-28
 ---
 
 # Genesis — Session Hand-off
+
+## Latest (2026-07-28, ASSETFORGE REAL-ASSET QUALIFICATION) [Codex]
+
+The twelve Assetforge processes now have a retained production-shaped qualification harness in
+`build/qualify-assetforge-real.py`. It uses tracked, hydrated Genesis assets rather than treating
+the synthetic suite board as production proof, records exact SHA-256 source evidence, and runs
+twelve candidates plus a real changed-image negative control.
+
+- Final qualification: 13/13 expectations met. All twelve real candidates pass their mechanical
+  gates; the changed floor state is correctly rejected by the zero-difference regression gate.
+- Individual inspection found and fixed three proof-quality issues during the run: nominal grid
+  crops split the lower-right crack decal, nearby-fragment tolerance retained foreign chest/barrel
+  sheet debris, and the roof repeat used an obvious diagonal variant cadence. The repaired decal
+  uses anchor-assigned alpha groups with complete source-alpha accounting; prop cleanup is
+  zero-gap and audited; roof selection is deterministic, coverage-preserving, and adjacency-aware.
+- The individual proofs, manifests, outputs, receipts, evidence ledger, and navigation-only board
+  are retained under `dev/model-qa/assetforge-real/`. The hash-bound individual inspection is
+  `individual-visual-review.json`.
+- Synthetic regressions remain green: non-emote 11/11 positive + 11/11 negative controls, and
+  sprite-emote 10/10 outcomes plus all safety assertions. The rear-hand visual-failure fixture
+  still rejects.
+- PC emote v003 is mechanically 11/11. The seated rest and true rear view are present; individual
+  inspection found no obvious malformed rear hand or broken sword grip. It remains visual
+  `REVIEW_REQUIRED`, not admitted.
+
+**Next honest promotion:** Adam reviews the individual process proofs—not the navigation board—and
+selects any candidates worth a runtime-specific admission design. Material maps remain proposals.
 
 ## Latest (2026-07-27, ASSETFORGE TWELVE-FAMILY V1) [Codex]
 

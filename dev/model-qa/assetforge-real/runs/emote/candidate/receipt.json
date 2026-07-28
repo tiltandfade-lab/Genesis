@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 1,
+  "family": "sprite-emote",
+  "algorithmVersion": "sprite-emote-v1",
+  "jobId": "emote-spr-pc-human-fighter-male-v003",
+  "spriteSlug": "spr-pc-human-fighter-male",
+  "subjectKind": "pc",
+  "inputs": {
+    "job": "dev/model-qa/emote-factory/jobs/emote-spr-pc-human-fighter-male-v003.job.json",
+    "jobSha256": "a5ef14661e0329fdfaa590751b3f80df7edc2a972667431a56d689e6c2128e42",
+    "source": "assets/sprites/spr-pc-human-fighter-male.png",
+    "sourceSha256": "d307d7ac9183075b11a7cc922e0bb1dcc71041397727a43c1fac7abc883fa7a8",
+    "sheet": "dev/model-qa/emote-factory/returns/emote-spr-pc-human-fighter-male-v003-imagegen.png",
+    "sheetSha256": "46720346c7dd4e0fc5741b4126e412baac4f38687e19cefb15f69f8f61c3845b"
+  },
+  "generation": {
+    "provider": "OpenAI built-in image_gen edit",
+    "model": "unreported-by-built-in-tool",
+    "generationCallId": "call_2ycl5RpOMAsjyb2oeOgoXSzv",
+    "seed": null,
+    "promptPath": "dev/model-qa/emote-factory/jobs/emote-spr-pc-human-fighter-male-v003.imagegen-call.prompt.md"
+  },
+  "format": {
+    "requestedCanvas": [
+      1152,
+      768
+    ],
+    "actualCanvas": [
+      1536,
+      1024
+    ],
+    "requestedCellAspect": "1:1",
+    "requestedCellDimensions": [
+      384,
+      384
+    ],
+    "actualDerivedCellDimensions": [
+      512,
+      512
+    ],
+    "cellAspectRelativeError": 0.0,
+    "stateCountExpected": 6,
+    "stateCountObserved": 6
+  },
+  "crossStateMetrics": {
+    "medianFootY": 0.89726,
+    "maximumBaselineDelta": 0.045988,
+    "medianHeightOccupancy": 0.847656,
+    "maximumRelativeHeightDelta": 0.082949,
+    "licensedCompressionRatios": [
+      0.755761
+    ]
+  },
+  "states": {
+    "neutral": {
+      "contentBounds": [
+        0.236328,
+        0.066406,
+        0.900391,
+        0.919922
+      ],
+      "footX": 0.815068,
+      "footY": 0.919765,
+      "widthOccupancy": 0.664062,
+      "heightOccupancy": 0.853516,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 0.984974,
+      "heightPolicy": "standard",
+      "path": "dev/model-qa/assetforge-real/runs/emote/candidate/states/spr-pc-human-fighter-male--neutral.png",
+      "sha256": "b313739360b538bc5316f93e28d836c8df0c4d153f79341dfd0902f1151fc276"
+    },
+    "angry": {
+      "contentBounds": [
+        0.119141,
+        0.072266,
+        0.84375,
+        0.919922
+      ],
+      "footX": 0.723092,
+      "footY": 0.919765,
+      "widthOccupancy": 0.724609,
+      "heightOccupancy": 0.847656,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 0.9813,
+      "heightPolicy": "standard",
+      "path": "dev/model-qa/assetforge-real/runs/emote/candidate/states/spr-pc-human-fighter-male--angry.png",
+      "sha256": "b343eaf6092a09b90bdbf8d5fcdbff7e5eb459f375c117e345dac813bf117cdf"
+    },
+    "happy": {
+      "contentBounds": [
+        0.101562,
+        0.066406,
+        0.761719,
+        0.919922
+      ],
+      "footX": 0.667319,
+      "footY": 0.919765,
+      "widthOccupancy": 0.660156,
+      "heightOccupancy": 0.853516,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 0.984041,
+      "heightPolicy": "standard",
+      "path": "dev/model-qa/assetforge-real/runs/emote/candidate/states/spr-pc-human-fighter-male--happy.png",
+      "sha256": "0077c865028499af76ce002a43fbf182701f10014e44fefcad52aea7ac31904a"
+    },
+    "near-death": {
+      "contentBounds": [
+        0.207031,
+        0.085938,
+        0.857422,
+        0.863281
+      ],
+      "footX": 0.681018,
+      "footY": 0.863014,
+      "widthOccupancy": 0.650391,
+      "heightOccupancy": 0.777344,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 0.979976,
+      "heightPolicy": "standard",
+      "path": "dev/model-qa/assetforge-real/runs/emote/candidate/states/spr-pc-human-fighter-male--near-death.png",
+      "sha256": "32e4953cc93cf4c8c5fdb05c5621c9a4ab2a1b46a060c3fb7366376a113f3608"
+    },
+    "resting": {
+      "contentBounds": [
+        0.064453,
+        0.210938,
+        0.820312,
+        0.851562
+      ],
+      "footX": 0.444227,
+      "footY": 0.851272,
+      "widthOccupancy": 0.755859,
+      "heightOccupancy": 0.640625,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 0.981996,
+      "heightPolicy": "licensed-compression",
+      "path": "dev/model-qa/assetforge-real/runs/emote/candidate/states/spr-pc-human-fighter-male--resting.png",
+      "sha256": "5f16b933522531c5a8e17ae4ac6a48ce0890e74748bcbde473279c141a207219"
+    },
+    "rear-view": {
+      "contentBounds": [
+        0.123047,
+        0.037109,
+        0.701172,
+        0.875
+      ],
+      "footX": 0.413123,
+      "footY": 0.874755,
+      "widthOccupancy": 0.578125,
+      "heightOccupancy": 0.837891,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 0.989871,
+      "heightPolicy": "standard",
+      "path": "dev/model-qa/assetforge-real/runs/emote/candidate/states/spr-pc-human-fighter-male--rear-view.png",
+      "sha256": "0f92ed227414083fce5e7bfc79f918332ef627205c97c883d4c24dba60129f6a"
+    }
+  },
+  "gates": {
+    "sourceHashMatchesJob": true,
+    "sheetDimensionsDivisibleByGrid": true,
+    "cellAspectWithinTolerance": true,
+    "allRequiredStatesPopulated": true,
+    "cellBordersClear": true,
+    "magentaEdgeResidueWithinLimit": true,
+    "sharedBaselineWithinTolerance": true,
+    "relativeHeightWithinTolerance": true,
+    "licensedCompressionWithinEnvelope": true,
+    "sourcePaletteCoverageWithinBudget": true,
+    "atlasDimensionsMatchSheet": true
+  },
+  "mechanicalIdentity": "PASS",
+  "visualIdentity": "REVIEW_REQUIRED",
+  "tasteStatus": "REVIEW_REQUIRED",
+  "runtimeAdmission": "CANDIDATE",
+  "technicalStatus": "PASS",
+  "failureReasons": [],
+  "outputs": {
+    "atlas": "dev/model-qa/assetforge-real/runs/emote/candidate/atlas.png",
+    "atlasSha256": "ffba7c9fdbe0e64485cc8d167df307a3792d309e020059b74bfdfc5fb64ea6c4",
+    "metadata": "dev/model-qa/assetforge-real/runs/emote/candidate/atlas.json",
+    "metadataSha256": "87601e2fdf6d5a4d70ce312d8894a0dbd0ee957e2a9cbc10afed696440d7e2c8",
+    "proofBoard": "dev/model-qa/assetforge-real/runs/emote/candidate/proof-board.png",
+    "proofBoardSha256": "c42a1f23bd26860713bd1734000973dbccdf60331d6eee0784fb8fcea21d9cf1",
+    "visualReview": "dev/model-qa/assetforge-real/runs/emote/candidate/visual-review.json",
+    "visualReviewSha256": "51d924adf8d039e0e63c4670c6ed905356143f99505e5a7fcda5c45ac7e90224"
+  }
+}

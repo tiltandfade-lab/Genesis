@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "family": "boundary-autotile",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-real/manifests/boundary-real.json",
+  "manifestSha256": "6474d00c8b15fe6910b7068fac5071bf3a6c9515a202077f55f7bf2c74126601",
+  "technicalStatus": "PASS",
+  "gates": {
+    "sourceHashMatches": true,
+    "sourceWithinSeamBudget": true,
+    "compiledSourceSeamExact": true,
+    "all256RawMasksResolve": true,
+    "exactly47CanonicalShapes": true,
+    "diagonalSanitizationLegal": true,
+    "lookupDeterministic": true,
+    "allCanonicalShapesPacked": true,
+    "allTortureMapsRendered": true,
+    "neighborClosureExhaustive": true,
+    "tortureMapTopologyPreserved": true,
+    "seededFieldContainsEveryCanonicalShape": true
+  },
+  "outputs": {
+    "atlas": "dev/model-qa/assetforge-real/runs/boundary/candidate/atlas.png",
+    "metadata": "dev/model-qa/assetforge-real/runs/boundary/candidate/atlas.json",
+    "proofBoard": "dev/model-qa/assetforge-real/runs/boundary/candidate/proof-board.png"
+  },
+  "details": {
+    "canonicalShapeCount": 47,
+    "rawMaskCount": 256,
+    "sourceEdgeDelta": 7.147135416666667,
+    "compiledSourceEdgeDelta": 0.0,
+    "seamLockApplied": true,
+    "compatibleNeighborPairsChecked": 2312,
+    "seededFieldShapeCoverage": 47
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

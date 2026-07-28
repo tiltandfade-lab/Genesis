@@ -450,6 +450,11 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
    non-emote suite passes 11/11 positive controls and rejects 11/11 preserved red-first controls;
    the emote suite passes 10/10 fixture outcomes plus its live-output guard, including the
    rear-view hand failure.
-7. ☐ **Assetforge first production-material taste gate** — compile one admitted material and one
-   admitted component sheet through boundary + repeat, review the resulting topology/cadence
-   boards with Adam, and only then design runtime-registry admission.
+7. ☑ **Assetforge real-asset technical qualification** — all twelve processes ran against named,
+   hashed, decodable Genesis assets; 12/12 candidates passed and the deliberately changed real
+   regression control rejected. Individual inspection repaired clipped decal branches, foreign
+   prop-sheet fragments, and roof-repeat cadence before closure.
+8. ☐ **Assetforge art-admission gate** — Adam reviews the individual retained process proofs (the
+   aggregate board is navigation only), selects any candidates worth keeping, and only then do we
+   design family-specific runtime-registry admission. Emote identity and material-map authorship
+   remain explicitly review-required.

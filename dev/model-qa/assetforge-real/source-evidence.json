@@ -1,0 +1,301 @@
+{
+  "schemaVersion": 1,
+  "leafSources": [
+    {
+      "id": "fighter-sprite",
+      "path": "assets/sprites/spr-pc-human-fighter-male.png",
+      "sourceKind": "tracked-live-asset",
+      "tracked": true,
+      "sha256": "d307d7ac9183075b11a7cc922e0bb1dcc71041397727a43c1fac7abc883fa7a8",
+      "byteSize": 37995,
+      "decodable": true,
+      "mode": "RGBA",
+      "dimensions": [
+        174,
+        222
+      ]
+    },
+    {
+      "id": "fantasy-floor",
+      "path": "assets/textures/fantasy-floor-1.png",
+      "sourceKind": "tracked-live-asset",
+      "tracked": true,
+      "sha256": "f427c445e6c7b8b1c5b7eccc2181d29d81d9619ff2a1a60e8a7093b62b30502b",
+      "byteSize": 118075,
+      "decodable": true,
+      "mode": "RGB",
+      "dimensions": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "scene-banner",
+      "path": "assets/plaques/scene-banner.png",
+      "sourceKind": "tracked-live-asset",
+      "tracked": true,
+      "sha256": "31c60f115a9d2cb1c60ecf9dd97dbbaed8ed681ab6d42751de5cdfd9c6861209",
+      "byteSize": 1158398,
+      "decodable": true,
+      "mode": "RGBA",
+      "dimensions": [
+        2043,
+        386
+      ]
+    },
+    {
+      "id": "crack-decal-source-master",
+      "path": "assets/decals/source/shared-crack-decal-set-3.png",
+      "sourceKind": "tracked-live-source",
+      "tracked": true,
+      "sha256": "2b2862765a917fc6a965be5b3fae3d1068cf77a4f8e5d1349003637a6fcf683d",
+      "byteSize": 1458217,
+      "decodable": true,
+      "mode": "RGB",
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "id": "crack-decal-rgba-sheet",
+      "path": "assets/decals/shared/shared-crack-decal-set-3.png",
+      "sourceKind": "tracked-live-asset",
+      "tracked": true,
+      "sha256": "9e5694b8aa094f1e0f5e08046efcd320363294cbcbfceac0c66d556128075f52",
+      "byteSize": 268780,
+      "decodable": true,
+      "mode": "RGBA",
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "id": "slate-component-sheet",
+      "path": "dev/material-lane/source-sprites/b01-autonomous-v001/roof-slate-components-alpha-v001.png",
+      "sourceKind": "tracked-production-source",
+      "tracked": true,
+      "sha256": "c18f2ba5ebc2f054d068b86e00cae7a1c7ca380c56b974b2e3cc91e196d81f85",
+      "byteSize": 743850,
+      "decodable": true,
+      "mode": "RGBA",
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "id": "condition-base",
+      "path": "dev/material-workbench-proof/generated/fantasy-floor-albedo.png",
+      "sourceKind": "tracked-derived-from-live",
+      "tracked": true,
+      "sha256": "f427c445e6c7b8b1c5b7eccc2181d29d81d9619ff2a1a60e8a7093b62b30502b",
+      "byteSize": 118075,
+      "decodable": true,
+      "mode": "RGB",
+      "dimensions": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "condition-aged",
+      "path": "dev/material-workbench-proof/generated/fantasy-floor-albedo-aged.png",
+      "sourceKind": "tracked-derived-from-live",
+      "tracked": true,
+      "sha256": "364e11cc70394942ee0d9d966678124a44cf63a848125827c1beea89fc290d4a",
+      "byteSize": 119288,
+      "decodable": true,
+      "mode": "RGB",
+      "dimensions": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "condition-wet-mask",
+      "path": "dev/material-workbench-proof/generated/fantasy-floor-wetness-mask.png",
+      "sourceKind": "tracked-derived-from-live",
+      "tracked": true,
+      "sha256": "3a8461c96b37cd36650b35e8a855aa937158dda9c095c88711097846f8265f2c",
+      "byteSize": 25539,
+      "decodable": true,
+      "mode": "L",
+      "dimensions": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "fantasy-realm-palette",
+      "path": "dev/model-qa/realm-palettes/fantasy.json",
+      "sourceKind": "tracked-generated-configuration",
+      "tracked": true,
+      "sha256": "32bcfea5a1b08eefe31963e54b49908270b49f8fb58b6264ed6c79b36734ed2d",
+      "byteSize": 1893,
+      "decodable": true
+    },
+    {
+      "id": "emote-job",
+      "path": "dev/model-qa/emote-factory/jobs/emote-spr-pc-human-fighter-male-v003.job.json",
+      "sourceKind": "tracked-generation-contract",
+      "tracked": true,
+      "sha256": "a5ef14661e0329fdfaa590751b3f80df7edc2a972667431a56d689e6c2128e42",
+      "byteSize": 5458,
+      "decodable": true
+    },
+    {
+      "id": "emote-return-sheet",
+      "path": "dev/model-qa/emote-factory/returns/emote-spr-pc-human-fighter-male-v003-imagegen.png",
+      "sourceKind": "tracked-imagegen-return",
+      "tracked": true,
+      "sha256": "46720346c7dd4e0fc5741b4126e412baac4f38687e19cefb15f69f8f61c3845b",
+      "byteSize": 1948119,
+      "decodable": true,
+      "mode": "RGB",
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "id": "prop-chest",
+      "path": "assets/dressing/fantasy-obj-chest-closed.png",
+      "sourceKind": "tracked-live-asset",
+      "tracked": true,
+      "sha256": "9413fbeaf4b54b8e34025561d37b85f3c5f61a84de1a570c3b4ae6e6e9889754",
+      "byteSize": 100074,
+      "decodable": true,
+      "mode": "RGBA",
+      "dimensions": [
+        309,
+        207
+      ]
+    },
+    {
+      "id": "prop-shrine",
+      "path": "assets/dressing/fantasy-obj-shrine-lit.png",
+      "sourceKind": "tracked-live-asset",
+      "tracked": true,
+      "sha256": "52c8fd2e3b31f6d6239efd1716192b967d457c6cdf5d0d477e659ebff18989c0",
+      "byteSize": 114385,
+      "decodable": true,
+      "mode": "RGBA",
+      "dimensions": [
+        309,
+        208
+      ]
+    },
+    {
+      "id": "prop-barrel",
+      "path": "assets/dressing/fantasy-clutter-emptybarrel.png",
+      "sourceKind": "tracked-live-asset",
+      "tracked": true,
+      "sha256": "c90badf8ad70f66c6e2b71353f5b6db870281b42a96e183cbe645a5c8be486b8",
+      "byteSize": 142516,
+      "decodable": true,
+      "mode": "RGBA",
+      "dimensions": [
+        388,
+        260
+      ]
+    }
+  ],
+  "qualificationStaging": [
+    {
+      "id": "prop-kit-staging-sheet",
+      "path": "dev/model-qa/assetforge-real/sources/prop-kit-real-sheet.png",
+      "sourceKind": "qualification-composite",
+      "tracked": false,
+      "sha256": "6b7d69d5e9eef5d49bb3270c5ff299ebcd145da5f86a691838b3eef6c3d3d23f",
+      "byteSize": 353005,
+      "decodable": true,
+      "mode": "RGBA",
+      "dimensions": [
+        1080,
+        300
+      ],
+      "lineage": [
+        {
+          "id": "chest",
+          "source": "assets/dressing/fantasy-obj-chest-closed.png",
+          "sourceSha256": "9413fbeaf4b54b8e34025561d37b85f3c5f61a84de1a570c3b4ae6e6e9889754",
+          "sourceCrop": [
+            18,
+            64,
+            223,
+            207
+          ],
+          "stagedRect": [
+            20,
+            57,
+            320,
+            223
+          ]
+        },
+        {
+          "id": "shrine",
+          "source": "assets/dressing/fantasy-obj-shrine-lit.png",
+          "sourceSha256": "52c8fd2e3b31f6d6239efd1716192b967d457c6cdf5d0d477e659ebff18989c0",
+          "sourceCrop": [
+            41,
+            0,
+            237,
+            208
+          ],
+          "stagedRect": [
+            417,
+            20,
+            245,
+            260
+          ]
+        },
+        {
+          "id": "barrel",
+          "source": "assets/dressing/fantasy-clutter-emptybarrel.png",
+          "sourceSha256": "c90badf8ad70f66c6e2b71353f5b6db870281b42a96e183cbe645a5c8be486b8",
+          "sourceCrop": [
+            83,
+            0,
+            388,
+            260
+          ],
+          "stagedRect": [
+            747,
+            20,
+            305,
+            260
+          ]
+        }
+      ]
+    },
+    {
+      "id": "condition-aged-wet",
+      "path": "dev/model-qa/assetforge-real/sources/fantasy-floor-aged-wet.png",
+      "sourceKind": "qualification-derived-from-tracked-live",
+      "tracked": false,
+      "sha256": "ce012d5ddf987c779da311090c2bb63332b8f631ce3a377ddb0cb266b4194a46",
+      "byteSize": 121089,
+      "decodable": true,
+      "mode": "RGB",
+      "dimensions": [
+        256,
+        256
+      ],
+      "lineage": {
+        "operation": "material-workbench-age-plus-wetness",
+        "ageAmount": 0.85,
+        "wetnessAmount": 0.65,
+        "wetDarkening": 0.28,
+        "inputs": {
+          "dev/material-workbench-proof/generated/fantasy-floor-albedo.png": "f427c445e6c7b8b1c5b7eccc2181d29d81d9619ff2a1a60e8a7093b62b30502b",
+          "dev/material-workbench-proof/generated/fantasy-floor-albedo-aged.png": "364e11cc70394942ee0d9d966678124a44cf63a848125827c1beea89fc290d4a",
+          "dev/material-workbench-proof/generated/fantasy-floor-wetness-mask.png": "3a8461c96b37cd36650b35e8a855aa937158dda9c095c88711097846f8265f2c"
+        }
+      }
+    }
+  ],
+  "allLeafSourcesTracked": true,
+  "allImagesDecodable": true
+}

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "family": "sprite-citizenship",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-real/manifests/citizenship-real.json",
+  "manifestSha256": "9b8946dcf09ed9e6cd64276eba48edd594c220d4eeded322fbb8968500484827",
+  "technicalStatus": "PASS",
+  "gates": {
+    "sourceHashMatches": true,
+    "opaqueContentPresent": true,
+    "sourceHasSafeBorder": true,
+    "worldHeightIsExplicit": true,
+    "footAnchorNormalized": true,
+    "thumbnailGenerated": true
+  },
+  "outputs": {
+    "sprite": "dev/model-qa/assetforge-real/runs/citizenship/candidate/sprite.png",
+    "metadata": "dev/model-qa/assetforge-real/runs/citizenship/candidate/citizenship.json",
+    "proofBoard": "dev/model-qa/assetforge-real/runs/citizenship/candidate/proof-board.png"
+  },
+  "details": {
+    "chroma": {
+      "requested": "none",
+      "detected": null,
+      "dominantBorderRgb": [
+        193,
+        31,
+        181
+      ],
+      "keyRgb": null,
+      "tolerance": 12,
+      "softness": 0,
+      "keyedPixelCount": 0
+    }
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

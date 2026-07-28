@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "qualification": {
+    "kind": "real-repository-asset",
+    "admission": "candidate-only"
+  },
+  "family": "atlas-optimizer",
+  "paddingPx": 3,
+  "maxWidthPx": 1024,
+  "maxBytes": 4000000,
+  "assets": [
+    {
+      "id": "chest",
+      "path": "dev/model-qa/assetforge-real/runs/prop-kit/candidate/chest.png"
+    },
+    {
+      "id": "shrine",
+      "path": "dev/model-qa/assetforge-real/runs/prop-kit/candidate/shrine.png"
+    },
+    {
+      "id": "barrel",
+      "path": "dev/model-qa/assetforge-real/runs/prop-kit/candidate/barrel.png"
+    }
+  ],
+  "lineage": "prop-kit candidate outputs compiled from the tracked live assets"
+}

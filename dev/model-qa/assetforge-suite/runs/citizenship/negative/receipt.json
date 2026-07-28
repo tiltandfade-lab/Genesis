@@ -18,6 +18,20 @@
     "metadata": "dev/model-qa/assetforge-suite/runs/citizenship/negative/citizenship.json",
     "proofBoard": "dev/model-qa/assetforge-suite/runs/citizenship/negative/proof-board.png"
   },
-  "details": {},
+  "details": {
+    "chroma": {
+      "requested": "auto",
+      "detected": null,
+      "dominantBorderRgb": [
+        0,
+        0,
+        0
+      ],
+      "keyRgb": null,
+      "tolerance": 12,
+      "softness": 0,
+      "keyedPixelCount": 0
+    }
+  },
   "runtimeAdmission": "CANDIDATE"
 }

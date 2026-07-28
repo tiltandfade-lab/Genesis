@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "family": "trim-nine-slice",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-real/manifests/trim-real.json",
+  "manifestSha256": "1c135b07f9c55773b8ef98180a3ed5160f430ef17bf240c189ba6241d7e83a61",
+  "technicalStatus": "PASS",
+  "gates": {
+    "sourceHashMatches": true,
+    "insetsValid": true,
+    "outputInsetsValid": true,
+    "allTargetsLegal": true,
+    "capsPreservedExactly": true,
+    "everyTargetDimensionProved": true
+  },
+  "outputs": {
+    "proofBoard": "dev/model-qa/assetforge-real/runs/trim/candidate/proof-board.png"
+  },
+  "details": {
+    "targets": [
+      [
+        260,
+        40
+      ],
+      [
+        500,
+        40
+      ],
+      [
+        900,
+        40
+      ]
+    ],
+    "sourceInsets": [
+      320,
+      0,
+      320,
+      0
+    ],
+    "outputInsets": [
+      46,
+      0,
+      46,
+      0
+    ],
+    "errors": [],
+    "chroma": {
+      "requested": "#FF00FF",
+      "detected": null,
+      "dominantBorderRgb": [
+        248,
+        3,
+        249
+      ],
+      "keyRgb": [
+        255,
+        0,
+        255
+      ],
+      "tolerance": 55,
+      "softness": 0,
+      "keyedPixelCount": 285617
+    }
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

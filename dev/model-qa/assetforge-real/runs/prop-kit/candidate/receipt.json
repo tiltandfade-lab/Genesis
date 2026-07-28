@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "family": "prop-kit",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-real/manifests/prop-kit-real.json",
+  "manifestSha256": "2fd96ea2b5d328191c6a9b0904ca294be96043955e980ff246317c2f714ee594",
+  "technicalStatus": "PASS",
+  "gates": {
+    "sourceHashMatches": true,
+    "componentCountMatches": true,
+    "idsUnique": true,
+    "allComponentsHaveAlpha": true,
+    "allAnchorsGrounded": true,
+    "atlasContainsEveryId": true,
+    "componentsClearDeclaredCells": true,
+    "detachedFragmentPolicySatisfied": true
+  },
+  "outputs": {
+    "atlas": "dev/model-qa/assetforge-real/runs/prop-kit/candidate/atlas.png",
+    "metadata": "dev/model-qa/assetforge-real/runs/prop-kit/candidate/kit.json",
+    "proofBoard": "dev/model-qa/assetforge-real/runs/prop-kit/candidate/proof-board.png"
+  },
+  "details": {
+    "componentCount": 3,
+    "expectedCount": 3,
+    "chroma": {
+      "requested": "none",
+      "detected": null,
+      "dominantBorderRgb": [
+        0,
+        0,
+        0
+      ],
+      "keyRgb": null,
+      "tolerance": 12,
+      "softness": 0,
+      "keyedPixelCount": 0
+    },
+    "extraction": {
+      "mode": "declared-grid",
+      "grid": [
+        3,
+        1
+      ],
+      "gridCuts": {
+        "x": null,
+        "y": null
+      },
+      "declaredCellCount": 3,
+      "emptyCellIndexes": []
+    },
+    "fragmentAudits": {
+      "chest": {
+        "componentCountBefore": 15,
+        "componentCountKept": 15,
+        "componentCountPruned": 0,
+        "prunedAlphaPixels": 0,
+        "prunedAlphaRatio": 0.0,
+        "primaryAreaPixels": 60433,
+        "mergeDistancePx": 0.0
+      },
+      "shrine": {
+        "componentCountBefore": 15,
+        "componentCountKept": 9,
+        "componentCountPruned": 6,
+        "prunedAlphaPixels": 7018,
+        "prunedAlphaRatio": 0.15843059349391606,
+        "primaryAreaPixels": 37271,
+        "mergeDistancePx": 0.0
+      },
+      "barrel": {
+        "componentCountBefore": 9,
+        "componentCountKept": 3,
+        "componentCountPruned": 6,
+        "prunedAlphaPixels": 1906,
+        "prunedAlphaRatio": 0.0609744393614639,
+        "primaryAreaPixels": 29351,
+        "mergeDistancePx": 0.0
+      }
+    }
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

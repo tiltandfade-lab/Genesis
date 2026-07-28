@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "reviewKind": "individual-real-asset-proof-inspection",
+  "reviewedOn": "2026-07-28",
+  "reviewer": "Codex",
+  "technicalQualification": "PASS",
+  "artAdmission": "REVIEW_REQUIRED",
+  "claimBoundary": "Each listed proof board was opened individually at original detail. This review records visible defects and limitations but does not substitute for Adam's taste approval or runtime admission.",
+  "boardsInspected": 13,
+  "reviews": [
+    {
+      "family": "emote",
+      "run": "candidate",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/emote/candidate/proof-board.png",
+      "proofSha256": "c42a1f23bd26860713bd1734000973dbccdf60331d6eee0784fb8fcea21d9cf1",
+      "visualStatus": "REVIEW_REQUIRED",
+      "finding": "All six states read at proof and play scale. Resting is clearly seated; rear view is a true back construction. The rear gauntlet and sword grip show no obvious malformed hand or broken contact in this return. Identity and taste still require Adam."
+    },
+    {
+      "family": "boundary",
+      "run": "candidate",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/boundary/candidate/proof-board.png",
+      "proofSha256": "8815dcf3fc6b05832d839e7a17b42632e2049862cc09103b87287a2f09da5248",
+      "visualStatus": "PASS",
+      "finding": "The material remains coherent across island, hole, donut, L, mirrored L, neck, stair, diagonal, snake, and seeded-field topology proofs; no clipped transition is visible."
+    },
+    {
+      "family": "repeat",
+      "run": "candidate",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/repeat/candidate/proof-board.png",
+      "proofSha256": "3347c33b5ed2892d7b82b57f9956cfdb8f735099cc97ab663a6df316d7157b98",
+      "visualStatus": "PASS",
+      "finding": "The slate courses remain aligned and seamless in the 4x4 torus. Adjacency-aware deterministic selection removes the earlier obvious six-variant diagonal cadence while preserving all six source variants."
+    },
+    {
+      "family": "prop-kit",
+      "run": "candidate",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/prop-kit/candidate/proof-board.png",
+      "proofSha256": "67551a4449beed65e33d00f5ca833191bedb752d7939d58c391cf93baa752287",
+      "visualStatus": "PASS",
+      "finding": "Chest, shrine, and barrel are isolated and grounded. Foreign chest/barrel fragments present in the real source exports are absent after audited zero-gap cleanup."
+    },
+    {
+      "family": "condition",
+      "run": "candidate",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/condition/candidate/proof-board.png",
+      "proofSha256": "0fec6aadf7ffd94ecac7f531ac922310849e09637224eaa8870a465156d6d24a",
+      "visualStatus": "PASS_WITH_LIMITATION",
+      "finding": "Source, aged, and aged-wet states remain registered and materially coherent. The state strength is intentionally subtle; whether it is strong enough for gameplay remains a taste/readability decision."
+    },
+    {
+      "family": "palette",
+      "run": "candidate",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/palette/candidate/proof-board.png",
+      "proofSha256": "e25340c23d1610c020685803f0925b892aa8eaf90ae83c673d5f68cbb6a46d6e",
+      "visualStatus": "PASS_WITH_LIMITATION",
+      "finding": "The harmonized fighter preserves silhouette, value hierarchy, and protected visual roles. The change is modest because the source already fits the target fantasy palette."
+    },
+    {
+      "family": "trim",
+      "run": "candidate",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/trim/candidate/proof-board.png",
+      "proofSha256": "892a3f5c3e86aecc710cfcbed3d13244b77acb71838edb925d1adf97306a2d57",
+      "visualStatus": "PASS",
+      "finding": "Decorative caps remain intact at 260, 500, and 900 pixels; only the declared center span changes. The 40-pixel delivery height remains exact."
+    },
+    {
+      "family": "decal",
+      "run": "candidate",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/decal/candidate/proof-board.png",
+      "proofSha256": "71171801530f828c39de8687f86e3ad59f439c5864527250154382712473e373",
+      "visualStatus": "PASS_WITH_LIMITATION",
+      "finding": "All six crack families remain intact through four rotations with no nominal-cell clipping or chroma fringe. The real decals are deliberately low-contrast; final scene readability remains surface-dependent."
+    },
+    {
+      "family": "citizenship",
+      "run": "candidate",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/citizenship/candidate/proof-board.png",
+      "proofSha256": "ff8e9df259fd4e23af770d9f22487b58b1960feb5ca1b1558e385495f49c8d88",
+      "visualStatus": "PASS",
+      "finding": "The fighter keeps its source silhouette, receives a clear safe border and foot baseline, and remains legible on the six-foot play-scale card."
+    },
+    {
+      "family": "atlas",
+      "run": "candidate",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/atlas/candidate/proof-board.png",
+      "proofSha256": "e6127c3fad693ebf5f80670587412b020b2d988d0fe01b372e11684614dc126a",
+      "visualStatus": "PASS",
+      "finding": "The cleaned barrel, chest, and shrine round-trip visibly intact in the packed atlas with transparent separation and no neighboring-sheet debris."
+    },
+    {
+      "family": "material",
+      "run": "candidate",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/material/candidate/proof-board.png",
+      "proofSha256": "b9373c32942d59d2d698daeb1934c7815be4c10b0a9c3f73f1faecb86d92f9f9",
+      "visualStatus": "PASS_AS_PROPOSAL",
+      "finding": "Height, normal, roughness, and black emissive channels are coherent with the real floor albedo and satisfy the technical channel contract. They remain machine-derived proposals, not approved authored material maps."
+    },
+    {
+      "family": "regression",
+      "run": "candidate",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/regression/candidate/proof-board.png",
+      "proofSha256": "1c00c08710b0d0ceede719b082cfd8fc26485b5cb1008d506c2641630310e0b5",
+      "visualStatus": "PASS",
+      "finding": "Identical real floor inputs produce a visibly black difference panel and pass the zero-difference budget."
+    },
+    {
+      "family": "regression",
+      "run": "real-change-control",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/regression/real-change-control/proof-board.png",
+      "proofSha256": "5f39af15d358c7bee61502734f58c5bbe94b224a27a38af5ecc5c582975fece1",
+      "visualStatus": "EXPECTED_REJECTION_CONFIRMED",
+      "finding": "The changed aged-wet real floor produces a strong visible RGB difference and is correctly rejected by the zero-difference gate."
+    }
+  ]
+}

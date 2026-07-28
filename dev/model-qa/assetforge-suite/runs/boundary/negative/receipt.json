@@ -7,7 +7,8 @@
   "technicalStatus": "FAIL",
   "gates": {
     "sourceHashMatches": true,
-    "sourceIsSeamless": false,
+    "sourceWithinSeamBudget": false,
+    "compiledSourceSeamExact": false,
     "all256RawMasksResolve": true,
     "exactly47CanonicalShapes": true,
     "diagonalSanitizationLegal": true,
@@ -27,6 +28,8 @@
     "canonicalShapeCount": 47,
     "rawMaskCount": 256,
     "sourceEdgeDelta": 42.833333333333336,
+    "compiledSourceEdgeDelta": 42.833333333333336,
+    "seamLockApplied": false,
     "compatibleNeighborPairsChecked": 0,
     "seededFieldShapeCoverage": 47
   },

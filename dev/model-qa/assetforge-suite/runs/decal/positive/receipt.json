@@ -9,6 +9,7 @@
     "sourceHashMatches": true,
     "componentCountMatches": true,
     "sourceComponentsDoNotBleedOffSheet": true,
+    "everySourceAlphaPixelAssigned": true,
     "transparentPixelsDefringed": true,
     "halfScaleRemainsReadable": true,
     "rotationScaleMatrixComplete": true,
@@ -20,7 +21,29 @@
   },
   "details": {
     "componentCount": 2,
-    "variantCount": 24
+    "variantCount": 24,
+    "chroma": {
+      "requested": "auto",
+      "detected": "magenta",
+      "dominantBorderRgb": [
+        255,
+        0,
+        255
+      ],
+      "keyRgb": [
+        255,
+        0,
+        255
+      ],
+      "tolerance": 12,
+      "softness": 0,
+      "keyedPixelCount": 7044
+    },
+    "extraction": {
+      "mode": "connected-components",
+      "declaredCellCount": null
+    },
+    "errors": []
   },
   "runtimeAdmission": "CANDIDATE"
 }

@@ -1,0 +1,15 @@
+{
+  "slug": "spr-pc-human-fighter-male",
+  "source": "assets/sprites/spr-pc-human-fighter-male.png",
+  "sourceSha256": "d307d7ac9183075b11a7cc922e0bb1dcc71041397727a43c1fac7abc883fa7a8",
+  "contentBounds": [
+    5,
+    5,
+    169,
+    217
+  ],
+  "footX": 0.850609756097561,
+  "footY": 1.0,
+  "worldHeightFeet": 6,
+  "alphaCutoff": 12
+}

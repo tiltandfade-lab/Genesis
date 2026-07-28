@@ -8,6 +8,7 @@
   "gates": {
     "sourceHashMatches": true,
     "sourceSeamWithinBudget": true,
+    "compiledAlbedoSeamExact": true,
     "allChannelsMatchDimensions": true,
     "heightRangeValid": true,
     "normalRangeValid": true,
@@ -15,6 +16,7 @@
     "channelsRemainProposals": true
   },
   "outputs": {
+    "albedo": "dev/model-qa/assetforge-suite/runs/material/positive/albedo.png",
     "height": "dev/model-qa/assetforge-suite/runs/material/positive/height.png",
     "normal": "dev/model-qa/assetforge-suite/runs/material/positive/normal.png",
     "roughness": "dev/model-qa/assetforge-suite/runs/material/positive/roughness.png",
@@ -23,6 +25,8 @@
   },
   "details": {
     "sourceEdgeDelta": 0.0,
+    "compiledAlbedoEdgeDelta": 0.0,
+    "seamLockApplied": false,
     "normalBlueMinimum": 253
   },
   "runtimeAdmission": "CANDIDATE"

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "qualification": {
+    "kind": "real-repository-asset",
+    "admission": "candidate-only"
+  },
+  "family": "boundary-autotile",
+  "insideMaterial": {
+    "tile": "assets/textures/fantasy-floor-1.png",
+    "sha256": "f427c445e6c7b8b1c5b7eccc2181d29d81d9619ff2a1a60e8a7093b62b30502b"
+  },
+  "edgeLanguage": {
+    "borderWidthPx": 7,
+    "orientationPolicy": "rotatable-organic",
+    "phasePolicy": "world-locked"
+  },
+  "tileSizePx": 72,
+  "seed": 73129,
+  "allowSeamLock": true,
+  "maxRepairableSourceEdgeDelta": 10
+}

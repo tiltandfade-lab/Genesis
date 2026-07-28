@@ -8,6 +8,7 @@
   "gates": {
     "sourceHashMatches": true,
     "insetsValid": true,
+    "outputInsetsValid": false,
     "allTargetsLegal": false,
     "capsPreservedExactly": false,
     "everyTargetDimensionProved": false
@@ -22,9 +23,34 @@
         18
       ]
     ],
+    "sourceInsets": [
+      12,
+      12,
+      12,
+      12
+    ],
+    "outputInsets": [
+      12,
+      12,
+      12,
+      12
+    ],
     "errors": [
       "target smaller than fixed caps"
-    ]
+    ],
+    "chroma": {
+      "requested": "auto",
+      "detected": null,
+      "dominantBorderRgb": [
+        76,
+        68,
+        61
+      ],
+      "keyRgb": null,
+      "tolerance": 12,
+      "softness": 0,
+      "keyedPixelCount": 0
+    }
   },
   "runtimeAdmission": "CANDIDATE"
 }

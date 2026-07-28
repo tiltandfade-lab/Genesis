@@ -1923,3 +1923,17 @@ specs. Each is considered proven only when its compiler emits quarantined output
 board, a machine-readable receipt, a passing positive fixture, and a preserved red-first fixture
 that fails for the intended invariant. This build mandate does not grant production admission or
 allow a technical proof to substitute for art-direction review.
+
+## ASSETFORGE REAL-ASSET PROOF STANDARD (Adam, 2026-07-28 — binding; verbatim)
+
+> "so i don't think that image serves as proof, can you run each of the assetforge processes with real assets and prove the results?"
+
+Synthetic fixtures prove deterministic contracts and preserved failure behavior; they do not prove
+that a compiler handles production-shaped Genesis art. Every Assetforge family must therefore also
+run against a named, tracked, decodable repository asset, record the exact source hash and lineage,
+emit its own receipt and proof artifact, and receive individual visual inspection. A combined board
+is navigation only. It cannot substitute for the family receipts or individual proofs. Failures
+found during that inspection remain failures until repaired and rerun; an aggregate green status
+cannot hide clipped art, dirty sheet fragments, cadence defects, anatomy defects, or other visible
+problems. Real-asset technical qualification still does not grant runtime admission or Adam's taste
+approval.

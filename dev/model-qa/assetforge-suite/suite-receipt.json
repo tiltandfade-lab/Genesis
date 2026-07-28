@@ -33,7 +33,8 @@
       "negativeExpected": "FAIL",
       "negativeActual": "FAIL",
       "negativeFailedGates": [
-        "sourceIsSeamless",
+        "sourceWithinSeamBudget",
+        "compiledSourceSeamExact",
         "neighborClosureExhaustive"
       ],
       "negativeReceipt": "dev/model-qa/assetforge-suite/runs/boundary/negative/receipt.json"
@@ -100,6 +101,7 @@
       "negativeExpected": "FAIL",
       "negativeActual": "FAIL",
       "negativeFailedGates": [
+        "outputInsetsValid",
         "allTargetsLegal",
         "capsPreservedExactly",
         "everyTargetDimensionProved"
@@ -156,7 +158,8 @@
       "negativeExpected": "FAIL",
       "negativeActual": "FAIL",
       "negativeFailedGates": [
-        "sourceSeamWithinBudget"
+        "sourceSeamWithinBudget",
+        "compiledAlbedoSeamExact"
       ],
       "negativeReceipt": "dev/model-qa/assetforge-suite/runs/material/negative/receipt.json"
     },

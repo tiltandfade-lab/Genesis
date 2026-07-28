@@ -20,7 +20,20 @@
   "details": {
     "meanColorDistance": 0.0,
     "valueRankAgreement": 1.0,
-    "outputColorCount": 4
+    "outputColorCount": 4,
+    "chroma": {
+      "requested": "auto",
+      "detected": null,
+      "dominantBorderRgb": [
+        0,
+        0,
+        0
+      ],
+      "keyRgb": null,
+      "tolerance": 12,
+      "softness": 0,
+      "keyedPixelCount": 0
+    }
   },
   "runtimeAdmission": "CANDIDATE"
 }

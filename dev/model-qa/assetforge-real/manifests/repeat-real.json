@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "qualification": {
+    "kind": "real-repository-asset",
+    "admission": "candidate-only"
+  },
+  "family": "modular-repeat",
+  "componentSheet": "dev/material-lane/source-sprites/b01-autonomous-v001/roof-slate-components-alpha-v001.png",
+  "sourceSha256": "c18f2ba5ebc2f054d068b86e00cae7a1c7ca380c56b974b2e3cc91e196d81f85",
+  "chromaKey": "none",
+  "grid": [
+    3,
+    2
+  ],
+  "minimumComponents": 6,
+  "tileSizePx": 512,
+  "componentWidthPx": 96,
+  "componentResampling": "lanczos",
+  "layout": "staggered-courses",
+  "courseStepXPx": 82,
+  "courseStepYPx": 72,
+  "baseRGBA": [
+    42,
+    53,
+    67,
+    255
+  ],
+  "seed": 203
+}

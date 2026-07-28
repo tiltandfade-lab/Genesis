@@ -11,7 +11,8 @@
     "dimensionsLocked": true,
     "silhouetteWithinLicense": false,
     "damageIsLocalNotReplacement": true,
-    "declaredSeverityOrdered": true
+    "declaredSeverityOrdered": true,
+    "registrationContractSatisfied": true
   },
   "outputs": {
     "proofBoard": "dev/model-qa/assetforge-suite/runs/condition/negative/proof-board.png"
@@ -26,6 +27,47 @@
       "damaged": 0.00039426123984947516,
       "burned": 0.0011632872846108141,
       "corrupted": 0.031773928005545654
+    },
+    "originalDimensions": {
+      "source": [
+        72,
+        88
+      ],
+      "damaged": [
+        72,
+        88
+      ],
+      "burned": [
+        72,
+        88
+      ],
+      "corrupted": [
+        72,
+        88
+      ]
+    },
+    "registeredDimensions": [
+      72,
+      88
+    ],
+    "registration": null,
+    "sourceChroma": {
+      "requested": "auto",
+      "detected": null,
+      "dominantBorderRgb": [
+        0,
+        0,
+        0
+      ],
+      "keyRgb": null,
+      "tolerance": 12,
+      "softness": 0,
+      "keyedPixelCount": 0
+    },
+    "stateSha256": {
+      "damaged": "b091f413db56f7574957abe8e940592b031061557170b9a4314f9a575e663663",
+      "burned": "0c7c420d9fd4d2b07ee6a00751b63055cacfac9371799a7f7e112a811668846c",
+      "corrupted": "d2aa7abce9065097d2f83de5b2134adb7654f2bb9b10b71e6f1e00dbf9b03e0b"
     }
   },
   "runtimeAdmission": "CANDIDATE"

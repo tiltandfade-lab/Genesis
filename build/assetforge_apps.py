@@ -12,7 +12,7 @@ import json
 import math
 import random
 import shutil
-from collections import deque
+from collections import Counter, deque
 from pathlib import Path
 from typing import Any, Callable
 
@@ -122,16 +122,187 @@ def font() -> ImageFont.ImageFont:
     return ImageFont.load_default()
 
 
-def key_magenta(image: Image.Image, tolerance: int = 12) -> Image.Image:
+def color_distance(first: tuple[int, int, int], second: tuple[int, int, int]) -> float:
+    return math.sqrt(sum((first[index] - second[index]) ** 2 for index in range(3)))
+
+
+def border_dominant_rgb(image: Image.Image) -> tuple[int, int, int]:
+    rgb = image.convert("RGB")
+    pixels = rgb.load()
+    step_x = max(1, rgb.width // 100)
+    step_y = max(1, rgb.height // 100)
+    samples: Counter[tuple[int, int, int]] = Counter()
+    for x in range(0, rgb.width, step_x):
+        samples[pixels[x, 0]] += 1
+        samples[pixels[x, rgb.height - 1]] += 1
+    for y in range(0, rgb.height, step_y):
+        samples[pixels[0, y]] += 1
+        samples[pixels[rgb.width - 1, y]] += 1
+    return samples.most_common(1)[0][0]
+
+
+def parse_chroma_key(value: Any) -> tuple[int, int, int] | None:
+    if value is None or value is False or str(value).lower() in {"none", "off", "false"}:
+        return None
+    if isinstance(value, (list, tuple)) and len(value) == 3:
+        return tuple(int(channel) for channel in value)
+    if isinstance(value, str) and value.lower() not in {"auto", "detect"}:
+        return hex_rgb(value)
+    return None
+
+
+def defringe_chroma(
+    image: Image.Image,
+    key: tuple[int, int, int],
+    erode_excess: int = 60,
+    despill: float = 0.25,
+) -> Image.Image:
+    """Remove the one-to-two-pixel chroma halo without touching interior color.
+
+    This intentionally mirrors the edge-band discipline used by the established sprite slicer:
+    only pixels adjacent to transparency can be eroded or despilled.
+    """
+    rgba = image.convert("RGBA")
+    pixels = rgba.load()
+    width, height = rgba.size
+
+    def edge_pixels() -> list[tuple[int, int]]:
+        result = []
+        for y in range(height):
+            for x in range(width):
+                if pixels[x, y][3] == 0:
+                    continue
+                if any(
+                    not (0 <= nx < width and 0 <= ny < height) or pixels[nx, ny][3] == 0
+                    for nx, ny in (
+                        (x - 1, y),
+                        (x + 1, y),
+                        (x, y - 1),
+                        (x, y + 1),
+                        (x - 1, y - 1),
+                        (x + 1, y - 1),
+                        (x - 1, y + 1),
+                        (x + 1, y + 1),
+                    )
+                ):
+                    result.append((x, y))
+        return result
+
+    for _ in range(2):
+        eroded = False
+        for x, y in edge_pixels():
+            r, g, b, _ = pixels[x, y]
+            if key == (255, 0, 255):
+                contaminated = min(r, b) - g > erode_excess
+            else:
+                contaminated = g - max(r, b) > erode_excess
+            if contaminated:
+                pixels[x, y] = (r, g, b, 0)
+                eroded = True
+        if not eroded:
+            break
+
+    for x, y in edge_pixels():
+        r, g, b, a = pixels[x, y]
+        if key == (255, 0, 255) and r > g and b > g:
+            pixels[x, y] = (
+                g + int((r - g) * despill),
+                g,
+                g + int((b - g) * despill),
+                a,
+            )
+        elif key == (0, 255, 0) and g > r and g > b:
+            neutral = max(r, b)
+            pixels[x, y] = (r, neutral + int((g - neutral) * despill), b, a)
+    return transparent_rgb_clean(rgba)
+
+
+def key_chroma(
+    image: Image.Image,
+    key: tuple[int, int, int],
+    tolerance: int = 12,
+    softness: int = 0,
+) -> tuple[Image.Image, int]:
     rgba = image.convert("RGBA")
     pixels = []
+    keyed = 0
     for r, g, b, a in rgba.getdata():
-        if abs(r - 255) <= tolerance and g <= tolerance and abs(b - 255) <= tolerance:
+        distance = color_distance((r, g, b), key)
+        if distance <= tolerance:
             pixels.append((0, 0, 0, 0))
+            keyed += 1
+        elif softness and distance < tolerance + softness:
+            fraction = (distance - tolerance) / softness
+            alpha = round(a * fraction)
+            # Reverse the flat-key composite for the soft band. Without this unmixing,
+            # lowering alpha merely makes the magenta fringe translucent; the key color is
+            # still embedded in RGB and remains obvious over dark game surfaces.
+            reconstructed = tuple(
+                max(
+                    0,
+                    min(
+                        255,
+                        round(
+                            (channel - (1 - fraction) * key_channel)
+                            / max(fraction, 1e-6)
+                        ),
+                    ),
+                )
+                for channel, key_channel in zip((r, g, b), key)
+            )
+            pixels.append((*reconstructed, alpha))
         else:
             pixels.append((r, g, b, a))
     rgba.putdata(pixels)
-    return rgba
+    return defringe_chroma(rgba, key), keyed
+
+
+def key_manifest_image(
+    image: Image.Image,
+    manifest: dict[str, Any],
+) -> tuple[Image.Image, dict[str, Any]]:
+    requested = manifest.get("chromaKey", "auto")
+    tolerance = int(manifest.get("chromaTolerance", 12))
+    softness = int(manifest.get("chromaSoftness", 0))
+    rgba = image.convert("RGBA")
+    alpha_min, _ = rgba.getchannel("A").getextrema()
+    dominant = border_dominant_rgb(image)
+    key = parse_chroma_key(requested)
+    detected = None
+    if isinstance(requested, str) and requested.lower() in {"auto", "detect"}:
+        # Existing transparency is authoritative. Auto-detection is only needed for opaque
+        # ImageGen sheets; this prevents legitimate interior magenta in cut sprites being keyed.
+        if alpha_min == 255:
+            magenta_distance = color_distance(dominant, (255, 0, 255))
+            green_distance = color_distance(dominant, (0, 255, 0))
+            nearest = min(magenta_distance, green_distance)
+            if nearest <= float(manifest.get("maximumBorderKeyDistance", 60)):
+                key = (255, 0, 255) if magenta_distance <= green_distance else (0, 255, 0)
+                detected = "magenta" if key == (255, 0, 255) else "green"
+    if key is None:
+        return transparent_rgb_clean(rgba), {
+            "requested": requested,
+            "detected": detected,
+            "dominantBorderRgb": list(dominant),
+            "keyRgb": None,
+            "tolerance": tolerance,
+            "softness": softness,
+            "keyedPixelCount": 0,
+        }
+    keyed_image, keyed_count = key_chroma(rgba, key, tolerance, softness)
+    return keyed_image, {
+        "requested": requested,
+        "detected": detected,
+        "dominantBorderRgb": list(dominant),
+        "keyRgb": list(key),
+        "tolerance": tolerance,
+        "softness": softness,
+        "keyedPixelCount": keyed_count,
+    }
+
+
+def key_magenta(image: Image.Image, tolerance: int = 12) -> Image.Image:
+    return key_chroma(image, CHROMA, tolerance, 0)[0]
 
 
 def transparent_rgb_clean(image: Image.Image) -> Image.Image:
@@ -142,6 +313,13 @@ def transparent_rgb_clean(image: Image.Image) -> Image.Image:
 
 def alpha_bbox(image: Image.Image):
     return image.convert("RGBA").getchannel("A").getbbox()
+
+
+def alpha_bbox_above(image: Image.Image, cutoff: int = 0):
+    alpha = image.convert("RGBA").getchannel("A")
+    if cutoff <= 0:
+        return alpha.getbbox()
+    return alpha.point(lambda value: 255 if value > cutoff else 0).getbbox()
 
 
 def bbox_touches_edge(image: Image.Image, bbox=None) -> bool:
@@ -189,7 +367,11 @@ def paste_wrapped(canvas: Image.Image, sprite: Image.Image, x: int, y: int) -> N
             canvas.alpha_composite(sprite, (x + ox, y + oy))
 
 
-def connected_components(image: Image.Image, alpha_cutoff: int = 12) -> list[tuple[int, int, int, int]]:
+def connected_components(
+    image: Image.Image,
+    alpha_cutoff: int = 12,
+    minimum_area: int = 4,
+) -> list[tuple[int, int, int, int]]:
     alpha = image.convert("RGBA").getchannel("A")
     width, height = image.size
     values = alpha.load()
@@ -213,9 +395,238 @@ def connected_components(image: Image.Image, alpha_cutoff: int = 12) -> list[tup
                         if not seen[ni] and values[nx, ny] > alpha_cutoff:
                             seen[ni] = 1
                             queue.append((nx, ny))
-            if len(xs) >= 4:
+            if len(xs) >= minimum_area:
                 boxes.append((min(xs), min(ys), max(xs) + 1, max(ys) + 1))
     return sorted(boxes, key=lambda box: (box[1], box[0]))
+
+
+def alpha_component_records(
+    image: Image.Image,
+    alpha_cutoff: int = 12,
+) -> list[dict[str, Any]]:
+    alpha = image.convert("RGBA").getchannel("A")
+    width, height = image.size
+    values = alpha.load()
+    seen = bytearray(width * height)
+    records = []
+    for y in range(height):
+        for x in range(width):
+            index = y * width + x
+            if seen[index] or values[x, y] <= alpha_cutoff:
+                continue
+            queue = deque([(x, y)])
+            seen[index] = 1
+            pixels = []
+            while queue:
+                cx, cy = queue.popleft()
+                pixels.append((cx, cy))
+                for nx, ny in ((cx - 1, cy), (cx + 1, cy), (cx, cy - 1), (cx, cy + 1)):
+                    if 0 <= nx < width and 0 <= ny < height:
+                        neighbor = ny * width + nx
+                        if not seen[neighbor] and values[nx, ny] > alpha_cutoff:
+                            seen[neighbor] = 1
+                            queue.append((nx, ny))
+            xs = [item[0] for item in pixels]
+            ys = [item[1] for item in pixels]
+            records.append(
+                {
+                    "area": len(pixels),
+                    "bbox": (min(xs), min(ys), max(xs) + 1, max(ys) + 1),
+                    "pixels": pixels,
+                }
+            )
+    return records
+
+
+def bbox_gap(
+    first: tuple[int, int, int, int],
+    second: tuple[int, int, int, int],
+) -> float:
+    dx = max(first[0] - second[2], second[0] - first[2], 0)
+    dy = max(first[1] - second[3], second[1] - first[3], 0)
+    return math.hypot(dx, dy)
+
+
+def prune_detached_fragments(
+    image: Image.Image,
+    merge_distance: float,
+    alpha_cutoff: int = 12,
+) -> tuple[Image.Image, dict[str, Any]]:
+    rgba = transparent_rgb_clean(image)
+    components = alpha_component_records(rgba, alpha_cutoff)
+    if not components:
+        return rgba, {
+            "componentCountBefore": 0,
+            "componentCountKept": 0,
+            "componentCountPruned": 0,
+            "prunedAlphaPixels": 0,
+            "prunedAlphaRatio": 0.0,
+        }
+    primary = max(components, key=lambda item: item["area"])
+    kept = [
+        item
+        for item in components
+        if item is primary or bbox_gap(item["bbox"], primary["bbox"]) <= merge_distance
+    ]
+    kept_ids = {id(item) for item in kept}
+    removed = [item for item in components if id(item) not in kept_ids]
+    pixels = rgba.load()
+    for component in removed:
+        for x, y in component["pixels"]:
+            pixels[x, y] = (0, 0, 0, 0)
+    total_area = sum(item["area"] for item in components)
+    removed_area = sum(item["area"] for item in removed)
+    return transparent_rgb_clean(rgba), {
+        "componentCountBefore": len(components),
+        "componentCountKept": len(kept),
+        "componentCountPruned": len(removed),
+        "prunedAlphaPixels": removed_area,
+        "prunedAlphaRatio": removed_area / max(1, total_area),
+        "primaryAreaPixels": primary["area"],
+        "mergeDistancePx": merge_distance,
+    }
+
+
+def sheet_component_boxes(
+    image: Image.Image,
+    manifest: dict[str, Any],
+) -> tuple[
+    list[tuple[int, int, int, int]],
+    list[tuple[int, int, int, int]],
+    dict[str, Any],
+]:
+    grid = manifest.get("grid")
+    if not grid:
+        boxes = connected_components(
+            image,
+            int(manifest.get("alphaCutoff", 12)),
+            int(manifest.get("minimumComponentAreaPx", 4)),
+        )
+        slots = [(0, 0, image.width, image.height) for _ in boxes]
+        return boxes, slots, {"mode": "connected-components", "declaredCellCount": None}
+
+    columns, rows = (int(value) for value in grid)
+    if columns <= 0 or rows <= 0:
+        raise ValueError("sheet grid dimensions must be positive")
+    cuts = manifest.get("gridCuts", {})
+    x_cuts = [int(value) for value in cuts.get("x", [])]
+    y_cuts = [int(value) for value in cuts.get("y", [])]
+    if x_cuts and (
+        len(x_cuts) != columns + 1 or x_cuts[0] != 0 or x_cuts[-1] != image.width
+    ):
+        raise ValueError("gridCuts.x must contain every column boundary including 0 and sheet width")
+    if y_cuts and (
+        len(y_cuts) != rows + 1 or y_cuts[0] != 0 or y_cuts[-1] != image.height
+    ):
+        raise ValueError("gridCuts.y must contain every row boundary including 0 and sheet height")
+    boxes = []
+    slots = []
+    empty_cells = []
+    for row in range(rows):
+        y0 = y_cuts[row] if y_cuts else round(row * image.height / rows)
+        y1 = y_cuts[row + 1] if y_cuts else round((row + 1) * image.height / rows)
+        for column in range(columns):
+            x0 = x_cuts[column] if x_cuts else round(column * image.width / columns)
+            x1 = x_cuts[column + 1] if x_cuts else round((column + 1) * image.width / columns)
+            cell = image.crop((x0, y0, x1, y1))
+            box = alpha_bbox_above(cell, int(manifest.get("alphaCutoff", 12)))
+            if not box:
+                empty_cells.append(row * columns + column)
+                continue
+            boxes.append((x0 + box[0], y0 + box[1], x0 + box[2], y0 + box[3]))
+            slots.append((x0, y0, x1, y1))
+    return boxes, slots, {
+        "mode": "declared-grid",
+        "grid": [columns, rows],
+        "gridCuts": {
+            "x": x_cuts or None,
+            "y": y_cuts or None,
+        },
+        "declaredCellCount": columns * rows,
+        "emptyCellIndexes": empty_cells,
+    }
+
+
+def grouped_alpha_components(
+    image: Image.Image,
+    manifest: dict[str, Any],
+) -> tuple[list[Image.Image], list[tuple[int, int, int, int]], dict[str, Any]]:
+    anchors = [
+        (float(value[0]), float(value[1]))
+        for value in manifest.get("componentAnchors", [])
+    ]
+    if not anchors:
+        raise ValueError("alpha-component-groups isolation requires componentAnchors")
+    records = alpha_component_records(
+        image,
+        int(manifest.get("componentGroupAlphaCutoff", 0)),
+    )
+    groups: list[list[dict[str, Any]]] = [[] for _anchor in anchors]
+    for record in records:
+        area = max(1, int(record["area"]))
+        centroid_x = sum(point[0] for point in record["pixels"]) / area
+        centroid_y = sum(point[1] for point in record["pixels"]) / area
+        group_index = min(
+            range(len(anchors)),
+            key=lambda index: (
+                centroid_x - anchors[index][0]
+            )
+            ** 2
+            + (
+                centroid_y - anchors[index][1]
+            )
+            ** 2,
+        )
+        groups[group_index].append(record)
+
+    source_pixels = image.convert("RGBA").load()
+    components = []
+    boxes = []
+    group_details = []
+    assigned_pixels = 0
+    for index, records_for_group in enumerate(groups):
+        isolated = Image.new("RGBA", image.size, (0, 0, 0, 0))
+        isolated_pixels = isolated.load()
+        for record in records_for_group:
+            assigned_pixels += int(record["area"])
+            for x, y in record["pixels"]:
+                isolated_pixels[x, y] = source_pixels[x, y]
+        box = alpha_bbox(isolated)
+        if not box:
+            group_details.append(
+                {
+                    "index": index,
+                    "anchor": list(anchors[index]),
+                    "componentCount": 0,
+                    "alphaPixelCount": 0,
+                    "bbox": None,
+                }
+            )
+            continue
+        boxes.append(box)
+        components.append(transparent_rgb_clean(isolated.crop(box)))
+        group_details.append(
+            {
+                "index": index,
+                "anchor": list(anchors[index]),
+                "componentCount": len(records_for_group),
+                "alphaPixelCount": sum(
+                    int(record["area"]) for record in records_for_group
+                ),
+                "bbox": list(box),
+            }
+        )
+    source_alpha_pixels = sum(
+        1 for value in image.convert("RGBA").getchannel("A").getdata() if value > 0
+    )
+    return components, boxes, {
+        "mode": "alpha-component-groups",
+        "anchors": [list(anchor) for anchor in anchors],
+        "groups": group_details,
+        "sourceAlphaPixelCount": source_alpha_pixels,
+        "assignedAlphaPixelCount": assigned_pixels,
+        "everySourceAlphaPixelAssigned": assigned_pixels == source_alpha_pixels,
+    }
 
 
 def shelf_pack(
@@ -470,9 +881,14 @@ def compile_boundary(manifest_path: Path, output_dir: Path, force: bool = False)
     manifest = read_json(manifest_path)
     guarded_reset(output_dir, force)
     source = resolve_manifest_path(manifest_path, manifest["insideMaterial"]["tile"])
-    material = Image.open(source).convert("RGBA")
+    raw_material = Image.open(source).convert("RGBA")
     size = int(manifest.get("tileSizePx", 64))
     border = int(manifest.get("edgeLanguage", {}).get("borderWidthPx", max(3, size // 10)))
+    raw_source_delta = edge_delta(raw_material)
+    allow_seam_lock = bool(manifest.get("allowSeamLock", False))
+    fitted_material = ImageOps.fit(raw_material, (size, size), method=Image.Resampling.NEAREST)
+    material = force_periodic(fitted_material) if allow_seam_lock else fitted_material
+    material.save(output_dir / "compiled-inside-material.png")
     masks = canonical_masks()
     lookup = [sanitize_mask(raw) for raw in range(256)]
     tiles = {mask: make_boundary_tile(material, mask, size, border) for mask in masks}
@@ -524,7 +940,13 @@ def compile_boundary(manifest_path: Path, output_dir: Path, force: bool = False)
     gates = {
         "sourceHashMatches": not manifest["insideMaterial"].get("sha256")
         or sha256_file(source) == manifest["insideMaterial"]["sha256"],
-        "sourceIsSeamless": edge_delta(material) <= float(manifest.get("maxSourceEdgeDelta", 3.0)),
+        "sourceWithinSeamBudget": raw_source_delta <= float(
+            manifest.get(
+                "maxRepairableSourceEdgeDelta" if allow_seam_lock else "maxSourceEdgeDelta",
+                3.0,
+            )
+        ),
+        "compiledSourceSeamExact": edge_delta(material) == 0,
         "all256RawMasksResolve": len(lookup) == 256,
         "exactly47CanonicalShapes": len(masks) == 47,
         "diagonalSanitizationLegal": diag_legal,
@@ -548,7 +970,9 @@ def compile_boundary(manifest_path: Path, output_dir: Path, force: bool = False)
         {
             "canonicalShapeCount": len(masks),
             "rawMaskCount": len(lookup),
-            "sourceEdgeDelta": edge_delta(material),
+            "sourceEdgeDelta": raw_source_delta,
+            "compiledSourceEdgeDelta": edge_delta(material),
+            "seamLockApplied": allow_seam_lock,
             "compatibleNeighborPairsChecked": compatible_pairs,
             "seededFieldShapeCoverage": len(coverage),
         },
@@ -561,19 +985,76 @@ def compile_repeat(manifest_path: Path, output_dir: Path, force: bool = False) -
     manifest = read_json(manifest_path)
     guarded_reset(output_dir, force)
     sheet_path = resolve_manifest_path(manifest_path, manifest["componentSheet"])
-    sheet = key_magenta(Image.open(sheet_path))
-    boxes = connected_components(sheet)
-    components = [sheet.crop(box) for box in boxes]
+    sheet, chroma = key_manifest_image(Image.open(sheet_path), manifest)
+    boxes, _slots, extraction = sheet_component_boxes(sheet, manifest)
+    components = [transparent_rgb_clean(sheet.crop(box)) for box in boxes]
+    component_width = manifest.get("componentWidthPx")
+    if component_width:
+        scaled_components = []
+        for component in components:
+            width = int(component_width)
+            height = max(1, round(component.height * width / max(1, component.width)))
+            scaled_components.append(
+                component.resize(
+                    (width, height),
+                    Image.Resampling.LANCZOS
+                    if manifest.get("componentResampling", "lanczos") == "lanczos"
+                    else Image.Resampling.NEAREST,
+                )
+            )
+        components = scaled_components
     tile_size = int(manifest.get("tileSizePx", 96))
     seed = int(manifest.get("seed", 17))
     rng = random.Random(seed)
     tile = Image.new("RGBA", (tile_size, tile_size), tuple(manifest.get("baseRGBA", [70, 62, 51, 255])))
     placements = []
-    for index, component in enumerate(components):
-        x = rng.randrange(-component.width // 2, tile_size)
-        y = rng.randrange(-component.height // 2, tile_size)
-        paste_wrapped(tile, component, x, y)
-        placements.append({"component": index, "x": x, "y": y})
+    layout = manifest.get("layout", "seeded-scatter")
+    if layout == "staggered-courses" and components:
+        median_width = sorted(component.width for component in components)[len(components) // 2]
+        median_height = sorted(component.height for component in components)[len(components) // 2]
+        x_step = int(manifest.get("courseStepXPx", max(1, round(median_width * 0.82))))
+        y_step = int(manifest.get("courseStepYPx", max(1, round(median_height * 0.68))))
+        unused_components = set(range(len(components)))
+        previous_row: list[tuple[int, int]] = []
+        for row, y in enumerate(range(0, tile_size, y_step)):
+            offset = -(x_step // 2) if row % 2 else 0
+            current_row: list[tuple[int, int]] = []
+            left_component = None
+            for x in range(offset, tile_size, x_step):
+                above_component = (
+                    min(previous_row, key=lambda item: abs(item[0] - x))[1]
+                    if previous_row
+                    else None
+                )
+                forbidden = {left_component, above_component}
+                preferred = sorted(
+                    index
+                    for index in unused_components
+                    if index not in forbidden
+                )
+                candidates = preferred or [
+                    index
+                    for index in range(len(components))
+                    if index not in forbidden
+                ]
+                if not candidates:
+                    candidates = list(range(len(components)))
+                component_index = rng.choice(candidates)
+                unused_components.discard(component_index)
+                component = components[component_index]
+                paste_wrapped(tile, component, x, y)
+                placements.append(
+                    {"component": component_index, "x": x, "y": y, "row": row}
+                )
+                current_row.append((x, component_index))
+                left_component = component_index
+            previous_row = current_row
+    else:
+        for index, component in enumerate(components):
+            x = rng.randrange(-component.width // 2, tile_size)
+            y = rng.randrange(-component.height // 2, tile_size)
+            paste_wrapped(tile, component, x, y)
+            placements.append({"component": index, "x": x, "y": y})
     tile = force_periodic(transparent_rgb_clean(tile))
     tile_path = output_dir / "tile.png"
     tile.save(tile_path)
@@ -586,7 +1067,7 @@ def compile_repeat(manifest_path: Path, output_dir: Path, force: bool = False) -
         "Modular repeat compiler",
         [("component sheet", sheet), ("repeat tile", tile), ("4x4 torus proof", tiled)],
         output_dir / "proof-board.png",
-        (250, 210),
+        (360, 340),
         3,
     )
     exact_edges = edge_delta(tile) == 0
@@ -594,7 +1075,7 @@ def compile_repeat(manifest_path: Path, output_dir: Path, force: bool = False) -
         "sourceHashMatches": not manifest.get("sourceSha256") or sha256_file(sheet_path) == manifest["sourceSha256"],
         "componentsIsolated": len(components) >= int(manifest.get("minimumComponents", 2)),
         "toroidalClosureExact": exact_edges,
-        "allComponentsPlaced": len(placements) == len(components),
+        "allComponentsPlaced": {item["component"] for item in placements} == set(range(len(components))),
         "variantCadencePresent": len({(p["x"], p["y"]) for p in placements}) == len(placements),
     }
     return finish_receipt(
@@ -603,7 +1084,14 @@ def compile_repeat(manifest_path: Path, output_dir: Path, force: bool = False) -
         output_dir,
         gates,
         {"tile": repo_path(tile_path), "proofBoard": repo_path(output_dir / "proof-board.png")},
-        {"componentCount": len(components), "placements": placements, "edgeDelta": edge_delta(tile)},
+        {
+            "componentCount": len(components),
+            "placements": placements,
+            "edgeDelta": edge_delta(tile),
+            "layout": layout,
+            "chroma": chroma,
+            "extraction": extraction,
+        },
     )
 
 
@@ -613,12 +1101,22 @@ def compile_prop_kit(manifest_path: Path, output_dir: Path, force: bool = False)
     manifest = read_json(manifest_path)
     guarded_reset(output_dir, force)
     sheet_path = resolve_manifest_path(manifest_path, manifest["sheet"])
-    sheet = key_magenta(Image.open(sheet_path))
-    boxes = connected_components(sheet)
+    sheet, chroma = key_manifest_image(Image.open(sheet_path), manifest)
+    boxes, slots, extraction = sheet_component_boxes(sheet, manifest)
     ids = list(manifest.get("ids", []))
     cells = []
+    fragment_audits = {}
     for index, box in enumerate(boxes[: len(ids)]):
         prop = transparent_rgb_clean(sheet.crop(box))
+        if manifest.get("pruneDetachedFragments", False):
+            prop, fragment_audit = prune_detached_fragments(
+                prop,
+                float(manifest.get("fragmentMergePx", 24)),
+                int(manifest.get("alphaCutoff", 12)),
+            )
+            visible = alpha_bbox(prop)
+            prop = prop.crop(visible) if visible else prop
+            fragment_audits[ids[index]] = fragment_audit
         pad = int(manifest.get("paddingPx", 2))
         prop = ImageOps.expand(prop, border=pad, fill=(0, 0, 0, 0))
         cells.append((ids[index], prop))
@@ -647,6 +1145,15 @@ def compile_prop_kit(manifest_path: Path, output_dir: Path, force: bool = False)
         "allComponentsHaveAlpha": all(alpha_bbox(image) for _, image in cells),
         "allAnchorsGrounded": all(0.5 <= value["footY"] <= 1.0 for value in anchors.values()),
         "atlasContainsEveryId": len(placements) == len(ids),
+        "componentsClearDeclaredCells": all(
+            box[0] > slot[0] and box[1] > slot[1] and box[2] < slot[2] and box[3] < slot[3]
+            for box, slot in zip(boxes, slots)
+        ),
+        "detachedFragmentPolicySatisfied": not manifest.get("pruneDetachedFragments", False)
+        or all(
+            audit["prunedAlphaRatio"] <= float(manifest.get("maxPrunedAlphaRatio", 0.08))
+            for audit in fragment_audits.values()
+        ),
     }
     return finish_receipt(
         "prop-kit",
@@ -658,7 +1165,13 @@ def compile_prop_kit(manifest_path: Path, output_dir: Path, force: bool = False)
             "metadata": repo_path(output_dir / "kit.json"),
             "proofBoard": repo_path(output_dir / "proof-board.png"),
         },
-        {"componentCount": len(boxes), "expectedCount": len(ids)},
+        {
+            "componentCount": len(boxes),
+            "expectedCount": len(ids),
+            "chroma": chroma,
+            "extraction": extraction,
+            "fragmentAudits": fragment_audits,
+        },
     )
 
 
@@ -676,16 +1189,52 @@ def alpha_outside_ratio(candidate: Image.Image, allowed: Image.Image) -> float:
     return sum(1 for value in outside.getdata() if value) / max(1, sum(1 for value in cand.getdata() if value))
 
 
+def register_to_canvas(
+    image: Image.Image,
+    canvas_size: tuple[int, int],
+    foot_x: float = 0.5,
+    bottom_padding: int = 0,
+) -> Image.Image:
+    rgba = transparent_rgb_clean(image)
+    box = alpha_bbox(rgba)
+    output = Image.new("RGBA", canvas_size, (0, 0, 0, 0))
+    if not box:
+        return output
+    content = rgba.crop(box)
+    if content.width > canvas_size[0] or content.height + bottom_padding > canvas_size[1]:
+        content = ImageOps.contain(
+            content,
+            (canvas_size[0], max(1, canvas_size[1] - bottom_padding)),
+            Image.Resampling.LANCZOS,
+        )
+    x = round((canvas_size[0] - content.width) * foot_x)
+    y = canvas_size[1] - bottom_padding - content.height
+    output.alpha_composite(content, (x, y))
+    return output
+
+
 def compile_condition(manifest_path: Path, output_dir: Path, force: bool = False) -> dict[str, Any]:
     manifest = read_json(manifest_path)
     guarded_reset(output_dir, force)
     source_path = resolve_manifest_path(manifest_path, manifest["source"])
-    source = key_magenta(Image.open(source_path))
+    source, source_chroma = key_manifest_image(Image.open(source_path), manifest)
+    original_dimensions = {"source": list(source.size)}
     variants = []
     for entry in manifest.get("states", []):
         state_path = resolve_manifest_path(manifest_path, entry["path"])
-        image = key_magenta(Image.open(state_path))
+        image, _ = key_manifest_image(Image.open(state_path), {**manifest, **entry})
+        original_dimensions[entry["id"]] = list(image.size)
         variants.append((entry["id"], image, state_path))
+    registration = manifest.get("registration")
+    if registration:
+        canvas = tuple(int(value) for value in registration["canvas"])
+        foot_x = float(registration.get("footX", 0.5))
+        bottom_padding = int(registration.get("bottomPaddingPx", 0))
+        source = register_to_canvas(source, canvas, foot_x, bottom_padding)
+        variants = [
+            (state_id, register_to_canvas(image, canvas, foot_x, bottom_padding), path)
+            for state_id, image, path in variants
+        ]
     allowed = dilated_alpha(source, int(manifest.get("silhouetteAllowancePx", 3)))
     outside = {state_id: alpha_outside_ratio(image, allowed) for state_id, image, _ in variants}
     changes = {state_id: rgba_difference(source, image) for state_id, image, _ in variants}
@@ -706,6 +1255,8 @@ def compile_condition(manifest_path: Path, output_dir: Path, force: bool = False
         "silhouetteWithinLicense": all(value <= float(manifest.get("maxOutsideAlphaRatio", 0.01)) for value in outside.values()),
         "damageIsLocalNotReplacement": all(0.0001 <= value <= float(manifest.get("maxChangedRatio", 0.42)) for value in changes.values()),
         "declaredSeverityOrdered": order == sorted(order),
+        "registrationContractSatisfied": not registration
+        or all(image.size == source.size for _, image, _ in variants),
     }
     return finish_receipt(
         "condition-state",
@@ -713,7 +1264,17 @@ def compile_condition(manifest_path: Path, output_dir: Path, force: bool = False
         output_dir,
         gates,
         {"proofBoard": repo_path(output_dir / "proof-board.png")},
-        {"outsideAlphaRatio": outside, "changedRatio": changes},
+        {
+            "outsideAlphaRatio": outside,
+            "changedRatio": changes,
+            "originalDimensions": original_dimensions,
+            "registeredDimensions": list(source.size),
+            "registration": registration,
+            "sourceChroma": source_chroma,
+            "stateSha256": {
+                state_id: sha256_file(path) for state_id, _, path in variants
+            },
+        },
     )
 
 
@@ -734,7 +1295,7 @@ def compile_palette(manifest_path: Path, output_dir: Path, force: bool = False) 
     manifest = read_json(manifest_path)
     guarded_reset(output_dir, force)
     source_path = resolve_manifest_path(manifest_path, manifest["source"])
-    source = key_magenta(Image.open(source_path))
+    source, chroma = key_manifest_image(Image.open(source_path), manifest)
     palette = [hex_rgb(value) for value in manifest["palette"]]
     protected = {hex_rgb(value) for value in manifest.get("protectedColors", [])}
     output = source.copy()
@@ -797,26 +1358,36 @@ def compile_palette(manifest_path: Path, output_dir: Path, force: bool = False) 
             "meanColorDistance": sum(distances) / max(1, len(distances)),
             "valueRankAgreement": rank_agreement,
             "outputColorCount": len(output_colors),
+            "chroma": chroma,
         },
     )
 
 
 # Nine-slice / trim compiler ------------------------------------------------
 
-def nine_slice(source: Image.Image, target: tuple[int, int], insets: tuple[int, int, int, int]) -> Image.Image:
-    left, top, right, bottom = insets
+def nine_slice(
+    source: Image.Image,
+    target: tuple[int, int],
+    source_insets: tuple[int, int, int, int],
+    output_insets: tuple[int, int, int, int] | None = None,
+) -> Image.Image:
+    left, top, right, bottom = source_insets
+    out_left, out_top, out_right, out_bottom = output_insets or source_insets
     width, height = target
-    if width < left + right or height < top + bottom:
+    if width < out_left + out_right or height < out_top + out_bottom:
         raise ValueError("target smaller than fixed caps")
     x = (0, left, source.width - right, source.width)
     y = (0, top, source.height - bottom, source.height)
-    tx = (0, left, width - right, width)
-    ty = (0, top, height - bottom, height)
+    tx = (0, out_left, width - out_right, width)
+    ty = (0, out_top, height - out_bottom, height)
     out = Image.new("RGBA", target, (0, 0, 0, 0))
     for row in range(3):
         for col in range(3):
-            patch = source.crop((x[col], y[row], x[col + 1], y[row + 1]))
+            source_size = (x[col + 1] - x[col], y[row + 1] - y[row])
             target_size = (tx[col + 1] - tx[col], ty[row + 1] - ty[row])
+            if 0 in source_size or 0 in target_size:
+                continue
+            patch = source.crop((x[col], y[row], x[col + 1], y[row + 1]))
             if patch.size != target_size:
                 patch = patch.resize(target_size, Image.Resampling.NEAREST)
             out.alpha_composite(patch, (tx[col], ty[row]))
@@ -827,14 +1398,15 @@ def compile_trim(manifest_path: Path, output_dir: Path, force: bool = False) -> 
     manifest = read_json(manifest_path)
     guarded_reset(output_dir, force)
     source_path = resolve_manifest_path(manifest_path, manifest["source"])
-    source = key_magenta(Image.open(source_path))
-    insets = tuple(int(value) for value in manifest["insets"])
+    source, chroma = key_manifest_image(Image.open(source_path), manifest)
+    insets = tuple(int(value) for value in manifest.get("sourceInsets", manifest.get("insets")))
+    output_insets = tuple(int(value) for value in manifest.get("outputInsets", insets))
     targets = [tuple(int(value) for value in target) for target in manifest["targets"]]
     outputs = []
     errors = []
     for index, target in enumerate(targets):
         try:
-            image = nine_slice(source, target, insets)
+            image = nine_slice(source, target, insets, output_insets)
             image.save(output_dir / f"target-{index + 1}.png")
             outputs.append((f"{target[0]}x{target[1]}", image))
         except ValueError as exc:
@@ -847,16 +1419,73 @@ def compile_trim(manifest_path: Path, output_dir: Path, force: bool = False) -> 
         3,
     )
     left, top, right, bottom = insets
+    out_left, out_top, out_right, out_bottom = output_insets
     cap_ok = True
     for _, image in outputs:
-        cap_ok = cap_ok and (
-            image.crop((0, 0, left, top)).tobytes() == source.crop((0, 0, left, top)).tobytes()
-            and image.crop((image.width - right, image.height - bottom, image.width, image.height)).tobytes()
-            == source.crop((source.width - right, source.height - bottom, source.width, source.height)).tobytes()
-        )
+        if left and right and top and bottom and out_left and out_right and out_top and out_bottom:
+            corner_specs = (
+                (
+                    (0, 0, left, top),
+                    (0, 0, out_left, out_top),
+                    (out_left, out_top),
+                ),
+                (
+                    (source.width - right, 0, source.width, top),
+                    (image.width - out_right, 0, image.width, out_top),
+                    (out_right, out_top),
+                ),
+                (
+                    (0, source.height - bottom, left, source.height),
+                    (0, image.height - out_bottom, out_left, image.height),
+                    (out_left, out_bottom),
+                ),
+                (
+                    (source.width - right, source.height - bottom, source.width, source.height),
+                    (
+                        image.width - out_right,
+                        image.height - out_bottom,
+                        image.width,
+                        image.height,
+                    ),
+                    (out_right, out_bottom),
+                ),
+            )
+            for source_box, output_box, expected_size in corner_specs:
+                expected = source.crop(source_box)
+                if expected.size != expected_size:
+                    expected = expected.resize(expected_size, Image.Resampling.NEAREST)
+                cap_ok = cap_ok and image.crop(output_box).tobytes() == expected.tobytes()
+        elif left and out_left:
+            expected = source.crop((0, 0, left, source.height)).resize(
+                (out_left, image.height), Image.Resampling.NEAREST
+            )
+            cap_ok = cap_ok and image.crop((0, 0, out_left, image.height)).tobytes() == expected.tobytes()
+        if not (left and right and top and bottom) and right and out_right:
+            expected = source.crop((source.width - right, 0, source.width, source.height)).resize(
+                (out_right, image.height), Image.Resampling.NEAREST
+            )
+            cap_ok = cap_ok and image.crop(
+                (image.width - out_right, 0, image.width, image.height)
+            ).tobytes() == expected.tobytes()
+        if not (left and right and top and bottom) and top and out_top:
+            expected = source.crop((0, 0, source.width, top)).resize(
+                (image.width, out_top), Image.Resampling.NEAREST
+            )
+            cap_ok = cap_ok and image.crop((0, 0, image.width, out_top)).tobytes() == expected.tobytes()
+        if not (left and right and top and bottom) and bottom and out_bottom:
+            expected = source.crop((0, source.height - bottom, source.width, source.height)).resize(
+                (image.width, out_bottom), Image.Resampling.NEAREST
+            )
+            cap_ok = cap_ok and image.crop(
+                (0, image.height - out_bottom, image.width, image.height)
+            ).tobytes() == expected.tobytes()
     gates = {
         "sourceHashMatches": not manifest.get("sourceSha256") or sha256_file(source_path) == manifest["sourceSha256"],
         "insetsValid": left + right <= source.width and top + bottom <= source.height,
+        "outputInsetsValid": all(
+            target[0] >= out_left + out_right and target[1] >= out_top + out_bottom
+            for target in targets
+        ),
         "allTargetsLegal": len(outputs) == len(targets) and not errors,
         "capsPreservedExactly": cap_ok and bool(outputs),
         "everyTargetDimensionProved": len(outputs) == len(targets),
@@ -867,7 +1496,13 @@ def compile_trim(manifest_path: Path, output_dir: Path, force: bool = False) -> 
         output_dir,
         gates,
         {"proofBoard": repo_path(output_dir / "proof-board.png")},
-        {"targets": [list(target) for target in targets], "errors": errors},
+        {
+            "targets": [list(target) for target in targets],
+            "sourceInsets": list(insets),
+            "outputInsets": list(output_insets),
+            "errors": errors,
+            "chroma": chroma,
+        },
     )
 
 
@@ -877,26 +1512,53 @@ def compile_decal(manifest_path: Path, output_dir: Path, force: bool = False) ->
     manifest = read_json(manifest_path)
     guarded_reset(output_dir, force)
     sheet_path = resolve_manifest_path(manifest_path, manifest["sheet"])
-    keyed = transparent_rgb_clean(key_magenta(Image.open(sheet_path)))
-    boxes = connected_components(keyed)
+    keyed, chroma = key_manifest_image(Image.open(sheet_path), manifest)
+    if manifest.get("isolationMode") == "alpha-component-groups":
+        components, boxes, extraction = grouped_alpha_components(keyed, manifest)
+        slots = [(0, 0, keyed.width, keyed.height) for _box in boxes]
+    else:
+        boxes, slots, extraction = sheet_component_boxes(keyed, manifest)
+        components = [transparent_rgb_clean(keyed.crop(box)) for box in boxes]
     ids = list(manifest.get("ids", []))
     variants = []
     base_border_safe = all(
-        box[0] > 0 and box[1] > 0 and box[2] < keyed.width and box[3] < keyed.height for box in boxes
+        box[0] > slot[0] and box[1] > slot[1] and box[2] < slot[2] and box[3] < slot[3]
+        for box, slot in zip(boxes, slots)
     )
-    for index, box in enumerate(boxes[: len(ids)]):
-        base = ImageOps.expand(keyed.crop(box), border=3, fill=(0, 0, 0, 0))
+    for index, base in enumerate(components[: len(ids)]):
+        maximum_dimension = manifest.get("maxBaseDimensionPx")
+        if maximum_dimension:
+            base = ImageOps.contain(
+                base,
+                (int(maximum_dimension), int(maximum_dimension)),
+                Image.Resampling.LANCZOS,
+            )
+        base = ImageOps.expand(
+            base,
+            border=int(manifest.get("paddingPx", 3)),
+            fill=(0, 0, 0, 0),
+        )
         for angle in (0, 90, 180, 270):
             rotated = base.rotate(angle, expand=True, resample=Image.Resampling.NEAREST)
             for scale in (0.5, 1.0, 2.0):
                 size = (max(1, round(rotated.width * scale)), max(1, round(rotated.height * scale)))
-                variant = rotated.resize(size, Image.Resampling.NEAREST)
+                variant = transparent_rgb_clean(
+                    rotated.resize(size, Image.Resampling.NEAREST)
+                )
                 variant_id = f"{ids[index]}-r{angle}-s{str(scale).replace('.', '_')}"
                 variants.append((variant_id, variant))
     atlas = Image.new("RGBA", (1, 1), (0, 0, 0, 0))
     placements = {}
+    errors = []
     if variants:
-        atlas, placements = shelf_pack(variants, padding=2, max_width=768)
+        try:
+            atlas, placements = shelf_pack(
+                variants,
+                padding=int(manifest.get("atlasPaddingPx", 2)),
+                max_width=int(manifest.get("atlasMaxWidthPx", 768)),
+            )
+        except ValueError as exc:
+            errors.append(str(exc))
     atlas.save(output_dir / "atlas.png")
     sample_cells = [(name, image) for name, image in variants if "-s1_0" in name]
     proof_board("Decal/stamp compiler", sample_cells, output_dir / "proof-board.png", (170, 160), 4)
@@ -914,10 +1576,13 @@ def compile_decal(manifest_path: Path, output_dir: Path, force: bool = False) ->
         "sourceHashMatches": not manifest.get("sourceSha256") or sha256_file(sheet_path) == manifest["sourceSha256"],
         "componentCountMatches": len(boxes) == len(ids) and bool(ids),
         "sourceComponentsDoNotBleedOffSheet": base_border_safe,
+        "everySourceAlphaPixelAssigned": extraction.get(
+            "everySourceAlphaPixelAssigned", True
+        ),
         "transparentPixelsDefringed": transparent_clean,
         "halfScaleRemainsReadable": half_readable and bool(variants),
         "rotationScaleMatrixComplete": len(variants) == len(ids) * 12,
-        "atlasContainsEveryVariant": len(placements) == len(variants),
+        "atlasContainsEveryVariant": len(placements) == len(variants) and not errors,
     }
     return finish_receipt(
         "decal-stamp",
@@ -925,7 +1590,13 @@ def compile_decal(manifest_path: Path, output_dir: Path, force: bool = False) ->
         output_dir,
         gates,
         {"atlas": repo_path(output_dir / "atlas.png"), "proofBoard": repo_path(output_dir / "proof-board.png")},
-        {"componentCount": len(boxes), "variantCount": len(variants)},
+        {
+            "componentCount": len(boxes),
+            "variantCount": len(variants),
+            "chroma": chroma,
+            "extraction": extraction,
+            "errors": errors,
+        },
     )
 
 
@@ -935,7 +1606,7 @@ def compile_citizenship(manifest_path: Path, output_dir: Path, force: bool = Fal
     manifest = read_json(manifest_path)
     guarded_reset(output_dir, force)
     source_path = resolve_manifest_path(manifest_path, manifest["source"])
-    source = transparent_rgb_clean(key_magenta(Image.open(source_path)))
+    source, chroma = key_manifest_image(Image.open(source_path), manifest)
     box = alpha_bbox(source)
     cropped = source.crop(box) if box else Image.new("RGBA", (1, 1), (0, 0, 0, 0))
     padding = int(manifest.get("paddingPx", 3))
@@ -994,6 +1665,7 @@ def compile_citizenship(manifest_path: Path, output_dir: Path, force: bool = Fal
             "metadata": repo_path(output_dir / "citizenship.json"),
             "proofBoard": repo_path(output_dir / "proof-board.png"),
         },
+        {"chroma": chroma},
     )
 
 
@@ -1110,8 +1782,10 @@ def compile_material(manifest_path: Path, output_dir: Path, force: bool = False)
     manifest = read_json(manifest_path)
     guarded_reset(output_dir, force)
     albedo_path = resolve_manifest_path(manifest_path, manifest["albedo"])
-    albedo = Image.open(albedo_path).convert("RGB")
-    source_seam = edge_delta(albedo)
+    source_albedo = Image.open(albedo_path).convert("RGB")
+    source_seam = edge_delta(source_albedo)
+    allow_seam_lock = bool(manifest.get("allowSeamLock", False))
+    albedo = force_periodic(source_albedo) if allow_seam_lock else source_albedo
     height = force_periodic(albedo.convert("L").filter(ImageFilter.GaussianBlur(float(manifest.get("heightBlur", 1.2)))))
     normal = normal_from_height(height, float(manifest.get("normalStrength", 2.0)))
     roughness = force_periodic(ImageOps.autocontrast(ImageOps.invert(height)))
@@ -1134,7 +1808,13 @@ def compile_material(manifest_path: Path, output_dir: Path, force: bool = False)
     gates = {
         "sourceHashMatches": not manifest.get("sourceSha256") or sha256_file(albedo_path) == manifest["sourceSha256"],
         "sourceSeamWithinBudget": not manifest.get("seamRequired", True)
-        or source_seam <= float(manifest.get("maxSourceEdgeDelta", 3.0)),
+        or source_seam <= float(
+            manifest.get(
+                "maxRepairableSourceEdgeDelta" if allow_seam_lock else "maxSourceEdgeDelta",
+                3.0,
+            )
+        ),
+        "compiledAlbedoSeamExact": not manifest.get("seamRequired", True) or edge_delta(albedo) == 0,
         "allChannelsMatchDimensions": all(image.size == albedo.size for _, image in channels),
         "heightRangeValid": min(height.getdata()) >= 0 and max(height.getdata()) <= 255,
         "normalRangeValid": blue_min >= 128,
@@ -1149,13 +1829,19 @@ def compile_material(manifest_path: Path, output_dir: Path, force: bool = False)
         output_dir,
         gates,
         {
+            "albedo": repo_path(output_dir / "albedo.png"),
             "height": repo_path(output_dir / "height.png"),
             "normal": repo_path(output_dir / "normal.png"),
             "roughness": repo_path(output_dir / "roughness.png"),
             "emissive": repo_path(output_dir / "emissive.png"),
             "proofBoard": repo_path(output_dir / "proof-board.png"),
         },
-        {"sourceEdgeDelta": source_seam, "normalBlueMinimum": blue_min},
+        {
+            "sourceEdgeDelta": source_seam,
+            "compiledAlbedoEdgeDelta": edge_delta(albedo),
+            "seamLockApplied": allow_seam_lock,
+            "normalBlueMinimum": blue_min,
+        },
     )
 
 
@@ -1170,10 +1856,10 @@ def compile_regression(manifest_path: Path, output_dir: Path, force: bool = Fals
     current = Image.open(current_path).convert("RGBA")
     same_dimensions = baseline.size == current.size
     if same_dimensions:
-        diff = ImageChops.difference(baseline, current)
+        diff = ImageChops.difference(baseline.convert("RGB"), current.convert("RGB"))
         score = rgba_difference(baseline, current)
     else:
-        diff = Image.new("RGBA", baseline.size, (255, 0, 0, 255))
+        diff = Image.new("RGB", baseline.size, (255, 0, 0))
         score = 1.0
     amplified = diff.point(lambda value: min(255, value * 4))
     diff.save(output_dir / "diff.png")

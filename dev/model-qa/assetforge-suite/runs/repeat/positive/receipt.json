@@ -35,7 +35,29 @@
         "y": 10
       }
     ],
-    "edgeDelta": 0.0
+    "edgeDelta": 0.0,
+    "layout": "seeded-scatter",
+    "chroma": {
+      "requested": "auto",
+      "detected": "magenta",
+      "dominantBorderRgb": [
+        255,
+        0,
+        255
+      ],
+      "keyRgb": [
+        255,
+        0,
+        255
+      ],
+      "tolerance": 12,
+      "softness": 0,
+      "keyedPixelCount": 9984
+    },
+    "extraction": {
+      "mode": "connected-components",
+      "declaredCellCount": null
+    }
   },
   "runtimeAdmission": "CANDIDATE"
 }

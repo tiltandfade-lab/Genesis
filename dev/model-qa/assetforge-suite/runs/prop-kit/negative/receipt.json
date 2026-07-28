@@ -11,7 +11,9 @@
     "idsUnique": true,
     "allComponentsHaveAlpha": true,
     "allAnchorsGrounded": true,
-    "atlasContainsEveryId": true
+    "atlasContainsEveryId": true,
+    "componentsClearDeclaredCells": true,
+    "detachedFragmentPolicySatisfied": true
   },
   "outputs": {
     "atlas": "dev/model-qa/assetforge-suite/runs/prop-kit/negative/atlas.png",
@@ -20,7 +22,29 @@
   },
   "details": {
     "componentCount": 3,
-    "expectedCount": 2
+    "expectedCount": 2,
+    "chroma": {
+      "requested": "auto",
+      "detected": "magenta",
+      "dominantBorderRgb": [
+        255,
+        0,
+        255
+      ],
+      "keyRgb": [
+        255,
+        0,
+        255
+      ],
+      "tolerance": 12,
+      "softness": 0,
+      "keyedPixelCount": 9984
+    },
+    "extraction": {
+      "mode": "connected-components",
+      "declaredCellCount": null
+    },
+    "fragmentAudits": {}
   },
   "runtimeAdmission": "CANDIDATE"
 }

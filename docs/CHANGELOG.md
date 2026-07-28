@@ -8,6 +8,32 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-28 — Assetforge real-asset qualification [Codex]
+
+**Added**
+- `build/qualify-assetforge-real.py` and retained
+  `dev/model-qa/assetforge-real/` evidence: tracked/decodable source ledger, exact hashes, twelve
+  real candidate runs, one changed-real-image negative control, per-process receipts/proofs, and a
+  navigation-only aggregate board. Final technical result: 13/13 expectations met.
+
+**Changed**
+- Decal isolation can assign every nonzero source-alpha component to declared semantic anchors,
+  preserving overlapping loose-sheet art without clipping it at nominal cell boundaries.
+- Prop cleanup records pruned-alpha budgets and can enforce zero-gap ownership; repeat courses use
+  deterministic adjacency-aware selection instead of a forever-repeating shuffled sequence.
+- Real regression difference boards now visualize RGB change independently of transparent output
+  alpha.
+
+**Fixed**
+- Repaired a clipped lower-right crack, removed neighboring chest/barrel fragments present in real
+  dressing exports, and broke the obvious diagonal cadence found during individual roof-repeat
+  inspection.
+
+**Verified**
+- Real qualification 13/13; synthetic non-emote suite 11/11 positive and 11/11 expected negative;
+  sprite-emote suite 10/10 expected outcomes plus its live-output guard and rear-hand rejection.
+  No candidate was admitted to runtime.
+
 ## 2026-07-27 — Assetforge twelve-family V1 [Codex]
 
 **Added**
@@ -835,4 +861,3 @@ Fable's Phase-3 call; (2) **Open5e `srd-2024`** (CC-BY-4.0) as a build-time cros
 
 **Deferred.** Fable weighs in on Phase 3, potentially expands/orchestrates the next waves. All four adoption
 candidates are recommendations, not decisions.
-

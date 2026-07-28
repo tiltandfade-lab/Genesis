@@ -183,6 +183,44 @@ architecture and the defining invariant of each family. Adding a new dialect, pa
 condition vocabulary, channel derivation, or runtime adapter requires new manifests and negative
 controls without weakening the V1 receipt.
 
+## Real-asset qualification
+
+The synthetic suite above is the fast contract regression. Production-shaped qualification is a
+separate retained harness:
+
+```bash
+python3 build/qualify-assetforge-real.py --force
+```
+
+The harness requires hydrated, decodable Git LFS content and fails loudly on pointer text or a
+source-hash mismatch. It runs all twelve families against named Genesis assets, including the real
+fighter sprite/emote return, floor and plaque art, slate components, dirty dressing exports, crack
+decals, and the existing material-workbench condition maps. It records:
+
+- tracked leaf-source paths, byte sizes, SHA-256 hashes, and decode status in
+  `dev/model-qa/assetforge-real/source-evidence.json`;
+- exact lineage for the two explicit staging composites (the prop qualification sheet and
+  aged-wet condition state);
+- one manifest, receipt, and individual proof board per process;
+- twelve expected passing candidate runs plus one deliberately changed real-image regression
+  control which must fail;
+- a combined navigation board which is explicitly not accepted as proof by itself.
+
+The retained qualification receipt is
+`dev/model-qa/assetforge-real/qualification-receipt.json`. The 2026-07-28 run met all 13
+expectations. The separate hash-bound inspection ledger is
+`dev/model-qa/assetforge-real/individual-visual-review.json`; rerunning the qualifier deliberately
+removes it so changed outputs cannot inherit a stale visual verdict. Individual inspection exposed
+and repaired three defects before that result was
+accepted: nominal grid slicing clipped a crack branch, and loose distance-based prop cleanup kept
+neighboring-sheet fragments. Decals now support anchor-assigned alpha-component groups with an
+all-source-alpha-assigned gate; the prop qualification uses zero-gap component ownership and
+records its cleanup ratio. The repeat compiler also rejects a visually repetitive selection policy
+in favor of deterministic adjacency-aware variant selection.
+
+This is a technical qualification boundary, not an art-admission boundary. Emote identity/taste,
+material-channel authorship, and every production routing decision remain explicitly reviewable.
+
 ## Non-emote V1 contracts
 
 - **Modular repeat:** keys a component sheet, isolates connected components, places every component

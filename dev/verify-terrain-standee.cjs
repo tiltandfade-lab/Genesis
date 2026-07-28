@@ -29,8 +29,9 @@ const OUT_JSON = process.argv.includes("--json")
   ? process.argv[process.argv.indexOf("--json") + 1] : null;
 
 const VIEWPORT = { width: 1280, height: 720, deviceScaleFactor: 2 };
-/* the six rungs of the ladder, so the contract is proved at every device combination and not only
-   at the one that happens to look best */
+/* Six URL-compatible rungs. `decal` is intentionally an inert alias of `material` after Adam
+   rejected A7's regular sedimentary face bands; retaining the id keeps old capture URLs valid
+   without retaining the rejected renderer. */
 const RUNGS = ["naked", "material", "decal", "prop", "all", "nojitter"];
 
 let pass = 0, fail = 0;
@@ -187,10 +188,11 @@ const check = (name, cond, detail = "") => {
         && report.rungs[r].probe.expression.rungId === r),
       JSON.stringify(RUNGS.map((r) => report.rungs[r].probe.expression
         && report.rungs[r].probe.expression.rungId)));
-    check("INV4. the rungs actually DIFFER in what was drawn (a ladder whose rungs render "
-      + "identically proves nothing)",
-      new Set(RUNGS.map((r) => (report.rungs[r].probe.terrain.frameCensus.expression || 0)
-        + ":" + (report.rungs[r].probe.terrain.frameCensus.occluders || 0))).size >= 4,
+    const visualStates = RUNGS.map((r) => (report.rungs[r].probe.terrain.frameCensus.expression || 0)
+      + ":" + (report.rungs[r].probe.terrain.frameCensus.occluders || 0));
+    check("INV4. the ladder retains three genuine visual states, while the retired `decal` URL "
+      + "matches `material` exactly and therefore cannot resurrect A7",
+      new Set(visualStates).size >= 3 && visualStates[1] === visualStates[2],
       JSON.stringify(RUNGS.map((r) => [r,
         report.rungs[r].probe.terrain.frameCensus.expression,
         report.rungs[r].probe.terrain.frameCensus.occluders])));

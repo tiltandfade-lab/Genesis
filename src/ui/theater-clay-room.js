@@ -4061,28 +4061,44 @@ function clayTerrainRolloverMesh(field, c, sides, topY, colour){
   return mesh;
 }
 
-/* A4 — THE TWO-FREQUENCY JOINT. A fine unit far smaller than the cell PLUS one coarse course at
-   the cell pitch, so the ruled tactical overlay lands on a mortar line instead of on nothing. At
-   clay fidelity (no textures on this bench yet) the joint is drawn as line geometry rather than as
-   a UV scale; the RULE is the deliverable and the expression is provisional — recorded as such in
-   docs/DESIGN.md rather than presented as the final material. */
+/* A4 — THE TWO-FREQUENCY JOINT. The coarse ring is the ONLY line allowed to reach the tactical
+   boundary. Fine joints are a clipped, staggered running bond: bed joints stop before the ring and
+   head joints terminate at each bed. The first implementation drew a complete 4x4 square lattice
+   on every cell; it did not make the grid diegetic, it minted a second grid at quarter scale. */
 function clayTerrainJointMesh(field, index, flags, baseY, cx, cz, coarseColour, fineColour){
   const q = TERRAIN_GRID_LAW.verticalQuantumWorldUnits;
   const lift = 0.006;
   function y(u, v){ return baseY + terrainCellTopH(field, index, u, v, flags) * q + lift; }
-  const coarse = [];
-  const ring = [[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5], [-0.5, -0.5]];
-  for(let i = 0; i + 1 < ring.length; i++){
-    coarse.push(cx + ring[i][0], y(ring[i][0], ring[i][1]), cz + ring[i][1]);
-    coarse.push(cx + ring[i + 1][0], y(ring[i + 1][0], ring[i + 1][1]), cz + ring[i + 1][1]);
+  const coarseSoft = [], coarseRelief = [];
+  const c = field.cells[index];
+  function neighbour(dx, dy){
+    const x = c.x + dx, yy = c.y + dy;
+    if(x < 0 || yy < 0 || x >= field.extent.x || yy >= field.extent.y) return null;
+    const n = field.cells[yy * field.extent.x + x];
+    return n && n.kind !== "void" && n.inPlayfield ? n : null;
   }
+  function coarseEdge(points, n){
+    const joins = n && typeof terrainCellsJoinAsSurface === "function"
+      ? terrainCellsJoinAsSurface(field, index, n.index, flags)
+      : !!(n && n.h === c.h);
+    const out = joins ? coarseSoft : coarseRelief;
+    out.push(cx + points[0], y(points[0], points[1]), cz + points[1],
+      cx + points[2], y(points[2], points[3]), cz + points[3]);
+  }
+  /* Canonical ownership: every cell owns north + west; east + south draw only at the field edge.
+     The old full ring was emitted by BOTH cells at an interior seam. Multiply blending therefore
+     made a nominal 55% line roughly 30% after the overlap — a black tile outline. */
+  coarseEdge([-0.5, -0.5, 0.5, -0.5], neighbour(0, -1));
+  coarseEdge([-0.5, 0.5, -0.5, -0.5], neighbour(-1, 0));
+  if(!neighbour(1, 0)) coarseEdge([0.5, -0.5, 0.5, 0.5], null);
+  if(!neighbour(0, 1)) coarseEdge([0.5, 0.5, -0.5, 0.5], null);
   const fine = [];
-  const n = 4;                                     /* the fine unit: a quarter cell, never in ratio 1 */
-  for(let k = 1; k < n; k++){
-    const t = -0.5 + k / n;
-    fine.push(cx - 0.5, y(-0.5, t), cz + t, cx + 0.5, y(0.5, t), cz + t);
-    fine.push(cx + t, y(t, -0.5), cz - 0.5, cx + t, y(t, 0.5), cz + 0.5);
-  }
+  const fineSegments = (typeof terrainFineJointSegments === "function")
+    ? terrainFineJointSegments(field, index) : [];
+  fineSegments.forEach(function(s){
+    fine.push(cx + s[0], y(s[0], s[1]), cz + s[1],
+      cx + s[2], y(s[2], s[3]), cz + s[3]);
+  });
   const group = new THREE.Group();
   /* A JOINT IS ALWAYS DARKER THAN ITS SURROUND, in every light case. A line cannot be lit in three.js
      — LineBasicMaterial ignores every light in the scene — so an ordinary line drawn over the DARK
@@ -4091,7 +4107,8 @@ function clayTerrainJointMesh(field, index, flags, baseY, cx, cz, coarseColour, 
      MULTIPLY is the fix and it is the same trick the contact pool already uses: white is the
      identity, so a grey line darkens whatever is under it by a fixed ratio whether the ground is
      noon-lit or nearly black, and it can never add light. */
-  function seg(points, grey){
+  function seg(points, grey, role){
+    if(!points.length) return;
     const geo = new THREE.BufferGeometry();
     geo.setAttribute("position", new THREE.Float32BufferAttribute(points, 3));
     const line = new THREE.LineSegments(geo, new THREE.LineBasicMaterial({
@@ -4099,59 +4116,33 @@ function clayTerrainJointMesh(field, index, flags, baseY, cx, cz, coarseColour, 
       depthWrite: false, toneMapped: false }));
     line.userData.terrainExpression = "A4-joint";
     line.userData.contactBlendMode = "multiply";
+    line.userData.terrainJointRole = role;
     group.add(line);
   }
-  seg(fine, 0xc8c8c8);       /* the fine unit: a light touch, well under the cell pitch */
-  seg(coarse, 0x8c8c8c);     /* one coarse course AT the cell pitch — the one the overlay lands on */
+  const jointLaw = (typeof TERRAIN_FINE_JOINT_LAW === "object")
+    ? TERRAIN_FINE_JOINT_LAW : {
+      fineValueMultiplier: 0.95, continuousTacticalValueMultiplier: 0.82,
+      reliefBoundaryValueMultiplier: 0.58
+    };
+  function greyAt(multiplier){
+    const byte = Math.max(0, Math.min(255, Math.round(multiplier * 255)));
+    return byte * 0x010101;
+  }
+  /* The grid stays readable, but it is no longer the darkest shape in the field. A continuous
+     terrace/ramp receives a restrained construction seam; an actual riser/cliff/perimeter earns
+     the stronger line. This is the XCOM part of the grammar: topology dominates the cell lattice. */
+  seg(fine, greyAt(jointLaw.fineValueMultiplier), "fine-material");
+  seg(coarseSoft, greyAt(jointLaw.continuousTacticalValueMultiplier), "continuous-tactical");
+  seg(coarseRelief, greyAt(jointLaw.reliefBoundaryValueMultiplier), "relief-boundary");
   group.userData.terrainExpression = "A4-joint";
-  return group;
-}
-
-/* A7 — SEAM AND FACE DRESSING. The XCOM move: the volume behind a thin face is free, so fill it
-   where neither cover nor pathing is generating. Here that is horizontal banding on the exposed
-   face — bedded strata / coursed masonry — which is FFT device #7 and the reason `655bd60e…`
-   survives being the most literally cube-stacked map in the corpus. */
-function clayTerrainFaceBands(field, c, sides, topY, faceBottomY, colour, flags, insets){
-  const group = new THREE.Group();
-  const height = topY - faceBottomY;
-  if(height < 0.18) return null;
-  const bandCount = Math.max(1, Math.min(5, Math.floor(height / 0.22)));
-  const rnd = terrainRng(terrainHash32(field.seed + ":band:" + c.x + "," + c.y));
-  /* R3 — A BAND MUST LIE ON THE FACE IT DRESSES. Found by reading the geometry while dropping the
-     proud offset: the bands were positioned at +-0.5, the CELL boundary, while the A3 shaft they
-     dress is inset by up to CLAY_TERRAIN_CHAMFER on an exposed side. So on every overhung cell the
-     bands were not proud of the face at all — they were detached rails hanging 0.10 wu out in the
-     air below the cap, which is exactly the "protruding rails" reading in Adam's frames. The face
-     plane is now taken from the same inset the shaft was built with. */
-  const ins = insets || { w: 0, e: 0, n: 0, s: 0 };
-  ["w", "e", "n", "s"].forEach(function(key){
-    if(!(sides[key] > 0)) return;
-    const facePlane = 0.5 - (ins[key] || 0);
-    for(let i = 0; i < bandCount; i++){
-      const frac = (i + 0.5) / bandCount;
-      const jitter = flags.jitter ? (rnd() - 0.5) * 0.06 : 0;
-      const by = topY - height * frac + jitter;
-      const thick = 0.035 + rnd() * 0.03;
-      /* R3, second half (Adam 2026-07-28): the banding read as PROTRUDING RAILS in the R1 frames.
-         *"drop it to a material value change, not a projecting ledge."* 0.022 wu proud is what
-         caught the wrong highlight — it is nearly twice the plinth's own 0.012 bevel thickness,
-         which is the visibility floor at the production read, so it was a ledge by any measure.
-         0.0015 is a flush band: enough to win the depth test against the face it sits on, six times
-         under the visibility floor, so what remains is the TONE change and nothing else. */
-      const proud = 0.0015;
-      const tone = clayTerrainScaleHex(colour, flags.jitter ? (0.80 + rnd() * 0.30) : 0.88);
-      const geo = (key === "w" || key === "e")
-        ? new THREE.BoxGeometry(proud * 2, thick, 0.98)
-        : new THREE.BoxGeometry(0.98, thick, proud * 2);
-      const mesh = new THREE.Mesh(geo, clayStructureMaterial(tone));
-      mesh.position.set(key === "w" ? -facePlane : (key === "e" ? facePlane : 0), by,
-        key === "n" ? -facePlane : (key === "s" ? facePlane : 0));
-      mesh.castShadow = true; mesh.receiveShadow = true;
-      mesh.userData.terrainExpression = "A7-face-band";
-      group.add(mesh);
-    }
+  group.userData.terrainJointPattern = (typeof TERRAIN_FINE_JOINT_LAW === "object")
+    ? TERRAIN_FINE_JOINT_LAW.pattern : "staggered-running-bond";
+  group.userData.terrainFineJointSegments = fineSegments.length;
+  group.userData.terrainFineJointReachesBoundary = fineSegments.some(function(s){
+    return Math.abs(s[0]) >= 0.5 || Math.abs(s[1]) >= 0.5
+      || Math.abs(s[2]) >= 0.5 || Math.abs(s[3]) >= 0.5;
   });
-  return group.children.length ? group : null;
+  return group;
 }
 
 /* R6 — THE CLIMBABLE ROCK BITS. A stack of small proud nubs up ONE exposed side of a cell that owns
@@ -4337,25 +4328,44 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
     const nw = nose && sides.w === 1 ? nose : 0, ne2 = nose && sides.e === 1 ? nose : 0;
     const nn = nose && sides.n === 1 ? nose : 0, ns = nose && sides.s === 1 ? nose : 0;
 
-    /* the cap: a folded/graded top surface split along B4's own per-cell diagonal, plus a skirt to
-       capBottomY at the full (nosed) footprint, so no crack between neighbours can open. */
+    /* The cap is a small faceted surface, not one arbitrarily tilted quad. Five samples per axis
+       give B4's interior fold somewhere to exist while the shared-boundary resolver guarantees
+       that equal terraces and genuine continuing ramps publish one height at their common edge.
+       The old two-triangle cap sampled the fold only where it was maximally discontinuous — the
+       four cell corners — and then hung a skirt from EVERY interior edge, which made the field
+       read as a tray of loose tiles. */
     const x0 = -0.5 - nw, x1 = 0.5 + ne2, z0 = -0.5 - nn, z1 = 0.5 + ns;
-    const cy = corners;                                            /* [nw, ne, se, sw] */
     const diag = flags.fold && typeof terrainCellFoldDiagonal === "function"
       ? terrainCellFoldDiagonal(field, c.index) : 0;
     const capPos = [];
     function tri(a, b, cc){ capPos.push(a[0], a[1], a[2], b[0], b[1], b[2], cc[0], cc[1], cc[2]); }
-    const P = [[x0, cy[0], z0], [x1, cy[1], z0], [x1, cy[2], z1], [x0, cy[3], z1]];
-    /* WINDING. Three.js culls back faces, and a top face wound clockwise-from-above has its normal
-       pointing DOWN — the cell top then simply is not drawn and the backdrop shows through it.
-       Round-5's own version of the round-4 lesson: the first cut of this cap was wound the other way
-       and the frames came back with black holes in the sheet, which the pixel-coverage gate caught
-       as 6 declared cells landing on backdrop in the dark scene. The order below is checked by the
-       right-hand rule: for the diag=0 split, (P3-P0) x (P1-P0) has +Y as its y component. */
-    if(diag){ tri(P[0], P[2], P[1]); tri(P[0], P[3], P[2]); }
-    else { tri(P[0], P[3], P[1]); tri(P[1], P[3], P[2]); }
-    /* skirt */
+    const samples = [-0.5, -0.25, 0, 0.25, 0.5];
+    function capPoint(u, v){
+      const px = u === -0.5 ? x0 : (u === 0.5 ? x1 : u);
+      const pz = v === -0.5 ? z0 : (v === 0.5 ? z1 : v);
+      return [px, baseY + terrainCellTopH(field, c.index, u, v, flags) * h, pz];
+    }
+    for(let gz = 0; gz + 1 < samples.length; gz++){
+      for(let gx = 0; gx + 1 < samples.length; gx++){
+        const a = capPoint(samples[gx], samples[gz]);
+        const b = capPoint(samples[gx + 1], samples[gz]);
+        const cc = capPoint(samples[gx + 1], samples[gz + 1]);
+        const d = capPoint(samples[gx], samples[gz + 1]);
+        /* The per-cell diagonal now follows the terrain. Alternating the subdivision diagonal
+           around that declared choice keeps hard normals from forming a second micro-lattice. */
+        const split = ((gx + gz + diag) & 1);
+        if(split){ tri(a, cc, b); tri(a, d, cc); }
+        else { tri(a, d, b); tri(b, d, cc); }
+      }
+    }
+    const P = [[x0, corners[0], z0], [x1, corners[1], z0],
+      [x1, corners[2], z1], [x0, corners[3], z1]];
+    /* Only a genuinely exposed/downhill edge gets a cap skirt. Equal-height interior seams and
+       uphill neighbours are welded by their top surfaces; drawing four skirts per cell was the
+       visual equivalent of outlining every tile. Edge order is north, east, south, west. */
+    const skirtEdges = [sides.n > 0, sides.e > 0, sides.s > 0, sides.w > 0];
     for(let e = 0; e < 4; e++){
+      if(!skirtEdges[e]) continue;
       const a = P[e], b = P[(e + 1) % 4];
       tri(a, b, [b[0], capBottomY, b[2]]);
       tri(a, [b[0], capBottomY, b[2]], [a[0], capBottomY, a[2]]);
@@ -4382,20 +4392,13 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
       cellGroup.add(clayTerrainJointMesh(field, c.index, flags, baseY, 0, 0,
         clayTerrainScaleHex(cellColour, 0.55), clayTerrainScaleHex(cellColour, 0.78)));
     }
-    if(flags.facedress){
-      const faceBottom = baseY + cellBaseH * h;
-      const bands = clayTerrainFaceBands(field, c, sides, capBottomY - 0.05, faceBottom,
-        cellColour, flags, { w: iw, e: ie, n: inn, s: is });
-      if(bands) cellGroup.add(bands);
-    }
-    /* R6 — THE EASED CLIMB AFFORDANCE, on its OWN device flag rather than riding A7's decal bin.
+    /* R6 — THE EASED CLIMB AFFORDANCE, on its OWN device flag.
        Adam: *"i like the idea of having some edges where there are little rock bits that maybe a
        character can climb with a low or auto DC check vs the standard."* Proud rock is geometry,
        not paint, and putting it in the geometry bin is also what makes it present in the MATERIAL
        rung — the frame Adam has already said he prefers, which is the one it needs to be judged in.
        The bits are drawn ONLY on a face the same predicate marked eased, so the affordance is the
-       reason for the DC rather than decoration applied next to one. Proud well OVER the 0.012 wu
-       visibility floor, which is the exact opposite of what A7's bands now do. */
+       reason for the DC rather than decoration applied next to one. */
     if(flags.climbease){
       const eased = easedFaceByCell[c.index];
       if(eased){
@@ -4552,7 +4555,9 @@ function clayTerrainCellWorld(field, originCell, baseY, origin, index){
   const c = field.cells[index];
   return new THREE.Vector3(
     originCell.x + c.x - origin.cx + 0.5,
-    baseY + (c.h + c.sub) * h,
+    /* Match terrainCellStandPlane's centre law. Random per-cell relief remains available on
+       guarded/non-standable mass; a walkable stand point stays on its integer datum. */
+    baseY + (c.h + (c.standable ? 0 : c.sub)) * h,
     originCell.z + c.y - origin.cz + 0.5
   );
 }
@@ -5485,6 +5490,15 @@ function clayRoomMountTerrainBench(){
             return { id: b.field.id, faces: c.faces, eased: c.easedFaces, share: c.easedShare,
               auto: c.autoFaces }; })
         : null,
+      /* The angle gate used to inspect each cell in isolation. This receipt records the proposition
+         the picture actually needs: cells that claim one surface agree at the same shared points. */
+      surfaceContinuity: (typeof terrainSurfaceContinuityReport === "function")
+        ? built.map(function(b){
+            return { id: b.field.id, report: terrainSurfaceContinuityReport(b.field, expressionFlags) };
+          })
+        : null,
+      fineJointLaw: (typeof TERRAIN_FINE_JOINT_LAW === "object")
+        ? TERRAIN_FINE_JOINT_LAW : null,
       walkFingerprints: (typeof terrainWalkFingerprint === "function")
         ? built.map(function(b){ return { id: b.field.id, walk: terrainWalkFingerprint(b.field) }; })
         : null,
@@ -5538,6 +5552,18 @@ function clayRoomMountTerrainBench(){
       S.interiorGroup.traverse(function(node){
         const ud = node.userData || {};
         if(ud.clayTerrainWitness && visible(node)) c.witnessFigures++;
+        /* Joint metadata lives on the A4 group rather than one of its line children. Count it
+           before the mesh-only census guard so a line law cannot silently disappear from receipts. */
+        if(ud.terrainJointPattern && visible(node)){
+          c.fineJointGroups = (c.fineJointGroups || 0) + 1;
+          c.fineJointPatterns = c.fineJointPatterns || [];
+          if(c.fineJointPatterns.indexOf(ud.terrainJointPattern) < 0){
+            c.fineJointPatterns.push(ud.terrainJointPattern);
+          }
+          if(ud.terrainFineJointReachesBoundary){
+            c.fineJointBoundaryBreaches = (c.fineJointBoundaryBreaches || 0) + 1;
+          }
+        }
         if(!(node.isMesh || node.isSprite) || !visible(node)) return;
         let inWitness = false, cur = node;
         while(cur){ if(cur.userData && cur.userData.clayTerrainWitness){ inWitness = true; break; } cur = cur.parent; }

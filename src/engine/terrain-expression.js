@@ -13,8 +13,8 @@
 
    So every device here is RENDER-ONLY by construction. Nothing in this file writes a height, a
    standable flag, a walk edge, a cover value or an occupancy. The instrument that PROVES that is
-   terrainWalkFingerprint() — a fingerprint over (standable, walkAdj) and nothing else, so
-   "cosmetic" is one comparable string instead of a claim (the F11 signal).
+   terrainWalkFingerprint() — a fingerprint over the field's current occupancy, walking, climbing,
+   movement-cost, face, and entry facts, so "cosmetic" is one comparable string instead of a claim.
 
    Engine layer. No THREE, no DOM, no camera. Heights are in QUANTA (h) exactly like
    terrain-field.js; the standee-contract numbers are in WORLD UNITS (wu) because that is the space
@@ -49,9 +49,6 @@ var TERRAIN_EXPRESSION_DEVICES = Object.freeze([
   Object.freeze({ id: "A6", key: "wash", bin: "material", rung: "A",
     label: "cavity-darken + curvature-lighten", gameplay: false,
     grounds: "GRID-BREAKING-STUDY §2.8 — wash and drybrush, driven off the real height channel." }),
-  Object.freeze({ id: "A7", key: "facedress", bin: "decal", rung: "A",
-    label: "seam and face dressing (horizontal banding on exposed faces)", gameplay: false,
-    grounds: "XCOM §1.2 — the volume behind a thin face is free; FFT device #7, face banding." }),
   Object.freeze({ id: "B1", key: "slopeplinth", bin: "geometry", rung: "B",
     label: "the plinth tilts to the cell's declared stand plane", gameplay: false,
     grounds: "STANDEE-CONTRACT §3(d) — the only option with zero error at every yaw." }),
@@ -62,7 +59,7 @@ var TERRAIN_EXPRESSION_DEVICES = Object.freeze([
     label: "tri-split fold as sub-quantum relief over one declared stand plane", gameplay: false,
     grounds: "STANDEE-CONTRACT §4(A) — a Medium does not fit in a half-cell triangle at any yaw." }),
   Object.freeze({ id: "C1", key: "shallowgrade", bin: "geometry", rung: "C",
-    label: "the render-only shallow grade (18.0 deg, the corpus's common walkable grade)",
+    label: "the render-only grade ladder (g3 continuity default; g2 FFT comparison)",
     gameplay: false,
     grounds: "FFT-SURFACE-GRAMMAR §2.2 — Genesis's only legal slope is 26.565 deg; FFT's common one is 18." }),
   /* R2 round, Adam's R6 ruling. GEOMETRY, not decal — the affordance is proud rock, and it rides
@@ -81,7 +78,8 @@ var TERRAIN_EXPRESSION_DEVICE_KEYS = Object.freeze(
   TERRAIN_EXPRESSION_DEVICES.map(function(d){ return d.key; }));
 
 /* ─── THE LADDER (§5) ─────────────────────────────────────────────────────────────────────────
-   naked -> +material -> +decal -> +prop -> all -> jitter-disabled negative control. The geometry
+   naked -> +material -> retired-decal compatibility control -> +prop -> all -> jitter-disabled
+   negative control. The geometry
    devices (chamfer / plinth tilt / nosing / fold / grade) ride the MATERIAL rung, because the whole
    point of the ladder is bin isolation and a geometry-only rung would isolate nothing Adam is
    ruling on. They are still bin-labelled `geometry` in the registry so that choice stays visible
@@ -93,9 +91,12 @@ var TERRAIN_EXPRESSION_RUNGS = Object.freeze([
   Object.freeze({ id: "material", index: 1, label: "A1 · MATERIAL BIN ONLY",
     bins: Object.freeze(["material", "geometry"]),
     claim: "can the material bin alone do it? If yes the prop spend never has to happen." }),
-  Object.freeze({ id: "decal", index: 2, label: "A2 · + DECAL/PAINT BIN",
+  /* Kept as a URL-compatible comparison rung because historical capture packets name `decal`.
+     It intentionally adds nothing now: Adam rejected A7's regular sedimentary face bands, and an
+     old capture URL must not be able to resurrect them. */
+  Object.freeze({ id: "decal", index: 2, label: "A2 · RETIRED FACE-BAND CONTROL",
     bins: Object.freeze(["material", "geometry", "decal"]),
-    claim: "what the flat-mark bin adds on its own." }),
+    claim: "historical URL control; identical to material after regular face banding was removed." }),
   Object.freeze({ id: "prop", index: 3, label: "A3 · + PROP BIN",
     bins: Object.freeze(["material", "geometry", "decal", "prop"]),
     claim: "what props buy over material." }),
@@ -128,8 +129,9 @@ function terrainExpressionFlags(rungId, overrides){
   });
   /* R2 R4 — WHICH RUNG OF THE GRADE LADDER this render carries. Same discipline as the rung id: an
      unknown grade throws rather than falling back, because a frame labelled `g4` that quietly
-     rendered `g2` is the identical class of lie. Omitted = the ladder's own default, which is the
-     18.00 deg grade the R1 build shipped, so an un-flagged render is byte-identical to R1. */
+     rendered `g2` is the identical class of lie. Omitted = the ladder's own declared default.
+     The continuity repair promotes that default to g3: it is the only rung that consumes an
+     authored one-quantum-per-cell run without leaving a residual riser or inventing height. */
   var gradeId = (overrides && overrides.gradeId != null)
     ? String(overrides.gradeId) : TERRAIN_GRADE_LADDER_DEFAULT;
   var grade = terrainGradeById(gradeId);
@@ -149,11 +151,11 @@ function terrainExpressionFlags(rungId, overrides){
    The R1 build had ONE render-only grade, 0.65 quanta per cell = 18.00 deg. This is that single
    step turned into a declared ladder, so Adam can see every angle beside every other one and rule.
 
-   HOW TO READ `gradeH`. It is the multiplier on the cell's own measured gradient, and the gradient
-   is a CENTRAL difference — so `gradeH` is the angle a RUN cell renders (one neighbour a quantum
-   up, the other a quantum down: the stair run and the graded slope, which are the same cell class
-   in an integer heightfield). A one-sided EDGE cell has half that gradient and therefore renders at
-   half the declared step, which is honest and is stated per grade in `edgeDeg`.
+   HOW TO READ `gradeH`. It is the multiplier on a continuing three-centre run. A terrace edge,
+   crest, foot, or isolated stair remains flat with an honest riser; only a monotone run becomes a
+   plane. `gradeH` is therefore the angle of that whole run, not a per-cell lean inferred from one
+   neighbour. `edgeDeg` is retained as comparison metadata from the R2 study, not as a production
+   shape Genesis now emits.
 
    EVERY RUNG IS RENDER-ONLY. The integer heightfield, the walkable census, cover and LOS do not
    move for any of them — terrainWalkFingerprint is byte-identical across the whole ladder and that
@@ -177,7 +179,12 @@ var TERRAIN_GRADE_LADDER = Object.freeze([
     grounds: "TERRAIN_GRID_LAW.maxWalkableSlopeDeg = 30, and TERRAIN_WALK_NOISE_BUDGET_H.maxRenderedStepH = tan(30)*5/2.5 = 1.1547h is already the chassis's own RENDERED ceiling — the number the walkable noise budget is derived from. Nothing steeper can be rendered without contradicting a constant the engine already publishes." })
 ]);
 
-var TERRAIN_GRADE_LADDER_DEFAULT = "g2";
+/* The default is the one grade that can join a genuine 1h-per-cell run without either inventing
+   height or leaving a residual riser. g2 remains the common FFT *visual* register and stays in the
+   comparison ladder, but applying 0.65 independently to neighbouring integer tiers necessarily
+   leaves 0.35h between them. The production default therefore uses the chassis's own legal 1h
+   grade; shallower authored ramps need a longer logical run rather than an angle multiplier. */
+var TERRAIN_GRADE_LADDER_DEFAULT = "g3";
 
 /* THE MAXIMUM, PROPOSED (R4 asks for a proposal with evidence, never a silent adoption).
 
@@ -212,27 +219,32 @@ function terrainGradeById(gradeId){
   return g;
 }
 
-/* ─── F11 · THE WALK-ONLY FINGERPRINT ─────────────────────────────────────────────────────────
-   terrainFieldFingerprint folds kind, surface and depthH, so it moves for a purely visual edit and
-   cannot answer "was this cosmetic?". This one folds ONLY the two things gameplay reads off the
-   field: which cells are standable, and which cells are walk-adjacent to which. Byte-identical
-   across a change declared cosmetic, or the change was not cosmetic.
+/* ─── F11 · THE GAMEPLAY FINGERPRINT ───────────────────────────────────────────────────────────
+   terrainFieldFingerprint folds surface labels and other render facts, so it moves for a purely
+   visual edit and cannot answer "was this cosmetic?". This instrument folds every CURRENT
+   traversal/occupancy fact instead: integer height, standability, difficult-terrain state, cell
+   kind, the walk graph, the climb graph, face climb facts, and entries.
 
-   Cover and line of sight are not separately folded because on this chassis both are DERIVED from
-   the same two arrays plus the integer heights: cover comes from the 2h+ face rule
-   (terrain-field.js pushFace) and LOS from the heightfield itself. So heights are folded too, and
-   the three claims collapse into one string. */
+   The first version omitted `climbAdj`, `difficult`, and the face's climbable/DC fields. A dressing
+   pass could therefore change non-flying reachability or movement cost while the named gameplay
+   invariance gate stayed green. Those are the seventh-through-ninth mutations the six-mutation
+   proof never tried. Byte-identical across a change declared cosmetic, or the change was not
+   cosmetic. */
 function terrainWalkFingerprint(field){
   var parts = [];
   var n = field.cells.length;
   for(var i = 0; i < n; i++){
     var c = field.cells[i];
     var adj = field.walkAdj[i] ? field.walkAdj[i].slice().sort(function(a, b){ return a - b; }) : [];
+    var climb = field.climbAdj && field.climbAdj[i]
+      ? field.climbAdj[i].slice().sort(function(a, b){ return a - b; }) : [];
     parts.push(field.heights[i] + ":" + (c.standable ? 1 : 0) + ":" + (c.inPlayfield ? 1 : 0)
-      + ":" + (c.guarded ? 1 : 0) + ":" + adj.join("."));
+      + ":" + (c.guarded ? 1 : 0) + ":" + (c.difficult ? 1 : 0) + ":" + c.kind
+      + ":w" + adj.join(".") + ":c" + climb.join("."));
   }
   parts.push("faces=" + field.faces.map(function(f){
-    return f.highIndex + ">" + f.lowIndex + "@" + f.deltaH;
+    return f.highIndex + ">" + f.lowIndex + "@" + f.deltaH
+      + ":" + (f.climbable ? 1 : 0) + ":" + (f.climbDc == null ? "-" : f.climbDc);
   }).join(","));
   parts.push("entries=" + field.entryCells.join(","));
   return terrainHash32(parts.join("|")).toString(16).padStart(8, "0")
@@ -299,18 +311,30 @@ function terrainCellNeighbourH(field, x, y, fallbackH){
 }
 
 /* The gradient of the walkable neighbourhood, in quanta per cell, clamped to the walkable step so
-   a rendered plane can never claim a grade the walk law forbids. A face (2h+) contributes its
-   CLAMPED share only: the drop past one quantum is the face's business, not the top plane's. */
+   a rendered plane can never claim a grade the walk law forbids. */
 function terrainCellGradient(field, index){
   var c = field.cells[index];
   var step = TERRAIN_GRID_LAW.walkableStepQuanta;
   function clampStep(v){ return Math.max(-step, Math.min(step, v)); }
-  var w = clampStep(terrainCellNeighbourH(field, c.x - 1, c.y, c.h) - c.h);
-  var e = clampStep(terrainCellNeighbourH(field, c.x + 1, c.y, c.h) - c.h);
-  var n = clampStep(terrainCellNeighbourH(field, c.x, c.y - 1, c.h) - c.h);
-  var s = clampStep(terrainCellNeighbourH(field, c.x, c.y + 1, c.h) - c.h);
-  /* central difference over one cell: (east - west) / 2 gives quanta per cell */
-  return { dx: (e - w) / 2, dz: (s - n) / 2 };
+  var wh = terrainCellNeighbourH(field, c.x - 1, c.y, c.h);
+  var eh = terrainCellNeighbourH(field, c.x + 1, c.y, c.h);
+  var nh = terrainCellNeighbourH(field, c.x, c.y - 1, c.h);
+  var sh = terrainCellNeighbourH(field, c.x, c.y + 1, c.h);
+  /* A grade is a CONTINUING RUN, not a cosmetic lean applied to every cell that happens to have a
+     high neighbour. Both halves of the cell must name the same signed step. Otherwise the shape is
+     a terrace edge, stair, crest, or foot and stays flat with an honest riser.
+
+     This is the distinction the first expression pass missed: central differences turned isolated
+     steps and outside corners into unrelated little planes. Each plane passed its own angle gate,
+     while the field read like earthquake rubble. Requiring a monotone three-centre run makes angle
+     carry topological meaning. */
+  function continuing(prevH, nextH){
+    var into = clampStep(c.h - prevH);
+    var out = clampStep(nextH - c.h);
+    return Math.abs(into) > 1e-12 && Math.abs(out) > 1e-12
+      && Math.abs(into - out) < 1e-12 ? into : 0;
+  }
+  return { dx: continuing(wh, eh), dz: continuing(nh, sh) };
 }
 
 /* The declared stand plane for a cell, in quanta. `y` is the cell-centre height and NEVER moves —
@@ -320,10 +344,12 @@ function terrainCellStandPlane(field, index, flags){
   var c = field.cells[index];
   var on = !!(flags && flags.shallowgrade);
   var g = on ? terrainCellGradient(field, index) : { dx: 0, dz: 0 };
-  /* R4 — the grade is the LADDER's, not one hard-coded constant. Absent flags fall back to the R1
-     shipped value so every caller that predates the ladder renders exactly what it always did. */
+  /* R4 — the grade is the LADDER's, not one hard-coded constant. A partial legacy flag object uses
+     the ladder's current declared default; a caller must name g2 explicitly to request the old FFT
+     comparison angle. */
   var scale = on
-    ? (flags && flags.gradeScale != null ? flags.gradeScale : TERRAIN_SHALLOW_GRADE_H) : 0;
+    ? (flags && flags.gradeScale != null
+      ? flags.gradeScale : terrainGradeById(TERRAIN_GRADE_LADDER_DEFAULT).gradeH) : 0;
   var dx = g.dx * scale, dz = g.dz * scale;
   /* R4 — THE DECLARED MAXIMUM IS A CEILING ON THE PLANE, NOT ON EACH AXIS. A cell that falls in
      BOTH x and z (an outside corner) has gradient magnitude sqrt(2) times the per-axis one, so
@@ -346,7 +372,11 @@ function terrainCellStandPlane(field, index, flags){
   return {
     gradeId: (flags && flags.gradeId) || null,
     gradeCapped: capped,
-    centreH: c.h + c.sub,
+    /* Per-cell random centre-height noise was another hidden seam generator: two cells at the same
+       logical tier disagreed by up to 0.077h before a grade was even applied. Walkable expression
+       spends its relief in the bounded fold and material wash instead; guarded/non-standable mass
+       may retain the authored break-up because no standee or walk seam depends on it. */
+    centreH: c.h + (c.standable ? 0 : c.sub),
     dHdx: dx, dHdz: dz,                        /* quanta per cell */
     dYdx: dx * q, dYdz: dz * q,                /* world units per cell */
     slopeDeg: terrainSlopeDegForStepH(riseH),
@@ -366,13 +396,27 @@ function terrainCellStandPlane(field, index, flags){
    provides, budgeted so it can never change a tier.
 
    Two extra guarantees this implementation adds beyond the budget:
-     * the fold is ZERO at the stand point and reaches full amplitude only at the cell rim (a radial
-       attenuation), so the plinth's own footprint is never sitting on a ridge or over a trough;
-     * the diagonal is a deterministic per-cell bit, so a saddle cell gets the crease that serves it
-       rather than whichever way the quad happened to triangulate. */
+     * the fold is ZERO at the stand point AND the cell perimeter, spending its relief only in the
+       interior so two neighbours can never disagree at a shared edge;
+     * the diagonal follows the local fall line or quiet neighbour axis, so its angle serves terrain
+       continuity rather than whichever bit a hash happened to return. */
 function terrainCellFoldDiagonal(field, index){
   var c = field.cells[index];
-  return (terrainHash32(field.seed + ":fold:" + c.x + "," + c.y) & 1) ? 1 : 0;
+  var g = terrainCellGradient(field, index);
+  if(Math.abs(g.dx) > 1e-12 || Math.abs(g.dz) > 1e-12){
+    /* Run with the fall line. This makes neighbouring cells in a real ramp rhyme instead of
+       choosing unrelated creases from a hash. */
+    return g.dx * g.dz >= 0 ? 1 : 0;
+  }
+  var w = terrainCellNeighbourH(field, c.x - 1, c.y, c.h);
+  var e = terrainCellNeighbourH(field, c.x + 1, c.y, c.h);
+  var n = terrainCellNeighbourH(field, c.x, c.y - 1, c.h);
+  var s = terrainCellNeighbourH(field, c.x, c.y + 1, c.h);
+  /* On a flat/crest/basin cell, align the crease with the quieter pair of opposite neighbours.
+     Cell order breaks the exact tie deterministically without pretending randomness serves shape. */
+  var axisBias = Math.abs(w - e) - Math.abs(n - s);
+  if(Math.abs(axisBias) > 1e-12) return axisBias > 0 ? 1 : 0;
+  return ((c.x + c.y) & 1) ? 1 : 0;
 }
 
 /* u, v in [-0.5, 0.5] across the cell. Returns a height offset in QUANTA. */
@@ -385,18 +429,168 @@ function terrainCellFoldOffset(field, index, u, v, flags){
   var along = diag ? (u + v) : (u - v);
   var crease = 1 - Math.abs(along) * Math.SQRT2;      /* 1 on the diagonal, 0 at the far corners */
   var sign = (terrainHash32(field.seed + ":foldsign:" + c.x + "," + c.y) & 2) ? 1 : -1;
-  /* radial attenuation: zero under the stand point, full at the rim */
-  var r = Math.min(1, Math.sqrt(u * u + v * v) / 0.5);
-  return sign * crease * budget * (r * r);
+  /* Zero under the stand point AND on every cell edge. The earlier r^2 profile reached its maximum
+     at the perimeter, so two adjacent cells added unrelated signed offsets to the same edge. The
+     random disagreement was literal geometric discontinuity. A square-radius bell keeps the fold
+     inside the cell: it peaks halfway out and returns to zero before any neighbour is met. */
+  var r = Math.min(1, Math.max(Math.abs(u), Math.abs(v)) / 0.5);
+  var interiorBell = 4 * r * (1 - r);
+  return sign * crease * budget * interiorBell;
 }
 
-/* The full rendered top, in QUANTA, at a point inside the cell. The renderer builds its cap from
-   this and the standee mount reads terrainCellStandPlane — the fold is deliberately NOT in the
-   stand plane, because relief under a miniature is cobblestone, not support. */
-function terrainCellTopH(field, index, u, v, flags){
+function terrainCellLocalTopH(field, index, u, v, flags){
   var plane = terrainCellStandPlane(field, index, flags);
   return plane.centreH + plane.dHdx * u + plane.dHdz * v
     + terrainCellFoldOffset(field, index, u, v, flags);
+}
+
+/* A shared boundary is averaged only where the two planes mean the same thing:
+     - equal logical tier (one continuous terrace), or
+     - a genuine continuing 1h run rendered at exactly the legal 1h grade.
+   A shallow g1/g2 grade cannot consume a whole 1h centre delta without a residual riser, and g4
+   overshoots it. Those remain intentional terrace seams. A 2h+ delta is always a face.
+
+   At a corner the up-to-four incident cells are split into local smooth components, then only the
+   component containing the caller contributes. Every member therefore publishes the same corner
+   height, while a cliff on the same vertex remains discontinuous. */
+function terrainCellsJoinAsSurface(field, aIndex, bIndex, flags){
+  var a = field.cells[aIndex], b = field.cells[bIndex];
+  if(!a || !b || a.kind === "void" || b.kind === "void" || !a.inPlayfield || !b.inPlayfield){
+    return false;
+  }
+  var dh = b.h - a.h;
+  if(dh === 0) return true;
+  if(Math.abs(dh) !== TERRAIN_GRID_LAW.walkableStepQuanta) return false;
+  var grade = flags && flags.shallowgrade
+    ? (flags.gradeScale != null
+      ? flags.gradeScale : terrainGradeById(TERRAIN_GRADE_LADDER_DEFAULT).gradeH)
+    : 0;
+  if(Math.abs(grade - TERRAIN_GRID_LAW.walkableStepQuanta) > 1e-9) return false;
+  var ax = b.x - a.x, ay = b.y - a.y;
+  var ga = terrainCellGradient(field, aIndex), gb = terrainCellGradient(field, bIndex);
+  var ca = ax ? ga.dx * ax : ga.dz * ay;
+  var cb = ax ? gb.dx * ax : gb.dz * ay;
+  return Math.abs(ca - dh) < 1e-9 && Math.abs(cb - dh) < 1e-9;
+}
+
+function terrainCellSharedBoundaryH(field, index, u, v, flags){
+  var eps = 1e-9;
+  var atW = Math.abs(u + 0.5) < eps, atE = Math.abs(u - 0.5) < eps;
+  var atN = Math.abs(v + 0.5) < eps, atS = Math.abs(v - 0.5) < eps;
+  if(!(atW || atE || atN || atS)) return terrainCellLocalTopH(field, index, u, v, flags);
+  var c = field.cells[index];
+  var xs = atW ? [c.x - 1, c.x] : (atE ? [c.x, c.x + 1] : [c.x]);
+  var ys = atN ? [c.y - 1, c.y] : (atS ? [c.y, c.y + 1] : [c.y]);
+  var candidates = [];
+  for(var yi = 0; yi < ys.length; yi++) for(var xi = 0; xi < xs.length; xi++){
+    var x = xs[xi], y = ys[yi];
+    if(x < 0 || y < 0 || x >= field.extent.x || y >= field.extent.y) continue;
+    var idx = y * field.extent.x + x;
+    var cell = field.cells[idx];
+    if(cell && cell.kind !== "void" && cell.inPlayfield) candidates.push(idx);
+  }
+  if(candidates.length <= 1) return terrainCellLocalTopH(field, index, u, v, flags);
+  var allowed = {}, queue = [index];
+  allowed[index] = true;
+  while(queue.length){
+    var cur = queue.shift(), cc = field.cells[cur];
+    candidates.forEach(function(next){
+      if(allowed[next]) return;
+      var nn = field.cells[next];
+      if(Math.abs(cc.x - nn.x) + Math.abs(cc.y - nn.y) !== 1) return;
+      if(terrainCellsJoinAsSurface(field, cur, next, flags)){
+        allowed[next] = true; queue.push(next);
+      }
+    });
+  }
+  var rows = candidates.filter(function(idx){ return allowed[idx]; });
+  if(rows.length <= 1) return terrainCellLocalTopH(field, index, u, v, flags);
+  var worldX = c.x + 0.5 + u, worldY = c.y + 0.5 + v;
+  var sum = 0;
+  rows.forEach(function(idx){
+    var cell = field.cells[idx];
+    sum += terrainCellLocalTopH(field, idx,
+      worldX - (cell.x + 0.5), worldY - (cell.y + 0.5), flags);
+  });
+  return sum / rows.length;
+}
+
+/* The full rendered top, in QUANTA, at a point inside the cell. Boundary points are resolved by
+   the shared-surface law above; interior points use the cell's declared stand plane plus bounded
+   fold. */
+function terrainCellTopH(field, index, u, v, flags){
+  return terrainCellSharedBoundaryH(field, index, u, v, flags);
+}
+
+/* Executable visual-continuity instrument. The old gates proved each plane's angle separately and
+   never compared two cells' claims about the same point. This measures the missing proposition. */
+function terrainSurfaceContinuityReport(field, flags){
+  var checked = 0, failed = 0, maxGapH = 0, samples = [];
+  field.cells.forEach(function(c){
+    if(!c || c.kind === "void" || !c.inPlayfield) return;
+    [[1, 0], [0, 1]].forEach(function(dir){
+      var nx = c.x + dir[0], ny = c.y + dir[1];
+      if(nx >= field.extent.x || ny >= field.extent.y) return;
+      var j = ny * field.extent.x + nx;
+      if(!terrainCellsJoinAsSurface(field, c.index, j, flags)) return;
+      var points = dir[0]
+        ? [[0.5, -0.5, -0.5, -0.5], [0.5, 0, -0.5, 0], [0.5, 0.5, -0.5, 0.5]]
+        : [[-0.5, 0.5, -0.5, -0.5], [0, 0.5, 0, -0.5], [0.5, 0.5, 0.5, -0.5]];
+      points.forEach(function(p){
+        var gap = Math.abs(terrainCellTopH(field, c.index, p[0], p[1], flags)
+          - terrainCellTopH(field, j, p[2], p[3], flags));
+        checked++;
+        if(gap > maxGapH) maxGapH = gap;
+        if(gap > 1e-9){
+          failed++;
+          if(samples.length < 12) samples.push({ a: c.index, b: j, gapH: Number(gap.toFixed(8)) });
+        }
+      });
+    });
+  });
+  return {
+    law: "cells that declare one continuous surface publish one height at their shared edge",
+    gradeId: flags && flags.gradeId || null,
+    samplesChecked: checked,
+    failures: failed,
+    maxGapH: Number(maxGapH.toFixed(8)),
+    ok: checked > 0 && failed === 0,
+    sampleFailures: samples
+  };
+}
+
+/* A4's fine material joint must never mint a second tactical lattice. Fine seams stop inside the
+   cell and use running-bond head joints; only the coarse ring reaches the 1-cell boundary. */
+var TERRAIN_FINE_JOINT_LAW = Object.freeze({
+  pattern: "staggered-running-bond",
+  coursesPerCell: 4,
+  edgeInsetCells: 0.04,
+  fineValueMultiplier: 0.95,
+  continuousTacticalValueMultiplier: 0.82,
+  reliefBoundaryValueMultiplier: 0.58,
+  maxFineSpanCells: 0.92,
+  tacticalPitchCells: 1,
+  statement: "fine seams stop inside cells; each tactical edge draws once, softly on one surface "
+    + "and strongly only where it names real relief"
+});
+
+function terrainFineJointSegments(field, index){
+  var c = field.cells[index];
+  var law = TERRAIN_FINE_JOINT_LAW;
+  var inset = law.edgeInsetCells;
+  var min = -0.5 + inset, max = 0.5 - inset;
+  var out = [];
+  for(var k = 1; k < law.coursesPerCell; k++){
+    var v = -0.5 + k / law.coursesPerCell;
+    out.push([min, v, max, v]);                 /* bed joint, clipped before the tactical ring */
+  }
+  for(var course = 0; course < law.coursesPerCell; course++){
+    var v0 = -0.5 + course / law.coursesPerCell + inset * 0.5;
+    var v1 = -0.5 + (course + 1) / law.coursesPerCell - inset * 0.5;
+    var stagger = ((c.x + c.y + course) & 1) ? -0.22 : 0.22;
+    out.push([stagger, v0, stagger, v1]);       /* head joint terminates at each bed */
+  }
+  return out;
 }
 
 /* ─── A1 · PER-INSTANCE JITTER ────────────────────────────────────────────────────────────────
@@ -866,19 +1060,20 @@ function terrainFaceClimbCensus(field){
        camera. So depth <= 0.10.
      FLOOR — the deepest daylight a plinth can open under its own footprint. The plinth conforms to
        the cell's declared STAND PLANE, but the ground it sits on is the RENDERED top, which carries
-       B4's fold on top of that plane. The fold's amplitude is TERRAIN_WALK_NOISE_BUDGET_H.perCellH
-       (0.07735h = 0.03868 wu) attenuated by r^2, and the worst-case Medium plinth corner sits at
-       r = 0.466/0.5 = 0.932, so r^2 = 0.8686 -> 0.0336 wu of possible dip. Add the 0.006 wu the
-       contact law already embeds and 0.0336 - 0.006 = 0.0276 wu is the daylight to cover.
+       B4's fold on top of that plane. The continuity repair moves the fold off the perimeter and
+       into an interior bell; a free-yaw Medium base can still cross the bell's peak, so the honest
+       bound is the FULL TERRAIN_WALK_NOISE_BUDGET_H.perCellH amplitude:
+       0.07735h * 0.5 wu/h = 0.03868 wu. Less the 0.006 authored embed, 0.03268 wu is the daylight
+       to cover.
 
-   0.06 wu is the chosen depth: 2.2x the derived need, and 0.04 wu clear of the cap ceiling. */
+   0.06 wu is the chosen depth: 1.8x the derived need, and 0.04 wu clear of the cap ceiling. */
 var TERRAIN_BASE_SKIRT = Object.freeze({
   depthWU: 0.06,
   capCeilingWU: 0.10,
-  derivedNeedWU: 0.0276,
-  grounds: "fold amplitude 0.03868 wu * r^2 at the worst Medium corner (0.8686) = 0.0336, less the "
-    + "0.006 authored embed = 0.0276 wu of daylight; the cap slab is 0.10 wu, so 0.06 clears the "
-    + "need 2.2x and stays 0.04 inside the ceiling.",
+  derivedNeedWU: 0.0327,
+  grounds: "the interior fold can reach its full 0.03868 wu amplitude under a free-yaw Medium; less "
+    + "the 0.006 authored embed = 0.03268 wu of daylight. The cap slab is 0.10 wu, so 0.06 clears "
+    + "the need 1.8x and stays 0.04 inside the ceiling.",
   cosmeticOnly: "may not change contact Y, the walkable census, or any contact measurement",
   defaultOn: "terrain witnesses only — the flat tabletop and interior boards are unchanged"
 });
@@ -1047,7 +1242,8 @@ function terrainContractCellPicks(field, opts){
 }
 
 /* ─── §5 · THE GAMEPLAY-INVARIANCE GATE ───────────────────────────────────────────────────────
-   Across all six rungs the walkable census, cover set, occupancy and LOS must be byte-identical.
+   Across all six URL-compatible rungs the walkable census, cover set, occupancy and LOS must be
+   byte-identical. The retired `decal` control intentionally matches `material`.
    That is what makes this provably a dressing pass and not a silent gameplay change.
 
    `buildScene(rungId)` is supplied by the caller so this works from jsdom and from the browser

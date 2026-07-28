@@ -1878,3 +1878,32 @@ Binding consequences:
   inside inner wall bounds, rises remain equal, adjacent solids overlap at contact, the top tread
   meets its landing, a retaining curb yields the stair opening, and a doorway cannot intersect the
   raised platform. Illegal compositions reject loudly instead of rendering a curated exception.
+
+## TERRAIN CONTINUITY OVER CELLWISE DISRUPTION (Adam, 2026-07-28 — binding; verbatim)
+
+> "the repo is starting to get messy, so this should be the last run before a clean up most likely, but claude took a stab at starting to build terrain, and it did a decent job at getting us started, though things are a bit random and disjointed, looks more like the effects of an earthquake spell, but still, we are getting somewhere"
+
+> "it has drafted some changes, problems etc...i just need you to do a deep review of it's work and see where you can make some improvements based on the idea that we are aiming for FFT XCOM, FFT terrain is great, but we do want some modern edges to the shapes so that things don't just look like a minecraft map with terrain angle modifier, the angles need to matter and suggest continuity of terrain"
+
+> "but this has that kind of sedimentary regular ridge that i rejected in the claude pass, make sure that's not part of the actual terrain engine"
+
+Binding consequences:
+
+- An angle is evidence of a continuing landform, not a cosmetic rotation applied independently to
+  cells. A slope must have a readable approach, continuation, and termination; isolated steps,
+  crests, and feet remain terraces or risers unless the logical field authors a real run.
+- Cells that visually claim one terrace or ramp publish the same height at their shared boundary.
+  Per-cell noise, folds, diagonals, skirts, and material seams may not reopen that edge.
+- FFT supplies the readable tier-and-ramp grammar. The modern/XCOM edge is stronger regional
+  silhouette, restrained construction seams, selective relief boundaries, and facets aligned to the
+  terrain's fall line. The result may retain a five-foot grid without making the square lattice the
+  darkest or most important shape.
+- Fine material structure does not mint a second tactical grid. It terminates, staggers, or reduces
+  to value texture before the cell boundary; each tactical shared edge is drawn once.
+- Repeated horizontal sedimentary ridges are not a terrain-engine dressing device. They may not be
+  retained as low-relief geometry, a material-value stripe, a hidden rung, or a fixture-only toggle.
+  A realm-specific material may express geology later only through its own approved irregular
+  parent; the generic terrain silhouette cannot impose regular strata.
+- This is the last additive terrain-expression pass before consolidation. Further work begins by
+  cleaning the studies, receipts, amended decisions, and branch stack, then ruling on a cell-cap
+  versus field-contour production architecture.

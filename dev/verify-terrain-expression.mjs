@@ -6,9 +6,10 @@
 
      * §5 GAMEPLAY INVARIANCE — the walkable census, cover set, occupancy and LOS are byte-identical
        across all six rungs of the ladder. The instrument is terrainWalkFingerprint, and this file
-       PROVES THE INSTRUMENT CAN FAIL before trusting it: mutate one standable flag, one walk edge,
-       one face, one entry, and the fingerprint must move every time. A gate that cannot fail is not
-       a gate (the backdrop-luma lesson; two probes were discarded this session for exactly this).
+       PROVES THE INSTRUMENT CAN FAIL before trusting it: mutate occupancy, walking, climbing,
+       movement cost, a face, and an entry, and the fingerprint must move every time. A gate that
+       cannot fail is not a gate (the backdrop-luma lesson; two probes were discarded this session
+       for exactly this).
 
      * §1 P2 — the two gates that would stay green on the failure picture. The flat-plant-on-a-slope
        case is executed here, in arithmetic, so the receipt can show the LEGACY origin gap reading
@@ -71,10 +72,9 @@ const W = freshWin();
 console.log("1. the device registry and the three dressing bins");
 guard("1. registry", () => {
   const devices = W.TERRAIN_EXPRESSION_DEVICES;
-  check("1a. twelve devices, each with an id, a bin and its grounds (eleven from the R1 build plus "
-    + "R6's climbable rock bits, added 2026-07-28 in the geometry bin so Adam's preferred MATERIAL "
-    + "rung carries the affordance he has to rule on)",
-    devices.length === 12
+  check("1a. eleven live devices, each with an id, a bin and its grounds (rejected A7 sedimentary "
+    + "face bands are absent; R6's climbable rock bits remain independently governed)",
+    devices.length === 11
     && devices.every(d => d.id && d.key && d.bin && typeof d.grounds === "string" && d.grounds.length > 30),
     "n=" + devices.length);
   const bins = new Set(W.TERRAIN_EXPRESSION_BINS);
@@ -101,9 +101,11 @@ guard("2. ladder", () => {
     naked.on.length === 0 && naked.anyDevice === false, naked.on.join(","));
   const mat = W.terrainExpressionFlags("material");
   check("2c. the material rung turns on the material bin and no prop or decal",
-    mat.rollover && mat.joint && mat.wash && !mat.occluders && !mat.facedress && !mat.jitter);
+    mat.rollover && mat.joint && mat.wash && !mat.occluders && !mat.jitter);
   const dec = W.terrainExpressionFlags("decal");
-  check("2d. the decal rung ADDS the flat-mark bin over material", dec.facedress && !dec.occluders);
+  check("2d. the historical decal URL is now an inert compatibility control: it cannot resurrect "
+    + "the rejected regular face bands",
+    !("facedress" in dec) && JSON.stringify(dec.on) === JSON.stringify(mat.on) && !dec.occluders);
   const prop = W.terrainExpressionFlags("prop");
   check("2e. the prop rung adds occluders and jitter", prop.occluders && prop.jitter);
   const all = W.terrainExpressionFlags("all");
@@ -136,13 +138,24 @@ const MUT = guard("3. mutation", () => {
     ["one height moves by a quantum", (f) => { f.heights[f.heights.length >> 1] += 1; }],
     ["a face changes its delta", (f) => { f.faces[0].deltaH += 1; }],
     ["an entry cell is lost", (f) => { f.entryCells = f.entryCells.slice(1); }],
-    ["a cell leaves the playfield", (f) => { const i = f.cells.findIndex(c => c.inPlayfield); f.cells[i].inPlayfield = false; }]
+    ["a cell leaves the playfield", (f) => { const i = f.cells.findIndex(c => c.inPlayfield); f.cells[i].inPlayfield = false; }],
+    ["one climb edge disappears", (f) => {
+      const i = f.climbAdj.findIndex(a => a.length > 0);
+      f.climbAdj[i] = f.climbAdj[i].slice(1);
+    }],
+    ["difficult terrain flips", (f) => {
+      const i = f.cells.findIndex(c => c.inPlayfield);
+      f.cells[i].difficult = !f.cells[i].difficult;
+    }],
+    ["a face climb DC changes", (f) => {
+      f.faces[0].climbDc = (f.faces[0].climbDc == null ? 12 : f.faces[0].climbDc + 1);
+    }]
   ];
   const caught = mutations.filter(([, mutate]) => {
     const f = clone(); mutate(f);
     return W.terrainWalkFingerprint(f) !== base;
   });
-  check("3b. EVERY gameplay mutation moves the fingerprint (6/6) — the gate has teeth",
+  check("3b. EVERY gameplay mutation moves the fingerprint (9/9) — the gate has teeth",
     caught.length === mutations.length,
     caught.length + "/" + mutations.length + " caught: " + caught.map(c => c[0]).join(" · "));
 
@@ -203,14 +216,18 @@ guard("5. stand plane", () => {
   check("5a. the sheet contains a graded cell to measure", idx >= 0, "idx=" + idx);
   const pOff = W.terrainCellStandPlane(f, idx, off);
   const pOn = W.terrainCellStandPlane(f, idx, on);
-  check("5b. THE CENTRE NEVER MOVES — the plane's centre height is the chassis's own (h + sub)",
-    pOff.centreH === pOn.centreH && Math.abs(pOn.centreH - (f.cells[idx].h + f.cells[idx].sub)) < 1e-12);
+  check("5b. THE WALKABLE CENTRE NEVER MOVES — visual sub-noise cannot offset one cell from the next",
+    pOff.centreH === pOn.centreH && Math.abs(pOn.centreH - f.cells[idx].h) < 1e-12);
   check("5c. with the shallow grade OFF the plane is exactly horizontal",
     pOff.dHdx === 0 && pOff.dHdz === 0 && pOff.slopeDeg === 0);
-  check("5d. with it ON a full 1h step renders at 18.00 deg — the corpus's common walkable grade, "
-    + "the register Genesis's integer field cannot otherwise say",
-    Math.abs(W.terrainSlopeDegForStepH(W.TERRAIN_SHALLOW_GRADE_H) - 18.0) < 0.05,
-    "deg=" + W.terrainSlopeDegForStepH(W.TERRAIN_SHALLOW_GRADE_H));
+  check("5d. the default is g3: the only grade that joins a real 1h-per-cell run without a residual "
+    + "riser or invented height",
+    on.gradeId === "g3" && Math.abs(pOn.slopeDeg - W.terrainSlopeDegForStepH(1)) < 0.001,
+    on.gradeId + " / " + pOn.slopeDeg);
+  const g2 = W.terrainExpressionFlags("all", { gradeId: "g2" });
+  check("5d2. the 18-degree FFT comparison grade remains explicitly selectable",
+    g2.gradeId === "g2" && Math.abs(W.terrainSlopeDegForStepH(g2.gradeScale) - 18.0) < 0.05,
+    g2.gradeId + " / " + W.terrainSlopeDegForStepH(g2.gradeScale));
   let worst = 0;
   f.cells.forEach(c => {
     if(c.kind === "void") return;
@@ -219,7 +236,7 @@ guard("5. stand plane", () => {
   });
   check("5e. no rendered stand plane anywhere claims a grade past the 30 deg walk law",
     worst <= W.TERRAIN_GRID_LAW.maxWalkableSlopeDeg + 1e-9, "worst=" + worst.toFixed(3) + "deg");
-  check("5f. and none exceeds the 26.565 deg one-quantum step either (the grade only ever SHALLOWS)",
+  check("5f. and none exceeds the 26.565 deg one-quantum step",
     worst <= W.terrainSlopeDegForStepH(1) + 1e-9, "worst=" + worst.toFixed(3));
 });
 
@@ -256,6 +273,38 @@ guard("6. fold", () => {
     Math.abs(W.terrainProtectedDiameter("medium") - 0.831) < 0.002
     && (1 + 1 - Math.SQRT2) < W.terrainProtectedDiameter("medium"),
     W.terrainProtectedDiameter("medium").toFixed(4));
+  let edgeFold = 0;
+  f.cells.forEach(c => {
+    if(c.kind === "void") return;
+    [-0.5, 0, 0.5].forEach(t => {
+      edgeFold = Math.max(edgeFold,
+        Math.abs(W.terrainCellFoldOffset(f, c.index, -0.5, t, on)),
+        Math.abs(W.terrainCellFoldOffset(f, c.index, 0.5, t, on)),
+        Math.abs(W.terrainCellFoldOffset(f, c.index, t, -0.5, on)),
+        Math.abs(W.terrainCellFoldOffset(f, c.index, t, 0.5, on)));
+    });
+  });
+  check("6g. the fold is EXACTLY ZERO around the whole cell perimeter — adjacent cells cannot "
+    + "publish unrelated relief at one edge", edgeFold === 0, String(edgeFold));
+  const route = W.terrainBenchSceneBuild("route-proof");
+  const reports = route.fields.map(field => W.terrainSurfaceContinuityReport(field, on));
+  check("6h. every declared terrace/ramp surface in the route proof publishes one shared edge "
+    + "height, with a non-empty measured sample",
+    reports.length > 0 && reports.every(r => r.ok && r.samplesChecked > 0),
+    JSON.stringify(reports));
+  const segs = W.terrainFineJointSegments(f, f.cells.find(c => c.inPlayfield).index);
+  check("6i. fine material joints are clipped staggered courses, never a second tactical square",
+    W.TERRAIN_FINE_JOINT_LAW.pattern === "staggered-running-bond"
+    && segs.length === 7
+    && segs.every(s => s.every(v => Math.abs(v) < 0.5))
+    && segs.some(s => s[1] === s[3]) && segs.some(s => s[0] === s[2]),
+    JSON.stringify(segs));
+  check("6j. continuous tactical seams are lighter than real relief boundaries, so the height "
+    + "topology—not the square lattice—owns the silhouette",
+    W.TERRAIN_FINE_JOINT_LAW.continuousTacticalValueMultiplier
+      > W.TERRAIN_FINE_JOINT_LAW.reliefBoundaryValueMultiplier
+    && W.TERRAIN_FINE_JOINT_LAW.fineValueMultiplier
+      > W.TERRAIN_FINE_JOINT_LAW.continuousTacticalValueMultiplier);
 });
 
 // ============================================================================
@@ -391,13 +440,23 @@ guard("10. renderer boundary", () => {
     && /new THREE\.BoxGeometry\(1, columnH, 1\)/.test(region));
   check("10c. every device is gated on its own flag, so the ladder can isolate one bin",
     /flags\.chamfer/.test(region) && /flags\.rollover/.test(region) && /flags\.joint/.test(region)
-    && /flags\.occluders/.test(region) && /flags\.facedress/.test(region)
+    && /flags\.occluders/.test(region)
     && /flags\.jitter/.test(region) && /flags\.nosing/.test(region) && /flags\.fold/.test(region));
+  check("10c2. rejected sedimentary face bands are absent from both registry and renderer—not "
+    + "merely hidden by the current rung",
+    read("src/engine/terrain-expression.js").length > 2000 && region.length > 2000
+    && !/key: "facedress"/.test(read("src/engine/terrain-expression.js"))
+    && !/clayTerrainFaceBands|A7-face-band|flags\.facedress/.test(region));
   check("10d. the renderer authors no randomness of its own (every draw is seeded off the field)",
     region.length > 2000 && !/Math\.random/.test(region));
   check("10e. it reads the ONE published stand plane rather than deriving a second one",
     /terrainCellStandPlane/.test(region) && /standPlaneFor/.test(region)
     && (region.match(/function standPlaneFor/g) || []).length <= 1);
+  check("10e2. the cap samples the shared surface, only exposed/downhill edges get skirts, and "
+    + "the fine joint mesh consumes the clipped running-bond law",
+    /terrainCellTopH/.test(region) && /const skirtEdges = \[sides\.n > 0/.test(region)
+    && /terrainFineJointSegments/.test(region) && /terrainFineJointReachesBoundary/.test(region)
+    && /continuous-tactical/.test(region) && /relief-boundary/.test(region));
   const spritesSrc = read("src/ui/theater-sprites.js");
   /* AMENDED 2026-07-28 by TERRAIN-EXPRESSION-R2 R1. This check used to also assert that the tilt
      never reached the sprite wrap. Adam's R1 ruling REVERSES that — "the sprite itself should

@@ -1864,3 +1864,31 @@ terrain, where the tread is a whole cell and free yaw is safe.
 check 23 (the fall-death tween reaching π/2) fails ~2 runs in 3 **at HEAD as well as on this branch**,
 with a different partial angle each time — a tween-timing race in the harness, not a regression.
 `verify-env1b-tabletop-shadows` fails its interior3d/torchlit pixel-diff identically at HEAD (34/1).
+
+## 2026-07-28 — Terrain continuity review (amends the expression decisions above)
+
+The adversarial review is recorded in `docs/CODEX-TERRAIN-CONTINUITY-REVIEW-0728.md`. Its central
+finding is that the expression pass proved legal angles per cell but never proved neighbouring
+cells agreed at a shared edge. The resulting maximum route-proof disagreement was 0.4463 wu and was
+the geometric cause of the “earthquake spell” reading.
+
+The production interpretation now differs from the historical decisions above in four explicit
+ways:
+
+1. A grade requires a monotone three-centre run. One-sided steps, crests, feet, and outside corners
+   no longer lean.
+2. The default is g3 / 26.565°, because it is the only current rung that exactly connects logical
+   centres one quantum apart. G2 / 18° remains an explicit FFT comparison, not the default.
+3. A standable centre is the integer `h`, not `h + sub`; same-tier walkable cells no longer receive
+   independent centre-height noise.
+4. B4 relief is zero on the whole perimeter, and A4 fine joints are clipped staggered courses.
+   Tactical shared edges have one owner and are strong only when they name real relief.
+5. A7's regular horizontal face banding is removed from the registry and renderer. Lowering its
+   proud offset did not cure the rejected sedimentary rhythm. The historical `decal` URL is an
+   inert compatibility control and cannot re-enable it.
+
+`terrainSurfaceContinuityReport` is the new executable proposition. The route-proof receipt at g3
+measures 480 declared shared-surface samples with zero failures and zero maximum gap. This remains a
+render-only field interpretation: no logical height, walk edge, cover value, or LOS fact changed.
+The next terrain step is cleanup plus a founder decision on per-cell cap assembly versus a
+field-level contour mesh, not another layer of per-cell dressing.

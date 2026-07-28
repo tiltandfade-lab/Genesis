@@ -120,12 +120,10 @@ guard("R2", () => {
   /* recompute the FLOOR from the chassis's own constants rather than trusting the comment */
   const budget = W.TERRAIN_WALK_NOISE_BUDGET_H.perCellH;              /* quanta */
   const q = W.TERRAIN_GRID_LAW.verticalQuantumWorldUnits;             /* wu per quantum */
-  const rMedium = W.terrainProtectedRadius("mediumCap");              /* wu */
-  const atten = Math.pow(Math.min(1, rMedium / 0.5), 2);              /* the fold's r^2 falloff */
-  const dip = budget * q * atten;
+  const dip = budget * q;                                             /* interior bell can reach 1 */
   const need = dip - W.TERRAIN_STANDEE_CONTRACT.nominalEmbed;
-  check("R2b. the derived need recomputes to the declared one (fold amplitude * r^2 at the worst "
-    + "Medium corner, less the authored embed) — " + need.toFixed(4) + " wu",
+  check("R2b. the derived need recomputes to the declared one (full interior fold amplitude, less "
+    + "the authored embed) — " + need.toFixed(4) + " wu",
     Math.abs(need - s.derivedNeedWU) < 0.0005, need.toFixed(5) + " vs " + s.derivedNeedWU);
   check("R2c. the skirt is DEEPER than the daylight it exists to cover", s.depthWU > need,
     s.depthWU + " vs " + need.toFixed(5));
@@ -218,14 +216,11 @@ const r3 = guard("R3", () => {
   check("R3j. with the chamfer device OFF, no cell carries an overhang at all",
     W.terrainOverhangCensus(f, W.terrainExpressionFlags("naked")).overhangCells === 0);
 
-  /* A7 — the face banding drops to a MATERIAL VALUE CHANGE, not a projecting rail. */
+  /* Adam's later ruling removes A7 outright; a sub-visibility proud value still leaves the rejected
+     regular sedimentary rhythm in the material read. */
   const room = read("src/ui/theater-clay-room.js");
-  const bandProud = /const proud = ([0-9.]+);/.exec(room);
-  check("R3k. A7's face banding no longer projects a rail — the proud offset is far under the "
-    + "0.012 wu bevel-thickness visibility floor (found " + (bandProud && bandProud[1]) + " wu, "
-    + "was 0.022)",
-    !!bandProud && Number(bandProud[1]) < 0.012 && Number(bandProud[1]) > 0,
-    bandProud ? bandProud[1] : "no `const proud` in the terrain region");
+  check("R3k. rejected regular sedimentary face banding is not part of the terrain renderer",
+    room.length > 2000 && !/clayTerrainFaceBands|A7-face-band|flags\.facedress/.test(room));
   return { rows, forcedCensus };
 });
 
@@ -462,15 +457,19 @@ console.log("\nmanifest + module hygiene");
 guard("manifest", () => {
   const manifest = JSON.parse(readRaw("manifest.json"));
   const mod = manifest.modules.find((m) => m.path === "src/engine/terrain-expression.js");
+  const engineSource = read("src/engine/terrain-expression.js");
   check("M1. terrain-expression.js still owns every symbol R2 added",
-    !!mod && ["TERRAIN_GRADE_LADDER", "TERRAIN_OVERHANG_LAW", "TERRAIN_MEDIUM_ACCESS_LAW",
+    engineSource.length > 2000 && !!mod
+    && ["TERRAIN_GRADE_LADDER", "TERRAIN_OVERHANG_LAW", "TERRAIN_MEDIUM_ACCESS_LAW",
       "TERRAIN_CLIMB_EASED", "TERRAIN_BASE_SKIRT", "terrainOverhangCensus",
-      "terrainMediumAccessCensus", "terrainFaceClimb"].every((s) => mod.owns.includes(s)),
+      "terrainMediumAccessCensus", "terrainFaceClimb", "terrainSurfaceContinuityReport",
+      "TERRAIN_FINE_JOINT_LAW", "terrainFineJointSegments"].every((s) => mod.owns.includes(s)),
     mod ? JSON.stringify(mod.owns.filter((o) => /GRADE|OVERHANG|MEDIUM|CLIMB|SKIRT/.test(o))) : "no module");
   check("M2. the engine layer stays engine — no THREE construction, no DOM, no camera in the R2 "
     + "additions (a prose mention of THREE.ExtrudeGeometry in a measurement note is not a dependency)",
+    engineSource.length > 2000 &&
     !/new THREE\.|document\.(getElementById|querySelector|createElement)|window\.(location|document)/
-      .test(read("src/engine/terrain-expression.js")));
+      .test(engineSource));
 });
 
 console.log(`\n${pass} passed, ${fail} failed.`);

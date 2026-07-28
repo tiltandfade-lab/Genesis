@@ -1749,7 +1749,13 @@
         "terrainCellStandPlane",
         "terrainCellFoldDiagonal",
         "terrainCellFoldOffset",
+        "terrainCellLocalTopH",
+        "terrainCellsJoinAsSurface",
+        "terrainCellSharedBoundaryH",
         "terrainCellTopH",
+        "terrainSurfaceContinuityReport",
+        "TERRAIN_FINE_JOINT_LAW",
+        "terrainFineJointSegments",
         "terrainExpressionJitter",
         "terrainOccluderSites",
         "terrainCellWashFactor",
@@ -1782,7 +1788,7 @@
         "terrainHash32",
         "terrainRng"
       ],
-      "desc": "TERRAIN EXPRESSION — the dressing chassis (docs/TERRAIN-EXPRESSION-BUILD.md, 2026-07-28). Eleven independently switchable render-only devices (A1-A7 arris/jitter/joint/occluder/wash/face-dressing, B1 the tilted plinth, B2 the cell-scale stair nosing, B4 the tri-split fold, C1 the 18-degree render-only shallow grade) sorted into the three dressing bins plus an explicit `geometry` bin so a shape change cannot hide in a dressing bin. Publishes the one thing STANDEE-CONTRACT-NONFLAT names as the missing chassis addition — a PLANE per cell (terrainCellStandPlane) rather than a scalar height — read by BOTH the renderer and the standee mount so the plinth can never float on a second truth. Owns the F1/F2/F3 contact probe (nearest-contact gap under the plinth's RENDERED bbox corners, which is what the old origin-gap gate could not see) and terrainWalkFingerprint, the walk-only F11 instrument that makes 'cosmetic' one comparable string across the six-rung ladder. Writes no height, no standable flag, no walk edge, no cover value. R2 (2026-07-28, Adam's seven rulings in docs/TERRAIN-EXPRESSION-R2.md) adds: the GRADE LADDER (five declared render-only angles, 0 to a PROPOSED 30-degree maximum, with the declared angle enforced as a CEILING on the plane rather than per axis); the OVERHANG LICENCE (a cap overhang has to be earned by a 2h+ cliff face, with a deterministic scene cap that withdraws from the shallowest faces first) replacing the universal overhang Adam rejected; the MEDIUM-ACCESSIBILITY FLOOR (share + cohesion + entry clauses over the worst-case 0.932 wu Medium disc — the law nothing in the repo stated before); the EASED CLIMB BAND with its visible relief affordance; and the base SKIRT constants, whose depth is derived from the fold amplitude below and the cap slab above. F7 is REVERSED: the sprite now matches its base."
+      "desc": "TERRAIN EXPRESSION — the dressing chassis (docs/TERRAIN-EXPRESSION-BUILD.md, 2026-07-28). Eleven independently switchable live devices (A1-A6 arris/jitter/joint/occluder/wash, B1 the tilted plinth, B2 the cell-scale stair nosing, B4 the tri-split fold, C1 the grade ladder, R6 climb affordance) sorted into dressing bins plus an explicit `geometry` bin. Rejected A7 regular sedimentary face banding is absent; the historical `decal` rung remains only as an inert URL-compatible control. Publishes one stand plane per cell, then resolves declared continuous neighbours to one shared boundary height; only a continuing three-centre run slopes, so angles carry terrain topology instead of making isolated tiles lean. terrainSurfaceContinuityReport measures that missing cross-cell proposition. B4 relief is interior-only, and TERRAIN_FINE_JOINT_LAW replaces the quarter-cell square lattice with clipped running bond. Owns the F1/F2/F3 contact probe and terrainWalkFingerprint, expanded to cover difficult terrain, climb adjacency and face climb facts. Writes no height, no standable flag, no walk edge, no cover value. R2 adds the grade ladder, overhang licence, Medium-accessibility floor, eased climb band, and derived base skirt. F7 is REVERSED: the sprite now matches its base."
     },
     {
       "id": "engine.terrain-bench",

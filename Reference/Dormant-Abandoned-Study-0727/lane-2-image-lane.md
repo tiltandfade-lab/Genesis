@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: EVIDENCE DRAFT — CODEX ADVERSARIAL DISPOSITION RECORDED IN `synthesis.md` (2026-07-28)
 
 # Lane 2 — Real-image reference lane
 
@@ -108,10 +108,11 @@ grass mound with one masonry socket: the *mound* is terrain and the passage is a
 (Lochaline) is an intact adit. Against that, every above-ground structure in D1-* has lost
 its roof and floors.
 
-**Generator posture — the survivability rule.** Subtractive space is the *reliable playable
-volume* of any dormant site; additive structure is its *silhouette*. This is why the
-engine's own Sunken Estate row reads "Manor house / Basement levels": the dungeon is the
-part that could not fall down.
+**Generator posture — one survivability profile.** Where the host already contains
+subtractive space, it can be the reliable playable volume while exposed additive structure
+becomes silhouette. This is why the engine's own Sunken Estate row reads "Manor house /
+Basement levels." The evidence does not make this geometry mandatory for every dormant host,
+and Dormant may not invent it.
 
 ### DA-10 — A tomb wall is a matrix of voids, and its state is one panel per void
 

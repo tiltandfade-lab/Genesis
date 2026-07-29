@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: RESEARCH PACKET — CODEX ADVERSARIAL DISPOSITION APPLIED 2026-07-28
 
 # Mixed-Scale Study — Golden Site 11 research packet
 
@@ -23,9 +23,9 @@ spawnable inventory: `docs/intel-sites/SITE-11-SPAWNABLE.md`
 
 ## The one-paragraph version
 
-Site 11's measured demand is 3.7× what the census reported — 100 of 539 wilderness arrivals
-(18.55%) carry a mixed-scale set-piece, second only to dormant/ruin content at 25.42% under
-an equally broad control sweep — and every one of those hits is an **object**, not a place.
+The broad mixed-scale object screen is 3.7× the census's original keyword count — 100 of 539
+wilderness arrivals (18.55%), second only to the broad dormant screen at 25.42% — and every
+hit is an **object**, not a place. This is ingredient supply, not measured Site-11 activation.
 Twenty-eight of them are caught by *both* sweeps, which is the transform reading made
 concrete. The engine's own
 `wilderness-feature` table already specifies the tactical grammar for those objects
@@ -36,8 +36,9 @@ construction inherited by a smaller one, which is why the Greeks named cyclopean
 Cyclopes. FFT confirms the shape from the other direction: it never enlarges a walkable cell,
 it enlarges the envelope. And the `dungeon-type` table settles the census's flagged ambiguity
 on its own terms — The Megastructure's theme column says *"Anomaly / Ancient technology"* and
-its flavour says *"non-euclidean walls shift"*, so it belongs to Site 12. **Bigness is not
-anomaly.**
+its flavour says *"non-euclidean walls shift"*, so it demands anomalous substrate behavior.
+It may also carry a ScaleContract; neither stress proof replaces its host. **Bigness is not
+anomaly, and anomaly is not a host replacement.**
 
 ## Honest gates proposed by this packet
 

@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: RECONCILED SOURCE INVENTORY — NO IMPLEMENTATION AUTHORITY (2026-07-28)
 
 ---
 type: spawn-audit
@@ -16,6 +16,13 @@ authority: this document is an inventory, not a ruling. It classifies what the w
 ---
 
 # SITE 2 SPAWNABLE-CONTENT INVENTORY
+
+## 2026-07-28 adversarial reconciliation
+
+The table audit below remains evidence. The reviewed spec changes one interpretation:
+guest-family exit is not a population or duration threshold. A hosted camp remains Site 2
+until persistent address, property, service, inheritance, or municipal facts require an
+ordinary host program. No inventory row licenses a single-number promotion rule.
 
 Every concrete thing the Site 2 working spec implies can spawn in play, mapped to the Engine
 table/roller that would produce it, or marked `NO-TABLE-YET`. This feeds the spawn-audit

@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: EVIDENCE DRAFT — CODEX ADVERSARIAL DISPOSITION RECORDED IN `synthesis.md` (2026-07-28)
 
 # Lane 3 — FFT cohort comparison: how Final Fantasy Tactics handles scale
 

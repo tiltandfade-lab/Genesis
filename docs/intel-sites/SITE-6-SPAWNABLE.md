@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: RECONCILED SOURCE INVENTORY — NO IMPLEMENTATION AUTHORITY (2026-07-28)
 
 ---
 type: spawn-audit
@@ -15,6 +15,14 @@ authority: this document is an inventory, not a ruling. It classifies what the w
 ---
 
 # SITE 6 SPAWNABLE-CONTENT INVENTORY
+
+## 2026-07-28 adversarial reconciliation
+
+`PR-DOC-10 — Yamen Magistrate Custody` remains a candidate. `PR-DOC-11 —
+Ward-and-Surety` is not a custody doctrine; it is an external disposition/social-liability
+provider that may compose with a custody host. Care/asylum is an ordinary care host unless
+prevented exit activates the full custody lifecycle, force truth, property custody, and finite
+disposition obligations.
 
 Every concrete thing the Site 6 working spec implies can spawn in play, mapped to the Engine
 table/roller that would produce it, or marked `NO-TABLE-YET`. This feeds the spawn-audit lane;

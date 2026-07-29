@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: EVIDENCE PACKET — CODEX ADVERSARIAL CORRECTION APPLIED 2026-07-28
 
 ---
 type: research-note
@@ -125,9 +125,10 @@ were a deliberate policy instrument, not an accident.
 **Test.** Two vernaculars in one envelope (military masonry outside, domestic fabric inside)
 and two populations by design. Structural. But note it overlaps Site 10's urban fabric.
 
-**Verdict: KEEP with a boundary.** The wall and its fighting surfaces belong to Site 9; the
-streets, frontages and market inside belong to Site 10. Site 9 owns the *envelope and its
-relationship to what it encloses* — not a second town generator.
+**Verdict: KEEP with a boundary.** Defense/Fortification owns the wall and fighting surfaces;
+the streets, frontages and market inside belong to Site 10. Site 9 proves their persistent
+multi-window control composition — it owns neither a second wall generator nor a second town
+generator.
 
 ### 8. Under construction — contested before finished
 
@@ -190,7 +191,7 @@ rather than a style. It also directly supports the refuge reading (6).
 | # | reading | role in Site 9 |
 |---|---|---|
 | 2 | **split occupation across nested enceintes** | the **core identity** — scale *and* relationship in one geometry |
-| 3 | **cohabitation after the war** | the **dominant live expression** (lane 4); relationship without violence |
+| 3 | **cohabitation after the war** | the **first proof expression** supported directly by rows 51 and 71; relationship without violence |
 | 6 | **refuge — sheltered population outnumbers the garrison** | first-class variant; makes quiet space load-bearing |
 | 7 | **fortified town** | first-class variant, bounded against Site 10 |
 | 11 | **gate-as-fortress** | the small rung; the seam down to Site 1 |
@@ -200,17 +201,17 @@ rather than a style. It also directly supports the refuge reading (6).
 
 ## The distinction from Site 8, stated plainly
 
-Site 8 asks **"who really controls this?"** — its currency is recognition, concealment,
-knowledge and permission, and its signature structural buy is concealed pieces (false wall,
-trapdoor). Its tension survives at any map size, and it can be entirely latent.
+Site 8 asks **"who controls what, under which rules?"** — its currency is claims,
+recognition, knowledge, permission and attributed ground. It may be overt or covert and
+survives at any map size.
 
-Site 9 asks **"who holds which ground, right now?"** — its currency is attributed territory,
-a visible front, and a defensive envelope that both sides can read. Nobody is hiding. Its
-tension *requires* enough materialised space to have two sides of something.
+Site 9 asks whether that same control relation survives on a Defense/Fortification host whose
+consequential extent exceeds one window. Its first retained proof uses readable attributed
+ground; covert claims may compose without becoming a different site.
 
-The clean test: **remove the concealment and Site 8 collapses; remove the second population's
-ground and Site 9 collapses.** A besieged castle with a traitor in the gatehouse is both, and
-that is a compose the engine should support — not evidence that the two are the same case.
+The clean test: **remove the actionable second claim and both stress/control readings collapse
+to the ordinary defense host; remove multi-window extent and Site 8 remains.** A besieged
+castle with a traitor in the gatehouse is one composition the engine should support.
 
 ## Declared gaps in this lane
 

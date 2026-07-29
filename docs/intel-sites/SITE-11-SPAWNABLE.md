@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: RECONCILED SOURCE INVENTORY — NO IMPLEMENTATION AUTHORITY (2026-07-28)
 
 ---
 type: spawnable-inventory
@@ -10,6 +10,14 @@ consumer: the spawn-audit lane
 ---
 
 # SITE 11 — SPAWNABLE CONTENT INVENTORY
+
+## 2026-07-28 adversarial reconciliation
+
+Site 11 proves `ScaleContract`, not a Dragon Lair generator or universal 3:1 threshold. Two
+represented scales must create different consequential affordances; the larger body may be
+present, absent, or historical. Hoard terrain routes through the shared `GranularMass`
+provider sponsored by this proof. The 18.55% tally is broad mixed-scale object supply, not
+measured Site-11 activation.
 
 Every concrete thing the Site 11 spec implies can **spawn in play**, mapped to the Engine
 table or roller that would produce it — or marked `NO-TABLE-YET`.
@@ -44,7 +52,7 @@ The imbalance is the point: the highest-volume, most-detailed content in the sit
 | A4 | Gallery ring at +2 overlooking the centre | `room-elevation-profile` 91–96 | `LIVE` (table is flagged `PROVISIONAL`, Adam's ELEV-1 draft) | the natural attendant-gallery-over-a-big-volume shape |
 | A5 | Terraced profile, 2–3 steps of +1 across the room | `room-elevation-profile` 81–90 | `LIVE` | the closest live shape to a hoard slope; see F-block adapter |
 | A6 | Chasm/shaft −2..−3 with a bridge or edge path | `room-elevation-profile` 97–100 | `LIVE` | the Mode-D under-body void |
-| A7 | **Big-body aperture** (3–4 cells clear, class-capacity bearing) | — | `NO-TABLE-YET` | Site 11's first signature buy. No table, no kit, no code |
+| A7 | **Big-body aperture** (3–4 cells clear, class-capacity bearing) | — | `NO-TABLE-YET` | first `ScaleContract` aperture proof sponsored here; no table, kit, or code |
 | A8 | **Small-body service aperture** (1 cell, must exclude a 2-cell body) | — | `NO-TABLE-YET` | the other half of the aperture pair |
 | A9 | **Service passage / back-of-house run** at 1 cell clear | — | `NO-TABLE-YET` | conceptually the same object as Site 5's manway; may be inheritable rather than new |
 | A10 | Hollow tunnel, 5' wide × 15' long, "Medium creatures must crawl" | `wilderness-tactical-terrain` row 22 | `LIVE` | **the closest live thing to a small-body-only route.** Already carries a body-class gate in its own text |
@@ -107,7 +115,7 @@ because their authored tactical effect asks for both.
 
 | # | spawnable | produced by | status | note |
 |---|---|---|---|---|
-| D1 | **Hoard terrain — stable band (1 h/cell, 26.6°)** | — | `NO-TABLE-YET` | Site 11's second signature buy. Site 7's brief is already waiting on it |
+| D1 | **Hoard terrain — stable band (1 h/cell, 26.6°)** | — | `NO-TABLE-YET` | shared `GranularMass` provider sponsored and first stress-proved here; Site 7's brief is already waiting on it |
 | D2 | **Hoard terrain — unstable band (2 h/cell, 45°), slides when disturbed** | — | `NO-TABLE-YET` | — |
 | D3 | **Hoard terrain — flowing / engulfing state** | — | `NO-TABLE-YET` | licensed only with a draw-down agent; Ideal-horizon |
 | D4 | Rampart of Bone/Fossil — "massive ribs of a dead leviathan", 5'×20' | `wilderness-tactical-terrain` row 36 | `LIVE` | the one live anatomy-as-cover piece |
@@ -156,15 +164,15 @@ surface that has to exist.
 
 Twenty items. Fifteen of them collapse onto two buys.
 
-**Buy 1 — the aperture pair** (closes A7, A8, A9, C12, E3, E4, E8, F3):
+**Buy 1 — ScaleContract aperture/capacity proof** (closes A7, A8, A9, C12, E3, E4, E8, F3):
 one wall assembly carrying two openings with declared body-class capacities, a service run
 that provably excludes a 2-cell body, plus the tether/feed mechanism set and the attendance
-clock. This is the Golden Seed's entire content requirement.
+clock. This is the Golden Seed's first contract proof, not a Site-11-private aperture system.
 
-**Buy 2 — granular mass terrain** (closes D1, D2, D3, D9, E6, F4, F5):
+**Buy 2 — shared `GranularMass` terrain** (closes D1, D2, D3, D9, E6, F4, F5):
 a mass with a repose angle, stable and unstable slope bands, an accumulation state, and a
 slide rule. Discharges Site 7's outstanding placeholder debt and reaches Sites 5, 3, and 10 as
-spoil, rubble, and bulk.
+spoil, rubble, and bulk. Site 11 sponsors and proves the provider; it does not own it.
 
 **Remaining five, not covered by either buy:** A12 (anatomy pieces — Mode C), A13 (pinned
 parasitic access — Mode D), B7 (salvagers), B8 (pilgrims), E5 (butchery objectives). All are
@@ -187,9 +195,9 @@ Mode C/D, i.e. MVP-and-later per the spec's proposed build order.
    be run up like a ramp.* Nine authored verbs, all live, none realisable.
 3. **One authored cover class is stranded.** `Slotted Cover` exists in table prose with no
    consumer. Any spawn audit should flag it.
-4. **Hoard is the single largest hole**, and it is a hole two sites are standing in: Site 11
-   needs it as its signature terrain and Site 7 is explicitly borrowing a placeholder until it
-   exists.
+4. **Granular hoard is the single largest hole**, and it is shared infrastructure: Site 11
+   needs it for its first `GranularMass` stress proof and Site 7 is explicitly borrowing a
+   placeholder until it exists.
 5. **`room-elevation-profile` row 81–90 (Terraced, 2–3 steps of +1) is the nearest live shape
    to a hoard slope** and is the obvious adapter target — but that table is flagged
    `PROVISIONAL (Adam's draft, ELEV-1)` and its own header says "steps are 5-ft GRID-LAW

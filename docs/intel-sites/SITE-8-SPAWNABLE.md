@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: RECONCILED SOURCE INVENTORY — NO IMPLEMENTATION AUTHORITY (2026-07-28)
 
 ---
 type: spawnable-inventory
@@ -10,6 +10,15 @@ feeds: the spawn-audit lane
 ---
 
 # SITE 8 — SPAWNABLE CONTENT INVENTORY
+
+## 2026-07-28 adversarial reconciliation
+
+The inventory's claimant ingredients remain useful, but 12/12 generated worlds did not prove
+12/12 eligible hosts. `method` is tactic and cannot derive legitimacy or standing. Hidden
+evidence is optional; overt competing claims qualify. Route desirability is actor/PC-relative
+and may change only through access, risk, schedule, or service consequences—not by mutating
+host topology or truth. Grain, envelope, boundary, and readability rows are conditional
+profiles, not transform invariants.
 
 Every concrete thing the Site 8 spec implies can **spawn in play**, mapped to the Engine table or
 roller that would produce it — or marked `NO-TABLE-YET`.
@@ -146,7 +155,7 @@ Per the spec §6.2, `layeredControl = true` is rejected. These are the factorize
 |---|---|---|
 | `claimStrength` — latent / acknowledged / operative / dominant | derivable from `f.dominant` + clock fill; not modelled as a field | `NO-TABLE-YET` |
 | `openness` — secret / signalled / open / declared | `f.known` is the nearest live fact (binary) | partial `LIVE` / four-state `NO-TABLE-YET` |
-| `legitimacy` — criminal / customary / chartered / official | proposed as **derived from the rolled `method`** (spec Q3 recommendation); `SS.fMethod` is `LIVE`, the mapping is not | mapping `NO-TABLE-YET` |
+| `legitimacy` / standing — criminal / customary / chartered / official | requires authority, ownership, law, custom, recognition, or adjudication facts; `SS.fMethod` is only a tactic and cannot supply standing | `NO-TABLE-YET` |
 | `recognition` — stranger / known / vouched / member / marked / hunted | `w.renown.factions[slug].score`, `HUNTED_AT`, epithets, plus `rollFactionProximity`'s member/tie | `DERIVED` from `LIVE` state |
 | `scheduleState` — which authority is in force now | — | `NO-TABLE-YET` |
 | `frictionState` — accommodated / strained / breached / hot | — | `NO-TABLE-YET` |

@@ -1,7 +1,7 @@
 # Building family sample tables and deterministic taste rolls
 
-date: 2026-07-26
-status: TASTE PACKET — sample d6/d4 tranches, not final d20 corpus or live runtime output
+date: 2026-07-28
+status: TASTE PACKET — seven founder-ruled families plus one proposed Market/Exchange family; sample d6/d4 tranches, not final d20 corpus or live runtime output
 source: `TABLE-SAMPLES.json`
 rerun: `node dev/roll-building-family-samples.mjs`
 
@@ -1091,6 +1091,182 @@ Context tags: `licensed-world-adapter`
 - Scene: **AR-SC-01** — A component passes every test but its provenance belongs to a batch recorded as destroyed.
 - Spice: **Volatile / AR-SP-V** — Any unreceipted component leaving the shop causes its storage condition to manifest around the carrier.
 - Realm: **frontier / Arcanist / Charmwright** — Component drawers, consultation, inscribed or worked bench, locked cabinet, test circle or safe surface, provenance and disposal.
+
+## BF-MARKET-EXCHANGE — Market / Exchange (proposed eighth family)
+
+A publicly legible trading ground allocates pitches or bays, admits goods and buyers on a schedule, exposes inspection and common measure, records price or obligation, supports delivery and clearing, and closes without erasing ownership or access truth.
+
+**Family forbids:**
+
+- No civic chamber, warehouse, or row of unrelated shops may replace the trading-ground program merely because it shares the building.
+- Stalls, samples, standards, and goods are assigned operating surfaces, not undifferentiated market dressing.
+- An optional upper program must declare its own Civic, Logistics, or Exchange obligations while the ground-floor market remains independently legible.
+
+### Chassis taste tranche (d6)
+
+| d6 | id | scale | requires | sample relationship |
+| --- | --- | --- | --- | --- |
+| 1 | ME-CH-01 | small-to-medium | ordinary context | Open-post market house: a roofed rectangular trading floor is divided by repeated structural bays, with open cross-access, an authority-and-measure position, and loading or clearing at one short end. |
+| 2 | ME-CH-02 | medium | ordinary context | Pier-and-arch hall: a heavier open arcade encloses a durable market floor, with perimeter pitch lines, two public approaches, a lockable standards room, and a service edge. |
+| 3 | ME-CH-03 | medium-to-large | ordinary context | Long exchange hall: a broad central aisle separates parallel trading bays while an inspection rail, clerk position, sample hold, and end loading doors keep bargaining distinct from bulk movement. |
+| 4 | ME-CH-04 | distributed | ordinary context | Court-and-arcade market: permanent covered bays line one or more sides of an open court, with a common measure point, removable fair pitches, drainage, and several closure gates. |
+| 5 | ME-CH-05 | medium-to-large | ordinary context | Two-level market house: an open trading ground and lockable count room sit below an external or controlled stair to a separately accountable upper program; delivery and public circulation do not pass through that upper room. |
+| 6 | ME-CH-06 | large-regional | ordinary context | Deep cloth-hall lattice: repeated arcaded or post bays flank a continuous inspection-and-display route, with folding or sample tables, secure standards and records, side delivery courts, and an upper storage or bargaining range. |
+
+### Operating-state taste tranche (d4)
+
+| d4 | id | sample state |
+| --- | --- | --- |
+| 1 | ME-ST-01 | Opening and allocation: officials, keepers, or elected traders assign pitches, check rights, set out standards, and separate deliveries from the arriving public. |
+| 2 | ME-ST-02 | Full trade: bargaining, inspection, weighing, payment, replenishment, and crowd movement compete for the same legible bays and aisles. |
+| 3 | ME-ST-03 | Clearing and closure: portable pitches are struck, unsold goods are attributed and removed or secured, accounts close, refuse leaves, and public routes reopen. |
+| 4 | ME-ST-04 | Assay or dispute session: one standard, lot, allocation, price, or right to trade is under public examination while the rest of the market continues around it. |
+
+### Guest upper-program composition proofs
+
+These cards test co-location without transferring ownership of the trading ground.
+
+| id | guest family | guest program | legal host chassis | composition contract |
+| --- | --- | --- | --- | --- |
+| ME-GC-01 | BF-CIVIC-AUTHORITY | Council chamber or Court | ME-CH-05 | The market ground keeps its own pitches, measure, schedule, delivery, closure, and authority. A separately reached upper council chamber or court consumes Civic/Authority threshold, decision, staff, and records obligations without commandeering the trading floor. |
+| ME-GC-02 | BF-LOGISTICS | Attributed storage, sampling, or dispatch | ME-CH-05, ME-CH-06 | Upper or side storage receives named lots from the market's delivery edge through a controlled goods route. Logistics owns custody, handling, count, and dispatch; the public floor still owns allocation, inspection, price, and market hours. |
+| ME-GC-03 | BF-MARKET-EXCHANGE | Exchange / Cloth Hall upper range | ME-CH-05, ME-CH-06 | An upper bargaining, sample, or record hall relates registered contracts and lots to the market below through attributed stairs and goods routes. It extends the family but does not make the public ground optional. |
+
+### Market Hall program layer
+
+Invariants: public trading ground · pitch or bay allocation · goods arrival and clearing · common measure or inspection · price/payment practice · market schedule and closure · accountable market authority
+
+Layer meaning: operating arrangement
+
+**Arrangement taste tranche (d4)**
+
+| d4 | id | eligibility | sample arrangement |
+| --- | --- | --- | --- |
+| 1 | MH-AR-01 | all family chassis | Daily provisions market with assigned food and household-goods bays, a common scale, early delivery, public trading hours, wash-down, and same-day clearing. |
+| 2 | MH-AR-02 | all family chassis | Periodic town market whose permanent hall stores standards and allocation records while removable pitches and carts expand onto an adjoining court on market day. |
+| 3 | MH-AR-03 | all family chassis | Mixed market with several licensed permanent counters at the sheltered edge and numbered temporary pitches on the central floor, all sharing inspection and closure rules. |
+| 4 | MH-AR-04 | all family chassis | Wholesale-first hall where bulk lots are inspected and priced before dawn, then broken into smaller public sales while separate delivery and buyer routes remain active. |
+
+**Current-scene taste tranche (d4)**
+
+| d4 | id | sample scene |
+| --- | --- | --- |
+| 1 | MH-SC-01 | Two traders hold valid-looking allocations for the same numbered pitch, and opening cannot finish until the authority record is reconciled. |
+| 2 | MH-SC-02 | The common scale is accurate, but a legal local weight now differs from the standard stamped into several prepaid deliveries. |
+| 3 | MH-SC-03 | A late cart blocks the clearing route while its perishable load is owed to buyers already waiting at three different bays. |
+| 4 | MH-SC-04 | An order closes one category of trade at midday, leaving goods, deposits, and promised collection times that still belong to named people. |
+
+**Spice taste tranche (band-selected d4 prototype)**
+
+| band | id | sample Spice | surface |
+| --- | --- | --- | --- |
+| Grounded | MH-SP-G | Old pitch marks beneath the current numbering prove one narrow bay was quietly removed from the allocation book. | allocation and floor history |
+| Textured | MH-SP-T | A suspended balance rings at a distinct pitch whenever a weighed lot contains goods from two declared origins. | inspection and provenance |
+| Strange | MH-SP-S | At the opening call, each numbered bay casts the shadow of the goods contractually promised there, including one promise no trader admits making. | allocation and obligation |
+| Volatile | MH-SP-V | A licensed market bell shifts one complete, attributed pitch between two approved trading grounds at closure; goods, keeper, records, routes, and claims move together. | market location and closure |
+
+**Realm-doctrine taste tranche**
+
+| realm | venue label | material operating realization |
+| --- | --- | --- |
+| frontier | Market House / Covered Market | Timber posts or stone arcades shelter numbered pitches, common beam and stamped weights, clerk or reeve, cart edge, wash-down and a bell-governed market day. |
+| chrome | Wholesale Concourse / Regulated Market | Modular vendor bays, booking and identity gates, calibrated inspection stations, live price boards, cold or secure services, freight edge and timed public access. |
+| gloom | Municipal Market Shed / Produce Hall | Painted stall numbers, concrete or iron bays, scale office, cash and account counter, loading alley, drains and refuse route, shutters and posted market hours. |
+
+### Exchange / Cloth Hall program layer
+
+Invariants: commodity or contract identity · inspection and sample relationship · bargaining or price publication · standards and records · secure lot/sample custody · bulk delivery relationship · accountable exchange authority
+
+Layer meaning: operating arrangement
+
+**Arrangement taste tranche (d4)**
+
+| d4 | id | eligibility | sample arrangement |
+| --- | --- | --- | --- |
+| 1 | EX-AR-01 | all family chassis | Cloth hall with long merchant bays, daylight inspection, measuring and folding tables, stamped quality records, secure samples, and bulk bales entering from side courts. |
+| 2 | EX-AR-02 | all family chassis | Commodity exchange where samples and lot records reach a bargaining floor while the physical bulk remains in attributed stores connected to a timed delivery edge. |
+| 3 | EX-AR-03 | all family chassis | Merchants' exchange with posted prices, agent benches, private bargaining recesses, contract registration, settlement, and an arbitration room reached without crossing secure records. |
+| 4 | EX-AR-04 | all family chassis | Seasonal fair hall whose permanent standards, clerk, sample store, and dispute process support a changing licensed commodity and temporary merchant roster. |
+
+**Current-scene taste tranche (d4)**
+
+| d4 | id | sample scene |
+| --- | --- | --- |
+| 1 | EX-SC-01 | A sealed sample passes inspection, but the attributed bulk lot arriving at the side court carries a different handling mark. |
+| 2 | EX-SC-02 | Two recognized standards produce different grades for the same cloth, and both authorities have buyers waiting on the result. |
+| 3 | EX-SC-03 | The posted price changed during a delayed message interval, leaving matched contracts that are legal under different recorded minutes. |
+| 4 | EX-SC-04 | A registered merchant has vanished after assigning both a sample and a delivery obligation to different agents with valid seals. |
+
+**Spice taste tranche (band-selected d4 prototype)**
+
+| band | id | sample Spice | surface |
+| --- | --- | --- | --- |
+| Grounded | EX-SP-G | A retired assay stamp appears on one current lot record and on no physical bale yet admitted to the hall. | standards and provenance |
+| Textured | EX-SP-T | The north inspection light reveals repairs and substitutions that disappear under every lamp used elsewhere in the hall. | inspection surface |
+| Strange | EX-SP-S | A retained sample changes scent and temperature to match the present storage condition of its attributed bulk lot. | sample-to-lot relationship |
+| Volatile | EX-SP-V | When a contract is publicly settled, its attributed lot acquires the hall's mark wherever it physically rests; forged settlement can therefore move both title and danger. | record, title, and remote lot |
+
+**Realm-doctrine taste tranche**
+
+| realm | venue label | material operating realization |
+| --- | --- | --- |
+| frontier | Cloth Hall / Wool Exchange | Long arcaded hall, cloth or sample bays, daylight tables, beam and measures, guild or town clerk, sealed records, bale court and upper store or bargaining room. |
+| chrome | Commodity Exchange / Clearing Hall | Credentialed trading floor, certified sample lab, market data and bid surfaces, contract clearing, bonded custody, freight-system links and controlled records. |
+| gloom | Produce Exchange / Merchants' Hall | Inspection tables under high windows, chalk price board or ticker, agent rail, sample cages, stamped tickets, warehouse and rail or truck transfer, arbitration office. |
+
+### Deterministic sample rolls
+
+#### BF-MARKET-EXCHANGE-01 — Market Hall — grounded-frontier
+
+Seed: `BUILDING-FAMILY-TASTE/BF-MARKET-EXCHANGE/market-hall/grounded-frontier/0` → `1890023939`
+
+Context tags: ordinary
+
+- Chassis: **ME-CH-04** — Court-and-arcade market: permanent covered bays line one or more sides of an open court, with a common measure point, removable fair pitches, drainage, and several closure gates.
+- Arrangement: **MH-AR-01** — Daily provisions market with assigned food and household-goods bays, a common scale, early delivery, public trading hours, wash-down, and same-day clearing.
+- State: **ME-ST-03** — Clearing and closure: portable pitches are struck, unsold goods are attributed and removed or secured, accounts close, refuse leaves, and public routes reopen.
+- Scene: **MH-SC-02** — The common scale is accurate, but a legal local weight now differs from the standard stamped into several prepaid deliveries.
+- Spice: **Grounded / MH-SP-G** — Old pitch marks beneath the current numbering prove one narrow bay was quietly removed from the allocation book.
+- Realm: **frontier / Market House / Covered Market** — Timber posts or stone arcades shelter numbered pitches, common beam and stamped weights, clerk or reeve, cart edge, wash-down and a bell-governed market day.
+
+#### BF-MARKET-EXCHANGE-02 — Exchange / Cloth Hall — textured-chrome
+
+Seed: `BUILDING-FAMILY-TASTE/BF-MARKET-EXCHANGE/exchange-cloth-hall/textured-chrome/1` → `3435509390`
+
+Context tags: ordinary
+
+- Chassis: **ME-CH-04** — Court-and-arcade market: permanent covered bays line one or more sides of an open court, with a common measure point, removable fair pitches, drainage, and several closure gates.
+- Arrangement: **EX-AR-04** — Seasonal fair hall whose permanent standards, clerk, sample store, and dispute process support a changing licensed commodity and temporary merchant roster.
+- State: **ME-ST-01** — Opening and allocation: officials, keepers, or elected traders assign pitches, check rights, set out standards, and separate deliveries from the arriving public.
+- Scene: **EX-SC-01** — A sealed sample passes inspection, but the attributed bulk lot arriving at the side court carries a different handling mark.
+- Spice: **Textured / EX-SP-T** — The north inspection light reveals repairs and substitutions that disappear under every lamp used elsewhere in the hall.
+- Realm: **chrome / Commodity Exchange / Clearing Hall** — Credentialed trading floor, certified sample lab, market data and bid surfaces, contract clearing, bonded custody, freight-system links and controlled records.
+
+#### BF-MARKET-EXCHANGE-03 — Market Hall — strange-gloom
+
+Seed: `BUILDING-FAMILY-TASTE/BF-MARKET-EXCHANGE/market-hall/strange-gloom/2` → `893695740`
+
+Context tags: ordinary
+
+- Chassis: **ME-CH-02** — Pier-and-arch hall: a heavier open arcade encloses a durable market floor, with perimeter pitch lines, two public approaches, a lockable standards room, and a service edge.
+- Arrangement: **MH-AR-04** — Wholesale-first hall where bulk lots are inspected and priced before dawn, then broken into smaller public sales while separate delivery and buyer routes remain active.
+- State: **ME-ST-04** — Assay or dispute session: one standard, lot, allocation, price, or right to trade is under public examination while the rest of the market continues around it.
+- Scene: **MH-SC-02** — The common scale is accurate, but a legal local weight now differs from the standard stamped into several prepaid deliveries.
+- Spice: **Strange / MH-SP-S** — At the opening call, each numbered bay casts the shadow of the goods contractually promised there, including one promise no trader admits making.
+- Realm: **gloom / Municipal Market Shed / Produce Hall** — Painted stall numbers, concrete or iron bays, scale office, cash and account counter, loading alley, drains and refuse route, shutters and posted market hours.
+
+#### BF-MARKET-EXCHANGE-04 — Exchange / Cloth Hall — volatile-frontier
+
+Seed: `BUILDING-FAMILY-TASTE/BF-MARKET-EXCHANGE/exchange-cloth-hall/volatile-frontier/3` → `3885835280`
+
+Context tags: `licensed-world-adapter`
+
+- Chassis: **ME-CH-04** — Court-and-arcade market: permanent covered bays line one or more sides of an open court, with a common measure point, removable fair pitches, drainage, and several closure gates.
+- Arrangement: **EX-AR-03** — Merchants' exchange with posted prices, agent benches, private bargaining recesses, contract registration, settlement, and an arbitration room reached without crossing secure records.
+- State: **ME-ST-02** — Full trade: bargaining, inspection, weighing, payment, replenishment, and crowd movement compete for the same legible bays and aisles.
+- Scene: **EX-SC-04** — A registered merchant has vanished after assigning both a sample and a delivery obligation to different agents with valid seals.
+- Spice: **Volatile / EX-SP-V** — When a contract is publicly settled, its attributed lot acquires the hall's mark wherever it physically rests; forged settlement can therefore move both title and danger.
+- Realm: **frontier / Cloth Hall / Wool Exchange** — Long arcaded hall, cloth or sample bays, daylight tables, beam and measures, guild or town clerk, sealed records, bale court and upper store or bargaining room.
 
 ## BF-CUSTODY — Prison / Custody
 

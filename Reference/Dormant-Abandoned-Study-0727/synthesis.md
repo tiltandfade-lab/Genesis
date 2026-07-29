@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: RESEARCH PACKET — CODEX ADVERSARIAL DISPOSITION APPENDED 2026-07-28
 
 # Synthesis — Dormant / Abandoned (Golden Site 3)
 
@@ -7,6 +7,20 @@ date: 2026-07-27
 lanes: `lane-1-breadth-sweep.md` · `lane-2-image-lane.md` · `lane-3-fft-cohort.md` ·
 `lane-4-engine-content-audit.md` · `images/LICENSE-LEDGER.md`
 consumer: `docs/SITE-3-DORMANT-CONCEPT.md`
+
+## 2026-07-28 adversarial disposition
+
+The observations and source ledger remain evidence. Three proposed deductions do not carry
+forward unchanged into the working spec:
+
+- a stable occupant does not automatically end Dormant; the original host program must be
+  restored or replaced so completely that its prior failure is no longer consequential;
+- aperture-first is a useful proof profile, not a universal law that lets the renderer punch
+  holes for readability; and
+- the ordinary host is named **Funerary / Mortuary Institution**, not “Funerary Store.”
+
+The transform may be prototyped on one existing host now, but portfolio proof still requires
+the same compiler to survive at least three unlike hosts.
 
 ## The three things the research changed
 
@@ -20,7 +34,7 @@ consumer: `docs/SITE-3-DORMANT-CONCEPT.md`
    Crypt (21.3 % of dungeon rolls) to Site 3 on the reading that "funerary/tomb reads as the
    abandoned/condition family". Half of that is wrong in a way that matters: a crypt with a
    living cult is a *maintained institution* (image D4-03 is the proof — named, dated,
-   painted skulls under lit votives). The crypt is a **Funerary Store host program** that
+   painted skulls under lit votives). The crypt is a **Funerary / Mortuary Institution host program** that
    Site 3 may transform, exactly as it transforms a mine or a guard post.
 3. **Site 3's build is a coherence layer, not a ruin kit.** The engine already rolls tiered
    sarcophagi, collapsed arches that grant ranged elevation, cracked pillars with damage
@@ -38,25 +52,28 @@ All `PROPOSED`. None is a founder ruling.
 > Dormancy is the withdrawal of maintenance from a host's circuits, plus elapsed time, plus
 > whoever came after. It is never a visual style, and it never replaces the host.
 
-### THE SUBTRACTIVE-SURVIVES LAW
+### THE SUBTRACTIVE-SURVIVES PROFILE
 
-> Cut voids survive; built volumes fall. In any dormant site, the below-grade and rock-cut
-> half is the reliable playable volume and the above-ground half is the silhouette.
+> Where the host already contains cut or below-grade volume, that volume often outlasts
+> exposed built fabric and is a strong aperture-first proof profile. Dormant does not create
+> this geometry, guarantee it, or require every host to use it.
 
 Evidence: two-thousand-year-old catacomb galleries geometrically intact (D4-01/02) versus
 every above-ground shell in the packet having lost roof and floors (D1-01/02/03); the
 engine's own Sunken Estate row reading "Manor house / **Basement levels**"; the flooded adit
-(D5-01) intact where the surface works are gone.
+(D5-01) intact where the surface works are gone. This supports the profile; it does not
+establish a universal geometry law.
 
-### THE APERTURE LAW
+### THE APERTURE HYPOTHESIS
 
-> Dormancy destroys light owners and creates apertures. Every breach, roof hole, collapsed
-> vault and open portal becomes the room's motivated light source, and the lit island beneath
-> it is exposed ground while the dark rim is not.
+> Where dormancy's cause ledger already commits a breach, roof hole, collapsed vault or open
+> portal, that aperture becomes a motivated light source; the lit island beneath it is exposed
+> ground while the dark rim is not.
 
 This is the resolution of the tension between the CAUSAL LIGHT LAW (Site 7, ruled: no
 inhabitants needing light ⇒ no light) and the fixed-camera readability gate. The site does not
-need an unexplained lamp; it needs a hole, and dormancy generates holes for free. Image D5-01
+need an unexplained lamp. It may use a causally committed hole, or remain dark and use
+player-owned light. Image D5-01
 shows what happens without one: nine-tenths black, with only grazing wall light, wet-floor
 specular, and two high-albedo objects carrying the read.
 
@@ -98,7 +115,7 @@ and it is why the ladder's rungs must be per-zone rather than per-site.
 | **D5 earthwork** | no fabric | the plan survives as a height field; readable through differential deposit in the low ground |
 
 Orthogonal vectors, legal at any rung: **ROBBED** · **FLOODED** · **BURIED** · **OVERGROWN**
-· **SEALED** · **TRANSIENT-OCCUPIED**.
+· **SEALED** · **OCCUPIED**.
 
 ## Where the research disagrees with the existing concept doc
 
@@ -106,7 +123,7 @@ Orthogonal vectors, legal at any rung: **ROBBED** · **FLOODED** · **BURIED** �
 |---|---|
 | first build = "operating waystation → dormant waystation" | **superseded as first choice.** The waystation is a fine host but it teaches least: it is small, above-ground, has no below-grade half, and does not touch the two buckets that carry a third of dungeon demand. The packet proposes a *pair on two unlike hosts* instead |
 | five-expression family: suspended shelter / neglected waystation / dead institutional wing / breached and reclaimed / deliberately closed | **retained and re-grounded.** All five survive; "suspended shelter" is now formally D0 *held*, and "deliberately closed" is now the SEALED vector rather than a size rung |
-| "REQUIRED — no stable new operator owns the place" | **confirmed by the Arles/Lucca reoccupation literature**, which shows precisely what happens when the rule is violated: the site becomes a different host |
+| "REQUIRED — no stable new operator owns the place" | **rejected as a universal deduction.** Reoccupation may leave the original host circuit dead. Dormant ends only when that circuit is restored or a replacement program makes its failure non-consequential |
 | "LICENSED — supernatural persistence" | **confirmed, and strengthened**: the desertion literature says causes are overwhelmingly mundane and economic, so the licensed weird result should be genuinely rare |
 | Site 3 "consumes the operating families built by the other Golden Sites", therefore build it last | **partly disputed.** The *transform proof* needs at least two unlike hosts, and two already exist at spec grade (Guard Post `PASS/PASS/PASS`, Mine working spec). Waiting for all twelve is not required to prove the transform; waiting for all twelve is required to prove *portfolio coverage*. Those are different claims and the build order should separate them |
 

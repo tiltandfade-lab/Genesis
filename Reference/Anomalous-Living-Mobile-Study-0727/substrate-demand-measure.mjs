@@ -1,11 +1,11 @@
-/* STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+/* STATUS: BROAD CANDIDATE MEASURE — CODEX ADVERSARIAL CORRECTION APPLIED 2026-07-28
  *
  * Site-12 substrate-transform demand measurement.
  *
  * Loads the REAL carved data (`data/starting-state.js` — SS / SS_CONC) and replays the exact
  * tag logic of `src/engine/world-gen.js` rollPressure() lines 16–21, which is what actually
  * runs at world genesis via rollStartingState(). Rolls N worlds (two pressures each) and
- * reports how often a world commits a Site-12-class substrate transform.
+ * reports broad Becoming/Intrusion and disclosed candidate-row rates.
  *
  * This measures the CURRENT LIVE PATH. It does not roll walks and it does not touch
  * tables.js / tables.json.
@@ -51,9 +51,9 @@ function pressureTag(kind) {
   return { tag: concTag, row: r.idx + 1, text: r.text };
 }
 
-/* Which concretized rows rewrite what the GROUND is.
-   becoming: all 8 rewrite what the place is.
-   intrusion: all 6 impose foreign law on the ground.
+/* Broad disclosed candidate screen, NOT a Site-12 eligibility classifier.
+   becoming includes population-only rows 3 and 7.
+   intrusion manifestations are not inspected here.
    buried: 1 (sleeper beneath), 2 (structure surfacing), 8 (land reverting to an older shape).
    curse:  5 (the land itself collecting), 7 (a place that should not have been entered).
    These row selections are a DISCLOSED classification, not a founder ruling. */
@@ -83,5 +83,6 @@ const pct = n => (100 * n / N).toFixed(2) + "%";
 console.log("worlds rolled:", N, "(2 pressures each)");
 console.log("concretize-tag counts over", 2 * N, "pressures:", tagTally);
 console.log("cBecoming row spread:", becomingRows);
-console.log("P(world commits >=1 becoming/intrusion pressure)      =", pct(narrow));
-console.log("P(world commits >=1 substrate-relevant concrete row)  =", pct(wide));
+console.log("P(world commits >=1 becoming/intrusion tag)            =", pct(narrow));
+console.log("P(world commits >=1 broad candidate concrete row)       =", pct(wide));
+console.log("NOTE: neither line measures Site-12 eligibility or materialization demand.");

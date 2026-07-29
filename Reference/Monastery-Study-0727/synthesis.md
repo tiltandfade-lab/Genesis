@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: CODEX ADVERSARIAL REVIEWED — MULTI-CHASSIS DIRECTION ACCEPTED; FOUNDER ORDER OPEN (2026-07-28)
 
 ---
 type: research-synthesis
@@ -179,29 +179,20 @@ institution at all. It is **seven separate, single-purpose buildings** (gate, Bu
 hall, monks' hall, kitchen, bathhouse, lavatory) related by a processional sequence rather than by
 a shared arcaded perimeter. This is real, sourced, imaged evidence for a **distinct institutional
 chassis** — not a variant of Site 4's `CLOISTER_VOID`/`ARCADE_BAY` grammar, but a different
-organizing principle (sequence of discrete halls vs. enclosure around one void). It is flagged
-here, not folded into any of M1/M2/M4/M5, and not proposed as a new Golden Site — per the
-concepting guidelines' step 0.5, that classification question ("is this a new host program, or an
-expression of the existing chassis with different circulation?") is exactly the kind of judgment
-call that belongs to Adam, not to a research pass. Recorded as an open classification question in
-§4 below.
+organizing principle (sequence of discrete halls vs. enclosure around one void). The
+2026-07-28 adversarial review keeps it inside the Site-4 host family and requires multiple
+chassis: wrapped court, processional campus, cliff/terrace, and distributed house. Founder
+authority still owns their build order.
 
-## 4. Proposed status-gate line (PROPOSED — this file does not edit `GOLDEN-SITES-CATALOG.md`)
+## 4. Adversarially integrated status-gate disposition
 
-Per the DEPTH LAW and the honesty laws governing this campaign, no research pass may write to the
-shared catalog's status-gate table. This section proposes language for Codex or Adam to migrate
-into `GOLDEN-SITES-CATALOG.md` if accepted; the actual table is unchanged by this pass.
+The research pass itself did not edit the shared catalog. The 2026-07-28 integration keeps
+the gate values and records the multiple-chassis consequence.
 
-**Current catalog line (Site 4 row, unchanged by this pass):**
+**Integrated catalog line:**
 `RESEARCHED: PASS · FOUNDER-RULED: PARTIAL · BRIEF-CONGRUENT: PARTIAL · CLAY-PROVED: OPEN` —
-*"M1/M2/M4/M5 build order is proposed; cultural breadth and metric evidence remain thin."*
-
-**Proposed replacement reason text (gate values unchanged — no gate may advance on a research
-pass's say-so):**
-*"M1/M2/M4/M5 build order remains proposed and requires a founder ruling (§2 of
-`Reference/Monastery-Study-0727/synthesis.md` is now decision-ready); cultural breadth now
-spans eight monastic/communal building traditions and three measured-dimension sources plus
-Genesis's own live Monastery Cloister scene-frame numbers; no rendered clay fixture exists."*
+*"Evidence supports multiple chassis (wrapped court, processional campus, cliff/terrace,
+distributed house); build order remains founder-facing; no rendered fixture."*
 
 **Why the gate values themselves do not move.** `RESEARCHED` was already `PASS` before this
 pass and remains `PASS` — this pass adds depth to an already-passing gate, it does not newly
@@ -214,8 +205,9 @@ reason — the working spec still marks the build order `PROPOSED` throughout, c
 
 - **No clay pass.** Every recommendation above is a research-and-reasoning packet, not a built
   and captured fixture. `CLAY-PROVED` is unaffected by this pass by design.
-- **The Zen chassis-classification question is opened, not answered** (§3). It needs an
-  ontology-engine-marriage-style judgment call this pass does not make.
+- **The research pass did not answer the Zen chassis-classification question** (§3). The
+  2026-07-28 adversarial review answers it: retain the processional-campus chassis inside
+  Site 4; founder authority still chooses its build-order placement.
 - **The Fountains Abbey "300 ft × 42 ft" cloister figure is reproduced as sourced, with an
   honest flag that it most likely describes the walk run rather than a square garth**
   (`MEASURED-REFERENCES.md` §1) — not independently re-verified against a scaled survey drawing.

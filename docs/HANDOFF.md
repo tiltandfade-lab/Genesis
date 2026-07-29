@@ -6,6 +6,39 @@ updated: 2026-07-27
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-28, GOLDEN-SITES ADVERSARIAL INTEGRATION + MARKET SAMPLER) [Codex]
+
+The 2026-07-27 Golden-Sites campaign has completed Codex adversarial review. The integrated
+ontology now treats the twelve numbers as a coverage portfolio rather than twelve runtime
+generators: seven host proofs (1/2/4/5/6/7/10), two cross-host transforms (3 Dormant and
+8 Layered Control), two shared scale/fortification stress proofs (9/11), and one shared
+substrate/terminal-transformation proof (12). The story engine and three walk families remain
+upstream; host programs, transforms, `ScaleContract`, `SubstratePlan`, materialization, and
+projection have explicit ownership. Site specs, research syntheses, spawn inventories, the
+catalog, founder queue, diagrams, and canon map now agree with that reading.
+
+Evidence-rate claims were narrowed to what the audits actually measured: claimant ingredients,
+fortification host demand, object supply, and broad pressure tags—not Site-8/9/11/12 activation.
+Prison remains a dedicated custody lifecycle; Site 5 hands freestanding shops to
+`BF-SHOP-WORKSHOP`; Site 10 hands public trading ground to the proposed
+`BF-MARKET-EXCHANGE` family.
+
+The missing Market/Exchange taste packet has now returned under
+`Reference/Building-Family-Table-Samples/`: eight sampled families total, 17 programs,
+32 deterministic receipts, six Market/Exchange chassis, separate Market Hall and Exchange /
+Cloth Hall layers, and three explicit Civic/Logistics/Exchange upper-program composition
+cards. The eighth family remains proposed and live compilation remains unauthorized until
+founder disposition.
+
+Validation: building-family generator `--check` passes; `git diff --check` passes;
+`build/archive-docs.py --check` passes; edited SVGs pass `xmllint`; manifest ends
+`RESULT: OK` with the repository's existing layer warnings.
+
+**Do next:** founder reviews the returned Market/Exchange tranche and the filtered build-order
+queue; the Golden lane otherwise stays out of the active CL-R3 files. After construction
+reconciliation, execute the retained semantic/composition and clay proofs from
+`GOLDEN-SITES-PROOF-QUEUE.md` before any broad runtime compiler rollout.
+
 ## ⭐ Latest (2026-07-27, INTEGRATION CLOSE + CAMPAIGN LAUNCH) [Fable]
 
 Everything is landed: master now holds the clay CL-R3→R5 capture lane, Codex's completed

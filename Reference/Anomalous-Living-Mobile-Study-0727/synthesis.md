@@ -1,6 +1,6 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: RESEARCH SYNTHESIS — CODEX ADVERSARIAL DISPOSITION APPENDED 2026-07-28
 
-# SYNTHESIS — the substrate grammar, the ladder, and the honest spice grade
+# SYNTHESIS — the substrate grammar, proof profiles, and the honest spice grade
 
 type: research-synthesis
 date: 2026-07-27
@@ -8,19 +8,27 @@ site: 12 — anomalous / living / mobile
 inputs: `breadth-sweep.md` · `LICENSE-LEDGER.md` (13 images) · `fft-cohort.md` (8 FFT maps
 read in place) · `engine-evidence.md` (measured demand)
 
+## 2026-07-28 adversarial disposition
+
+The images support a rich raft/mobile profile, not seven universal relations. Runtime uses an
+orthogonal `SubstratePlan`: support mode, capacity, datum, mobility/anchoring, agency,
+transformation phase and tenure vary independently. Thickness, anchors, trusted path, costed
+off-path ground, clock, perimeter and ownership are conditional. The S0–S7 sequence below is
+retained only as a proof-profile board, not a promotion ladder. The Megastructure retains its
+host identity while consuming anomalous substrate and optional scale contracts. Finally,
+13.48% measures Becoming/Intrusion tags—including population-only Becoming rows and
+unclassified Intrusion manifestations—not Site-12 materialization demand.
+
 ---
 
-## 1. The seven relations (grammar induction)
+## 1. Seven relations induced from the raft/mobile cohort
 
-Six substrate families, thirteen photographs, and eight FFT boards reduce to **seven
-relations**. Every one of them is present in a reed island, a boat mill, a tidal causeway,
-a whale's back, and a burning coal seam. That shared grammar is the whole argument for one
-Site 12 rather than five unrelated generators.
+Six substrate families, thirteen photographs, and eight FFT boards suggest **seven useful
+relations**. They are profile ingredients, not a checklist every substrate must satisfy.
 
 ### R1 — SUBSTRATE: the floor is a material with a thickness and a limit
 
-Ordinary sites stand on ground, which is infinitely thick and infinitely strong. A Site-12
-floor is a *thing*: 1–2 m of stacked totora root; 0.5–several m of sphagnum mat; >3 m of
+Where capacity matters, the floor is a *thing*: 1–2 m of stacked totora root; 0.5–several m of sphagnum mat; >3 m of
 sea ice; a hull's planking; a glass crust over baked earth. It has a measurable depth, and
 below that depth is water, void, fire, or flesh.
 
@@ -29,7 +37,7 @@ standee is not just at a cell; it is a load on a cell.
 
 ### R2 — ANCHOR: you do not found on it, you join to it
 
-Nothing on a Site-12 floor rests by gravity alone. Uros islands are staked to the lakebed
+Floating, suspended, attached and mobile profiles join rather than found. Uros islands are staked to the lakebed
 with eucalyptus and rope. Tonlé Sap houses are tethered to poles driven into the bed so
 they rise and fall *in place*. Boat mills are moored at the strongest point of the current
 or to bridge piers. Whale barnacles grow wall-plate chambers **into which the host's skin
@@ -45,9 +53,8 @@ Plank walkways on the reed mat (`S12-A2`). The causeway's tarmac ribbon across t
 flat (`S12-E1`). Gangplanks from bank to mill (`S12-B1`). FFT map 71's braided dry ridge
 through the swamp. FFT map 106's plate corners.
 
-Consequence: **the tactical design of a Site-12 map is the shape of the reliable route**,
-and everything off it is passable-at-a-cost, not walled. A Site-12 map whose unreliable
-ground is simply impassable has failed: it is a corridor with a texture.
+Consequence: where reliable and unreliable ground coexist, the trusted route may organize
+the tactical design. Off-path ground may be costed, impassable, absent or creature-specific.
 
 ### R4 — DATUM: the level is set by the object, not the world
 
@@ -55,8 +62,8 @@ A cart deck's height is the wheel radius. A hull's is its freeboard. A stilt vil
 two floors ten metres apart and the same ids in both (`S12-A3`). A sluice has two liquid
 levels across one control structure (FFT 64).
 
-Consequence: **every Site-12 edge has a step**, and the site can have more than one legal
-floor without being more than one map.
+Consequence: a datum is committed where the substrate/object sets a consequential level; it
+is not required on every substrate edge.
 
 ### R5 — CLOCK: the floor has a cycle, and it is longer than a fight
 
@@ -76,39 +83,38 @@ nothing beyond it (FFT 55). The vitrified crust ending in ordinary red baked ear
 (`S12-D1`). Centralia's bleached vent patch ringed by dead white trees with healthy scrub
 growing to the line (`S12-D3`). FFT 114's rim around its hole.
 
-Consequence: **wrong ground is a patch inside normal ground with a halo**, not a biome.
-This is also the site's cheapest legibility tool: the player learns the rule by seeing
-where it stops.
+Consequence: bounded patch profiles need a committed edge. Whole-map and interior
+Megastructure substrate plans remain legal.
 
 ### R7 — HOST STATE: something the site does not control is doing something
 
 The whale sounds. The river rises. The floe breaks. The fire moves under the town. The
 colony swarms. Nobody on the substrate decides these.
 
-Consequence: **a Site-12 map has a state owner outside the map.** This is the one relation
-Sites 1–11 do not have, and it is the site's actual identity.
+Consequence: externally driven state is one useful profile. Inert, locally controlled and
+ownerless substrates remain legal.
 
 ---
 
-## 2. The substrate ladder (PROPOSED)
+## 2. Named proof profiles, not a runtime ladder (PROPOSED)
 
-Eight rungs, ordered by how much the ground *does*. This is the site's growth ladder in the
-sense the catalog's growth-ladder directive means: each rung reuses the one below and adds
-exactly one relation.
+Eight names organize the proof queue. They do not reuse one another monotonically; runtime
+selects orthogonal axes.
 
-| rung | the ground is… | adds | real anchor |
+| historical label | illustrative axis bundle | what it proves | real anchor |
 |---|---|---|---|
-| **S0 unreliable** | passable at a cost — mud, scree, wet plank, shallow water | R1, R3 | Dolbodar-style braid; bog paths |
-| **S1 cyclic** | present on a public schedule | + R5, R4 (two floors) | tidal causeway; ice road; Tonlé Sap |
-| **S2 made** | a manufactured object with an owner | + R2, R6 (own silhouette) | boat mill; raft; Old Oak Wharf |
-| **S3 mobile** | travelling; the world moves past it | + R7 (motive), portal-as-prop | ger tereg; drift station; barge |
-| **S4 grown** | alive and tractable — tended, farmed, maintained | + R2 as a living joint | root bridge; reed island; coral |
-| **S5 reactive** | responding to what is done to it, without intention | + R7 as feedback | coal-seam fire; karst; vitrified crust |
-| **S6 becoming** | turning into something else on a clock | + R5 as an advancing front | *(engine: `cBecoming`)* |
-| **S7 willed** | wanting, remembering, bargaining | + R7 as an actor | *(no real referent — see below)* |
+| **S0 unreliable** | ordinary/founded support + load-limited capacity + static datum | passable ground with a consequential cost | Dolbodar-style braid; bog paths |
+| **S1 cyclic** | any support + cyclic datum | one id set across two scheduled states | tidal causeway; ice road; Tonlé Sap |
+| **S2 made/floating** | floating support + moored mobility + inert agency; tenure optional | bearing, release and recovery | boat mill; raft; Old Oak Wharf |
+| **S3 mobile** | translating, carried or self-propelled mobility; agency independent | persistent place while surround/position changes | ger tereg; drift station; barge |
+| **S4 grown** | grown or body-borne support; agency independent | a living joint or maintained organic bearing surface | root bridge; reed island; coral |
+| **S5 reactive** | reactive agency + stable transformation phase | physical feedback without intention | coal-seam fire; karst; vitrified crust |
+| **S6 becoming** | becoming transformation phase over any support/mobility profile | causal replacement on a clock | *(engine: `cBecoming`)* |
+| **S7 willed** | willed agency over any support, mobility or tenure profile | actor decisions through committed substrate facts | *(no real referent — see below)* |
 
-S0–S5 have real-world referents and mundane construction. S6 and S7 do not, and the spec
-must derive them from S0–S5's mechanics rather than inventing new ones.
+The labels do not form a sequence and no row automatically contains the previous row.
+S0–S5 have real-world referents and mundane construction. S6 and S7 do not; the spec must
+express them through the same committed axes rather than inventing a second substrate system.
 
 ---
 
@@ -116,10 +122,10 @@ must derive them from S0–S5's mechanics rather than inventing new ones.
 
 The campaign brief states the working assumption plainly: *"this site IS the
 Strange/Volatile/Mythic end."* Measured against the engine's own spice-graded table, **that
-is true of the site's transform door and false of its noun door**, and the split is exactly
+is true of the site's transform door and false of its substrate door**, and the split is exactly
 the noun/state distinction ruled in `SETTLED-LIFE-SITES-PROGRAM.md` §2.
 
-### 3a. The noun door is not spice-gated at all
+### 3a. The substrate door is not spice-gated at all
 
 `place-master-setting` carries **15 substrate-anomaly rows across all five bands, four of
 them Grounded** (`engine-evidence.md`). `dungeon-type` — which owns the Living Hive and the
@@ -127,7 +133,7 @@ Megastructure — **has no Band column whatsoever**; it is a flat Fork-class d10
 living dungeon is exactly as likely in a Grounded baseline region as at the rim.
 
 A floating reed village, a tidal port, a boat mill, a town built from one fallen tree: all
-Grounded, all Site 12 by substrate.
+Grounded, all candidates for ordinary host + `SubstratePlan`.
 
 ### 3b. The transform door *is* spice-gated, tightly and correctly
 
@@ -136,9 +142,9 @@ markdown) or `pImpersonal` **12** (*Strange*). The Intrusion only from `pExterna
 (*Mythic*). The terminal state — `Impending Doom` **12**, "transformation — the place
 becomes something else and will not change back" — is *Mythic*.
 
-So the state door sits at Strange/Volatile/Mythic **by authored design**, and the noun door
+So the state door sits at Strange/Volatile/Mythic **by authored design**, and the substrate door
 sits wherever the place happens to be. Both are live. They are not the same site behaviour
-and must not share a rung.
+and must not share one activation or spice gate.
 
 ### 3c. PROPOSED grading rule — three factors, and appearance is not one of them
 
@@ -191,10 +197,9 @@ counterexample would sink it.
 
 ---
 
-## 4. The deck — "the fast point"
+## 4. Raft/mobile proof deck — "the fast point"
 
-Every settled site in the portfolio owes a *deck* (elevation-as-objective, generalised from
-the guard-post roof ruling). Site 12's deck is proposed as **THE FAST POINT**: the single
+The retained raft/mobile proof owes elevation-as-objective. Its deck is proposed as **THE FAST POINT**: the
 piece of structure anchored to the most reliable part of the substrate — the mast, the
 mooring bitt, the dorsal ridge, the causeway refuge post, the stake that holds the whole
 island, the outcrop the crust has not reached.
@@ -202,31 +207,32 @@ island, the outcrop the crust has not reached.
 It is elevation, it is the best sightline, it is where you go when the floor fails, and it
 is the thing an attacker cuts. Unlike a roof, **it is also load-bearing for the site's
 identity**: destroying the fast point does not just lose you the high ground, it unmoors,
-unbalances, or releases the place.
+unbalances, or releases the place. Static, whole-map and interior substrate profiles need
+not contain one.
 
 ---
 
 ## 5. What this research changed
 
-1. **Site 12 is a substrate *axis*, not a strangeness bucket.** Six families, eight rungs,
-   four families entirely mundane, real demand concentrated at the Grounded end.
+1. **Site 12 proves a substrate *contract*, not a strangeness bucket or host generator.**
+   Its axes vary independently and several profiles are entirely mundane.
 
-2. **The demand number was wrong by an order of magnitude in the wrong direction.** The
-   census's 1.2% (Living Hive) is the smallest of five live doors. The largest — the
-   world-genesis Becoming/Intrusion chain — commits a Site-12-class transform in **13.5% of
-   worlds**, measured against the live carved tables. The Megastructure rows also belong
-   here, taking the dungeon door from 1% to 3%.
+2. **The engine supplies abundant candidates, but activation is unmeasured.** The
+   world-genesis chain emits a Becoming/Intrusion tag in **13.5% of worlds**, including
+   population-only and unclassified manifestations. Megastructure rows require substrate
+   behavior, but retain their host identity.
 
 3. **The structural buy is the opposite of what the catalog assumed.** `STRUCTURE-KIT-
    CATALOG.md` calls Site 12 "exotic · smallest structural buy · biggest skin buy." The FFT
    cohort says its buy is a small set of *silhouette and void relations* — deck, plates,
    rim, braid, datum — three of which are achieved by **subtracting** from terrain the
    engine already builds, and the skin is the cheap half. The "exotic vernacular" label is
-   true only of rung S7.
+   true only of the willed proof profile.
 
 4. **FFT never moves a tile — and that is permission, not a limit.** Motion, life, and
    wrongness are expressed as static shape plus committed state. Site 12 does not need an
-   animated floor; it needs two committed floors and an honest clock.
+   animated floor. Cyclic profiles need two committed datum states and a truthful schedule;
+   other profiles select only the state facts their axes require.
 
 5. **The spice claim needed splitting.** The noun is ungated and often Grounded; the state
    is gated at Strange/Volatile/Mythic by authorship. Band is set by agency, impossibility,

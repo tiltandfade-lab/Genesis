@@ -1,8 +1,9 @@
 ---
 type: working-site-spec
 created: 2026-07-27
-status: WORKING SPEC — DRAFT; research PARTIAL; founder OPEN; clay OPEN
-site: 12 — anomalous / living / mobile (substrate / ownership stress case)
+updated: 2026-07-28
+status: WORKING SPEC — DRAFT; adversarial redline applied; research PARTIAL; founder OPEN; clay OPEN
+site: 12 — anomalous / living / mobile (SubstratePlan + terminal-transformation stress proof)
 standard: SITE-5-MINE-WORKSHOP-CONCEPT.md
 method: GOLDEN-SITE-CONCEPTING-GUIDELINES.md
 authority:
@@ -21,7 +22,7 @@ research:
   - ../Reference/Anomalous-Living-Mobile-Study-0727/LICENSE-LEDGER.md
 ---
 
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: DRAFT — CODEX ADVERSARIAL REDLINE APPLIED; FOUNDER QUESTIONS REMAIN OPEN
 
 # SITE 12 — ANOMALOUS / LIVING / MOBILE — WORKING SPEC
 
@@ -40,10 +41,10 @@ no thin brief and no prior research.
 This spec is a consumer of the catalog, the ontology contract, the settled-life program's
 noun/state ruling, and the structure-kit matrix. It replaces none of them.
 
-### 1.2 Proposed status-gate line
+### 1.2 Adversarially integrated status-gate line
 
-Offered for the catalog's status-gate table. **This lane did not edit that table** — the
-line below is a proposal for the integrator.
+The 2026-07-28 integration pass applies the following reading in
+`GOLDEN-SITES-CATALOG.md`:
 
 | site | researched | founder-ruled | brief-congruent | clay-proved | current reason |
 |---|---|---|---|---|---|
@@ -51,7 +52,7 @@ line below is a proposal for the integrator.
 
 `RESEARCHED` is **PARTIAL**, not PASS. The three depth-law lanes ran and returned, but they
 were self-gated, there is no measured section drawing behind any dimension in §4, and the
-occupant/culture study that the site's ownership half demands has not been run. Site 5 and
+occupant/culture study that the optional tenure profile demands has not been run. Site 5 and
 Site 6 sit at `PARTIAL` for the same class of reason; this is the consistent value.
 
 ### 1.3 Ruled decisions
@@ -62,48 +63,48 @@ implementation authority.
 
 The two things this spec treats as *inherited law*, not new rulings:
 
-- the noun/state distinction and its three bins (`SETTLED-LIFE-SITES-PROGRAM.md` §2), which
+- the noun/state distinction and its four bins (`SETTLED-LIFE-SITES-PROGRAM.md` §2), which
   this spec applies to Site 12 in §1.4; and
-- step 0.5 of the concepting guidelines, which classifies Site 12 as a substrate/ownership
-  stress case rather than a host program.
+- step 0.5 of the concepting guidelines, as reconciled by the ontology pass: Site 12 proves
+  `SubstratePlan` and terminal transformation rather than a host program; tenure is optional.
 
 ### 1.4 Step 0.5 classification — and the finding that Site 12 is *both* doors
 
 Applying the settled-life program's bin test to Site 12 produces an answer the portfolio
 has not yet recorded, and it is the single most important structural claim in this spec.
 
-**Site 12 has two doors, and they are different bins.**
+**Site 12 has two composable doors, and neither is a host replacement by itself.**
 
 | door | what it is | bin | engine path | spice |
 |---|---|---|---|---|
-| **the noun door** | the place *is* built on/of an unusual substrate — a raft, a reed mat, a tidal flat, a hull, a hive, a whale | **(a) new host-adjacent family** — but a very thin one; it borrows Camp/Mine/Urban chassis and owns only the substrate relations | `place-master-setting` (15 of 100 rows, all five bands) · `dungeon-type` (3 of 100 rows, ungraded) | **ungated** — 4 of the 15 rows are Grounded |
+| **the substrate door** | a host is built on/of a consequential substrate — a raft, reed mat, tidal flat, hull, hive, whale, shifting mechanism | **(d) shared spatial contract** — `SubstratePlan`; it borrows the host's chassis and owns support/datum/mobility facts only | `place-master-setting` broad candidates · `dungeon-type` candidates · footing tables | **ungated** — ordinary substrates remain ordinary |
 | **the state door** | the ground *is turning* wrong — a Becoming, an Intrusion, a Buried Power rising | **(c) cross-host transform** | `starting-state-pressures` → `SS.cBecoming` / `SS.cIntrusion` / `SS.cBuried`, live at world genesis | **gated** at Strange / Volatile / Mythic by authorship |
 
 The settled-life program's hard tell for bin (c) is *"ask what persists when the state
-ends."* Site 12's state door **fails that test at its terminal rung**, and that failure is
+ends."* Site 12's state door **fails that test at its terminal transformation phase**, and that failure is
 precisely why the site earns a number:
 
 > `Impending Doom` d12 = 12 — *"transformation — the place becomes something else and will
 > not change back"* (**Mythic**).
 
-A Becoming that runs to completion does not return the host. It is bin (c) while it runs
-and bin (a) once it lands. **Site 12 is the retained proof for the case where a transform
-terminates in a substrate the host program cannot survive.** No other portfolio member has
-to hold that.
+A Becoming that runs to completion may destroy the substrate a host depends on. The
+transformation remains bin (c); the resulting host identity is resolved independently rather
+than promoted automatically into a Site-12 host. **Site 12 is the retained proof for terminal
+substrate transformation and host-continuity failure.**
 
 ### 1.5 Unresolved proposals carrying load
 
 Everything below is `PROPOSED` and load-bearing. A reader must not treat any of it as
 settled:
 
-1. the eight-rung substrate ladder (§3.1) and its build order (§3.3);
+1. the orthogonal substrate axes and proof profiles (§3.1) and their proof order (§3.3);
 2. the Golden Seed `SUB-RAFT-01` and the deliberate decision **not** to make the Dorsal
    Market the first build (§3.4);
 3. every number in §4 — none is backed by a measured drawing;
 4. the three-factor spice-grading rule (§12.6);
-5. the reclassification of `dungeon-type` rows 98–99 (*The Megastructure*) from Site 11 to
-   Site 12 (§8.2);
-6. THE FAST POINT as the site's deck (§4.5);
+5. the composition classification of `dungeon-type` rows 98–99 (*The Megastructure*) as a
+   host requiring anomalous `SubstratePlan`, with optional `ScaleContract` (§8.2);
+6. THE FAST POINT as the raft/mobile profile's deck (§4.5);
 7. the reading of the existing footing tables as Site 12's load-band and trusted-path
    source, and the claim that `wild-walk.js` currently discards two of their three columns
    (§8.2a) — the finding is verified, the *response* to it is proposed and belongs to
@@ -117,52 +118,52 @@ settled:
 
 ### 2.1 The promise
 
-> **This is a place where the floor is somebody else's.**
+> **This is a place where what supports you is a consequential world fact.**
 >
-> Everywhere else in the game, the ground is a given — it holds, it stays, it is nobody's.
-> Here it is a thing with a thickness, an owner, a schedule, and a condition. The player
-> should arrive understanding four things fast: what they are standing on, what it is
-> doing, what it will do next, and who they owe for being on it.
+> Here support, load, datum, mobility, anchoring or transformation may change what the
+> player can do. The player should understand whichever of those facts matter now, without
+> being forced to resolve every axis on every map.
 
-The feeling is not horror. It is **tenancy** — the specific alertness of a person walking a
-plank line across a bog, timing a causeway against the tide, or paying a tithe to stand on
-someone's whale. Horror is one licensed expression at the top of the ladder, not the site.
+The feeling may be simple footing, timing, balance, maintenance, tenancy, symbiosis or horror.
+Tenancy is one optional social layer, not the definition.
 
-### 2.2 What makes it a site family
+### 2.2 What makes it a stress proof
 
-Site 12 owns the **substrate relation**:
+Site 12 proves a shared **`SubstratePlan`** and the case where a transformation changes it:
 
-`substrate (thickness · limit) → anchor → trusted path → datum → clock → perimeter → host state`
+`host program + consequential substrate axes + optional Becoming/Intrusion delta`
 
-Those seven relations are the family boundary. A place is Site 12 when at least the first
-five are true of it and R7 has an owner outside the map. It is *not* Site 12 merely because
-it looks strange (see §12.5, and the FFT cohort's finding 5 — Murond Death City and
-Nelveska Temple are narratively anomalous and structurally ordinary ruins).
+Eligibility is consequential difference: at least one substrate fact changes support,
+capacity, access, position, timing or host continuity. The contract is shared across hosts;
+Golden number 12 does not own a second raft, hive, whale, market or Megastructure generator.
+It is not active merely because a place looks strange.
 
 ### 2.3 Invariants
 
-- **REQUIRED — the floor is a material with a stated thickness and a stated limit.** The
-  player can learn what is under it and what it will not hold. A "floating" surface with no
-  underside is rejected.
-- **REQUIRED — nothing is founded; everything is anchored.** Every built thing on the site
-  attaches to the substrate through a named, inspectable, damageable anchor class — stake,
-  mooring, pile, growing joint, lashing, spike. Cutting an anchor changes *where* a thing
-  is, not whether it is broken.
-- **REQUIRED — a trusted path exists and is narrower than the site.** There is a reliable
-  route over unreliable ground, and it is legible before commitment.
-- **REQUIRED — unreliable ground is passable at a cost, never walled.** A Site-12 map whose
-  bad ground is simply impassable has failed; it is a corridor with a texture (FFT 71 is
-  the counter-model — its design *is* the shape of the dry line).
-- **REQUIRED — the substrate has a clock the player can read.** Tide, season, drift, growth,
-  rot, spread, or the host's own rhythm. It is public, it is longer than one fight, and it
-  can be planned against.
-- **REQUIRED — the anomaly has a perimeter.** The wrong ground stops somewhere and the edge
-  is visible. A whole-map anomaly with no boundary is rejected.
-- **REQUIRED — there is a host state nobody on the map controls.** The whale, the river,
-  the fire, the colony, the Becoming. It has its own facts and its own causes.
-- **REQUIRED — the substrate has an owner, and standing on it costs something.** Rent,
-  tithe, tribute, feeding, maintenance labour, ritual, or forbearance. "Nobody owns the
-  ground" is a legal position ordinary sites may take; Site 12 may not.
+- **REQUIRED — consequential substrate truth.** At least one support, load, datum, mobility,
+  anchoring, agency or transformation fact changes access, capacity, position, timing or host
+  continuity.
+- **REQUIRED — causal factorization.** The active facts have named causes, present states,
+  visible or learnable tells, legal deltas and recoveries. One `substrateState = weird` switch
+  is rejected.
+- **REQUIRED — host identity stays separate.** Market, mill, custody, shrine, habitation,
+  lair, fortress or Megastructure obligations remain owned by their host program.
+- **REQUIRED — committed state/frontier.** Where datum, motion, spread or transformation
+  changes geometry, both current state and any promised next state/frontier are committed
+  before they become useful.
+- **CONDITIONAL — thickness and load.** Required only when support capacity, breach or
+  underside access matters.
+- **CONDITIONAL — anchoring.** Required for floating, mobile, suspended, piled or attached
+  profiles; ordinary founded construction remains legal.
+- **CONDITIONAL — trusted path and costed ground.** Required when reliable and unreliable
+  ground coexist. Off-path ground may be passable, impassable, absent or creature-specific as
+  canon dictates.
+- **CONDITIONAL — clock and datum.** Required for cyclic, mobile, growing, decaying or
+  transforming profiles. A static unusual substrate need not invent a public clock.
+- **CONDITIONAL — perimeter.** Required when the substrate occupies a bounded patch or has a
+  consequential edge. Whole-map substrate and interior Megastructure cases remain legal.
+- **OPTIONAL — ownership/tenancy.** Owner, common right, stewardship, rent, tithe, reciprocity
+  or no owner are all legal. Add a cost of standing only when world/culture facts establish it.
 - **DEFAULT — the site is mostly quiet.** Living and unreliable substrates are sparsely
   built: a humpback carries a few live barnacle clusters among dozens of old scars
   (`S12-C2`); a reed flat runs to the horizon with one dense knot of houses on it
@@ -176,38 +177,40 @@ Nelveska Temple are narratively anomalous and structurally ordinary ruins).
 - **LICENSED — impossible mechanism.** Flight, arrested time, inverted gravity, unbounded
   depth. Requires realm and rolled facts to own the mechanism, its cost, and its visible
   consequence.
-- **VARIANT — the substrate as antagonist.** Legal at rungs S5+ only, and it must act
-  through the seven relations (change the schedule, foul the anchors, thin the crust,
+- **VARIANT — the substrate as antagonist.** Legal only with reactive/willed agency, and it must act
+  through committed axes (change the schedule, foul the anchors, thin the crust,
   shift the datum), never as free-floating malice.
-- **PROPOSED — the fast point** (§4.5) as the site's deck.
+- **PROPOSED PROFILE — the fast point** (§4.5) for mobile/anchored proofs.
 
-**Rejection examples.** A cave with glowing moss is Site 7. A ruined ship on a beach that
-nobody uses is Site 3 wearing a Site-12 silhouette. A gargantuan creature you fight is Site
-11; a gargantuan creature you *stand on* is Site 12. A flooded mine is Site 5 plus water —
-unless the rock itself is the thing that is wrong.
+**Rejection examples.** A cave with glowing moss is Site 7 unless substrate behavior changes
+play. A ruined ship on a beach may be Site 3 over an ordinary vessel host; add `SubstratePlan`
+only if hull support/position remains consequential. A gargantuan creature may carry
+`ScaleContract`, `SubstratePlan`, both or neither. A flooded mine remains the mine host with
+water/substrate deltas; no Golden number replaces it.
 
 ---
 
-## 3. Scene ladder, implementation order, learning rationale, Golden Seed
+## 3. Proof profiles, implementation order, learning rationale, Golden Seed
 
-### 3.1 The substrate ladder (the growth ladder — PROPOSED)
+### 3.1 Orthogonal substrate axes and named proof profiles (`PROPOSED`)
 
-Eight rungs ordered by how much the ground *does*. Each reuses the rung below and adds
-exactly one relation. Mapped to the L1–10 bands per the growth-ladder directive.
+The original S0–S7 ladder conflated support, mobility, time, agency, transformation and
+tenure. They vary independently and are not runtime promotion rungs.
 
-| rung | the ground is… | adds | band | tier |
-|---|---|---|---|---|
-| **S0 unreliable** | passable at a cost — mud, scree, wet plank, shallow water | R1 substrate, R3 path | Grounded | L1–2 |
-| **S1 cyclic** | present on a public schedule | + R5 clock, R4 two floors | Grounded | L1–3 |
-| **S2 made** | a manufactured object with an owner | + R2 anchor, R6 own silhouette | Grounded–Textured | L2–4 |
-| **S3 mobile** | travelling; the world moves past it | + R7 motive, portal-as-prop | Textured | L3–5 |
-| **S4 grown** | alive and tractable — tended, farmed, maintained | + R2 as a living joint | Textured–Strange | L4–7 |
-| **S5 reactive** | responding to what is done to it, without intention | + R7 as feedback | Strange | L5–8 |
-| **S6 becoming** | turning into something else on a clock | + R5 as an advancing front | Volatile | L7–10 |
-| **S7 willed** | wanting, remembering, bargaining | + R7 as an actor | Mythic | L9–10+ |
+| axis | representative values | when it matters |
+|---|---|---|
+| **support mode** | founded · piled · floating · suspended · grown · body-borne · unsupported/void | how host loads reach bearing |
+| **capacity mode** | ordinary · load-limited · fragile · reactive | what may stand, cross, break or recover |
+| **datum** | static · cyclic · drifting · translating · rotating | which ids/portals/routes are available now and next |
+| **anchoring/mobility** | fixed · moored · tethered · self-propelled · externally carried | what holds position and what changes when released |
+| **agency** | inert · reactive · living · willed | whether deltas are physical feedback or actor decisions |
+| **transformation phase** | stable · becoming · terminal/replaced | whether the supporting truth is changing and whether the host survives |
+| **tenure** | none · common · stewarded · private · extracted · reciprocal · contested | who, if anyone, may demand payment or maintenance |
 
-S0–S5 have real-world referents and mundane construction (`breadth-sweep.md`). S6 and S7
-have none and are derived from S0–S5's mechanics.
+The old names remain only as useful **proof profiles**: unreliable, cyclic, made/floating,
+mobile, grown, reactive, becoming and willed. A floating raft can be inert or willed; a
+founded crust can be reactive; a mobile host can have no owner. No profile automatically
+contains the one before it.
 
 ### 3.2 The five-expression family
 
@@ -215,52 +218,54 @@ Per the guidelines' step 3 — five related expressions sharing one relational g
 
 1. **Smallest believable — the bog crossing.** One trusted plank line across a quaking mat,
    a stake field holding it, a single dry knoll, and a marker post. Two cells wide at its
-   widest. No settlement at all. (S0/S1.)
+   widest. No settlement at all. *(unreliable support + fixed anchoring + inert agency)*
 2. **Ordinary — the raft-quarter.** A moored cluster of pontoon decks and one working
    raft-mill on a river, joined by plank spines, tethered to a stake-and-pier field, with
-   one gangway to the bank. (S2. **The recommended first build.**)
+   one gangway to the bank. *(floating support + moored mobility + cyclic datum;
+   **the recommended first build**)*
 3. **Large / advanced — the dorsal market.** A trading quarter anchored to the back of a
    living host: tithe gate, market arcade in the lee of the fast point, anchor-scar
-   district, and a rim where the host's outline ends the world. (S3+S4.)
+   district, and a rim where the host's outline ends the world. *(body-borne support +
+   living agency + optional tenure)*
 4. **Degraded / occupied / repurposed — the drowned port at low water.** The same
    settlement's cyclic face: pilings exposed through two storeys, boats grounded in mud, a
    piling-forest under the houses that is its own tactical space, and the high-water
-   ids still committed and unreachable. (S1, reached by degradation.)
+   ids still committed and unreachable. *(founded/piled support + cyclic datum; a changed
+   state, not a weaker profile)*
 5. **Unusual but supported — the glass crater town.** A settlement on and around a
    reactive vitrified crust: a rim posture around a central void, crust thin in mapped
    patches, ordinary ground beneath where it is broken, a perimeter halo of dead growth.
-   (S5 — the Shimmering Maw's structure, arrived at by rolled facts.)
+   *(reactive load-limited support + static datum; the Shimmering Maw's structure, arrived
+   at by rolled facts)*
 
-All five share: a floor with a thickness · anchors instead of foundations · a narrower
-trusted path · a datum set by the object · a public clock · a legible perimeter · a host
-state outside the map.
+All five share only the contract: consequential support facts are factorized and the host
+program remains separate. Each expression selects only the axes it actually needs.
 
-### 3.3 Implementation order — **S2 → S1 → S4 → S5 → S6/S7** (PROPOSED)
+### 3.3 Proof order — **floating → cyclic → grown → reactive → becoming/willed** (`PROPOSED`)
 
-Deliberately not the same as the scene ladder, following the Mine's B→A→C→D pattern.
+Deliberately nonlinear, following the Mine's B→A→C→D proof-order pattern.
 
-- **S2 first (the raft-quarter)** because it is the smallest composition that contains six
-  of the seven relations, and it builds them out of timber, plank, rope, and piling — kit
+- **Floating first (the raft-quarter)** because it is the smallest composition that exercises
+  several orthogonal axes at once, and it builds them out of timber, plank, rope, and piling — kit
   Sites 2, 5, and 10 already need. It is the cheapest possible route to the site's hardest
   ideas.
-- **S1 second, by honest degradation** — remove the buoyancy and the mooring field, keep
-  the plank spine and the two datums. Do not shrink every object; delete the flotation and
-  let the piling forest become the low-state map.
-- **S4 third (the living host)** because it is the first rung that needs a *new* anchor
+- **Cyclic second, by changed state** — retain the host and compare two committed datums.
+  This is not degradation on a universal ladder.
+- **Grown third (the living host)** because it is the first profile that needs a *new* anchor
   class (the growing joint) and a host state that is an actor rather than a schedule.
-  Everything else it needs was proved at S2.
-- **S5 fourth (the reactive crust)** because it reuses S4's feedback loop and adds only a
+  Everything else it needs was proved by the raft profile.
+- **Reactive fourth (the reactive crust)** because it reuses the feedback loop and adds only a
   crust/subgrade split — which is a material and a breach rule, not a new geometry.
-- **S6/S7 last, and as a transform** — never as a new generator. They are deltas over any
+- **Becoming/willed last** — Becoming is a transform; agency is a substrate/actor fact. Neither is a new generator. They are deltas over any
   host, and by then the shared compiler owes them nothing new but an advancing front and a
   bargaining surface.
 
-**Learning rationale.** S2 proves: a floor with a thickness and a limit; anchors as a
-damageable class; a trusted path narrower than the site; a datum the object sets; a public
-clock; a silhouette with no apron; and one host state (the river). What it deliberately
-**does not** prove — stated in advance, per guidelines step 4 — is **R7 as an actor**. After
-S2 passes we still will not know whether a substrate that *decides* things reads as a place
-or as a monster. That is the whole reason S4 is queued immediately behind it and is not
+**Learning rationale.** The raft profile proves buoyancy, mooring, datum, capacity and host
+continuity on a mundane case. Those are fixture obligations, not universal Site-12 relations.
+What it deliberately **does not** prove is agency. After it passes we still will not know
+whether a substrate that *decides* things reads as a place
+or as a monster. That is the whole reason the living-host profile is queued immediately
+behind it and is not
 allowed to be deferred to Ideal.
 
 ### 3.4 Golden Seed — `SUB-RAFT-01`, and why it is not the Dorsal Market
@@ -281,24 +286,26 @@ is the entire Ideal asset library in one object, and choosing it would let the s
 hardest *relational* questions hide behind a modelling problem. `SUB-RAFT-01` asks the same
 seven questions in plank and rope.
 
-The Dorsal Market is queued as the **second** fixture (`SUB-BACK-01`), not as Ideal.
+The Dorsal Market is queued as the **second distinct-host fixture** (`SUB-BACK-01`), after
+the raft's two-datum comparison, not as Ideal.
 
 **Degradation and promotion paths.**
 - *degrades to*: the bog crossing (remove the settlement, keep the path and stakes) · the
   drowned port at low water (remove the flotation) · a wreck nobody uses (**hands off to
   Site 3**).
 - *promotes to*: the dorsal market (host becomes alive) · the barge-town under way (cut the
-  mooring; the site becomes S3) · the glass crater town (substrate becomes reactive) · a
-  Becoming (transform door, any rung).
+  mooring; the mobility axis becomes translating/self-propelled) · the glass crater town
+  (substrate becomes reactive) · a Becoming (transformation-phase door over any profile).
 
 ---
 
-## 4. Required spatial zones, provisional grid and standee hypotheses
+## 4. Raft-profile spatial zones, provisional grid and standee hypotheses
 
-### 4.1 Required zones
+### 4.1 Required for `SUB-RAFT-01`, conditional elsewhere
 
-Seven readable zones. They may overlap where real work allows; none may vanish into
-dressing.
+Seven readable zones are required by the first raft proof. Other substrate profiles select
+only zones licensed by their axes; they do not inherit a landing, path, anchor field, knot,
+fast point or perimeter automatically.
 
 1. **The landing** — where the world touches the site: gangway, causeway head, tithe gate,
    mat lip, or the one place the host's flank is climbable. The only legal ingress.
@@ -310,7 +317,7 @@ dressing.
    arcade, the mill deck, the house cluster. Small relative to the footprint.
 5. **The quiet field** — the honest majority of the site. Mat, deck, flat, flank, crust.
    Not filled with props to prove the map was used.
-6. **The fast point** — the site's deck (§4.5).
+6. **The fast point** — this profile's deck (§4.5).
 7. **The margin** — the perimeter where the substrate's rule stops: the gunwale, the mat
    lip, the crust edge with its halo, the host's outline, the causeway's last marker.
 
@@ -354,7 +361,7 @@ any number:
 
 Every number is `PROPOSED`. None is backed by a measured drawing — see §15.4.
 
-### 4.4 Load bands (the relation Site 12 adds to the grid) — PROPOSED
+### 4.4 Load bands (shared substrate-capacity relation) — PROPOSED
 
 R1 makes weight a legal input. **The engine already authors this** — `wilderness-footing`'s
 `Thin Ice / Fragile Crust` rows carry a rolled limit ("breaks if weight exceeds 3d10×10 lbs
@@ -364,7 +371,7 @@ proposed *reading* of that existing content, not a new system:
 | band | means | exceeding it |
 |---|---|---|
 | `light` | one ordinary standee at a time | the surface **sags one state**: slower, noisier, and now visible from below |
-| `normal` | ordinary traffic; the site's designed use | the surface **tilts or submerges one rung** — the datum changes locally |
+| `normal` | ordinary traffic; the site's designed use | the surface **tilts or submerges into a changed state** — the datum changes locally |
 | `heavy` | rated for the presentation-large witness or cargo | the anchor takes the strain instead; **anchor state degrades** |
 
 Exceeding a load band is never instant death. It is a **state change with a cause and a
@@ -374,11 +381,12 @@ The first proof must show small, six-foot-human, presentation-large, and largest
 standees on the deck, the trusted path, and the quiet field, and must say in the tactical
 overlay where a capacity changes.
 
-### 4.5 THE DECK — the fast point (PROPOSED)
+### 4.5 THE RAFT/MOBILE PROFILE DECK — the fast point (PROPOSED)
 
-Every site owes a deck: elevation-as-objective, generalised from the guard-post roof ruling.
+The first raft/mobile proof owes an elevation-as-objective. The fast point is its profile
+answer, not a universal Site-12 structure.
 
-> **Site 12's deck is THE FAST POINT — the one piece of structure anchored to the most
+> **The raft/mobile profile's deck is THE FAST POINT — a piece of structure anchored to the most
 > reliable part of the substrate.** The mast. The mooring bitt on the masonry pier. The
 > dorsal ridge. The causeway's refuge post. The one stake that holds the whole mat. The
 > outcrop the crust never reached.
@@ -386,7 +394,8 @@ Every site owes a deck: elevation-as-objective, generalised from the guard-post 
 It is the best sightline, the last dry place, the rally point when the floor fails, and the
 thing an attacker cuts. It differs from every other site's deck in one way that matters:
 **it is load-bearing for the site's identity.** Taking the guard post's roof gains you the
-high ground. Taking the fast point unmoors, unbalances, or releases the place.
+high ground. In profiles that use it, taking the fast point unmoors, unbalances, or releases
+the place. Static, whole-map and interior substrate plans need no fast point.
 
 ### 4.6 §10.3 structural coverage banked
 
@@ -400,7 +409,8 @@ Site 12 banks:
 - **ravine or water channel** — the braid (FFT 71 read): reliable ridges threading costed
   liquid;
 - **offset platform landmark** — the fast point;
-- **market plaza with functional stalls / building mass** — the knot, at S3/S4 scale
+- **market plaza with functional stalls / building mass** — the knot, at raft-quarter or
+  dorsal-market scale
   (the raft-quarter and the dorsal market both); and
 - **tight interior whose valid result is intentionally simple** — the underside (piling
   forest, below-deck, mat-to-water gap).
@@ -428,7 +438,11 @@ no route may lead on speed, safety, capacity, and information at once.
 
 ## 6. Operating circuits and factorized mutable state
 
-### 6.1 The six circuits
+### 6.1 Circuit menu — profiles commit only what they use
+
+These are available circuit families, not six universal obligations. Every committed
+profile needs support/bearing truth. Anchorage, a clock, special circulation, tenure and an
+agentic host state exist only when their selected axes make them consequential.
 
 1. **Buoyancy / bearing** — what holds the floor up: displacement, mat thickness, ice
    thickness, crust integrity, the host's own body. Has a source, a margin, and a failure.
@@ -438,8 +452,8 @@ no route may lead on speed, safety, capacity, and information at once.
    period, a next event, and a public tell.
 4. **Circulation** — the trusted path, the costed ground, the underside, the landing. Has a
    continuity state and per-segment capacity.
-5. **Tenancy** — who owns the substrate, what is owed, who has paid, who is in arrears, and
-   what non-payment does. This is the site's *ownership* half.
+5. **Tenancy, when committed** — who owns the substrate, what is owed, who has paid, who is
+   in arrears, and what non-payment does. Ownership is optional.
 6. **Host state** — what the substrate itself is doing, owned outside the map: the river's
    stage, the whale's behaviour, the fire's front, the colony's cycle, the Becoming's
    spread.
@@ -456,7 +470,8 @@ thin here"). Those labels are **derived**, never stored. Stored facts:
 - **continuity:** whether each circulation segment is currently legal;
 - **debt:** tenancy standing per party — paid / owed / in arrears / barred;
 - **host mode:** calm / stirring / acting / spent, with a cause and a recovery; and
-- **front:** for S5–S7 only, the advancing boundary's position and rate.
+- **front:** only for spatially advancing transformation profiles, the boundary's position
+  and rate.
 
 A single `substrateState = failing` switch is rejected for the same reason the Mine rejects
 `mineState = failing`: it makes every consequence simultaneous and removes every lever.
@@ -468,7 +483,7 @@ A single `substrateState = failing` switch is rejected for the same reason the M
 ### 7.1 Levers
 
 - **Cut, foul, or re-drive an anchor** — moves a raft, opens or closes a gap, changes what
-  is adjacent to what. The site's signature verb.
+  is adjacent to what. The raft profile's signature verb.
 - **Add to or breach the substrate** — lay fresh reed/plank over a weak patch to raise its
   load band; or break the crust to reach the ordinary ground beneath (`S12-D1` shows the
   crust is a *layer*).
@@ -527,7 +542,7 @@ edit the ledger**; the records below are proposed for it. Full evidence:
 | **Wilderness footing** | `wilderness-footing` (d200) | `src/engine/wild-walk.js:182` — `walkPick("wilderness-footing",1)` | **`LIVE` — but column-truncated** | see §8.2a. Already authors thin-ice/fragile-crust load limits and bog costs, **with a coverage-geometry column the roller never reads** |
 | **Urban footing** | `urban-footing` (d100) | *no code consumer*; referenced only by `Engine/02. _Procedures/Urban Encounter v2.5.md` | **`ORACLE-MANUAL`** | see §8.2a. Already authors the entire trusted-path failure grammar (sturdy/rotting boardwalk, missing planks, makeshift plank) and no urban walk can reach it |
 | Place Spine / building kits | (Place Spine archetypes) | — | **`LIVE`** | the ordinary buildings that sit *on* a Site-12 substrate |
-| The substrate grammar itself | — | — | **`TARGET-ADAPTER`** | the seven relations, the load bands, the datum pair, the anchor class, the tenancy circuit |
+| The substrate grammar itself | — | — | **`TARGET-ADAPTER`** | shared `SubstratePlan` axes; load, datum, anchor, perimeter and tenure only when consequential |
 
 ### 8.2a The footing tables — Site 12's mechanics are already authored, and half of them are dropped
 
@@ -570,7 +585,7 @@ Consequences for this spec, all `PROPOSED`:
    `docs/intel-sites/SITE-12-SPAWNABLE.md` and belongs to whichever lane owns the walk
    consumption boundary — **not** to this spec, which may not change `wild-walk.js`.
 
-### 8.2 Proposed reclassification — *The Megastructure* moves to Site 12
+### 8.2 Proposed composition classification — *The Megastructure* requires anomalous substrate
 
 `walk-census.md` mapped `dungeon-type` rows 98–99 to Site 11 (Mixed-Scale/Dragon), flagging
 it "genuinely ambiguous vs. Site 12." Reading the source rows settles it: the archetype's
@@ -578,9 +593,10 @@ stated original purpose is **"Anomaly / Ancient technology,"** and both atmosphe
 describe *geometry behaving wrongly* — "impossible geometry," "non-euclidean walls shift in
 faint mechanical rhythm." Nothing in either row is titan-sized.
 
-**PROPOSED:** the Megastructure is a Site-12 substrate case (wrong ground), not a Site-11
-scale case. This takes Site 12's `dungeon-type` share from 1 row to 3 (1% → 3%). The
-boundary rule that decides it is in §12.5: *scale is Site 11; substrate is Site 12.*
+**PROPOSED:** the Megastructure host consumes anomalous `SubstratePlan` because its geometry
+changes. It also consumes `ScaleContract` when apertures/routes create consequential size
+differences. This is a composition classification, not a transfer of host ownership or a
+claim that 3% of dungeon rolls activate a separate Site-12 generator.
 
 ### 8.3 Retained compositions (proposed)
 
@@ -623,44 +639,46 @@ pressure rolls, any concretize roll and its manifestation roll, and the world-co
 
 ## 9. Generator inputs, semantic blueprint, ordered generation
 
+This section is the `SUB-RAFT-01` proof harness. The runtime adapter first selects
+consequential axes; it must not instantiate every raft-profile field on every substrate.
+
 ### 9.1 Inputs committed before layout
 
-- substrate family (A mat / B vessel / C body / D crust / E cyclic / F willed) and rung
-  S0–S7;
-- substrate material, thickness, and load bands;
+- substrate profile plus independently selected support, capacity, datum, mobility/anchor,
+  agency, transformation and tenure axes;
+- substrate material, thickness, underside and load bands where consequential;
 - what is beneath it (water, void, fire, flesh, ordinary ground);
-- anchor technology and anchor count;
-- clock kind, period, current phase, and next event;
-- datum pair (high state / low state) and which ids exist in each;
+- anchor technology and anchor count where the support/mobility mode needs them;
+- clock kind, period, current phase, and next event where cyclic/change facts need them;
+- datum pair (high state / low state) and which ids exist in each where applicable;
 - host identity, host mode, and who owns the host state;
-- tenancy: owner, what is owed, current standing per party;
-- perimeter shape and halo width;
+- optional tenure: owner/common right/steward/no owner, any obligation, standing per party;
+- perimeter shape and halo width where the substrate has a consequential bounded edge;
 - host program riding on the substrate (market, mill, custody, shrine, habitation…) and its
   own operating model — **the substrate does not replace the program**;
-- size rung, occupancy, culture/organization cards;
+- map/host size band, occupancy, culture/organization cards;
 - realm-owned exceptions and any licensed impossible mechanism; and
 - encounter objective, threat band, creature envelopes, arrival direction.
 
 ### 9.2 Semantic blueprint (named before scenery)
 
-Landing · trusted-path spine and its segments · anchor field with per-anchor hold and
-direction · knot with its host-program roles · quiet field regions · fast point · margin and
-halo · underside (if licensed) · the datum pair · the clock with its next event · tenancy
-parties and debts · host-state facts and causes · three candidate plans with tradeoffs ·
-per-segment capacities and load bands · hooks, occupants, interaction anchors, recovery
-verbs.
+For the raft proof: landing · trusted-path spine and its segments · anchor field with
+per-anchor hold and direction · knot with its host-program roles · quiet field regions · fast
+point · margin and halo · underside (if licensed) · datum pair · clock · optional tenure ·
+host-state facts and causes · three candidate plans with tradeoffs · per-segment capacities
+and load bands · hooks, occupants, interaction anchors, recovery verbs.
 
 ### 9.3 Generation order
 
-1. Commit world facts, host program, substrate family/rung, occupants, and creature
+1. Commit world facts, host program, selected substrate axes/profile, occupants, and creature
    envelopes.
 2. Choose the **posture** from the substrate family: `DECK` (own silhouette, no apron) ·
    `PLATES` (archipelago over void) · `RIM` (ground around a central hole) · `BRAID`
    (reliable ridges through costed ground) · `FLAT` (continuous mat/crust). *These are the
    FFT cohort's five induced relations.*
 3. Fix the **datum pair** and decide which ids exist in each state.
-4. Place the **margin** — the site's outline — before anything inside it. On a Site-12 site
-   the perimeter is a decision, not a leftover.
+4. For the raft proof, place the **margin** — the raft cluster's outline — before anything
+   inside it. Other profiles omit this step when substrate covers the whole committed window.
 5. Place the **landing**, and commit that it is the only legal ingress until another is
    earned.
 6. Lay the **trusted path** from landing to knot. Narrower than the site. Continuous in the
@@ -684,30 +702,30 @@ verbs.
 
 ### 10.1 Countable rejection checks
 
-Reject before presentation when:
+Reject every profile before presentation when:
 
-1. the substrate has no stated thickness, or nothing is defined beneath it;
-2. any built object rests on the substrate without a named anchor;
-3. no trusted path exists, or the trusted path is as wide as the site;
-4. unreliable ground is impassable rather than costed;
-5. the clock has no period, no next event, or no public tell;
-6. the perimeter is absent, or the anomaly covers the whole map with no halo;
-7. no host state exists, or the host state has no owner outside the map;
-8. the substrate has no owner and nothing is owed for standing on it;
-9. the high and low datum states share no committed ids (they are two maps, not one);
-10. the knot exceeds its proposed share of the footprint, or the quiet field has been
-    prop-carpeted to prove the map was used;
-11. one route leads on speed, safety, capacity, and information simultaneously;
-12. cutting every anchor produces no reachable change, or produces total loss with no
-    recovery;
-13. the fast point is not anchored to the site's most reliable point, or destroying it has
-    no consequence beyond losing height;
-14. the site's spice band was raised by *appearance* rather than by agency, impossibility,
-    or stake (§12.6);
-15. a large creature is blocked from the only required route without an explicit capacity
-    fact;
-16. practical light has no owner, fuel, shift, or process; or
-17. a changed seed preserves the picture by destroying the choice.
+1. no substrate fact changes access, capacity, position, timing or host continuity;
+2. active substrate facts are collapsed into one unfactorized state or lack a cause;
+3. the substrate contract replaces or contradicts the host program;
+4. a promised datum, motion state, spread front or transformation state was invented after
+   observation;
+5. one route leads on speed, safety, capacity, and information simultaneously;
+6. a large creature is blocked from the only required route without an explicit capacity
+   fact;
+7. practical light has no owner, fuel, shift, or process; or
+8. a changed seed preserves the picture by destroying the choice.
+
+Additionally reject the retained raft profile when:
+
+9. its load/underside facts matter but thickness or what lies beneath is undefined;
+10. a floating or mobile piece has no named mooring/anchor relation;
+11. its reliable/unreliable-ground split is selected but no legible trusted path exists;
+12. its cyclic state is selected but no period, next event or public tell exists;
+13. its bounded-edge profile is selected but the committed margin is absent;
+14. its high/low states share no committed ids;
+15. the quiet field has been prop-carpeted to prove the map was used;
+16. cutting anchors produces no reachable change, or only total loss with no recovery; or
+17. the fast-point profile is selected but taking it has no consequence beyond losing height.
 
 ### 10.2 Deterministic fallback ladder
 
@@ -720,20 +738,22 @@ If placement fails, relax in this order and record the relaxation:
    never to a number where cutting one anchor loses everything);
 5. shorten the underside while preserving its decision;
 6. narrow the cyclic swing toward 2h so more ids survive both states;
-7. drop one ladder rung (S4 → S2) while keeping the complete relation chain;
+7. remove one optional raft-profile axis (agency before cyclic datum before mobility) while
+   preserving the consequential substrate fact;
 8. reject and reroll.
 
 The generator may **not** silently overlap standee bases, hand-place a second landing,
-delete the perimeter, make the trusted path a full-capacity road, or resolve a failure by
-freezing the clock.
+delete a committed raft margin, make its trusted path a full-capacity road, or resolve a
+cyclic-profile failure by freezing its clock.
 
 ---
 
 ## 11. Culture, construction, and occupant cards
 
-Physics chooses where the substrate can be. **Culture decides how people agree to live on
-something that is not theirs** — which is why the ownership half of this site is a culture
-problem, not a geometry problem.
+Physics chooses where the substrate can be. **Where tenure is active, culture decides how
+people agree to live on shared, borrowed, stewarded or privately claimed support.** Ownership
+is an optional axis, which is why that part of the proof needs a culture study, not a
+geometry assumption.
 
 A culture pair must change at least four of these without changing the committed substrate:
 
@@ -785,7 +805,8 @@ Tenanted and current · tenanted and in arrears · contested between two claiman
 where **Site 8** layers on) · keeper-run with a dependent population · abandoned but still
 maintained by one party · abandoned and drifting (**hands off to Site 3** once nothing is
 maintained) · under emergency (parting, flooding, breaking up, spreading) · newly claimed by
-people who do not know the clock · claimed by the substrate itself (S5+).
+people who do not know the clock · claimed by the substrate itself when agency and standing
+facts license that claim.
 
 ### 12.2 Arrival hooks
 
@@ -827,27 +848,27 @@ the player the thickness, the material, and what is beneath.
 
 ### 12.5 Site boundaries
 
-- **Site 3 — Dormant / Abandoned.** Owns the place that stopped. A wreck nobody uses is
-  Site 3 wearing a Site-12 silhouette. Site 12 requires that the substrate relation still
-  matters to someone.
+- **Site 3 — Dormant / Abandoned.** Owns the stopped operating model. A wreck nobody uses may
+  still consume `SubstratePlan` when hull support, position or access remains consequential;
+  Dormant and substrate state are orthogonal.
 - **Site 5 — Mine / Workshop.** Owns deliberate cuts, shoring, haulage, and production
-  chains. A flooding mine is Site 5 plus water. A mine whose *rock is alive* is Site 12
-  hosting Site 5.
-- **Site 7 — Natural Lair.** Owns natural voids claimed by a body. Site 12 owns the case
-  where the body **is** the floor.
-- **Site 8 — Layered Control.** Owns two persistent claims on one host. It composes freely
-  with Site 12 — and Site 12 adds a third possible claimant that Site 8 alone cannot
-  express: **the substrate**.
-- **Site 9 / 10 — Fortress / Urban Institution.** Host programs that may sit on a Site-12
-  substrate. The substrate never replaces their operating model.
-- **Site 11 — Mixed Scale / Dragon Domain.** *Scale is Site 11; substrate is Site 12.* A
-  gargantuan creature you fight, or whose domain you traverse, is Site 11. A gargantuan
-  creature you **stand on** is Site 12. This line is what reclassifies the Megastructure
-  (§8.2).
-- **Site 2 — Camp / Service.** Owns transient service on borrowed ground. A raft-quarter
-  that stays is not a camp; a camp pitched on a mat is Site 2 hosted by Site 12.
-- **Ordinary venue programs.** A tavern on a raft is `VENUE-TAVERN-01` hosted by Site 12,
-  not a thirteenth site.
+  chains. A flooded or living-rock mine remains the mine host and consumes the relevant
+  water/substrate contract.
+- **Site 7 — Natural Lair.** Owns natural voids claimed by a body. A body used as support
+  consumes `SubstratePlan`; Site 12 does not become the lair host.
+- **Site 8 — Layered Control.** Owns persistent claims on one host. A substrate is a claimant
+  only when it has agency and an actionable claim; inert ground does not become a third faction.
+- **Site 9 / 10 — Fortress / Urban Institution.** Stress proof and host programs that may
+  consume `SubstratePlan`. The substrate never replaces their operating model.
+- **Site 11 — Mixed Scale / Dragon Domain.** Scale and substrate are orthogonal contracts. A
+  gargantuan creature may change scale affordances, support affordances, both or neither.
+  `The Megastructure` consumes anomalous substrate and optionally scale (§8.2); neither Golden
+  number owns the host.
+- **Site 2 — Camp / Service.** Owns transient service. A raft-quarter that stays uses an
+  ordinary settlement/venue host plus `SubstratePlan`; a camp pitched on a mat is Site 2 plus
+  that same contract.
+- **Ordinary venue programs.** A tavern on a raft is `VENUE-TAVERN-01` plus `SubstratePlan`,
+  not a thirteenth site and not hosted by a Golden number.
 
 ### 12.6 Spice grading (PROPOSED rule) — the honest answer to "is this the Strange end?"
 
@@ -932,8 +953,9 @@ family · marker post with a datum scale.
 Anchor: drive / cut / re-set / foul · gangway: run out / draw in / stow · plank: lay / lift ·
 mooring line: make fast / slip / warp · sluice, hatch, or plug: open / close · pump or bail ·
 reed/plank patch: add a layer (raises a load band) · crust: sound it / breach it · tithe
-gate: pay / defer / refuse · winch or capstan for warping a parted raft · the host's own
-mechanism at S4+ (a breathing aperture, a shifting plate, a closing ring).
+gate: pay / defer / refuse · winch or capstan for warping a parted raft · for agentic or
+living-host profiles, the host's own mechanism (a breathing aperture, a shifting plate, a
+closing ring).
 
 **Proof subset for the first build:** substrate slab with underside · mat/deck edge · plank
 spine (fixed + removable) · gangway with two states · stake anchor with hold states ·
@@ -944,10 +966,11 @@ mooring line · waterline/datum socket · piling frame · fast-point post · mar
 - **Material:** wet and dry plank · lashed rope and cordage · driven timber pile (wet
   section / dry section / weathered) · reed and bundled thatch mat · saturated peat and moss
   · still and moving water · wet mud and exposed bed · ice · vitrified/slagged crust ·
-  baked and oxidized subgrade · living bark and root · hide, flesh, and callus (S4+) · shell
+  baked and oxidized subgrade · living bark and root · hide, flesh, and callus for
+  living-host profiles · shell
   and chitin · barnacle and encrustation · tar, pitch, and caulk · rusted and salted iron.
 - **Decal / paint:** waterline stains at **both** datums · tide and stage marks ·
-  **anchor scars** (the site's signature decal — the record of former occupancy) · rope-wear
+  **anchor scars** (the anchor-using profiles' identity-bearing record of former occupancy) · rope-wear
   at bitts and cleats · plank-lift marks · rot and worm at the underside · algal and salt
   bands · crust-crazing and bubbling · burn and bake boundaries · tithe/tally marks at the
   landing · claim marks on maintained patches · memorial marks at the margin.
@@ -989,13 +1012,15 @@ position, or interaction reach is geometry or a mechanism — not a decorative p
 
 Schema names may change; the fixture must retain the equivalent of:
 
-`substrateFamily` · `substrateRung` · `substrateMaterial` · `substrateThickness` ·
+`substrateFamily` · `substrateProfileId` · `supportMode` · `capacityMode` · `datumMode` ·
+`mobilityMode` · `agencyMode` · `transformationPhase` · `tenureMode` ·
+`substrateMaterial` · `substrateThickness` ·
 `beneathKind` · `loadBands[]` · `postureKind` (deck/plates/rim/braid/flat) · `marginPath` ·
 `haloWidth` · `anchorIds[]` with `anchorClass` / `holdState` / `holdDirection` /
 `holdsWhat` · `trustedPathIds[]` with per-segment `capacity` and `continuity` ·
 `landingIds[]` · `knotId` · `quietFieldIds[]` · `fastPointId` · `undersideIds[]` ·
 `datumPair{high,low}` · `datumCurrent` · `idsByDatum{}` · `clock{kind,period,phase,nextEvent,tell}` ·
-`hostId` · `hostMode` · `hostStateOwner` · `frontPosition` / `frontRate` (S5+) ·
+`hostId` · `hostMode` · `hostStateOwner` · conditional `frontPosition` / `frontRate` ·
 `tenancy{owner,owed,standingByParty}` · `hostProgramId` · `objectiveIds[]` ·
 `planTradeoffs[]` · `recoveryVerbs[]` · `relaxations[]` · `rejections[]`.
 
@@ -1031,16 +1056,16 @@ datum). At least three viable plans demonstrated, **one of them non-combat** (pl
 
 ### 15.2 MVP
 
-Rungs S0–S3. Mat, deck, hull, causeway, and stilt families · plank spine, gangway, stake,
+Unreliable, cyclic, floating/made, and mobile proof profiles. Mat, deck, hull, causeway, and stilt families · plank spine, gangway, stake,
 pile, mooring, pontoon, waterline, marker-post, and piling-frame assemblies · load bands ·
-the two-datum machinery · the anchor-cut lever with recovery · the tenancy circuit with two
+the two-datum machinery · the anchor-cut lever with recovery · the optional tenure profile with two
 culture cards (`CULT-KEEPERS`, `CULT-MAINTAINERS`) · at least two substrate materials and
 two host programs riding the same substrate · legal lighting · deterministic
 failure/recovery · social, salvage, rescue, theft, sabotage, and maintenance hook support.
 
 ### 15.3 Ideal
 
-Rungs S4–S7. Living-host anchoring with growing joints and host modes · reactive crust with
+Grown, reactive, becoming, and willed profiles. Living-host anchoring with growing joints and host modes · reactive crust with
 breach-to-subgrade · plate archipelago and rim postures at scale · the Becoming and the
 Intrusion as deltas over at least three unlike hosts with no host-specific branch · the
 terminal transformation (a host program that does not survive its substrate) · hive and reef
@@ -1052,10 +1077,10 @@ Site 8 · disaster, salvage, and evacuation play · broad cultural evidence for 
 1. **No measured drawing.** Every number in §4 is derived from prose sources and photographs.
    A boat-mill hull section, a stilt-house piling grid, or a reed-island core section must be
    read before any §4 number leaves `PROPOSED`. **This alone keeps `RESEARCHED` at PARTIAL.**
-2. **No occupant / culture study.** "Who lives on a substrate they do not own, and by what
-   right" is the site's ownership half and is entirely unstudied. The two cards in §11 are
+2. **No occupant / culture study for the optional tenure profile.** "Who lives on shared,
+   borrowed or claimed support, and by what right" is entirely unstudied. The two cards in §11 are
    sketches, one of them extrapolated from a single rolled faction name.
-3. **Family F has no evidence and cannot get any.** S6/S7 are derived from S0–S5 plus the
+3. **Willed/becoming profiles have no real-world evidence.** They are derived from mundane profiles plus the
    engine's own live tables. Anything stronger would be invention presented as research.
 4. **No world-context receipt** has been rolled for Site 12.
 5. **No felt-register answer.** Every family in this study is a *felt* thing — the bog
@@ -1065,20 +1090,21 @@ Site 8 · disaster, salvage, and evacuation play · broad cultural evidence for 
 6. **FFT sampling was 8 of 121 map ids.** Small, and stated as small.
 7. **An unresolved intel discrepancy** on the Dorsal Market's roll index/band
    (`engine-evidence.md`); load-bearing on nothing here, handed to the TIYL lane.
-8. **The Megastructure reclassification (§8.2) is proposed, not ruled**, and it moves a row
-   between two sites' demand figures.
+8. **The Megastructure composition classification (§8.2) is proposed, not ruled**; the host
+   should consume substrate and optional scale contracts without moving demand between Golden
+   numbers.
 
 ### 15.5 Founder questions — as proposed build orders
 
 Per the generator principle, these arrive as build orders with learning rationales and
-ladder links, never as A-or-B choices. All five are `PROPOSED`.
+dependency links, never as A-or-B choices. All five are `PROPOSED`.
 
 **FQ-1 — Build the raft-quarter first, and the whale second.**
 *The choice:* which expression of "the floor is somebody else's" gets built first — the
 mundane moored raft-quarter, or the Dorsal Market on the living sky-whale that the dice
 actually rolled as a character's birthplace.
-*Recommendation:* raft-quarter first. It asks all seven of the site's questions in plank
-and rope; the whale asks the same questions but hides them behind the biggest modelling
+*Recommendation:* raft-quarter first. It exercises support, capacity, mooring, datum and
+optional tenure in plank and rope; the whale asks related questions but hides them behind the biggest modelling
 problem in the portfolio.
 *What it changes later:* if the raft passes, the whale is mostly a reskin plus one new
 anchor class. If we start with the whale, we learn about giant animals and not about
@@ -1103,40 +1129,39 @@ as underwhelming in a capture packet.
 *Needs to judge it:* two dressed captures of the same raft-quarter chassis — one plain, one
 uncanny.
 
-**FQ-3 — The substrate is a party to the site, and standing on it costs something.**
-*The choice:* whether Site 12's "ownership" half becomes a real mechanic (tenancy: rent,
-tithe, maintenance, forbearance) or stays flavour.
-*Recommendation:* real mechanic. The ontology contract already calls this the
-substrate/**ownership** stress case; a rolled TIYL start put *The Tithe-Keepers* in the same
-opening scene as the Dorsal Market without anyone asking for it (§8.3 — suggestive, not
-proof); and it gives the site a full non-combat plan surface that no amount of geometry
-provides.
+**FQ-3 — Do we prove optional tenure on the raft profile?**
+*The choice:* whether the first raft fixture also proves tenancy (rent, tithe, maintenance,
+forbearance), while allowing common or unowned substrate elsewhere.
+*Recommendation:* yes as a profile, no as a universal requirement. A rolled TIYL start put
+*The Tithe-Keepers* in the same opening scene as the Dorsal Market (§8.3 — suggestive, not
+proof), and tenure gives this fixture a non-combat plan surface. It may not imply that every
+bog, tide, hive, hull or Megastructure has an owner.
 *What it changes later:* the tenancy circuit generalises to Site 8, Site 6, and every
 settled-life venue with a landlord — so building it here buys it portfolio-wide.
 *Easy to revise?* Moderately — it is a circuit and two culture cards, not geometry.
 *Needs to judge it:* the two culture cards run over the same raft-quarter, showing which
 decks a stranger may cross in each.
 
-**FQ-4 — Build both datum states as one map, and cap the swing at 2h–4h.**
+**FQ-4 — Build both raft datum states as one map, and start at a 2h–4h swing.**
 *The choice:* how a site that has a high state and a low state is represented. Real
 seasonal swings reach 10 m; a map that swings that far shares no geometry between states.
-*Recommendation:* one map, two committed datums, swing capped at 2h–4h so ids survive both.
-The 10 m real case becomes a *narrative* fact, not a map fact.
+*Recommendation:* one retained raft map, two committed datums, with the first proof at
+2h–4h so ids survive both. Larger real swings use separate persistent windows or state
+assemblies; the proof calibration is not a universal cap.
 *What it changes later:* this machinery is what the settled-life program's flooding entry
 and the marathon's unhomed flood-site demand both need, so it is not Site-12-only spend.
 *Easy to revise?* The cap is easy; the one-map decision is not.
 *Needs to judge it:* the same raft-quarter captured at high and low datum with the id
 overlay on.
 
-**FQ-5 — The Megastructure belongs to Site 12, not Site 11.**
+**FQ-5 — The Megastructure composes anomalous substrate and optional scale.**
 *The choice:* `dungeon-type` rows 98–99, whose source purpose is "Anomaly / Ancient
 technology" and whose atmosphere is impossible, shifting geometry — currently mapped to
 Site 11 by the census with an explicit ambiguity flag.
-*Recommendation:* move them to Site 12 under the rule *scale is Site 11, substrate is
-Site 12*.
-*What it changes later:* Site 12's dungeon share goes 1% → 3%; Site 11 loses a case it was
-never going to build as a scale problem; and the boundary rule becomes reusable for every
-future ambiguous row.
+*Recommendation:* retain Megastructure as its own host, require anomalous `SubstratePlan`,
+and add `ScaleContract` only when body/object scale changes an affordance.
+*What it changes later:* no Golden number gains or loses a host-demand percentage; the
+composition rule becomes reusable for every future ambiguous row.
 *Easy to revise?* Trivially — it is a classification, not a build.
 *Needs to judge it:* the two source rows quoted side by side with Site 11's scale capsule.
 
@@ -1162,7 +1187,7 @@ study.
 - `Reference/Anomalous-Living-Mobile-Study-0727/fft-cohort.md` — 8 FFT maps read in place
 - `Reference/Anomalous-Living-Mobile-Study-0727/engine-evidence.md` — measured demand
 - `Reference/Anomalous-Living-Mobile-Study-0727/substrate-demand-measure.mjs` — reproducible
-- `Reference/Anomalous-Living-Mobile-Study-0727/synthesis.md` — grammar, ladder, spice grade
+- `Reference/Anomalous-Living-Mobile-Study-0727/synthesis.md` — grammar, proof profiles, spice grade
 - `docs/intel-sites/SITE-12-SPAWNABLE.md` — the spawnable-content inventory
 
 The packet supports this working spec. Its declared gaps keep `RESEARCHED` at `PARTIAL`,

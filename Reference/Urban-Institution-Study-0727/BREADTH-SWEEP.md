@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: EVIDENCE PACKET — CODEX ADVERSARIAL DISPOSITION APPLIED 2026-07-28
 
 ---
 type: research-note
@@ -47,7 +47,7 @@ programs. None of them is named "Market Hall," "Exchange," or "Cloth Hall." Site
 Golden Seed is a market hall. Applying step 0.5: does the market hall need its own numbered
 host (no — it is not a distinct *operating model* independent of an existing family's
 grammar), a venue fixture (partially), or is it a **missing program inside an existing
-family, or a fifth family**?
+family, or an eighth family**?
 
 **Finding, load-bearing (full reasoning in `synthesis.md` §3).** `MEASURED-REFERENCES.md` §1-2
 found that real market halls carry at least three different upper-room programs on the

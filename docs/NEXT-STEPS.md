@@ -3,7 +3,7 @@ type: next-steps
 branch: Genesis
 status: living
 created: 2026-06-18
-updated: 2026-07-26
+updated: 2026-07-28
 related:
   - "[[DESIGN]]"
   - "[[GAP-ANALYSIS]]"
@@ -18,7 +18,7 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
 roll into `NEXT-STEPS-ARCHIVE.md` via `python3 build/archive-docs.py --emit`. Standing plan
 sections (tracks/layers/etc.) are never auto-archived.
 
-## Do next (2026-07-26 — Golden Site ontology / engine marriage)
+## Do next (2026-07-28 — Golden Site ontology / engine marriage)
 
 The audit separated four gates that the 2026-07-24 running record had collapsed:
 `RESEARCHED` · `FOUNDER-RULED` · `BRIEF-CONGRUENT` · `CLAY-PROVED`. The older uses of
@@ -46,9 +46,11 @@ as current status** by `GOLDEN-SITES-CATALOG.md`.
    across all fourteen kits, same-seed realm mirrors, and the real Prison/Custody
    boundary; it proves current building layers do not yet reconcile like the walks.
    `Reference/Building-Family-Table-Samples/` now supplies the first after-direction
-   taste packet: seven small family tranches, dedicated Prison/Custody, explicit
-   arrangement/chassis eligibility, and 28 deterministic layered receipts. These are
-   founder-review samples, not final d20s or live compilation.
+   taste packet: seven founder-ruled family tranches plus the proposed Market/Exchange
+   eighth, dedicated Prison/Custody, explicit arrangement/chassis eligibility, three
+   Market/Exchange upper-program composition cards, and 32 deterministic layered
+   receipts across 17 programs. These are founder-review samples, not final d20s or
+   live compilation.
    The Golden-grade semantic/spatial venue fixture remains open.
 3. ☐ Let CL-R3 finish in its existing construction lane. Then reconcile its admitted
    generic construction product against the ontology contract before opening semantic
@@ -57,13 +59,12 @@ as current status** by `GOLDEN-SITES-CATALOG.md`.
    tavern through the common semantic/composition path, preserve SceneTray→BattleMap
    identity, apply layered control to the compact host and two unlike hosts, prove
    legal semantic overflow, and retain one large quiet-space fixture.
-5. ☐ Resolve the six nonblocking founder proposals in
-   `GOLDEN-SITES-FOUNDER-QUEUE.md` (four monastery build-order choices, Urban produce
-   tray tier, UC10 answer-object tier).
-6. ☐ Run the targeted source work in `GOLDEN-SITES-PROOF-QUEUE.md`: monastery metric
-   and cultural breadth; Mine direct tactical-map cohort, broader measured plans, and
-   first mechanism/culture cards; Urban measured frontage/hall, shutter, party wall,
-   balcony, working-market, and fixed-camera evidence.
+5. ☐ Resolve the adversarially filtered taste and build-order proposals in
+   `GOLDEN-SITES-FOUNDER-QUEUE.md`, including disposition of the returned proposed
+   Market/Exchange family. Research and clay gaps do not belong in this decision queue.
+6. ☐ Run only the remaining targeted source work in
+   `GOLDEN-SITES-PROOF-QUEUE.md`. The 2026-07-27 depth-law packets and 2026-07-28
+   adversarial integration are complete; do not repeat their broad audits.
 7. ☐ Build retained deterministic proofs in order: Guard Post → Camp → Lair →
    Monastery → Mine → Urban. The Mine proof uses the accepted active-upper/flooding-
    lower Rung-B fixture and must demonstrate broad, narrow, and conditional plans.

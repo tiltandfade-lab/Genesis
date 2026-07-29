@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: EVIDENCE PACKET — CODEX ADVERSARIAL CORRECTION APPLIED 2026-07-28
 
 ---
 type: research-note
@@ -23,14 +23,15 @@ vocabulary is the roller-preservation ledger's: `LIVE`, `LIVE-COMPOSED`, `AUTHOR
 |---|---|---|
 | `docs/intel/walk-census.md` §2a | Military Fortification as a share of dungeon `setup.type` (n = 253 real walks) | **14.62 %** — third of ten, behind Crypt (21.3 %) and Cavern (20.6 %) |
 | `Engine/…/Dungeons/Dungeon Type.md` | rows carrying the Military Fortification archetype, of 100 | **15 / 100** |
-| `Engine/…/Place Generation/Master Setting.md` | rows whose settlement **is** a fortification or is defined by one, of 100 | **13 / 100** (enumerated in §3) |
+| `Engine/…/Place Generation/Master Setting.md` | broad screen of rows that are fortified, walled, garrison-adjacent, or defined by defensive works, of 100 | **14 / 100 broad candidates** (enumerated in §3); only rows 51 and 71 directly encode Site 9 |
 | `docs/intel/marathon-spatial-mining.md` | Site 9 appearances across 11 marathon transcripts | **0** |
 
-Two independent live tables converge on roughly one place in seven. The marathon says zero,
-which is a real and awkward counter-datum: over eleven transcripts of actual play, no scene
-read as a fortress. The honest reading is that **the tables offer fortifications at ~14 % and
-the play sample did not take them** — which is evidence about sample size and about DM
-behaviour, not proof the demand is absent, but it must not be waved away.
+The two table counts are superficially similar but measure different things. Dungeon Type
+measures Defense/Fortification host-interior demand. The Master Setting count is a deliberately
+broad source screen, not a frequency of contested fortresses; only rows 51 and 71 directly encode
+two claims in one works. The marathon says zero Site-9 scenes across eleven transcripts. The
+honest conclusion is therefore **substantial fortification-host demand, two direct Site-9 source
+rows, and unmeasured Site-9 activation**.
 
 ## 2. The demand is for an INTERIOR
 
@@ -57,14 +58,14 @@ The 14.6 % arrives through the *dungeon walk*, and what it asks for is a fortifi
 That is exactly the FFT Bethla finding (lane 3) arriving from the other direction: the
 fortress is played as named interior windows.
 
-## 3. The settlement roller already builds contested fortresses
+## 3. The settlement roller provides fortification hosts and two direct Site-9 candidates
 
 `Master Setting.md` (`place-master-setting`, d100, 100 rows) is `LIVE` — rolled by
 `engine/codex-roll.js:660` (`rollTable("place-master-setting")`) and by the character-creation
 hometown beat at `creator/bardo.js:14`.
 
-Thirteen of its hundred rows are fortification-hosted settlements, and the pattern in their
-own text is startling:
+Fourteen rows survive a broad fortification-adjacent screen. Several are merely walled,
+garrison-adjacent or defensively shaped; the table must not treat all fourteen as Site 9:
 
 | row | setting | the relationship already written into the row |
 |---:|---|---|
@@ -83,10 +84,10 @@ own text is startling:
 | 79 | **The Garrison-Wife Town** — dependents and camp-followers who outlasted the army, governing by a rank structure with no military left to justify it | the second population is now the only population |
 | 93 | **The Tide-That-Stopped** — a coastal town whose walls are frozen water | the anomalous/Site-12 edge of the family |
 
-**Read the column on the right.** The live table's dominant fortress state is not siege. It
-is **cohabitation, inheritance, and drift** — someone living inside works they did not build,
-under an authority that has lapsed, changed, or gone absent. Rows 51 and 71 are Site 9's
-premise stated in a table row.
+Rows 51 and 71 are Site 9's premise stated directly. They make cohabitation/inheritance the
+strongest first proof state. They do **not** establish the dominant runtime weighting of the
+whole table, much less of generated worlds; story canon must still choose among garrison,
+cohabitation, refuge, mutiny, siege, dormancy and other states.
 
 Corroborating rows in `Place History.md` (`place-history`, `LIVE` via `creator/bardo.js`):
 row 6 *"A mountain pass that had to be guarded, so a garrison went up and a town grew in its
@@ -115,7 +116,7 @@ These are not hypothetical rows; they came back in the twelve-start census.
 | Urban Tactical Setup | `urban-tactical-setup` | `engine/walk.js:504` | row 11 **fortified gate plaza** (barricade at a street entrance, defenders on a 20 ft wall above, siege timing matters, mounted charge blocked); row 19 **guard tower interior** (spiral stairs, arrow slits giving defenders cover, confined floors, bell-rope alarm hazard, siege ladder at the base) |
 | Urban Segment Approach | `urban-segment-approach` | `engine/walk.js:121` | row 18 **The Fortress-Prison Siege Line** — an active military cordon as an *approach obstacle*, with four escalation hooks |
 | Urban Catalyst / Spectacle | `urban-catalyst`, `urban-spectacle` | `engine/walk.js:577`, `:362` | catalyst 140 *a wall section collapses; enemies gathering outside*; spectacle 79 *a mob storming the gates with rams and climbing equipment* |
-| Master Setting | `place-master-setting` | `engine/codex-roll.js:660`, `creator/bardo.js:14` | the thirteen fortification settlements of §3 |
+| Master Setting | `place-master-setting` | `engine/codex-roll.js:660`, `creator/bardo.js:14` | fourteen broad fortification-adjacent candidates, of which rows 51 and 71 directly encode Site 9 |
 | Place History / Traits / Nearby | `place-history`, `place-traits`, `place-nearby` | `creator/bardo.js`, `engine/codex-roll.js`, `world/wiring-b.js` | the garrison-origin and outlived-its-war histories |
 
 ### `AUTHORED-UNWIRED` — the awkward finding
@@ -197,9 +198,10 @@ Three things fall out:
   carries CTX-GP-19, CTX-CAMP-7, CTX-MONASTERY-68, CTX-MINE-39, CTX-LAIR-254, CTX-URBAN-13
   and CTX-PRISON-6198. There is no fortress draw. Site 9 has **no first context proof**, and
   one must be rolled before its context obligations can be written honestly.
-- **The 14.6 % is a `setup.type` label**, stamped at walk-assembly time. It is not proof that
-  a fortification interior was ever *played*; the marathon's zero hits is the counter-datum.
-- **No frequency claim is made for the `place-master-setting` fortification rows in play.**
-  Thirteen rows exist; how often they are rolled and reached is uncounted here.
+- **The 14.6 % is a Defense/Fortification `setup.type` label**, stamped at walk-assembly time.
+  It is not Site-9 demand and not proof that a fortification interior was ever *played*; the
+  marathon's zero Site-9 hits is the counter-datum.
+- **No Site-9 frequency claim is made for the `place-master-setting` screen.** Fourteen broad
+  candidates exist, two direct; how often either is rolled and reached is uncounted here.
 - The `LIVE` column proves a caller exists. It does not prove the result reaches a player
   surface intact — that is the wiring-law distinction, and it was not re-gated in this lane.

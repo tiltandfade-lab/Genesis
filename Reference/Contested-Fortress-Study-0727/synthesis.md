@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: EVIDENCE SYNTHESIS — CODEX ADVERSARIAL DISPOSITION APPENDED 2026-07-28
 
 ---
 type: research-note
@@ -7,6 +7,18 @@ status: EVIDENCE SYNTHESIS 2026-07-27 — nothing here is ruled; all build order
 ---
 
 # Synthesis — what the research says Site 9 actually is
+
+## 2026-07-28 adversarial disposition
+
+The research supports a strong retained proof, but not a Site-9 runtime generator.
+`Defense/Fortification` owns the host and works, `LayeredControl` owns claimants and
+attributed ground, and `MaterializationWindow` owns persistent cross-window extent. The 14.62%
+figure measures fortification-interior host demand, not contested-fortress activation. The
+Master Setting audit contains fourteen broad fortification-adjacent candidates, only rows 51
+and 71 directly encode Site 9, and therefore supports **cohabitation-first proof order**, not
+a global default state. Lengthened entrances, multi-barrier gates, large quiet wards and
+enceinte-lined buildings are useful profiles, not universal fortress invariants. Site 8 may
+be overt or covert; concealment is not its boundary.
 
 ## The one-paragraph answer
 
@@ -52,23 +64,23 @@ of loops across an open boulder-scattered field). Lane 2's Marqab pair shows the
 photographs: a wall-walk in the foreground, the inner works above, and a strip of bare
 overlooked ground between them.
 
-**Consequence:** the wall is not a boundary object. It is **terrain with two faces**, and a
-generator that only supports the outside view has built half the site.
+**Consequence:** the wall is not merely a boundary object. It has **two declared relations**,
+and a retained multi-window proof should read both. Either face may still be inaccessible,
+external, buried or otherwise non-playable when canon says so.
 
-### 4. The site's dominant *live* state is cohabitation, not siege
+### 4. Cohabitation is the strongest first proof state, not a measured global default
 
-Thirteen of a hundred `place-master-setting` rows are fortification settlements, and the
-pattern in their own prose is overwhelming: **Thorngate Keep** — "a border garrison … now
+Fourteen `place-master-setting` rows survive a broad fortification-adjacent screen, but only
+two directly encode the Site-9 relation: **Thorngate Keep** — "a border garrison … now
 housing a growing civilian quarter inside the old killing ground"; **The Borrowed Wall** — "a
 hamlet sheltering inside the curtain-wall of a castle that was never theirs, paying rent to a
-lord no living soul has met"; **The Garrison-Wife Town** — dependents who outlasted the army.
-`place-history` adds "a garrison town that outlived its war and learned to farm."
+lord no living soul has met." **The Garrison-Wife Town** is a supporting adjacent case:
+dependents outlasted the army, but only one live claimant remains. `place-history` adds "a
+garrison town that outlived its war and learned to farm."
 
-The live engine's fortresses are almost never under attack. They are **inherited, colonised,
-drifted, and shared.**
-
-**Consequence:** this is the single largest correction the research makes. Building Site 9 as
-a siege generator would serve a minority of the rolls the engine actually produces.
+**Consequence:** build inherited/cohabited works before siege because the two direct source
+rows support it and it tests the relationship without requiring combat. The story engine
+still selects the live state; this audit did not measure its runtime frequency.
 
 ### 5. The entrance is lengthened on purpose, in three unrelated materials
 
@@ -80,8 +92,8 @@ materials, one intention: **make the way in long, turning, and overlooked.**
 FFT does the same with a broken causeway across a moat (Igros) and a climbing terraced stair
 (Riovanes).
 
-**Consequence:** the lengthened entrance is a `REQUIRED`-grade relation candidate, and it is
-material-independent — which is exactly what a cross-cultural site family needs.
+**Consequence:** the lengthened entrance is a strong material-independent **gate-window
+profile**. It cannot reject straight-gated, breached or gate-less defense hosts.
 
 ### 6. The gate is a sequence, and its machinery is a staffed room
 
@@ -108,9 +120,9 @@ occupies about a quarter of its plate.
 The engine agrees: `urban-scene-frame` 156 gives a Keep Courtyard of **80′ × 80′** whose only
 listed content is a parade ground and four corner turrets.
 
-**Consequence:** honest empty space is not a licence Site 9 may use; it is a **requirement**
-Site 9 must prove. And the placement rule is concrete: **structures line the enceinte, the
-centre stays open.**
+**Consequence:** honest empty space is the default profile for the first broad fortress proof,
+and enceinte-edge service buildings are a high-value arrangement. Fortified towns, refuge
+overload and hosts with central water/ritual/command obligations may legitimately be denser.
 
 ### 8. The defensive edge is culturally free at constant cover class
 
@@ -122,17 +134,15 @@ entirely different silhouette. `urban-scene-frame` 206 already costs crenellatio
 **Consequence:** Site 1's ruled defensive-edge equality generalises upward without amendment.
 Site 9 inherits it and adds the *second rank* case — a firing level above a firing level.
 
-### 9. The site 8 boundary is clean, and it is about concealment
+### 9. Site 8 supplies the control relation; Site 9 supplies the stress proof
 
-Site 8 asks *who really controls this* — recognition, permission, concealment, knowledge; its
-structural buy is false walls and trapdoors; it can be entirely latent. Site 9 asks *who holds
-which ground right now* — attributed territory, a visible front, a defensive envelope both
-sides can read.
+Site 8 owns claimant identity, permissions, recognition, attributed territory and fronts whether
+the claim is overt or covert. Site 9 proves those same records on a Defense/Fortification host
+whose consequential extent exceeds one window.
 
-**The test: remove the concealment and Site 8 collapses; remove the second population's ground
-and Site 9 collapses.** A besieged castle with a traitor in the gatehouse is both, and that
-compose is worth supporting — a fortress is maximally unlike a tavern, which is precisely the
-second host Site 8 needs to prove itself on.
+**The test:** remove the actionable second claim and both stress/control readings collapse to
+the ordinary defense host; remove the multi-window extent and Site 8 remains. A besieged castle
+with a traitor in the gatehouse is one composition and should not invoke rival generators.
 
 ---
 
@@ -140,11 +150,11 @@ second host Site 8 needs to prove itself on.
 
 | the site *before* research | the site *after* research |
 |---|---|
-| A big castle exterior with an army outside it | A **fortification interior window set** on one persistent site, whose dominant live state is **cohabitation**, not assault |
+| A big castle exterior with an army outside it | A **fortification interior window set** on one persistent site, proving cohabitation first without making it the global default |
 | One hero board | A **set of named windows** chosen by objective — gate, wall segment, stores, command room, water control |
-| Walls as a boundary | Walls as **two-faced terrain** with a route on top and a front beside them |
-| Site 1's kit at bigger scale | Site 1's kit **plus** the lengthened entrance, the multi-barrier gate with a staffed machinery room, the wall-walk-as-route, and attributed ground |
-| Quiet space as a permission | Quiet space as a **proof obligation** |
+| Walls as a boundary | Walls with **two declared relations**, optionally traversable, and a route on top where construction supports one |
+| Site 1's kit at bigger scale | Defense/Fortification host **plus** gate-window profiles, wall-walk-as-route, shared Layered Control, and persistent windows |
+| Quiet space as a permission | Quiet space as the **default profile for the first broad proof**, not every fortress |
 
 ## The honest gates this packet supports
 

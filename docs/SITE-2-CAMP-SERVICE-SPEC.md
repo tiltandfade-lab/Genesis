@@ -1,10 +1,10 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: DRAFT — CODEX ADVERSARIAL REDLINE APPLIED; FOUNDER QUESTIONS REMAIN OPEN
 
 ---
 type: working-site-spec
 created: 2026-07-25
-updated: 2026-07-27 (gap-close addendum added; original rulings unchanged — see addendum
-  section for scope)
+updated: 2026-07-28 (Codex adversarial review applied to the 2026-07-27 gap-close addendum;
+  founder authority remains unchanged)
 status: WORKING SPEC — research PASS; founder and brief PARTIAL; clay OPEN (gap-close pass
   2026-07-27 proposes no status change — see addendum)
 site: 2 — camp / service
@@ -48,8 +48,8 @@ with the stated reason: "hosted-camp mechanism and build orders remain proposed.
 addendum does not change that reading — the depth law's real-image reference lane and a
 second, service-economy-angle FFT comparison are new this pass, but the prior 2026-07-24
 Camp Study had already delivered a breadth sweep, image lane, and FFT cohort read, so
-`RESEARCHED` was already `PASS` before this pass began. **Proposed status-gate values
-(PROPOSED — pending Codex adversarial review, not self-declared final):**
+`RESEARCHED` was already `PASS` before this pass began. **Adversarially reviewed status-gate
+values (not founder rulings):**
 
 | gate | catalog value (2026-07-25) | proposed value (this pass) | reason |
 |---|---|---|---|
@@ -58,8 +58,8 @@ Camp Study had already delivered a breadth sweep, image lane, and FFT cohort rea
 | BRIEF-CONGRUENT | PARTIAL | PARTIAL (unchanged) | this pass adds an addendum; it does not restructure the existing fifteen-section standard |
 | CLAY-PROVED | OPEN | OPEN (unchanged) | no fixture was built this pass |
 
-This table is a proposal recorded in this working spec only. The shared
-`GOLDEN-SITES-CATALOG.md` status-gate table is untouched by this pass.
+The 2026-07-28 adversarial pass accepts this gate reading and folds it into the shared
+`GOLDEN-SITES-CATALOG.md`. That review does not rule any founder proposal below.
 
 **Ruled decisions.** None added this pass. Every finding in the 2026-07-27 packet is offered
 as evidence or as a `PROPOSED` candidate.
@@ -157,12 +157,12 @@ boundary: FFT's closest analog (Slums in Dorter) reads as rooted, addressed-stre
 architecture, not a borrowed-ground camp — a visually testable version of where the hand-off
 should occur.
 
-**Recommendation:** add an explicit exit condition to the guest-family mechanism — a named
-point (population, duration, or a visible shift from unaddressed tent rows to addressed
-frontage) at which a hosted urban camp hands off to `SETTLED-LIFE-SITES-PROGRAM.md`'s
-permanent-slum entry instead of continuing to loosen Site 2's own cap. This is a proposal, not
-a ruling; the exact threshold is a taste/product-direction choice, not something research can
-settle.
+**Recommendation:** add an explicit semantic exit condition to the guest-family mechanism.
+Do not use one population or duration number. Hand off when persistent address/property facts,
+rooted frontage, permanent service obligations, inherited/transferable occupancy, or a
+municipal-style external relationship make borrowed temporary service no longer the truthful
+host program. Population and duration may be evidence, never the switch. The destination is
+the applicable habitation/urban host, not an aesthetic “slum” bucket.
 
 **What it changes later:** this is the highest-consequence of the three questions — it decides
 whether a long-running hosted camp remains Site 2's responsibility indefinitely or eventually

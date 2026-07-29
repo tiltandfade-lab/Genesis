@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: EVIDENCE PACKET — CODEX ADVERSARIAL CORRECTION APPLIED 2026-07-28
 
 # ENGINE EVIDENCE — where Site 12 actually comes from, measured
 
@@ -18,6 +18,15 @@ would have sized the whole spec wrong.
 
 This lane audits every path the engine has that can commit substrate-anomaly truth.
 
+## 2026-07-28 measurement correction
+
+This packet locates candidate sources; it does not measure Site-12 activation. The 13.48%
+result below counts every Becoming and Intrusion tag before checking whether the concrete
+result changes support/substrate in play. Becoming rows 3 and 7 are population-only, and the
+audit did not classify Intrusion manifestations. The 18.03% disclosed screen is broader
+still. Both are world-pressure ingredient rates. The narrower materialization-demand rate is
+unmeasured.
+
 ## Door 1 — `dungeon-type` (the census's door)
 
 Source read: `Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Type.md`
@@ -34,12 +43,13 @@ Source read: `Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Type.md`
 Megastructure* to Site 11 (Mixed-Scale/Dragon) and flagged it "genuinely ambiguous vs.
 Site 12." The source rows settle it: the archetype's stated original purpose is **"Anomaly
 / Ancient technology"** and both atmosphere strings are about *geometry behaving wrongly*,
-not about scale. Nothing in either row is titan-sized. **The Megastructure belongs to
-Site 12.**
+not about scale. Nothing in either row is titan-sized. **The Megastructure host requires
+anomalous `SubstratePlan`.** It may also require `ScaleContract`; neither Golden number owns
+the host.
 
-That takes Site 12's `dungeon-type` share from **1 row (1%)** to **3 rows (3%)** — a 2.5×
-correction against the census's observed 1.19% + 0.79%. (Observed ≈ 2.0% on n=253 vs. 3.0%
-expected is ordinary sampling noise at that n; the *table share* is the honest figure.)
+That produces **3 rows (3%) with substrate-plan candidate content**, not a 3% activation
+rate for a separate Site-12 generator. (Observed ≈ 2.0% on n=253 vs. 3.0% expected is
+ordinary sampling noise at that n; the table share is only the candidate-source figure.)
 
 **This table carries no Band column at all.** It is a Fork-class flat d100. So a Living
 Hive or a Megastructure is exactly as likely in a Grounded baseline region as in a rim
@@ -89,7 +99,7 @@ artifact disagrees with the markdown source; or the roll was recorded before a r
 **Flagged as an open discrepancy for the TIYL lane.** Nothing in this packet or the Site 12
 spec depends on which way it resolves — the row exists and is Strange in source either way.
 
-## Door 3 — the world-genesis pressure chain (the door nobody counted)
+## Door 3 — the world-genesis pressure chain (broad candidate pressure)
 
 This is the largest source of Site-12 demand in the engine, and it is fully live.
 
@@ -126,17 +136,18 @@ replays `rollPressure()`'s exact tag path over N worlds. Run at the repo root,
 concretize-tag counts over 400000 pressures:
   { buried: 19740, curse: 9872, beast: 9554, intrusion: 9765, becoming: 18147 }
 cBecoming row spread (d8, 2231–2293 per row — flat, as authored)
-P(world commits >=1 becoming/intrusion pressure)      = 13.48%
-P(world commits >=1 substrate-relevant concrete row)  = 18.03%
+P(world commits >=1 becoming/intrusion tag)            = 13.48%
+P(world commits >=1 broad candidate concrete row)       = 18.03%
 ```
 
 An independent closed-form enumeration over the same row ranges gives **13.47%** and
 **17.98%** — the two methods agree to within Monte-Carlo noise, so the number is not a
 harness artefact.
 
-> **≈ 1 world in 7 (13.5%) commits an unambiguous Site-12-class substrate transform — a
-> Becoming or an Intrusion — at world genesis, before the player has taken a single step.
-> ≈ 18% if the substrate-relevant Buried Power and Curse rows are counted.**
+> **≈ 1 world in 7 (13.5%) commits at least one Becoming or Intrusion tag at world genesis.**
+> This is not an unambiguous substrate-transform or Site-12 materialization rate. The
+> disclosed broad concrete-row screen is ≈18%; both require narrower semantic classification
+> before they can drive a map.
 
 The `cBecoming` d8 spread is flat by authorship, so each of its eight outcomes lands on
 ~1.7% of all worlds:
@@ -152,9 +163,8 @@ The `cBecoming` d8 spread is flat by authorship, so each of its eight outcomes l
 | 7 | a town of replacements, each resident slowly swapped | C (population, not ground — flagged) |
 | 8 | a wound still spreading from something that already happened here | D |
 
-Rows 3 and 7 change the *population*, not the substrate. They are counted in the 13.48%
-because they satisfy the site's ownership half ("who or what owns this place"), but a spec
-that promised them a ground-transform would be lying. Flagged.
+Rows 3 and 7 change the *population*, not the substrate. Their inclusion is exactly why
+13.48% cannot be called Site-12 demand. Intrusion manifestations also remain unevaluated.
 
 ## Door 4 — the marathon's thematic-only hits
 
@@ -183,8 +193,8 @@ Unstable-edge-as-weapon is a Site-12 mechanic wearing a Site-anything skin.
   has no precedent in any of the twelve."
 - **The Shimmering Maw ×1** — "**gap** — pure spectacle/wonder register, no precedent."
 
-**5 of 12 starts (42%) opened on a substrate-anomaly place.** The report attributes those
-to three separate gaps; read through the substrate axis they are one gap with three faces.
+**5 of 12 starts (42%) opened on a substrate-plan candidate setting.** This small sample
+demonstrates breadth, not activation frequency or ownership by a Golden number.
 
 ## Door 6 — the footing tables (already authored, half-delivered)
 
@@ -251,11 +261,11 @@ My first grep for `footing` in `src/` was piped through `head -10` and returned 
 recorded because the false version of this finding would have been more dramatic and
 completely wrong.
 
-## Demand summary — all doors
+## Candidate-source summary — all doors
 
-| door | status | Site-12 share | evidence |
+| door | status | measured candidate supply | evidence |
 |---|---|---|---|
-| world-genesis pressures (Becoming / Intrusion) | `LIVE` | **13.5% of worlds** (18% incl. buried/curse rows) | measured, this packet |
+| world-genesis pressures (Becoming / Intrusion) | `LIVE` | **13.5% of worlds with either tag** (18% broad candidate screen) | measured, this packet; activation unmeasured |
 | `place-master-setting` | `LIVE` | **15 of 100 rows**, all five bands | source read |
 | TIYL opening scenes | `LIVE` | **5 of 12 rolled starts** | `intel/tiyl-starts.md` |
 | `dungeon-type` | `LIVE` | **3 of 100 rows** (census read 1 of 100) | source read + census |
@@ -267,9 +277,10 @@ The census's 1.2% was the smallest door, measured correctly, and mistaken for th
 
 ## Honest limits of this lane
 
-- The 13.48% figure measures **what world genesis commits**, not what a player is shown.
-  A committed Becoming may never be materialised as a scene. The spec must not claim
-  player-facing frequency from this number.
+- The 13.48% figure measures **which tags world genesis commits**, not which concrete results
+  change substrate and not what a player is shown. A committed Becoming may be population-only
+  or may never be materialised as a scene. The spec must not claim Site-12 or player-facing
+  frequency from this number.
 - `SUBSTRATE_ROWS` in the measurement script is **my classification**, disclosed in the
   script and here. The underlying tag counts are exact; the substrate label on each
   concrete row is a judgement.

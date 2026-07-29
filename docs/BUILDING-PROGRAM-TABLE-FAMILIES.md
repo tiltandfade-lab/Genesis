@@ -1,8 +1,8 @@
 ---
 type: system-spec
 created: 2026-07-26
-updated: 2026-07-26
-status: ACCEPTED DIRECTION — founder-ruled after 42-roll audit; seven-family taste sampler returned; live implementation deferred
+updated: 2026-07-28
+status: ACCEPTED DIRECTION — founder-ruled seven-family core; proposed eighth Market/Exchange taste sampler returned for founder disposition; live implementation deferred
 owner: typed building generation
 authority:
   - GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md
@@ -84,6 +84,7 @@ relationship.
 | `BF-LOGISTICS` | Warehouse, Dock-House | receiving/dispatch edge, goods handling, storage, counting/records, staff control, vehicle/route relationship |
 | `BF-SHOP-WORKSHOP` | Smithy, Apothecary, General Store, Arcanist | customer edge, transaction, stock, work/preparation where present, secure material, delivery/waste, operator position |
 | `BF-CUSTODY` | Prison/Custody | authority claim, intake and property handoff, classification, holding assembly, control, service, routine, disposition, release/transfer, emergency and counterplay |
+| `BF-MARKET-EXCHANGE` **(PROPOSED ADDENDUM)** | Market Hall, Exchange / Cloth Hall | public trading ground, stall/bay allocation, goods inspection and measure, price/record authority, market schedule, closure, delivery edge, and optional upper program |
 
 These are authoring families, not runtime site identities. Tavern remains Tavern;
 Manor remains Manor. A family table supplies compatible chassis relationships, never a
@@ -96,6 +97,30 @@ replacement program noun.
 - Apothecary consumes preparation, consultation, storage, safety, and supply rules.
 - Warehouse and Dock-House consume actual goods/vehicle/route throughput.
 - Manor consumes a household/estate authority and service model.
+- Market Hall consumes market/exchange ground-floor obligations and may compose a Civic,
+  Logistics, or Exchange upper program without being reclassified as those families.
+
+### Why Market/Exchange should be an eighth family
+
+Site 10's Golden Seed is a Market Hall, and none of the founder-ruled seven families owns its
+ground-floor program. `BF-CIVIC-AUTHORITY` can supply a council/court upper room;
+`BF-LOGISTICS` can supply storage; neither owns public stall allocation, weights/measures,
+market hours, inspection, exchange records, or open trading ground. Treating occasional civic
+co-location as identity would recreate the d300 failure at family scale.
+
+The proposed family shares an open-post/arcade trading chassis and permits explicit
+compositions:
+
+- **market ground + civic upper** — council chamber, court, guild authority;
+- **market ground + logistics upper** — storage, sampling, weighing, dispatch;
+- **market ground + exchange upper** — cloth/wool/commodity hall, records and bargaining; or
+- **market ground only** — roofed public trading floor.
+
+This is an adversarial-review direction, not a retroactive founder ruling. Its small taste
+sampler has returned in `../Reference/Building-Family-Table-Samples/`: six chassis, two
+program layers, three explicit Civic/Logistics/Exchange upper-program composition cards, and
+four deterministic rolled receipts. Founder disposition remains required before
+implementation.
 
 ### Why Prison/Custody is a dedicated family
 
@@ -482,10 +507,11 @@ promotion, and the retained suspended living-ironwood solitary fixture.
 ### Returned family taste sampler
 
 `../Reference/Building-Family-Table-Samples/` contains deliberately small sample
-tranches for all seven families and every current program, plus deterministic rolled
-receipts. The sampler enforces explicit arrangement/chassis compatibility and
-context-only rows such as licensed exceptional custody. They are taste evidence, not
-final d20 authoring or live compilation.
+tranches for the founder-ruled seven families, every current program, and the proposed eighth
+Market/Exchange family, plus deterministic rolled receipts. The sampler enforces explicit
+arrangement/chassis compatibility, context-only rows such as licensed exceptional custody,
+and three legal upper-program composition cards. They are taste evidence, not final d20
+authoring or live compilation.
 
 ## 8. Acceptance tests
 
@@ -512,6 +538,10 @@ building program.
 This document changes the accepted generation direction. The seven-family sample
 tables and their pure deterministic sampler are authorized evidence. It does not
 authorize live table compilation or caller changes during the active CL-R3 lane.
+
+The proposed eighth Market/Exchange addendum remains a specification correction only. Its
+taste sampler has returned; it is not authorized for live compilation until founder
+disposition.
 
 The first implementation unit after serialization is the Manor/Apothecary authoring
 pair. Prison/Custody follows its dedicated Site 6 proof ladder rather than that generic

@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: EVIDENCE DRAFT — CODEX ADVERSARIAL DISPOSITION RECORDED IN `synthesis.md` (2026-07-28)
 
 # Lane 3 — FFT cohort comparison for the dormant transform
 
@@ -142,9 +142,11 @@ standing free with sky through it. Two sources, same shape.
 LC-6: FFT's cave labyrinths in plan are filled tile fields pierced by voids; the voids are
 the walls; the structure is subtractive.
 
-**Transfer.** The catacomb gallery network is the ideal case for this posture, and it agrees
-with DA-9 from the image lane: cut voids survive. A crypt generator should be **subtractive
-over a solid block**, not additive from wall runs.
+**Transfer.** The catacomb gallery network is an ideal case for this posture, and it agrees
+with DA-9 from the image lane: cut voids often survive. A Funerary / Mortuary Institution
+host using this proof profile should generate its cut galleries **subtractive over a solid
+block**, not additive from wall runs. Dormant itself neither creates nor requires that host
+geometry.
 
 ### FD-9 — The rotation obligation is worse for Site 3 than for anyone else **[documented]**
 

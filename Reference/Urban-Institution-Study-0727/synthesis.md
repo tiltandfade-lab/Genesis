@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: EVIDENCE PACKET — CODEX ADVERSARIAL DISPOSITION APPLIED 2026-07-28
 
 ---
 type: research-note
@@ -63,7 +63,7 @@ documents; and reconciles it against the settled-life program's findings.
   ensemble photograph of a rebuilt market square, and one honestly recorded correction where a
   candidate pair turned out to show construction-in-progress rather than the intended subject.
 
-## 3. The one load-bearing reconciliation: the market hall has no `BF-` family
+## 3. The load-bearing reconciliation: add an eighth `BF-MARKET-EXCHANGE`
 
 This is the most consequential finding in the pass, so it is stated once here plainly rather
 than only inside the breadth sweep.
@@ -90,18 +90,11 @@ constructed, geographically separated buildings (Hampshire timber-frame; Welsh m
 converging on the identical "market ground floor + civic-authority upper room" split is
 stronger evidence than either alone.
 
-**The boundary, PROPOSED not ruled:** the market hall is a program `BUILDING-PROGRAM-
-TABLE-FAMILIES.md` is missing, not a program Site 10 should invent unilaterally as bespoke
-Site-10 geometry outside the family system. Two resolutions are offered, neither chosen here:
-(a) add "Market Hall" as a program inside `BF-CIVIC-AUTHORITY`, licensed to share its chassis
-with Court/Guildhall/Garrison specifically because the real evidence shows they are
-*sometimes the same building*, distinguished only by upper-room arrangement and operating
-state; or (b) add a fifth thin family, `BF-MARKET-EXCHANGE`, sharing only the open-post/
-arcade ground-floor chassis relationship, the way `BF-SHOP-WORKSHOP`'s four programs share a
-customer-edge relationship without being one program. This is offered as a build-order
-suggestion for whoever authors the next `BUILDING-PROGRAM-TABLE-FAMILIES.md` wave, per the
-generator principle — not a unilateral edit to that shared document, which this pass does not
-touch.
+**Adversarial disposition, proposed pending founder:** add the eighth
+`BF-MARKET-EXCHANGE`, sharing the open-post/arcade trading-ground chassis and market
+operating model. A council/court above is an explicit Civic composition; storage is a
+Logistics composition; commodity exchange is native. Occasional co-location does not make
+public trading ground a Civic program.
 
 ## 4. Which `BF-` kits serve Site 10, and what the 42-roll audit proved
 
@@ -162,13 +155,11 @@ This pass does **not** claim:
 - that the working spec's existing rulings (functional capsule, deck, growth ladder, eight
   operating circuits, generation order) have changed in any way. They have not been touched.
 
-## 7. Proposed status-gate line (this document's authority only — not the shared catalog)
+## 7. Adversarial status-gate disposition
 
-Per the task's honesty-gates instruction, this proposal lives only in this packet and in
-`SITE-10-URBAN-INSTITUTION-SPEC.md`'s own addendum — the shared `GOLDEN-SITES-CATALOG.md`
-status table is untouched by this pass.
+The 2026-07-28 adversarial review accepts the packet's conservative gate reading:
 
-**Proposed:** `RESEARCHED: PARTIAL` (unchanged — this pass closes part of the declared
+**Disposition:** `RESEARCHED: PARTIAL` (unchanged — this pass closes part of the declared
 construction-evidence gap, specifically market-hall and civic-building measured references and
 the civic-authority FFT cohort, but the frontage-bay/party-wall/balcony/shutter-dimension gaps
 and broad non-European cultural evidence remain genuinely open, so a full `PASS` is not
@@ -176,5 +167,3 @@ honestly claimable yet). `FOUNDER-RULED: PARTIAL` (unchanged — no card selecti
 this pass). `BRIEF-CONGRUENT: PARTIAL` (unchanged — this pass adds an addendum and
 reconciliation, not a restructuring of the existing fifteen-section standard). `CLAY-PROVED:
 OPEN` (unchanged — no fixture exists).
-
-This is a proposal for Codex's adversarial review, not a self-declared final status.

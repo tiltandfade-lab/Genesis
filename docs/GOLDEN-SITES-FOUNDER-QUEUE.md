@@ -1,8 +1,8 @@
 # GOLDEN SITES — founder queue
 
 type: working-queue
-audited: 2026-07-26
-status: OPEN — six nonblocking proposals remain
+audited: 2026-07-28
+status: OPEN — adversarially filtered; only founder taste/build-order proposals remain
 
 This file contains only choices that still need Adam's taste or ordering decision.
 Research gaps and rendered-proof work belong in `GOLDEN-SITES-PROOF-QUEUE.md`.
@@ -68,7 +68,7 @@ identity.
 The recent Guard Post repair story remains a material-card choice, not a Golden Site
 founder blocker.
 
-## 2026-07-27 campaign — founder questions (pending Codex adversarial review)
+## 2026-07-27 campaign — founder questions (adversarially redlined 2026-07-28)
 
 Ten depth-law research lanes (Sites 2, 3, 4, 5, 6, 8, 9, 10, 11, 12) each returned founder
 questions as proposed build orders, not A-or-B picks. None are ruled. Full question text
@@ -78,43 +78,48 @@ lives at the pointer given below; it is not duplicated here.
   build order — cheapest form last?), FQ-CS-3 (guest-family cap exit condition) → full text:
   `docs/SITE-2-CAMP-SERVICE-SPEC.md` § "Gap-closure addendum (2026-07-27 campaign)" →
   "The founder packet".
-- **Site 3 Dormant/Abandoned** — Q3-1 (aperture as default light owner), Q3-2 (Funerary
-  Store as a host program, not a ruin), Q3-3 (build the transform now vs. after all twelve
+- **Site 3 Dormant/Abandoned** — Q3-1 (aperture-first as the first proof profile), Q3-2 (Funerary /
+  Mortuary Institution as an ordinary host, not a ruin), Q3-3 (prototype now vs. portfolio proof after three unlike
   hosts exist) → full text: `docs/SITE-3-DORMANT-CONCEPT.md` § "16. Founder questions".
-- **Site 4 Monastery/Commune** — M1/M2/M4/M5 build order (now decision-ready), *shichidō
-  garan* chassis-variant classification, communal-hall-as-head-position variant → full text:
+- **Site 4 Monastery/Commune** — M1/M2/M4/M5 build order (now decision-ready), placement of
+  the accepted processional-campus/*shichidō garan* chassis in that order, and the
+  communal-hall-as-head-position variant → full text:
   `Reference/Monastery-Study-0727/synthesis.md` § "2. THE DECISION-READY M1/M2/M4/M5
   PACKET".
-- **Site 5 Mine/Workshop** — Site 5 / `BF-SHOP-WORKSHOP` boundary, 10-ft main-haul oversize
-  vs. historical drift widths, FFT repeated-portal support rhythm adoption → full text:
+- **Site 5 Mine/Workshop** — 10-ft main-haul oversize vs. historical drift widths and FFT
+  repeated-portal support rhythm adoption. The Site-5/`BF-SHOP-WORKSHOP` boundary is already
+  adversarially accepted → full text:
   `docs/SITE-5-MINE-WORKSHOP-CONCEPT.md` § "Gap-closure addendum (2026-07-27 campaign)" →
   "Unresolved proposals carried forward from this pass".
-- **Site 6 Prison/Custody** — social/legal custody-boundary realization (`PR-DOC-11`),
-  doctrine-pair sequencing (parallel vs. behind first proof), Prison/Asylum roll-bucket
-  split → full text: `Reference/Prison-Custody-Study-0727/synthesis.md` § "6. Three
-  founder questions".
-- **Site 8 Layered Control** — Q1 many-claimant shape (caravanserai `SharedCentre`), Q2 may
-  a transform re-rank a host's own routes (potentially blocking), Q3 legitimacy weighting
-  from faction `method` → full text: `docs/SITE-8-LAYERED-CONTROL-SPEC.md` § "6.6 Founder
+- **Site 6 Prison/Custody** — doctrine-pair sequencing (Yamen parallel vs. behind first
+  proof) → full text: `Reference/Prison-Custody-Study-0727/synthesis.md`. Ward-and-Surety is
+  now classified as an external disposition provider; care/asylum is a distinct care host
+  unless prevented exit activates custody, so neither remains a Golden founder choice.
+- **Site 8 Layered Control** — Q1 many-claimant shape (caravanserai `SharedCentre`), Q2
+  actor-relative route desirability while host topology/truth remain fixed, Q3 legitimacy
+  evidence independent of faction `method` → full text: `docs/SITE-8-LAYERED-CONTROL-SPEC.md` § "6.6 Founder
   questions".
-- **Site 9 Contested Fortress** — FQ-1 (Golden Seed as a window pair), FQ-2 (default state
-  cohabitation vs. siege), FQ-3 (wall-walk as a first-class route) → full text:
+- **Site 9 Contested Fortress** — FQ-1 (Golden Seed as a window pair), FQ-2 (prove
+  cohabitation before siege, without making it a global default), FQ-3 (wall-walk as a first-class route) → full text:
   `docs/SITE-9-CONTESTED-FORTRESS-SPEC.md` § "Founder questions" (FQ-1–3).
-- **Site 10 Urban Institution** — market-hall home (`BF-CIVIC-AUTHORITY` vs. new
-  `BF-MARKET-EXCHANGE`), frontage-bay generation lockout once family tables ship,
+- **Site 10 Urban Institution** — accept, revise, or reject the returned proposed eighth
+  `BF-MARKET-EXCHANGE` taste tranche (six chassis, Market Hall and Exchange / Cloth Hall
+  layers, four deterministic family receipts, and Civic/Logistics/Exchange upper-program
+  composition cards); frontage-bay generation lockout once family tables ship;
   banner+dais+long-table civic-assembly grammar adoption → full text:
   `docs/SITE-10-URBAN-INSTITUTION-SPEC.md` § "Gap-closure addendum (2026-07-27 campaign)"
   → "Unresolved proposals carried forward from this pass".
 - **Site 11 Mixed Scale / Dragon Domain** — FQ-11-1 (relational-mode build order
-  B→A→C→D), FQ-11-2 (hoard terrain as terrain type vs. prop), FQ-11-3 (mixed-register
+  B→A→C→D), FQ-11-2 (shared `GranularMass` terrain vs. prop), FQ-11-3 (mixed-register
   sprite-density frame) → full text: `docs/SITE-11-MIXED-SCALE-SPEC.md` § "16. Founder
   questions" (FQ-11-1–3).
-- **Site 12 Anomalous/Living/Mobile** — FQ-1 (raft-quarter before the whale), FQ-3
-  (substrate tenancy as a real mechanic), FQ-2 (Grounded Site-12 sites should look
-  ordinary) → full text: `docs/SITE-12-ANOMALOUS-LIVING-MOBILE-SPEC.md` § "15.5 Founder
+- **Site 12 Anomalous/Living/Mobile** — FQ-1 (raft-quarter before the whale), FQ-2
+  (Grounded substrate proofs look ordinary), FQ-3 (prove optional tenure on the raft),
+  FQ-4 (two raft datum states with 2h–4h first-proof calibration), FQ-5
+  (Megastructure host + anomalous substrate + optional scale composition) → full text:
+  `docs/SITE-12-ANOMALOUS-LIVING-MOBILE-SPEC.md` § "15.5 Founder
   questions".
 
-Cross-lane flag for Codex: Sites 11 and 12 both touch where The Megastructure lives —
-Site 11's spec (§1.5/§12.5) proposes routing it to Site 12 with a Site-12-carries-a-
-Site-11-transform corollary; Site 12's spec was written in parallel and does not
-cross-reference the assignment back. Unreconciled; needs a single ruling, not two.
+**Reconciled cross-lane classification:** The Megastructure retains its host identity,
+consumes anomalous `SubstratePlan`, and consumes `ScaleContract` only when scale changes a
+present affordance. Site 11 and Site 12 now cross-reference the same composition.

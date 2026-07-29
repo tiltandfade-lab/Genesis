@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: EVIDENCE PACKET — CODEX ADVERSARIAL CORRECTION APPLIED 2026-07-28
 
 # Lane 4 — Live engine + table evidence (the roller audit)
 
@@ -29,7 +29,7 @@ EOF
 Run from the worktree root. The second and third scripts (census cross-tally, dungeon
 area-type tally) are inline in the sections below.
 
-## 1. THE CENSUS UNDER-COUNTED SITE 11 BY 3.7× — and it under-counted the wrong thing
+## 1. THE CENSUS UNDER-COUNTED BROAD MIXED-SCALE OBJECT INGREDIENTS BY 3.7×
 
 `docs/intel/walk-census.md` maps 27 of 539 wilderness arrivals (5.01%) to Site 11 by keyword.
 Re-running the same classification against the **actual source table's** mixed-scale rows
@@ -59,24 +59,25 @@ over the same table and the same 539 arrivals:
 | mixed-scale only | 38 | 72 | 13.36% |
 | dormant only | 67 | 109 | 20.22% |
 
-Corrected claim: **mixed-scale is the second-largest recomputed share, behind
-dormant/abandoned.** Still 3.7× the census's own Site 11 figure, still very large, but not
-first.
+Corrected claim: **the broad mixed-scale object screen is the second-largest recomputed
+ingredient share, behind the broad dormant screen.** It is 3.7× the census's original
+keyword count, but it does not measure Site-11 eligibility or activation.
 
 The overlap row is more interesting than the ranking. Eleven rows — `Fallen Megalith`,
 `Shattered Throne`, `Gargantuan Helmet` (rusting), `Giant Anchor` (rusted), `Giant Birdcage
 (Smashed)`, `Giant Sundial (Broken)`, `Colossal Dagger`, `Aqueduct Pillar`, `Beached
 Leviathan`, `Gargantuan Shed Skin`, `Giant Bear Trap` (rusted) — are simultaneously
-mixed-scale *and* dormant, 28 of 539 arrivals. **The same row is a Site 3 state and a Site 11
-relationship at once**, which is exactly what two transforms stacking over one object should
-look like, and is direct evidence for reading Site 11 as a transform rather than a host.
+tagged by both broad screens, 28 of 539 arrivals. These are strong candidates for Dormant +
+ScaleContract composition, but the screen did not test whether the scale difference changes
+an affordance in play. They are ingredients, not automatic transform activations.
 
 ### 1b. What all 100 hits actually are
 
-**Every one of those 100 hits is a PROP, not a PLACE.** The rows are things like
+**Every one of those 100 broad-screen hits is an OBJECT, not a PLACE.** The rows are things like
 `046 Colossal Statue (Head)`, `256 Petrified Dragon`, `294 Giant Skeleton (Beast)`. Not one
-of them is a hoard-hall, a giant steading, or an inhabited titan. The demand is enormous and
-it is entirely for a **mixed-scale set-piece register**, not for a mixed-scale host program.
+of them is a hoard-hall, a giant steading, or an inhabited titan. The measured supply is for a
+**mixed-scale set-piece register**, not for a mixed-scale host program. Which rows actually
+activate a consequential ScaleContract remains unmeasured.
 
 That is the finding that reframes the site.
 
@@ -134,7 +135,7 @@ implemented anywhere in `src/` that this lane could find.
 | `walk-archetypes.js` `"Giant Colony": {types:["giant"], sizeMax:"gargantuan"}` | `LIVE` | 1 of 253 dungeon walks (0.40%) |
 | `SPRITE_SIZE_SCALE` in `src/ui/theater-sprites.js` — `gargantuan: 4` | `LIVE` | bakes the SRD space ratio into the billboard; proved by `dev/verify-theater-sprites.mjs` check (c) |
 | `interiorTacticalSpanFor` in `src/ui/theater-standee-mount.js` — `gargantuan → 4` | `LIVE` | tactical span in cells |
-| `dungeon-type` row 98/99 "The Megastructure" | `LIVE` but **misclassified** — see §5 | 2 of 253 dungeon walks (0.79%) |
+| `dungeon-type` row 98/99 "The Megastructure" | `LIVE`; ordinary host needing anomalous `SubstratePlan`, optionally `ScaleContract` — see §5 | 2 of 253 dungeon walks (0.79%) |
 | `Slotted Cover` as a cover class | `AUTHORED-UNWIRED` | present in `wilderness-tactical-terrain` prose; no consumer found in `src/` |
 | hoard terrain of any kind | **does not exist** | no table, no code, no geometry. Site 7's brief already notes it borrows "a bounded hoard-pile prop until site 11 mints hoard terrain properly" |
 | titan-scale (2×) piece variants | `AUTHORED-UNWIRED` | one line in `STRUCTURE-KIT-CATALOG.md`'s vernacular matrix; no kit, no spec |
@@ -163,7 +164,7 @@ the register that matters most to this site has no distinct rung there.
 first clay proof will surface it immediately, and whoever builds that proof should know it is
 coming rather than discovering it as a mystery.
 
-## 5. The Megastructure boundary — resolved from the source table
+## 5. The Megastructure composition — resolved from the source table
 
 The census flags `The Megastructure` → Site 11 as "closest fit (titan-scale); genuinely
 ambiguous vs. Site 12." The source table settles it. `Dungeon Type.md` rows 98–99, verbatim:
@@ -173,13 +174,14 @@ ambiguous vs. Site 12." The source table settles it. `Dungeon Type.md` rows 98�
 | 98 | The Megastructure | **Anomaly / Ancient technology** | Metallic corridors hum softly with **impossible geometry**. |
 | 99 | The Megastructure | **Anomaly / Ancient technology** | **Non-euclidean walls shift** in faint mechanical rhythm. |
 
-The row's own second column is the classification, and it says *Anomaly*. Neither flavor line
-mentions size at all. What they mention is impossible geometry, non-euclidean walls, and
-walls that **shift** — which is the ontology contract's Site 12 definition word for word:
-"non-building identity, unusual extent, **motion**".
+The row's own second column says *Anomaly*. Neither flavor line mentions size. What they
+mention is impossible geometry, non-euclidean walls, and walls that **shift**: evidence that
+the Megastructure host needs an anomalous `SubstratePlan`, not evidence that Site 12 replaces
+the host.
 
 The census's mapping inferred "megastructure ⇒ big ⇒ Site 11" from the name. The table says
-otherwise. The proposed ruling, its test, and its corollary are in `synthesis.md` §2.
+scale is optional and substrate behavior is explicit. The reviewed composition, its test, and
+its corollary are in `synthesis.md` §2.
 
 ## 6. The grid arithmetic for hoard terrain
 
@@ -202,16 +204,18 @@ proposal built on it is in the working spec §6.
 
 ## 7. What this lane means for the site's shape
 
-1. Site 11's demand is real and large — 18.55% of wilderness arrivals, second only to
-   dormant/abandoned at 25.42% under an equally broad sweep — but it is demand for
-   **objects**, not for a host program. That matches the ontology contract's own
-   classification of Site 11 as a scale/relationship stress case, and matches
-   `SETTLED-LIFE-SITES-PROGRAM.md` §2's noun/state law. The 28 arrivals caught by *both*
-   sweeps make the transform reading concrete: one row, two stacked modifiers.
+1. Mixed-scale object ingredients are common — 18.55% of wilderness arrivals hit the broad
+   screen, second only to the broad dormant screen at 25.42% — but this is candidate-asset
+   frequency, not Site-11 activation. It is supply for **objects**, not a host program. That
+   matches the ontology contract's own
+   classification of Site 11 as a scale/relationship stress case. The 28 arrivals caught by
+   both sweeps are composition candidates; a later audit must apply the consequential-affordance
+   predicate before counting them as ScaleContract activations.
 2. The tactical grammar is already authored and already rolling. The gap is **geometry and
    admission**, not design.
 3. `Slotted Cover` is an authored, unwired cover class that Site 11 is the natural consumer
    for.
-4. Hoard terrain genuinely does not exist anywhere and Site 7 is already waiting on it.
-5. The Megastructure is Site 12's, and the case can be argued from the table rather than from
-   taste.
+4. Granular terrain genuinely does not exist anywhere and Site 7 is already waiting on its
+   hoard use; the provider should be shared rather than owned exclusively by Site 11.
+5. The Megastructure clearly demands anomalous substrate behavior and may also carry a
+   ScaleContract; neither Golden number replaces its host.

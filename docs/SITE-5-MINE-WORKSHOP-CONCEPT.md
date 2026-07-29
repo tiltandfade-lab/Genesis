@@ -1,12 +1,12 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: DRAFT — CODEX ADVERSARIAL REDLINE APPLIED; RESEARCH REMAINS PARTIAL
 
 ---
 type: working-site-spec
 created: 2026-07-25
-updated: 2026-07-27 (gap-close addendum added; original rulings unchanged — see addendum
-  section for scope)
-status: WORKING SPEC — founder foundation accepted; research PARTIAL (gap-close pass
-  2026-07-27 proposes PASS, pending Codex adversarial review — see addendum); clay OPEN
+updated: 2026-07-28 (Codex adversarial review applied to the 2026-07-27 gap-close addendum;
+  research remains PARTIAL)
+status: WORKING SPEC — founder foundation accepted; research PARTIAL after adversarial
+  review; clay OPEN
 site: 5 — strained mine / workshop
 method: GOLDEN-SITE-CONCEPTING-GUIDELINES.md
 preservation: GOLDEN-SITE-ROLLER-PRESERVATION-LEDGER.md
@@ -69,19 +69,18 @@ sweep ("what else could this site be": salt, peat, and gem extraction; one cross
 comparison; the `BF-SHOP-WORKSHOP` boundary test) also now exist, completing the depth law's
 three-part requirement. Full detail: `Reference/Mine-Workshop-Study-0727/`.
 
-**Proposed status-gate values (PROPOSED — pending Codex adversarial review, not self-declared
-final):**
+**Adversarially reviewed status-gate values (not founder rulings):**
 
 | gate | catalog value (2026-07-25) | proposed value (this pass) | reason |
 |---|---|---|---|
-| RESEARCHED | PARTIAL | **PASS** | the depth law's three components (breadth sweep, real-image reference lane, FFT cohort comparison) are now all present and re-gatable |
+| RESEARCHED | PARTIAL | **PARTIAL** | all three packet limbs exist, but the proof queue still lacks sufficiently broad measured/cultural work-organization evidence; file presence does not itself close the gate |
 | FOUNDER-RULED | PARTIAL | PARTIAL (unchanged) | no card selection (support/carrier/pump/ventilation/processing/light/culture/organization) was ruled this pass |
 | BRIEF-CONGRUENT | PARTIAL | PARTIAL (unchanged) | this pass adds an addendum; it does not restructure the existing ten/fifteen-section standard |
 | CLAY-PROVED | OPEN | OPEN (unchanged) | no fixture was built this pass |
 
-This table is a proposal recorded in this working spec only. The shared
-`GOLDEN-SITES-CATALOG.md` status-gate table is untouched by this pass — updating it is a
-separate, later act requiring its own review.
+The 2026-07-28 adversarial pass rejects the packet's proposed research promotion, keeps the
+gate at `PARTIAL`, and folds that reading into `GOLDEN-SITES-CATALOG.md`. It does not rule
+any founder proposal below.
 
 **Ruled decisions.** None added this pass. Every finding in the 2026-07-27 packet is offered
 as evidence or as a `PROPOSED` candidate under the generator principle (arriving as a build-
@@ -90,7 +89,7 @@ order suggestion, never an A-or-B pick presented as decided).
 **Unresolved proposals carried forward from this pass** (none are ruled; all await founder
 review):
 
-1. **The Site 5 / `BF-SHOP-WORKSHOP` boundary.** A workshop belongs to Site 5 only when it
+1. **The Site 5 / `BF-SHOP-WORKSHOP` boundary (adversarial direction accepted).** A workshop belongs to Site 5 only when it
    sits at the terminus of its own production chain (fed by the mine/quarry's haul spine,
    sharing its water/power/support circuits, with a distinct waste/export edge); a freestanding
    urban or settlement workshop that sources stock from elsewhere and sells or services at a
@@ -723,7 +722,7 @@ Research packet (gap-close addendum, 2026-07-27 — additive, does not replace t
 - `Reference/Mine-Workshop-Study-0727/LICENSE-LEDGER.md`
 
 The original packet supports this working spec; its declared gaps kept `RESEARCHED` at
-`PARTIAL`. The 2026-07-27 addendum proposes `RESEARCHED: PASS` (pending Codex adversarial
-review — see the addendum's proposed status-gate table). This document still cannot advance
+`PARTIAL`. The 2026-07-27 addendum proposed `RESEARCHED: PASS`; the 2026-07-28 adversarial
+review rejected that promotion and retained `PARTIAL`. This document still cannot advance
 `CLAY-PROVED` without the retained fixture, and `FOUNDER-RULED`/`BRIEF-CONGRUENT` remain
 `PARTIAL` until the open card selections are founder-ruled.

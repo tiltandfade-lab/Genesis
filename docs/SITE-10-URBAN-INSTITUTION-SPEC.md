@@ -1,13 +1,15 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: DRAFT — CODEX ADVERSARIAL REDLINE APPLIED; FOUNDER QUESTIONS REMAIN OPEN
 
 ---
 type: working-site-spec
 created: 2026-07-25
-updated: 2026-07-27 (gap-close addendum added; original rulings unchanged — see addendum
-  section for scope)
+updated: 2026-07-28 (Codex adversarial review applied to the 2026-07-27 gap-close addendum;
+  founder authority remains unchanged)
 status: WORKING SPEC — research/founder/brief PARTIAL (gap-close pass 2026-07-27 closes part
   of the construction-evidence gap and reconciles the spec to BUILDING-PROGRAM-TABLE-FAMILIES.md
-  and URBAN-FABRIC.md — see addendum, pending Codex adversarial review); clay OPEN
+  and URBAN-FABRIC.md; Codex adversarial review accepts the eighth-family direction but leaves
+  it pending founder approval; the proposed Market/Exchange taste sampler returned
+  2026-07-28); clay OPEN
 site: 10 — urban institution
 standard: SITE-5-MINE-WORKSHOP-CONCEPT.md
 authority:
@@ -108,6 +110,7 @@ genuinely open. Full detail: `Reference/Urban-Institution-Study-0727/`.
 | `BF-RITUAL-INSTITUTION` | Temple | The temple sibling institution at the same catalog line; a real plaza-dominating anchor now exists (St Peter Mancroft, Norwich). |
 | `BF-LOGISTICS` | Warehouse, Dock-House | The "Service/delivery edge" zone and the "Commerce and goods" circuit's destinations. Does not extend to the water edge itself — that is a separate, not-yet-site-graded item per `SETTLED-LIFE-SITES-PROGRAM.md` §3.2. |
 | `BF-SHOP-WORKSHOP` | Smithy, Apothecary, General Store, Arcanist | Ordinary frontage-bay shopfront programs — the customer-edge relationship each committed bay owner/program fact must resolve before drawing an interior. |
+| `BF-MARKET-EXCHANGE` **(PROPOSED ADDENDUM)** | Market Hall, Exchange / Cloth Hall | Owns the Golden Seed's public trading ground, stall/bay allocation, measure/inspection, schedule and exchange record; may compose Civic, Logistics, or Exchange upper programs. |
 | `BF-HOUSEHOLD-ESTATE` | Manor | **Does not serve Site 10.** `SETTLED-LIFE-SITES-PROGRAM.md` §3.1 places the household/dwelling program outside Site 10 as its own habitation host (folding into the Manor's low end, Adam-ruled 2026-07-27). A Manor may stand adjacent to a Site 10 slice; Site 10 does not own housing. |
 | `BF-CUSTODY` | Prison/Custody | **Does not serve Site 10.** Owned by Site 6. A non-custodial public punishment fixture (stocks/pillory) stays Site 10; any actual custody lifecycle, however small, hands off to Site 6 (`BREADTH-SWEEP.md` §3). |
 
@@ -124,16 +127,17 @@ never the flat d300** — or a rolled Site 10 scene would reproduce the exact fa
 found, inside the Golden Seed itself. This is a clarification of existing generation-order
 intent, not a change to it.
 
-**The load-bearing reconciliation: the market hall has no `BF-` family.** None of
-`BUILDING-PROGRAM-TABLE-FAMILIES.md`'s seven families names a market hall, exchange, or cloth
-hall, even though the market hall is Site 10's own Golden Seed. Real market halls carry at
+**The load-bearing reconciliation: add an eighth Market/Exchange family.** The founder-ruled
+seven-family core names no market hall, exchange, or cloth hall, even though the market hall
+is Site 10's own Golden Seed. Real market halls carry at
 least three different upper-room programs on the identical open-post-or-arcade ground floor —
 pure storage (Ledbury), a commodity exchange (Shrewsbury's wool hall), and civic authority
 itself as a council chamber (Titchfield) or a courtroom (the former Shire Hall, Llandeilo).
-**Proposed, not ruled:** either license "Market Hall" as a program inside `BF-CIVIC-AUTHORITY`
-(the real evidence shows they are sometimes the identical building), or add a fifth thin
-family, `BF-MARKET-EXCHANGE`, sharing only the open-post/arcade ground-floor chassis
-relationship. Full reasoning: `Reference/Urban-Institution-Study-0727/synthesis.md` §3.
+**Adversarial direction, still pending founder:** add `BF-MARKET-EXCHANGE`, sharing the
+open-post/arcade ground-floor chassis and market/exchange operating model. A civic council or
+court above is an explicit `Market/Exchange + Civic` composition; storage is
+`Market/Exchange + Logistics`. Co-location does not turn the trading ground into Civic.
+Full reasoning: `Reference/Urban-Institution-Study-0727/synthesis.md` §3.
 
 **Reconciliation against `URBAN-FABRIC.md`.** `rollBuilding` + `data/building-kits.js` is
 `LIVE` for ten typed kinds including tavern, temple, guildhall, manor, garrison, court,
@@ -156,8 +160,7 @@ dungeon walk, §3.6); or the home-settlement fabric itself (not a site at all, o
 the guest family's shanty quarter" wording is flagged here as an unresolved proposal for a
 future precision pass on that shared file, which this pass does not edit.
 
-**Proposed status-gate values (PROPOSED — pending Codex adversarial review, not self-declared
-final):**
+**Adversarially reviewed status-gate values (not founder rulings):**
 
 | gate | catalog value (2026-07-25) | proposed value (this pass) | reason |
 |---|---|---|---|
@@ -166,17 +169,20 @@ final):**
 | BRIEF-CONGRUENT | PARTIAL | PARTIAL (unchanged) | this pass adds an addendum and reconciliation; it does not restructure the existing fifteen-section standard |
 | CLAY-PROVED | OPEN | OPEN (unchanged) | no fixture was built this pass |
 
-This table is a proposal recorded in this working spec only. The shared
-`GOLDEN-SITES-CATALOG.md` status-gate table is untouched by this pass — updating it is a
-separate, later act requiring its own review.
+The 2026-07-28 adversarial pass accepts this gate reading and folds it into
+`GOLDEN-SITES-CATALOG.md`. It does not rule the eighth family or any other founder proposal.
 
-**Unresolved proposals carried forward from this pass** (none are ruled; all await founder or
-Codex review):
+**Unresolved proposals carried forward from this pass** (none are ruled; Codex's adversarial
+review has dispositioned them, and the Market/Exchange sampler has returned, but founder
+gates remain):
 
-1. **The market hall as a missing `BF-` program.** License "Market Hall" inside
-   `BF-CIVIC-AUTHORITY`, or add a fifth `BF-MARKET-EXCHANGE` family. Full reasoning and
-   photographic anchors (Titchfield Market Hall, the former Shire Hall at Llandeilo):
-   `Reference/Urban-Institution-Study-0727/synthesis.md` §3.
+1. **The market hall as a missing `BF-` program.** Accept, revise, or reject the proposed
+   eighth `BF-MARKET-EXCHANGE` family now sampled in
+   `Reference/Building-Family-Table-Samples/`. The returned taste tranche includes Market Hall
+   and Exchange / Cloth Hall program layers, six shared chassis, 32 packet-wide deterministic
+   receipts (four for this family), and explicit Civic/Logistics/Exchange upper-program
+   composition cards. Full reasoning and photographic anchors (Titchfield Market Hall, the
+   former Shire Hall at Llandeilo): `Reference/Urban-Institution-Study-0727/synthesis.md` §3.
 2. **A banner + dais + long-table composition as a licensed institution-threshold variant**
    for courthouse/guildhall/garrison-headquarters siblings, distinct from the market-hall/
    fountain composition and from the Monastery-Study's altar/shrine grammar.
@@ -773,8 +779,8 @@ Research packet (gap-close addendum, 2026-07-27 — additive, does not replace t
 - `Reference/Urban-Institution-Study-0727/BREADTH-SWEEP.md`
 - `Reference/Urban-Institution-Study-0727/LICENSE-LEDGER.md`
 
-The original packets support this working spec; their declared gaps kept `RESEARCHED` at
-`PARTIAL`. The 2026-07-27 addendum proposes `RESEARCHED: PARTIAL` (unchanged — see the
-addendum's proposed status-gate table for the honest reasoning). This document still cannot
+The original packets support this working spec; their declared gaps keep `RESEARCHED` at
+`PARTIAL`. The 2026-07-28 adversarial integration accepts that unchanged reading (see the
+addendum's reviewed status-gate table for the reasoning). This document still cannot
 advance `CLAY-PROVED` without the retained fixture, and `FOUNDER-RULED`/`BRIEF-CONGRUENT`
 remain `PARTIAL` until the open card selections are founder-ruled.

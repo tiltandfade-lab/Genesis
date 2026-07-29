@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: DRAFT — CODEX ADVERSARIAL REDLINE APPLIED; FOUNDER QUESTIONS REMAIN OPEN
 
 ---
 type: working-site-spec
@@ -61,8 +61,10 @@ scene-frame numbers (`Reference/Monastery-Study-0727/MEASURED-REFERENCES.md` §5
 below — every question stated with alternatives, a recommendation, and a reason. **The build
 order remains PROPOSED; this addendum makes it cheap to rule, it does not rule it.** One
 out-of-frame finding (the Japanese Zen *shichidō garan* is a sequence of separate halls, not a
-wrapped-courtyard chassis) is flagged as an open classification question, not folded into any
-existing category.
+wrapped-courtyard chassis) is accepted as evidence that Site 4 needs more than one chassis.
+Wrapped court, processional campus/sequence, cliff/terrace cluster, and distributed-house
+expressions share the communal operating model but must not be forced through one court plan.
+Their exact implementation order remains founder-facing.
 
 A courtyard inn or hostel is a licensed **guest program** over this chassis, not proof
 that all taverns are Site 4 institutions. Its hospitality/lodging obligations come from
@@ -589,8 +591,8 @@ non-Christian communal examples; guest institutions after their own evidence/pro
 - obtain guest-institution circulation evidence (unchanged — still open);
 - rule M1/M2/M4/M5 implementation order — **now decision-ready**
   (`Reference/Monastery-Study-0727/synthesis.md` §2), still requires Adam's ruling;
-- resolve the Japanese Zen *shichidō garan* classification question (new, 2026-07-27: is a
-  sequence-of-halls institution a Site 4 chassis variant or an out-of-scope host, per
-  `GOLDEN-SITE-CONCEPTING-GUIDELINES.md` step 0.5?);
+- place the accepted processional-campus/*shichidō garan* chassis in the founder-ruled
+  implementation order; the 2026-07-28 adversarial review keeps it inside Site 4 rather than
+  treating it as an out-of-scope host;
 - clay-prove court size, stair width, arcade fit, roofs, camera, plans, and lighting; and
 - build and retain the fixture in `GOLDEN-SITES-PROOF-QUEUE.md`.

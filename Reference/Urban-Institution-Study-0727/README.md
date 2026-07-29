@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: EVIDENCE PACKET — CODEX ADVERSARIAL REVIEW COMPLETE; FOUNDER QUESTIONS REMAIN OPEN (2026-07-28)
 
 # Urban Institution Study 0727 — gap-close packet
 
@@ -11,9 +11,10 @@ brief: "declared gaps are load-bearing construction evidence and visual gaps. Th
 building-program table families + urban fabric docs have LANDED since the spec was written —
 reconcile the spec to them (which BF- kits serve site 10, what the 42-roll audit proved), and
 close the construction-evidence gap with measured references (market halls, civic buildings,
-temple wards)." It does not rewrite any ruling in
-`docs/SITE-10-URBAN-INSTITUTION-SPEC.md`; it adds evidence for Codex's adversarial review and,
-after that review, for a future founder pass.
+temple wards)." It did not rewrite any ruling in
+`docs/SITE-10-URBAN-INSTITUTION-SPEC.md`. Codex's 2026-07-28 adversarial review accepted
+`BF-MARKET-EXCHANGE` as the proposal to test, not a ruled family. The taste sampler returned
+on 2026-07-28 in `../Building-Family-Table-Samples/`; a future founder pass remains required.
 
 ## Contents
 
@@ -39,16 +40,17 @@ after that review, for a future founder pass.
   progress instead).
 - `synthesis.md` — what this pass closed, the one load-bearing reconciliation (the market hall
   as a program missing from `BUILDING-PROGRAM-TABLE-FAMILIES.md`, and its overlap with
-  `BF-CIVIC-AUTHORITY`), and a proposed (not self-declared) status-gate update.
+  `BF-CIVIC-AUTHORITY`), and the adversarially accepted proposal for an eighth family.
 
-## Live authorities (unchanged by this pass)
+## Live authorities after adversarial integration
 
-- `docs/GOLDEN-SITES-CATALOG.md` — status-gate table and thin brief (untouched — this pass
-  does not edit the shared catalog file).
+- `docs/GOLDEN-SITES-CATALOG.md` — integrated status-gate table and thin brief (the research
+  pass itself did not edit the shared catalog).
 - `docs/SITE-10-URBAN-INSTITUTION-SPEC.md` — the working spec this pass adds an addendum to.
 - `docs/GOLDEN-SITES-PROOF-QUEUE.md` — the remaining evidence and countable fixture contract.
-- `docs/BUILDING-PROGRAM-TABLE-FAMILIES.md` — the seven BF- families this pass reconciles
-  Site 10's boundary against.
+- `docs/BUILDING-PROGRAM-TABLE-FAMILIES.md` — the founder-ruled seven-family core plus the
+  proposed eighth `BF-MARKET-EXCHANGE` addendum this pass motivates; its taste sampler has
+  now returned without promoting it to a founder ruling.
 - `docs/URBAN-FABRIC.md` — the built typed-building roller and district-fabric layer this
   pass reconciles Site 10's roller-preservation section against.
 - `docs/SETTLED-LIFE-SITES-PROGRAM.md` — the settled-life demand audit whose §3/§4 findings

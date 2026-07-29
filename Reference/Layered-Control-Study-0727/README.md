@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: RESEARCH PACKET — CODEX ADVERSARIAL CORRECTION APPLIED 2026-07-28
 
 ---
 type: research-packet-index
@@ -29,9 +29,10 @@ packet is ruled. It exists to move exactly one gate — `RESEARCHED` — and it 
 
 ## The one-line result
 
-**Site 8 is a projection gap, not a content gap.** Every rolled world already contains two or more
-persistent claimants with agendas, methods, clocks, transitions and a live per-faction reputation
-score; nothing in the spatial layer can express any of it.
+**Site 8 has a projection gap and abundant claimant ingredients.** Every sampled world contains
+two or more factions with agendas, methods, clocks, transitions and a live per-faction reputation
+score; the audit did not test whether two claims bind to the same host or resource, and nothing in
+the spatial layer can express that binding yet.
 
 ## Boundaries observed
 

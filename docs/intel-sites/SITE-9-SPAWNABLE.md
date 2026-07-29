@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: RECONCILED SOURCE INVENTORY — NO IMPLEMENTATION AUTHORITY (2026-07-28)
 
 ---
 type: spawnable-inventory
@@ -10,6 +10,15 @@ feeds: the spawn-audit lane
 ---
 
 # SITE 9 — SPAWNABLE CONTENT INVENTORY
+
+## 2026-07-28 adversarial reconciliation
+
+Site 9 owns no fortress or holder generator. It is the stress proof
+`Defense/Fortification HostProgram + LayeredControl + persistent MaterializationWindow`.
+The holder view is a projection of the shared claimant record. The 14.62% figure measures
+Military Fortification host demand, not contested activation. Quiet-largest ground,
+enceinte-edge buildings, and multi-barrier/lengthened gates are proof-profile defaults or
+window profiles; none is a universal Defense law.
 
 Every concrete thing the Site 9 spec implies can **spawn in play**, mapped to the Engine table
 or roller that would produce it — or marked `NO-TABLE-YET`.
@@ -45,7 +54,7 @@ kit and from live dungeon rooms; **the relationship column is almost entirely
 |---|---|---|
 | A **Military Fortification** dungeon (15 of 100 rows; **14.62 %** of dungeon walks per `docs/intel/walk-census.md`) | `dungeon-type` — `src/engine/dungeon-walk.js:613`, `walkPick("dungeon-type",1,3)` | `LIVE` |
 | Its atmosphere line — "geometric corridors with arrow slits," "defensive chokepoints every few steps," "guard posts overlook empty corridors," "narrow stairwells spiral with discipline" (15 rows, **all interior**) | `dungeon-type` col 3, same call | `LIVE` |
-| A **fortification settlement** — High-Harrow Gate, Salt-Flat Garrison, Toll-Keep, Salt-Road Outpost, Walled Orchard, Caravanserai of Stones, Shepherd's Tor, Saltpeter Works, Ash-Hollow, Wind-Break Village, **Thorngate Keep**, **The Borrowed Wall**, **The Garrison-Wife Town** (13 of 100 rows) | `place-master-setting` — `src/engine/codex-roll.js:660`; hometown beat `src/creator/bardo.js:14` | `LIVE` |
+| A broad **fortification-adjacent settlement** screen — fourteen rows, including High-Harrow Gate, Thorngate Keep, The Borrowed Wall, The Garrison-Wife Town, and The Tide-That-Stopped | `place-master-setting` — `src/engine/codex-roll.js:660`; hometown beat `src/creator/bardo.js:14` | `LIVE`; only rows 51 and 71 directly encode the Site-9 relationship |
 | A **garrison origin story** — "a mountain pass that had to be guarded, so a garrison went up and a town grew in its shadow" (row 6); "a garrison town that outlived its war and learned to farm" (row 59); "refugees from a war stopped one hard winter" (row 47) | `place-history` — `src/creator/bardo.js` | `LIVE` |
 | A **fortress siege ground** exterior frame, 120′ × 130′, central ruined gatehouse 30′ × 25′ × 15′, impact scarring (row 200) | `urban-scene-frame` — `src/engine/walk.js:373` | `LIVE` |
 | A **keep courtyard** frame, 80′ × 80′, central parade ground, four 10′-diameter corner towers (row 156) | `urban-scene-frame`, same call | `LIVE` |
@@ -98,7 +107,7 @@ gatehouse, keep storeys, and broken wall + gate (`STRUCTURE-KIT-CATALOG.md` §11
 
 ---
 
-## 3. Occupants and holders
+## 3. Occupants and claimant projections
 
 | spawnable thing | producing table / roller | status |
 |---|---|---|
@@ -111,7 +120,7 @@ gatehouse, keep storeys, and broken wall + gate (`STRUCTURE-KIT-CATALOG.md` §11
 | Who rules and how securely, plus the live tension in it (100 rows) | `place-ruler-status` via `placeRulerStatusRoll` — `src/world/wiring-b.js:274`, bundled into `placeDepthRoll(w)` at `:285`, invoked once per world at `src/world/play.js:88` | `LIVE` |
 | Inter-population relations at a settlement | `place-race-relations` via `placeRaceRelationsRoll` — same `placeDepthRoll` bundle | `LIVE` |
 | Nearby places that explain the works' position | `place-nearby` via `placeNearbyRoll` — same bundle | `LIVE` |
-| A **Holder card** — `claimTarget`, `claimBasis`, `recognitionProfile`, `enforcementReach`, `dependency`, `tell`, `schedule`, `crossingCost`, `wouldMoveTheLine` | — | `NO-TABLE-YET` ⚠ **the site's own invention; nothing produces any field of it** |
+| A **Holder view** — a fortress-facing projection of the shared LayeredControl claimant record: `claimTarget`, `claimBasis`, `recognitionProfile`, `enforcementReach`, `dependency`, `tell`, `schedule`, `crossingCost`, `wouldMoveTheLine` | — | `NO-TABLE-YET`; owned by the shared claimant contract, not Site 9 |
 | A **second population that is not a threat** — civilians, refugees, dependents, tenants inside the works | — | `NO-TABLE-YET` |
 | Garrison roster, watch rotation, change of guard | — | `NO-TABLE-YET` (Site 1 names the circuit; no table produces it) |
 | The gate crew occupying the machinery room | — | `NO-TABLE-YET` |
@@ -121,8 +130,8 @@ gatehouse, keep storeys, and broken wall + gate (`STRUCTURE-KIT-CATALOG.md` §11
 
 ## 4. The relationship layer — attributed ground, lines, crossings
 
-**This whole table is the site's reason for existing, and every row in it is
-`NO-TABLE-YET`.** No live table assigns two populations to two regions of one site, and no
+**This whole table is shared LayeredControl and MaterializationWindow demand, and every row
+in it is `NO-TABLE-YET`.** No live table assigns two populations to two regions of one site, and no
 live table carries a front, a truce line, an attributed territory, or a crossing cost. Today
 that is entirely DM narration.
 
@@ -240,10 +249,11 @@ arrow-loop niches, crenellated tower roofs at three-quarters cover, drawbridges 
 hazards, fortified gate plazas, factions, threat identities, ruler status, settlements built
 around walls. The engine is already generous about fortresses.
 
-**The other half is the relationship, and none of it exists.** Attributed ground, the line,
-the line tell, crossing costs, committed crossings, chokepoints, holder cards, the second
-non-hostile population, the ten state axes — every one is `NO-TABLE-YET`. That is not a
-complaint about the engine; it is the precise statement of what Site 9 is *for*.
+**The other half is shared relationship/window machinery, and none of it exists.** Attributed
+ground, the line, the line tell, crossing costs, committed crossings, chokepoints, claimant
+records, the second non-hostile population, and the state axes are `NO-TABLE-YET`. Site 9 is
+where the portfolio proves those shared contracts across a Defense host and multiple windows;
+it does not privately own them.
 
 **Three flags for the spawn-audit lane:**
 
@@ -251,8 +261,9 @@ complaint about the engine; it is the precise statement of what Site 9 is *for*.
    barbican with a portcullis control room — are the two most Site-9-specific room programs in
    the whole engine, and **nothing calls them.** Wiring them is cheaper than authoring them and
    is proposed as rung A's implementation (spec §8.3, P12).
-2. ⚠ **The Holder card has no field that any table produces.** Nine fields, zero coverage. It
-   is the site's own invention and the biggest single piece of new work.
+2. ⚠ **The shared claimant record has no field that any table produces.** The Holder view's
+   nine fields have zero coverage. This is LayeredControl work exercised by Site 9, not a
+   Site-9-only invention.
 3. ⚠ **The Military Fortification atmosphere rows describe props that cannot spawn.** "Rusted
    weapon racks line the walls," "ration crates collapsed in corners," "map tables rot beneath
    damp stone" are `LIVE` as *text* and absent as *objects*. That gap is small, concrete, and

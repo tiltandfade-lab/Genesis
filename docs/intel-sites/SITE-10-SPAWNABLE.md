@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: RECONCILED SOURCE INVENTORY — NO IMPLEMENTATION AUTHORITY (2026-07-28)
 
 ---
 type: spawn-audit
@@ -16,6 +16,14 @@ authority: this document is an inventory, not a ruling. It classifies what the w
 ---
 
 # SITE 10 SPAWNABLE-CONTENT INVENTORY
+
+## 2026-07-28 adversarial reconciliation
+
+The founder-ruled seven-family core remains intact. The adversarial pass selects a proposed
+eighth `BF-MARKET-EXCHANGE` family for Market Hall and Exchange / Cloth Hall; its taste
+sampler has now returned for founder disposition. Civic council/court, Logistics storage, or
+Exchange uses above the trading ground are explicit program compositions, not evidence that
+the whole host belongs to Civic.
 
 Every concrete thing the Site 10 working spec implies can spawn in play, mapped to the Engine
 table/roller that would produce it, or marked `NO-TABLE-YET`. This feeds the spawn-audit lane;

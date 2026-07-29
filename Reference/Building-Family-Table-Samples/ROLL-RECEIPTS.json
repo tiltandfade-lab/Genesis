@@ -1,13 +1,13 @@
 {
   "schema": "genesis.building-family-taste-rolls.v1",
-  "generatedOn": "2026-07-26",
+  "generatedOn": "2026-07-28",
   "source": "Reference/Building-Family-Table-Samples/TABLE-SAMPLES.json",
-  "sourceSha256": "a4f67438a57e7fab820ab764ba70b7aa59e9d8a381c9fd8d63517f2cb7aee1de",
+  "sourceSha256": "20e1a2f098f6e43af0ce8f8e58d883ce3d941cf69f27e6ccc90ae13dd1614617",
   "sampler": "dev/roll-building-family-samples.mjs",
-  "familyCount": 7,
-  "programCount": 15,
+  "familyCount": 8,
+  "programCount": 17,
   "receiptsPerFamily": 4,
-  "receiptCount": 28,
+  "receiptCount": 32,
   "profiles": [
     {
       "id": "grounded-frontier",
@@ -1758,6 +1758,295 @@
         "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
       },
       "readout": "Arcanist's Shop — Arcanist / Charmwright. Domestic front room serves customers beside an attached workshop; a rear delivery passage separates supplies and waste from household access. Component shop with consultation counter, ordinary reagents, locked rare stock, verification bench, and controlled disposal. Operating state: Demand backlog: customer orders, consultations, preparations, repairs, or commissions exceed the current operator's time or safe capacity. Current scene: A component passes every test but its provenance belongs to a batch recorded as destroyed. Volatile Spice: Any unreceipted component leaving the shop causes its storage condition to manifest around the carrier. Realm realization: Component drawers, consultation, inscribed or worked bench, locked cabinet, test circle or safe surface, provenance and disposal."
+    },
+    {
+      "receiptId": "BF-MARKET-EXCHANGE-01",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-MARKET-EXCHANGE/market-hall/grounded-frontier/0",
+        "value": 1890023939
+      },
+      "familyId": "BF-MARKET-EXCHANGE",
+      "familyLabel": "Market / Exchange (proposed eighth family)",
+      "programId": "market-hall",
+      "programLabel": "Market Hall",
+      "profileId": "grounded-frontier",
+      "contextTags": [],
+      "layers": {
+        "familyChassis": {
+          "id": "ME-CH-04",
+          "text": "Court-and-arcade market: permanent covered bays line one or more sides of an open court, with a common measure point, removable fair pitches, drainage, and several closure gates.",
+          "scale": "distributed",
+          "provides": [
+            "covered edge bays",
+            "open trading court",
+            "common measure",
+            "temporary pitches",
+            "drainage",
+            "closure gates"
+          ]
+        },
+        "programArrangement": {
+          "id": "MH-AR-01",
+          "text": "Daily provisions market with assigned food and household-goods bays, a common scale, early delivery, public trading hours, wash-down, and same-day clearing."
+        },
+        "operatingState": {
+          "id": "ME-ST-03",
+          "text": "Clearing and closure: portable pitches are struck, unsold goods are attributed and removed or secured, accounts close, refuse leaves, and public routes reopen."
+        },
+        "currentScene": {
+          "id": "MH-SC-02",
+          "text": "The common scale is accurate, but a legal local weight now differs from the standard stamped into several prepaid deliveries."
+        },
+        "spice": {
+          "id": "MH-SP-G",
+          "band": "Grounded",
+          "text": "Old pitch marks beneath the current numbering prove one narrow bay was quietly removed from the allocation book.",
+          "affects": "allocation and floor history",
+          "preserves": "ordinary market authority"
+        },
+        "realm": {
+          "id": "frontier",
+          "label": "Market House / Covered Market",
+          "realization": "Timber posts or stone arcades shelter numbered pitches, common beam and stamped weights, clerk or reeve, cart edge, wash-down and a bell-governed market day."
+        }
+      },
+      "preservedInvariants": [
+        "public trading ground",
+        "pitch or bay allocation",
+        "goods arrival and clearing",
+        "common measure or inspection",
+        "price/payment practice",
+        "market schedule and closure",
+        "accountable market authority"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Grounded",
+        "selectedSpiceBand": "Grounded",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Market Hall — Market House / Covered Market. Court-and-arcade market: permanent covered bays line one or more sides of an open court, with a common measure point, removable fair pitches, drainage, and several closure gates. Daily provisions market with assigned food and household-goods bays, a common scale, early delivery, public trading hours, wash-down, and same-day clearing. Operating state: Clearing and closure: portable pitches are struck, unsold goods are attributed and removed or secured, accounts close, refuse leaves, and public routes reopen. Current scene: The common scale is accurate, but a legal local weight now differs from the standard stamped into several prepaid deliveries. Grounded Spice: Old pitch marks beneath the current numbering prove one narrow bay was quietly removed from the allocation book. Realm realization: Timber posts or stone arcades shelter numbered pitches, common beam and stamped weights, clerk or reeve, cart edge, wash-down and a bell-governed market day."
+    },
+    {
+      "receiptId": "BF-MARKET-EXCHANGE-02",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-MARKET-EXCHANGE/exchange-cloth-hall/textured-chrome/1",
+        "value": 3435509390
+      },
+      "familyId": "BF-MARKET-EXCHANGE",
+      "familyLabel": "Market / Exchange (proposed eighth family)",
+      "programId": "exchange-cloth-hall",
+      "programLabel": "Exchange / Cloth Hall",
+      "profileId": "textured-chrome",
+      "contextTags": [],
+      "layers": {
+        "familyChassis": {
+          "id": "ME-CH-04",
+          "text": "Court-and-arcade market: permanent covered bays line one or more sides of an open court, with a common measure point, removable fair pitches, drainage, and several closure gates.",
+          "scale": "distributed",
+          "provides": [
+            "covered edge bays",
+            "open trading court",
+            "common measure",
+            "temporary pitches",
+            "drainage",
+            "closure gates"
+          ]
+        },
+        "programArrangement": {
+          "id": "EX-AR-04",
+          "text": "Seasonal fair hall whose permanent standards, clerk, sample store, and dispute process support a changing licensed commodity and temporary merchant roster."
+        },
+        "operatingState": {
+          "id": "ME-ST-01",
+          "text": "Opening and allocation: officials, keepers, or elected traders assign pitches, check rights, set out standards, and separate deliveries from the arriving public."
+        },
+        "currentScene": {
+          "id": "EX-SC-01",
+          "text": "A sealed sample passes inspection, but the attributed bulk lot arriving at the side court carries a different handling mark."
+        },
+        "spice": {
+          "id": "EX-SP-T",
+          "band": "Textured",
+          "text": "The north inspection light reveals repairs and substitutions that disappear under every lamp used elsewhere in the hall.",
+          "affects": "inspection surface",
+          "preserves": "material goods and operator judgment"
+        },
+        "realm": {
+          "id": "chrome",
+          "label": "Commodity Exchange / Clearing Hall",
+          "realization": "Credentialed trading floor, certified sample lab, market data and bid surfaces, contract clearing, bonded custody, freight-system links and controlled records."
+        }
+      },
+      "preservedInvariants": [
+        "commodity or contract identity",
+        "inspection and sample relationship",
+        "bargaining or price publication",
+        "standards and records",
+        "secure lot/sample custody",
+        "bulk delivery relationship",
+        "accountable exchange authority"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Textured",
+        "selectedSpiceBand": "Textured",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Exchange / Cloth Hall — Commodity Exchange / Clearing Hall. Court-and-arcade market: permanent covered bays line one or more sides of an open court, with a common measure point, removable fair pitches, drainage, and several closure gates. Seasonal fair hall whose permanent standards, clerk, sample store, and dispute process support a changing licensed commodity and temporary merchant roster. Operating state: Opening and allocation: officials, keepers, or elected traders assign pitches, check rights, set out standards, and separate deliveries from the arriving public. Current scene: A sealed sample passes inspection, but the attributed bulk lot arriving at the side court carries a different handling mark. Textured Spice: The north inspection light reveals repairs and substitutions that disappear under every lamp used elsewhere in the hall. Realm realization: Credentialed trading floor, certified sample lab, market data and bid surfaces, contract clearing, bonded custody, freight-system links and controlled records."
+    },
+    {
+      "receiptId": "BF-MARKET-EXCHANGE-03",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-MARKET-EXCHANGE/market-hall/strange-gloom/2",
+        "value": 893695740
+      },
+      "familyId": "BF-MARKET-EXCHANGE",
+      "familyLabel": "Market / Exchange (proposed eighth family)",
+      "programId": "market-hall",
+      "programLabel": "Market Hall",
+      "profileId": "strange-gloom",
+      "contextTags": [],
+      "layers": {
+        "familyChassis": {
+          "id": "ME-CH-02",
+          "text": "Pier-and-arch hall: a heavier open arcade encloses a durable market floor, with perimeter pitch lines, two public approaches, a lockable standards room, and a service edge.",
+          "scale": "medium",
+          "provides": [
+            "arcaded trading ground",
+            "perimeter pitches",
+            "two approaches",
+            "standards room",
+            "service edge"
+          ]
+        },
+        "programArrangement": {
+          "id": "MH-AR-04",
+          "text": "Wholesale-first hall where bulk lots are inspected and priced before dawn, then broken into smaller public sales while separate delivery and buyer routes remain active."
+        },
+        "operatingState": {
+          "id": "ME-ST-04",
+          "text": "Assay or dispute session: one standard, lot, allocation, price, or right to trade is under public examination while the rest of the market continues around it."
+        },
+        "currentScene": {
+          "id": "MH-SC-02",
+          "text": "The common scale is accurate, but a legal local weight now differs from the standard stamped into several prepaid deliveries."
+        },
+        "spice": {
+          "id": "MH-SP-S",
+          "band": "Strange",
+          "text": "At the opening call, each numbered bay casts the shadow of the goods contractually promised there, including one promise no trader admits making.",
+          "affects": "allocation and obligation",
+          "preserves": "named pitches and trade"
+        },
+        "realm": {
+          "id": "gloom",
+          "label": "Municipal Market Shed / Produce Hall",
+          "realization": "Painted stall numbers, concrete or iron bays, scale office, cash and account counter, loading alley, drains and refuse route, shutters and posted market hours."
+        }
+      },
+      "preservedInvariants": [
+        "public trading ground",
+        "pitch or bay allocation",
+        "goods arrival and clearing",
+        "common measure or inspection",
+        "price/payment practice",
+        "market schedule and closure",
+        "accountable market authority"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Strange",
+        "selectedSpiceBand": "Strange",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Market Hall — Municipal Market Shed / Produce Hall. Pier-and-arch hall: a heavier open arcade encloses a durable market floor, with perimeter pitch lines, two public approaches, a lockable standards room, and a service edge. Wholesale-first hall where bulk lots are inspected and priced before dawn, then broken into smaller public sales while separate delivery and buyer routes remain active. Operating state: Assay or dispute session: one standard, lot, allocation, price, or right to trade is under public examination while the rest of the market continues around it. Current scene: The common scale is accurate, but a legal local weight now differs from the standard stamped into several prepaid deliveries. Strange Spice: At the opening call, each numbered bay casts the shadow of the goods contractually promised there, including one promise no trader admits making. Realm realization: Painted stall numbers, concrete or iron bays, scale office, cash and account counter, loading alley, drains and refuse route, shutters and posted market hours."
+    },
+    {
+      "receiptId": "BF-MARKET-EXCHANGE-04",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-MARKET-EXCHANGE/exchange-cloth-hall/volatile-frontier/3",
+        "value": 3885835280
+      },
+      "familyId": "BF-MARKET-EXCHANGE",
+      "familyLabel": "Market / Exchange (proposed eighth family)",
+      "programId": "exchange-cloth-hall",
+      "programLabel": "Exchange / Cloth Hall",
+      "profileId": "volatile-frontier",
+      "contextTags": [
+        "licensed-world-adapter"
+      ],
+      "layers": {
+        "familyChassis": {
+          "id": "ME-CH-04",
+          "text": "Court-and-arcade market: permanent covered bays line one or more sides of an open court, with a common measure point, removable fair pitches, drainage, and several closure gates.",
+          "scale": "distributed",
+          "provides": [
+            "covered edge bays",
+            "open trading court",
+            "common measure",
+            "temporary pitches",
+            "drainage",
+            "closure gates"
+          ]
+        },
+        "programArrangement": {
+          "id": "EX-AR-03",
+          "text": "Merchants' exchange with posted prices, agent benches, private bargaining recesses, contract registration, settlement, and an arbitration room reached without crossing secure records."
+        },
+        "operatingState": {
+          "id": "ME-ST-02",
+          "text": "Full trade: bargaining, inspection, weighing, payment, replenishment, and crowd movement compete for the same legible bays and aisles."
+        },
+        "currentScene": {
+          "id": "EX-SC-04",
+          "text": "A registered merchant has vanished after assigning both a sample and a delivery obligation to different agents with valid seals."
+        },
+        "spice": {
+          "id": "EX-SP-V",
+          "band": "Volatile",
+          "text": "When a contract is publicly settled, its attributed lot acquires the hall's mark wherever it physically rests; forged settlement can therefore move both title and danger.",
+          "affects": "record, title, and remote lot",
+          "preserves": "exchange authority and counterplay"
+        },
+        "realm": {
+          "id": "frontier",
+          "label": "Cloth Hall / Wool Exchange",
+          "realization": "Long arcaded hall, cloth or sample bays, daylight tables, beam and measures, guild or town clerk, sealed records, bale court and upper store or bargaining room."
+        }
+      },
+      "preservedInvariants": [
+        "commodity or contract identity",
+        "inspection and sample relationship",
+        "bargaining or price publication",
+        "standards and records",
+        "secure lot/sample custody",
+        "bulk delivery relationship",
+        "accountable exchange authority"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Volatile",
+        "selectedSpiceBand": "Volatile",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Exchange / Cloth Hall — Cloth Hall / Wool Exchange. Court-and-arcade market: permanent covered bays line one or more sides of an open court, with a common measure point, removable fair pitches, drainage, and several closure gates. Merchants' exchange with posted prices, agent benches, private bargaining recesses, contract registration, settlement, and an arbitration room reached without crossing secure records. Operating state: Full trade: bargaining, inspection, weighing, payment, replenishment, and crowd movement compete for the same legible bays and aisles. Current scene: A registered merchant has vanished after assigning both a sample and a delivery obligation to different agents with valid seals. Volatile Spice: When a contract is publicly settled, its attributed lot acquires the hall's mark wherever it physically rests; forged settlement can therefore move both title and danger. Realm realization: Long arcaded hall, cloth or sample bays, daylight tables, beam and measures, guild or town clerk, sealed records, bale court and upper store or bargaining room."
     },
     {
       "receiptId": "BF-CUSTODY-01",

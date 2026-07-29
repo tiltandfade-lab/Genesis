@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: RECONCILED SOURCE INVENTORY — NO IMPLEMENTATION AUTHORITY (2026-07-28)
 
 ---
 type: spawn-audit
@@ -15,6 +15,14 @@ authority: this document is an inventory, not a ruling. It classifies what the w
 ---
 
 # SITE 3 SPAWNABLE-CONTENT INVENTORY
+
+## 2026-07-28 adversarial reconciliation
+
+Read every row below through the redlined transform contract: Dormant always preserves an
+ordinary host; stable replacement occupants do not by themselves end dormancy; the original
+host circuit must resume or be resolved as non-consequential. “Funerary Store” is superseded
+by **Funerary / Mortuary Institution**. Subtractive rock-cut survival and motivated apertures
+are useful proof profiles, not universal geometry laws and never permission to invent a hole.
 
 Every concrete thing the Site 3 working spec implies can spawn in play, mapped to the Engine
 table/roller that would produce it, or marked `NO-TABLE-YET`. This feeds the spawn-audit lane;
@@ -40,8 +48,8 @@ of the site's proposed build.
 
 | spawnable | roller/table | status | note |
 |---|---|---|---|
-| Subterranean Crypt (whole-dungeon archetype) | `dungeon-type` — archetype **Subterranean Crypt**, Original Purpose "Burial / Ancestral honor" (`Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Type.md`) | **LIVE** via `rollDungeonWalk` | **21.3 %** of dungeon rolls (`docs/intel/walk-census.md` §2a) — the single largest bucket in the census. The spec argues this is a *Funerary Store host* the transform acts on, not a dormancy state |
-| Sunken Estate | `dungeon-type` — archetype **Sunken Estate**, Original Purpose "**Manor house / Basement levels**" | **LIVE** | **10.3 %** of dungeon rolls. The Original Purpose column has already committed to the below-grade half being the playable half — the SUBTRACTIVE-SURVIVES law is in the table |
+| Subterranean Crypt (whole-dungeon archetype) | `dungeon-type` — archetype **Subterranean Crypt**, Original Purpose "Burial / Ancestral honor" (`Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Type.md`) | **LIVE** via `rollDungeonWalk` | **21.3 %** of dungeon rolls (`docs/intel/walk-census.md` §2a) — the single largest bucket in the census. The spec argues this is a *Funerary / Mortuary Institution host* the transform acts on, not a dormancy state |
+| Sunken Estate | `dungeon-type` — archetype **Sunken Estate**, Original Purpose "**Manor house / Basement levels**" | **LIVE** | **10.3 %** of dungeon rolls. The Original Purpose column licenses a strong below-grade survival profile; it does not establish a universal Dormant law |
 | Ruined Quarter (urban district) | `urban-type` (`src/engine/walk.js`) | **LIVE** | 9.3 % of urban rolls; the urban expression of the transform |
 | Every other host archetype the transform can act on | `dungeon-type` (Military Fortification, Infrastructure Hub, Religious Sanctuary, Prison/Asylum, Laboratory/Workshop, Natural Cavern, Living Hive, Megastructure) | **LIVE** | The transform's whole claim is that it works over all of these with no host-specific branch |
 | Building shells and typed kits | `building-interior`, `data/building-kits.js`, `place-spine`, `data/place-skins.js` | **LIVE** per the roller ledger | The above-ground dormant host, including the manor for `DA-SEED-01` |
@@ -148,7 +156,7 @@ of the site's proposed build.
 | Vaulted chamber form | `dungeon-area-type` row **107** ("central junction open to a 30' vaulted ceiling; each arm ends in an arched alcove"), row **138** ("Natural Vault") | **LIVE** | |
 | **Loculus / niche socket array** (a wall run whose relief is a tiling niche grid, 4–6 tiers) | — | **NO-TABLE-YET** | Row 156 gives *twelve sarcophagi in two tiers*; the catacomb gallery needs the denser, smaller, subtractive version — each socket simultaneously cover, concealment, loot slot, spawn slot and evidence |
 | **Ossuary / charnel bulk deposit** (bones as architecture and as inventory) | — | **NO-TABLE-YET** | Row 156 names a charnel alcove but nothing fills it. The overfill endpoint of the funerary workflow |
-| **Funerary Store host program** — roles, workflow, capacities, permissions, property flows, failure modes | — | **NO-TABLE-YET** | Founder question Q3-2. Without it, a fifth of all dungeons is generated as a ruin when many of them should be maintained institutions |
+| **Funerary / Mortuary Institution host program** — roles, workflow, capacities, permissions, property flows, failure modes | — | **NO-TABLE-YET** | Founder question Q3-2. Without it, a fifth of all dungeons is generated as a ruin when many of them should be maintained institutions |
 | Votive flame owned by a live practice | `dungeon-lighting` | **LIVE, but unowned** | The lighting table produces light; nothing binds a light to an owner, a fuel, or a practice |
 | Passage-tomb mound + revetted portal | — | **NO-TABLE-YET** | Image DA-14: terrain with one masonry socket. A wilderness-walk citizen more than a dungeon one |
 

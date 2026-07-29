@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: EVIDENCE PACKET — CODEX ADVERSARIAL REVIEW COMPLETE; FOUNDER BUILD ORDER REMAINS OPEN (2026-07-28)
 
 # Monastery/Commune Study 0727 — evidence-thickening packet
 
@@ -11,9 +11,9 @@ per the campaign brief: *"cultural breadth and metric evidence remain thin; M1/M
 order stays proposed... broaden the cultural sweep beyond the packet's current base (monastic
 traditions across at least four building cultures, commune variants), add measured evidence
 (cell/refectory/cloister dimensions), and produce the decision-ready founder packet for the build
-order."* It does not rewrite any ruling in `docs/SITE-4-MONASTERY-COMMUNE-SPEC.md` or
-`docs/GOLDEN-SITES-CATALOG.md`; it adds evidence for Codex's adversarial review and, after that
-review, for Adam's build-order ruling.
+order."* It did not rewrite any ruling in `docs/SITE-4-MONASTERY-COMMUNE-SPEC.md` or
+`docs/GOLDEN-SITES-CATALOG.md`. Codex's 2026-07-28 adversarial review accepted the evidence's
+multi-chassis consequence and folded it into the spec; Adam's build-order ruling remains open.
 
 ## Contents
 
@@ -35,14 +35,13 @@ review, for Adam's build-order ruling.
   attribution, retrieved 2026-07-27.
 - `synthesis.md` — what this pass closed, the decision-ready M1/M2/M4/M5 founder packet (four
   questions in the concepting-guidelines format, each restating the existing recommendation and
-  stating plainly whether new evidence reinforces or complicates it), one honestly-flagged
-  out-of-frame finding (the Zen chassis-classification question), and a proposed (not
-  self-declared) status-gate reason-text update.
+  stating plainly whether new evidence reinforces or complicates it), the accepted
+  multi-chassis consequence of the Zen evidence, and the integrated status-gate disposition.
 
-## Live authorities (unchanged by this pass)
+## Live authorities after adversarial integration
 
-- `docs/GOLDEN-SITES-CATALOG.md` — status-gate table and thin brief (untouched — this pass does
-  not edit the shared catalog file, per the campaign's explicit "touch no shared file" rule).
+- `docs/GOLDEN-SITES-CATALOG.md` — integrated status-gate table and thin brief (the research
+  pass itself did not edit the shared catalog).
 - `docs/SITE-4-MONASTERY-COMMUNE-SPEC.md` — the working spec this pass adds an addendum pointer
   to.
 - `docs/intel-sites/SITE-4-SPAWNABLE.md` — new this pass; the spawnable-content inventory feeding

@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: EVIDENCE PACKET — CODEX ADVERSARIAL REVIEW COMPLETE; RESEARCH REMAINS PARTIAL (2026-07-28)
 
 # Mine/Workshop Study 0727 — gap-close packet
 
@@ -7,9 +7,10 @@ Date: 2026-07-27
 
 This packet is a targeted gap-close of the Site 5 working spec's declared research gaps,
 per the 2026-07-27 campaign brief: "direct tactical-map evidence and broader
-measured/cultural breadth." It does not rewrite any ruling in
-`docs/SITE-5-MINE-WORKSHOP-CONCEPT.md`; it adds evidence for Codex's adversarial review and,
-after that review, for a future founder pass.
+measured/cultural breadth." It did not rewrite any ruling in
+`docs/SITE-5-MINE-WORKSHOP-CONCEPT.md`. Codex's 2026-07-28 adversarial review retained the
+evidence and the Site-5/`BF-SHOP-WORKSHOP` boundary, but rejected promotion of the research
+gate to `PASS`; a future founder pass remains open.
 
 ## Contents
 
@@ -26,12 +27,12 @@ after that review, for a future founder pass.
 - `LICENSE-LEDGER.md` + `images/` — 12 Wikimedia Commons reference images with full licence
   attribution, retrieved 2026-07-27.
 - `synthesis.md` — what this pass closed, the one load-bearing reconciliation (Site 5 vs.
-  `BF-SHOP-WORKSHOP`), and a proposed (not self-declared) status-gate update.
+  `BF-SHOP-WORKSHOP`), and the adversarial decision to keep research `PARTIAL`.
 
-## Live authorities (unchanged by this pass)
+## Live authorities after adversarial integration
 
-- `docs/GOLDEN-SITES-CATALOG.md` — status-gate table and thin brief (untouched — this pass
-  does not edit the shared catalog file).
+- `docs/GOLDEN-SITES-CATALOG.md` — integrated status-gate table and thin brief (the research
+  pass itself did not edit the shared catalog).
 - `docs/SITE-5-MINE-WORKSHOP-CONCEPT.md` — the working spec this pass adds an addendum to.
 - `docs/GOLDEN-SITES-PROOF-QUEUE.md` — the remaining evidence and countable fixture contract.
 - `docs/BUILDING-PROGRAM-TABLE-FAMILIES.md` — the `BF-SHOP-WORKSHOP` family this pass

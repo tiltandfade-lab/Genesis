@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: EVIDENCE DRAFT — CODEX ADVERSARIAL DISPOSITION RECORDED IN `synthesis.md` (2026-07-28)
 
 ---
 type: research-note
@@ -199,12 +199,13 @@ shipped composition.
 2. **Four devices transfer, and all four are free.** Owned diagonal, owned approach, appended strip,
    void-plus-owned-light. None enlarges the materialization window; three of the four are pure
    occupancy or lighting facts over existing geometry.
-3. **Grain is the transform's main visual instrument.** The generator's LC-3 expression should be
-   produced by *re-partitioning* an existing composition — subdividing masses, multiplying doors,
-   changing surface — not by generating new topology.
-4. **The claimant's formality decides the direction of the grain shift.** Informal claimants refine
-   and disorder; institutional claimants coarsen and regularise. This is a testable generator rule
-   and it is proposed, not ruled.
+3. **Grain is one strong conditional visual instrument.** Where construction and tenure facts
+   license re-partitioning, an LC-3 profile may subdivide masses, multiply doors, or change
+   surface without changing host topology. Other valid claims may leave grain untouched.
+4. **Claimant formality is a hypothesis for the direction of a licensed grain shift.** The sampled
+   informal claimants refine and disorder while deeper institutional claimants coarsen and
+   regularise. Changed-seed and broader cultural evidence must test this proposed bias; formality
+   alone never licenses construction.
 5. **The corpus supplies no many-claimant board.** Nothing in the 121 maps reads as N equal claims
    around one shared centre. The khan case from lane 1 has no FFT equivalent, which is a genuine
    evidence gap for the open question in the synthesis.

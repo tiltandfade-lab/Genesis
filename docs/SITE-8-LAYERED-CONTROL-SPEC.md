@@ -1,9 +1,10 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: DRAFT — CODEX ADVERSARIAL REDLINE APPLIED; FOUNDER QUESTIONS REMAIN OPEN
 
 ---
 type: working-site-spec
 created: 2026-07-27
-status: WORKING SPEC — first depth-law pass returned; research PARTIAL; clay OPEN
+updated: 2026-07-28
+status: WORKING SPEC — first depth-law pass returned; adversarial redline applied; research PARTIAL; clay OPEN
 site: 8 — layered control (cross-host transform)
 role: transform
 method: GOLDEN-SITE-CONCEPTING-GUIDELINES.md
@@ -53,10 +54,9 @@ Three further ruled facts constrain this document:
   being in an unusual state** (`SETTLED-LIFE-SITES-PROGRAM.md` §2.2, proposed language; §2.1's
   noun/state rule is the operating principle this spec follows).
 
-### 1.2 Proposed status-gate line
+### 1.2 Adversarially integrated status-gate line
 
-Proposed for the catalog's status table. **This spec does not edit that table**; the line below is a
-proposal for the integrating pass.
+The 2026-07-28 integration pass applies the following reading in the catalog:
 
 | site | role | researched | founder-ruled | brief-congruent | clay-proved | current reason |
 |---|---|---|---|---|---|---|
@@ -83,10 +83,10 @@ are presented as **build orders with a learning rationale and ladder links**, no
 |---|---|---|---|
 | P1 | The three-host proof set and its build order (venue → mine → custody) | PROPOSED | §3.4 |
 | P2 | The four control clusters and their spatial prices | PROPOSED | §2.4 |
-| P3 | The grain law (claimant formality sets the direction of the grain shift) | PROPOSED | §4.5 |
+| P3 | The grain profile (claimant formality may bias a grain shift where the host can legally repartition) | PROPOSED DEFAULT | §4.5 |
 | P4 | The four free devices (owned diagonal, owned approach, appended strip, void+owned light) | PROPOSED | §5.3 |
-| P5 | The envelope law (a confined claim fills its licensed envelope in 3D, then stops) | PROPOSED | §9.5 |
-| P6 | The boundary law (regime boundaries are inherited, not built) | PROPOSED | §10.2 |
+| P5 | The compression profile (some confined claims fill a licensed envelope before seeking overflow) | PROPOSED PROFILE | §9.5 |
+| P6 | The inherited-boundary bias (prefer existing boundaries; constructed boundaries remain legal when caused) | PROPOSED DEFAULT | §10.2 |
 | P7 | Rung weighting biased toward LC-0/LC-1/LC-2 | PROPOSED | §3.2 |
 | P8 | A `LayeredControl` record in the roller preservation ledger (Site 8 currently has none) | PROPOSED | §8.5 |
 | P9 | Site 8 should stop being the census's mapping target for the Underworks district | PROPOSED | §12.6 |
@@ -129,9 +129,12 @@ told. Nothing else in the twelve produces that.
 
 Classified per the catalog's recommendation classes.
 
-**REQUIRED — the host keeps working.** A layered-control tavern still gives hospitality; a layered-
-control mine remains causally related to extraction; a layered-control prison still preserves
-custody and property obligations. Violation rejects the candidate. (Ontology §5.3.)
+**REQUIRED — the host program remains the thing under control.** At LC-0 through LC-4, a
+layered-control tavern still gives hospitality, a mine remains causally related to extraction,
+and a prison preserves custody and property obligations. LC-5 may temporarily impair or suspend
+operation, but the conflict must still be over those named circuits and retain their recovery or
+failure obligations. A host whose program has become irrelevant is a different composition, not
+Layered Control. (Ontology §5.3.)
 
 **REQUIRED — two persistent, simultaneous claims.** Both must be *persistent*: temporary
 co-presence is not layered control. Two crews drinking in one room is not the transform; a
@@ -272,7 +275,7 @@ branch**, ontology acceptance item 2 is met.
 
 Whether the transform composes with *another* transform on the same host (layered control over a
 dormant host, or under flooding); whether the many-claimant shape needs its own rung; and whether
-the grain law (§4.5) survives changed seeds.
+the grain profile (§4.5) survives changed seeds.
 
 ---
 
@@ -297,8 +300,10 @@ the same physical object.
    that the first may not, or vice versa, expressible as a sentence a player could hear.
 4. **A tell** — something *visible* that a player who reads the room can find: a mark, a wear
    pattern, a seat left empty, a lamp with an owner, a sign that states a rule (image `lc9`).
-5. **A hidden fact behind a knowledge gate** — the *evidence*, distinct from the tell. Committed
-   before observation; consumes `place-secret` where one is rolled.
+5. **An information state** — either the claim is openly legible, or evidence sits behind a
+   knowledge gate distinct from its visible tell. Hidden evidence is committed before observation
+   and consumes `place-secret` where one is rolled; an overt legal or customary claim need not
+   invent a secret.
 6. **A schedule or signal that changes access** — an hour, a shift, a bell, a closed gate, a
    fair's duration. May be the only spatial expression at LC-1.
 7. **One truthful egress under each regime** — the player must be able to leave, and the two
@@ -356,21 +361,22 @@ cantilevered or corbelled off the court wall, with a wooden balustrade. That is 
 repeatable piece and it puts every claimant's door in sight of every other. It is proposed as the
 transform's preferred inherited deck where the host licenses one.
 
-### 4.5 P3 (PROPOSED) — the grain law
+### 4.5 P3 (PROPOSED DEFAULT) — the grain profile
 
-> When a claimant's zone is materialised inside a host, its **mass grain** shifts relative to the
-> host's, and the direction of the shift is a function of the claimant's **formality**, not of
-> depth. An informal claimant refines and disorders the grain — more and smaller masses, more doors,
-> irregular surface, added stairs and decks. An institutional claimant coarsens and regularises it —
-> fewer and larger masses, repeated bays, dressed surface, symmetry.
+> Where a claimant has actually altered a legally repartitionable part of the host, its
+> **mass grain may shift** relative to the host's. Claimant formality biases the direction:
+> informal occupation tends toward smaller irregular masses and opportunistic access;
+> institutional occupation tends toward repeated bays, coarser masses and regular surfaces.
 
 Evidence: FFT MAP031 → MAP032 (trade city → slum: two large regular masses become twenty small
 irregular ones, dressed stone becomes dirt) versus MAP056 → MAP057 (monastery → underground archive:
 irregular organic ground becomes a rigidly symmetric masonry hall with repeated shelf bays);
 confirmed by MAP038 → MAP040. Lane 2 §3.1.
 
-Consequence for the generator: **LC-3 is produced by re-partitioning an existing composition, not by
-laying out a new one.** That is what keeps the transform from becoming a level generator.
+Consequence for the generator: an LC-3 candidate may re-partition an existing composition only
+when construction, tenure and observation facts license it. Many LC-3 cases should remain purely
+operational overlays. Grain is never evidence that a claimant exists and never permission to
+rewrite host structure.
 
 ---
 
@@ -511,14 +517,16 @@ Easy to revise? Yes — it is additive.
 Proof needed to judge: a plan diagram of one court with four separately doored cells and a shared
 water source, against the same court read as a two-claimant LC-3.
 
-**Q2 — may the transform re-rank the host's routes? (potentially blocking)**
+**Q2 — may the transform change route desirability without changing route truth? (potentially blocking)**
 Plain English: FFT's Slums in Dorter puts the only public route on the *worst* ground on the board.
 That is excellent gameplay, and it is a change to the host, not a delta on top of it.
-Alternatives: (a) the transform may re-rank route desirability but never route topology;
-(b) strictly no — the host's route ranking is untouchable; (c) re-ranking allowed only at LC-3+.
-Recommendation and reason: **(a), and it should be built into the first proof** — re-ranking without
-re-routing is the whole of the grain law's gameplay value, and it is cheap; forbidding it would make
-LC-3 visually distinct but tactically inert.
+Alternatives: (a) the transform may derive claimant- and PC-relative desirability from
+access, risk, schedule and service deltas while preserving topology, capacity and host route
+truth; (b) strictly no derived ranking; (c) derived ranking only at LC-3+.
+Recommendation and reason: **(a), built into the first proof.** A public route may become slower,
+more exposed or unavailable to one actor without ceasing to be the host's public route. The
+transform records those costs; it may not mutate topology or replace a canonical ranking with one
+global answer.
 What it changes later: the delta compiler's contract, and whether Site 8 can make an existing site
 meaningfully harder without touching its geometry.
 Easy to revise? **No.** This is the one answer that shapes the compiler's boundary, which is why the
@@ -532,15 +540,17 @@ roll is 60% covert-or-parallel but includes "law, charters, and bureaucracy" and
 persuasion." Should the claimant-legitimacy roll be flat, or lean criminal because it is more
 immediately playable?
 Alternatives: (a) flat across criminal / customary / chartered / official; (b) lean criminal;
-(c) derive legitimacy from the rolled `method` and never roll it separately.
-Recommendation and reason: **(c), built first** — the world already rolled a method, and deriving
-legitimacy from it costs nothing, keeps the two facts from contradicting each other, and
-automatically produces the legal-vs-legal case at the rate the method table already implies.
+(c) derive legitimacy from the claimant's committed authority, ownership, law, custom and
+recognition facts, while `method` describes how the claim is pursued.
+Recommendation and reason: **(c), built first.** Tactic is not standing: coercion can enforce a
+legal office and persuasion can serve an outlaw. The world must either supply legitimacy facts or
+record the claimant as disputed/unknown; the transform may not infer legitimacy from `method`
+alone.
 What it changes later: the tone of the whole transform, and whether the monastery-exemption case is
 reachable at all.
 Easy to revise? Yes — it is a mapping table.
-Proof needed to judge: a 20-roll cohort of `method → legitimacy` with the resulting claimant
-descriptions, read side by side.
+Proof needed to judge: a 20-roll cohort crossing `method` with authority/ownership/recognition
+facts, including deliberate mismatches, read side by side.
 
 ---
 
@@ -651,7 +661,8 @@ This spec does not add it; the integrating pass should.
 - host program and operating model, with its zones, fixtures, routes, schedules and obligations;
 - the committed `SemanticSitePlan` and the current `MaterializationWindow` with its licensed
   frontiers;
-- claimants: name, `dominant`, `agenda`, `method`, clock state, derived legitimacy;
+- claimants: name, `dominant`, `agenda`, `method`, clock state, and committed
+  authority/ownership/recognition facts from which standing may be resolved;
 - the PC's `standing`, `rollFactionProximity` tie, and `w.renown.factions` scores;
 - the opening tension / current pressure;
 - `place-secret` and any committed rumour, job, debt, property or promise;
@@ -678,16 +689,18 @@ A delta set, never a plan:
 
 1. Test the eligibility predicate against canon. If it fails, emit nothing — this is not a fallback,
    it is the correct answer.
-2. Derive claimant legitimacy from `method` (Q3 recommendation) and recognition from `renown` +
-   `standing`.
+2. Resolve claimant standing from authority, ownership, law/custom and recognition facts; use
+   `method` only for tactic. Resolve PC-relative recognition from `renown` + `standing`.
 3. Choose the **lowest rung** whose obligations the current window can home.
 4. Bind claim targets to existing semantic role ids. Prefer sharing; a shared physical realization
    does not collapse two semantic identities.
 5. Home the seven delta obligations (§4.2). Run the capacity test.
-6. Place tells on surfaces the fixed camera can actually see; place evidence behind a gate.
-7. Assign owners and hours to the host's existing routes and deck. Apply route **re-ranking** if Q2
-   resolves to (a).
-8. Apply the grain shift (§4.5) only where a zone is materialised, and only by re-partitioning.
+6. Place tells on surfaces the fixed camera can actually see; where a hidden fact exists, place its
+   evidence behind a gate.
+7. Assign owners and hours to the host's existing routes and deck. Derive actor-relative route
+   desirability if Q2 resolves to (a), without mutating topology, capacity or host truth.
+8. Apply the grain profile (§4.5) only where committed construction and tenure facts license
+   re-partitioning.
 9. Reserve approach, retreat, quiet ground and interaction space; do not fill quiet ground to prove
    the claim exists.
 10. Assign light owners; leave unowned ground unlit.
@@ -702,11 +715,12 @@ ground; the claim concentrates into one or two truthful knots. Image `lc2` is th
 quiet paved square with the single activity knot in the ground-floor colonnade on one side. **The
 renderer may not scatter claimant props to prove the transform fired.**
 
-### 9.5 P5 (PROPOSED) — the envelope law
+### 9.5 P5 (PROPOSED PROFILE) — confined-envelope compression
 
-> A confined claim expands to the exact limits of its licensed envelope in all three dimensions and
-> then stops. It subdivides, stacks, compresses floor heights and multiplies doors rather than
-> crossing its boundary.
+> A claimant that is canonically confined, permitted to build, and under demonstrated capacity
+> pressure may fill its licensed envelope before seeking overflow. It may subdivide, stack,
+> compress floor heights and multiply doors only where support, access, construction and
+> observation facts permit.
 
 Evidence: the Venetian Ghetto's seven-to-eight-storey blocks in a city that does not build that way
 (image `lc2`); Kowloon Walled City's hard footprint and flat roofline at the aviation cap (image
@@ -714,7 +728,9 @@ Evidence: the Venetian Ghetto's seven-to-eight-storey blocks in a city that does
 stairs replacing external ones, light wells instead of yards, and party walls carrying loads they
 were not sized for — which is *why* such fabric reads as fine-grained and improvised from outside.
 
-This gives the overflow law a countable positive behaviour instead of only a prohibition.
+This is one countable compression profile, not a universal behavior of confined claims. A legal
+enclave may retain gardens; a sparse occupation may never build; an institutional claimant may
+prefer demolition and regularisation.
 
 ---
 
@@ -725,10 +741,13 @@ This gives the overflow law a countable positive behaviour instead of only a pro
 Reject the candidate before presentation when:
 
 1. the predicate is not met — fewer than two persistent claims, or no consequential difference;
-2. the host's own program is no longer performable under the deltas;
+2. at LC-0–LC-4 the host's program is no longer performable, or at LC-5 its impairment/
+   suspension lacks a committed cause, recovery/disposition path, and continuing host
+   obligations;
 3. any of the seven delta obligations (§4.2) has no home;
 4. the permission delta cannot be stated as a sentence a player could hear;
-5. there is a tell but no evidence, or evidence but no tell;
+5. a hidden claim has a tell but no committed evidence, or evidence but no observable route to
+   learning it;
 6. the hidden fact was committed **after** the player observed the space;
 7. a room, exit, cellar or wing was added without a satisfied overflow clause;
 8. all viable plans cost the same, or one plan is best on speed, safety, access and information;
@@ -743,11 +762,12 @@ Reject the candidate before presentation when:
 17. the transform emitted a replacement site plan rather than deltas;
 18. a changed seed preserves the picture by destroying the reading.
 
-### 10.2 P6 (PROPOSED) — the boundary law
+### 10.2 P6 (PROPOSED DEFAULT) — inherited-boundary bias
 
-> The boundary between two control regimes is **inherited** — a slope, a water line, a tree line, a
-> road, a wall the host already built — far more often than it is constructed by either claimant.
-> A fence drawn around a claimant zone is a rejection condition unless a rolled fact built it.
+> Prefer an **inherited** boundary — slope, water line, tree line, road, schedule, legal line or a
+> wall the host already built — when it truthfully carries the split. A claimant-built fence,
+> checkpoint, partition or barrier is legal when a committed construction or enforcement fact
+> caused it.
 
 Evidence: image `lc10` (Rocinha/São Conrado: the boundary is where the slope starts); FFT MAP091
 (water and one pier); the Alsatia liberty, whose boundary was a *legal* line the sheriffs fought at
@@ -940,8 +960,8 @@ interaction reach is geometry or a mechanism — not a decorative prop.
 
 The transform's reach is unusually good precisely because it owns so little:
 
-- **Across hosts:** every one of the seven host programs plus every ordinary venue program can take
-  it. The proof set deliberately spans three.
+- **Across hosts:** every retained host proof plus ordinary venue programs can take it. The
+  proof set deliberately spans three unlike hosts.
 - **Across walks:** urban (a district or frontage), wilderness (a route service or camp under a
   second claim), dungeon (an occupied level with a resident authority). The same delta set serves
   all three because it never touches traversal.
@@ -963,14 +983,14 @@ The transform's reach is unusually good precisely because it owns so little:
 
 Schema names may change; the fixture must retain the equivalent of:
 
-`claimantIds` · `claimantLegitimacy` · `claimantMethodRef` · `dominantClaimantId` ·
+`claimantIds` · `claimantStanding` · `claimantStandingSourceRefs[]` · `claimantMethodRef` · `dominantClaimantId` ·
 `claimTargets[]` (each bound to a host semantic role id) · `controlDimensions[]` ·
 `rungId` (`LC-0`…`LC-5`) · `claimStrength` · `openness` · `frictionState` ·
 `accessProfiles[]` · `scheduleWindows[]` · `permissionDeltas[]` · `serviceDeltas[]` ·
 `custodyDeltas[]` · `informationDeltas[]` · `recognitionState` (derived from `w.renown` +
 `standing`, never a second number) · `tellIds[]` with their surface/fixture bindings ·
-`evidenceIds[]` with their knowledge gates · `occupationZoneIds[]` · `frontIds[]` (LC-5 only) ·
-`routeOwners[]` and `routeRankDelta[]` · `deckOwner` · `lightOwners[]` · `capacityFacts[]` ·
+optional `evidenceIds[]` with their knowledge gates · `occupationZoneIds[]` · `frontIds[]` (LC-5 only) ·
+`routeOwners[]` and actor-relative `routeCostDeltas[]` · `deckOwner` · `lightOwners[]` · `capacityFacts[]` ·
 `transitionTriggers[]` · `legalOutcomes[]` · `objectiveIds[]` · `planTradeoffs[]` ·
 `relaxations[]` · `rejections[]` · `overflowClausesUsed[]`.
 
@@ -993,7 +1013,8 @@ validation results · every fallback used · and context-off/on pairs.
 
 One deterministic `LC-2` hospitality venue from a **real roll** (not an authored fixture):
 
-- two claimants drawn from that world's live `w.factions`, with legitimacy derived from `method`;
+- two claimants drawn from that world's live `w.factions`, with standing resolved from committed
+  authority/ownership/recognition facts and `method` retained separately as tactic;
 - all seven delta obligations homed inside the existing window, **with no map growth**;
 - one threshold, one two-owner fixture, one tell, one gated evidence, one schedule window;
 - four standee envelopes checked at the threshold and along any strip;
@@ -1009,7 +1030,7 @@ One deterministic `LC-2` hospitality venue from a **real roll** (not an authored
 ### 15.2 MVP
 
 The Proof, plus: the same delta compiler applied to **mine/workshop** and **prison/custody** with no
-host-specific branch; the four free devices available to the composer; the grain law implemented as
+host-specific branch; the four free devices available to the composer; the grain profile implemented as
 re-partitioning; the five site-owned pieces built; two claimant/recognition culture cards that change
 construction or interaction facts; LC-0 through LC-3 reachable by canon; demotion and residue paths;
 the transition vocabulary consuming `turnFactionOutcome`; and a legal overflow case proved against a
@@ -1031,7 +1052,7 @@ collapse played out over a campaign; and honest promotion into contested-fortres
 3. **A many-claimant cohort** — lane 1 has one case, lane 2 has none.
 4. **A non-European parallel-jurisdiction case** (millet, waqf, paréage) to test whether the four
    control clusters are complete.
-5. **A changed-seed test of the grain law**, which currently rests on two FFT map pairs and one
+5. **A changed-seed test of the grain profile**, which currently rests on two FFT map pairs and one
    confirmation.
 6. **Founder answers to Q1–Q3**, with Q2 potentially blocking the compiler contract.
 

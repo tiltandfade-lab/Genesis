@@ -1,9 +1,10 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: DRAFT — CODEX ADVERSARIAL REDLINE APPLIED; FOUNDER QUESTIONS REMAIN OPEN
 
 ---
 type: working-site-spec
 created: 2026-07-27
-status: WORKING SPEC — first depth-law pass returned; NO founder ruling exists; clay OPEN
+updated: 2026-07-28
+status: WORKING SPEC — first depth-law pass returned; adversarial redline applied; NO founder ruling exists; clay OPEN
 site: 11 — mixed scale / dragon domain
 portfolio-role: scale / relationship stress case
 method: GOLDEN-SITE-CONCEPTING-GUIDELINES.md
@@ -26,8 +27,9 @@ spawnable: intel-sites/SITE-11-SPAWNABLE.md
 classification, step 8 working-spec standard) → `SETTLED-LIFE-SITES-PROGRAM.md` §2 (the
 noun/state law) → this spec → `intel-sites/SITE-11-SPAWNABLE.md`.
 
-Construction authority remains `STRUCTURE-KIT-CATALOG.md`; this spec refines only Site 11's
-own buy and does not change another site's ownership or the shared socket/access rules.
+Construction authority remains `STRUCTURE-KIT-CATALOG.md`; this spec identifies
+Site-11-sponsored provider gaps and does not create Site-only runtime ownership or change the
+shared socket/access rules.
 
 ### 1.2 Nothing here is ruled
 
@@ -35,13 +37,13 @@ own buy and does not change another site's ownership or the shared socket/access
 `PROPOSED`. Founder items arrive as proposed build orders under THE GENERATOR PRINCIPLE, never
 as A-or-B choices, and nothing in this file may be cited as authority for an implementation.
 
-### 1.3 Proposed status-gate line
+### 1.3 Adversarially integrated status-gate line
 
-Proposed for the `GOLDEN-SITES-CATALOG.md` status table. **Not applied here** — this spec
-touches no shared file. A human or the integration pass applies it.
+The 2026-07-28 integration pass applies this reading in
+`GOLDEN-SITES-CATALOG.md`:
 
 ```
-| 11 Mixed Scale / Dragon Domain | PARTIAL | OPEN | PARTIAL | OPEN | first depth-law pass returned (breadth sweep with four relational modes, 13-image licence ledger, six-map FFT cohort, recomputed live-roller audit); demand recomputed at 18.55% of wilderness arrivals — 3.7× the census figure, second to dormant/ruin at 25.42% on a like-for-like control — and found to be prop-shaped, not site-shaped; the two-body law, aperture pair, hoard-terrain physics, and the Site-12 boundary test are all PROPOSED and unruled; measured large-body plans, a culture study, and FFT-lane reproducibility remain open; nothing rendered |
+| 11 Mixed Scale / Dragon Domain | PARTIAL | OPEN | PARTIAL | OPEN | first depth-law pass returned (breadth sweep with four relational modes, 13-image licence ledger, six-map FFT cohort, recomputed live-roller audit); 18.55% of wilderness arrivals hit a broad mixed-scale object screen, but Site-11 activation was not measured; the consequential-scale contract, aperture pair, shared granular-terrain physics, and Site-12 composition test are all PROPOSED and unruled; measured large-body plans, a culture study, and FFT-lane reproducibility remain open; nothing rendered |
 ```
 
 If the `role` column proposed by `SETTLED-LIFE-SITES-PROGRAM.md` §2.2 is adopted, Site 11's
@@ -56,23 +58,23 @@ value is `scale`.
 | `BRIEF-CONGRUENT` | `PARTIAL` | all fifteen sections and the ten-section brief material are present, but unresolved proposals carry load throughout |
 | `CLAY-PROVED` | `OPEN` | nothing rendered. This document is prose and arithmetic; neither can earn this gate |
 
-### 1.5 The one proposed ruling this spec asks for first
+### 1.5 Adversarially accepted composition rule
 
-**PROPOSED RULING — BIGNESS IS NOT ANOMALY.** Site 11 owns spaces that are *dimensionally*
-strange but *physically ordinary* — euclidean, static, obeying gravity and ordinary material
-behaviour. Site 12 owns spaces that are *physically* strange — non-euclidean, moving, living,
-self-altering — **at any size**. `The Megastructure` (`dungeon-type` rows 98–99) therefore
-routes to **Site 12**, not Site 11, because its own theme column reads *"Anomaly / Ancient
-technology"* and its flavour reads *"non-euclidean walls shift in faint mechanical rhythm."*
-Neither row mentions size.
+**REVIEWED RULING — BIGNESS IS NOT ANOMALY.** Site 11 proves a `ScaleContract`; Site 12
+proves a `SubstratePlan` and terminal substrate transformation. The contracts are orthogonal
+and may compose. `The Megastructure` (`dungeon-type` rows 98–99) clearly asks for anomalous
+substrate behavior because its theme reads *"Anomaly / Ancient technology"* and its flavour
+reads *"non-euclidean walls shift in faint mechanical rhythm."* It also takes a ScaleContract
+when its apertures or routes create consequential affordance differences. Neither Golden
+number replaces its ordinary host identity.
 
 This resolves the ambiguity `docs/intel/walk-census.md` §3 flagged explicitly. The three-question
 test and the corollary are in §12.5.
 
 ### 1.6 Unresolved proposals carrying load
 
-`THE TWO-BODY LAW` (§2.2) · `THE SCALE-RATIO THRESHOLD` (§2.2) · `THE APERTURE PAIR` (§4.3) ·
-hoard terrain as a terrain type rather than a prop (§6.3) · the four-mode build order (§3.2) ·
+`THE TWO-SCALE LAW` (§2.2) · consequential-scale eligibility (§2.2) · `THE APERTURE PAIR` (§4.3) ·
+shared granular terrain as a terrain type rather than a prop (§6.3) · the four-mode build order (§3.2) ·
 the Site 11/12 boundary test (§12.5) · the gargantuan pixels-per-foot drop (§4.5) · every
 numeric hypothesis in §4.
 
@@ -97,19 +99,17 @@ body cannot reach. Those gaps are the player's advantage, and finding them is th
 
 Recommendation classes per `GOLDEN-SITES-CATALOG.md`.
 
-- **REQUIRED — THE TWO-BODY LAW.** At least two body classes must have a *simultaneous,
-  consequential, and different* relationship to the same space. Test it by removal: take the
-  small body out — does the space still make sense? Take the large body out — does it? If
-  either removal leaves the space playing the same way, the candidate is not Site 11. This is
-  the invariant that stops "a cave with a dragon in it" from claiming this number, and it
-  agrees with Site 7's existing boundary note.
-- **REQUIRED — THE SCALE-RATIO THRESHOLD.** The ratio between the largest and smallest
-  resident body class must be **≥ 3 tactical cells** — i.e. Huge or larger against
-  Medium/Small. Grounded in the live spans in `src/ui/theater-standee-mount.js`
-  (`large → 2`, `huge → 3`, `gargantuan → 4`). Below 3, ordinary hosts already handle it: a
-  Large ogre in a guard post is a guard post with an ogre in it. At ≥ 3 the *space itself*
-  stops meaning what it usually means — apertures, treads, reach, cover, and sightline all
-  change class.
+- **REQUIRED — THE TWO-SCALE LAW.** At least two represented body-scale contracts must have
+  a consequential and different relationship to the same space. The larger body may be
+  present, absent, historical or only the intended user, provided its scale still changes
+  route capacity, reach, cover, access or interaction for play now. A cave with a dragon in it
+  does not qualify unless those affordances differ; an inherited giant-built hall may qualify
+  with no giant present.
+- **REQUIRED — CONSEQUENTIAL SCALE.** Eligibility is an affordance test, not a fixed ratio.
+  At least one aperture, route, reach, cover, traversal or interaction fact must resolve
+  differently for the two scale contracts. Huge-versus-Medium (3 cells versus 1) is the
+  recommended first proof because it is visually obvious and already represented by live
+  spans, not because 3:1 is a universal threshold.
 - **REQUIRED — the oversize must be reachable.** Whatever is out of scale must be something
   the player can stand on, climb, hide inside, shoot through, be blocked by, or be denied by.
   Scale that lives only in the ceiling is dressing, not this site. (FFT anti-rule 3.)
@@ -120,8 +120,9 @@ Recommendation classes per `GOLDEN-SITES-CATALOG.md`.
 - **REQUIRED — the walkable cell stays 5 feet.** Site 11 never enlarges the tactical grid.
   Scale is expressed in the envelope, the pieces, and the apertures. (FFT anti-rule 1;
   agreed independently by the built record — the Tiryns gallery is one cell wide.)
-- **REQUIRED — physically ordinary.** Euclidean, static, gravity-obeying, ordinary materials.
-  The moment the substrate misbehaves, the host is Site 12. (§1.5.)
+- **REQUIRED — host identity remains independent.** An ordinary or anomalous substrate may
+  carry the same ScaleContract. When substrate behavior matters, compose Site 12's shared
+  contract; do not reroute or replace the host. (§1.5.)
 - **DEFAULT — the scale has a named cause.** A builder, an intended occupant, a set of
   remains, or a present colossus explains the measurements. An unexplained big room is a big
   room.
@@ -307,10 +308,11 @@ No number becomes binding until standee fit, collision, fixed-camera legibility,
 play choices agree. The first proof must show **four standee envelopes in one frame**: small,
 six-foot human, Huge (3 cells), and Gargantuan (4 cells).
 
-### 4.5 The standee and sprite constraint — the tray problem Site 11 owns
+### 4.5 The standee and sprite constraint — the tray problem Site 11 first proves
 
-Site 11 is **the only site that routinely puts a solo-sheet titanic sprite and a
-sixteen-per-sheet medium sprite in the same frame at the same time.** Two live consequences.
+Site 11 is the portfolio's first retained proof that routinely puts a solo-sheet titanic
+sprite and a sixteen-per-sheet medium sprite in the same frame at the same time. Other hosts
+may later consume the same `ScaleContract`. Two live consequences follow.
 
 **(a) The engine currently holds two different answers for "how big is Gargantuan."**
 
@@ -433,12 +435,12 @@ that space as difficult terrain. So a Medium body may legally move through a Hug
 space, and a Small body through a Large one's. That is not a Site 11 invention; it is the
 existing rule, and it means **the two-body relationship already has mechanical teeth in the
 combat layer before any geometry is built.** Medium (1 cell) to Huge (3 cells) is the smallest
-gap at which it applies — the same gap the spec's `SCALE-RATIO THRESHOLD` proposes, which is
-useful independent support for the number rather than a coincidence worth ignoring. (Whether
+gap at which this particular movement rule applies, which makes it a useful first-proof
+calibration without turning it into a universal Site-11 threshold. (Whether
 the SRD wording means *exactly* two sizes or *at least* two is a reading question the combat
 layer already has to have settled; this spec does not resolve it and should not.)
 
-### 6.3 Hoard terrain — PROPOSED as a terrain type, not a prop
+### 6.3 Granular mass — PROPOSED shared terrain provider, with hoard as one use
 
 Restated as real-world construction first: a heap of loose material stands at its angle of
 repose. Steeper and it slides; shallower and it sits. Loose granular material sits broadly in
@@ -465,9 +467,11 @@ mixed, size-varied, and matte in aggregate — not a uniform gleaming pile. Hoar
 should read as *aggregate*, with individual legible objects only at the surface and edges.
 
 **Why terrain and not a prop.** As a prop it is loot wallpaper and Site 7 is already borrowing
-"a bounded hoard-pile prop until site 11 mints hoard terrain properly." As terrain it gives
-Site 11 a mechanic no other site owns, gives Site 7 the thing it is waiting on, and makes the
-dragon's floor a decision instead of a texture. This is Founder Question 2.
+"a bounded hoard-pile prop until site 11 mints hoard terrain properly." As a shared
+`GranularMass` terrain provider it serves hoard, mine spoil, rubble, grain, salt, ash, scree
+and bulk cargo without giving Site 11 exclusive ownership of a general mechanic. Site 11
+sponsors the first hoard proof and consumes the same provider through its `ScaleContract`.
+This is Founder Question 2.
 
 ---
 
@@ -539,7 +543,7 @@ Full audit with reproduction commands:
 
 | source | status | evidence |
 |---|---|---|
-| `wilderness-feature` (d303, `table_class: Fork`) — **49 of 303 rows (16.2%) are mixed-scale relics** with footprint, height, and tactical effect | `LIVE` | **100 of 539 census arrivals (18.55%)** across 45 distinct rows. Second to dormant/ruin (25.42%) on a like-for-like control sweep; 28 arrivals are caught by both, i.e. one row carrying a Site 3 state and a Site 11 relationship at once |
+| `wilderness-feature` (d303, `table_class: Fork`) — **49 of 303 rows (16.2%) hit the broad mixed-scale object screen** with footprint, height, and tactical effect | `LIVE` | **100 of 539 census arrivals (18.55%)** across 45 distinct rows. This is candidate-asset frequency, not Site-11 activation; 28 arrivals also hit the broad dormant screen and are valuable composition candidates |
 | `wilderness-tactical-terrain` rows 22 (Hollow Tunnel, "Medium creatures must crawl") and 36 (Rampart of Bone/Fossil, `Slotted Cover`) | `LIVE` (row) | same live wilderness path |
 | `dungeon-area-type` — "Massive Cavern" / "Massive Hall" / "Grand Chamber" etc., 15 of 200 rows | `LIVE` | 33 of 1,473 rolled dungeon rooms (2.24%) |
 | `walk-archetypes.js` `"Dragon Lair"` (`sizeMax: gargantuan`) | `LIVE` | 6 of 253 dungeon walks (2.37%) |
@@ -609,7 +613,8 @@ set of creature envelopes that must fit.
 
 ### 9.3 Generation order
 
-1. Commit the two body classes, their spans, presence, and the host program.
+1. Commit the two represented body-scale contracts, their spans, presence/history state, and
+   the host program.
 2. Choose the relational mode from the committed facts — never from a preferred look.
 3. Place the scale-setting body's volume(s) first. Everything else is negative space around it.
 4. Cut the big-body apertures to the large span; verify passage without contact.
@@ -631,15 +636,18 @@ set of creature envelopes that must fit.
 
 Reject the candidate before presentation when:
 
-- fewer than two body classes have a consequential relationship to the space (`TWO-BODY LAW`);
-- the largest-to-smallest span ratio is below 3 cells (`SCALE-RATIO THRESHOLD`);
+- fewer than two represented body-scale contracts have a consequentially different
+  relationship to the space (`TWO-SCALE LAW`);
+- no aperture, route, reach, cover, traversal or interaction affordance resolves differently
+  between them (`CONSEQUENTIAL SCALE`);
 - the oversize is not standable, climbable, enterable, shootable-through, or blocking;
 - no unscaled reference is present in the fixed camera's frame;
 - any walkable cell is not 5 ft;
 - the small-body route admits a 2-cell body anywhere along its run;
 - the big-body aperture does not clear the committed occupant span without contact;
 - the large body has no position that changes what is reachable or watched;
-- the space is non-euclidean, moving, or living (→ it is Site 12; reroute, do not adapt);
+- anomalous substrate behavior is consequential but no `SubstratePlan`/Site-12 composition is
+  recorded;
 - a granular mass exists with no accumulating agent and no reason;
 - an unstable slope exists with no downslope destination;
 - the fixed camera cannot legibly show a 4-cell standee and a 1-cell standee together;
@@ -655,7 +663,8 @@ Try in order and record the relaxation:
 3. reduce the number of repeated bays while keeping at least one complete aperture pair;
 4. drop the relational mode one rung of expense (D → C → B → A) while keeping both body
    classes present;
-5. reduce the large body one size class, **only if** the ratio stays ≥ 3 cells;
+5. reduce the large body one size class only if the consequential affordance difference
+   survives;
 6. shorten the granular mass while preserving its slope decision;
 7. reject and reroll.
 
@@ -736,20 +745,19 @@ per `GOLDEN-SITE-WORLD-CONTEXT-PROJECTION.md`. **No context receipt has been rol
 
 ### 12.5 Boundaries with other sites
 
-- **Site 12 — Anomalous / Living / Mobile.** THE boundary, and the one this spec proposes a
-  ruling on. Three-question test, in order: (1) does the space obey euclidean geometry,
-  gravity, and ordinary material behaviour? No → Site 12, stop. (2) do its measurements have a
-  named cause in some body's size? No → it is the host with an unusual footprint. (3) do two
-  body classes have a simultaneous consequential relationship to it? No → it is the host with a
-  big occupant. All three must pass. **`The Megastructure` fails (1)** — its own theme column
-  says *"Anomaly / Ancient technology"* and its flavour says *"non-euclidean walls shift"* —
-  and therefore routes to Site 12. **Corollary:** a Megastructure may still carry a Site 11
-  *transform* if its corridors are sized for another body class. The host does not change.
-  This is the noun/state law of `SETTLED-LIFE-SITES-PROGRAM.md` §2 applied unchanged.
+- **Site 12 — Anomalous / Living / Mobile.** These are orthogonal stress contracts. Ask:
+  (1) does body/object scale change a present affordance? If yes, apply `ScaleContract`;
+  (2) does support, datum, mobility, anchoring or substrate state change play? If yes, apply
+  `SubstratePlan`; (3) does Becoming/Intrusion change that substrate? If yes, apply the
+  transformation. **`The Megastructure` clearly needs the substrate side** because its source
+  says *"Anomaly / Ancient technology"* and *"non-euclidean walls shift"*. It also needs
+  ScaleContract when differently sized routes or apertures are consequential. Neither answer
+  replaces the Megastructure host.
 - **Site 7 — Natural Lair.** Site 7 owns the lair interior grammar at ordinary scale, and its
   brief already says a dragon-lair occupancy may borrow a bounded hoard-pile prop "until site
   11 mints hoard terrain properly." This spec accepts that boundary and proposes to discharge
-  the debt: hoard terrain is Site 11's buy (§6.3), lent to Site 7 as terrain rather than prop.
+  the debt through the shared `GranularMass` provider (§6.3), sponsored by Site 11 and
+  available to Site 7 as terrain rather than prop.
   A big cave with a dragon in it stays Site 7.
 - **Site 9 — Contested Fortress.** Both are scale/relationship stress cases. Site 9's stress is
   *population and fronts* over a large defence; Site 11's is *body ratio*. A fortress built by
@@ -773,18 +781,19 @@ composition is organised around it) · **tight interior whose valid result is in
 simple** (the Rung-A one-object room) · **basin and rim** (the hoard landform, and the yard-and-
 bays relationship) · **stepped courtyard** (Mode-A inherited oversize treads as terraces).
 
-### 13.2 Inherit / invent split
+### 13.2 Provider ownership and proof-sponsored gaps
 
 **Inherits:** terrain slabs and terraces · ordinary wall/shell pieces · posts, beams, gable and
 shed cover · doorframe sockets · stairs and ramps · rock clusters · water surfaces · crate and
 store dressing · the entire ordinary-scale kit, unchanged, as the unscaled reference.
 
-**Invents (signature buy):**
+**Site-11-sponsored provider work:**
 
 1. **The aperture pair assembly** — one wall unit carrying a big-body opening and a small-body
-   opening with declared class capacities. The single most reusable piece.
+   opening with declared class capacities. The first `ScaleContract` assembly; reusable
+   outside Site 11.
 2. **Hoard / granular mass terrain** — a mass with a repose angle, a stable and an unstable
-   slope band, an accumulation state, and a slide rule.
+   slope band, an accumulation state, and a slide rule. Owned by shared `GranularMass`.
 3. **Anatomy pieces** — rib bay (slotted cover), jaw arch, skull chamber with socket openings,
    long-bone post, vertebral column as spine/deck. Sockets onto existing post/arch mounts.
 4. **Oversize piece variants (2×)** — sill, tread, lintel, cap, block. Explicitly generated to
@@ -792,6 +801,10 @@ store dressing · the entire ordinary-scale kit, unchanged, as the unscaled refe
 5. **Pinned parasitic access** — irregular stair, ledge, and rail that socket onto a mass at
    whatever height the mass offers rather than at a kit rhythm.
 6. **The tether / mounting-block family** — the Mode-B mechanism set.
+
+The proof sponsors and admits these gaps; runtime ownership belongs to `ScaleContract`,
+`GranularMass`, the ordinary host kit, or the anatomy/tether provider named by the eventual
+implementation map. There is no `if goldenSite === 11` asset path.
 
 ### 13.3 Mechanism and interaction ownership
 
@@ -823,13 +836,13 @@ interaction reach is geometry or a mechanism — not a prop.
 
 ### 13.5 Stretch analysis — how far Site 11's resources reach
 
-This is where Site 11 earns its number, because it is a transform: **its buys apply over every
-other site.**
+This is where Site 11 earns its number: it is the retained `ScaleContract` proof, and the
+providers it sponsors apply across ordinary hosts.
 
 - **The aperture pair** goes to Site 6 (a cell built for something bigger than a person), Site
   1 (a gate built for something that no longer comes), Site 2 (a pen), Site 4 (a beast-bearing
   cloister), Site 10 (a market's animal frontage), Site 5 (it is already the haul/manway split
-  in disguise). One assembly, seven hosts.
+  in disguise). One assembly across the retained host roster.
 - **Hoard terrain** goes straight to Site 7 (which is waiting on it), Site 5 (spoil and
   stockpile — the same mass with a different material), Site 3 (rubble and collapse cones), and
   Site 10 (grain, refuse, market bulk).
@@ -941,22 +954,23 @@ the only remaining invention.
 **Ladder links:** B degrades to A by deleting the envelope; B promotes to C by repetition and
 to D by replacing the built envelope with a body; D degrades to A by deleting the apparatus
 and keeping the body.
-**Tension to be aware of:** the measured demand (18.55% of wilderness arrivals) is all Mode-A/
-object-scale content, which argues for building A first. The counter-argument is that A built
+**Tension to be aware of:** the broad object screen (18.55% of wilderness arrivals) is all
+Mode-A/object-scale candidate content, which argues for building A first. It does not prove
+that every hit activates Site 11. The counter-argument is that A built
 first teaches nothing reusable — it is a prop family, and we would then still have to discover
 the aperture pair. **Recommendation: B first anyway**, with A landing immediately after by
 degradation rather than by separate invention.
 **Easy to revise?** Yes. The order costs sequencing, not exclusion.
 **Needs to judge it:** the §15.5 section-and-plan pair.
 
-### FQ-11-2 — Is hoard terrain a terrain type or a prop?
+### FQ-11-2 — Is hoard a shared granular terrain type or a prop?
 
-**Proposed build order: terrain first, prop as its degradation** — built with the first Mode-D
-composition, not with Proof.
+**Proposed build order: shared `GranularMass` terrain first, prop as its degradation** —
+built with the first Mode-D composition, not with Proof.
 **Learning:** as a prop it is loot wallpaper and teaches nothing; Site 7's brief is already
-carrying a placeholder prop and waiting. As terrain it gives Site 11 a mechanic no other site
-owns, discharges the Site 7 debt, and turns the dragon's floor into a decision. It also reaches
-Sites 5, 3, and 10 as spoil, rubble, and bulk.
+carrying a placeholder prop and waiting. As shared terrain it discharges the Site 7 debt,
+turns the dragon's floor into a decision, and reaches Sites 5, 3, and 10 as spoil, rubble,
+grain and bulk without assigning a general terrain mechanic to one Golden number.
 **Ladder links:** the prop version is a strict subset of the terrain version (a static mass
 with no slope band), so terrain degrades to prop cleanly; the reverse does not hold.
 **Easy to revise?** Downward, yes. Upward, no — a prop built first would be thrown away.
@@ -965,8 +979,8 @@ with a standee on each, so the stable/unstable read can be seen rather than argu
 
 ### FQ-11-3 — The mixed-register frame: does Site 11 gate a sprite re-render?
 
-**The situation.** Site 11 is the only site that routinely frames a solo-sheet titanic sprite
-beside a sixteen-per-sheet medium sprite. Under the round-4 sheet economy the band holds at
+**The situation.** Site 11 is the first retained proof that routinely frames a solo-sheet
+titanic sprite beside a sixteen-per-sheet medium sprite. Under the round-4 sheet economy the band holds at
 ~67 px/ft from Medium through Huge and drops to ~53 px/ft at Gargantuan — the biggest creature
 is the least detailed per foot. Separately, the engine currently carries two different answers
 for the Gargantuan ratio (4× on the billboard path, 2.2× on the cuboid path), and the

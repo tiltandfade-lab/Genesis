@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: DRAFT — CODEX ADVERSARIAL REDLINE APPLIED; RESEARCH/FOUNDER GATES REMAIN PARTIAL
 
 ---
 type: working-site-spec
@@ -759,14 +759,14 @@ The earlier `Surety/household custody` proposal is retired as the first-pair car
 social/sponsor relationships remain legal occupancy and plan inputs, but the doctrine
 itself lacks enough direct evidence for MVP promotion.
 
-**PROPOSED — CANDIDATE second comparison pair, 2026-07-27, not founder-ruled:**
+**Adversarially reviewed second-pair proposal, 2026-07-28, not founder-ruled:**
 `../Reference/Prison-Custody-Study-0727/DOCTRINE-PAIR-TWO.md` drafts
 `PR-DOC-10 — Yamen Magistrate Custody` against `PR-DOC-11 — Ward-and-Surety Custody`, following
-the same card schema and comparison-receipt discipline as the pair above. Unlike the pair above,
-this new pair has not passed Codex's own adversarial review and is explicitly not marked
-`SELECTED FOR PROOF`. `PR-DOC-11` in particular raises an unresolved question about whether this
-spec's own custody-boundary and force-truth invariants admit a social/legal (rather than
-spatial) realization — see the 2026-07-27 addendum section above.
+the same card schema and comparison-receipt discipline as the pair above. The adversarial
+review retains `PR-DOC-10` as a candidate but does not mark it `SELECTED FOR PROOF`.
+`PR-DOC-11` is not a custody doctrine: it is an external disposition/social-liability
+provider that may compose with a custody host but cannot replace the host's controlled
+threshold, force truth, or custody lifecycle.
 
 ## Occupancy states and hooks
 
@@ -909,7 +909,7 @@ locks, routes, property, disposition, actors, knowledge, and ids. The receipt ad
 `worldContextPlanId`, band/recipe ids, viewpoint/portal/support refs, source refs,
 omissions, false-affordance rejections, and fallbacks.
 
-### 2026-07-27 measured-breadth and second-doctrine-pair gap-close pass — DRAFT, PENDING CODEX ADVERSARIAL REVIEW
+### 2026-07-27 measured-breadth and second-doctrine-pair gap-close pass — ADVERSARIAL DISPOSITION 2026-07-28
 
 `../Reference/Prison-Custody-Study-0727/` closes two of the gaps the 2026-07-25 pass declared:
 measured cross-cultural custody evidence beyond the Anglo-American/British spine, and a real FFT
@@ -929,15 +929,17 @@ this spec's ruled PR1/PR2/PR3 decisions.
 - **Second doctrine pair** (`DOCTRINE-PAIR-TWO.md`): `PR-DOC-10 — Yamen Magistrate Custody`
   (custody fused permanently into the seat of judicial/administrative power, with no separate
   keeper role) and `PR-DOC-11 — Ward-and-Surety Custody` (custody as a distributed social/legal
-  obligation with **no purpose-built geometry at all**). Both are `PROPOSED — CANDIDATE`, not
-  `SELECTED FOR PROOF` — that status is deliberately withheld pending Codex's own review, unlike
-  the first pair's research-pass determination.
-- **A load-bearing question is flagged, not resolved:** `PR-DOC-11` tests whether this spec's own
-  REQUIRED "custody boundary" and "force has truth" invariants (above, under "Required
-  invariants") are written broadly enough to admit a social/legal threshold and a
-  reputational/legal force surface, or whether Ward-and-Surety custody is correctly a
-  disposition/occupancy overlay rather than a promotable doctrine. See
-  `DOCTRINE-PAIR-TWO.md` §4 and `synthesis.md` §7 item 1.
+  obligation with **no purpose-built geometry at all**). The review retains `PR-DOC-10` as a
+  candidate but not `SELECTED FOR PROOF`; `PR-DOC-11` fails the custody predicate and is
+  reclassified in the next bullet.
+- **Adversarial classification:** `PR-DOC-11` Ward-and-Surety is an external
+  disposition/social-liability provider, not a Prison/Custody doctrine. It may supply who is
+  answerable, who guarantees appearance, and what happens on breach, but it does not satisfy
+  the custody boundary or replace intake/property/holding/release obligations.
+- **Care/asylum boundary:** a care, refuge, hospital or asylum program is a distinct care
+  host. It composes `BF-CUSTODY` only when identifiable people are actually prevented from
+  leaving under a custody authority and the full property/service/disposition obligations
+  apply. Care need alone is not custody.
 - **FFT** (`FFT-COHORT-COMPARISON.md`): read honestly, not favorably — the 121-map corpus
   contains no named prison/jail/dungeon-custody map (Site 6 gets the Camp study's "zero direct
   hits" result, not the Mine study's "a whole named cohort" result). Two real, narrower findings
@@ -945,10 +947,9 @@ this spec's ruled PR1/PR2/PR3 decisions.
   for the faction-seized-prison occupancy silhouette. No tactical cell-block/gallery/control-
   landing cohort exists in FFT to compare against the working spec's own cell-front vocabulary.
 - **Gate consequence:** this pass strengthens `RESEARCHED: PARTIAL` within its tier; it does not
-  earn `RESEARCHED: PASS`. `FOUNDER-RULED` remains `PARTIAL` and gains one new open question
-  (the invariant-scope question above). `BRIEF-CONGRUENT` and `CLAY-PROVED` are unchanged. The
-  shared status-gate table in `GOLDEN-SITES-CATALOG.md` is not edited by this pass — see
-  `../Reference/Prison-Custody-Study-0727/synthesis.md` §3 for the proposed line.
+  earn `RESEARCHED: PASS`. `FOUNDER-RULED` remains `PARTIAL`; the surviving question is
+  Yamen doctrine sequencing. `BRIEF-CONGRUENT` and `CLAY-PROVED` are unchanged. The
+  2026-07-28 integration applies this reading in `GOLDEN-SITES-CATALOG.md`.
 
 ## Structure, mechanisms, and surfaces
 
@@ -1181,7 +1182,7 @@ passed.
 No Prison/Custody item remains in the founder queue. The unusual suspended fixture's
 exact timing remains an implementation-learning proposal.
 
-### 2026-07-27 gap-close pass — returned, PENDING CODEX ADVERSARIAL REVIEW
+### 2026-07-27 gap-close pass — returned; adversarial classification applied 2026-07-28
 
 `../Reference/Prison-Custody-Study-0727/` adds measured cross-cultural custody evidence (Qing
 China, Edo Japan, matched custody-without-architecture traditions, a partial Mesoamerican
@@ -1191,8 +1192,9 @@ the corpus). Full detail in the addendum section above and in the packet's own `
 Research remains `PARTIAL`, not `PASS`: the Ottoman lane still has no jail-interior evidence, the
 yamen's own cell dimensions were not found, the Tenmachō plan is untranslated, hostage/surety/
 quarantine/religious-penance custody remain research-needed, the suspended fixture still has no
-honest historical analogue, and nothing here is clay-proved. Three founder questions are carried
-forward in that packet's `synthesis.md` §7 rather than answered here.
+honest historical analogue, and nothing here is clay-proved. The Ward-and-Surety scope question
+is resolved as an external disposition provider; remaining founder questions stay in that
+packet's `synthesis.md` §7.
 
 ### Known implementation gaps
 

@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: RECONCILED SOURCE INVENTORY — NO IMPLEMENTATION AUTHORITY (2026-07-28)
 
 ---
 type: spawn-audit
@@ -15,6 +15,13 @@ authority: this document is an inventory, not a ruling. It classifies what the w
 ---
 
 # SITE 4 SPAWNABLE-CONTENT INVENTORY
+
+## 2026-07-28 adversarial reconciliation
+
+The cultural evidence rejects one universal cloister chassis. Inventory rows must route into
+at least wrapped-court, processional-campus, cliff/terrace, and distributed-house chassis
+before culture and doctrine layers are applied. A missing row is not permission to force a
+Japanese, Ethiopian, Coptic, Sufi, Shaker, Oneida, or kibbutz expression into one plan.
 
 Every concrete thing the Site 4 working spec implies can spawn in play, mapped to the Engine
 table/roller that would produce it, or marked `NO-TABLE-YET`. This feeds the spawn-audit lane;

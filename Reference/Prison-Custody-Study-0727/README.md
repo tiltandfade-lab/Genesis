@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: EVIDENCE PACKET — CODEX ADVERSARIAL REVIEW COMPLETE; RESEARCH REMAINS PARTIAL (2026-07-28)
 
 # Prison/Custody Study 0727 — gap-close packet
 
@@ -12,8 +12,9 @@ open") per the 2026-07-27 campaign brief: "Close the measured-breadth gap (cross
 custody architecture, historical capacity/dimension data) and draft the NEXT doctrine pair
 beyond Keeper-House/Ledger-and-Shift." It does not rewrite any ruling in
 `docs/SITE-6-PRISON-CUSTODY-SPEC.md` or edit the original `Reference/Prison-Custody-Study/`
-packet; it adds evidence and a proposed second card pair for Codex's adversarial review and,
-after that review, for a future founder pass.
+packet. Codex's 2026-07-28 adversarial review retained Yamen Magistrate Custody as a candidate
+doctrine, reclassified Ward-and-Surety as an external disposition/social-liability provider,
+and left the remaining research and founder gates open.
 
 ## Contents
 
@@ -27,20 +28,20 @@ after that review, for a future founder pass.
   finding (Aztec teilpiloyan), and an honest negative finding for precolonial Africa.
 - `DOCTRINE-PAIR-TWO.md` — the requested next doctrine pair: `PR-DOC-10 — Yamen Magistrate
   Custody` and `PR-DOC-11 — Ward-and-Surety Custody`, built to the existing card schema and
-  comparison-receipt discipline, with an explicit flag of the invariant-scope question the pair
-  raises.
+  comparison-receipt discipline. The review retains Yamen and reclassifies Ward-and-Surety.
 - `FFT-COHORT-COMPARISON.md` — the direct FFT read for Site 6, done honestly: no named prison
   map exists in the 121-map corpus (unlike the Mine study's direct hit), but two real, narrower
   findings do (Golgorand Execution Site for the disposition edge; Thieves Fort for the
   faction-seized-prison occupancy silhouette).
 - `LICENSE-LEDGER.md` + `images/` — 8 Wikimedia Commons reference images with full licence
   attribution, retrieved 2026-07-27.
-- `synthesis.md` — what this pass closed, the proposed (not self-declared) status-gate line, a
-  reconciliation check against `BUILDING-PROGRAM-TABLE-FAMILIES.md`, and three founder questions.
+- `synthesis.md` — what this pass closed, the integrated status-gate disposition, the
+  reconciliation check against `BUILDING-PROGRAM-TABLE-FAMILIES.md`, and the remaining Yamen
+  sequencing question.
 
-## Live authorities (unchanged by this pass)
+## Live authorities after adversarial integration
 
-- `docs/GOLDEN-SITES-CATALOG.md` — status-gate table and thin brief (untouched — this pass does
+- `docs/GOLDEN-SITES-CATALOG.md` — integrated status-gate table and thin brief (the research pass did
   not edit the shared catalog file).
 - `docs/SITE-6-PRISON-CUSTODY-SPEC.md` — the working spec this pass adds a dated addendum
   section to.
@@ -59,10 +60,10 @@ The measured-breadth gap is substantially, not fully, closed: two independent no
 custody traditions now have real dated/quantified evidence (Qing China, Edo Japan), and a
 genuinely new custody-without-architecture pattern is documented from two independent traditions
 (English frankpledge, Japanese gonin-gumi) plus corroborating African evidence. The requested
-second doctrine pair exists, fully drafted to the same schema and comparison-receipt discipline
-as the first, and explicitly surfaces one load-bearing invariant-scope question rather than
-quietly resolving it. The FFT gap is closed honestly rather than favorably — no tactical prison
-cohort exists in the corpus, and this packet says so plainly.
+second-doctrine comparison exists and has been dispositioned: Yamen remains a custody
+candidate; Ward-and-Surety becomes an external disposition/social-liability provider. The FFT
+gap is closed honestly rather than favorably — no tactical prison cohort exists in the corpus,
+and this packet says so plainly.
 
 Real gaps remain open exactly as declared: the Ottoman lane has no jail-interior evidence, only a
 later building's street facade; the yamen's cell-level dimensions were not found; the Tenmachō

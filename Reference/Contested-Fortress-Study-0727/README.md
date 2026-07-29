@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: RESEARCH PACKET — CODEX ADVERSARIAL DISPOSITION APPLIED 2026-07-28
 
 ---
 type: research-packet
@@ -21,8 +21,9 @@ on; it does not by itself promote the gate, and **nothing here is a founder ruli
 Per guidelines step 0.5, Site 9 is classified in the ontology contract
 (`GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md` §6) as a **scale/relationship stress case**, not
 a host program. That classification shaped every lane: the question is never "what does a
-castle look like," it is "what breaks when a military-masonry host gets big enough that the
-materialization window cannot hold it, and two or more populations live inside it at once."
+castle look like," it is "what breaks when a Defense/Fortification host gets big enough that
+the materialization window cannot hold it, and Layered Control binds two or more consequential
+claims to it at once."
 
 ## The lanes
 

@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: CODEX ADVERSARIAL REVIEWED — PROPOSED PASS REJECTED; RESEARCH REMAINS PARTIAL (2026-07-28)
 
 ---
 type: research-note
@@ -107,17 +107,15 @@ catalog and the proof queue. This pass does **not** claim:
   growth ladder, deck, the six operating circuits) have changed in any way. They have not been
   touched.
 
-## 5. Proposed status-gate line (this document's authority only — not the shared catalog)
+## 5. Adversarial status-gate disposition
 
-Per the task's honesty-gates instruction, this proposal lives only in this packet and in
-`SITE-5-MINE-WORKSHOP-CONCEPT.md`'s own §1 — the shared `GOLDEN-SITES-CATALOG.md` status table
-is untouched by this pass.
+The packet originally proposed `RESEARCHED: PARTIAL → PASS` because the depth law's three
+components are present. The 2026-07-28 adversarial review rejects that promotion: packet
+completeness does not substitute for sufficiently broad measured/cultural work-organization
+evidence. The reviewed gate is:
 
-**Proposed:** `RESEARCHED: PARTIAL → PASS` (the depth law's three components — breadth sweep,
-real-image reference lane, FFT cohort comparison — are now all present and re-gatable).
+**Disposition:** `RESEARCHED: PARTIAL` (unchanged).
 `FOUNDER-RULED: PARTIAL` (unchanged — no card selections were ruled this pass).
 `BRIEF-CONGRUENT: PARTIAL` (unchanged — the ten/fifteen-section standard was already met by the
 existing working spec; this pass adds an addendum rather than restructuring it).
 `CLAY-PROVED: OPEN` (unchanged — no fixture exists).
-
-This is a proposal for Codex's adversarial review, not a self-declared final status.

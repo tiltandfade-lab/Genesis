@@ -6,9 +6,19 @@ spec: ../SITE-12-ANOMALOUS-LIVING-MOBILE-SPEC.md
 research: ../../Reference/Anomalous-Living-Mobile-Study-0727/
 ---
 
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: RECONCILED SOURCE INVENTORY — NO IMPLEMENTATION AUTHORITY (2026-07-28)
 
 # SITE 12 — SPAWNABLE CONTENT INVENTORY
+
+## 2026-07-28 adversarial reconciliation
+
+Site 12 proves the shared `SubstratePlan` plus terminal transformation. Its axes—support,
+capacity, datum, anchor/mobility, agency, transform, and tenure—are orthogonal; no S0–S7
+ladder owns them. Thickness, anchor fields, trusted paths, clocks, perimeters, ownership, and
+tenancy are conditional profile facts. Terminal transformation may destroy the former host
+substrate and requires a separately resolved resulting host. Megastructure remains an ordinary
+host composed with anomalous substrate and optional `ScaleContract`. The 13.48% tag rate is
+not measured Site-12 activation.
 
 Every concrete thing the Site 12 working spec implies can **spawn in play**, mapped to the
 Engine table or roller that would produce it — or marked `NO-TABLE-YET`.
@@ -40,21 +50,21 @@ treated as authoritative (see §8.2a of the spec for the `urban-footing` case).
 
 ---
 
-## 1. Substrate and surface — the site's identity layer
+## 1. Substrate and surface — shared `SubstratePlan` inputs
 
 | what spawns | table / roller | status | note |
 |---|---|---|---|
 | the settlement itself, as a substrate-anomaly place | `place-master-setting` → `src/creator/bardo.js:14`, `src/engine/codex-roll.js:660` | `LIVE` | 15 of 100 rows; bands Grounded→Mythic; incl. Drowned Port, Ice-Road Town, Old Oak Wharf, Mire-End, Shimmering Maw, Dorsal Market, Living Tapestry, Fracture-Market, Anvil-of-Morning |
-| a living or impossible dungeon | `dungeon-type` rows 98–100 → `src/engine/dungeon-walk.js:613` | `LIVE` | Living Hive ×1, Megastructure ×2 (the Megastructure reclassification is PROPOSED, spec §8.2) |
+| a living or impossible dungeon | `dungeon-type` rows 98–100 → `src/engine/dungeon-walk.js:613` | `LIVE` | Living Hive ×1; Megastructure ×2 remains an ordinary host that may compose with anomalous substrate and optional `ScaleContract` |
 | the walking surface, by flavour | `wilderness-footing` col 1 → `src/engine/wild-walk.js:182` | `LIVE` | 200 rows, incl. Spongy Peat, Foul Bog, Thin Ice / Fragile Crust, Cooled Lava Flow, Petrified Wood / Smooth Coral Plateau, Dried Algae Crust |
-| **the surface's coverage geometry** ("One 20×20 patch", "Outer Perimeter", "10-foot wide strip", "25% of Area") | `wilderness-footing` col 2 | **`LIVE-TRUNCATED`** | authored, rolled, **and discarded** — `walkPick(…, 1)` takes column 1 only. This is the perimeter/patch vocabulary the spec's R6 requires |
+| **the surface's coverage geometry** ("One 20×20 patch", "Outer Perimeter", "10-foot wide strip", "25% of Area") | `wilderness-footing` col 2 | **`LIVE-TRUNCATED`** | authored, rolled, **and discarded** — `walkPick(…, 1)` takes column 1 only. This can serve profiles that commit a perimeter or patch; not every substrate requires one |
 | **the surface's load limit** ("breaks if weight exceeds 3d10×10 lbs in a 10-ft square; fall through") | `wilderness-footing` col 3 | **`LIVE-TRUNCATED`** | same call; the load-band relation is authored and never delivered |
 | urban walking surface: boardwalk, rotting boardwalk, missing planks, makeshift plank, flooded street, deep mud, shallow water | `urban-footing` | **`ORACLE-MANUAL`** | no code consumer; only `Engine/02. _Procedures/Urban Encounter v2.5.md` references it. The entire trusted-path failure grammar is unreachable from the urban walk |
 | tactical terrain features | `wilderness-tactical-terrain` → `wild-walk.js:45`; `urban-tactical-setup` → `walk.js` | `LIVE` | the general terrain layer a substrate skin would ride |
 | substrate material read (what the floor is *made of*) | `architecture-material` | `AUTHORED-UNWIRED` | no src consumer found |
-| substrate **thickness**, and what is beneath it | — | **`NO-TABLE-YET`** | the spec's R1. No table states a floor's depth or its underside |
-| **datum pair** (a committed high state and low state over one id set) | — | **`NO-TABLE-YET`** | the spec's R4. The engine has no two-state surface concept |
-| the **perimeter halo** (dead/marked transition outside an anomaly) | — | **`NO-TABLE-YET`** | R6; partially expressible via `wilderness-footing` col 2's "Outer Perimeter" coverage if the column were read |
+| substrate **thickness**, and what is beneath it | — | **`NO-TABLE-YET`** | conditional support/capacity fact; no table states a floor's depth or its underside |
+| **datum pair** (a committed high state and low state over one id set) | — | **`NO-TABLE-YET`** | conditional datum-axis expression; the engine has no two-state surface concept |
+| the **perimeter halo** (dead/marked transition outside an anomaly) | — | **`NO-TABLE-YET`** | conditional boundary profile; partially expressible via `wilderness-footing` col 2 if that column were read |
 
 ## 2. Structures
 
@@ -66,10 +76,10 @@ treated as authoritative (see §8.2a of the spec for the `urban-footing` case).
 | plank spine / boardwalk segment (fixed) | `urban-footing` 31–32 | `ORACLE-MANUAL` |
 | plank spine (removable) — a lifted or laid plank as a route change | — | **`NO-TABLE-YET`** |
 | gangway / ramp with run-out and stowed states | — | **`NO-TABLE-YET`** |
-| stake, driven pile, mooring bitt, cleat — the **anchor field** | — | **`NO-TABLE-YET`** (the spec's R2; the site's signature invent) |
+| stake, driven pile, mooring bitt, cleat — an **anchor field** | — | **`NO-TABLE-YET`** (conditional anchor/mobility-axis expression; signature of the raft proof profile, not every substrate) |
 | pontoon / float mass | — | **`NO-TABLE-YET`** |
 | piling forest / under-deck frame (the "underside" zone) | — | **`NO-TABLE-YET`** |
-| the **fast point** (mast, post, bitt, ridge, outcrop) | — | **`NO-TABLE-YET`** (the site's deck) |
+| the **fast point** (mast, post, bitt, ridge, outcrop) | — | **`NO-TABLE-YET`** (raft/mooring proof-profile deck) |
 | marker post carrying a datum scale | — | **`NO-TABLE-YET`** |
 | crust panel, and its breached variant exposing subgrade | — | **`NO-TABLE-YET`** |
 | plate-and-gap terrain (archipelago over void) | — | **`NO-TABLE-YET`** (FFT-106 posture; pure subtraction from existing terrain) |
@@ -101,11 +111,10 @@ treated as authoritative (see §8.2a of the spec for the `urban-footing` case).
 | the site's people, by role | `npc-role`, `npc-role-megatable` family; `npc-role-spine` | mixed — `npc-role-spine` has no src consumer; the role skins (`npc-role-skin-*`) are generated data |
 | dug-in threats | `dungeon-threat-identity-t1/t2`, `urban-threat-identity-t1/t2` → the walks | `LIVE` |
 | enemy composition | `dungeon-enemy-category` / `-composition`, urban and wilderness equivalents | `LIVE` |
-| the substrate's **owner / counterparty** (keeper caste, tithe-keepers, the host itself) | `faction-basic` + `patron-archetype` + `npc-resource-control` | `LIVE-COMPOSED` for the faction; `npc-resource-control` has **no src consumer** |
-| a **tenant in arrears** — standing per party against the substrate's owner | — | **`NO-TABLE-YET`** (the spec's tenancy circuit) |
+| the substrate's **owner / counterparty**, when tenure is committed (keeper caste, tithe-keepers, the host itself) | `faction-basic` + `patron-archetype` + `npc-resource-control` | `LIVE-COMPOSED` for the faction; `npc-resource-control` has **no src consumer** |
+| a **tenant in arrears**, when tenure is committed — standing per party against the substrate's owner | — | **`NO-TABLE-YET`** |
 | the maintainer caste (who adds reed, re-drives stakes, re-lashes) | — | **`NO-TABLE-YET`** |
-| the **host organism** itself as a rolled entity (S4+) | `animal-kind` / `wild-animal-kind` → `codex-roll.js` produce animals; nothing produces a *gargantuan inhabited host* | `NO-TABLE-YET` for the host role |
-| creatures native to the substrate (bog, reef, hive, deck vermin) | bestiary + `dungeon-enemy-category` | `LIVE` |
+| the **host organism** itself as a rolled entity, for living-host profiles | `animal-kind` / `wild-animal-kind` → `codex-roll.js` produce animals; nothing produces a *gargantuan inhabited host* | `NO-TABLE-YET` for the host role |
 | **encrusting colonists** — the barnacle/lice register: things anchored to a living host that are neither threat nor NPC | — | **`NO-TABLE-YET`** |
 
 ## 5. Situations, hooks, problems
@@ -115,7 +124,7 @@ treated as authoritative (see §8.2a of the spec for the `urban-footing` case).
 | the world's substrate transform: **The Becoming** (d8) | `SS.cBecoming` via `concretize()` ← `rollPressure()` ← `rollStartingState()` (`src/engine/world-gen.js:29`) | **`LIVE`** — fires at every world genesis; ≈13.5% of worlds carry a Becoming or Intrusion |
 | **The Intrusion** (d6) + its manifestation (d4: fixed doorway · wandering fold · spreading tide · scattered bleed-points) | `SS.cIntrusion`, `SS.cIntrusionManifest` | **`LIVE`** |
 | **The Buried Power** rows 1 / 2 / 8 (sleeper beneath · structure surfacing · land reverting to an older shape) | `SS.cBuried` | **`LIVE`** |
-| the terminal transformation ("the place becomes something else and will not change back") | `SS.doom` / Impending Doom d12 row 12 | **`LIVE`** |
+| the terminal transformation ("the place becomes something else and will not change back") | `SS.doom` / Impending Doom d12 row 12 | **`LIVE`** as story pressure; resulting-host resolution is absent |
 | the pressure's advancing clock | `w.pressures[].clock` + `SS.grimPortent` → `src/world/turn.js` | `LIVE` |
 | generic problems and hazards | `dungeon-problem`, `urban-problem`, `wilderness-problem`, `dungeon-hazard`, `urban-hazard`, `wilderness-hazard` | `LIVE` |
 | a parted mooring / a raft adrift | — | **`NO-TABLE-YET`** |
@@ -132,13 +141,13 @@ treated as authoritative (see §8.2a of the spec for the `urban-footing` case).
 | what spawns | table / roller | status |
 |---|---|---|
 | dressing condition (worn, damaged, fresh…) | `dungeon-set-dressing-condition`, `urban-set-dressing-condition`, `wilderness-set-dressing-condition` | `LIVE` |
-| **per-anchor hold state** (secure / slipping / parted / re-set) | — | **`NO-TABLE-YET`** |
+| **per-anchor hold state** (secure / slipping / parted / re-set), when anchors are committed | — | **`NO-TABLE-YET`** |
 | **per-surface integrity** (sound / strained / critical / failed) | partially in `wilderness-footing` col 3 | `LIVE-TRUNCATED` |
-| **clock phase** (tide, season, drift, growth, rot, spread) | pressure clocks exist; a *substrate* clock does not | `NO-TABLE-YET` |
+| **clock phase** (tide, season, drift, growth, rot, spread), when a substrate clock is committed | pressure clocks exist; a *substrate* clock does not | `NO-TABLE-YET` |
 | **current datum** and which ids sit above/below it | — | **`NO-TABLE-YET`** |
 | **circulation continuity** per path segment | — | **`NO-TABLE-YET`** |
-| **tenancy standing** (paid / owed / in arrears / barred) | — | **`NO-TABLE-YET`** |
-| **host mode** (calm / stirring / acting / spent) with cause and recovery | — | **`NO-TABLE-YET`** |
+| **tenancy standing** (paid / owed / in arrears / barred), when tenure is committed | — | **`NO-TABLE-YET`** |
+| **host mode** (calm / stirring / acting / spent) with cause and recovery, for agentic/living-host profiles | — | **`NO-TABLE-YET`** |
 | **front position and rate** for a Becoming | the pressure clock gives a rate; a *spatial* front does not exist | `NO-TABLE-YET` |
 | world drift over time | `place-drift` → `src/world/turn.js` | `LIVE` |
 
@@ -149,7 +158,7 @@ treated as authoritative (see §8.2a of the spec for the `urban-footing` case).
 | set dressing | `dungeon-set-dressing`, `urban-set-dressing`, `wilderness-set-dressing` → the three walks | `LIVE` |
 | dressing mega-tables | `dungeon-dressing-mega-table`, `wilderness-dressing-mega-table` | authored; the walks roll the non-mega variants |
 | furniture and clutter | `furniture-clutter` | `AUTHORED-UNWIRED` |
-| **anchor scars** — the record of former occupancy, the site's signature decal | — | **`NO-TABLE-YET`** (and the spec makes these *ids*, not dressing) |
+| **anchor scars** — the record of former occupancy in anchor-using profiles | — | **`NO-TABLE-YET`** (identity-bearing state, not free dressing) |
 | waterline / tide-stage marks at **both** datums | — | **`NO-TABLE-YET`** |
 | claim marks on maintained patches | — | **`NO-TABLE-YET`** |
 | tally board at the tithe gate | `urban-commerce` can produce a commerce beat; the tally board is not a rolled object | `NO-TABLE-YET` |
@@ -225,11 +234,12 @@ cheap third — nothing in it needs authoring, only consuming.
    caller. **The usage classification and the code disagree, and the code is right.** That
    discrepancy is worth checking across the whole registry.
 
-3. **Site 12's genuine invent list is the anchor field.** Of the 53 `NO-TABLE-YET` items, the
-   ones that are irreducibly this site's are: the anchor (with hold states and hold
-   direction), the datum pair, the substrate's thickness/underside, the tenancy standing,
-   the host mode, and the anchor scar. Almost everything else is either an existing table
-   that is not being read, or a subtraction from terrain the engine already builds.
+3. **The irreducible buy is a shared `SubstratePlan`, not an anchor field.** The 53
+   `NO-TABLE-YET` items cluster under orthogonal support, capacity, datum, anchor/mobility,
+   agency, transform, and tenure axes. Anchor state/scars, datum pairs, thickness/underside,
+   tenancy, and host mode are conditional expressions selected only when the rolled profile
+   needs them. Almost everything else is either an existing table that is not being read or
+   a subtraction from terrain the engine already builds.
 
 ## Boundary
 

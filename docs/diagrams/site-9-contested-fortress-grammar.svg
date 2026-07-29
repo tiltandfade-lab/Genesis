@@ -1,12 +1,12 @@
-<!-- STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign) -->
+<!-- STATUS: CODEX REDLINE APPLIED (2026-07-28); PROPOSED PROFILE, NOT A GENERATOR -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 1000" width="1240" height="1000" font-family="Helvetica, Arial, sans-serif">
   <title>Site 9 — Contested Fortress: the relational grammar (PROPOSED, 2026-07-27)</title>
-  <desc>STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign). Companion to docs/SITE-9-CONTESTED-FORTRESS-SPEC.md. Self-contained: no external references, explicit fills only.</desc>
+  <desc>STATUS: CODEX REDLINE APPLIED (2026-07-28). One Defense + LayeredControl + MaterializationWindow proof profile; not a unique fortress generator. Companion to docs/SITE-9-CONTESTED-FORTRESS-SPEC.md.</desc>
 
   <rect x="0" y="0" width="1240" height="1000" fill="#f6f3ec"/>
 
   <text x="40" y="46" font-size="25" font-weight="700" fill="#20242b">SITE 9 — CONTESTED FORTRESS · the relational grammar</text>
-  <text x="40" y="70" font-size="13.5" fill="#5d6470">STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign). Every relation and number is PROPOSED; nothing here is ruled or clay-proved.</text>
+  <text x="40" y="70" font-size="13.5" fill="#5d6470">STATUS: CODEX REDLINE APPLIED (2026-07-28). One proposed stress-proof profile; every number remains unruled and unproved in clay.</text>
   <line x1="40" y1="88" x2="1200" y2="88" stroke="#c3bcae" stroke-width="1.5"/>
 
   <!-- ============================================================ -->
@@ -81,11 +81,11 @@
 
   <!-- PANEL A legend -->
   <g font-size="12" fill="#3a3f48">
-    <text x="40" y="500" font-size="12.5" font-weight="700" fill="#20242b">1</text><text x="56" y="500">OUTSIDE FIELD — ditch / glacis / slope. Quiet ground: sparse cover, fully exposed, and the largest single region.</text>
+    <text x="40" y="500" font-size="12.5" font-weight="700" fill="#20242b">1</text><text x="56" y="500">OUTSIDE FIELD — ditch / glacis / slope. This profile uses a large quiet region; other Defense hosts need not.</text>
     <text x="40" y="520" font-size="12.5" font-weight="700" fill="#20242b">2</text><text x="56" y="520">WALL-WALK — the site's signature deck. A <tspan font-style="italic">route</tspan>, not a position: ≥ 2 access points, ≥ 1 chokepoint, ≥ 10 ft clear.</text>
     <text x="40" y="540" font-size="12.5" font-weight="700" fill="#b5442e">3</text><text x="56" y="540" fill="#8a3524">CHOKEPOINT — the tower's two walk doors, one cell wide. The highest-value square on the board.</text>
     <text x="40" y="560" font-size="12.5" font-weight="700" fill="#20242b">4</text><text x="56" y="560">STAIR HEAD — the walk's access from the court, and its own defensible cap.</text>
-    <text x="40" y="580" font-size="12.5" font-weight="700" fill="#20242b">5</text><text x="56" y="580">INSIDE COURT — 30–35 ft below the walk. Structures line the enceinte; the centre stays open.</text>
+    <text x="40" y="580" font-size="12.5" font-weight="700" fill="#20242b">5</text><text x="56" y="580">INSIDE COURT — 30–35 ft below the walk. Edge structures and open centre are this profile's defaults.</text>
     <text x="40" y="600" font-size="12.5" font-weight="700" fill="#20242b">6</text><text x="56" y="600">ATTRIBUTED GROUND — named, contiguous, camera-readable. Narration alone does not satisfy the invariant.</text>
     <text x="40" y="620" font-size="12.5" font-weight="700" fill="#b5442e">7</text><text x="56" y="620" fill="#8a3524">THE LINE — readable at the production camera without the receipt. Crossing has a stated cost, and the line can move.</text>
     <text x="40" y="640" font-size="12.5" font-weight="700" fill="#2f5c8f">8</text><text x="56" y="640" fill="#2f5c8f">ALTERNATE CROSSING — postern / breach / mural passage / ladder point. Capacity 1, no cargo. Committed before observation.</text>
@@ -130,7 +130,7 @@
     <text x="946" y="260" font-size="10" fill="#78808c">splayed reveal inside</text>
     <text x="946" y="378" font-size="11" font-weight="700">BATTER</text>
     <text x="946" y="392" font-size="10" fill="#78808c">the outer face slopes back —</text>
-    <text x="946" y="404" font-size="10" fill="#78808c">the two faces are not mirrors</text>
+    <text x="946" y="404" font-size="10" fill="#78808c">the two relations are not mirror routes</text>
   </g>
   <line x1="950" y1="192" x2="978" y2="214" stroke="#9aa1ac" stroke-width="1"/>
   <line x1="950" y1="234" x2="978" y2="234" stroke="#9aa1ac" stroke-width="1"/>
@@ -208,10 +208,10 @@
   <rect x="40" y="862" width="1160" height="112" fill="#efece4" stroke="#c3bcae" stroke-width="1.2"/>
   <text x="56" y="886" font-size="13" font-weight="700" fill="#20242b">D · BOUNDARIES — the test that keeps Site 9 out of its neighbours</text>
 
-  <text x="56" y="910" font-size="12" fill="#3a3f48"><tspan font-weight="700" fill="#8a5230">vs SITE 8 (layered control):</tspan> Site 8 asks <tspan font-style="italic">who really controls this</tspan> — concealment, recognition, hidden claims; it survives at any map size.</text>
+  <text x="56" y="910" font-size="12" fill="#3a3f48"><tspan font-weight="700" fill="#8a5230">SITE 8 composed with Defense:</tspan> claimant standing and material control difference may be overt or hidden; no concealment requirement.</text>
   <text x="56" y="928" font-size="12" fill="#3a3f48">Site 9 asks <tspan font-style="italic">who holds which ground right now</tspan> — open, territorial, at a scale that exceeds one materialization window.</text>
-  <text x="56" y="950" font-size="12" font-weight="700" fill="#b5442e">Remove the concealment and Site 8 collapses. Remove the second population's ground and Site 9 collapses.</text>
-  <text x="56" y="966" font-size="12" fill="#8a3524">A besieged castle with a traitor in the gatehouse is BOTH — and that compose is worth supporting.</text>
+  <text x="56" y="950" font-size="12" font-weight="700" fill="#b5442e">Site 9 adds cohabiting armed populations, attributed ground, and persistent inside/outside windows to that composition.</text>
+  <text x="56" y="966" font-size="12" fill="#8a3524">A traitor in one gatehouse may be Layered Control alone; a divided fortress can exercise the full stress proof.</text>
 
   <line x1="880" y1="898" x2="880" y2="962" stroke="#c3bcae" stroke-width="1.2"/>
   <text x="900" y="910" font-size="11.5" fill="#3a3f48"><tspan font-weight="700">vs SITE 1:</tspan> controls a transition, not ground.</text>

@@ -1,14 +1,13 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: CODEX ADVERSARIAL REVIEWED — YAMEN RETAINED; WARD-AND-SURETY RECLASSIFIED (2026-07-28)
 
 ---
 type: research-lane
 study: SITE-6-PRISON-CUSTODY measured-breadth gap-close (2026-07-27 campaign)
 created: 2026-07-27
-status: PROPOSED — CANDIDATE SECOND COMPARISON PAIR, NOT FOUNDER-RULED, NOT "SELECTED FOR
-  PROOF." This pass deliberately does not reuse the first pair's "SELECTED FOR PROOF" status
-  language for its own cards — that status was a research-pass determination Codex made after
-  its own full depth pass; this pair has not had the same scrutiny and is offered explicitly
-  for Codex's adversarial review before any promotion.
+updated: 2026-07-28
+status: ADVERSARIAL REVIEWED — PR-DOC-10 remains a candidate custody doctrine; PR-DOC-11 is
+  reclassified as an external disposition/social-liability provider. Neither is founder-ruled
+  or selected for proof.
 authority note: the card schema, invariant list, and comparison-receipt format below are
   copied verbatim in structure from
   `Reference/Prison-Custody-Study/culture-doctrine-cards.md` §1–3 so the two packets stay
@@ -22,8 +21,9 @@ existing packet already named eight further candidates (`PR-DOC-03` through `PR-
 single cards, several `RESEARCH-NEEDED`. Rather than promote one of those in isolation, this
 pass drafts a genuinely new **matched pair** — following the same "must change at least four
 correlated facts" law the first pair used — built specifically from this campaign's
-measured-breadth research (`MEASURED-REFERENCES.md`), because a pair, not a singleton, is what
-lets Codex run the same comparison-receipt discipline the first pair already passed.
+measured-breadth research (`MEASURED-REFERENCES.md`). The proposed pairing lets the same
+comparison-receipt discipline expose whether both cards actually belong to the custody family.
+The 2026-07-28 review found that they do not.
 
 The two new ids are `PR-DOC-10` and `PR-DOC-11` (ids 03–09 remain exactly as the original packet
 left them — nothing here renames or supersedes them).
@@ -56,7 +56,7 @@ rather than quietly declaring compliance.
 
 ## 2. `PR-DOC-10 — Yamen Magistrate Custody`
 
-status: **PROPOSED — CANDIDATE, PENDING ADVERSARIAL REVIEW**
+status: **PROPOSED — ADVERSARIAL-REVIEWED CANDIDATE; NOT FOUNDER-RULED OR SELECTED FOR PROOF**
 best fit: Rung B/C; degrades to Rung A as a single-official household-office hybrid
 evidence spine: Neixiang County Yamen Museum (Henan, Qing-dynasty); Wikipedia "Yamen"; the
 William Alexander 1805 cangue engraving; `MEASURED-REFERENCES.md` §1
@@ -90,8 +90,8 @@ court he does not sit on) does not model.
 
 ## 3. `PR-DOC-11 — Ward-and-Surety Custody`
 
-status: **PROPOSED — CANDIDATE, PENDING ADVERSARIAL REVIEW — see §4 for the invariant stress
-this card creates**
+status: **RECLASSIFIED — NOT A CUSTODY DOCTRINE; external disposition/social-liability
+provider candidate; see §4**
 best fit: Rung A only; does not promote to Rung B/C without ceasing to be this doctrine
 evidence spine: English frankpledge/tithing (Anglo-Saxon period, regularized under Cnut);
 Tokugawa Japan's gonin-gumi (formalized c. 1643–1725); corroborating (not primary) evidence from
@@ -138,7 +138,8 @@ durability facts at all — collective fine and reputational exposure are real, 
 consequential mechanisms, but they are not the kind of fact the second invariant's list
 (material/support/lock/durability/noise) anticipates.
 
-Two honest ways to resolve this are named, neither chosen here:
+Two honest ways were originally named. The 2026-07-28 adversarial review selects the narrow
+reading for the working spec:
 
 1. **Narrow reading:** `PR-DOC-11` is out of Site 6's scope as written — it is a *disposition
    alternative* (like exile or ransom) rather than a custody doctrine, because Site 6's own
@@ -154,9 +155,9 @@ Two honest ways to resolve this are named, neither chosen here:
    `PR-DOC-11` is a legitimate doctrine and the invariant wording needs one clarifying sentence,
    not a new exception.
 
-This pass does not choose between them. It is exactly the kind of load-bearing question the
-campaign brief asked to be flagged rather than silently resolved, and it is repeated as the
-first of this study's three founder questions in `synthesis.md` §7.
+**Disposition:** retain the broad reading above as rejected design history. File
+`PR-DOC-11` as an external disposition/social-liability provider; it may compose with a
+custody host but cannot satisfy or replace its lifecycle.
 
 ## 5. Comparison receipt
 
@@ -184,11 +185,11 @@ doctrine-card row this comparison format was not originally built to hold.
 
 ## 6. What this closes, and what it deliberately does not
 
-**Closes:** the campaign brief's request for "the NEXT doctrine pair beyond Keeper-House/
-Ledger-and-Shift," with real, cross-cultural, dated, sourced evidence, structured to the same
-card schema and comparison-receipt discipline the first pair used.
+**Closes:** the campaign brief's request to test a next doctrine pair with real,
+cross-cultural, dated, sourced evidence. The comparison earns one retained custody candidate
+and one boundary rejection; it does not earn a second promoted pair.
 
-**Does not close:** founder ruling (neither card is Adam-ruled; both are explicitly `PROPOSED`);
-the invariant-wording question in §4; a clay proof of either card (none exists, exactly as none
-exists yet for `PR-DOC-01`/`PR-DOC-02`); and the residual "RESEARCH-NEEDED" status of
-`PR-DOC-07`/`PR-DOC-08` from the original packet, which this pass does not touch.
+**Does not close:** founder ruling; selection of `PR-DOC-10` for proof; a clay proof; or the
+residual `RESEARCH-NEEDED` status of `PR-DOC-07`/`PR-DOC-08`. The invariant question is
+resolved narrowly in §4: a social-liability provider may compose with custody but cannot
+replace its controlled threshold and force truth.

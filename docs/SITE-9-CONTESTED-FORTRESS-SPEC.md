@@ -1,9 +1,10 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: DRAFT — CODEX ADVERSARIAL REDLINE APPLIED; FOUNDER QUESTIONS REMAIN OPEN
 
 ---
 type: working-site-spec
 created: 2026-07-27
-status: WORKING SPEC — first pipeline pass; founder gate OPEN; clay OPEN
+updated: 2026-07-28
+status: WORKING SPEC — first pipeline pass; adversarial redline applied; founder gate OPEN; clay OPEN
 site: 9 — contested fortress
 role: scale/relationship stress case (GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md §6)
 standard: SITE-5-MINE-WORKSHOP-CONCEPT.md
@@ -39,15 +40,14 @@ vernacular is **military-masonry**, which Site 1 founded and Site 9 inherits who
 (`STRUCTURE-KIT-CATALOG.md` §11: *site 9 · military-masonry · inherits full site-1 kit ·
 invents gatehouse, keep storeys, broken wall + gate*).
 
-**Site 9 does not get its own castle generator.** It gets the military-masonry host at a
-scale that breaks the materialization window, plus a two-population control plan that no
-other site owns.
+**Site 9 does not get its own castle generator.** The ordinary `Defense/Fortification`
+HostProgram owns the works and operating model. `LayeredControl` owns claimants and
+attributed ground. `MaterializationWindow` owns honest cross-window extent. Site 9 is the
+retained proof that those three systems survive composition at fortress scale.
 
-### 1.2 Proposed status-gate line
+### 1.2 Adversarially integrated status-gate line
 
-The catalog's status table currently reads `3/8/9/11/12 | OPEN | OPEN | OPEN | OPEN`. This
-spec **proposes** the following replacement row for Site 9. It does not edit the table — the
-catalog is a shared file and the integration lane owns it.
+The 2026-07-28 integration pass applies the following row in the catalog:
 
 ```
 | 9 Contested Fortress | PARTIAL | OPEN | PARTIAL | OPEN | breadth sweep, 15-image licensed
@@ -93,14 +93,14 @@ Numbered so review can answer them individually. All are `PROPOSED`.
 
 | # | proposal | where |
 |---|---|---|
-| P1 | The site's promise and its ten invariants | §2 |
+| P1 | The site's promise and classified proof obligations | §2 |
 | P2 | The four-rung ladder and its implementation order A → B → C → D | §3 |
 | P3 | `CF-SHAPE-01` as the Golden Seed — a **window pair**, not a single board | §3.4 |
 | P4 | Fourteen required zones and the provisional grid band | §4 |
 | P5 | Four route promises with capacities | §5 |
 | P6 | Eight operating circuits and the ten-axis state factorization | §6 |
 | P7 | Five extensions to Site 9's structure buy beyond the matrix's three | §13.2 |
-| P8 | The **Holder card** — the site's own invention, one per population | §11.2 |
+| P8 | The **Holder view** — a fortress-facing projection of the shared Layered-Control claimant record, one per population | §11.2 |
 | P9 | The **line tell** as a decal-bin dressing rather than geometry | §13.4 |
 | P10 | A third culture profile (`Massed Rampart Tradition`) beside Site 1's MVP pair | §11.1 |
 | P11 | Commission a Site 9 world-context receipt (`CTX-FORT-*`) — none exists | §12.4 |
@@ -112,8 +112,8 @@ Numbered so review can answer them individually. All are `PROPOSED`.
 
 ### 2.1 The promise
 
-> **A Contested Fortress is a defence too big for the people holding it, with more than one
-> population inside.**
+> **A Contested Fortress is a Defense/Fortification host whose consequential claims and
+> defensive extent cannot be honestly shown in one materialization window.**
 >
 > Play here is about ground. Which side of which line you are standing on, what it costs to
 > cross, who has to let you, and what changes when the line moves. The walls were built to
@@ -128,12 +128,11 @@ both sides at once.** Everywhere else, the defences belong to somebody and the p
 outside them or inside them. Here the player is inside somebody's defences *with somebody
 else*, and the wall that protects one population is the obstacle the other has to solve.
 
-### 2.2 What makes it a site family
+### 2.2 What makes it a stress proof
 
-Site 9 owns a **contested defensive envelope**:
+Site 9 proves this composition:
 
-`defended ground A → readable line → defended ground B`, all inside `one works too large for
-the current window`
+`Defense/Fortification host + LayeredControl + persistent multi-window extent`
 
 Two things must be simultaneously true or it is not this site:
 
@@ -143,9 +142,12 @@ Two things must be simultaneously true or it is not this site:
   set of committed windows on one persistent identity, with honest frontiers into
   unmaterialised fortress.
 
-Drop the relationship and it is a Guard Post at odd scale (Site 1). Drop the scale and it is
-layered control on a small host (Site 8). Drop the visibility of the line and it is Site 8
-regardless of size. Drop the claimants entirely and it is Site 3.
+Drop the relationship and it remains an ordinary Defense/Fortification host, possibly the
+large end of Site 1's family. Drop the multi-window extent and it remains Layered Control on
+a fortification host. Hide one claim and Site 8 still applies; Site 9's first proof simply
+requires enough attributed ground to make the cross-window stress legible. Drop the
+claimants entirely and the defense host remains; add Dormant only when its operating model
+has actually stopped.
 
 ### 2.3 Required invariants
 
@@ -161,32 +163,29 @@ candidate.
   **precommitted frontier** into unmaterialised fortress — a wall run continuing, a stair
   going up out of frame, a gate to somewhere the plan already owns. A wall that ends in a flat
   cap is a rejection.
-- **REQUIRED — the wall has two faces.** Every enceinte run in the window declares both an
-  inboard and an outboard relation, and both are legal ground somewhere in the site's window
-  set. Not necessarily both in the *same* window — but a wall with only one legal face
-  anywhere is a rejection.
-- **REQUIRED — the lengthened entrance.** The way in turns, offsets, climbs, or doubles back
-  under observation. A gate aligned straight through both lines with no offset, turn or grade
-  change is a rejection. *(Evidence: Beaumaris's offset gates, Marqab's climbing walled ramp,
-  Maiden Castle's overlapping banks, FFT's broken causeway and terraced stair — three
-  materials, one intention.)*
-- **REQUIRED — the gate is a sequence.** At least two independently operable barriers in one
-  passage, and the machinery has an **occupied position** with its own access and defenders.
+- **REQUIRED — the wall has two relations.** Every enceinte run in the retained window set
+  declares an inboard and outboard relation. Either face may be traversable, inaccessible,
+  buried, flooded or external; the spec may not invent playable ground merely to complete a
+  pair.
+- **PROFILE — the lengthened entrance.** The gate-window proof turns, offsets, climbs, or
+  doubles back under observation. Straight gates, breached lines and gate-less works remain
+  legal Defense/Fortification results outside that profile.
+- **PROFILE — the gate is a sequence.** The gate-window proof carries at least two
+  independently operable barriers and an occupied machinery position with its own access.
+  This is not a universal requirement for every fortress window.
 - **REQUIRED — the walk is a route.** Where a wall-walk exists it has at least two access
   points and at least one chokepoint, and it connects things. A deck you can only stand on is
   Site 1's deck, not Site 9's.
-- **REQUIRED — quiet ground is the largest single region.** Glacis, court, ward, plateau or
-  water. Density clusters at gates, lines and wall bases.
-- **REQUIRED — structures line the enceinte.** Buildings sit against the wall; the centre of a
-  ward stays open unless a licensed fact puts something there. *(Evidence: Beaumaris inner
-  ward; the live `urban-scene-frame` 156 Keep Courtyard, whose only content is a parade ground
-  and four corner turrets.)*
-- **REQUIRED — nobody is hiding.** If the site's tension depends on concealment, recognition
-  asymmetry, or a claim nobody can see, it is Site 8 and must be routed there.
-- **DEFAULT — cohabitation, not assault.** The weighted normal state is two populations living
-  in works one of them did not build, under an authority that has lapsed or changed. Active
-  assault is a licensed condition, not the default. *(Evidence: thirteen `place-master-setting`
-  fortification rows, whose own prose is overwhelmingly inheritance and drift — §8.2.)*
+- **DEFAULT PROFILE — quiet ground is the largest single region.** Glacis, court, ward,
+  plateau or water. Dense fortified towns, packed refuges and compact cliff works may reject
+  this profile without rejecting the host.
+- **DEFAULT PROFILE — structures line the enceinte.** Buildings often sit against the wall
+  while the ward centre stays open. A licensed civic, ritual, water, command or terrain fact
+  may put the main mass elsewhere.
+- **PROOF ORDER — cohabitation before assault.** Rows 51 and 71 in the broad
+  `place-master-setting` screen directly support inherited/cohabited works. Build that retained
+  state first, then prove assault using the same systems. This is a learning order, not a global
+  world-state weighting; story canon chooses the actual state.
 - **LICENSED — assault, mutiny, refuge overload, undermining, construction, slighting.** Each
   is a condition or occupancy card over the same works, legal when its facts are rolled.
 - **VARIANT — fortified town, refuge enclosure, earthwork/timber expression, gate-only
@@ -250,9 +249,9 @@ what is outside; and what each holder currently needs.
 | rung | scene | proves |
 |---|---|---|
 | **A** | **Gate passage interior** — forecourt/barbican → passage with two barriers → gallery above, with the passage's two ends held by different people | the barrier sequence, the staffed machinery room, an interior chokepoint, and the 14.6 % dungeon-interior demand |
-| **B** | **Contested wall segment, two faces** — one wall run played as an *inside* window and an *outside* window sharing ids | the site's unique property: one persistent works, several committed windows, one geometry read from two sides |
+| **B** | **Contested wall segment, two relations** — one wall run projected through an *inside* window and an *outside* window sharing ids | the portfolio stress proof's distinctive obligation: one persistent works, several committed windows, one geometry read from two relations |
 | **C** | **The double line** — outer ward, inner ward, the ring between, offset gates | nested enceintes, legal overflow across a precommitted frontier, and the true concentric geometry |
-| **D** | **The colonised works** — civil infill in the killing ground, lapsed authority, arriving second claimant | the dominant live state, the makeshift vernacular over military masonry, and the Site 10 seam |
+| **D** | **The colonised works** — civil infill in the killing ground, lapsed authority, arriving second claimant | the strongest directly supported non-siege state, the makeshift vernacular over military masonry, and the Site 10 seam |
 
 ### 3.3 Implementation order and learning rationale — `PROPOSED`
 
@@ -285,7 +284,7 @@ claimant leaves.
 **Level bands (TIER-SCOPE L1–10) — `PROPOSED`:** A at L1–3, B at L2–6, C at L5–10, D at any
 band (its difficulty comes from the holders, not the walls).
 
-### 3.4 Golden Seed — `CF-SHAPE-01 — Contested Wall Segment, Two Faces`
+### 3.4 Golden Seed — `CF-SHAPE-01 — Contested Wall Segment, Two Relations`
 
 **The seed is a window pair, not a board.** This is the proposal that most needs founder
 attention (P3), because every previous golden seed has been one composition.
@@ -306,8 +305,8 @@ Spatial sentence (provisional prose for testing, **not** a canonical table row):
 damage and repair facts, and the same holder attributions · the walk has at least two access
 points and passes through at least one tower door pair · the line is readable in the inside
 window and its consequence (which loops are manned, which are dark) is readable in the outside
-window · at least one crossing exists that is not the front · quiet ground is the largest
-region in both windows · a precommitted frontier continues the wall out of both windows ·
+window · at least one crossing exists that is not the front · a precommitted frontier
+continues the wall out of both windows ·
 retreat is honest for both holders.
 
 **Arrangeable.** Which holder is at which end · whether the tower is mid-run or at one end ·
@@ -318,7 +317,7 @@ the defensive edge · condition and repair history.
 
 **Anti-rules.** No wall that ends in a flat cap · no walk without access · no tower claimed as
 a chokepoint with fewer than two walk doors · no second population that exists only in prose ·
-no crossing revealed after it becomes useful · no concealment doing the site's work · no
+no crossing revealed after it becomes useful · no second claimant existing only in prose · no
 special geometry for the retained seed · no walk on a wall too thin to carry it (§4.3).
 
 ---
@@ -482,14 +481,16 @@ A classic siege is `outside = investing` + `line = open-conflict` + `stores = ra
 
 ### 7.1 The site's levers
 
-Things the player can *use* here that no other site offers:
+Things this composition must make usable at fortress scale:
 
 - **The chokepoint.** Holding a tower door pair splits a front. It is one cell wide and it is
   the single highest-value square on the board.
 - **The height differential.** The walk overlooks the inhabited court by three storeys. What
   is said on the walk is heard below; what happens below is seen above.
-- **The two faces.** The same wall is cover for one holder and an obstacle for the other. A
-  breach helps whoever needs to cross and hurts whoever needs to hold.
+- **The two relations.** The same wall is cover for one claimant and an obstacle for the
+  other. A breach helps whoever needs to cross and hurts whoever needs to hold. Neither side
+  becomes a traversable “face” unless the Defense host actually built a walk, passage, stair,
+  or opening there.
 - **The barrier sequence.** Opening one barrier is not opening the gate. Jamming the middle
   one traps whoever is between them.
 - **The machinery room.** Taking it does two jobs at once — it operates the barrier and it
@@ -531,7 +532,9 @@ engine was not executed.**
 ### 8.1 `LIVE`
 
 `dungeon-type` (`engine/dungeon-walk.js:613`) — the Military Fortification archetype, 15 of
-100 rows, **14.62 %** of real dungeon walks per `docs/intel/walk-census.md`.
+100 rows, **14.62 %** of real dungeon walks per `docs/intel/walk-census.md`. This measures
+Defense/Fortification **host demand**, especially interiors; it does not measure Site-9
+multi-claim or multi-window activation.
 `dungeon-area-type` (`:113`) — 200 room programs including an attached gatehouse room with a
 portcullis slot, twin flanking guard rooms, an antechamber closed by an iron portcullis with a
 wall winch, murder-hole slits, arrow slits at switchback landings, an armory alcove behind an
@@ -603,16 +606,22 @@ wiring fix for content that already exists.
 
 **Everything about who holds which ground.** No live table assigns two populations to two
 regions of one site. No live table carries a front, a truce line, an attributed territory, or
-a crossing cost. Today that is entirely DM narration, and it is precisely the thing Site 9
-exists to make spatial. The Holder card (§11.2) is the proposed remedy.
+a crossing cost. Today that is entirely DM narration. The shared `LayeredControl` adapter
+must make it spatial; Site 9 supplies the retained fortress-scale proof, not a second claimant
+system. The Holder view (§11.2) is the proposed projection.
 
-### 8.5 Proposed `TARGET-ADAPTER`
+### 8.5 Proposed composed `TARGET-ADAPTER`
 
-A Site 9 functional grammar reading existing world / place / dungeon facts into a
-**two-population, multi-line control plan**: nested enceintes or one line with a legal inside
-and outside; attributed ground on each side; a readable line; committed crossings; and a
-precommitted frontier. It **consumes** the rows above; it does not reroll them, and it does not
-replace the upstream facts with a single site seed.
+One composition pass reads existing world/place/dungeon facts through three shared owners:
+
+- `Defense/Fortification` emits the enceinte graph, gates, wall routes, stores, service and
+  defensive operating model;
+- `LayeredControl` emits claimant profiles, attributed ground, permissions, fronts and
+  crossing costs; and
+- `MaterializationWindow` emits the active window, stable frontiers and cross-window identity.
+
+The adapter composes them into the retained **two-population, multi-window control plan**. It
+consumes the rows above, does not reroll them, and has no `if goldenSite === 9` geometry path.
 
 ### 8.6 Lineage receipt
 
@@ -625,11 +634,15 @@ belongs to, so a window set is replayable as a set.
 
 ## 9. Generator inputs, semantic blueprint, and ordered generation
 
+The steps below describe the Site-9 proof harness. Runtime ownership remains with the three
+providers in §8.5; “generate” here means call and compose those providers, not introduce a
+fourth fortress generator.
+
 ### 9.1 Inputs
 
 World/realm axes and construction material · walk family and approach · the fortification host
 fact (from `dungeon-type`, `place-master-setting`, or an urban wall) · rung and archetype ·
-**holder set (2–3 Holder cards)** · line state and the ten state axes · culture construction
+**holder set (2–3 shared claimant records projected as Holder views)** · line state and the ten state axes · culture construction
 profile · condition and chronology, including slighting-versus-decay · defensive-edge family ·
 walk carriage (wall-thickness / corbel / arcade / timber) · barrier set and machinery ·
 crossings (committed) · stores/water/sanitation state · terrain and outside-ground family ·
@@ -660,9 +673,9 @@ recipe versions, relaxations, typed rejections.
 7. Place **stair heads** and any corbelled widening; bind every height delta to a typed
    connector.
 8. Generate the **inside court edge** and the **outside ground** (ditch / glacis / slope /
-   water), reserving quiet ground **first**, before any dressing.
-9. Place **structures against the enceinte**; keep the court centre open unless a licensed
-   fact fills it.
+   water). Apply the quiet-ground profile when the host program and density facts support it.
+9. Place host structures from their operating relationships. Prefer the enceinte edge for
+   suitable barracks, stores and service buildings; do not force every program off the centre.
 10. Partition **attributed ground** between holders; derive the **line** and its tell; place
     the **committed crossings** (front, alternate, and any social crossing).
 11. Reserve routes, deployment, objectives, cover, chokepoints, retreat for **both** holders.
@@ -684,17 +697,17 @@ recipe versions, relaxations, typed rejections.
 4. the second population exists only in prose — no ground, no props, no schedule;
 5. the window has **no precommitted frontier** — every enceinte edge is capped;
 6. an enceinte run has only one legal face anywhere in the site's window set;
-7. the entrance is **not lengthened** — straight through both lines, no offset, turn or grade;
-8. the gate has fewer than **two** independently operable barriers;
-9. the gate machinery has **no occupied position** with its own access;
+7. the retained **gate-window profile** is selected but the entrance is not lengthened;
+8. the retained gate-window profile has fewer than **two** independently operable barriers;
+9. the retained gate-window profile's machinery has **no occupied position** with its own access;
 10. a wall-walk has fewer than **two** access points, or no chokepoint;
 11. a walk exists on a run **thinner than its carriage requires** (§4.1 step 4, §4.3);
 12. a tower is claimed as a chokepoint with fewer than **two** walk doors;
 13. a tower does not project outward and enfilade is nonetheless claimed;
-14. **quiet ground is not the largest single region**;
-15. a structure occupies the centre of a ward with no licensed fact putting it there;
+14. the retained quiet-ground profile is selected but quiet ground is not the largest region;
+15. a structure contradicts the host's operating relationships or a committed open-ground fact;
 16. a crossing appears that was **not committed before observation**;
-17. the site's tension depends on **concealment** (route to Site 8);
+17. the second claimant has no actionable control delta (Layered Control predicate fails);
 18. **no claimant remains** and nothing is contested (route to Site 3);
 19. the two windows of a retained pair **do not share ids**, geometry, damage or attribution;
 20. context projection adds a second gate, wall line, approach or an army that the plan does
@@ -714,12 +727,14 @@ recipe versions, relaxations, typed rejections.
 5. reduce tower storeys, **keeping the door pair**;
 6. reduce the crossing set to one front plus one alternate;
 7. reduce the holder set from three to two;
-8. degrade one rung (C → B, B → A) while retaining the contested-envelope capsule;
+8. degrade one rung (C → B, B → A) while retaining the Defense + Layered Control +
+   multi-window composition;
 9. reject and reroll.
 
-**Never** delete the second attributed ground, collapse the two faces to one, cap the
-frontier, straighten the entrance, remove the machinery room's occupancy, overlap standees,
-or add an invisible crossing or cover object to save a seed.
+**Never** delete the second attributed ground, erase either wall relation, cap the frontier,
+overlap standees, or add an invisible crossing or cover object to save a seed. When the
+gate-window profile is selected, also never straighten its entrance or remove its machinery
+position merely to save that candidate.
 
 ---
 
@@ -750,10 +765,12 @@ defensive-edge equality law across a silhouette that shares nothing with the MVP
 poles, scavenged plank, hide and canvas pressed against ashlar. Its coexistence with dressed
 masonry **is** the cohabitation tell.
 
-### 11.2 P8 — The Holder card (the site's own invention)
+### 11.2 P8 — The Holder view (Layered-Control projection)
 
-No other Golden Site needs this, and no live table provides it (§8.4). One card per
-population; a site rolls two or three.
+No live table provides the same-host territorial binding (§8.4), but the runtime record belongs
+to `LayeredControl`, not Site 9. The fortress proof projects one Holder view per claimant and
+uses two or three; another host must be able to consume the same claimant record without
+fortress fields.
 
 | field | what it carries |
 |---|---|
@@ -859,17 +876,16 @@ the shared `WorldContextProjectionPlan` under these obligations:
 - **Site 3 (Dormant)** owns the fully dormant transformation. A slighted fortress nobody
   claims is Site 3. A slighted fortress two parties still want is Site 9 with damage applied.
 - **Site 6 (Prison)** owns custody, intake and property. A fortress used as a prison composes
-  the two — Site 6 owns the custody circuits, Site 9 owns the envelope and the ground.
-- **Site 8 (Layered Control)** owns **concealed or nested** control — recognition asymmetry,
-  hidden claims, false walls and trapdoors, and a tension that survives at any map size. Site 9
-  owns **open, territorial** control at a scale that exceeds one window. **Test: remove the
-  concealment and Site 8 collapses; remove the second population's ground and Site 9
-  collapses.** A besieged castle with a traitor in the gatehouse is both — and that compose is
-  worth supporting, because a fortress is maximally unlike a tavern and Site 8 must prove
-  itself on at least two unlike hosts.
+  the two — Site 6 owns the custody circuits and Defense/Fortification owns the works.
+- **Site 8 (Layered Control)** owns claimant identity, attributed ground, recognition,
+  permissions and fronts whether the control is overt or covert and at any map size. Site 9
+  proves that transform on a Defense/Fortification host whose consequential extent exceeds one
+  window. **Test: remove the actionable second claim and Site 8/Site 9 collapse to the ordinary
+  defense host; remove the multi-window stress and Site 8 remains on that host.** A besieged
+  castle with a traitor in the gatehouse is one composed case, not two competing generators.
 - **Site 10 (Urban Institution)** owns streets, frontage, plaza and stalls. In a fortified
-  town, Site 9 owns the **envelope and its relationship to what it encloses**; Site 10 owns
-  what is enclosed. *(FFT's Zaland Fort City does not merge them — it abuts them: masonry wall
+  town, Defense/Fortification owns the **envelope**, Site 10 owns what is enclosed, and Site 9
+  proves their multi-window control composition when eligible. *(FFT's Zaland Fort City does not merge them — it abuts them: masonry wall
   in front, timber-and-tile houses behind, on one plate.)*
 - **Site 5 (Mine/Workshop)** owns extraction and excavated support. A mine gallery under a
   contested fortress is one site expressed through two walk families, not a new site.
@@ -888,20 +904,21 @@ a gate passage and its gallery is a small, sightline-dominated interior whose co
 is not to be elaborate. (Per §10.3, one golden site may cover several dimensions and no
 one-to-one pairing is frozen.)
 
-### 13.2 Inherit / invent split
+### 13.2 Provider ownership and proof-sponsored gaps
 
-**Inherits (full Site 1 military-masonry kit):** composed terrain stage · elevation mass ·
+**Defense/Fortification host provider (initial donors include the full Site 1
+military-masonry kit):** composed terrain stage · elevation mass ·
 road ribbon · foundation transition · continuous wall run · deep opening with reveal ·
 barrier/threshold · observation assembly · flat deck and defensive edge · retaining run ·
 typed stair/ramp connectors · relational rock cluster · drainage/support/repair member ·
-cutaway cap.
+cutaway cap · gatehouse assembly · keep/tower storeys · broken wall + gate.
 
-**Invents (signature — already assigned by the matrix):** **gatehouse assembly** · **keep /
-tower storeys** · **broken wall + gate**.
+The older matrix assigned gatehouse, keep/tower storeys, and broken wall + gate to Site 9 as
+signature buys. The ontology pass retains Site 9 as their **proof sponsor** but moves runtime
+ownership to the ordinary Defense/Fortification host provider.
 
-**P7 — proposed extensions to Site 9's own buy.** The matrix permits a site spec to refine its
-own buy; these are `PROPOSED` refinements, not silent additions, and none of them changes
-another site's ownership:
+**P7 — proposed Defense-provider extensions exercised by Site 9.** These are `PROPOSED`
+refinements, not silent additions:
 
 | piece | why the research demands it | shared with |
 |---|---|---|
@@ -958,12 +975,13 @@ What Site 9's buy is worth beyond Site 9:
   piece in the portfolio after the wall run itself.
 - **The gatehouse assembly** is Site 1's checkpoint at larger scale and Site 6's intake
   threshold.
-- **The mural passage** is a corridor piece for every dungeon, and it is the answer to the
-  14.6 % demand.
+- **The mural passage** is a corridor piece for every dungeon, and it helps answer the
+  14.6 % Defense/Fortification-interior demand.
 - **Keep/tower storeys** are the generic multi-storey tower every site eventually wants.
 - **The breach piece** is Site 3's structural buy, arriving early.
-- **The Holder card and the line tell** are Site 8's spatial expression at rungs LC-3, LC-4 and
-  LC-5 — Site 9 pays for the machinery that lets layered control *become spatial* on any host.
+- **The shared claimant record and line tell** are Site 8's spatial expression at rungs LC-3,
+  LC-4 and LC-5. Site 9 proves that machinery on the hardest large defense host; it does not
+  own or duplicate it.
 - **The two-faced surface property** — one committed geometry, two window readings, shared ids
   — is what a settlement wall, a canyon rim, a dam, a bridge and a cliff all eventually need.
   It is the most valuable thing rung B buys and the least visible.
@@ -980,7 +998,7 @@ Retain equivalents of:
 `chokepointIds` · `towerIds` · `towerDoorPairs` · `parapetFamily` · `banquette` ·
 `defensiveCoverClass` · `loopIds` · `loopManned` · `muralPassageIds` · `gateId` ·
 `barrierIds` · `barrierStates` · `machineryPositionId` · `crossingIds` · `crossingCapacities` ·
-`holderIds` · `holderCards` · `attributedGroundIds` · `lineId` · `lineTellId` ·
+`holderIds` · `layeredControlClaimRefs` · `holderViews` · `attributedGroundIds` · `lineId` · `lineTellId` ·
 `lineCrossingCosts` · `lineState` · `claimCount` · `populationMix` · `walkControl` ·
 `storesState` · `waterState` · `conditionState` · `damageVocabulary` · `authorityState` ·
 `outsideState` · `quietGroundIds` · `quietGroundShare` · `cultureProfileId` ·
@@ -1030,7 +1048,7 @@ window, one colonised works, one non-masonry expression, alongside the seed pair
 ### 15.3 Ideal
 
 Rung C's double line with the ring and offset gates; rung D's civil quarter with a real Site 10
-seam; three-holder sites; the Site 8 compose (concealed control inside open contest) proved on
+seam; three-holder sites; the Site 8 compose (overt and covert control on the same defense host) proved on
 this host; mural-passage networks and undermining as a Site 5 seam; the line moving as a
 consequence of play and persisting; broader culture × realm × condition × population families,
 each after its own proof.
@@ -1081,7 +1099,7 @@ Each names what gets built first, what it teaches, and how the variants link.
 Every previous golden seed is one composition. Site 9's whole claim is that a fortress is
 played as several committed windows on one persistent site — FFT built Bethla Garrison as five
 maps, and the engine's own 14.6 % demand arrives as interior room-chains, not as a castle
-silhouette. **Proposed build order:** rung A (one interior board) first to prove the cheap
+silhouette. That number is host demand, not Site-9 activation. **Proposed build order:** rung A (one interior board) first to prove the cheap
 parts, then `CF-SHAPE-01` as a **pair** — the same wall from inside and outside, sharing ids —
 as the retained seed. **Teaches:** whether one committed geometry can be read from two sides
 with stable ids, which is the property nothing else in the portfolio proves. **Ladder:** if
@@ -1090,17 +1108,19 @@ addition — which delays the scale proof by one horizon rather than losing it. 
 revise?** Yes at spec stage, expensive after the receipt schema is built, because
 `windowSetId` and cross-window id sharing are the two fields that change.
 
-### FQ-2 — Is the default state cohabitation rather than siege?
+### FQ-2 — Do we prove cohabitation before siege?
 
-The live world table's thirteen fortification settlements are overwhelmingly about
-inheritance and drift, not assault: *Thorngate Keep* houses "a growing civilian quarter inside
+The broad source screen contains fourteen fortification-adjacent settings, but only rows 51
+and 71 directly encode the Site-9 relationship. Both emphasize inheritance and drift rather
+than assault: *Thorngate Keep* houses "a growing civilian quarter inside
 the old killing ground"; *The Borrowed Wall* is "a hamlet sheltering inside the curtain-wall of
 a castle that was never theirs, paying rent to a lord no living soul has met." **Proposed
 build order:** build the cohabitation reading first (rung D's occupancy over rung B's
-machinery), and keep active assault as a licensed condition card that reuses the same
-attributed-ground system. **Teaches:** whether "two populations sharing works one of them
+machinery), and then test active assault as a condition card that reuses the same
+attributed-ground system. **This is proof order, not a global default; story canon selects the
+live state. Teaches:** whether "two populations sharing works one of them
 didn't build" is as playable as it reads on the table — and it is the state the engine
-actually rolls. **Ladder:** assault promotes out of cohabitation by setting
+directly supports in those two rows. **Ladder:** assault promotes out of cohabitation by setting
 `outside = investing` and `line = open-conflict`; cohabitation degrades toward Site 3 when the
 last claimant leaves. **Easy to revise?** Yes — this is a weighting, not a structure.
 

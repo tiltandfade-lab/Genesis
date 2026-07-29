@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: EVIDENCE PACKET — CODEX ADVERSARIAL DISPOSITION APPLIED 2026-07-28
 
 ---
 type: research-lane
@@ -13,6 +13,14 @@ authority note: this is an evidence record, not the live implementation contract
 ---
 
 # SITE 6 PRISON/CUSTODY — 2026-07-27 GAP-CLOSE SYNTHESIS
+
+## 2026-07-28 adversarial disposition
+
+`PR-DOC-10` remains a valid custody doctrine candidate. `PR-DOC-11` Ward-and-Surety is
+classified as an external disposition/social-liability provider, not a custody doctrine:
+it can guarantee appearance and consequences but cannot replace the controlled threshold,
+property chain, holding, service, counterplay and release obligations. Care/asylum is likewise
+a distinct care host unless actual prevented exit activates the full custody lifecycle.
 
 ## 1. What this pass was asked to do, and what it actually did
 
@@ -52,10 +60,8 @@ doctrine cards survive this pass unchanged. Four things are genuinely new:
    *maximally away from* any dedicated architecture at all (a distributed social/legal
    obligation with zero purpose-built footprint). Together they bracket the entire design space
    the first pair's two civic-jail variants sit inside the middle of.
-3. **A specific, load-bearing invariant question is now on the record** (`DOCTRINE-PAIR-TWO.md`
-   §4): does Site 6's REQUIRED "controlled threshold" and "force has truth" language admit a
-   purely social/legal realization, or is `PR-DOC-11` correctly out of scope as a disposition
-   alternative rather than a custody doctrine? This pass deliberately does not answer it.
+3. **The invariant question was useful and is now resolved by adversarial review**:
+   `PR-DOC-11` is an external disposition/social-liability provider, not a custody doctrine.
 4. **The FFT gap is closed honestly, not favorably** — Site 6 gets the Camp study's "zero direct
    hits" result, not the Mine study's "a whole named cohort" result. Two real findings
    (Golgorand Execution Site for the disposition edge; Thieves Fort for the faction-seized-prison
@@ -63,17 +69,18 @@ doctrine cards survive this pass unchanged. Four things are genuinely new:
    corpus does not contain one. Reporting this as a full FFT closure would be dishonest; it is
    reported as a partial, targeted closure instead.
 
-## 3. Proposed status-gate line (PROPOSED — not self-declared, not applied to the shared table)
+## 3. Adversarially integrated status-gate disposition
 
-The shared status-gate table (`docs/GOLDEN-SITES-CATALOG.md`) is explicitly out of scope for
-this pass (unique-path rule). This is the line this pass proposes for Codex/Adam's
-consideration, following the honesty law that nothing here earns `RESEARCHED: PASS`:
+The research pass itself did not edit the shared table. The 2026-07-28 integration accepts
+its conservative gate values while rejecting the proposed pairing of Ward-and-Surety as a
+custody doctrine:
 
 > `6 Prison / Custody` — `RESEARCHED: PARTIAL` (unchanged tier; strengthened within the tier —
 > non-European measured breadth substantially closed, FFT evidence now exists, hostage/surety/
 > quarantine/religious-penance and the suspended-fixture analogue remain open) ·
-> `FOUNDER-RULED: PARTIAL` (unchanged — the new doctrine pair introduces one new open founder
-> question, §7 below) · `BRIEF-CONGRUENT: PARTIAL` (unchanged) · `CLAY-PROVED: OPEN` (unchanged
+> `FOUNDER-RULED: PARTIAL` (unchanged — Yamen remains a candidate; Ward-and-Surety is an
+> external provider, not a founder choice inside Site 6) · `BRIEF-CONGRUENT: PARTIAL`
+> (unchanged) · `CLAY-PROVED: OPEN` (unchanged
 > — nothing here is clay).
 
 This pass does **not** claim `RESEARCHED: PASS`. Real gaps remain: the yamen cell's own
@@ -109,34 +116,24 @@ independent from `BF-CIVIC-AUTHORITY` ("small prisons back through `BF-CIVIC-AUT
 named as a *fallback*, not as this doctrine's *default* relationship) — flagged, not resolved,
 here.
 
-## 6. Three founder questions (for Codex to carry forward — none answered here)
+## 6. Remaining founder question
 
-1. **The `PR-DOC-11` invariant-scope question** (`DOCTRINE-PAIR-TWO.md` §4): should Site 6's
-   REQUIRED "controlled threshold" and "force has truth" invariants explicitly admit a
-   social/legal realization (narrow vs. broad reading, both stated), or is Ward-and-Surety
-   custody correctly a disposition/occupancy overlay rather than a promotable doctrine card?
-   This has real downstream consequences: a "broad" ruling opens a whole class of buildingless
-   custody scenes (cheap to generate, narratively rich, genuinely novel gameplay); a "narrow"
-   ruling keeps Site 6's invariants clean but sends this material to the disposition/occupancy
-   list instead.
-2. **Should `PR-DOC-10` promote alongside `PR-DOC-01`/`PR-DOC-02` as a third card in the
+1. **Should `PR-DOC-10` promote alongside `PR-DOC-01`/`PR-DOC-02` as a third card in the
    founder-facing proof queue, or wait behind the first pair's own clay proof?** The working
    spec's ruled build order (PR1/PR2/PR3) says nothing about doctrine-pair sequencing beyond
    "apply `PR-DOC-01` and `PR-DOC-02` to matched legal/capacity inputs" as step 6 of 8. This pass
-   recommends (not rules) that `PR-DOC-10`/`PR-DOC-11` wait until after that step passes, so the
-   base generator is proven before a second pair stress-tests it — but does not insert itself
-   into the ruled sequence.
-3. **Is the walk-census's "Prison / Asylum" combined bucket (`docs/intel/walk-census.md`) a
-   wiring problem or an honest reflection that the two institutions were historically blurred
-   (as the Site 6 corpus's own name choice suggests)?** If Adam wants Asylum treated as its own
-   occupant of the existing `PR-DOC-08 — Quarantine / Protective Isolation` card rather than a
-   silent Site-6-only default, that's a founder-taste call this pass surfaces but does not make.
+   recommends that `PR-DOC-10` wait until after that step passes, so the base generator is
+   proven before the Yamen composition stress-tests it.
+
+The 2026-07-28 adversarial review resolves the other two classification questions.
+Ward-and-Surety is an external disposition/social-liability provider. Care/asylum is a
+distinct care host unless actual prevented exit activates the full custody lifecycle.
+Neither remains a Golden founder choice.
 
 ## 7. Three-line summary of what the research changed about the site
 
-The site's promise, invariants, and ruled build order are unchanged. What changed: Site 6 now
-has real non-Anglo-American measured evidence instead of only colonial-institution citations,
-and a second doctrine pair exists that stretches the family from "custody fused into the seat
-of power" to "custody with no building at all" — the second of which directly questions whether
-one of Site 6's own REQUIRED invariants is written narrowly enough to accidentally exclude a
-real, well-documented historical custody tradition.
+The site's promise, invariants, and ruled build order are unchanged. Site 6 now has real
+non-Anglo-American measured evidence instead of only colonial-institution citations.
+The proposed second pair produced one custody candidate—Yamen—and one useful boundary
+rejection: Ward-and-Surety remains available as an external provider without weakening the
+controlled-threshold and force-truth invariants.

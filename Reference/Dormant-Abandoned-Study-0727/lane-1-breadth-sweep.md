@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: EVIDENCE DRAFT — CODEX ADVERSARIAL DISPOSITION RECORDED IN `synthesis.md` (2026-07-28)
 
 # Lane 1 — Breadth sweep: what else could "dormant / abandoned" be?
 
@@ -140,7 +140,7 @@ Sources: [Ruderal Resilience (Frontiers in Built Environment)](https://www.front
 [Ruderal plants and ecological succession](https://livetoplant.com/ruderal-plants-and-their-role-in-ecological-succession/) ·
 [Barn owl dietary shift following partial field abandonment](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11394017/)
 
-### 7. Reoccupation is real, common, and it *ends* the transform
+### 7. Reoccupation is real and common; replacement may end the transform
 
 Roman amphitheatres were not left empty. At Arles the open spaces and sturdy walls became
 the foundation of a small fortified community — nearly 200 houses within the walls, plus
@@ -148,12 +148,15 @@ chapels and four towers, inhabited into the early 19th century. At Lucca the *cu
 converted into dwellings and the oval became an urban square, passing through fortress,
 warehouse and prison on the way.
 
-**Genesis consequence.** This is exactly the boundary the invariant already draws: *no stable
-new operator owns the place.* A settled reoccupation is not a dormant site — it is a new host
-program wearing an inherited shell, and it belongs to Site 8 (layered control) or Site 10
-(urban institution). Site 3 owns only the *transient* claimants: scavengers, animals, a
-camp in one wing, a robbing crew with a cart. Naming this from the literature makes the
-invariant defensible rather than arbitrary.
+**Genesis consequence.** Stable occupants do not automatically erase dormant causality.
+Arles and Lucca are stronger cases: settled reoccupation established a replacement program
+that made the former host's failure non-consequential. At that point Dormant hands off to the
+new host program wearing an inherited shell; Layered Control or Urban Institution may also
+compose when their own predicates are met. Site 3 may still contain transient or stable
+replacement occupants while the original operating circuit remains failed: scavengers,
+animals, a camp in one wing, a robbing crew with a cart, or squatters who have not established
+a replacement host program. Naming this from the literature makes the boundary defensible
+rather than arbitrary.
 
 Sources: [Arles, Roman and Romanesque Monuments (UNESCO)](https://whc.unesco.org/en/list/164/) ·
 [The Roman Amphitheatre in Lucca](https://www.luccaapartmentsandvillas.co.uk/blog/roman-amphitheatre-lucca/) ·
@@ -257,9 +260,9 @@ Sources: [The Secret Drowned Villages Under Ladybower](https://letsgopeakdistric
 | overgrown / reclaimed | yes, as an orthogonal vector | **OVERGROWN** — a timed succession with substrate preference |
 | animal-denned shell | yes, but hand the ecology to Site 7 | Site 3 supplies the *inherited* void; Site 7 owns the occupant's grammar |
 | scavenger / robbing crew present | yes, transient only | a hook and an occupant, not a new operator |
-| squatter community settled in the shell | **no** | stable operator ⇒ Site 8 / Site 10. This is the Arles case |
+| squatter community settled in the shell | conditional | legal Dormant occupancy if the original host circuit remains stopped; compose Repurposed or Site 8 where the new use/claims become consequential |
 | funerary crypt with a living cult | **no** | maintained institution; belongs with Site 4 / Site 10 |
-| funerary crypt whose cult has lapsed | yes | **Funerary Store host + Dormant transform** — the crypt's real classification |
+| funerary crypt whose cult has lapsed | yes | **Funerary / Mortuary Institution host + Dormant transform** — the crypt's real classification |
 | haunted / cursed persistence | yes, LICENSED | needs realm and history facts; never the default explanation for stillness |
 | battlefield / disaster aftermath | partly | the *event* belongs to the story engine; Site 3 owns only the persistent state it leaves |
 | construction site never finished | yes, as a cause | "unfinished" is a distinct exit mode — the tools are there and nothing is worn |

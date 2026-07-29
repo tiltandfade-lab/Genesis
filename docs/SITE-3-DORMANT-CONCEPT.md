@@ -1,10 +1,10 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: DRAFT — CODEX ADVERSARIAL REDLINE APPLIED; FOUNDER QUESTIONS REMAIN OPEN
 
 ---
 type: working-site-spec
 created: 2026-07-25
-updated: 2026-07-27
-status: WORKING SPEC — cross-host transform; research PARTIAL; founder OPEN; clay OPEN
+updated: 2026-07-28
+status: WORKING SPEC — cross-host transform; adversarial redline applied; research PARTIAL; founder OPEN; clay OPEN
 site: 3 — dormant / abandoned (a **cross-host transform**, not a host program)
 standard: SITE-5-MINE-WORKSHOP-CONCEPT.md
 method: GOLDEN-SITE-CONCEPTING-GUIDELINES.md
@@ -50,11 +50,10 @@ vector of this transform. It is not a flood site.
 This spec is a consumer and index of the ontology contract, the catalog, the roller ledger
 and the world-context contract. It is not a replacement authority for any of them.
 
-### 1.2 Proposed status-gate line
+### 1.2 Adversarially integrated status-gate line
 
-The catalog's status table currently carries Site 3 inside the composite row
-`3/8/9/11/12 | OPEN | OPEN | OPEN | OPEN`. This spec **proposes** the following replacement
-line. It does not edit the table; the catalog owner does that.
+The 2026-07-28 integration pass applies the following reading in
+`GOLDEN-SITES-CATALOG.md`:
 
 | site | role | researched | founder-ruled | brief-congruent | clay-proved | current reason |
 |---|---|---|---|---|---|---|
@@ -136,11 +135,12 @@ grey filter over it.
 - **REQUIRED — host truth survives.** Original surfaces, routes, ownership history, culture
   and component provenance are transformed, never replaced by a generic ruin prefab. Stable
   ids survive the transform.
-- **REQUIRED — no stable new operator owns the place.** Passing scavengers, animals, weather,
-  a robbing crew, or a single encounter are legal. A functioning replacement population removes
-  the Dormant transform: it becomes Site 8 when at least two persistent simultaneous claims
-  retain a consequential control difference, or Site 10/its own host when one population has
-  simply moved in and started operating.
+- **REQUIRED — the original operating model remains stopped.** Stable occupants are legal:
+  squatters may sleep in a dead customs house, pilgrims may tend one sealed crypt chamber, or a
+  scavenger clan may live beside machinery it cannot restore. Occupancy removes Dormant only when
+  the failed host circuit is restored or a replacement program makes the former failure no longer
+  consequential. A persistent replacement use may compose `Repurposed`; two consequential
+  simultaneous claims may also compose Site 8. Neither fact erases Dormant by itself.
 - **REQUIRED — the state is factorized, not a switch.** Rung and vectors are recorded per
   zone with a cause and a recovery. One site-wide `abandonedState = ruined` is rejected for
   exactly the reason `mineState = failing` is rejected in Site 5: it makes every consequence
@@ -213,7 +213,7 @@ decays and in what order. Construction material sets the *clock*; it does not ch
 | **BURIED** | sediment, spoil, sand, ash or snow fills from below or above | it reduces headroom and seals lower volumes; it also preserves |
 | **OVERGROWN** | plants colonise in a fixed order: horizontal ledges, then joints and verticals, then canopy | it is a timed succession with substrate preference, not an intensity slider |
 | **SEALED** | openings deliberately blocked in a cheaper, later material; shafts capped; passages backfilled; a termination deposit laid | it *preserves*, and it inverts the problem from "survive the ruin" to "get in, and decide whether you should" |
-| **TRANSIENT-OCCUPIED** | animals den, scavengers camp, a robbing crew works, a single monster claims it | strictly transient. A stable operator ends the transform (§2.3) |
+| **OCCUPIED** | animals den, scavengers camp, a robbing crew works, squatters settle, pilgrims maintain one practice, a single monster claims it | occupancy is orthogonal to Dormant. It ends the transform only by restoring the original operating model or replacing it so completely that the former failure no longer matters (§2.3) |
 
 ### 4.3 Growth ladder and build order (`PROPOSED` under the generator principle)
 
@@ -223,10 +223,10 @@ gets recorded is build order, learning rationale and ladder links. Accordingly:
 | rung | build | learning rationale | ladder links |
 |---|---|---|---|
 | **A** | **The comparison pair on one small host** — an existing Site 1 Guard Post built twice from the same committed facts: operating, then dormant at D2 + SEALED | proves the transform *is* a delta: same ids, same footprint, same culture, only the caused facts differ. Site 1 is already `RESEARCHED/FOUNDER-RULED/BRIEF-CONGRUENT: PASS`, and its own spec already says "a dead checkpoint whose operating relationship has vanished belongs to Site 3" — so the handoff is pre-declared and the host costs nothing | promotes to B by adding a below-grade half; degrades to D5 |
-| **B** | **The Sunken Estate** — a domestic/manor host, D2–D3 above the datum, D0-preserved below it, FLOODED vector, drawdown as a state change | proves the SUBTRACTIVE-SURVIVES law and the water datum, covers 10.3 % of dungeon rolls directly, and needs no new host program | promotes to C; degrades to a D4 wall-stub field on a dry season |
-| **C** | **The lapsed crypt** — Funerary Store host (§11.5) + Dormant + SEALED + ROBBED | the largest single demand bucket at 21.3 %, and the two-route promise (ceremonial way vs robbers' tunnel) is the strongest strategic case in the whole site. Costs a new *host program*, which is why it is third and not first | promotes to a catacomb network; degrades to a robbed and empty gallery |
+| **B** | **The Sunken Estate** — a domestic/manor host, D2–D3 above the datum, D0-preserved below it, FLOODED vector, drawdown as a state change | proves one subtractive-survival profile and the water datum, covers 10.3 % of dungeon rolls directly, and needs no new host program | promotes to C; degrades to a D4 wall-stub field on a dry season |
+| **C** | **The lapsed crypt** — Funerary / Mortuary Institution host (§11.5) + Dormant + SEALED + ROBBED | the largest single demand bucket at 21.3 %, and the two-route promise (ceremonial way vs robbers' tunnel) is the strongest strategic case in the whole site. Costs a new *host program*, which is why it is third and not first | promotes to a catacomb network; degrades to a robbed and empty gallery |
 | **D** | **The dead wing** — one range of a still-operating Site 4 / 6 / 10 host gone dormant while the rest works | proves the transform at *sub-site* scale and proves it composes with a live host — the hardest and most valuable case | this is the promotion target for A–C |
-| **E** | **The stopped mine** — Site 5's own declared handoff ("fully stopped, at which point Site 3 becomes the host") | closes the loop with an already-specced host and exercises D0 HELD, the industrial closure vocabulary, and the FLOODED vector underground | ideal-horizon |
+| **E** | **The stopped mine** — Site 5's own declared handoff (fully stopped, at which point the Dormant transform becomes active over the mine host) | closes the loop with an already-specced host and exercises D0 HELD, the industrial closure vocabulary, and the FLOODED vector underground | ideal-horizon |
 
 Rungs map onto the L1–10 bands the way the other sites' ladders do: A is a low-tier
 encounter, B and C are mid-tier, D and E are upper-tier where the host's own complexity
@@ -241,7 +241,7 @@ water datum, with the drawdown clock as the site's central lever.
 Why this and not the waystation the concept board proposed: the waystation is small,
 above-ground, has no below-grade half, and touches neither of the two buckets that together
 carry a third of dungeon demand. `DA-SEED-01` exercises the ladder, the water vector, the
-subtractive-survives law, the aperture law, two genuinely different routes, and a state change
+subtractive-survival profile, the aperture-first profile, two genuinely different routes, and a state change
 the player can cause — on a host that already exists.
 
 The concept board's waystation is retained as rung A's alternate host if Adam prefers the
@@ -390,8 +390,8 @@ dormant(host) =
   × elapsedBand       ∈ {season, years, decades, generations, ancient}   [ordinal only]
   × cause             (a rolled world/place/host fact — never invented locally)
   × zoneRungs[]       ∈ D0..D5 per zone, not per site
-  × vectors[]         ⊆ {ROBBED, FLOODED, BURIED, OVERGROWN, SEALED, TRANSIENT-OCCUPIED}
-  × reclaimers[]      (transient only)
+  × vectors[]         ⊆ {ROBBED, FLOODED, BURIED, OVERGROWN, SEALED, OCCUPIED}
+  × reclaimers[]      (transient or stable; neither restores the host implicitly)
   → circuit deltas + ingress circuit + load circuit + residue field + light owners
 ```
 
@@ -571,13 +571,15 @@ Reject the candidate before presentation when:
 7. a water body has no source, no dead-level datum, or no destination;
 8. an object below the water datum weathers as if it were dry;
 9. a practical light exists with no current owner, fuel and legal operating condition;
-10. an aperture exists with no lit island beneath it, or a lit island with no aperture;
+10. a committed aperture emits no motivated light despite an unobstructed source, or a lit
+    island has no source;
 11. a robbed element was load-bearing and the structure above it is intact;
 12. de facto refuse contradicts the exit mode (an orderly withdrawal leaving portable valuables
     on the floor, or a violent end with the stores neatly emptied);
 13. overgrowth appears on a surface whose stage index has not been reached (canopy at rung D1,
     joint growth with no joints exposed);
-14. a stable operating population is present — that is Site 8 or the host's own number;
+14. the original host circuit is operating normally while Dormant is still asserted, or a
+    replacement program has made the old failure non-consequential without removing Dormant;
 15. the only route is a breach that no legal standee can pass, and no alternative exists;
 16. a large creature is placed in a volume whose capacity fact excludes it;
 17. rung D5 is selected but the encounter requires interior cover or an aperture;
@@ -593,7 +595,7 @@ If placement fails, try in this order and record the relaxation:
 1. move non-canonical dressing;
 2. reduce the residue field's object count while preserving its taken/left ratio;
 3. lower one zone's rung by one step (less damage is always safer than more);
-4. drop one vector, in the order TRANSIENT-OCCUPIED → OVERGROWN → BURIED → ROBBED;
+4. drop one vector, in the order OCCUPIED → OVERGROWN → BURIED → ROBBED;
 5. shorten the reclaimed ground while preserving the claimant's presence;
 6. move the water datum by one `h` step;
 7. reduce the site one scale rung while keeping cause, failure, aperture and residue;
@@ -644,13 +646,14 @@ roost · a single monster that has claimed the best-protected volume · pilgrims
 visiting a closed place on a schedule · a rival party who arrived an hour ago. Every one of
 these has a *way in*, and their way in is a route the player can use.
 
-### 11.5 THE FUNERARY STORE — a host program, not a state (`PROPOSED`)
+### 11.5 THE FUNERARY / MORTUARY INSTITUTION — a host program, not a state (`PROPOSED`)
 
 The census maps Subterranean Crypt (21.3 %) to Site 3. That mapping is half right, and the
 wrong half is load-bearing: **a crypt with a living cult is a maintained institution and must
 not take the Dormant transform.**
 
-Under the ontology contract's bin (b), the Funerary Store is an **ordinary venue program**
+Under the ontology contract's bin (b), the Funerary / Mortuary Institution is an **ordinary
+venue program**
 deserving a retained Golden Venue fixture — not a thirteenth Golden Site. Its operating model:
 
 - **roles:** keeper/sexton, officiant, mourners, the enrolled dead, the excluded dead;
@@ -688,8 +691,9 @@ it is the strongest strategic case in this whole site.
 Empty and unvisited · empty but recently searched · a den · a roost · a scavenger camp in one
 dry corner (this is Site 2's hosted-camp guest-family property landing inside a Site 3 host) ·
 a robbing crew mid-extraction · pilgrims on a schedule · a rival party · a bound or persistent
-supernatural presence (LICENSED). **A stable operating population is not an occupancy state
-here — it ends the transform.**
+supernatural presence (LICENSED). **Stable occupants who merely inhabit the failed host remain
+legal occupants. Dormant ends only when they restore the original program or establish a
+replacement program that makes the old failure non-consequential.**
 
 ### 12.2 Arrival hooks
 
@@ -699,7 +703,7 @@ robbing crew opened · shelter here and discover you are not the first · restar
 for somebody who needs it · verify a death · return something to a closed place · trace where
 the removed machinery went. Each must touch a real circuit and at least one map lever.
 
-### 12.3 Lighting — the CAUSAL LIGHT LAW plus THE APERTURE LAW
+### 12.3 Lighting — the CAUSAL LIGHT LAW plus the aperture-first profile
 
 The ruled law applies at its purest here: **withdrawal of maintenance removes the light owner
 by definition.** The transform must therefore *delete* practical light sources unless a
@@ -710,16 +714,18 @@ The image lane shows exactly what that produces: an unowned interior is roughly 
 black, and the read is carried by grazing light on the near wall, specular sheen on wet
 horizontal floor, and two or three high-albedo objects. Nothing else in the volume is legible.
 
-**THE APERTURE LAW (`PROPOSED`, an addition to the ruled law).** Dormancy destroys light
-owners and *creates apertures*. Every breach, roof hole, collapsed vault and open portal is a
-motivated light source; the lit island beneath it is exposed ground and the dark rim is not.
-This resolves the tension between the causal law and the fixed-camera readability gate without
-inventing a lamp: the site does not need a light, it needs a hole, and dormancy makes holes
-for free.
+**THE APERTURE-FIRST DEFAULT (`PROPOSED`, an addition to the ruled law).** Dormancy may
+destroy light owners. A breach, roof hole, collapsed vault or open portal may exist only
+when the host and consequence ledger already commit it; the transform never punches a hole
+for readability. Every such committed aperture is a motivated light source: the lit island
+beneath it is exposed ground and the dark rim is not. Aperture-first is a useful profile, not
+a universal causal consequence; sealed, intact and early-rung hosts may stay dark and let
+player-owned light do the work.
 
 Teeth: a rolled dormant interior whose census has no light-needing occupant emits **zero**
-unmotivated practicals, while the readability gate still passes — and it passes because every
-zone that must be read either has an aperture or is deliberately dark.
+unmotivated practicals, while the readability gate still passes — because every zone that
+must be read either has a causally committed aperture or is deliberately dark and assigned to
+player-owned light.
 
 ### 12.4 Cutaway
 
@@ -905,15 +911,15 @@ Rungs D0–D4 with per-zone assignment; ROBBED, FLOODED, OVERGROWN and SEALED ve
 blocking panel, breach, rubble cone, wall-stub run, scar band, water datum and waterline;
 closure cards for at least two cultures; construction cards for at least two materials; the
 residue field with working exit modes; the ingress and load circuits; reactivation on at least
-three verbs; transient occupancy including a hosted camp and a den; the aperture law
-implemented with its receipt; honest promotion into Site 8 when a second persistent claim
-appears.
+three verbs; occupancy including a hosted camp, a den and one stable non-restoring occupant;
+the aperture-first profile implemented with its receipt; honest composition with Site 8 when
+a second persistent claim appears.
 
 ### 15.3 Ideal
 
 The transform working across all twelve Golden Sites with no host-specific branch; the
-Funerary Store host program and its four sub-programs as a retained Golden Venue fixture;
-BURIED and full TRANSIENT-OCCUPIED; multiple elapsed bands and climate-specific decay orders
+Funerary / Mortuary Institution host program and its four sub-programs as a retained Golden
+Venue fixture; BURIED and full OCCUPIED; multiple elapsed bands and climate-specific decay orders
 including mudbrick, thatch, permafrost and desert; repair, reoccupation and reactivation as
 *played* processes with visible historical layers; rung D5 earthworks as a wilderness-walk
 citizen; Grounded-through-Mythic causes; and the whole thing reversible — a place the players
@@ -936,32 +942,34 @@ proves a transform is the difference between two pictures of the same place.
 
 Each arrives as a proposed build order, not an A-or-B choice (the generator principle).
 
-### Q3-1 — Does the aperture become the default light owner for dormant interiors?
+### Q3-1 — Does aperture-first become the initial proof profile for dormant interiors?
 
 **The choice, plainly.** A dormant interior has nobody to light it. Two ways to keep it
 readable: (a) hole-first — every zone that must be read gets a motivated opening, and the
 rest is genuinely dark; (b) dark-first — the site is mostly black and the player's own light
 is the primary tool, with apertures kept rare.
 
-**Recommendation:** (a) as the build order, with (b) always legal and rolled. Apertures are
-free (dormancy makes holes anyway), they are causal, they create the exposed-island /
-safe-rim tactical figure, and they let the fixed-camera gate pass without inventing a lamp.
+**Recommendation:** (a) for the first changed-seed proof, with (b) always legal and rolled.
+Where the cause ledger already commits a breach, apertures are causal, create the
+exposed-island / safe-rim tactical figure, and let the fixed-camera gate pass without
+inventing a lamp. The transform may never create a hole merely because the presentation
+needs one.
 
 **What it changes later:** the entire look of every dormant interior, and how often the party's
 torch is the only thing lit. **Easy to revise?** Yes — it is a weight, not a structure.
 **Proof needed:** the aperture-lit and unowned-dark captures in §15.1, side by side.
 
-### Q3-2 — Is the Funerary Store a host program we build, or does Site 3 keep swallowing crypts?
+### Q3-2 — Is the Funerary / Mortuary Institution a host program we build, or does Site 3 keep swallowing crypts?
 
 **The choice, plainly.** Subterranean Crypt is 21.3 % of dungeon rolls — the single biggest
 bucket in the census. Today it is mapped to "dormant". But a crypt with a living cult is a
 *working institution*, and building it as a ruin would make a fifth of all dungeons quietly
 wrong.
 
-**Recommendation:** build the Funerary Store as an **ordinary venue program with a retained
+**Recommendation:** build the Funerary / Mortuary Institution as an **ordinary venue program with a retained
 fixture** — bin (b), one program row plus arrangement tables, not a thirteenth Golden number
 — and let Site 3 transform it like any other host. Build order: rung A pair first (cheapest
-proof of the transform), Sunken Estate second (no new host), Funerary Store third (the only
+proof of the transform), Sunken Estate second (no new host), Funerary / Mortuary Institution third (the only
 one that costs a new host).
 
 **What it changes later:** whether a fifth of the dungeon supply gets a real operating model
@@ -977,8 +985,9 @@ consumes the other hosts. That is true of *portfolio coverage*. It is not true o
 least three unlike hosts, and two spec-grade hosts already exist (Guard Post at PASS/PASS/PASS,
 Mine at working-spec grade).
 
-**Recommendation:** split the claim. Build the transform proof **now**, at rung A, on hosts
-that already exist; keep portfolio coverage deferred to last as originally ruled. The
+**Recommendation:** split the claim. Build the transform prototype **now**, at rung A, on a
+host that already exists; do not call the transform portfolio-proved until the same compiler
+survives at least three unlike hosts. Keep portfolio coverage deferred to last as originally ruled. The
 research's strongest finding argues for this: the engine already rolls the condition content
 and cannot make it agree, so the coherence layer pays off on every dungeon generated between
 now and the twelfth site — not only on Site 3's own fixtures.

@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: EVIDENCE DRAFT — CODEX ADVERSARIAL DISPOSITION RECORDED IN `synthesis.md` (2026-07-28)
 
 # BREADTH SWEEP — "what else could Site 12 be?"
 
@@ -9,9 +9,10 @@ site: 12 — anomalous / living / mobile
 
 ## The question this lane answers
 
-Site 12 is described in the portfolio as the **substrate/ownership stress case** — the
-proof that Genesis can hold a place whose *ground* is alive, moving, or wrong
-(`GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md` §6). The catalog's shopping note is one line:
+The campaign began by describing Site 12 as the **substrate/ownership stress case**. The
+2026-07-28 adversarial review narrows that label: Site 12 proves `SubstratePlan` plus
+terminal transformation; ownership/tenure is only one optional axis. The catalog's original
+shopping note was one line:
 "exotic · smallest structural buy · organic/impossible connectors; biggest skin buy"
 (`STRUCTURE-KIT-CATALOG.md` vernacular matrix).
 

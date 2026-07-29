@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: EVIDENCE PACKET — CODEX ADVERSARIAL CORRECTION APPLIED 2026-07-28
 
 ---
 type: research-note
@@ -13,16 +13,16 @@ method: source read of the built engine (`src/`, `data/`) plus a re-tally of the
 
 ## 0. The finding in one sentence
 
-**Site 8 is not a content gap. It is a projection gap.** The story engine already rolls, persists,
-mutates and narrates layered control on every single world it creates; nothing anywhere in the
-visual or spatial layer can express any of it.
+**Site 8 has abundant claimant ingredients and a real projection gap.** The story engine rolls,
+persists and mutates factions in every sampled world; nothing in the visual or spatial layer can
+bind two of those claims to the same host, resource, route or schedule.
 
 That reframing is the most consequential result of this whole study and it changes what the site's
 first build should be.
 
 ---
 
-## 1. The eligibility predicate is satisfied by 100% of rolled worlds
+## 1. Claimant ingredients appear in 100% of the sample; local eligibility is unmeasured
 
 The DESIGN.md ruling requires (a) at least two persistent simultaneous claims and (b) a
 consequential difference in at least one control dimension.
@@ -31,12 +31,12 @@ Re-tallying the twelve real TIYL starts in `docs/intel/tiyl-raw.json`:
 
 - **Factions per world: 12/12 worlds have ≥2. Range 2–4, mean 2.92.** Each faction carries a
   `name`, a `dominant` flag, an `agenda` and a `method`.
-- **The `method` field is a control-dimension roll in all but name.** Across the 35 factions in the
+- **The `method` field supplies control tactics, not legitimacy or standing.** Across the 35 factions in the
   batch: faith and persuasion ×5, commerce and debt ×5, coercion and made examples ×4, marriage and
   blood-ties ×4, rumour and propaganda ×4, sabotage and accidents ×3, smuggling and the black
   market ×3, open force ×2, law/charters/bureaucracy ×2, infiltration and spies ×2, ritual and the
-  occult ×1. **21 of 35 (60%) are parallel-authority or covert methods** — precisely the LC-2/LC-3
-  material.
+  occult ×1. **21 of 35 (60%) are parallel-authority or covert tactics** — useful LC-2/LC-3
+  ingredients once a host-local claim and independent standing facts exist.
 - **`agenda` supplies the claim target.** "Seize control of a vital resource" ×5, "widen its
   territory or reach" ×4, "impose its creed, law, or taboo on everyone" ×4, "break, absorb, or
   outlast a rival" ×3, and the full `SS.fAgenda` d20 also carries **"control who comes and goes"**
@@ -52,6 +52,12 @@ Re-tallying the twelve real TIYL starts in `docs/intel/tiyl-raw.json`:
 Sources for the rolls: `src/engine/world-gen.js` (`rollFaction` at line 8, `factionKind` at 61,
 `rollFactionProximity` at ~70, `pickTension` at 49, `rollEntry`'s standing/bundle at 99–148),
 `data/starting-state.js` (`SS.fAgenda` d20, `SS.fMethod` d12, `SS.eStanding`).
+
+These facts do **not** satisfy the predicate by themselves. The audit never proves that two
+factions simultaneously claim the same host, resource, route or schedule, nor that their
+difference is locally actionable. The measured result is therefore **12/12 worlds with claimant
+ingredients and 0/12 locally evaluated Site-8 candidates**. Activation frequency remains
+unmeasured.
 
 ---
 
@@ -226,7 +232,7 @@ Using the ledger's status vocabulary (`GOLDEN-SITE-ROLLER-PRESERVATION-LEDGER.md
 
 | source | status | contribution to `LayeredControl` |
 |---|---|---|
-| `data/starting-state.js` `SS.fAgenda` / `SS.fMethod`; `src/engine/world-gen.js` `rollFaction` | `LIVE` | ≥2 persistent claimants per world with agenda + method |
+| `data/starting-state.js` `SS.fAgenda` / `SS.fMethod`; `src/engine/world-gen.js` `rollFaction` | `LIVE` | ≥2 world-level claimant ingredients per sampled world with agenda + method; no same-host binding |
 | `src/engine/world-gen.js` `rollFactionProximity` / `factionKind` | `LIVE` | the PC's own tie to a claimant |
 | `src/engine/world-gen.js` `rollEntry` `standing` (`SS.eStanding`) | `LIVE` | the arriving recognition asymmetry |
 | `src/engine/world-gen.js` `pickTension` | `LIVE` | opening tension, frequently a control statement |

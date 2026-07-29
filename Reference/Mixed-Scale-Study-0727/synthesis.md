@@ -1,4 +1,4 @@
-STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+STATUS: RESEARCH SYNTHESIS — CODEX ADVERSARIAL DISPOSITION APPENDED 2026-07-28
 
 # Synthesis — Mixed-Scale Study (Golden Site 11)
 
@@ -8,26 +8,36 @@ lanes: `lane-1-breadth-sweep.md` · `lane-2-image-reference.md` · `lane-3-fft-c
 `lane-4-engine-evidence.md` · `images/LICENSE-LEDGER.md`
 consumer: `../../docs/SITE-11-MIXED-SCALE-SPEC.md`
 
+## 2026-07-28 adversarial disposition
+
+The 18.55% tally is a broad mixed-scale object screen, not measured Site-11 activation. The
+runtime concept is `ScaleContract`: two represented body/object scales qualify when an
+aperture, route, reach, cover, traversal or interaction affordance differs. The larger body
+may be absent or historical. Huge-versus-Medium is a strong first proof, not a universal 3:1
+threshold. Anomalous substrate composes through Site 12; it does not reroute or replace the
+host. Hoard uses a shared `GranularMass` terrain provider sponsored by Site 11.
+
 ## 1. What the research changed
 
 Three things, in order of how much they move the build.
 
-**(a) The demand is 3.7× larger than the census said, and it is demand for props.**
+**(a) The broad object supply is 3.7× larger than the census said.**
 Recomputing the census's own data against the actual source table gives 100 of 539 wilderness
 arrivals (18.55%) carrying a mixed-scale set-piece, not 27 (5.01%). Running the same broad
 sweep for Site 3 as a control puts dormant/ruin content at 25.42%, so mixed-scale is the
-**second**-largest recomputed share, not the largest — see `lane-4-engine-evidence.md` §1a,
+**second**-largest broad recomputed share, not the largest — see `lane-4-engine-evidence.md` §1a,
 where the earlier first-place claim is retracted with its arithmetic. And all 100 hits are
 objects: colossal statues, giant skeletons, petrified dragons, oversized artefacts. Not one is
-a hoard-hall, a giant steading, or an inhabited titan. **Site 11's real, measured, live demand
-is for a mixed-scale prop-and-terrain register that can be dropped into the sites we already
-have.** The dragon-hall was the least-evidenced part of the brief.
+a hoard-hall, a giant steading, or an inhabited titan. **The measured result is supply for a
+mixed-scale prop-and-terrain register; Site-11 activation remains unmeasured.** The dragon-hall
+was the least-evidenced part of the brief.
 
 The control run also produced the best single piece of evidence for the transform reading:
 28 of the 539 arrivals are caught by *both* sweeps — `Fallen Megalith`, `Shattered Throne`,
 `Giant Sundial (Broken)`, `Beached Leviathan` and seven more. One rolled row, carrying a Site 3
-state and a Site 11 relationship simultaneously, with no conflict. That is what two transforms
-stacking over one object is supposed to look like.
+state and a mixed-scale ingredient simultaneously. They are good Dormant + ScaleContract
+candidates, but the screen did not test consequential affordance and cannot count them as
+automatic activations.
 
 **(b) The tactical grammar is already written; only the geometry is missing.**
 Those 49 authored rows carry footprint, height, and tactical effect columns, and the effects
@@ -45,7 +55,7 @@ body and inherited by a smaller one, which is exactly why classical Greeks named
 masonry after Cyclopes. It is also the cheapest to build (the existing kit with the piece
 scale changed) and the one FFT's Nelveska Temple already demonstrates.
 
-## 2. PROPOSED RULING — the Site 11 / Site 12 boundary
+## 2. Adversarial disposition — the Site 11 / Site 12 composition boundary
 
 The census flagged `The Megastructure` (0.79% of dungeon walks) as "genuinely ambiguous vs.
 Site 12." The source table resolves it without a taste call.
@@ -53,25 +63,22 @@ Site 12." The source table resolves it without a taste call.
 `Dungeon Type.md` rows 98–99 classify The Megastructure in their own theme column as
 **"Anomaly / Ancient technology"**, and describe it as *"metallic corridors hum softly with
 impossible geometry"* and *"non-euclidean walls shift in faint mechanical rhythm."* Neither
-line mentions size. What they describe is a substrate that does not behave like matter —
-which is the ontology contract's Site 12 definition ("non-building identity, unusual extent,
-motion or living ownership").
+line mentions size. What they describe is a host whose support/spatial behavior requires an
+anomalous `SubstratePlan`.
 
-> **PROPOSED RULING — BIGNESS IS NOT ANOMALY.**
-> Site 11 owns spaces that are *dimensionally* strange but *physically ordinary*: euclidean,
-> static, obeying gravity and ordinary material behaviour. Site 12 owns spaces that are
-> *physically* strange — non-euclidean, moving, living, self-altering — **at any size**.
-> `The Megastructure` therefore routes to **Site 12**, not Site 11.
+> **REVIEWED RULING — BIGNESS IS NOT ANOMALY.**
+> Site 11 proves consequential scale; Site 12 proves substrate behavior. Ordinary and
+> anomalous substrate may both carry a ScaleContract. `The Megastructure` clearly needs the
+> substrate contract and may also need scale; neither Golden number replaces its host.
 
 ### The three-question test (countable, in order)
 
-1. **Does the space obey euclidean geometry, gravity, and ordinary material behaviour?**
-   No → **Site 12**. Stop.
+1. **Does body/object scale change a present affordance?** No → no Site-11 stress proof.
 2. **Do the space's measurements have a named cause in some body's size** — a builder, an
    intended occupant, a set of remains, or a present colossus? No → it is the host site with
    an unusual footprint, not Site 11.
-3. **Do at least two body classes have a simultaneous and consequential relationship to the
-   same space?** No → it is the host site with a big occupant, not Site 11.
+3. **Do at least two represented scale contracts have a consequentially different relationship
+   to the same space?** No → it is the host site with a big occupant or large object, not Site 11.
 
 All three must pass. Question 3 is the one that does most of the work: it is what stops
 "a cave with a dragon in it" from being Site 11 (which is Site 7's boundary note already), and
@@ -79,28 +86,25 @@ it is what makes Site 11 a *relationship* case rather than a size bucket.
 
 ### The corollary
 
-A Megastructure may still carry a **Site 11 transform** — if its shifting corridors happen to
-be sized for a body class other than the player's, the scale relationship is real and applies
-as a delta. What it may not do is change host. This is `SETTLED-LIFE-SITES-PROGRAM.md` §2's
-noun/state law applied unchanged: the host is a noun, the scale relationship is a modifier
-over it.
+A Megastructure may carry both `ScaleContract` and `SubstratePlan`. The contracts change
+affordances and substrate behavior without changing host identity.
 
 ## 3. PROPOSED — what Site 11 actually is
 
-> **Site 11 is not a place. It is a relationship between a space and two bodies, plus the
-> two pieces of geometry that relationship needs and no other site owns.**
+> **Site 11 is not a place. It is the retained proof that one shared ScaleContract can make
+> unlike body/object scales consequential across unlike hosts.**
 
-That relationship applies as a transform over any host. The two pieces it owns outright are:
+That relationship applies across hosts. Two shared assemblies are first proved here:
 
 1. **The aperture pair** — a room with a big-body opening and a small-body opening. Evidenced
    at Hampi (eleven chambers each sized for two elephants, each with a small rear door for the
    mahouts) and structurally in the Tiryns gallery (a human passage threaded through an
    eight-metre wall). It produces two viable routes with different capacities from one wall
    assembly, and it rhymes exactly with Site 5's haul/manway split.
-2. **Hoard terrain** — a granular mass with a repose angle, a stable band, an unstable band,
+2. **`GranularMass` terrain** — a shared provider with a repose angle, a stable band, an unstable band,
    and an engulfment failure mode. Nothing like it exists in the engine, and Site 7's brief is
    already waiting on it ("may borrow a bounded hoard-pile prop until site 11 mints hoard
-   terrain properly").
+   terrain properly"). Hoard is one Site-11-sponsored use, not exclusive ownership.
 
 Everything else Site 11 needs is the existing kit at a different piece scale, plus a bone
 material and an irregular joint treatment.

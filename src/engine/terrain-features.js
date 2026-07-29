@@ -533,6 +533,214 @@ function terrainDefensiveGateworksSpec(seed){
   });
 }
 
+/* ─── CL-F09 · THE VERTICAL FFT PROOF ──────────────────────────────────────────────────────────
+   This is one retained BATTLEFIELD, not another isolated-form card. Its terrain is authored from
+   two reusable macro operations:
+     * a sparse control surface establishes low approach, two fighting benches, a saddle and a
+       thirty-foot far ridge;
+     * graded corridors cut/fill that mass into a long switchback and a shorter gully climb.
+
+   The height is not a spectacle budget. It is tactical distance: twelve quanta are earned across
+   several routes and fighting levels, while the high mass stays in the camera-far half. */
+function terrainFftHillsideSpec(seed){
+  var extent = { x: 20, y: 24 };
+  var switchback = [
+    { x: 17.5, y: 22.5, h: 0, widthCells: 2.1 },
+    { x: 4.0, y: 19.4, h: 3, widthCells: 1.8 },
+    { x: 3.2, y: 17.1, h: 3, widthCells: 2.6 },
+    { x: 16.4, y: 13.9, h: 6, widthCells: 1.75 },
+    { x: 17.0, y: 11.6, h: 6, widthCells: 2.55 },
+    { x: 5.0, y: 8.5, h: 9, widthCells: 1.8 },
+    { x: 4.2, y: 6.3, h: 9, widthCells: 2.6 },
+    { x: 13.6, y: 3.1, h: 12, widthCells: 1.9 },
+    { x: 11.0, y: 1.5, h: 12, widthCells: 2.5 }
+  ];
+  var gully = [
+    { x: 19.0, y: 22.0, h: 0, widthCells: 1.15 },
+    { x: 18.5, y: 17.5, h: 2, widthCells: 1.15 },
+    { x: 18.7, y: 13.5, h: 4, widthCells: 1.15 },
+    { x: 18.2, y: 9.5, h: 6, widthCells: 1.15 },
+    { x: 18.5, y: 5.5, h: 8, widthCells: 1.15 },
+    { x: 18.0, y: 1.0, h: 10, widthCells: 1.15 }
+  ];
+  var pieces = [
+    terrainFeaturePiece("fft-hill-mass", "R1-07", "thirty-foot mountainside", [
+      terrainFeatureOp("control-surface", "set", {
+        columns: [0, 3, 7, 11, 15, 19],
+        rows: [0, 3, 6, 8, 12, 15, 19, 23],
+        heightsH: [
+          [11, 12, 12, 11, 9, 8],
+          [11, 12, 12, 11, 10, 8],
+          [10, 11, 11, 10, 8, 7],
+          [7, 8, 9, 9, 7, 6],
+          [6, 7, 7, 8, 6, 4],
+          [4, 4, 6, 6, 4, 2],
+          [2, 2, 3, 4, 1, 0],
+          [0, 0, 0, 0, 0, 0]
+        ],
+        /* The massif is continuous walkable ground. A cliff is a later explicit scarp piece, never
+           an accidental by-product of quantizing the survey controls or cutting the route. */
+        slopeClamp: 1,
+        kind: "ground"
+      })
+    ], {
+      macroNodes: ["lower-approach", "lower-bench", "middle-bench", "saddle", "high-overlook"],
+      reliefH: 12
+    }),
+    /* One real face, confined to the middle-left shoulder. The switchback rounds its right-hand
+       end, so the scarp creates route meaning without wrapping the mountain in a sedimentary band. */
+    terrainFeaturePiece("fft-middle-scarp", "R1-07", "localized middle-shoulder escarpment", [
+      terrainFeatureOp("ridge", "max", {
+        polyline: [
+          { x: -1.0, y: 12.4 }, { x: 3.5, y: 11.7 },
+          { x: 8.0, y: 12.3 }, { x: 13.8, y: 11.1 }
+        ],
+        halfPlane: true,
+        plateauSide: 1,
+        heightH: 8,
+        baseH: 0,
+        slopeClamp: Infinity,
+        kind: "ground",
+        bounds: { x: 0, y: 9, w: 14, d: 5 }
+      })
+    ], {
+      routeRelationship: "the primary switchback rounds the open right end",
+      qualityLock: "one broken scarp only; never repeat it as parallel strata"
+    }),
+    /* R1-07 is intentional here. A mountainside road grades through 1h neighbours; R1-09 is the
+       constructed retaining-terrace piece and would turn every legal rise into a curb. */
+    terrainFeaturePiece("fft-switchback", "R1-07", "cut-and-fill switchback", [
+      terrainFeatureOp("graded-path", "set", {
+        polyline: switchback,
+        widthCells: 2.4,
+        shoulderCells: 2.25,
+        surfaceKind: "switchback-trail",
+        slopeClamp: 1,
+        kind: "ground"
+      }, "switchback-trail")
+    ], {
+      routeType: "switchback",
+      hairpins: 3,
+      construction: "three uphill traverses, cut/fill shoulders, broad turning landings"
+    }),
+    terrainFeaturePiece("fft-gully", "R1-03", "direct gully climb", [
+      terrainFeatureOp("graded-path", "set", {
+        polyline: gully,
+        widthCells: 1.15,
+        shoulderCells: 1.4,
+        surfaceKind: "gully-route",
+        slopeClamp: 1,
+        kind: "ground"
+      }, "gully-route")
+    ], {
+      routeType: "gully",
+      tacticalCost: "shorter and narrower; ends below the crown and requires a final climb"
+    })
+  ];
+  return terrainFeatureSpecBase("fft-hillside-switchback-proof", seed, extent, pieces, {
+    featureId: "FFT-H01",
+    featureScale: "battlefield",
+    quietSurfaceMinimumShare: 0.23,
+    macroGraph: {
+      nodes: [
+        { id: "lower-approach", heightBandH: [0, 1], role: "deployment" },
+        { id: "lower-bench", heightBandH: [2, 4], role: "first fighting surface" },
+        { id: "middle-bench", heightBandH: [5, 8], role: "reverse-cover and route crossing" },
+        { id: "saddle", heightBandH: [9, 10], role: "alternate gully arrival" },
+        { id: "high-overlook", heightBandH: [11, 12], role: "objective and observation" }
+      ],
+      routes: [
+        { id: "fft-switchback", from: "lower-approach", to: "high-overlook",
+          kind: "walk", hairpins: 3 },
+        { id: "fft-gully", from: "lower-approach", to: "saddle",
+          kind: "narrow climb", hairpins: 0 }
+      ]
+    },
+    tacticalGrammar: {
+      profile: "fft-hillside-switchback",
+      verticalTravelH: 12,
+      verticalTravelFeet: 30,
+      primaryRoutePieceId: "fft-switchback",
+      alternateRoutePieceId: "fft-gully",
+      fightingElevationZones: 5,
+      highMassCameraBand: "far"
+    }
+  });
+}
+
+function terrainMarkedRouteReport(field, surfaceKind){
+  var route = field.cells.filter(function(c){
+    return c.inPlayfield && c.standable && c.surface === surfaceKind;
+  });
+  if(!route.length){
+    return { surfaceKind: surfaceKind, cells: 0, minH: null, maxH: null,
+      verticalTravelH: 0, connectedLowToHigh: false, maxInternalStepH: null, ok: false };
+  }
+  var routeSet = {};
+  route.forEach(function(c){ routeSet[c.index] = true; });
+  var minH = route.reduce(function(m, c){ return Math.min(m, c.h); }, Infinity);
+  var maxH = route.reduce(function(m, c){ return Math.max(m, c.h); }, -Infinity);
+  var roots = route.filter(function(c){ return c.h === minH; }).map(function(c){ return c.index; });
+  var seen = {}, stack = roots.slice(), maxStep = 0;
+  roots.forEach(function(i){ seen[i] = true; });
+  while(stack.length){
+    var i = stack.pop();
+    (field.walkAdj[i] || []).forEach(function(j){
+      if(!routeSet[j]) return;
+      maxStep = Math.max(maxStep, Math.abs(field.cells[i].h - field.cells[j].h));
+      if(!seen[j]){ seen[j] = true; stack.push(j); }
+    });
+  }
+  var connected = route.some(function(c){ return c.h === maxH && seen[c.index]; });
+  return {
+    surfaceKind: surfaceKind,
+    cells: route.length,
+    minH: minH,
+    maxH: maxH,
+    verticalTravelH: maxH - minH,
+    connectedLowToHigh: connected,
+    maxInternalStepH: maxStep,
+    ok: connected && maxStep <= TERRAIN_GRID_LAW.walkableStepQuanta
+  };
+}
+
+function terrainQuietSurfaceReport(field){
+  var live = field.cells.filter(function(c){ return c.inPlayfield && c.standable; });
+  var quiet = live.filter(function(c){ return c.localSlopeDeg <= 0.0001; });
+  var byBand = {};
+  quiet.forEach(function(c){ byBand[c.h] = (byBand[c.h] || 0) + 1; });
+  return {
+    standableCells: live.length,
+    quietCells: quiet.length,
+    quietShare: live.length ? quiet.length / live.length : 0,
+    quietHeightBands: Object.keys(byBand).map(Number).sort(function(a, b){ return a - b; }),
+    byHeight: byBand
+  };
+}
+
+function terrainFftHillsideSceneBuild(seed){
+  var s = seed == null ? terrainSeedFrom("cl-f09-fft-hillside") : (seed >>> 0);
+  var spec = terrainFftHillsideSpec(s);
+  var field = terrainFieldBuild(spec);
+  var switchback = terrainMarkedRouteReport(field, "switchback-trail");
+  var gully = terrainMarkedRouteReport(field, "gully-route");
+  var quiet = terrainQuietSurfaceReport(field);
+  return {
+    sceneId: "fft-hillside-proof",
+    featureBook: CL_F08_TERRAIN_FEATURE_BOOK,
+    featureId: spec.featureId,
+    spec: spec,
+    fields: [field],
+    primary: field,
+    structures: [],
+    cameraLaw: TERRAIN_DEFENSIVE_CAMERA_LAW,
+    tacticalGrammar: spec.tacticalGrammar,
+    macroGraph: spec.macroGraph,
+    routeReport: { switchback: switchback, gully: gully },
+    quietSurfaceReport: quiet
+  };
+}
+
 function terrainCameraDepth01(structure, extent){
   var fp = structure.footprint;
   /* Judge the whole mass, not its forgiving centroid. Positive local x/y are camera-near, so the
@@ -566,8 +774,8 @@ function terrainDefensiveCameraReport(structures, extent, law){
 
 var CL_F08_TERRAIN_FEATURE_BOOK = Object.freeze({
   id: "cl-f08-terrain-feature-book",
-  version: 2,
-  status: "AUTHORED FORM-LANGUAGE BASELINE — procedural transforms intentionally deferred",
+  version: 3,
+  status: "AUTHORED FORM-LANGUAGE BASELINE + FFT VERTICAL BATTLEFIELD PROOF",
   question: "Does each terrain feature read as one continuous, tactically useful landform?",
   proof: "CL-F08a",
   featureIds: TERRAIN_AUTHORED_FEATURE_IDS,
@@ -592,6 +800,12 @@ var CL_F08_TERRAIN_FEATURE_BOOK = Object.freeze({
       id: "defensive-gateworks", capture: 10, label: "Rising gateworks",
       lightRecipeId: "daylit",
       claim: "one far gate mass, one committed rising approach, one split water obstacle"
+    }),
+    Object.freeze({
+      id: "fft-hillside-proof", capture: 11, label: "FFT hillside and switchback",
+      lightRecipeId: "daylit",
+      claim: "thirty feet of vertical travel across five elevation zones, a walkable switchback, "
+        + "and a shorter gully climb"
     })
   ])
 });
@@ -609,6 +823,7 @@ function terrainFeatureSceneBuild(sceneId, seed, opts){
   var def = terrainFeatureSceneDefinition(sceneId);
   if(!def) return null;
   var s = seed == null ? terrainSeedFrom("cl-f08a") : (seed >>> 0);
+  if(sceneId === "fft-hillside-proof") return terrainFftHillsideSceneBuild(s);
   if(sceneId === "authored-feature-book"){
     var frameIndex = opts && opts.frameIndex != null ? Math.max(0, opts.frameIndex | 0) : 0;
     var featureId = TERRAIN_AUTHORED_FEATURE_IDS[frameIndex % TERRAIN_AUTHORED_FEATURE_IDS.length];
@@ -645,6 +860,7 @@ function terrainFeatureGateReport(seed){
   });
   var ridge = terrainFeatureSceneBuild("defensive-ridgeworks", s);
   var gate = terrainFeatureSceneBuild("defensive-gateworks", s);
+  var hillside = terrainFeatureSceneBuild("fft-hillside-proof", s);
   [ridge, gate].forEach(function(scene){
     rows.push({
       id: scene.featureId, scale: "defensive-site",
@@ -690,6 +906,41 @@ function terrainFeatureGateReport(seed){
     gateApproachH: gateApproachH,
     gateStructuresGrounded: structuresGrounded(gate)
   };
+  var quietCells = hillside.primary.cells.filter(function(c){
+    return c.inPlayfield && c.standable && c.localSlopeDeg <= 0.0001;
+  });
+  var zoneCoverage = hillside.macroGraph.nodes.map(function(node){
+    var count = quietCells.filter(function(c){
+      return c.h >= node.heightBandH[0] && c.h <= node.heightBandH[1];
+    }).length;
+    return { id: node.id, quietCells: count, covered: count > 0 };
+  });
+  var hillsideReport = {
+    verticalTravelH: hillside.primary.metrics.maxH - hillside.primary.metrics.minH,
+    verticalTravelFeet: (hillside.primary.metrics.maxH - hillside.primary.metrics.minH)
+      * TERRAIN_GRID_LAW.verticalQuantumFeet,
+    switchback: hillside.routeReport.switchback,
+    gully: hillside.routeReport.gully,
+    quietSurfaceShare: Number(hillside.quietSurfaceReport.quietShare.toFixed(4)),
+    quietSurfaceMinimumShare: hillside.spec.quietSurfaceMinimumShare,
+    quietHeightBands: hillside.quietSurfaceReport.quietHeightBands,
+    zoneCoverage: zoneCoverage,
+    faces: hillside.primary.metrics.faces,
+    scarpYRange: hillside.primary.faces.reduce(function(range, face){
+      var hi = hillside.primary.cells[face.highIndex];
+      var lo = hillside.primary.cells[face.lowIndex];
+      range[0] = Math.min(range[0], hi.y, lo.y);
+      range[1] = Math.max(range[1], hi.y, lo.y);
+      return range;
+    }, [Infinity, -Infinity])
+  };
+  var hillsideOk = hillsideReport.verticalTravelH >= 12
+    && hillsideReport.switchback.ok && hillsideReport.switchback.verticalTravelH >= 12
+    && hillsideReport.gully.ok && hillsideReport.gully.verticalTravelH >= 10
+    && hillsideReport.quietSurfaceShare >= hillsideReport.quietSurfaceMinimumShare
+    && zoneCoverage.every(function(zone){ return zone.covered; })
+    && hillsideReport.faces > 0 && hillsideReport.faces <= 20
+    && hillsideReport.scarpYRange[1] - hillsideReport.scarpYRange[0] <= 3;
   return {
     fixture: CL_F08_TERRAIN_FEATURE_BOOK.id,
     fixtureVersion: CL_F08_TERRAIN_FEATURE_BOOK.version,
@@ -702,6 +953,7 @@ function terrainFeatureGateReport(seed){
     illegal: illegal,
     camera: gate.cameraReport,
     defensive: defensive,
+    hillside: hillsideReport,
     rows: rows,
     ok: illegal.length === 0
       && smallCount === 4 && largeCount === 4 && defensiveCount === 2
@@ -711,5 +963,6 @@ function terrainFeatureGateReport(seed){
       && JSON.stringify(gateApproachH) === JSON.stringify([4, 3, 2, 1, 0])
       && defensive.gateStructuresGrounded
       && gate.cameraReport.ok && gate.cameraReport.maxStoreys > 2
+      && hillsideOk
   };
 }

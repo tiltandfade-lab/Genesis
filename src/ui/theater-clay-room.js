@@ -3827,7 +3827,8 @@ const CLAY_TERRAIN_SCENE_IDS = Object.freeze([
 /* Diagnostic colours, deliberately NOT art: the clay register stays neutral so Adam is ruling on
    FORM, and every non-clay colour here is an overlay that a capture can turn off. */
 const CLAY_TERRAIN_COLORS = Object.freeze({
-  ground: 0x9c9a95, guarded: 0x7a736c, boulder: 0x8d857c, water: 0x4d7f96,
+  ground: 0x9c9a95, trail: 0xb69c76, gully: 0x817b75,
+  guarded: 0x7a736c, boulder: 0x8d857c, water: 0x4d7f96,
   thicket: 0x5d6b4b, trunks: 0x6b5b47, fog: 0xb8bcc2,
   standable: 0x6fcfff, unreachable: 0xff3030, entry: 0xffd166,
   approach: 0x8fe08f, retreat: 0xe08f8f, objective: 0xffd166, span: 0xc8a06a
@@ -4261,7 +4262,9 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
     const cellBaseH = baseHFor(c);
     const columnH = Math.max(0.05, (topH - cellBaseH) * h);
     const kindColor = c.kind === "guarded-slope" ? CLAY_TERRAIN_COLORS.guarded
-      : (c.kind === "boulder" ? CLAY_TERRAIN_COLORS.boulder : CLAY_TERRAIN_COLORS.ground);
+      : (c.kind === "boulder" ? CLAY_TERRAIN_COLORS.boulder
+        : (c.surface === "switchback-trail" ? CLAY_TERRAIN_COLORS.trail
+          : (c.surface === "gully-route" ? CLAY_TERRAIN_COLORS.gully : CLAY_TERRAIN_COLORS.ground)));
     const cx = originCell.x + c.x - origin.cx + 0.5;
     const cz = originCell.z + c.y - origin.cz + 0.5;
     if(!flags.anyDevice){
@@ -4350,35 +4353,36 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
     const nn = nose && reliefSides.n === 1 ? nose : 0;
     const ns = nose && reliefSides.s === 1 ? nose : 0;
 
-    /* The cap is a small faceted surface, not one arbitrarily tilted quad. Its samples follow the
-       engine's shared centre/edge/corner network, so an incline can respond into a convex crest,
-       concave hollow, saddle, or rolling neighbour without reopening their common edge. B4 has
-       somewhere to add its feature-scoped interior relief while remaining zero at that edge. The
-       old two-triangle cap sampled unrelated cell-local folds at the four corners and hung a skirt
-       from EVERY interior edge, which made the field read as a tray of loose tiles. */
+    /* The cap is the engine's EXACT responsive FFT topology: one authored centre, four shared edge
+       midpoints, four shared corners, and eight broad facets. Do not re-tessellate these facets into
+       a checker. The former 4x4 subdivision alternated a diagonal in every micro-quad; hard low-poly
+       normals turned that implementation detail into the visible zipper running across every
+       diagonal hillside. Eight topology-aligned facets retain changing tile angles without minting
+       a second geometric lattice. */
     const x0 = -0.5 - nw, x1 = 0.5 + ne2, z0 = -0.5 - nn, z1 = 0.5 + ns;
-    const diag = flags.fold && typeof terrainCellFoldDiagonal === "function"
-      ? terrainCellFoldDiagonal(field, c.index, flags) : 0;
-    const capPos = [];
-    function tri(a, b, cc){ capPos.push(a[0], a[1], a[2], b[0], b[1], b[2], cc[0], cc[1], cc[2]); }
-    const samples = [-0.5, -0.25, 0, 0.25, 0.5];
+    const capPos = [], capIndex = [];
+    function vertex(point){
+      const at = capPos.length / 3;
+      capPos.push(point[0], point[1], point[2]);
+      return at;
+    }
+    function tri(a, b, cc){ capIndex.push(a, b, cc); }
     function capPoint(u, v){
       const px = u === -0.5 ? x0 : (u === 0.5 ? x1 : u);
       const pz = v === -0.5 ? z0 : (v === 0.5 ? z1 : v);
       return [px, baseY + terrainCellTopH(field, c.index, u, v, flags) * h, pz];
     }
-    for(let gz = 0; gz + 1 < samples.length; gz++){
-      for(let gx = 0; gx + 1 < samples.length; gx++){
-        const a = capPoint(samples[gx], samples[gz]);
-        const b = capPoint(samples[gx + 1], samples[gz]);
-        const cc = capPoint(samples[gx + 1], samples[gz + 1]);
-        const d = capPoint(samples[gx], samples[gz + 1]);
-        /* The per-cell diagonal now follows the terrain. Alternating the subdivision diagonal
-           around that declared choice keeps hard normals from forming a second micro-lattice. */
-        const split = ((gx + gz + diag) & 1);
-        if(split){ tri(a, cc, b); tri(a, d, cc); }
-        else { tri(a, d, b); tri(b, d, cc); }
-      }
+    const centre = capPoint(0, 0);
+    const capRing = [
+      capPoint(-0.5, -0.5), capPoint(0, -0.5), capPoint(0.5, -0.5),
+      capPoint(0.5, 0), capPoint(0.5, 0.5), capPoint(0, 0.5),
+      capPoint(-0.5, 0.5), capPoint(-0.5, 0)
+    ];
+    const centreIndex = vertex(centre);
+    const ringIndex = capRing.map(vertex);
+    for(let ri = 0; ri < capRing.length; ri++){
+      /* Ring order is clockwise in X/Z. Reverse each pair so the top normal points +Y. */
+      tri(centreIndex, ringIndex[(ri + 1) % ringIndex.length], ringIndex[ri]);
     }
     /* A hard edge can bend through its shared midpoint, so its skirt follows two segments rather
        than bridging corner-to-corner. Natural grades get no skirt at all. */
@@ -4392,12 +4396,18 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
       if(!run.on) return;
       for(let k = 0; k + 1 < run.pts.length; k++){
         const a = run.pts[k], b = run.pts[k + 1];
-        tri(a, b, [b[0], capBottomY, b[2]]);
-        tri(a, [b[0], capBottomY, b[2]], [a[0], capBottomY, a[2]]);
+        /* Duplicate the skirt vertices so the cap may share/smooth its responsive nodes without
+           rounding a real cliff edge into the vertical face. */
+        const ia = vertex(a), ib = vertex(b);
+        const ibb = vertex([b[0], capBottomY, b[2]]);
+        const iab = vertex([a[0], capBottomY, a[2]]);
+        tri(ia, ib, ibb);
+        tri(ia, ibb, iab);
       }
     });
     const capGeo = new THREE.BufferGeometry();
     capGeo.setAttribute("position", new THREE.Float32BufferAttribute(capPos, 3));
+    capGeo.setIndex(capIndex);
     capGeo.computeVertexNormals();
     const cap = new THREE.Mesh(capGeo, clayStructureMaterial(cellColour));
     clayStructureTag(cap, "cl-f07:" + field.id + ":cell",
@@ -4408,7 +4418,15 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
       surface: c.surface, localSlopeDeg: c.localSlopeDeg,
       tileType: (typeof terrainSurfaceTileProfile === "function")
         ? terrainSurfaceTileProfile(field, c.index, flags).type : null,
-      edgeKinds: sideKinds };
+      edgeKinds: sideKinds,
+      capTopology: "fft-centre-edge-corner-8-smooth-cap" };
+    /* The route material is part of this terrain proof, not stray site art. Preserve only the marked
+       tread's authored colour through the neutral-clay sweep so a reviewer can distinguish the
+       switchback from an accidental contour line. The shaft and every unmarked ground cap remain
+       diagnostic clay. */
+    if(c.surface === "switchback-trail" || c.surface === "gully-route"){
+      cap.userData.clayMaterialBenchSurface = true;
+    }
     cellGroup.add(cap);
     cellMeshes.push(cap);
 
@@ -5663,6 +5681,9 @@ function clayRoomMountTerrainBench(){
         declaredCellTopsFormat: "[cellX,cellY,worldX,worldYTop,worldZ,inPlayfield]"
       };
     }),
+    macroGraph: scene.macroGraph || null,
+    routeReport: scene.routeReport || null,
+    quietSurfaceReport: scene.quietSurfaceReport || null,
     witnesses: witnesses,
     witnessFailures: witnessFailures,
     /* COUNTABLE FRAME CENSUS, walked off the live scene after everything is mounted. The bench may

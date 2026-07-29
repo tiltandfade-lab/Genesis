@@ -1,0 +1,121 @@
+{
+  "fixture": "cl-f08-terrain-feature-book",
+  "fixtureVersion": 3,
+  "proof": "CL-F09 vertical FFT battlefield",
+  "sceneId": "fft-hillside-proof",
+  "expressionRung": "all",
+  "captureCommand": "node dev/capture-clay-terrain-bench.cjs <outDir> 5183 fft-hillside-proof all",
+  "retainedFrame": {
+    "file": "11-fft-hillside-proof-04-clean-production.png",
+    "sha256": "10de33b519c553ee725eba791870588e2d12bbb9fedfdf52782926f27c764b42",
+    "viewport": {
+      "width": 1280,
+      "height": 720,
+      "deviceScaleFactor": 2
+    },
+    "camera": "governed production camera",
+    "browserErrors": 0,
+    "browserWarnings": 0
+  },
+  "field": {
+    "extentCells": {
+      "x": 20,
+      "y": 24
+    },
+    "cellFeet": 5,
+    "verticalQuantumFeet": 2.5,
+    "standableCells": 480,
+    "walkEdges": 906,
+    "faces": 10,
+    "unownedFaces": 0,
+    "illegalWalkEdges": 0,
+    "unreachableStandableNonFlying": 0,
+    "minH": 0,
+    "maxH": 12,
+    "verticalTravelFeet": 30
+  },
+  "routes": {
+    "switchback": {
+      "hairpins": 3,
+      "cells": 130,
+      "minH": 0,
+      "maxH": 12,
+      "connectedLowToHigh": true,
+      "maxInternalStepH": 1,
+      "ok": true
+    },
+    "gully": {
+      "cells": 28,
+      "minH": 0,
+      "maxH": 10,
+      "connectedLowToHigh": true,
+      "maxInternalStepH": 1,
+      "ok": true
+    }
+  },
+  "elevationZones": [
+    {
+      "id": "lower-approach",
+      "heightBandH": [0, 1],
+      "role": "deployment"
+    },
+    {
+      "id": "lower-bench",
+      "heightBandH": [2, 4],
+      "role": "first fighting surface"
+    },
+    {
+      "id": "middle-bench",
+      "heightBandH": [5, 8],
+      "role": "reverse-cover and route crossing"
+    },
+    {
+      "id": "saddle",
+      "heightBandH": [9, 10],
+      "role": "alternate gully arrival"
+    },
+    {
+      "id": "high-overlook",
+      "heightBandH": [11, 12],
+      "role": "objective and observation"
+    }
+  ],
+  "quietSurface": {
+    "cells": 111,
+    "share": 0.23125,
+    "heightBandsH": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    "allMacroZonesCovered": true
+  },
+  "responsiveSurface": {
+    "capTopology": "fft-centre-edge-corner-8-smooth-cap",
+    "sharedEdgeSamples": 4530,
+    "sharedEdgeFailures": 0,
+    "maxGapH": 0,
+    "distinctTangentPlanes": 18,
+    "responsiveJoinedPairs": 630,
+    "shapedCells": 373,
+    "tileTypes": {
+      "flat": 74,
+      "concave": 144,
+      "convex": 144,
+      "incline": 116,
+      "rolling": 2
+    },
+    "edgeKinds": {
+      "continuous": 583,
+      "grade": 323,
+      "curb": 0,
+      "cliff": 10
+    }
+  },
+  "visualReview": {
+    "macroRead": "one asymmetric thirty-foot hillside with a far crown",
+    "routeRead": "one continuous three-turn switchback plus a distinct narrow gully",
+    "hardBreakRead": "one localized broken middle scarp; no repeated sedimentary ridge ladder",
+    "zipperRead": "former alternating diagonal micro-grid absent",
+    "referenceFamily": [
+      "Reference/FFT Battle Maps/Grog_Hill_1.webp",
+      "Reference/FFT Battle Maps/1999b53b86725-screenshotUrl.webp"
+    ]
+  }
+}

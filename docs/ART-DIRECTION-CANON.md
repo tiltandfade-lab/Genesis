@@ -1980,3 +1980,33 @@ Binding consequences:
   unwalkable visual shelf, a disconnected tile angle, or a second tactical grid.
 - Quiet ground is intentional negative space. A feature plate should not spend every cell proving
   that the terrain system exists, and tall defensive masses remain biased to the camera-far band.
+
+## UNCAP HEIGHT; HILLSIDES + SWITCHBACKS; NO DIAGONAL ZIPPER (Adam, 2026-07-28 — binding; verbatim)
+
+> "an improvement but the geometry has the sophistication of the ramps on excitebike for NES, what is holding it back? it still isn't even on the level of FFT yet. There is progress so don't despair, i am just wondering how to get the rest of the way with procedural geometry, i think the biggest issue i see is that everything is kind of limited to 5 ft tall....where is the hillside? where is the switchback? where are those types of terrains?"
+
+> "why are there these heigh caps on the terrain? that doesn't make any sense, you saw the renders, and while we won't be making vignettes as large as those renders at any point, there were several where height was part of the attractiveness of the level/vignette
+>
+> also the diagonal geometry creates these weird zipper zig zag geometry, it's really bad
+>
+> so yes, can you try that again? don't stop until you get a map that looks like it could exist in the world of FFT"
+
+Binding consequences:
+
+- Small authored studies may have an intentional size identity, but their current relief is not a
+  global terrain ceiling. Battlefield relief is governed by footprint, routes, camera composition,
+  fighting surfaces, and tactical access; height may exceed a storey when those relationships earn
+  it.
+- A tall map needs macro topology before cell shaping: named elevation zones, a lower approach, a
+  crown or objective, and at least one connected route that explains how the height is traversed.
+- A switchback is a graded cut-and-fill corridor with turning landings and blended shoulders. It is
+  not a decorative zig-zag painted across unrelated cells and not a stack of parallel retaining
+  slabs.
+- Repeated parallel scarps are the rejected sedimentary failure in a different form. Hard faces are
+  localized and causal; natural slope remains the default between them.
+- Alternating diagonal subdivision may not create a visible zig-zag or zipper across a hillside.
+  Responsive tile nodes use one topology-aligned cap whose shading does not expose an arbitrary
+  micro-triangulation.
+- FFT-believability is a visual completion condition as well as a graph condition. A legal
+  heightfield is insufficient if the production camera still reads it as Excitebike ramps,
+  disconnected cell events, a quarry stack, or Minecraft blocks with tilted tops.

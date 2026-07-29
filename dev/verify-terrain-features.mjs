@@ -2,7 +2,7 @@
 
    This gate proves the engine facts and the coarse form budgets that prevent known visual
    regressions. It does not claim that the renders look good:
-     * four small, four large, and two defensive compositions exist and differ;
+     * four small, four large, two defensive compositions, and one vertical battlefield exist;
      * authored geometry is seed-invariant until a later procedural-transform pass is approved;
      * walk, face ownership, and non-flying reachability remain legal;
      * FFT-style local angle variation keeps complete shared-edge continuity;
@@ -80,13 +80,13 @@ guard("1. census", () => {
     recipes.map((r) => r.id + ":" + r.scale).join(", "));
   check("1b. every recipe publishes construction, tactical read, and a transform quality lock",
     recipes.every((r) => r.construction && r.tacticalRead && r.qualityLock));
-  check("1c. CL-F07 remains its seven-scene proof; CL-F08 adds three scenes without rewriting it",
+  check("1c. CL-F07 remains its seven-scene proof; the feature book adds four scenes without rewriting it",
     W.CL_F07_TERRAIN_BENCH.scenes.length === 7
-      && W.CL_F08_TERRAIN_FEATURE_BOOK.scenes.length === 3);
+      && W.CL_F08_TERRAIN_FEATURE_BOOK.scenes.length === 4);
   const dispatched = W.terrainBenchSceneBuild("authored-feature-book", SEED_A, { frameIndex: 7 });
   check("1d. the shared bench dispatches CL-F08 frames and preserves the selected feature",
     dispatched && dispatched.featureId === IDS[7] && dispatched.fields.length === 1);
-  check("1e. the three new scene ids all resolve through the shared light-recipe seam",
+  check("1e. the four feature-book scene ids all resolve through the shared light-recipe seam",
     W.CL_F08_TERRAIN_FEATURE_BOOK.scenes.every((scene) =>
       W.terrainBenchSceneLightRecipe(scene.id) === "daylit"));
 });
@@ -129,6 +129,10 @@ guard("3. engine legality", () => {
     report.defensive.ridgeQuietGroundShare >= report.defensive.ridgeQuietGroundMinimum
       && report.defensive.gateQuietGroundShare >= report.defensive.gateQuietGroundMinimum,
     JSON.stringify(report.defensive));
+  check("3h. the vertical proof keeps a legal 12h switchback and 10h alternate climb",
+    report.hillside.switchback.ok && report.hillside.switchback.verticalTravelH >= 12
+      && report.hillside.gully.ok && report.hillside.gully.verticalTravelH >= 10,
+    JSON.stringify(report.hillside));
 });
 
 console.log("\n4. FFT-style continuity without flattening");
@@ -226,12 +230,14 @@ guard("6. form language", () => {
       operations: entry.spec.pieces.flatMap((piece) => piece.ops || [])
     };
   });
-  check("6a. small forms stay low enough to read as terrain events rather than monuments",
-    stats.filter((row) => row.scale === "small").every((row) => row.relief <= 2),
+  check("6a. every small study authors actual relief instead of a flat placeholder",
+    stats.filter((row) => row.scale === "small").every((row) => row.relief > 0),
     JSON.stringify(stats.filter((row) => row.scale === "small")
       .map((row) => [row.id, row.relief])));
-  check("6b. large natural forms stay within three quanta; the causal bluff alone may reach four",
-    stats.every((row) => row.id === "AF-L04" ? row.relief <= 4 : row.relief <= 3),
+  const hillside = W.terrainFeatureSceneBuild("fft-hillside-proof", SEED_A);
+  check("6b. authored feature scale is not a global terrain height cap",
+    stats.some((row) => row.scale === "large" && row.relief > 0)
+      && hillside.primary.metrics.maxH - hillside.primary.metrics.minH >= 12,
     JSON.stringify(stats.map((row) => [row.id, row.relief])));
   check("6c. every study preserves at least half its plate as calm datum ground",
     stats.every((row) => row.datumShare >= 0.5),
@@ -293,12 +299,60 @@ guard("6. form language", () => {
     JSON.stringify([raisedInRow(tapered, 1), raisedInRow(tapered, 3),
       raisedInRow(tapered, 8)]));
   const reverse = stats.find((row) => row.id === "AF-L02");
-  check("6g. the reverse-slope reference remains a low rolling ridge, not a wall or broad slab",
-    reverse.relief === 2 && reverse.topShare <= 0.18,
+  check("6g. the reverse-slope reference remains a rolling ridge rather than a broad slab",
+    reverse.relief > 0 && reverse.topShare <= 0.18,
     JSON.stringify(reverse));
-  const rejectedSlab = { ...reverse, relief: 4, topShare: 0.4 };
-  check("6h. TEETH — a tall broad summit fails the reverse-slope form budget",
-    !(rejectedSlab.relief === 2 && rejectedSlab.topShare <= 0.18));
+  const rejectedSlab = { ...reverse, topShare: 0.4 };
+  check("6h. TEETH — a broad uniform summit still fails the reverse-slope identity",
+    !(rejectedSlab.relief > 0 && rejectedSlab.topShare <= 0.18));
+});
+
+console.log("\n7. FFT hillside, switchback, and non-zipper proof");
+guard("7. vertical battlefield", () => {
+  const scene = W.terrainFeatureSceneBuild("fft-hillside-proof", SEED_A);
+  const report = W.terrainFeatureGateReport(SEED_A).hillside;
+  const flags = W.terrainExpressionFlags("material", { shallowgrade: true, gradeId: "g3" });
+  const continuity = W.terrainSurfaceContinuityReport(scene.primary, flags);
+  const variation = W.terrainSurfaceVariationReport(scene.primary, flags);
+  check("7a. the battlefield earns 30 ft / 12h of vertical travel",
+    report.verticalTravelH === 12 && report.verticalTravelFeet === 30,
+    JSON.stringify(report));
+  check("7b. the primary marked route is connected bottom-to-crown at legal one-quantum steps",
+    report.switchback.ok && report.switchback.minH === 0 && report.switchback.maxH === 12
+      && report.switchback.maxInternalStepH <= 1,
+    JSON.stringify(report.switchback));
+  check("7c. the alternate gully is connected, narrower, and stops below the crown",
+    report.gully.ok && report.gully.cells < report.switchback.cells
+      && report.gully.maxH === 10,
+    JSON.stringify(report.gully));
+  check("7d. all five macro elevation zones contain calm fighting ground",
+    report.zoneCoverage.length === 5 && report.zoneCoverage.every((zone) => zone.covered),
+    JSON.stringify(report.zoneCoverage));
+  check("7e. calm fighting ground exists across several elevations, not only at the base datum",
+    report.quietSurfaceShare >= report.quietSurfaceMinimumShare
+      && report.quietHeightBands.length >= 5,
+    JSON.stringify([report.quietSurfaceShare, report.quietHeightBands]));
+  check("7f. the one localized scarp does not repeat as a sedimentary ridge ladder",
+    report.faces > 0 && report.faces <= 20
+      && report.scarpYRange[1] - report.scarpYRange[0] <= 3,
+    JSON.stringify([report.faces, report.scarpYRange]));
+  check("7g. the whole tall field preserves shared edges while retaining varied tile angles",
+    continuity.ok && variation.ok && variation.distinctTangentPlanes >= 8
+      && variation.responsiveJoinedPairs > 100,
+    JSON.stringify({ continuity, variation }));
+  const switchbackPiece = scene.spec.pieces.find((piece) => piece.id === "fft-switchback");
+  check("7h. the switchback is a graded mountainside corridor, not the retaining-terrace primitive",
+    switchbackPiece && switchbackPiece.pieceId !== "R1-09"
+      && switchbackPiece.ops.some((op) => op.type === "graded-path"
+        && op.params.shoulderCells > 0));
+  const renderer = read("src/ui/theater-clay-room.js");
+  check("7i. the cap uses one indexed eight-facet topology with no alternating diagonal micro-grid",
+    /capTopology: "fft-centre-edge-corner-8-smooth-cap"/.test(renderer)
+      && /capGeo\.setIndex\(capIndex\)/.test(renderer)
+      && !/gx \+ gz \+ diag|samples = \[-0\.5, -0\.25/.test(renderer));
+  const broken = { ...report.switchback, connectedLowToHigh: false, ok: false };
+  check("7j. TEETH — a severed switchback fails the route verdict",
+    !(broken.ok && broken.connectedLowToHigh && broken.verticalTravelH >= 12));
 });
 
 console.log("\n" + (fail ? "FAIL" : "PASS") + ` — ${pass} passed, ${fail} failed\n`);

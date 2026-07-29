@@ -57,10 +57,11 @@ const SCENES = [
   { id: "dark",                 capture: 7, light: "dark" },
   { id: "authored-feature-book",capture: 8, light: null, frames: 8 },
   { id: "defensive-ridgeworks", capture: 9, light: null },
-  { id: "defensive-gateworks",  capture: 10, light: null }
+  { id: "defensive-gateworks",  capture: 10, light: null },
+  { id: "fft-hillside-proof",   capture: 11, light: null }
 ];
 const FEATURE_SCENE_IDS = new Set([
-  "authored-feature-book", "defensive-ridgeworks", "defensive-gateworks"
+  "authored-feature-book", "defensive-ridgeworks", "defensive-gateworks", "fft-hillside-proof"
 ]);
 
 function pageProbe() {

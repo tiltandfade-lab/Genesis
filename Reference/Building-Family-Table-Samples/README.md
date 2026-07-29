@@ -1,8 +1,9 @@
 # Building family table samples
 
-date: 2026-07-26  
-status: TASTE PACKET RETURNED — seven sample families and deterministic rolls; founder
-taste calls open; not live runtime data
+date: 2026-07-28
+status: TASTE PACKET RETURNED — seven founder-ruled sample families plus proposed
+Market/Exchange eighth family and deterministic rolls; founder taste calls open; not live
+runtime data
 
 ## What this packet is
 
@@ -14,13 +15,13 @@ It contains:
 
 - `TABLE-SAMPLES.json` — hand-authored d6 chassis, d4 operating-state, per-program d4
   arrangement/current-scene/Spice, and three-realm realization samples;
-- `ROLL-RECEIPTS.json` — 28 deterministic layered receipts, four per family;
+- `ROLL-RECEIPTS.json` — 32 deterministic layered receipts, four per family;
 - `TABLE-AND-ROLL-CARDS.md` — the same source tables and rolls in founder-review form;
   and
 - `../../dev/roll-building-family-samples.mjs` — pure deterministic sampler and source
   validator.
 
-The seven families are:
+The seven founder-ruled families are:
 
 1. `BF-PUBLIC-SERVICE`;
 2. `BF-CIVIC-AUTHORITY`;
@@ -29,6 +30,13 @@ The seven families are:
 5. `BF-LOGISTICS`;
 6. `BF-SHOP-WORKSHOP`; and
 7. `BF-CUSTODY`.
+
+The adversarial pass adds an eighth **proposed** family for taste:
+
+8. `BF-MARKET-EXCHANGE` — Market Hall and Exchange / Cloth Hall.
+
+This eighth tranche answers the Site-10 evidence gap. It does not promote the family into the
+founder-ruled core or authorize live compilation.
 
 Prison/Custody is intentionally separate. Its sample rows are a thin taste projection
 of the much deeper lifecycle in `../../docs/SITE-6-PRISON-CUSTODY-SPEC.md`; they do not
@@ -41,9 +49,11 @@ node dev/roll-building-family-samples.mjs
 node dev/roll-building-family-samples.mjs --check
 ```
 
-The sampler validates seven unique families, all fourteen live building programs plus
-Prison/Custody, four Spice bands per program, all three realm realizations, and the
-dedicated custody boundary. It then composes:
+The sampler validates eight unique families, all fourteen live building programs plus
+Prison/Custody and the two proposed Market/Exchange programs, four Spice bands per program,
+all three realm realizations, the dedicated custody boundary, the Market/Exchange membership
+boundary, and three explicit Civic/Logistics/Exchange upper-program composition cards. It
+then composes:
 
 ```text
 family chassis
@@ -72,8 +82,10 @@ Review `TABLE-AND-ROLL-CARDS.md` for:
    rather than merely vocabulary?
 7. **custody depth** — do the thin sample rows correctly point into Site 6 without
    flattening it?
+8. **Market/Exchange boundary** — do Market Hall and Exchange / Cloth Hall genuinely share
+   all six chassis, and do Civic/Logistics upper programs remain explicit guest compositions
+   rather than silently taking over the trading ground?
 
 Every generated receipt deliberately retains
 `programIdentityReadableBeforeDmInterpretation: "taste-call-required"`. A sampler pass
 proves composition and determinism; it does not make the taste decision.
-

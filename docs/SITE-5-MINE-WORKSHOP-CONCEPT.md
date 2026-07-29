@@ -1,7 +1,12 @@
+STATUS: DRAFT — CODEX ADVERSARIAL REDLINE APPLIED; RESEARCH REMAINS PARTIAL
+
 ---
 type: working-site-spec
 created: 2026-07-25
-status: WORKING SPEC — founder foundation accepted; research PARTIAL; clay OPEN
+updated: 2026-07-28 (Codex adversarial review applied to the 2026-07-27 gap-close addendum;
+  research remains PARTIAL)
+status: WORKING SPEC — founder foundation accepted; research PARTIAL after adversarial
+  review; clay OPEN
 site: 5 — strained mine / workshop
 method: GOLDEN-SITE-CONCEPTING-GUIDELINES.md
 preservation: GOLDEN-SITE-ROLLER-PRESERVATION-LEDGER.md
@@ -9,6 +14,10 @@ context-projection: GOLDEN-SITE-WORLD-CONTEXT-PROJECTION.md
 research:
   - ../Reference/Mine-Workshop-Study/SOURCE-LEDGER.md
   - ../Reference/Mine-Workshop-Study/synthesis.md
+  - ../Reference/Mine-Workshop-Study-0727/synthesis.md
+  - ../Reference/Mine-Workshop-Study-0727/FFT-COHORT-COMPARISON.md
+  - ../Reference/Mine-Workshop-Study-0727/MEASURED-REFERENCES.md
+  - ../Reference/Mine-Workshop-Study-0727/BREADTH-SWEEP.md
 ---
 
 # SITE 5 — STRAINED MINE / WORKSHOP
@@ -27,6 +36,84 @@ Adam accepted all three opening recommendations:
 These rulings establish the concept and build target. The initial research pass has now
 returned with declared gaps. It supports a detailed working specification, but it does
 not yet earn a completed research gate or a clay proof.
+
+## Gap-closure addendum (2026-07-27 campaign) — authority, honest gates, and proposed status
+
+This section is additive. It changes no ruling, invariant, capsule, deck, growth ladder, or
+operating-circuit definition above or below it. It exists to hold the §1-equivalent authority
+statement the working-spec standard requires (guidelines step 8, section 1: "authority, honest
+gates, ruled decisions, and unresolved proposals") for the evidence added this pass.
+
+**Authority.** This addendum is authored under the 2026-07-27 golden-sites campaign brief:
+"Site 5 — GAP-CLOSE the existing working spec... its declared gaps are direct tactical-map
+evidence and broader measured/cultural breadth." It is subordinate to every ruling already
+recorded in this document and in `GOLDEN-SITES-CATALOG.md`.
+
+**Honest gates.** The catalog's status-gate table (as of the 2026-07-25 audit) records Site 5
+as `RESEARCHED: PARTIAL`, `FOUNDER-RULED: PARTIAL`, `BRIEF-CONGRUENT: PARTIAL`,
+`CLAY-PROVED: OPEN`, with the stated reason: "working spec and initial source-led synthesis
+exist; direct tactical-map and broader measured/cultural evidence gaps remain; no rendered
+proof exists." This addendum closes the two named evidence gaps:
+
+- a direct FFT tactical-map mine cohort now exists, read in place from the sibling `genesis`
+  worktree's archive per THE FFT BOUNDARY — `Reference/Mine-Workshop-Study-0727/
+  FFT-COHORT-COMPARISON.md`;
+- measured/cultural breadth beyond the original packet's Agricola-only tradition now exists —
+  `Reference/Mine-Workshop-Study-0727/MEASURED-REFERENCES.md` (real Cornish 1670 regulation and
+  unregulated gallery dimensions, U.S. room-and-pillar entry ranges, a measured 19th-century
+  workshop footprint, real mine-cart rail gauges, real quarry-bench dimensions, and one
+  additional culturally distinct UNESCO case with a measured chamber figure).
+
+A real-image reference lane (12 Wikimedia Commons images, full licence ledger) and a breadth
+sweep ("what else could this site be": salt, peat, and gem extraction; one cross-media
+comparison; the `BF-SHOP-WORKSHOP` boundary test) also now exist, completing the depth law's
+three-part requirement. Full detail: `Reference/Mine-Workshop-Study-0727/`.
+
+**Adversarially reviewed status-gate values (not founder rulings):**
+
+| gate | catalog value (2026-07-25) | proposed value (this pass) | reason |
+|---|---|---|---|
+| RESEARCHED | PARTIAL | **PARTIAL** | all three packet limbs exist, but the proof queue still lacks sufficiently broad measured/cultural work-organization evidence; file presence does not itself close the gate |
+| FOUNDER-RULED | PARTIAL | PARTIAL (unchanged) | no card selection (support/carrier/pump/ventilation/processing/light/culture/organization) was ruled this pass |
+| BRIEF-CONGRUENT | PARTIAL | PARTIAL (unchanged) | this pass adds an addendum; it does not restructure the existing ten/fifteen-section standard |
+| CLAY-PROVED | OPEN | OPEN (unchanged) | no fixture was built this pass |
+
+The 2026-07-28 adversarial pass rejects the packet's proposed research promotion, keeps the
+gate at `PARTIAL`, and folds that reading into `GOLDEN-SITES-CATALOG.md`. It does not rule
+any founder proposal below.
+
+**Ruled decisions.** None added this pass. Every finding in the 2026-07-27 packet is offered
+as evidence or as a `PROPOSED` candidate under the generator principle (arriving as a build-
+order suggestion, never an A-or-B pick presented as decided).
+
+**Unresolved proposals carried forward from this pass** (none are ruled; all await founder
+review):
+
+1. **The Site 5 / `BF-SHOP-WORKSHOP` boundary (adversarial direction accepted).** A workshop belongs to Site 5 only when it
+   sits at the terminus of its own production chain (fed by the mine/quarry's haul spine,
+   sharing its water/power/support circuits, with a distinct waste/export edge); a freestanding
+   urban or settlement workshop that sources stock from elsewhere and sells or services at a
+   customer-facing counter belongs to `docs/BUILDING-PROGRAM-TABLE-FAMILIES.md`'s
+   `BF-SHOP-WORKSHOP` family instead. Full reasoning and photographic anchor (MW-11, a real
+   Italian street-level smithy with no visible ore/haulage chain):
+   `Reference/Mine-Workshop-Study-0727/synthesis.md` §3.
+2. **Support rhythm may be expressed as portal repetition, not only mid-route timber sets.**
+   FFT's Colliery Underground Second Floor shows a repeated row of identical door-frames set
+   into a terrace riser as its support-rhythm signal. Offered as an alternative or
+   supplementary expression to the existing "repeated timber support ~9 ft apart" hypothesis,
+   not a replacement for it. `FFT-COHORT-COMPARISON.md` §2, finding MW-FFT-1.
+3. **The 10-ft main-haul hypothesis is a knowing gameplay oversize, not a historical
+   default.** Real Cornish regulation drifts ran 7 ft × 3 ft in 1670, and unregulated
+   historic crosscuts as narrow as 4 ft × 2 ft 4 in. The working spec's manway hypothesis
+   (1 cell/5 ft) has real historic precedent on both sides of it; the main-haul hypothesis does
+   not, because nothing in the real tradition anticipated cart-and-large-creature traffic
+   sharing one route. Recorded so the number is chosen knowingly at clay calibration rather
+   than defaulted. `MEASURED-REFERENCES.md` §1.
+4. **Salt, peat, and gem extraction all license under existing family members rather than
+   requiring new rows** — salt as an unusual/realm-owned Site 5 host with a Site 4/10 guest
+   relation (the Wieliczka cathedral-in-a-mine case), peat under the existing prospect/open-cut
+   family, gem/crystal seams already named in the five-expression family with security-of-
+   product as an occupancy pressure rather than a new host trait. `BREADTH-SWEEP.md` §1, §3.
 
 ## The plain-English promise
 
@@ -614,11 +701,28 @@ map cohort; obtain broader measured preindustrial plans/sections; select the fir
 support, pump, ventilation, processing, and culture cards; and measure the route/water
 choices in actual play.
 
-Research packet:
+**2026-07-27 update:** the direct tactical-map cohort and the broader measured/cultural
+plans are now addressed — see the Gap-closure addendum above and the packet listed below.
+Card selection and the clay fixture remain the open next-phase work; they were not in scope
+for this evidence pass.
+
+Research packet (original, 2026-07-25):
 
 - `Reference/Mine-Workshop-Study/SOURCE-LEDGER.md`
 - `Reference/Mine-Workshop-Study/synthesis.md`
 - `Reference/Mine-Workshop-Study/foundation-scan.md`
 
-The packet supports this working spec. Its declared gaps keep `RESEARCHED` at
-`PARTIAL`, and this document cannot advance `CLAY-PROVED` without the retained fixture.
+Research packet (gap-close addendum, 2026-07-27 — additive, does not replace the above):
+
+- `Reference/Mine-Workshop-Study-0727/README.md`
+- `Reference/Mine-Workshop-Study-0727/synthesis.md`
+- `Reference/Mine-Workshop-Study-0727/FFT-COHORT-COMPARISON.md`
+- `Reference/Mine-Workshop-Study-0727/MEASURED-REFERENCES.md`
+- `Reference/Mine-Workshop-Study-0727/BREADTH-SWEEP.md`
+- `Reference/Mine-Workshop-Study-0727/LICENSE-LEDGER.md`
+
+The original packet supports this working spec; its declared gaps kept `RESEARCHED` at
+`PARTIAL`. The 2026-07-27 addendum proposed `RESEARCHED: PASS`; the 2026-07-28 adversarial
+review rejected that promotion and retained `PARTIAL`. This document still cannot advance
+`CLAY-PROVED` without the retained fixture, and `FOUNDER-RULED`/`BRIEF-CONGRUENT` remain
+`PARTIAL` until the open card selections are founder-ruled.

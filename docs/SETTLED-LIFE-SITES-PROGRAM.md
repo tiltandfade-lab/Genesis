@@ -129,21 +129,26 @@ itself. Proposed, not ruled — this is a documentation change with no build con
    host program never earns a second number for being in an unusual state.** A flooded
    port is the port host plus the flooding transform. It is not a flood site.
 
-### 2.3 The three bins
+### 2.3 The four bins
 
-Any new settled-life demand sorts into exactly one of these. The bin decides the cost, the
-owner, and the pipeline.
+Any new settled-life demand selects one primary bin and may compose compatible secondary
+contracts. The primary bin decides the owner and pipeline.
 
 | bin | what it means | who owns it | what it costs |
 |---|---|---|---|
 | **(a) new host program** | a distinct operating model — roles, workflows, services, capacities, property flows, failure modes — that no existing host provides | the Golden portfolio (a new number, or an unnumbered host family) | full SITE PIPELINE: research → determination → listing → options → stretch → scene promotion → congruent brief, then a working spec |
 | **(b) venue fixture inside an existing host** | a common program the story engine requests often, which an existing family chassis can already carry | the shared venue compiler; a retained **Golden Venue fixture** where frequency justifies it (`VENUE-TAVERN-01` is the first) | one program row + one arrangement table + a retained proof — no new geometry generator |
 | **(c) transform / state** | a cross-host change that leaves the host's identity intact: dormant, layered control, flooding, occupation, damage, repair, repurposing, breach | the `TransformStack` in the ontology contract | a delta set — claimant profiles, access/schedule/service deltas, tells, triggers — proved on **at least three unlike hosts** with no host-specific branch |
+| **(d) cross-cutting spatial contract** | consequential support, scale, capacity, extent or material behavior shared by unlike hosts | `SubstratePlan`, `ScaleContract`, `MaterializationWindow`, and shared terrain/mechanism providers | a factorized contract and assemblies proved across unlike hosts — no new host and no Golden-number-specific generator |
 
 Bin (c) has a hard tell that separates it from bin (a): **ask what persists when the state
 ends.** If the place goes back to being itself, it was a state. A drained port is a port.
 An emptied prison is a prison. A camp that never leaves is not a camp any more — which is
 exactly the argument in §3.4.
+
+Sites 9, 11, and 12 are retained proofs of bin-(d) compositions: Defense + Layered Control +
+persistent windows; consequential scale; and consequential substrate/terminal substrate
+transformation. Their numbers do not create runtime host kinds.
 
 ## 3. The settled-life slate
 

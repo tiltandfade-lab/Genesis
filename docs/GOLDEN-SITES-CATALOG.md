@@ -487,16 +487,23 @@ through these gates only in order, and no later gate may be implied by an earlie
 Gate values are `PASS`, `PARTIAL`, or `OPEN`. “Served” is retired because it blurred
 the four gates.
 
-| site | researched | founder-ruled | brief-congruent | clay-proved | current reason |
-|---|---|---|---|---|---|
-| 1 Guard Post | PASS | PASS | PASS | OPEN | recent-repair card and final material/culture taste ride the proof; no rendered fixture has passed |
-| 2 Camp / Service | PASS | PARTIAL | PARTIAL | OPEN | hosted-camp mechanism and build orders remain proposed |
-| 4 Monastery / Commune | PASS | PARTIAL | PARTIAL | OPEN | M1/M2/M4/M5 build order is proposed; cultural breadth and metric evidence remain thin |
-| 5 Mine / Workshop | PARTIAL | PARTIAL | PARTIAL | OPEN | working spec and initial source-led synthesis exist; direct tactical-map and broader measured/cultural evidence gaps remain; no rendered proof exists |
-| 6 Prison / Custody | PARTIAL | PARTIAL | PARTIAL | OPEN | initial architecture/operation/property study and first doctrine pair returned; global measured breadth, later doctrines, implementation reconciliation, and clay proof remain open |
-| 7 Natural Lair | PASS | PASS | PASS | OPEN | congruent brief and current diagram now agree; no rendered proof exists |
-| 10 Urban Institution | PARTIAL | PARTIAL | PARTIAL | OPEN | body/culture studies returned, but load-bearing construction and visual gaps remain |
-| 3/8/9/11/12 | OPEN | OPEN | OPEN | OPEN | not yet through the depth-law pipeline; Site 3's transform concept and Site 8's transform ontology are retained, but neither has completed the full site pipeline |
+| site | role | researched | founder-ruled | brief-congruent | clay-proved | current reason |
+|---|---|---|---|---|---|---|
+| 1 Guard Post | host | PASS | PASS | PASS | OPEN | recent-repair card and final material/culture taste ride the proof; no rendered fixture has passed |
+| 2 Camp / Service | host | PASS | PARTIAL | PARTIAL | OPEN | hosted-camp mechanism and build orders remain proposed; exit keys off persistent address/property/service facts, not one population/duration threshold |
+| 3 Dormant / Abandoned | transform | PARTIAL | OPEN | PARTIAL | OPEN | stable occupants are legal while the original host circuit remains stopped; aperture-first is a profile; Funerary/Mortuary is an ordinary host; no rendered fixture |
+| 4 Monastery / Commune | host | PASS | PARTIAL | PARTIAL | OPEN | evidence supports multiple chassis (wrapped court, processional campus, cliff/terrace, distributed house); build order remains founder-facing; no rendered fixture |
+| 5 Mine / Workshop | host | PARTIAL | PARTIAL | PARTIAL | OPEN | 2026-07-28 adversarial review rejected the proposed research promotion; Site 5 ends where extraction-linked haul/waste/water/power ends and freestanding shops route to `BF-SHOP-WORKSHOP` |
+| 6 Prison / Custody | host | PARTIAL | PARTIAL | PARTIAL | OPEN | Yamen remains a doctrine candidate; Ward-and-Surety is an external disposition provider and care/asylum a distinct host unless prevented exit activates custody; clay proof open |
+| 7 Natural Lair | host | PASS | PASS | PASS | OPEN | congruent brief and current diagram now agree; no rendered proof exists |
+| 8 Layered Control | transform | PARTIAL | PARTIAL | PARTIAL | OPEN | claimant ingredients are common but same-host eligibility is unmeasured; route costs are actor-relative deltas; grain/envelope/boundary are profiles; culture and clay open |
+| 9 Contested Fortress | scale | PARTIAL | OPEN | PARTIAL | OPEN | Defense host + Layered Control + persistent windows; 14.62% measures fortification-interior host demand, not Site-9 activation; interior evidence and clay open |
+| 10 Urban Institution | host | PARTIAL | PARTIAL | PARTIAL | OPEN | market-hall construction evidence improved; proposed eighth `BF-MARKET-EXCHANGE` taste sampler returned with Market Hall/Exchange rolls and upper-program composition cards; founder ruling/clay open |
+| 11 Mixed Scale / Dragon Domain | scale | PARTIAL | OPEN | PARTIAL | OPEN | `ScaleContract` uses consequential affordance, not a 3:1 threshold; 18.55% is broad object supply, not activation; shared `GranularMass`, culture and clay open |
+| 12 Anomalous / Living / Mobile | substrate | PARTIAL | OPEN | PARTIAL | OPEN | `SubstratePlan` axes are orthogonal; tenure/clock/path/perimeter conditional; 13.48% is a broad pressure-tag rate, not activation; measured drawings/culture/clay open |
+
+The 2026-07-27 campaign has been adversarially redlined as of 2026-07-28. Gate values above
+are the integrated reading; founder and clay gates remain explicit.
 
 The detailed work queue and countable capture contract live in
 `GOLDEN-SITES-PROOF-QUEUE.md`.
@@ -528,7 +535,12 @@ The portfolio deliberately mixes several proof roles:
 - **host/program families:** Sites 1, 2, 4, 5, 6, 7, and 10;
 - **cross-host transforms:** Site 3 dormant/abandoned and Site 8 layered control;
 - **scale/relationship stress cases:** Sites 9 and 11; and
-- **substrate/ownership stress case:** Site 12.
+- **substrate/terminal-transformation stress case:** Site 12; tenure is an optional
+  `SubstratePlan` axis.
+
+Seven of the twelve numbers are host programs. Five are transforms or stress proofs. Sites
+9, 11, and 12 compose ordinary hosts with shared control/window, scale, and substrate
+contracts; they are not hidden runtime generators.
 
 Site 8 therefore applies to a tavern, prison, mine, monastery, fortress, camp, or other
 host when persistent competing claims satisfy its semantic predicate; it does not own

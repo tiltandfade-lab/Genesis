@@ -75,8 +75,8 @@ function validateSource() {
   if (source.schema !== "genesis.building-family-table-samples.v1") {
     fail("Unexpected source schema: " + source.schema);
   }
-  if (source.families.length !== 7) {
-    fail("Expected seven families, found " + source.families.length);
+  if (source.families.length !== 8) {
+    fail("Expected seven founder-ruled families plus one proposed family, found " + source.families.length);
   }
   if (source.profiles.length !== 4) {
     fail("Expected four taste profiles, found " + source.profiles.length);
@@ -140,10 +140,12 @@ function validateSource() {
     "apothecary",
     "general",
     "arcanist",
+    "market-hall",
+    "exchange-cloth-hall",
     "prison-custody",
   ]);
   if (programIds.size !== expectedPrograms.size) {
-    fail("Expected 15 programs, found " + programIds.size);
+    fail("Expected 17 programs, found " + programIds.size);
   }
   for (const id of expectedPrograms) {
     if (!programIds.has(id)) fail("Missing program " + id);
@@ -156,6 +158,32 @@ function validateSource() {
   const civic = source.families.find((family) => family.id === "BF-CIVIC-AUTHORITY");
   if (!civic || civic.programs.some((program) => program.id === "prison-custody")) {
     fail("Prison/Custody leaked into BF-CIVIC-AUTHORITY");
+  }
+  const market = source.families.find((family) => family.id === "BF-MARKET-EXCHANGE");
+  const marketPrograms = new Set((market?.programs || []).map((program) => program.id));
+  if (
+    !market ||
+    marketPrograms.size !== 2 ||
+    !marketPrograms.has("market-hall") ||
+    !marketPrograms.has("exchange-cloth-hall")
+  ) {
+    fail("BF-MARKET-EXCHANGE must contain Market Hall and Exchange/Cloth Hall");
+  }
+  if (market.guestCompositions?.length !== 3) {
+    fail("BF-MARKET-EXCHANGE must expose three guest upper-program composition proofs");
+  }
+  const marketChassis = new Map(market.chassis.map((row) => [row.id, row]));
+  for (const composition of market.guestCompositions) {
+    if (!(composition.hostChassisAllow || []).length) {
+      fail(composition.id + " must name at least one host chassis");
+    }
+    for (const chassisId of composition.hostChassisAllow) {
+      const chassis = marketChassis.get(chassisId);
+      if (!chassis) fail(`${composition.id} allows unknown chassis ${chassisId}`);
+      if (!chassis.upperProgramSocket) {
+        fail(`${composition.id} targets ${chassisId} without an upper-program socket`);
+      }
+    }
   }
 
   const manor = source.families
@@ -274,8 +302,8 @@ function renderMarkdown(receipts) {
   const lines = [
     "# Building family sample tables and deterministic taste rolls",
     "",
-    "date: 2026-07-26",
-    "status: TASTE PACKET — sample d6/d4 tranches, not final d20 corpus or live runtime output",
+    "date: 2026-07-28",
+    "status: TASTE PACKET — seven founder-ruled families plus one proposed Market/Exchange family; sample d6/d4 tranches, not final d20 corpus or live runtime output",
     "source: `TABLE-SAMPLES.json`",
     "rerun: `node dev/roll-building-family-samples.mjs`",
     "",
@@ -319,6 +347,23 @@ function renderMarkdown(receipts) {
       ]),
       ""
     );
+
+    if ((family.guestCompositions || []).length) {
+      lines.push(
+        "### Guest upper-program composition proofs",
+        "",
+        "These cards test co-location without transferring ownership of the trading ground.",
+        "",
+        renderTable(family.guestCompositions, [
+          { label: "id", value: (row) => row.id },
+          { label: "guest family", value: (row) => row.guestFamilyId },
+          { label: "guest program", value: (row) => row.guestProgram },
+          { label: "legal host chassis", value: (row) => row.hostChassisAllow.join(", ") },
+          { label: "composition contract", value: (row) => row.text },
+        ]),
+        ""
+      );
+    }
 
     for (const program of family.programs) {
       lines.push(`### ${program.label} program layer`, "");
@@ -425,7 +470,7 @@ for (const family of source.families) {
 const sourceSha256 = createHash("sha256").update(sourceText).digest("hex");
 const receiptDocument = {
   schema: "genesis.building-family-taste-rolls.v1",
-  generatedOn: "2026-07-26",
+  generatedOn: "2026-07-28",
   source: "Reference/Building-Family-Table-Samples/TABLE-SAMPLES.json",
   sourceSha256,
   sampler: "dev/roll-building-family-samples.mjs",

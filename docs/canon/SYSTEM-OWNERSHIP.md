@@ -2,7 +2,7 @@
 type: canon
 status: ACTIVE — the authority map: which system owns which facts
 created: 2026-07-22
-updated: 2026-07-26
+updated: 2026-07-29
 owner: docs/canon/README.md (precedence law)
 ---
 
@@ -40,6 +40,7 @@ Two columns of truth run through this file and must never be conflated:
 
 | Fact family | Accepted owner | Ruled in |
 |---|---|---|
+| Procedural vignette orchestration and synthesis order | one `ProceduralVignetteSynthesizer` compiling `VignetteRequest` through semantic/window/spatial/tactical/surface/asset plans; terrain and construction are stages, never separate engines | `GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md` |
 | Site identity, host semantics, transforms, and active extent | persistent `SiteIdentity` + host `RoomProgram`/operating-model obligations + ordered `TransformStack` + bounded `MaterializationWindow` | Waves 1-2; `GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md` reconciliation |
 | Spatial legality (cells, volumes, elevation, boundaries, zones, provenance) | `SpatialPlanV2` via the staged pipeline SpatialIntent → legality → `TacticalCompositionPlan` → `SurfaceAssemblyPlan` | Wave 3 P3.5 |
 | Connections, portals, secrets, vertical traversal, circulation | canonical `Connection` objects + traversal transactions + Secret Networks | Wave 4 (single subject authority) |
@@ -101,6 +102,11 @@ Two columns of truth run through this file and must never be conflated:
     acceptance portfolio, not a mutually exclusive site enum. Ordinary host/venue
     programs and cross-host transforms compose through the shared semantic/spatial
     path. (`docs/GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md`)
+12. **Separate terrain and building/site engines.** Natural substrate formation and
+    constructed host realization share one request, macro plan, support/elevation
+    field, tactical reservations, asset resolver, receipt, and projection pipeline.
+    They may be separate compiler stages or modules, never rival generators.
+    (`docs/GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md`)
 
 ## 5. Cutover law
 
@@ -109,4 +115,7 @@ rolls → Connection records; current dungeon d200 → decomposed rollers + reci
 serialization → chunked persistence), the built system **keeps running and keeps its census
 protection** until Wave 12 authorizes the specific cutover with replacement proof (golden-beat
 preservation law, Wave 1 §8.11; PHASING-FRAMEWORK law 9: "the MVP floor is not a removal list").
-The IMPLEMENTATION-HOLD stands: nothing in this map authorizes a build.
+The general IMPLEMENTATION-HOLD still protects unscoped cutovers. Adam's 2026-07-29
+directive creates one scoped route: Wave 0 and each subsequently passed gate in
+`GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md`. Nothing in this map authorizes work
+outside that program or bypasses a replacement-proof cutover.

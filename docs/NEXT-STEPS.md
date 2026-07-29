@@ -3,7 +3,7 @@ type: next-steps
 branch: Genesis
 status: living
 created: 2026-06-18
-updated: 2026-07-28
+updated: 2026-07-29
 related:
   - "[[DESIGN]]"
   - "[[GAP-ANALYSIS]]"
@@ -17,6 +17,37 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
 **Auto-archive rule (2026-07-09):** at most 4 dated `## Do next (...)` blocks live here; older ones
 roll into `NEXT-STEPS-ARCHIVE.md` via `python3 build/archive-docs.py --emit`. Standing plan
 sections (tracks/layers/etc.) are never auto-archived.
+
+## Do next (2026-07-29 — Golden Site procedural-vignette master program)
+
+`GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md` is the execution owner for the next
+several weeks. Terrain and construction are stages of one synthesizer. The Golden
+portfolio, ordinary venues, asset foundry, walk demand, game play, battle simulation,
+and visual review now advance through the same Waves 0–8 gates.
+
+1. ◐ **Close Wave 0:** finish canonical routing, create the machine-readable
+   twelve-site/ordinary-venue coverage inventory, classify all open work by owner, and
+   freeze first-pass `VignetteRequest`, `VignettePlan`, asset-demand, receipt, and
+   negative-control contracts.
+2. ☐ Rehome or rebuild the private-scratchpad 1,050-walk census as a checked-in,
+   deterministic, world-context-aware observatory with natural-frequency and
+   stratified/exhaustive corpora. Classify full-site, continuation, transform, local
+   feature, narrative-only, and unresolved demand separately.
+3. ☐ Capture the current walk, combat, automated-playtest, save/load, manifest,
+   terrain, Clayroom, and visual baselines before product changes.
+4. ☐ Select the exact retained live receipts for `VENUE-TAVERN-01` and Site 1
+   `GP-SHAPE-01`; write the Wave-1 observatory/read-only-adapter implementation brief.
+5. ☐ Enter Wave 1 only after W0 passes. Do not change walk content to improve coverage;
+   adapter, provenance, and typed metadata come first.
+6. ☐ Enter Wave 2 with proxy-first composition: Tavern proves semantic/identity
+   continuity and Guard Post proves the first compact visible/tactical vignette. Add
+   only demand-backed assets after clay, route, camera, and battle gates pass.
+7. ☐ Run multi-session work only when a current wave has frozen its shared contract
+   and each lane names a bounded gate, owned files, verifier, evidence, merge order,
+   and stop condition.
+8. ☐ Run intermittent game flows and PC-versus-enemy battle simulations throughout,
+   escalating from current zone combat to exact-cell assertions only after that
+   separate replacement-proof cutover is ready.
 
 ## Do next (2026-07-28 — Golden Site ontology / engine marriage)
 
@@ -78,208 +109,6 @@ as current status** by `GOLDEN-SITES-CATALOG.md`.
    syntheses remain evidence records; `REQUIRED`, `DEFAULT`, `LICENSED`, `VARIANT`, and
    `PROPOSED` classifications remain authoritative and no working-spec detail promotes
    a proposal.
-
-## Do next (2026-07-24 — CONSOLIDATION CLOSED; guard-post program fully specced; delegate the next wave)
-
-Master is the singular canonical line again (six --no-ff merges: root strays · CL-R0 reset ·
-door/C1B movement lane · GP-MM-STONE-V001 materials · sprite prototype admission · the
-structure-kit catalog session). `docs/STRUCTURE-KIT-CATALOG.md` is the guard-post/12-site
-structure spec — **its founder queue is EMPTY** (occupancy axis + arrival hook law minted;
-roof posture locked flat-deck-both-cultures with the cover promise invariant; repair story +
-edge patterns deliberately parked at card-time; numbers clay-deferred). Living golden-sites
-authority = `GOLDEN-SITES-CATALOG.md`; verbatim Desktop record archived in
-`Reference/FFT-Guard-Post-Study/`.
-
-1. ☐ **Delegate the next dev wave** (Adam + Fable, from this canonical state). The two
-   immediately-runnable parallel lanes:
-   a. **Codex material brief #2 — WRITTEN: `docs/CODEX-MATERIAL-BRIEF-2.md`** (the
-      STRUCTURE-KIT-CATALOG §8 possibility roster + culture-pair/deck-edge candidates +
-      condition masks; six stop-and-report batches). No dependency; hand to Codex.
-   b. **Clay ladder brief — WRITTEN: `docs/CODEX-CLAY-LADDER-BRIEF.md`** (CL-R1 colour/light
-      causality → CL-R2 sprite citizenship → CL-R3 construction bench consuming the catalog's
-      grid/socket/piece contracts). Guard Post rung A opens after the ladder. Hand to Codex.
-   Fable + Adam meanwhile: thin briefs for the remaining eleven sites in vernacular-coverage
-   order (camp → lair → monastery → urban unlock all six vernaculars; the rest recombine).
-   **Progress 2026-07-24 (thin-brief session): site 2 camp/service RULED + captured** to
-   GOLDEN-SITES-CATALOG (surface-anchored capsule · geometry+paint tents · permanence
-   ladder rungs 0–2, two rollers/one technology · terrain-owned deck + wagon top +
-   occupancy-licensed watch platform · module-test rider deferred to after the twelve ·
-   guest-family property: camps roll inside hosts — dungeon interiors + urban
-   refugee/shanty spaces, host-governed caps, summoned by host programs, never new rollers;
-   occupancy-license clause added to STRUCTURE-KIT-CATALOG §15; 3 diagram keepers).
-   Camp coda RULED: host-coverage condition (materials/structures for every camp host);
-   tent status variants (troop/officer/shanty); guard towers count-scalable for military.
-   **Site 7 natural lair IN PROGRESS (same day):** capsule RULED (found-OR-dug; dragons +
-   burrowers in-scope; site-11 boundary noted) · room chaining + organic portal RULED
-   (C1B Connection citizen; BG enter-icon + RE buffer transition liked-not-ruled) · **THE
-   CAUSAL LIGHT LAW** RULED (no light without an owner; Diablo-1 torch-radius touchstone;
-   dungeons too; teeth owed via the diegetic-light harness family) · ledge deck RULED
-   (BG3 owlbear-cave touchstone, reference-only boundary; keeper diagram). **THE DEPTH
-   LAW minted (Adam, same day): no brief settles without guard-post-grade research —
-   breadth sweep · real-image reference lanes · FFT-equivalent comparison. Camp + lair
-   owe depth passes; the lair's runs first; monastery deferred until the lair is served.**
-   **THE STAKES ruling (Adam, same day):** the 12 sites ARE the game's MVP visual
-   identity — months-scale, exhaustive; stretch analysis added to every thin brief.
-   Lair stretch rulings banked: dungeon-skin identity (one-off room ↔ full dungeon;
-   hybrid chains both directions; higher-level identity roll) · nature = high roll incl.
-   UNINHABITED (abandoned mine) · mishap entry (collapse/mountainside → dropped into a
-   lair). Camp: tent FORMS culture-expressive (silhouette = culture channel). Lair-action
-   provenance: 2014 MM, dropped in 2024-era imports — Genesis-native if built.
-   **Research briefs DELEGATED 2026-07-24: both launched on Opus 5 background agents**
-   (Adam: "test the new Opus 5 in the background") — `docs/LAIR-STUDY-BRIEF.md` ·
-   `docs/CAMP-STUDY-BRIEF.md`; outputs land at `Reference/Lair-Study/` +
-   `Reference/Camp-Study/` on the briefs branch; image lanes reference-only with
-   per-image license ledgers; FFT cohort lanes run on the in-repo five-angle corpus.
-   **Fable re-gates both returns personally — never trust self-reported green.**
-   **Desktop study folder MOVED into the repo (Adam's 3rd ask — honored):**
-   `Reference/FFT-Guard-Post-Study/study-archive/` — 346 MB / 3,969 files verified,
-   Desktop source gone; stage-vs-ignore call rides the close (battle-maps rescue is the
-   precedent). Lair-actions thread DEFERRED past the L1–10 v1 cap (expansion/sequel
-   window — TIER-SCOPE). **Growth-ladder directive minted:** per-site build pattern
-   post-research (easy scaling upward, shape + level language expanding per scale; guard
-   post rungs A→D + camp permanence ladder = the models). **Monastery re-opened** per
-   Adam ("move on once those tasks have been delegated").
-   **Both studies RETURNED + RE-GATED (2026-07-24, Opus 5 agents):** camp study (8
-   deliverables, 38-image ledger, FFT corpus confirmed camp-free → clearing grammar;
-   Public Cemetery claim vision-verified) · lair study (8 deliverables, 36-image ledger,
-   declared gaps honest; map-114 no-ceiling + map-39 mine-overburden claims
-   vision-verified). **Adam answered both founder packets (20 rulings) — captured to the
-   Site 2 + Site 7 briefs:** tent kit (4 forms in, bindings locked, one adjustable cone,
-   ger rooted-only, rope-geometry FLAGGED for someday, earthwork ADMITTED as world
-   ground assembly, entrance discipline rolled, no enterable volumes/NPC-summoned,
-   CENTER LAW promoted + teeth owed) · lair (chains descend, broken shelf, dug⇒bolt-hole
-   always, light=trade via existing SRD seen/unseen economy [verified], FFT-knows-best
-   ceilings, single fixed camera+zoom+pan/no orbit, entrance count from origin,
-   **RETURN-LOOP LAW game-wide** [Oblivion exit pattern; Wave-4 circulation owner
-   inherits; teeth owed], eyrie DROPPED). Two questions returned to Adam: loop-around
-   floor-vs-ledge · mine family (defer to site 5 proposed).
-   **Study follow-ups RULED (same day):** both loop styles in the box (roller selects) ·
-   mine family deferred to site 5 confirmed (lair rolls feral workings) · return-loop
-   law refined to the SHORT-EXIT GUARANTEE (loop-back OR separate organic exit OR
-   one-way shortcut; "it's a game not reality") · **WALK-OUT MONTAGE ADOPTED**
-   (WORLD-TURN §5b: known ground only · real time · world may interrupt; teeth owed).
-   **Sites 2 + 7 are SERVED — the first two through the full depth-law cycle.**
-   **MONASTERY-STUDY-BRIEF WRITTEN (`docs/MONASTERY-STUDY-BRIEF.md`) — awaiting Adam's
-   launch word** (Opus 5 background pattern; hillside seed flagged as the ruling to
-   stress-test).
-   **MONASTERY STUDY LAUNCHED (Opus 5 background, Adam's word) + SITE 10 URBAN
-   INSTITUTION OPENED AND RULED (same day):** capsule = the road grown walls (a slice of
-   town, never the whole town; street passes through) · frontage = the signature buy
-   (party walls, shopfront bays, multi-storey — the module-test tech) · deck = THREE
-   expressions: roofline + balconies + **terrain-borne street elevation** (Adam's San
-   Francisco/Lombard pattern: a winding descending lane flanked by level overlooking
-   streets; stair streets; hillside towns) · first seed = MARKET HALL + FOUNTAIN at the
-   plaza center (the center law's public face). **All six vernaculars now open at
-   ruling level.** **URBAN-STUDY-BRIEF WRITTEN (`docs/URBAN-STUDY-BRIEF.md`) on Adam's
-   materials question — lane 2 = the DRESSING CENSUS** (the town is the
-   dressing-heaviest site; the material/decal/prop roster is a study deliverable in §8
-   format, routed to the next Codex material brief; Site 10's material line marked
-   placeholder). **PLUS URBAN-CULTURE-STUDY-BRIEF (Adam: "we will need a verbose
-   cultural study on pre-industrial urban sites too") — the town's LIFE to the other
-   brief's BODY:** seven long-form lanes (the day/year · work and the street · power
-   and order · social fabric · senses/squalor · belief/festival · non-European
-   counterpoints), a READING study whose output is deliberately verbose prose plus
-   routed extracts (band-sorted hook fodder, hour-by-hour occupancy fodder,
-   meaning-bearing dressing, DM lore). **BOTH URBAN STUDIES LAUNCHED (Adam: "lets kick
-   off the urban research") — two Opus 5 background agents, outputs →
-   `Reference/Urban-Study/` + `Reference/Urban-Culture-Study/`; Fable re-gates both
-   returns.** Monastery study RETURNED + RE-GATED same day (Orbonne claim
-   vision-verified; ledger honesty confirmed): hillside-seed verdict = legitimate
-   hybrid (cloister plan on terraced-sanctuary section; "gate low" best-evidenced
-   clause); its 10-question founder packet + the hip-vs-FFT tension (zero hips in
-   FFT's institutional cohort vs the ruled hip debut) AWAIT ADAM.
-   **Urban BODY study RETURNED + RE-GATED (Zarghidas two-level street vision-verified;
-   37/37 ledger; workspace clean):** THE DRESSING CENSUS delivered — **54 demand slots
-   (12 material · 18 decal-paint · 24 prop)** in §8 format, ready to route to the next
-   Codex material brief; headline findings: the missing bin was WEAR-AND-MESSAGE, not
-   materials; street lamps historically belong to HOUSEHOLDERS (causal light wires to
-   occupancy for free; post lamp = civic authority exists); per-unit limewash colour =
-   occupancy made visible; the two-state shutter (awning up / counter down) = the
-   frontage's candidate signature mechanism. Evidence pushbacks flagged: the seed has
-   TWO centres (hall + fountain — real plazas hold one); FFT has NO market hall and NO
-   fountain (the seed is knowingly invented); deck order reads terrain → roofline →
-   gallery (balconies = one continuous gallery, not N ledges); FFT avoids fully
-   enclosed street corridors; two ways in may be too few. **Its 10-question founder
-   packet AWAITS ADAM; the culture study is still running.**
-   **Urban CULTURE study RETURNED + RE-GATED (word count exact 51,576; ledger honesty
-   verified incl. 3 HELD-unread books + 11 named second-hand chains; hook extract
-   spot-read — 44 hooks banded G12/T11/S10/V6/M5, every one traced):** 15 Gutenberg
-   texts mined; extracts = hooks + hour-by-hour occupancy + ~60 meaning-dressing items
-   + DM lore (verbatim cries, costed sums, 2 ready scenes). Headliners: THE FAIR
-   SUSPENDS THE LAW (alternate ruleset over the same plaza) · bell ownership = who
-   rules · authority-marks-on-others'-property as the decal family · the Cornhill
-   center STACK (well→cage→pillory) · the water bearer (clock+sacristan+barometer) ·
-   trades MOBILE/ANCHORED/EXTINCT · culture axis = answers-not-skins (four shared
-   questions). Its 10-question packet queued. **ALL FIVE STUDIES HOME.
-   `docs/GOLDEN-SITES-FOUNDER-QUEUE.md` consolidates the 31 open founder items
-   (M1–M11 · UB1–UB10 · UC1–UC10) for one-sitting ruling.**
-   **UB packet part-discharged (Adam, same day): UB1 free-standing block · UB7
-   roof-as-upper-street culture-gated to the default culture · UB8 both lamp halves ·
-   UB9 culture palette families as hue/tint over few base textures · UB10 varies per
-   roll (sample: two ends + one vertical). UB2 awaiting a reading-confirm (hall +
-   fountain as one center stack); UB3/4 leaning (same mechanism — the shutter) +
-   produce-tray rec; UB5/6 explained with diagram, answers pending. THE CONGRUENCE LAW
-   minted (one ten-section template per site; ladders + MVP/ideal map to MODULE-PHASING
-   horizons; audit in the catalog preamble; full restructuring pass runs as the queue
-   discharges).**
-   **THE GENERATOR PRINCIPLE minted (Adam, same day — "we are building a monastery
-   generator, not just one key scene"):** founder either/ors default to BOTH-ROLLED;
-   the recorded answer = build order + learning rationale + degradation/promotion
-   links; founder questions now arrive as proposed build orders. Applied immediately:
-   UB3/4 RULED (shutter pair) · UB5/6 CONFIRMED as WARN-grade defaults ("not in every
-   instance") · M3 RULED (dormitory default / cell-row variant) · M1/M2/M4/M5
-   BOTH-ROLLED with the proposed variant build order captured in the Site 4 brief
-   (B→C→A yards; center gate first; one yard first; head-chapel first, Rila roll rides
-   the defended variant). UB2 still awaits its one-line confirm.
-   **THE SITE PIPELINE minted (Adam, same day — the rigid per-site scaffold):**
-   RESEARCH → DETERMINATION → LISTING → OPTIONS (build order + learning + ladder
-   links) → STRETCH (alt uses, reskin reach) → SCENE PROMOTION ORDER (most basic →
-   golden seed → most developed) → CONGRUENT BRIEF. Applied retroactively: variant
-   build orders + scene ladders added to sites 2, 7, 10 (site 1 already compliant).
-   Founder queue RE-LISTED in generator form (proposed dispositions/build orders).
-   **Mass discharge (Adam, same day): M6–M11 ALL RULED → SITE 4 FULLY RULED + SERVED
-   (third site through the complete pipeline; M11 = seed hall gable+spire, hip stays
-   in kit and promotes with the manor read — STRUCTURE-KIT §7 updated) · UC1–UC8
-   RULED (fair state + Adam's rider: wire to the Engine's existing fair events/hooks;
-   water bearer AS MODIFIED — encounterable fixture NPC, never auto-rolled) · UB2
-   RULED both-rolled (seed = hall-with-fountain landmark; street basin = variant).
-   QUEUE REMAINING: 2 — UC9 + UC10.** Plain-English memory strengthened again (queue
-   sheets count too). **THEN DRAINED (Adam, session end): UC9 = rolled OPTION keyed to
-   burn history, not default · UC10 = lazy way NOW (the already-ruled paint tier);
-   town-vs-tray split recorded (the four cultural answers are town-roller text/rule
-   facts; the tray shows visible tips); tier-1 ANSWER-OBJECT proposal standing ("all
-   ears" pending). THE FOUNDER QUEUE IS EMPTY. Sites 1/2/4/7 served; site 10 ruled
-   through both packets. Next mechanical work: the congruence restructuring pass over
-   all five briefs, then the recombiner sites begin (site 3, dormant, has the most
-   hosts waiting for it).**
-   **Monastery progress (same day):** capsule RULED + **THE INSTITUTIONAL CHASSIS**
-   (Adam: the walled-courtyard grammar serves prison / school / hospital / hotel — the
-   courtyard inn closes the caravanserai loop; one kit, five-plus institutions) ·
-   repetition RULED (arcade bay + cell row = the first repeated-bay grammar) · deck
-   RULED (stepped courtyard → chapel platform; militant-order bell tower) · exemplary
-   seed RULED (hillside bench, gate low, chapel high — keeper diagram; study pass may
-   pressure) · hip roof RULED (hall+gatehouse debut) · **WALKABLE-PITCH LAW minted
-   (Adam): PCs/creatures walk pitched roofs up to the walkable-slope limit — one slope
-   rule for ground/terraces/wall-walks/roofs (number clay-calibrated, 30° ground default);
-   walkable roof ⇒ reachability obligation; visual proof rides the standee-base rework
-   (Adam's note: bases being reworked to sit on slopes)**. Plain-English rule re-affirmed
-   (memory: feedback-genesis-plain-english). MONASTERY-STUDY-BRIEF owed before the site
-   settles.
-   **Site-inhabitant cascade RULED (Adam, same day; captured WORLD-TURN §5a + catalog
-   pointer):** recall→pool→mint preference order extended to ALL WALKS incl. site
-   minting · **freshness valve** (guaranteed fresh roll every X segments; X
-   playtest-tunable) · lock-vs-lean (written facts LOCK, regional canon only LEANS the
-   roll). Spice already governed by SPICE-RAISE (band-first 25/25/25/17/8 baseline →
-   rim; site tables Commitment-class, all-band coverage). Teeth owed: recall-before-mint
-   check + valve-fires check.
-2. ☐ **Owed enforcing checks (teeth):** the arrival-hook validator (no site roll without an
-   active hook) · cover-class equality across cultural variants · merged socket registry
-   (CL-S08 base + catalog extensions) · all-standable-surfaces-reachable — land with the
-   first C1H validator work.
-3. ☐ **SPATIAL-MODEL rider owed:** guard post as route feature minted-as-node-when-entered —
-   design into the walk rework, not after it.
-4. ☐ Sprite prototype admissions ride until the full sprite review (frozen list; delete +
-   regen there).
 
 ## Open threads — carried forward (STANDING section; never auto-archived)
 

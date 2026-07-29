@@ -5391,8 +5391,15 @@ function clayRoomMountTerrainBench(){
           && a.at.y >= bay.y && a.at.y < bay.y + bay.d;
       });
       if(anchors.length >= 2){
-        const network = terrainSpanNetwork(anchors, { spanCount: Math.min(2, anchors.length - 1),
-          diameterFt: 2, heightAboveDatumH: 1, barkCondition: "sound", undercutDepthH: 1 });
+        const spanParams = spanPiece.params || {};
+        const network = terrainSpanNetwork(anchors, {
+          spanCount: Math.min(spanParams.spanCount || 2, anchors.length - 1),
+          diameterFt: spanParams.diameterFt || 2,
+          heightAboveDatumH: spanParams.heightAboveDatumH == null
+            ? 1 : spanParams.heightAboveDatumH,
+          barkCondition: spanParams.barkCondition || "sound",
+          undercutDepthH: spanParams.undercutDepthH == null ? 1 : spanParams.undercutDepthH
+        });
         network.spans.forEach(function(span){
           const ai = span.from.at.y * field.extent.x + span.from.at.x;
           const bi = span.to.at.y * field.extent.x + span.to.at.x;
@@ -5461,6 +5468,25 @@ function clayRoomMountTerrainBench(){
       parent.add(mesh);
       return mesh;
     }
+    function mountDefenseTieredColumn(parent, structure, part, x, z, w, d, bottomY, height, color){
+      /* Diagnostic massing only: the declared footprint and total storeys remain authoritative.
+         Small setbacks keep a legal tall far-band mass from reading as one placeholder cuboid. */
+      const lowerH = height * 0.38;
+      const middleH = height * 0.34;
+      const upperH = height - lowerH - middleH;
+      const inset1 = Math.min(0.18, Math.max(0, Math.min(w, d) * 0.07));
+      const inset2 = Math.min(0.3, Math.max(0, Math.min(w, d) * 0.12));
+      mountDefenseBox(parent, structure, part + "-lower",
+        x, z, w, d, bottomY, lowerH, color);
+      mountDefenseBox(parent, structure, part + "-middle",
+        x, z, Math.max(0.5, w - inset1 * 2), Math.max(0.5, d - inset1 * 2),
+        bottomY + lowerH, middleH, 0x7b7670);
+      mountDefenseBox(parent, structure, part + "-upper",
+        x, z, Math.max(0.5, w - inset2 * 2), Math.max(0.5, d - inset2 * 2),
+        bottomY + lowerH + middleH, upperH, 0x827d77);
+      mountDefenseBox(parent, structure, part + "-cap",
+        x, z, w + 0.18, d + 0.18, bottomY + height, 0.16, 0x918a82);
+    }
     declaredDefenseStructures.forEach(function(structure){
       const fp = structure.footprint;
       const centerX = first.originCell.x + fp.x + fp.w / 2 - origin.cx;
@@ -5476,20 +5502,20 @@ function clayRoomMountTerrainBench(){
         const pierW = Math.max(1, fp.w * 0.28);
         const passageW = Math.max(1, fp.w - pierW * 2);
         const openingH = Math.min(height * 0.42, storeyH * 1.55);
-        mountDefenseBox(structureGroup, structure, "west-pier",
+        mountDefenseTieredColumn(structureGroup, structure, "west-pier",
           centerX - (fp.w - pierW) / 2, centerZ, pierW, fp.d, bottomY, height, 0x77736e);
-        mountDefenseBox(structureGroup, structure, "east-pier",
+        mountDefenseTieredColumn(structureGroup, structure, "east-pier",
           centerX + (fp.w - pierW) / 2, centerZ, pierW, fp.d, bottomY, height, 0x77736e);
         mountDefenseBox(structureGroup, structure, "upper-bridge",
-          centerX, centerZ, passageW, fp.d, bottomY + openingH, height - openingH, 0x827d77);
+          centerX, centerZ, passageW, Math.max(1, fp.d - 0.35),
+          bottomY + openingH, Math.min(storeyH * 1.35, height - openingH), 0x827d77);
+        mountDefenseBox(structureGroup, structure, "bridge-cap",
+          centerX, centerZ, passageW + 0.18, fp.d - 0.12,
+          bottomY + openingH + Math.min(storeyH * 1.35, height - openingH),
+          0.16, 0x918a82);
       } else {
-        mountDefenseBox(structureGroup, structure, "mass",
+        mountDefenseTieredColumn(structureGroup, structure, "mass",
           centerX, centerZ, fp.w, fp.d, bottomY, height, 0x716d68);
-        /* A slightly broader cap prevents a tall diagnostic tower from reading as an extruded
-           cuboid while keeping the gameplay footprint unchanged. */
-        mountDefenseBox(structureGroup, structure, "point-deck-cap",
-          centerX, centerZ, fp.w + 0.24, fp.d + 0.24,
-          bottomY + height, 0.16, 0x8b857e);
       }
       group.add(structureGroup);
       const row = cameraRow(structure.id);

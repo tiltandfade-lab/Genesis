@@ -1,7 +1,7 @@
 ---
 type: working-build-spec
 created: 2026-07-28
-status: BUILT — CL-F08a authored baseline; visual verdict remains Adam's
+status: BUILT — CL-F08a form-language baseline; visual verdict remains Adam's
 owner: authored terrain features before procedural transformation
 authority:
   - ART-DIRECTION-CANON.md
@@ -55,6 +55,28 @@ The feature book reads the local FFT studies directly during production.
 
 The rejected regular sedimentary face ridge is not reintroduced. Face strata remain absent from
 the terrain renderer.
+
+## Form target learned from the Golden Site renders
+
+The active Golden Site concept renders clarified the intended hierarchy:
+
+1. **Calm field:** most of the tactical plate remains readable datum ground.
+2. **Macro silhouette:** one connected hill, ridge, bank, hollow, bluff, ditch system, or defensive
+   seat organizes the frame.
+3. **Meso explanation:** shoulders, saddles, cuts, spoil, talus, slumps, and route transitions
+   explain why that silhouette changes.
+4. **Localized break:** a cliff, curb, trench, root undercut, stair, or wall occurs only where its
+   cause is visible.
+5. **Dressing:** material, debris, roots, water, and vegetation reinforce the authored form after
+   the terrain itself already reads.
+
+This is a form-language reference, not permission to copy concept-render cheats into the tactical
+mesh. Walk, collision, shared-edge, and support receipts remain authoritative.
+
+Version 2 of CL-F08a therefore lowers and broadens the natural features, replaces circular masses
+with rotated elliptical ones, and lets ridge/channel width, height, and depth vary along a run.
+Runs can fade at their ends. This gives an authored feature a beginning, continuation, and
+termination instead of a constant-width ribbon or a pile of independently randomized cells.
 
 ## The eight feature baselines
 
@@ -144,6 +166,12 @@ The headless gate requires:
 - multiple responsive tile profiles and tangent planes;
 - identical authored logical geometry across changed seeds;
 - a real four-storey mass, with every tall mass inside the far-band rule.
+- no hard faces on natural ground except the explicitly authored bluff;
+- at least half of every feature study retained as calm datum ground;
+- a two-quantum maximum relief on small studies and a three-quantum maximum on large natural
+  studies, with the causal bluff as the four-quantum exception;
+- a bounded summit share so the reverse-slope ridge cannot regress into a broad flat slab;
+- actual use of rotated directional masses and tapered or fading authored runs.
 
 Visual acceptance remains Adam's. A green engine gate says the feature is legal, continuous,
 deterministic, and honestly placed; it does not say the feature looks good.

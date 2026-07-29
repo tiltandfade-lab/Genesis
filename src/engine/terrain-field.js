@@ -177,6 +177,50 @@ function terrainOpApply(op, ctx){
   /* Every op may be BOUNDED to a rectangle. Thirteen pieces on one sheet each need their own bay,
      and an op that silently paints the whole field is the bug that makes a bench unreadable. */
   var bnd = p.bounds || null;
+  /* R3 authored-form projection. A ridge, bank, or runoff cut needs to know where it is along
+     its whole path, not only how far it is from the nearest segment. That permits broad-to-narrow
+     shoulders and entrances/exits that fade into the field instead of ending as vertical walls.
+     Kept local to the op evaluator so this remains one shaping vocabulary, not a second generator. */
+  function polylineProjection(points, px, py){
+    var total = 0, lengths = [];
+    for(var si = 0; si + 1 < points.length; si++){
+      var svx = points[si + 1].x - points[si].x;
+      var svy = points[si + 1].y - points[si].y;
+      var sl = Math.sqrt(svx * svx + svy * svy);
+      lengths.push(sl);
+      total += sl;
+    }
+    var best = Infinity, side = 1, along = 0, before = 0;
+    for(var sj = 0; sj + 1 < points.length; sj++){
+      var a = points[sj], b = points[sj + 1];
+      var vx = b.x - a.x, vy = b.y - a.y;
+      var len2 = vx * vx + vy * vy || 1;
+      var tt = Math.max(0, Math.min(1, ((px - a.x) * vx + (py - a.y) * vy) / len2));
+      var qx = a.x + tt * vx, qy = a.y + tt * vy;
+      var dd = Math.sqrt((px - qx) * (px - qx) + (py - qy) * (py - qy));
+      if(dd < best){
+        best = dd;
+        side = ((px - qx) * vy - (py - qy) * vx) >= 0 ? 1 : -1;
+        along = before + tt * (lengths[sj] || 0);
+      }
+      before += lengths[sj] || 0;
+    }
+    return {
+      distance: best, side: side, along: along, total: total,
+      t01: total > 0 ? Math.max(0, Math.min(1, along / total)) : 0
+    };
+  }
+  function lerpParam(start, end, fallback, t){
+    var a = start == null ? fallback : start;
+    var b = end == null ? a : end;
+    return a + (b - a) * t;
+  }
+  function endFade(proj, fadeCells){
+    if(!(fadeCells > 0) || !(proj.total > 0)) return 1;
+    return Math.max(0, Math.min(1,
+      proj.along / fadeCells,
+      (proj.total - proj.along) / fadeCells));
+  }
   function write(x, y, value, cellClamp, cellKind, modeOverride){
     if(x < 0 || y < 0 || x >= ex || y >= ey) return;
     if(bnd && (x < bnd.x || y < bnd.y || x >= bnd.x + bnd.w || y >= bnd.y + bnd.d)) return;
@@ -193,18 +237,28 @@ function terrainOpApply(op, ctx){
   if(op.type === "radial"){
     /* A pile of material: peak at the centre, falling to zero at the footprint radius. `asymmetry`
        pushes the crest off-centre, which is what makes one flank steep and the other long — the
-       windward and lee sides of a real hill are never the same. */
-    var acx = p.cx + (p.asymmetry || 0) * (p.radius || 1) * 0.5;
-    var acy = p.cy + (p.asymmetry || 0) * (p.radius || 1) * 0.25;
+       windward and lee sides of a real hill are never the same. `radiusX/radiusY/rotationDeg`
+       extend that same mass into an authored shoulder or spur; they do not add per-cell noise. */
+    var rrx = p.radiusX || p.radius || 1;
+    var rry = p.radiusY || p.radius || 1;
+    var rang = (p.rotationDeg || 0) * Math.PI / 180;
+    var rcos = Math.cos(rang), rsin = Math.sin(rang);
+    var ashift = (p.asymmetry || 0) * rrx * 0.5;
+    var acx = p.cx + ashift * rcos;
+    var acy = p.cy + ashift * rsin
+      + (p.rotationDeg == null ? (p.asymmetry || 0) * (p.radius || 1) * 0.25 : 0);
     for(y = 0; y < ey; y++) for(x = 0; x < ex; x++){
       var dx = (x - acx), dy = (y - acy);
-      var r = Math.sqrt(dx * dx + dy * dy) / Math.max(0.001, p.radius);
+      var rlx = dx * rcos + dy * rsin;
+      var rly = -dx * rsin + dy * rcos;
+      var r = Math.sqrt((rlx * rlx) / Math.max(0.001, rrx * rrx)
+        + (rly * rly) / Math.max(0.001, rry * rry));
       if(r > 1) continue;
       var t = 1 - r;
       var prof = p.profile === "concave" ? (t * t)
         : p.profile === "sigmoid" ? (t * t * (3 - 2 * t))
         : t;                                        /* convex/default: linear fall */
-      var flatR = (p.crownFlatCells || 0) / Math.max(0.001, p.radius) / 2;
+      var flatR = (p.crownFlatCells || 0) / Math.max(0.001, Math.min(rrx, rry)) / 2;
       if(flatR > 0 && r <= flatR) prof = 1;
       write(x, y, (p.baseH || 0) + prof * (p.peakH || 0), p.slopeClamp, p.kind || "ground");
     }
@@ -216,30 +270,43 @@ function terrainOpApply(op, ctx){
        half-width, and an optional sign flip for the paired ditch. */
     var pts = p.polyline || [];
     for(y = 0; y < ey; y++) for(x = 0; x < ex; x++){
-      var best = Infinity, side = 1;
-      for(var s = 0; s + 1 < pts.length; s++){
-        var a = pts[s], b = pts[s + 1];
-        var vx = b.x - a.x, vy = b.y - a.y;
-        var len2 = vx * vx + vy * vy || 1;
-        var tt = Math.max(0, Math.min(1, ((x - a.x) * vx + (y - a.y) * vy) / len2));
-        var px = a.x + tt * vx, py = a.y + tt * vy;
-        var dd = Math.sqrt((x - px) * (x - px) + (y - py) * (y - py));
-        if(dd < best){ best = dd; side = ((x - px) * vy - (y - py) * vx) >= 0 ? 1 : -1; }
-      }
-      var hw = p.halfWidthCells == null ? 0.5 : p.halfWidthCells;
+      var ridgeProj = polylineProjection(pts, x, y);
+      var best = ridgeProj.distance, side = ridgeProj.side;
+      var hw = lerpParam(p.halfWidthStartCells, p.halfWidthEndCells,
+        p.halfWidthCells == null ? 0.5 : p.halfWidthCells, ridgeProj.t01);
+      var ridgeHeight = lerpParam(p.heightStartH, p.heightEndH, p.heightH || 0, ridgeProj.t01);
+      var ridgeFade = endFade(ridgeProj, p.endFadeCells);
       /* A CLIFF or a BANK is not a ridge: it is two grounds at different datums meeting at an edge.
          `halfPlane` builds that — everything on the plateau side of the polyline stands at the
          upper datum and everything on the other side stays at the lower one. A ridge (berm) is the
          symmetric case and keeps the original path. Same op, one named parameter. */
       if(p.halfPlane){
         if(side === (p.plateauSide == null ? -1 : p.plateauSide)){
-          write(x, y, (p.baseH || 0) + (p.heightH || 0), p.slopeClamp, p.kind || "ground");
+          write(x, y, (p.baseH || 0) + ridgeHeight, p.slopeClamp, p.kind || "ground");
         }
       } else if(best <= hw){
-        var falloff = p.crestWidthCells >= 1 ? 1 : Math.max(0, 1 - (best / Math.max(0.001, hw)));
-        write(x, y, (p.baseH || 0) + (p.heightH || 0) * falloff, p.slopeClamp, p.kind || "ground");
-      } else if(p.pairedDitch && best <= hw + (p.ditchWidthCells || 1) && side === (p.ditchSide || -1)){
-        write(x, y, (p.baseH || 0) - (p.ditchDepthH || 1), p.slopeClamp, p.kind || "ground", "min");
+        var falloff;
+        if(p.crossProfile){
+          var crestHalf = Math.max(0, p.crestHalfWidthCells || 0);
+          var rr = Math.max(0, Math.min(1,
+            (best - crestHalf) / Math.max(0.001, hw - crestHalf)));
+          falloff = rr <= 0 ? 1 : (p.crossProfile === "smooth"
+            ? 1 - rr * rr * (3 - 2 * rr)
+            : (p.crossProfile === "concave" ? (1 - rr) * (1 - rr) : 1 - rr));
+        } else {
+          falloff = p.crestWidthCells >= 1 ? 1 : Math.max(0, 1 - (best / Math.max(0.001, hw)));
+        }
+        write(x, y, (p.baseH || 0) + ridgeHeight * falloff * ridgeFade,
+          p.slopeClamp, p.kind || "ground");
+      } else {
+        var ditchWidth = lerpParam(p.ditchWidthStartCells, p.ditchWidthEndCells,
+          p.ditchWidthCells || 1, ridgeProj.t01);
+        if(p.pairedDitch && best <= hw + ditchWidth && side === (p.ditchSide || -1)){
+          var ditchDepth = lerpParam(p.ditchDepthStartH, p.ditchDepthEndH,
+            p.ditchDepthH || 1, ridgeProj.t01);
+          write(x, y, (p.baseH || 0) - ditchDepth * ridgeFade,
+            p.slopeClamp, p.kind || "ground", "min");
+        }
       }
     }
     return;
@@ -251,7 +318,14 @@ function terrainOpApply(op, ctx){
        so raising the datum floods outward for free, correctly, following the real ground. */
     for(y = 0; y < ey; y++) for(x = 0; x < ex; x++){
       var bdx = x - p.cx, bdy = y - p.cy;
-      var br = Math.sqrt(bdx * bdx + bdy * bdy) / Math.max(0.001, p.radius);
+      var brx = p.radiusX || p.radius || 1;
+      var bry = p.radiusY || p.radius || 1;
+      var bang = (p.rotationDeg || 0) * Math.PI / 180;
+      var bcos = Math.cos(bang), bsin = Math.sin(bang);
+      var blx = bdx * bcos + bdy * bsin;
+      var bly = -bdx * bsin + bdy * bcos;
+      var br = Math.sqrt((blx * blx) / Math.max(0.001, brx * brx)
+        + (bly * bly) / Math.max(0.001, bry * bry));
       if(br > 1) continue;
       var depth = p.shoreProfile === "undercut-bank" ? (br < 0.85 ? 1 : (1 - br) / 0.15)
         : p.shoreProfile === "stepped-shelf" ? Math.min(1, Math.ceil((1 - br) * 3) / 3)
@@ -268,19 +342,15 @@ function terrainOpApply(op, ctx){
        the slot carries its own free clamp. */
     var spts = p.polyline || [];
     for(y = 0; y < ey; y++) for(x = 0; x < ex; x++){
-      var sbest = Infinity;
-      for(var q = 0; q + 1 < spts.length; q++){
-        var sa = spts[q], sb = spts[q + 1];
-        var svx = sb.x - sa.x, svy = sb.y - sa.y;
-        var slen2 = svx * svx + svy * svy || 1;
-        var st = Math.max(0, Math.min(1, ((x - sa.x) * svx + (y - sa.y) * svy) / slen2));
-        var spx = sa.x + st * svx, spy = sa.y + st * svy;
-        var sd = Math.sqrt((x - spx) * (x - spx) + (y - spy) * (y - spy));
-        if(sd < sbest) sbest = sd;
-      }
-      var shw = (p.widthCells || 1) / 2;
+      var slotProj = polylineProjection(spts, x, y);
+      var sbest = slotProj.distance;
+      var slotWidth = lerpParam(p.widthStartCells, p.widthEndCells, p.widthCells || 1,
+        slotProj.t01);
+      var shw = slotWidth / 2;
       if(sbest <= shw){
-        var floorH = (p.baseH || 0) - (p.depthH || 0);
+        var slotDepth = lerpParam(p.depthStartH, p.depthEndH, p.depthH || 0,
+          slotProj.t01) * endFade(slotProj, p.endFadeCells);
+        var floorH = (p.baseH || 0) - slotDepth;
         if(p.floorProfile === "rising") floorH += Math.round((p.depthH || 0) * 0.4);
         write(x, y, floorH, p.slopeClamp, p.void ? "void" : (p.kind || "ground"));
       }

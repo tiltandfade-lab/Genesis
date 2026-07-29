@@ -33,10 +33,11 @@ const POS = process.argv.slice(2).filter((a) => !a.startsWith("--"));
 const OUT = POS[0];
 const PORT = POS[1] || "5176";
 const ONLY = POS[2] || "all";
-/* TERRAIN-EXPRESSION §5 — the bin-isolation ladder. One rung per run, over an otherwise identical
-   field: same seed, same camera, same layout. Omitted = `naked`, which is the byte-identical legacy
-   render, so an un-flagged capture bank is exactly what it was before this build. */
-const RUNG = FLAGS.rung || POS[3] || "naked";
+/* TERRAIN-EXPRESSION §5 — an explicit rung remains one rung per run, over an otherwise identical
+   field: same seed, same camera, same layout. When omitted, each scene uses its production default:
+   the seven CL-F07 bin-isolation scenes remain `naked`; authored feature maps use `all`, because a
+   feature proof is a picture of the battlefield rather than the box-per-cell control. */
+const RUNG_OVERRIDE = FLAGS.rung || POS[3] || null;
 const PROBE = FLAGS.probe || POS[4] || null;
 const SEED = FLAGS.seed || POS[5] || null;
 const GRADE = FLAGS.grade || null;
@@ -70,6 +71,9 @@ const FEATURE_SCENE_IDS = new Set([
   "fft-reverse-ridge-proof", "fft-ravine-crossing-proof", "fft-terraced-bluff-proof",
   "fft-earthwork-breach-proof"
 ]);
+function rungForScene(sceneId){
+  return RUNG_OVERRIDE || (FEATURE_SCENE_IDS.has(sceneId) ? "all" : "naked");
+}
 
 function pageProbe() {
   const T = window.Theater || {};
@@ -168,11 +172,15 @@ async function plate(page, filename) {
         : "cl-f07-terrain-bench"),
     proof: featureOnly ? "CL-F08a" : (ONLY === "all" ? "CL-F07a + CL-F08a" : "CL-F07a"),
     captures: [],
-    determinism: null, gate: null, rung: RUNG, probe: PROBE, seed: SEED,
+    determinism: null, gate: null,
+    rung: RUNG_OVERRIDE || "scene-default",
+    rungPolicy: RUNG_OVERRIDE ? "explicit override" : "CL-F07 diagnostics=naked; authored features=all",
+    probe: PROBE, seed: SEED,
     grade: GRADE, overhang: OVERHANG, skirt: SKIRT, quarterTurn: TURN,
     generatedAt: new Date().toISOString(), viewport: VIEWPORT };
 
   async function openScene(scene) {
+    const sceneRung = rungForScene(scene.id);
     const page = await browser.newPage();
     await page.setRequestInterception(true);
     page.on("request", (r) => {
@@ -187,7 +195,10 @@ async function plate(page, filename) {
     page.on("pageerror", (e) => consoleErrors.push(String(e)));
     const url = BASE + "/genesis.html?clayroom=1&clayfixture=terrain&terrainscene=" + scene.id
       + (scene.frameIndex != null ? "&terrainframe=" + scene.frameIndex : "")
-      + "&terrainrung=" + RUNG + (PROBE ? "&terrainprobe=" + PROBE : "")
+      /* When no override was requested, omit the parameter and exercise the product default. The
+         rig still carries the expected answer beside the live receipt, and a mismatch is NOT BUILT. */
+      + (RUNG_OVERRIDE ? "&terrainrung=" + sceneRung : "")
+      + (PROBE ? "&terrainprobe=" + PROBE : "")
       + (SEED ? "&terrainseed=" + SEED : "")
       + (GRADE ? "&terraingrade=" + GRADE : "")
       + (OVERHANG ? "&terrainoverhang=" + OVERHANG : "")
@@ -205,7 +216,7 @@ async function plate(page, filename) {
       }, scene.light);
       await new Promise((r) => setTimeout(r, 400));
     }
-    return { page, consoleErrors, consoleWarnings };
+    return { page, consoleErrors, consoleWarnings, sceneRung };
   }
 
   /* A multi-frame scene expands into one capture per frame. §4.3 capture 3 is literally "Six
@@ -227,7 +238,7 @@ async function plate(page, filename) {
     let opened;
     try { opened = await openScene(scene); }
     catch (e) { console.log("FAILED to open:", e.message); continue; }
-    const { page, consoleErrors, consoleWarnings } = opened;
+    const { page, consoleErrors, consoleWarnings, sceneRung } = opened;
 
     await new Promise((r) => setTimeout(r, 900));
     const early = await page.evaluate(pageProbe);
@@ -328,12 +339,16 @@ async function plate(page, filename) {
        declared and not drawn. Both plates are small on disk (smooth gradient, no geometry). */
     await plate(page, label + "-06-production-backdrop-plate.png");
 
+    const resolvedRung = settled.terrain && settled.terrain.expression
+      ? settled.terrain.expression.rungId : null;
     const receipt = {
       fixture: "cl-f07-terrain-bench",
       proof: "CL-F07a",
       capture: scene.capture,
       sceneId: scene.id,
-      rung: RUNG,
+      rung: resolvedRung,
+      expectedRung: sceneRung,
+      rungOverride: RUNG_OVERRIDE,
       probe: PROBE,
       grade: GRADE,
       overhang: OVERHANG,
@@ -341,7 +356,8 @@ async function plate(page, filename) {
       quarterTurn: TURN,
       quarterTurnGate: quarterTurnGate,
       frameIndex: scene.frameIndex != null ? scene.frameIndex : null,
-      claim: (settled.terrain && settled.terrain.sceneId === scene.id) ? "built" : "NOT BUILT",
+      claim: (settled.terrain && settled.terrain.sceneId === scene.id
+        && resolvedRung === sceneRung) ? "built" : "NOT BUILT",
       lightRecipeRequested: scene.light,
       viewport: VIEWPORT,
       strategicViewApplied: strategic,
@@ -370,6 +386,8 @@ async function plate(page, filename) {
       boundary: settled.terrain && settled.terrain.boundary ? settled.terrain.boundary.kind : null,
       frames: receipt.frames, backdropPlates: receipt.backdropPlates,
       receipt: label + "-receipt.json",
+      rung: resolvedRung,
+      expectedRung: sceneRung,
       built: receipt.claim === "built",
       consoleErrors: consoleErrors.length,
       quarterTurnGate: quarterTurnGate,

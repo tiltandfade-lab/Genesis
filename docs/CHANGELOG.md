@@ -8,6 +8,23 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-29 — Natural-surface feature default and honest terrain evidence [Codex]
+
+**Changed**
+- Authored terrain-feature scenes now enter through the complete responsive expression by default:
+  natural grades share their edge/corner heights and retain changing FFT-style tile angles, while
+  constructed treads, ruined masonry, fortifications, retaining work, and causal cliffs keep hard
+  low-poly faces.
+- The CL-F07 expression-ladder fixtures still default to their byte-compatible `naked`
+  box-per-cell control. `terrainrung=` and the capture flag remain explicit overrides.
+- Terrain capture now resolves and records the rung per scene. An unqualified feature proof can no
+  longer be mislabeled by silently rendering the legacy voxel control.
+
+**Fixed**
+- The prior CL-F10 proof sheet accidentally used the capture rig's legacy global `naked` default,
+  making the feature maps appear to have regressed to Minecraft chunks. The new retained packet
+  uses the same authored fields and cameras with the full responsive surface.
+
 ## 2026-07-29 — Complementary FFT maps, ruined-tower centerpiece, and quarter-turn review [Codex]
 
 **Added**
@@ -804,34 +821,3 @@ after the wave: `a23d2eb2`.
 **Deferred**
 - W0-b PRNG dedup — real surface is 20+ harness files, not 3; re-scope before executing.
 - W0-a struck — MF-3b hit-stop already shipped in BW4B (`17474b45`); wave plan listed a stale unit.
-## 2026-07-14 — Faceted regeneration: generation complete (fantasy realm), canon promoted, salvage + QA
-
-**Added**
-- `dev/model-qa/faceted-sheets/` — the sheet-doc batch architecture that replaced the F-packet lane
-  format: STYLE-CANON.md (Adam's verbatim art direction + decal exemption + prop canon), SHEET-TEMPLATE,
-  refire/redo batch docs, 15+ session prompts, qa-ledger.json (510-file QA verdicts).
-- ~650 raw candidates committed across rounds 1–3 + P/T-series: all 901 figure identities minus a
-  10-identity gap-fill (`session-prompts/gapfill-final.md`, fireable), 56 fx + 43 decal masters
-  (3 sets incl. condition/trace library), 20 extrude item props, 37 dressing components (construction-
-  class routed), 20 icons, 375-item universe (15 sheets), 10-slot floor/wall/trim/face tileset.
-- `salvage-2026-07-14/` — 149 disk-only sprites rescued from broken F10/F11/F7/F3 worktrees.
-- Master (via merge 8a1eb3c4): `docs/ART-DIRECTION-CANON.md` + `docs/FACETED-ART-REGENERATION-
-  PRODUCTION-PLAN.md` + `docs/FACETED-SHEET-TEMPLATE.md`; CLAUDE.md + AGENTS.md both mandate them
-  (the Claude/Codex shared-authority fix + decision-capture rule).
-
-**Changed**
-- Decals are naturalistic surface marks, never triangulated (Adam's ruling, in canon).
-- Props: per-state door/lever/trap generation dropped — §4.1 kit contract enforced (isolated
-  components; engine owns states); §7 master prop prompt restored un-shortened.
-
-**Fixed**
-- F2–F15 audit: F3/F7 fabricated returns, F4/F8 misrouted content, F10/F11 lost to worktree
-  corruption — all salvaged or re-fired; 5+1 crop rejects quarantined (`crop-rejects/`).
-- Volume swept: 20 stale worktrees/dirs removed after salvage; every sprite now lives in git.
-
-**Deferred**
-- Gap-fill session (10 identities) → then Step-E → slice → §9 admission → Adam's sprite-review
-  height pass (5179) → registry regen → engine swap of the 896 pixel sprites.
-- 88 procedural realm-surfaces vs textured floors decision; 11 other realms (~3,420 refs); kit-sheet
-  K1 QA (11 alpha-passed sheets on codex/extruded-prop-pilot).
-

@@ -3819,11 +3819,13 @@ function clayRoomMountSpriteBench(){
    the governed 72° camera), and a sixth bench in a new module would require rewiring the root's
    ctx injection — protected core the graphics charter tells me not to touch for a first pass. */
 const CLAY_ROOM_TERRAIN_BENCH_ID = "cl-f07-terrain-bench";
+const CLAY_TERRAIN_FEATURE_SCENE_IDS = Object.freeze(
+  typeof CL_F08_TERRAIN_FEATURE_BOOK === "object"
+    ? CL_F08_TERRAIN_FEATURE_BOOK.scenes.map(function(scene){ return scene.id; }) : []);
 const CLAY_TERRAIN_SCENE_IDS = Object.freeze([
   "thirteen-piece-sheet", "one-clamp-proof", "boundary-sheet", "route-proof",
   "walk-down-16", "support-graph", "dark"
-].concat(typeof CL_F08_TERRAIN_FEATURE_BOOK === "object"
-  ? CL_F08_TERRAIN_FEATURE_BOOK.scenes.map(function(scene){ return scene.id; }) : []));
+].concat(CLAY_TERRAIN_FEATURE_SCENE_IDS));
 /* Diagnostic colours, deliberately NOT art: the clay register stays neutral so Adam is ruling on
    FORM, and every non-clay colour here is an overlay that a capture can turn off. */
 const CLAY_TERRAIN_COLORS = Object.freeze({
@@ -3904,6 +3906,15 @@ function clayRoomTerrainRungFromLocation(){
   return null;
 }
 
+/* The original seven CL-F07 scenes are an expression-ladder instrument, so their unqualified
+   control remains `naked`. Authored feature maps are pictures of the intended battlefield, not
+   bin-isolation controls: they enter through the complete responsive surface unless a URL or the
+   workbench explicitly asks for another rung. This prevents a feature URL from silently replacing
+   natural grades with the legacy one-box-per-cell renderer. */
+function clayRoomTerrainDefaultRung(sceneId){
+  return CLAY_TERRAIN_FEATURE_SCENE_IDS.indexOf(sceneId) >= 0 ? "all" : "naked";
+}
+
 /* WHICH PROOF PROBE this mount carries. `standee-contract` adds the §3 B3 matrix — three envelopes
    on each of the four surface classes a standee must survive — ON TOP of the scene's own witnesses,
    at FREE yaw. It is a URL flag rather than an eighth scene precisely so the seven CL-F07a captures
@@ -3930,7 +3941,9 @@ function clayRoomTerrainGradeFromLocation(){
 }
 
 function clayRoomTerrainFlags(){
-  const rung = S.clayRoomTerrainRung || clayRoomTerrainRungFromLocation() || "naked";
+  const sceneId = S.clayRoomTerrainSceneId || clayRoomTerrainSceneIdFromLocation();
+  const rung = S.clayRoomTerrainRung || clayRoomTerrainRungFromLocation()
+    || clayRoomTerrainDefaultRung(sceneId);
   const grade = S.clayRoomTerrainGrade || clayRoomTerrainGradeFromLocation() || null;
   if(typeof terrainExpressionFlags !== "function"){
     return { rungId: "naked", rungIndex: 0, rungLabel: "A0 · NAKED (expression chassis absent)",

@@ -2035,3 +2035,24 @@ Binding consequences:
 - Tall centerpiece acceptance requires a four-bearing capture. At least one view must establish
   the intended silhouette, and the other views must expose meaningfully different ground or
   interior information without clipping the battlefield.
+
+## CHUNKY CONSTRUCTION, CONNECTED NATURAL GROUND (Adam, 2026-07-29 — binding; verbatim)
+
+> "so what happened, we wen't back to minecraft chunks again. I like some of that, but the beauty will be in the ix of the chunky and the smooth, generally the chunky will be human/creature construction and the smooth will be the terrain"
+
+Binding consequences:
+
+- The desired register is a controlled mixture, not universal smoothing and not universal blocks.
+  Human- or creature-built architecture, stairs, treads, retaining work, fortifications, and other
+  visibly constructed masses may keep deliberate chunky low-poly geometry.
+- Natural hills, hollows, shoulders, banks, ravines, gullies, and ordinary rises and falls default
+  to the responsive connected terrain surface. Tactical cells may change angle and retain a light
+  grid, but the five-foot tile volume may not dominate the natural silhouette.
+- A natural hard break still requires a visible cause such as a cliff, canyon wall, undercut,
+  crevice, or collapse. “Natural terrain is smooth” does not erase cliffs; it prevents every height
+  quantum from becoming an exposed voxel face.
+- The box-per-cell `naked` rung remains a named diagnostic control for expression-ladder review. It
+  is not the default presentation of an authored terrain feature and may not be used as final art
+  evidence without being labeled as the rejected/control register.
+- Review packets must record the actual expression rung. An authored feature opened or captured
+  without an explicit override uses the complete responsive terrain expression.

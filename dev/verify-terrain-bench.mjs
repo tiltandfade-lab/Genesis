@@ -510,6 +510,14 @@ guard("17. frame hygiene", () => {
     /for\(let i = 1; i <= 4; i\+\+\)/.test(capture)
       && /topologyInvariant/.test(capture)
       && /increments\.every\(\(deg\) => Math\.abs\(deg - 90\)/.test(capture));
+  check("17l. authored terrain defaults to the responsive surface while CL-F07 keeps its naked control",
+    /function clayRoomTerrainDefaultRung/.test(src)
+      && /CLAY_TERRAIN_FEATURE_SCENE_IDS\.indexOf\(sceneId\) >= 0 \? "all" : "naked"/.test(src)
+      && /function rungForScene/.test(capture)
+      && /FEATURE_SCENE_IDS\.has\(sceneId\) \? "all" : "naked"/.test(capture)
+      && /RUNG_OVERRIDE \? "&terrainrung=" \+ sceneRung : ""/.test(capture)
+      && /resolvedRung === sceneRung/.test(capture)
+      && /expectedRung: sceneRung/.test(capture));
 });
 
 // ============================================================================

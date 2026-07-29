@@ -395,6 +395,15 @@ guard("15. renderer boundary", () => {
     region.length > 2000 && !/\bd20\b|applyEvent\(|walkPick\(/.test(region));
   check("15f. it reuses the governed 72-degree strategic camera rather than a second one",
     /clayRoomTerrainView === "strategic"/.test(src) && (src.match(/72 \* Math\.PI \/ 180/g) || []).length === 1);
+  const boot = read("src/ui/theater-boot.js");
+  check("15g. terrain quarter turns delegate to the production rotate verb and its four-step state",
+    /function clayRoomSetTerrainQuarterTurn/.test(src)
+      && /for\(let i = 0; i < turns; i\+\+\) rotate\(\)/.test(src)
+      && /S\.rotationStep = \(S\.rotationStep \+ 1\) % 4/.test(boot));
+  check("15h. the terrain camera exposes exactly four 90-degree bearings and no free-orbit seam",
+    /canonicalBearings: 4/.test(src) && /incrementDeg: 90/.test(src)
+      && /freeOrbit: false/.test(src)
+      && !/clayRoomSetTerrain(?:Yaw|Pitch|Orbit)/.test(src));
 });
 
 // ============================================================================
@@ -496,6 +505,11 @@ guard("17. frame hygiene", () => {
     && /function clayTerrainCameraProjection/.test(region)
     && /projectionMatrix/.test(region) && /canvasRect/.test(region)
     && /cameraProjection: clayTerrainCameraProjection\(\)/.test(region));
+  const capture = read("dev/capture-clay-terrain-bench.cjs");
+  check("17k. capture sweeps a full four-bearing cycle and requires topology invariance",
+    /for\(let i = 1; i <= 4; i\+\+\)/.test(capture)
+      && /topologyInvariant/.test(capture)
+      && /increments\.every\(\(deg\) => Math\.abs\(deg - 90\)/.test(capture));
 });
 
 // ============================================================================

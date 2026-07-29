@@ -2,7 +2,7 @@
 
    This gate proves the engine facts and the coarse form budgets that prevent known visual
    regressions. It does not claim that the renders look good:
-     * four small, four large, two defensive compositions, and one vertical battlefield exist;
+     * four small, four large, two defensive compositions, and five distinct battlefields exist;
      * authored geometry is seed-invariant until a later procedural-transform pass is approved;
      * walk, face ownership, and non-flying reachability remain legal;
      * FFT-style local angle variation keeps complete shared-edge continuity;
@@ -80,13 +80,13 @@ guard("1. census", () => {
     recipes.map((r) => r.id + ":" + r.scale).join(", "));
   check("1b. every recipe publishes construction, tactical read, and a transform quality lock",
     recipes.every((r) => r.construction && r.tacticalRead && r.qualityLock));
-  check("1c. CL-F07 remains its seven-scene proof; the feature book adds four scenes without rewriting it",
+  check("1c. CL-F07 remains its seven-scene proof; the feature book adds eight scenes without rewriting it",
     W.CL_F07_TERRAIN_BENCH.scenes.length === 7
-      && W.CL_F08_TERRAIN_FEATURE_BOOK.scenes.length === 4);
+      && W.CL_F08_TERRAIN_FEATURE_BOOK.scenes.length === 8);
   const dispatched = W.terrainBenchSceneBuild("authored-feature-book", SEED_A, { frameIndex: 7 });
   check("1d. the shared bench dispatches CL-F08 frames and preserves the selected feature",
     dispatched && dispatched.featureId === IDS[7] && dispatched.fields.length === 1);
-  check("1e. the four feature-book scene ids all resolve through the shared light-recipe seam",
+  check("1e. all eight feature-book scene ids resolve through the shared light-recipe seam",
     W.CL_F08_TERRAIN_FEATURE_BOOK.scenes.every((scene) =>
       W.terrainBenchSceneLightRecipe(scene.id) === "daylit"));
 });
@@ -113,9 +113,9 @@ guard("2. authored lock", () => {
 console.log("\n3. traversal and ownership gates");
 guard("3. engine legality", () => {
   const report = W.terrainFeatureGateReport(SEED_A);
-  check("3a. gate census is 4 small + 4 large + 2 defensive",
+  check("3a. gate census is 4 small + 4 large + 2 defensive + 5 battlefield proofs",
     report.smallFeatures === 4 && report.largeFeatures === 4
-      && report.defensiveCompositions === 2);
+      && report.defensiveCompositions === 2 && report.battlefieldProofs === 5);
   check("3b. zero walkable cells exceed the slope limit", report.rows.every((row) =>
     row.metrics.walkableCellsOverSlopeLimit === 0));
   check("3c. zero illegal walk edges", report.rows.every((row) =>
@@ -353,6 +353,88 @@ guard("7. vertical battlefield", () => {
   const broken = { ...report.switchback, connectedLowToHigh: false, ok: false };
   check("7j. TEETH — a severed switchback fails the route verdict",
     !(broken.ok && broken.connectedLowToHigh && broken.verticalTravelH >= 12));
+});
+
+console.log("\n8. complementary FFT battlefield proof suite");
+guard("8. proof suite", () => {
+  const sceneIds = [
+    "fft-reverse-ridge-proof",
+    "fft-ravine-crossing-proof",
+    "fft-terraced-bluff-proof",
+    "fft-earthwork-breach-proof"
+  ];
+  const scenes = sceneIds.map((id) => W.terrainFeatureSceneBuild(id, SEED_A));
+  const report = W.terrainFeatureGateReport(SEED_A);
+  const suite = report.proofSuite;
+  check("8a. four complementary maps extend H01 instead of replacing it",
+    scenes.every(Boolean) && suite.length === 4 && report.battlefieldProofs === 5,
+    JSON.stringify(suite.map((row) => row.featureId)));
+  check("8b. every added proof is a full 20x24 battlefield, not an enlarged feature card",
+    scenes.every((scene) => scene.primary.extent.x === 20 && scene.primary.extent.y === 24));
+  check("8c. the maps carry four distinct tactical profiles and geometry fingerprints",
+    new Set(suite.map((row) => row.profile)).size === 4
+      && new Set(scenes.map((scene) => scene.primary.fingerprint)).size === 4,
+    JSON.stringify(suite.map((row) => row.profile)));
+  check("8d. relief is proposition-specific rather than globally capped or copied from H01",
+    JSON.stringify(suite.map((row) => row.reliefH)) === JSON.stringify([8, 9, 10, 7]),
+    JSON.stringify(suite.map((row) => row.reliefH)));
+  check("8e. every declared primary and alternate route is connected at legal one-quantum steps",
+    suite.every((row) => row.routes.length === 2
+      && row.routes.every((route) => route.ok
+        && route.report.maxInternalStepH <= 1)),
+    JSON.stringify(suite.map((row) => row.routes)));
+  check("8f. each map preserves its quiet-surface budget across every named elevation zone",
+    suite.every((row) => row.quietSurfaceShare >= row.quietSurfaceMinimumShare
+      && row.zoneCoverage.every((zone) => zone.covered)),
+    JSON.stringify(suite.map((row) => [row.featureId, row.quietSurfaceShare,
+      row.zoneCoverage])));
+  check("8g. all four maps are legal, continuous, and retain responsive per-tile angles",
+    suite.every((row) => row.legal && row.continuity.ok && row.variation.ok
+      && row.variation.distinctTangentPlanes >= 8
+      && row.variation.responsiveJoinedPairs >= 100),
+    JSON.stringify(suite.map((row) => [row.featureId, row.continuity.failures,
+      row.variation.distinctTangentPlanes, row.variation.responsiveJoinedPairs])));
+  check("8h. the reverse ridge keeps playable defilade materially below its observation crest",
+    suite[0].identity.ok
+      && suite[0].identity.crestAverageH >= suite[0].identity.reverseAverageH + 1.5,
+    JSON.stringify(suite[0].identity));
+  check("8i. the ravine is a real wet cut with localized hard faces and two legal crossings",
+    suite[1].identity.ok && suite[1].waterCells > 0
+      && suite[1].faces >= 12 && suite[1].faces <= 90,
+    JSON.stringify([suite[1].waterCells, suite[1].faces]));
+  check("8j. the bluff keeps one localized face, one authored final stair, and a grounded tall ruin",
+    suite[2].identity.ok && suite[2].identity.hasLocalizedBluff
+      && suite[2].identity.hasBuiltFinalStair
+      && suite[2].identity.hasThreeStoreyRuinedTower
+      && suite[2].identity.towerGrounded
+      && suite[2].identity.reviewBearings === 4
+      && suite[2].faces >= 8 && suite[2].faces <= 70,
+    JSON.stringify(suite[2].identity));
+  check("8k. the defensive proof has four real earthwork runs and deliberately offset breaches",
+    suite[3].identity.ok && suite[3].identity.earthworkRuns === 4
+      && suite[3].identity.offsetBreaches && suite[3].faces >= 12,
+    JSON.stringify(suite[3].identity));
+  const renderer = read("src/ui/theater-clay-room.js");
+  check("8l. every added route surface is visibly marked through the neutral-clay capture sweep",
+    ["ridge-saddle-track", "ridge-flank-track", "ravine-high-crossing",
+      "ravine-floor-route", "bluff-ascent", "bluff-scramble",
+      "earthwork-entry", "earthwork-sally"].every((surface) =>
+      renderer.includes('"' + surface + '"')));
+  const brokenRoute = {
+    ...suite[1].routes[0],
+    report: { ...suite[1].routes[0].report, connectedLowToHigh: false, ok: false },
+    ok: false
+  };
+  check("8m. TEETH — severing either promised ravine crossing fails its route contract",
+    !(brokenRoute.ok && brokenRoute.report.connectedLowToHigh));
+  check("8n. the combined back-end verdict includes and passes all four new visual propositions",
+    report.ok && suite.every((row) => row.ok),
+    JSON.stringify(suite.filter((row) => !row.ok)));
+  check("8o. the ruined tower remains engine-authored while the renderer only projects its role",
+    scenes[2].structures.length === 1
+      && scenes[2].structures[0].role === "ruined-tower"
+      && /structure\.role === "ruined-tower"/.test(renderer)
+      && /camera-near corner is physically absent/.test(renderer));
 });
 
 console.log("\n" + (fail ? "FAIL" : "PASS") + ` — ${pass} passed, ${fail} failed\n`);

@@ -42,7 +42,8 @@ const SEED = FLAGS.seed || POS[5] || null;
 const GRADE = FLAGS.grade || null;
 const OVERHANG = FLAGS.overhang || null;
 const SKIRT = FLAGS.skirt != null ? FLAGS.skirt : null;
-if (!OUT) { console.error("usage: node dev/capture-clay-terrain-bench.cjs <outDir> [port] [sceneId|all] [rung] [probe] [seed] [--grade=g0..g4] [--overhang=rule|universal|none] [--skirt=<wu>]"); process.exit(2); }
+const TURN = FLAGS.turn == null ? null : (((Number(FLAGS.turn) | 0) % 4 + 4) % 4);
+if (!OUT) { console.error("usage: node dev/capture-clay-terrain-bench.cjs <outDir> [port] [sceneId|all] [rung] [probe] [seed] [--grade=g0..g4] [--overhang=rule|universal|none] [--skirt=<wu>] [--turn=0..3]"); process.exit(2); }
 const BASE = "http://127.0.0.1:" + PORT;
 fs.mkdirSync(OUT, { recursive: true });
 
@@ -58,10 +59,16 @@ const SCENES = [
   { id: "authored-feature-book",capture: 8, light: null, frames: 8 },
   { id: "defensive-ridgeworks", capture: 9, light: null },
   { id: "defensive-gateworks",  capture: 10, light: null },
-  { id: "fft-hillside-proof",   capture: 11, light: null }
+  { id: "fft-hillside-proof",   capture: 11, light: null },
+  { id: "fft-reverse-ridge-proof", capture: 12, light: null },
+  { id: "fft-ravine-crossing-proof", capture: 13, light: null },
+  { id: "fft-terraced-bluff-proof", capture: 14, light: null },
+  { id: "fft-earthwork-breach-proof", capture: 15, light: null }
 ];
 const FEATURE_SCENE_IDS = new Set([
-  "authored-feature-book", "defensive-ridgeworks", "defensive-gateworks", "fft-hillside-proof"
+  "authored-feature-book", "defensive-ridgeworks", "defensive-gateworks", "fft-hillside-proof",
+  "fft-reverse-ridge-proof", "fft-ravine-crossing-proof", "fft-terraced-bluff-proof",
+  "fft-earthwork-breach-proof"
 ]);
 
 function pageProbe() {
@@ -162,7 +169,7 @@ async function plate(page, filename) {
     proof: featureOnly ? "CL-F08a" : (ONLY === "all" ? "CL-F07a + CL-F08a" : "CL-F07a"),
     captures: [],
     determinism: null, gate: null, rung: RUNG, probe: PROBE, seed: SEED,
-    grade: GRADE, overhang: OVERHANG, skirt: SKIRT,
+    grade: GRADE, overhang: OVERHANG, skirt: SKIRT, quarterTurn: TURN,
     generatedAt: new Date().toISOString(), viewport: VIEWPORT };
 
   async function openScene(scene) {
@@ -184,7 +191,8 @@ async function plate(page, filename) {
       + (SEED ? "&terrainseed=" + SEED : "")
       + (GRADE ? "&terraingrade=" + GRADE : "")
       + (OVERHANG ? "&terrainoverhang=" + OVERHANG : "")
-      + (SKIRT != null ? "&terrainskirt=" + SKIRT : "");
+      + (SKIRT != null ? "&terrainskirt=" + SKIRT : "")
+      + (TURN != null ? "&terrainturn=" + TURN : "");
     await page.goto(url, { waitUntil: "load", timeout: 60000 });
     await page.waitForFunction(
       () => document.querySelector("canvas") && document.getElementById("clay-room-overlay"),
@@ -213,7 +221,8 @@ async function plate(page, filename) {
   for (const scene of RUNS) {
     if (ONLY !== "all" && ONLY !== scene.id) continue;
     const label = String(scene.capture).padStart(2, "0") + "-" + scene.id
-      + (scene.frameIndex != null ? "-f" + scene.frameIndex : "");
+      + (scene.frameIndex != null ? "-f" + scene.frameIndex : "")
+      + (TURN != null ? "-q" + TURN : "");
     process.stdout.write("capture " + label + " ... ");
     let opened;
     try { opened = await openScene(scene); }
@@ -227,6 +236,57 @@ async function plate(page, filename) {
     await new Promise((r) => setTimeout(r, 4500));
     const settled = await page.evaluate(pageProbe);
     await page.screenshot({ path: path.join(OUT, label + "-02-settled-production.png") });
+
+    /* FOUR CANONICAL BEARINGS, ONE IMMUTABLE MAP. Exercise the shipped production rotate verb
+       through the Clayroom seam, make a full cycle, then return to the exact capture bearing.
+       This is not a visual verdict; it proves rotation changes only the camera and does so in
+       quarter turns, never by mutating or rebuilding terrain under a new view. */
+    const quarterTurnGate = await page.evaluate(() => {
+      const T = window.Theater || {};
+      if(!T._clayTerrainBenchForTest || !T._clayTerrainSetQuarterTurnForTest){
+        return { ok: false, reason: "quarter-turn terrain seam missing" };
+      }
+      const signature = (report) => JSON.stringify((report && report.fields || []).map((field) => ({
+        id: field.id, fingerprint: field.fingerprint
+      })));
+      const start = T._clayTerrainBenchForTest();
+      const startTurn = start && start.cameraQuarterTurn ? start.cameraQuarterTurn.step : 0;
+      const startSignature = signature(start);
+      const samples = [{
+        step: startTurn,
+        bearingDeg: start && start.cameraQuarterTurn ? start.cameraQuarterTurn.bearingDeg : null,
+        signature: startSignature
+      }];
+      for(let i = 1; i <= 4; i++){
+        T._clayTerrainSetQuarterTurnForTest((startTurn + i) % 4);
+        const report = T._clayTerrainBenchForTest();
+        samples.push({
+          step: report.cameraQuarterTurn.step,
+          bearingDeg: report.cameraQuarterTurn.bearingDeg,
+          signature: signature(report)
+        });
+      }
+      const increments = [];
+      for(let i = 1; i < samples.length; i++){
+        const delta = ((samples[i].bearingDeg - samples[i - 1].bearingDeg) % 360 + 360) % 360;
+        increments.push(Number(delta.toFixed(3)));
+      }
+      return {
+        ok: samples.length === 5
+          && samples.every((sample) => sample.signature === startSignature)
+          && increments.every((deg) => Math.abs(deg - 90) < 0.01)
+          && samples[4].step === startTurn,
+        canonicalBearings: 4,
+        startStep: startTurn,
+        samples: samples.map((sample) => ({
+          step: sample.step, bearingDeg: sample.bearingDeg
+        })),
+        incrementsDeg: increments,
+        topologyInvariant: samples.every((sample) => sample.signature === startSignature),
+        returnedToStart: samples[4].step === startTurn
+      };
+    });
+    await new Promise((r) => setTimeout(r, 500));
 
     /* THE 72-DEGREE STRATEGIC READ — the second half of the mandatory camera pair. */
     const strategic = await page.evaluate(() => {
@@ -278,6 +338,8 @@ async function plate(page, filename) {
       grade: GRADE,
       overhang: OVERHANG,
       skirt: SKIRT,
+      quarterTurn: TURN,
+      quarterTurnGate: quarterTurnGate,
       frameIndex: scene.frameIndex != null ? scene.frameIndex : null,
       claim: (settled.terrain && settled.terrain.sceneId === scene.id) ? "built" : "NOT BUILT",
       lightRecipeRequested: scene.light,
@@ -310,6 +372,7 @@ async function plate(page, filename) {
       receipt: label + "-receipt.json",
       built: receipt.claim === "built",
       consoleErrors: consoleErrors.length,
+      quarterTurnGate: quarterTurnGate,
       fingerprints: settled.terrain ? settled.terrain.fields.map((f) => ({ id: f.id, fingerprint: f.fingerprint })) : null });
     if (settled.terrain && settled.terrain.gate) index.gate = settled.terrain.gate;
     console.log(receipt.claim, "· errors=" + consoleErrors.length);

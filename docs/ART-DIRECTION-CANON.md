@@ -2010,3 +2010,28 @@ Binding consequences:
 - FFT-believability is a visual completion condition as well as a graph condition. A legal
   heightfield is insufficient if the production camera still reads it as Excitebike ramps,
   disconnected cell events, a quarry stack, or Minecraft blocks with tilted tops.
+
+## COMPLEMENTARY MAP PROOFS + FOUR CANONICAL BEARINGS (Adam, 2026-07-29 — binding; verbatim)
+
+> "ok, that's pretty good, can you do several other proofs now?"
+
+> "ok, i am coming to the realization that some of the beauty of the FFT maps require the camera to have the quarter turn capability, there's no real reason for us not to have the quarter turn camera angle now that you are proving that you can have some level of control over the terrain, but it only makes sense if we want to have something like a ruined tower as a centerpiece that we have the ability to rotate the camera"
+
+Binding consequences:
+
+- One successful hillside does not establish the battlefield language. Complementary authored
+  proofs must exercise materially different macro propositions before procedural transformation:
+  reverse cover, a water-cut ravine, a localized bluff, and constructed earthworks.
+- Terrain review has four canonical bearings separated by exactly 90 degrees. This is the
+  production Theater quarter-turn verb and state, not a Clayroom-only orbit camera and not free
+  pitch or yaw.
+- A tall centerpiece remains biased to the camera-far band in the authored starting bearing. Other
+  bearings may make it camera-near; their purpose is to let the player reveal hidden ground,
+  inspect the opposite face, and choose the tactical read rather than requiring every structure to
+  remain non-occluding from an impossible universal direction.
+- Camera rotation may change projection, overlap, silhouette, and the information visible at once.
+  It may not rebuild, mirror, reroll, or otherwise mutate the terrain, routes, structures, or their
+  tactical fingerprints.
+- Tall centerpiece acceptance requires a four-bearing capture. At least one view must establish
+  the intended silhouette, and the other views must expose meaningfully different ground or
+  interior information without clipping the battlefield.

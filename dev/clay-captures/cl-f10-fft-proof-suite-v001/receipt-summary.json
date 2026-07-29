@@ -1,0 +1,102 @@
+{
+  "id": "cl-f10-fft-proof-suite-v001",
+  "fixture": "cl-f08-terrain-feature-book",
+  "fixtureVersion": 4,
+  "source": "production Theater renderer through the Clayroom terrain fixture",
+  "viewport": {
+    "cssWidth": 1280,
+    "cssHeight": 720,
+    "deviceScaleFactor": 2
+  },
+  "battlefieldProofs": 5,
+  "authoredRows": 15,
+  "uniqueFingerprints": 15,
+  "browserConsoleErrors": 0,
+  "cameraCycle": {
+    "canonicalBearings": 4,
+    "samplesDeg": [45, 135, 225, 315, 45],
+    "incrementsDeg": [90, 90, 90, 90],
+    "topologyInvariant": true,
+    "returnedToStart": true,
+    "freeOrbit": false,
+    "ok": true
+  },
+  "proofs": [
+    {
+      "featureId": "FFT-H02",
+      "sceneId": "fft-reverse-ridge-proof",
+      "profile": "reverse-slope-ridge",
+      "reliefH": 8,
+      "reliefFeet": 20,
+      "faces": 0,
+      "quietSurfaceShare": 0.2542,
+      "identity": {
+        "crestAverageH": 6.412,
+        "reverseAverageH": 4.65
+      },
+      "legal": true,
+      "ok": true
+    },
+    {
+      "featureId": "FFT-H03",
+      "sceneId": "fft-ravine-crossing-proof",
+      "profile": "diagonal-ravine-two-crossings",
+      "reliefH": 9,
+      "reliefFeet": 22.5,
+      "faces": 51,
+      "waterCells": 22,
+      "quietSurfaceShare": 0.375,
+      "legal": true,
+      "ok": true
+    },
+    {
+      "featureId": "FFT-H04",
+      "sceneId": "fft-terraced-bluff-proof",
+      "profile": "localized-bluff-two-ascents",
+      "reliefH": 10,
+      "reliefFeet": 25,
+      "faces": 18,
+      "quietSurfaceShare": 0.25,
+      "structure": {
+        "id": "fft-bluff-ruined-watchtower",
+        "role": "ruined-tower",
+        "storeys": 3,
+        "cameraDepth01AtView0": 0.2083,
+        "grounded": true
+      },
+      "legal": true,
+      "ok": true
+    },
+    {
+      "featureId": "FFT-H05",
+      "sceneId": "fft-earthwork-breach-proof",
+      "profile": "double-earthwork-offset-breaches",
+      "reliefH": 7,
+      "reliefFeet": 17.5,
+      "faces": 71,
+      "quietSurfaceShare": 0.4063,
+      "identity": {
+        "earthworkRuns": 4,
+        "offsetBreaches": true
+      },
+      "legal": true,
+      "ok": true
+    }
+  ],
+  "files": {
+    "labeledSheet": "fft-proof-suite-and-four-bearings-labeled.png",
+    "defaultViews": [
+      "reverse-ridge-view-0.png",
+      "ravine-crossing-view-0.png",
+      "terraced-bluff-ruin-view-0.png",
+      "breached-earthworks-view-0.png"
+    ],
+    "ruinBearings": [
+      "terraced-bluff-ruin-view-0.png",
+      "terraced-bluff-ruin-view-1.png",
+      "terraced-bluff-ruin-view-2.png",
+      "terraced-bluff-ruin-view-3.png"
+    ]
+  },
+  "verdict": "PASS"
+}

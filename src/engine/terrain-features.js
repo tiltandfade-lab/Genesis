@@ -668,6 +668,522 @@ function terrainFftHillsideSpec(seed){
   });
 }
 
+/* ─── CL-F10 · FOUR MORE AUTHORED FFT BATTLEFIELDS ─────────────────────────────────────────────
+   H01 proved that the chassis can carry real height. These maps prove that height can serve four
+   DIFFERENT tactical propositions without collapsing back into the same switchback massif:
+
+     H02  a crest with playable reverse ground and two unequal ways over;
+     H03  one diagonal ravine with a high crossing and a longer floor route;
+     H04  a localized bluff with a natural approach around its end and a short built stair;
+     H05  two dog-legged ditch-and-bank lines whose offset breaches lengthen the way in.
+
+   The authored relationships remain the asset. There is still no independent per-cell noise and
+   no proof-specific mesh path. Each map uses the same terrain field, cap topology, walk graph,
+   face ownership, water plane, surface marker, and capture rig as H01. */
+function terrainFftReverseRidgeSpec(seed){
+  var extent = { x: 20, y: 24 };
+  var saddleTrack = [
+    { x: 16.8, y: 23.0, h: 0, widthCells: 2.0 },
+    { x: 14.2, y: 18.5, h: 1, widthCells: 1.8 },
+    { x: 12.5, y: 14.0, h: 3, widthCells: 1.8 },
+    { x: 10.5, y: 10.1, h: 5, widthCells: 1.7 },
+    { x: 9.2, y: 7.0, h: 6, widthCells: 2.3 },
+    { x: 8.1, y: 4.0, h: 4, widthCells: 2.0 },
+    { x: 7.0, y: 1.0, h: 4, widthCells: 2.3 }
+  ];
+  var flankTrack = [
+    { x: 2.0, y: 23.0, h: 0, widthCells: 1.25 },
+    { x: 2.8, y: 19.0, h: 1, widthCells: 1.25 },
+    { x: 2.2, y: 15.0, h: 3, widthCells: 1.25 },
+    { x: 3.1, y: 11.0, h: 5, widthCells: 1.25 },
+    { x: 4.0, y: 7.0, h: 7, widthCells: 1.35 },
+    { x: 3.0, y: 3.0, h: 5, widthCells: 1.35 }
+  ];
+  var pieces = [
+    terrainFeaturePiece("fft-ridge-mass", "R1-02", "long attacking slope and reverse hollow", [
+      terrainFeatureOp("control-surface", "set", {
+        columns: [0, 4, 8, 12, 16, 19],
+        rows: [0, 3, 6, 8, 11, 15, 19, 23],
+        heightsH: [
+          [5, 4, 4, 5, 5, 4],
+          [6, 4, 3, 4, 5, 4],
+          [8, 8, 7, 8, 7, 6],
+          [7, 7, 6, 7, 6, 5],
+          [5, 5, 4, 5, 4, 4],
+          [3, 3, 2, 3, 2, 2],
+          [1, 1, 1, 1, 1, 0],
+          [0, 0, 0, 0, 0, 0]
+        ],
+        slopeClamp: 1,
+        kind: "ground"
+      })
+    ], {
+      qualityLock: "the crest shelters playable reverse ground; it is not the top edge of the tray"
+    }),
+    terrainFeaturePiece("fft-ridge-saddle-track", "R1-07", "broad saddle crossing", [
+      terrainFeatureOp("graded-path", "set", {
+        polyline: saddleTrack,
+        widthCells: 2.0,
+        shoulderCells: 1.8,
+        surfaceKind: "ridge-saddle-track",
+        slopeClamp: 1,
+        kind: "ground"
+      }, "ridge-saddle-track")
+    ], {
+      routeType: "saddle crossing",
+      tacticalCost: "lower crest and broader tread; exposed for longer"
+    }),
+    terrainFeaturePiece("fft-ridge-flank-track", "R1-03", "steeper flank crossing", [
+      terrainFeatureOp("graded-path", "set", {
+        polyline: flankTrack,
+        widthCells: 1.25,
+        shoulderCells: 1.15,
+        surfaceKind: "ridge-flank-track",
+        slopeClamp: 1,
+        kind: "ground"
+      }, "ridge-flank-track")
+    ], {
+      routeType: "flank crossing",
+      tacticalCost: "narrower and higher; reaches the observation crest before the reverse hollow"
+    })
+  ];
+  return terrainFeatureSpecBase("fft-reverse-slope-ridge-proof", seed, extent, pieces, {
+    featureId: "FFT-H02",
+    featureScale: "battlefield",
+    quietSurfaceMinimumShare: 0.2,
+    macroGraph: {
+      nodes: [
+        { id: "ridge-approach", heightBandH: [0, 1], role: "deployment" },
+        { id: "attacking-slope", heightBandH: [2, 5], role: "exposed advance" },
+        { id: "observation-crest", heightBandH: [6, 8], role: "line of sight and contest" },
+        { id: "reverse-hollow", heightBandH: [3, 5], role: "defilade and reserves" }
+      ],
+      routes: [
+        { id: "fft-ridge-saddle-track", from: "ridge-approach", to: "reverse-hollow",
+          kind: "broad saddle" },
+        { id: "fft-ridge-flank-track", from: "ridge-approach", to: "observation-crest",
+          kind: "narrow flank" }
+      ]
+    },
+    tacticalGrammar: {
+      profile: "reverse-slope-ridge",
+      verticalTravelH: 8,
+      routeSurfaces: [
+        { id: "ridge-saddle-track", minimumTravelH: 6 },
+        { id: "ridge-flank-track", minimumTravelH: 7 }
+      ],
+      crestRows: [5, 8],
+      reverseRows: [0, 4],
+      maximumFaces: 0
+    }
+  });
+}
+
+function terrainFftRavineCrossingSpec(seed){
+  var extent = { x: 20, y: 24 };
+  var highCrossing = [
+    { x: 18.0, y: 23.0, h: 0, widthCells: 1.8 },
+    { x: 17.0, y: 18.0, h: 1, widthCells: 1.7 },
+    { x: 16.0, y: 14.2, h: 3, widthCells: 1.6 },
+    { x: 15.2, y: 11.2, h: 4, widthCells: 1.45 },
+    { x: 14.4, y: 8.0, h: 5, widthCells: 1.6 },
+    { x: 12.5, y: 3.0, h: 7, widthCells: 2.0 }
+  ];
+  var floorRoute = [
+    { x: 2.0, y: 23.0, h: 0, widthCells: 1.35 },
+    { x: 3.0, y: 18.0, h: 1, widthCells: 1.35 },
+    { x: 4.4, y: 14.3, h: 2, widthCells: 1.45 },
+    { x: 5.0, y: 12.1, h: 0, widthCells: 1.75 },
+    { x: 5.1, y: 9.7, h: 3, widthCells: 1.4 },
+    { x: 4.8, y: 6.4, h: 5, widthCells: 1.3 },
+    { x: 4.0, y: 2.0, h: 7, widthCells: 1.45 }
+  ];
+  var pieces = [
+    terrainFeaturePiece("fft-ravine-country", "R1-07", "rising broken country", [
+      terrainFeatureOp("control-surface", "set", {
+        columns: [0, 4, 8, 12, 16, 19],
+        rows: [0, 4, 8, 11, 14, 18, 23],
+        heightsH: [
+          [7, 7, 8, 8, 7, 6],
+          [6, 7, 7, 7, 6, 6],
+          [5, 6, 6, 6, 5, 5],
+          [4, 5, 5, 5, 4, 4],
+          [3, 4, 4, 4, 3, 3],
+          [1, 2, 2, 2, 1, 1],
+          [0, 0, 0, 0, 0, 0]
+        ],
+        slopeClamp: 1,
+        kind: "ground"
+      })
+    ]),
+    terrainFeaturePiece("fft-ravine-cut", "R1-04", "one diagonal water-cut ravine", [
+      terrainFeatureOp("slot", "min", {
+        polyline: [
+          { x: -2, y: 14.5 }, { x: 3.5, y: 12.6 }, { x: 7.5, y: 13.2 },
+          { x: 12.2, y: 11.3 }, { x: 16.0, y: 10.8 }, { x: 21.0, y: 9.4 }
+        ],
+        widthStartCells: 3.6,
+        widthEndCells: 2.7,
+        depthStartH: 4,
+        depthEndH: 5,
+        baseH: 4,
+        slopeClamp: Infinity,
+        kind: "ground"
+      })
+    ], {
+      qualityLock: "one changing-width cut with two causally placed crossings; never parallel bands"
+    }, 0, { x: 0, y: 8, w: 20, d: 8 }),
+    terrainFeaturePiece("fft-ravine-high-crossing", "R1-09", "narrow high crossing", [
+      terrainFeatureOp("graded-path", "set", {
+        polyline: highCrossing,
+        widthCells: 1.6,
+        shoulderCells: 1.15,
+        surfaceKind: "ravine-high-crossing",
+        slopeClamp: 1,
+        kind: "ground"
+      }, "ravine-high-crossing")
+    ], {
+      routeType: "high crossing",
+      tacticalCost: "short and exposed; the ravine remains dangerous on both sides"
+    }),
+    terrainFeaturePiece("fft-ravine-floor-route", "R1-05", "long floor route", [
+      terrainFeatureOp("graded-path", "set", {
+        polyline: floorRoute,
+        widthCells: 1.4,
+        shoulderCells: 1.1,
+        surfaceKind: "ravine-floor-route",
+        slopeClamp: 1,
+        kind: "ground"
+      }, "ravine-floor-route")
+    ], {
+      routeType: "ravine floor",
+      tacticalCost: "drops to the wet floor, bends with the cut, and climbs out under observation"
+    })
+  ];
+  return terrainFeatureSpecBase("fft-ravine-crossing-proof", seed, extent, pieces, {
+    featureId: "FFT-H03",
+    featureScale: "battlefield",
+    quietSurfaceMinimumShare: 0.17,
+    macroGraph: {
+      nodes: [
+        { id: "ravine-near-bank", heightBandH: [0, 3], role: "deployment and approach" },
+        { id: "ravine-floor", heightBandH: [-1, 1], role: "concealed difficult route" },
+        { id: "ravine-far-bank", heightBandH: [4, 8], role: "objective side" },
+        { id: "high-crossing", heightBandH: [3, 5], role: "exposed choke" }
+      ],
+      routes: [
+        { id: "fft-ravine-high-crossing", from: "ravine-near-bank", to: "ravine-far-bank",
+          kind: "narrow high crossing" },
+        { id: "fft-ravine-floor-route", from: "ravine-near-bank", to: "ravine-far-bank",
+          kind: "wet floor route" }
+      ]
+    },
+    tacticalGrammar: {
+      profile: "diagonal-ravine-two-crossings",
+      verticalTravelH: 9,
+      routeSurfaces: [
+        { id: "ravine-high-crossing", minimumTravelH: 7 },
+        { id: "ravine-floor-route", minimumTravelH: 7 }
+      ],
+      minimumFaces: 12,
+      maximumFaces: 90,
+      requiresWater: true
+    }
+  });
+}
+
+function terrainFftTerracedBluffSpec(seed){
+  var extent = { x: 20, y: 24 };
+  var naturalAscent = [
+    { x: 18.0, y: 23.0, h: 0, widthCells: 2.0 },
+    { x: 15.0, y: 18.0, h: 2, widthCells: 1.8 },
+    { x: 16.0, y: 14.0, h: 3, widthCells: 1.75 },
+    { x: 14.0, y: 11.0, h: 5, widthCells: 1.8 },
+    { x: 12.5, y: 8.0, h: 7, widthCells: 2.1 },
+    { x: 9.0, y: 7.0, h: 7, widthCells: 2.0 }
+  ];
+  var scramble = [
+    { x: 4.0, y: 23.0, h: 0, widthCells: 1.2 },
+    { x: 5.0, y: 19.0, h: 1, widthCells: 1.2 },
+    { x: 5.4, y: 15.0, h: 3, widthCells: 1.2 },
+    { x: 5.2, y: 11.5, h: 5, widthCells: 1.15 },
+    { x: 5.0, y: 8.4, h: 7, widthCells: 1.15 }
+  ];
+  var stairCells = terrainFeaturePatchRect(6, 4, 4, 4);
+  var pieces = [
+    terrainFeaturePiece("fft-bluff-country", "R1-07", "high shoulder and long foot slope", [
+      terrainFeatureOp("control-surface", "set", {
+        columns: [0, 4, 8, 12, 16, 19],
+        rows: [0, 4, 8, 12, 16, 20, 23],
+        heightsH: [
+          [10, 10, 10, 8, 6, 5],
+          [10, 10, 9, 7, 5, 4],
+          [8, 9, 8, 6, 4, 3],
+          [5, 6, 6, 5, 3, 2],
+          [3, 3, 4, 3, 2, 1],
+          [1, 1, 2, 1, 0, 0],
+          [0, 0, 0, 0, 0, 0]
+        ],
+        slopeClamp: 1,
+        kind: "ground"
+      })
+    ]),
+    terrainFeaturePiece("fft-bluff-face", "R1-07", "localized broken bluff face", [
+      terrainFeatureOp("ridge", "max", {
+        polyline: [
+          { x: -1.0, y: 8.6 }, { x: 3.3, y: 7.7 },
+          { x: 7.2, y: 8.3 }, { x: 11.2, y: 7.4 }
+        ],
+        halfPlane: true,
+        plateauSide: 1,
+        heightH: 10,
+        baseH: 0,
+        slopeClamp: Infinity,
+        kind: "ground",
+        bounds: { x: 0, y: 3, w: 12, d: 7 }
+      })
+    ], {
+      qualityLock: "the face ends before the route; it never wraps the entire plateau"
+    }),
+    terrainFeaturePiece("fft-bluff-natural-ascent", "R1-07", "route around the bluff end", [
+      terrainFeatureOp("graded-path", "set", {
+        polyline: naturalAscent,
+        widthCells: 1.9,
+        shoulderCells: 1.6,
+        surfaceKind: "bluff-ascent",
+        slopeClamp: 1,
+        kind: "ground"
+      }, "bluff-ascent")
+    ], {
+      routeType: "natural ascent",
+      tacticalCost: "long safe traverse around the causal end of the bluff"
+    }),
+    terrainFeaturePiece("fft-bluff-scramble", "R1-03", "talus scramble to the face foot", [
+      terrainFeatureOp("graded-path", "set", {
+        polyline: scramble,
+        widthCells: 1.15,
+        shoulderCells: 1.0,
+        surfaceKind: "bluff-scramble",
+        slopeClamp: 1,
+        kind: "ground"
+      }, "bluff-scramble")
+    ], {
+      routeType: "scramble",
+      tacticalCost: "shorter sheltered approach ending below a climbable face"
+    }),
+    terrainFeaturePiece("fft-bluff-stair", "R1-09", "short built stair onto the crown", [
+      terrainFeatureOp("terrace", "set", {
+        stepCount: 4,
+        riseHPerStep: -1,
+        treadDepthCells: 1,
+        axis: "y",
+        originCell: { x: 6, y: 4 },
+        widthCells: 4,
+        baseH: 10,
+        slopeClamp: 1,
+        kind: "ground",
+        bounds: { x: 6, y: 4, w: 4, d: 4 }
+      }),
+      terrainFeatureOp("patch", "set", {
+        cells: stairCells,
+        surfaceKind: "bluff-ascent"
+      }, "bluff-ascent")
+    ], {
+      routeType: "built final stair",
+      construction: "four short treads only where the natural route meets the retained crown"
+    })
+  ];
+  return terrainFeatureSpecBase("fft-terraced-bluff-proof", seed, extent, pieces, {
+    featureId: "FFT-H04",
+    featureScale: "battlefield",
+    quietSurfaceMinimumShare: 0.18,
+    /* The default FFT bearing sees this on the camera-far crown. It is intentionally taller than
+       the Clayroom's old two-storey diagnostic convention: the four canonical quarter turns, not
+       an arbitrary height cap, are what make a tall centerpiece reviewable without pretending it
+       can never occlude ground. The renderer reads this exact footprint and broken-tower role; it
+       does not choose either of them. */
+    structures: [
+      {
+        id: "fft-bluff-ruined-watchtower",
+        role: "ruined-tower",
+        storeys: 3,
+        baseH: 10,
+        footprint: { x: 1, y: 0, w: 4, d: 4 },
+        opening: "camera-near corner missing"
+      }
+    ],
+    macroGraph: {
+      nodes: [
+        { id: "bluff-approach", heightBandH: [0, 2], role: "deployment" },
+        { id: "talus-foot", heightBandH: [3, 7], role: "cover and climb decision" },
+        { id: "route-landing", heightBandH: [7, 8], role: "turning fight" },
+        { id: "bluff-crown", heightBandH: [9, 10], role: "objective and observation" }
+      ],
+      routes: [
+        { id: "fft-bluff-natural-ascent", from: "bluff-approach", to: "bluff-crown",
+          kind: "natural route plus short stair" },
+        { id: "fft-bluff-scramble", from: "bluff-approach", to: "talus-foot",
+          kind: "short scramble then climb" }
+      ]
+    },
+    tacticalGrammar: {
+      profile: "localized-bluff-two-ascents",
+      verticalTravelH: 10,
+      routeSurfaces: [
+        { id: "bluff-ascent", minimumTravelH: 10 },
+        { id: "bluff-scramble", minimumTravelH: 7 }
+      ],
+      minimumFaces: 8,
+      maximumFaces: 70,
+      bluffBounds: { x: 0, y: 3, w: 12, d: 7 },
+      centerpiece: {
+        id: "fft-bluff-ruined-watchtower",
+        minimumStoreys: 3,
+        reviewBearings: 4
+      }
+    }
+  });
+}
+
+function terrainFftEarthworkBreachSpec(seed){
+  var extent = { x: 20, y: 24 };
+  function earthwork(id, line, baseH){
+    return terrainFeaturePiece(id, "R1-08", "ditch-and-bank run", [
+      terrainFeatureOp("ridge", "max", {
+        polyline: line,
+        halfWidthStartCells: 1.75,
+        halfWidthEndCells: 1.35,
+        heightStartH: 3.0,
+        heightEndH: 2.35,
+        crossProfile: "smooth",
+        crestHalfWidthCells: 0.4,
+        endFadeCells: 0.8,
+        pairedDitch: true,
+        ditchDepthStartH: 2,
+        ditchDepthEndH: 1.6,
+        ditchWidthStartCells: 2.25,
+        ditchWidthEndCells: 1.8,
+        ditchSide: -1,
+        baseH: baseH,
+        slopeClamp: Infinity,
+        kind: "ground"
+      })
+    ]);
+  }
+  var entryRoute = [
+    { x: 16.5, y: 23.0, h: 0, widthCells: 2.0 },
+    { x: 13.5, y: 18.0, h: 1, widthCells: 1.8 },
+    { x: 9.0, y: 15.0, h: 2, widthCells: 2.3 },
+    { x: 8.0, y: 12.5, h: 3, widthCells: 2.1 },
+    { x: 5.5, y: 10.0, h: 4, widthCells: 2.3 },
+    { x: 5.2, y: 7.5, h: 5, widthCells: 2.1 },
+    { x: 8.5, y: 5.0, h: 6, widthCells: 1.9 },
+    { x: 10.5, y: 1.5, h: 7, widthCells: 2.2 }
+  ];
+  var sallyRoute = [
+    { x: 2.0, y: 23.0, h: 0, widthCells: 1.15 },
+    { x: 2.8, y: 18.0, h: 1, widthCells: 1.15 },
+    { x: 3.0, y: 14.0, h: 3, widthCells: 1.15 },
+    { x: 2.4, y: 10.0, h: 4, widthCells: 1.15 },
+    { x: 2.8, y: 7.0, h: 5, widthCells: 1.15 }
+  ];
+  var pieces = [
+    terrainFeaturePiece("fft-earthwork-glacis", "R1-02", "rising defended ground", [
+      terrainFeatureOp("control-surface", "set", {
+        columns: [0, 4, 8, 12, 16, 19],
+        rows: [0, 4, 7, 10, 13, 17, 23],
+        heightsH: [
+          [7, 7, 7, 6, 5, 4],
+          [6, 6, 6, 5, 5, 4],
+          [5, 5, 6, 5, 4, 4],
+          [4, 4, 4, 4, 3, 3],
+          [3, 3, 3, 3, 2, 2],
+          [1, 2, 2, 1, 1, 1],
+          [0, 0, 0, 0, 0, 0]
+        ],
+        slopeClamp: 1,
+        kind: "ground"
+      })
+    ]),
+    earthwork("fft-earthwork-outer-west",
+      [{ x: -1.0, y: 15.5 }, { x: 3.0, y: 14.7 }, { x: 7.0, y: 15.2 }], 2),
+    earthwork("fft-earthwork-outer-east",
+      [{ x: 10.0, y: 14.2 }, { x: 14.5, y: 13.4 }, { x: 21.0, y: 14.4 }], 2),
+    earthwork("fft-earthwork-inner-west",
+      [{ x: -1.0, y: 9.5 }, { x: 1.8, y: 8.4 }, { x: 4.0, y: 9.0 }], 4),
+    earthwork("fft-earthwork-inner-east",
+      [{ x: 7.0, y: 8.2 }, { x: 11.0, y: 7.4 }, { x: 15.5, y: 8.6 },
+        { x: 21.0, y: 7.7 }], 4),
+    terrainFeaturePiece("fft-earthwork-entry", "R1-07", "turning committed entrance", [
+      terrainFeatureOp("graded-path", "set", {
+        polyline: entryRoute,
+        widthCells: 2.1,
+        shoulderCells: 1.45,
+        surfaceKind: "earthwork-entry",
+        slopeClamp: 1,
+        kind: "ground"
+      }, "earthwork-entry")
+    ], {
+      routeType: "offset breaches",
+      tacticalCost: "the outer gap does not point at the inner gap; both banks observe the turn"
+    }),
+    terrainFeaturePiece("fft-earthwork-sally", "R1-03", "narrow exposed assault", [
+      terrainFeatureOp("graded-path", "set", {
+        polyline: sallyRoute,
+        widthCells: 1.15,
+        shoulderCells: 0.9,
+        surfaceKind: "earthwork-sally",
+        slopeClamp: 1,
+        kind: "ground"
+      }, "earthwork-sally")
+    ], {
+      routeType: "direct assault",
+      tacticalCost: "shorter route across the bank profile with less room to maneuver"
+    })
+  ];
+  return terrainFeatureSpecBase("fft-earthwork-breach-proof", seed, extent, pieces, {
+    featureId: "FFT-H05",
+    featureScale: "battlefield",
+    quietSurfaceMinimumShare: 0.18,
+    macroGraph: {
+      nodes: [
+        { id: "earthwork-approach", heightBandH: [0, 2], role: "deployment and open advance" },
+        { id: "outer-line", heightBandH: [2, 4], role: "first breach contest" },
+        { id: "killing-ground", heightBandH: [3, 5], role: "turned inter-line fight" },
+        { id: "inner-line", heightBandH: [4, 6], role: "second breach contest" },
+        { id: "redoubt-ground", heightBandH: [6, 7], role: "objective and reserve" }
+      ],
+      routes: [
+        { id: "fft-earthwork-entry", from: "earthwork-approach", to: "redoubt-ground",
+          kind: "offset-breach entry" },
+        { id: "fft-earthwork-sally", from: "earthwork-approach", to: "inner-line",
+          kind: "direct assault" }
+      ]
+    },
+    tacticalGrammar: {
+      profile: "double-earthwork-offset-breaches",
+      verticalTravelH: 7,
+      routeSurfaces: [
+        { id: "earthwork-entry", minimumTravelH: 7 },
+        { id: "earthwork-sally", minimumTravelH: 5 }
+      ],
+      outerGap: { x0: 7, x1: 10, y: 15 },
+      innerGap: { x0: 4, x1: 7, y: 9 },
+      minimumFaces: 12,
+      maximumFaces: 120
+    }
+  });
+}
+
+function terrainFftBattlefieldSpec(sceneId, seed){
+  if(sceneId === "fft-hillside-proof") return terrainFftHillsideSpec(seed);
+  if(sceneId === "fft-reverse-ridge-proof") return terrainFftReverseRidgeSpec(seed);
+  if(sceneId === "fft-ravine-crossing-proof") return terrainFftRavineCrossingSpec(seed);
+  if(sceneId === "fft-terraced-bluff-proof") return terrainFftTerracedBluffSpec(seed);
+  if(sceneId === "fft-earthwork-breach-proof") return terrainFftEarthworkBreachSpec(seed);
+  return null;
+}
+
 function terrainMarkedRouteReport(field, surfaceKind){
   var route = field.cells.filter(function(c){
     return c.inPlayfield && c.standable && c.surface === surfaceKind;
@@ -741,6 +1257,34 @@ function terrainFftHillsideSceneBuild(seed){
   };
 }
 
+function terrainFftBattlefieldSceneBuild(sceneId, seed){
+  var s = seed == null ? terrainSeedFrom("cl-f10-" + sceneId) : (seed >>> 0);
+  if(sceneId === "fft-hillside-proof") return terrainFftHillsideSceneBuild(s);
+  var spec = terrainFftBattlefieldSpec(sceneId, s);
+  if(!spec) return null;
+  var field = terrainFieldBuild(spec);
+  var routes = {};
+  (spec.tacticalGrammar.routeSurfaces || []).forEach(function(route){
+    routes[route.id] = terrainMarkedRouteReport(field, route.id);
+  });
+  return {
+    sceneId: sceneId,
+    featureBook: CL_F08_TERRAIN_FEATURE_BOOK,
+    featureId: spec.featureId,
+    spec: spec,
+    fields: [field],
+    primary: field,
+    structures: spec.structures || [],
+    cameraLaw: spec.cameraLaw || TERRAIN_DEFENSIVE_CAMERA_LAW,
+    tacticalGrammar: spec.tacticalGrammar,
+    macroGraph: spec.macroGraph,
+    routeReport: routes,
+    quietSurfaceReport: terrainQuietSurfaceReport(field),
+    cameraReport: terrainDefensiveCameraReport(spec.structures || [], spec.extentCells,
+      spec.cameraLaw || TERRAIN_DEFENSIVE_CAMERA_LAW)
+  };
+}
+
 function terrainCameraDepth01(structure, extent){
   var fp = structure.footprint;
   /* Judge the whole mass, not its forgiving centroid. Positive local x/y are camera-near, so the
@@ -772,10 +1316,124 @@ function terrainDefensiveCameraReport(structures, extent, law){
   };
 }
 
+function terrainFftBattlefieldGateReport(scene){
+  var field = scene.primary;
+  var grammar = scene.tacticalGrammar || {};
+  var quiet = scene.quietSurfaceReport || terrainQuietSurfaceReport(field);
+  var routes = (grammar.routeSurfaces || []).map(function(contract){
+    var report = scene.routeReport[contract.id] || terrainMarkedRouteReport(field, contract.id);
+    return {
+      id: contract.id,
+      minimumTravelH: contract.minimumTravelH,
+      report: report,
+      ok: report.ok && report.verticalTravelH >= contract.minimumTravelH
+    };
+  });
+  var quietCells = field.cells.filter(function(c){
+    return c.inPlayfield && c.standable && c.localSlopeDeg <= 0.0001;
+  });
+  var zoneCoverage = (scene.macroGraph && scene.macroGraph.nodes || []).map(function(node){
+    var count = quietCells.filter(function(c){
+      return c.h >= node.heightBandH[0] && c.h <= node.heightBandH[1];
+    }).length;
+    return { id: node.id, quietCells: count, covered: count > 0 };
+  });
+  var flags = typeof terrainExpressionFlags === "function"
+    ? terrainExpressionFlags("material", { shallowgrade: true, gradeId: "g3" }) : null;
+  var continuity = flags && typeof terrainSurfaceContinuityReport === "function"
+    ? terrainSurfaceContinuityReport(field, flags) : { ok: true };
+  var variation = flags && typeof terrainSurfaceVariationReport === "function"
+    ? terrainSurfaceVariationReport(field, flags) : { ok: true, distinctTangentPlanes: 0,
+      responsiveJoinedPairs: 0 };
+  var reliefH = field.metrics.maxH - field.metrics.minH;
+  var waterCells = field.cells.filter(function(c){ return c.depthH > 0; }).length;
+  var faceRangeOk = (grammar.minimumFaces == null || field.metrics.faces >= grammar.minimumFaces)
+    && (grammar.maximumFaces == null || field.metrics.faces <= grammar.maximumFaces);
+  var identity = { profile: grammar.profile, ok: true };
+  function rowAverage(y0, y1){
+    var cells = field.cells.filter(function(c){ return c.y >= y0 && c.y <= y1; });
+    return cells.length ? cells.reduce(function(sum, c){ return sum + c.h; }, 0) / cells.length : 0;
+  }
+  if(scene.featureId === "FFT-H02"){
+    identity.crestAverageH = Number(rowAverage(grammar.crestRows[0], grammar.crestRows[1]).toFixed(3));
+    identity.reverseAverageH = Number(rowAverage(grammar.reverseRows[0], grammar.reverseRows[1]).toFixed(3));
+    identity.ok = identity.crestAverageH >= identity.reverseAverageH + 1.5;
+  } else if(scene.featureId === "FFT-H03"){
+    identity.waterCells = waterCells;
+    identity.ok = waterCells > 0 && field.metrics.faces >= grammar.minimumFaces;
+  } else if(scene.featureId === "FFT-H04"){
+    var stair = scene.spec.pieces.filter(function(piece){ return piece.id === "fft-bluff-stair"; })[0];
+    var tower = (scene.structures || []).filter(function(structure){
+      return structure.role === "ruined-tower";
+    })[0];
+    identity.hasLocalizedBluff = field.metrics.faces >= grammar.minimumFaces;
+    identity.hasBuiltFinalStair = !!(stair && stair.ops.some(function(op){
+      return op.type === "terrace";
+    }));
+    identity.hasThreeStoreyRuinedTower = !!(tower
+      && tower.storeys >= grammar.centerpiece.minimumStoreys);
+    identity.towerGrounded = !!(tower && (function(){
+      var fp = tower.footprint;
+      for(var y = fp.y; y < fp.y + fp.d; y++) for(var x = fp.x; x < fp.x + fp.w; x++){
+        if(field.heights[y * field.extent.x + x] !== tower.baseH) return false;
+      }
+      return true;
+    })());
+    identity.reviewBearings = grammar.centerpiece.reviewBearings;
+    identity.ok = identity.hasLocalizedBluff && identity.hasBuiltFinalStair
+      && identity.hasThreeStoreyRuinedTower && identity.towerGrounded
+      && identity.reviewBearings === 4;
+  } else if(scene.featureId === "FFT-H05"){
+    identity.offsetBreaches = grammar.outerGap.x0 !== grammar.innerGap.x0;
+    identity.earthworkRuns = scene.spec.pieces.filter(function(piece){
+      return piece.pieceId === "R1-08";
+    }).length;
+    identity.ok = identity.offsetBreaches && identity.earthworkRuns === 4
+      && field.metrics.faces >= grammar.minimumFaces;
+  }
+  var legal = field.metrics.walkableCellsOverSlopeLimit === 0
+    && field.metrics.illegalWalkEdges === 0
+    && field.metrics.unownedFaces === 0
+    && field.metrics.unreachableStandableNonFlying === 0;
+  return {
+    featureId: scene.featureId,
+    sceneId: scene.sceneId,
+    profile: grammar.profile,
+    extent: field.extent,
+    reliefH: reliefH,
+    reliefFeet: reliefH * TERRAIN_GRID_LAW.verticalQuantumFeet,
+    requiredReliefH: grammar.verticalTravelH,
+    faces: field.metrics.faces,
+    faceRangeOk: faceRangeOk,
+    waterCells: waterCells,
+    routes: routes,
+    quietSurfaceShare: Number(quiet.quietShare.toFixed(4)),
+    quietSurfaceMinimumShare: scene.spec.quietSurfaceMinimumShare,
+    quietHeightBands: quiet.quietHeightBands,
+    zoneCoverage: zoneCoverage,
+    continuity: continuity,
+    variation: variation,
+    identity: identity,
+    legal: legal,
+    ok: legal
+      && reliefH >= grammar.verticalTravelH
+      && routes.every(function(route){ return route.ok; })
+      && quiet.quietShare >= scene.spec.quietSurfaceMinimumShare
+      && zoneCoverage.every(function(zone){ return zone.covered; })
+      && faceRangeOk
+      && (!grammar.requiresWater || waterCells > 0)
+      && continuity.ok
+      && variation.ok
+      && variation.distinctTangentPlanes >= 8
+      && variation.responsiveJoinedPairs >= 100
+      && identity.ok
+  };
+}
+
 var CL_F08_TERRAIN_FEATURE_BOOK = Object.freeze({
   id: "cl-f08-terrain-feature-book",
-  version: 3,
-  status: "AUTHORED FORM-LANGUAGE BASELINE + FFT VERTICAL BATTLEFIELD PROOF",
+  version: 4,
+  status: "AUTHORED FORM-LANGUAGE BASELINE + FIVE FFT BATTLEFIELD PROOFS",
   question: "Does each terrain feature read as one continuous, tactically useful landform?",
   proof: "CL-F08a",
   featureIds: TERRAIN_AUTHORED_FEATURE_IDS,
@@ -806,6 +1464,26 @@ var CL_F08_TERRAIN_FEATURE_BOOK = Object.freeze({
       lightRecipeId: "daylit",
       claim: "thirty feet of vertical travel across five elevation zones, a walkable switchback, "
         + "and a shorter gully climb"
+    }),
+    Object.freeze({
+      id: "fft-reverse-ridge-proof", capture: 12, label: "FFT reverse-slope ridge",
+      lightRecipeId: "daylit",
+      claim: "one observation crest, playable reverse ground, and two unequal crossings"
+    }),
+    Object.freeze({
+      id: "fft-ravine-crossing-proof", capture: 13, label: "FFT ravine crossings",
+      lightRecipeId: "daylit",
+      claim: "one diagonal water-cut ravine, a narrow high crossing, and a longer floor route"
+    }),
+    Object.freeze({
+      id: "fft-terraced-bluff-proof", capture: 14, label: "FFT terraced bluff",
+      lightRecipeId: "daylit",
+      claim: "one localized bluff, a route around its end, a short final stair, and a direct scramble"
+    }),
+    Object.freeze({
+      id: "fft-earthwork-breach-proof", capture: 15, label: "FFT breached earthworks",
+      lightRecipeId: "daylit",
+      claim: "two dog-legged ditch-and-bank lines, offset breaches, and a rising redoubt"
     })
   ])
 });
@@ -823,7 +1501,7 @@ function terrainFeatureSceneBuild(sceneId, seed, opts){
   var def = terrainFeatureSceneDefinition(sceneId);
   if(!def) return null;
   var s = seed == null ? terrainSeedFrom("cl-f08a") : (seed >>> 0);
-  if(sceneId === "fft-hillside-proof") return terrainFftHillsideSceneBuild(s);
+  if(sceneId.indexOf("fft-") === 0) return terrainFftBattlefieldSceneBuild(sceneId, s);
   if(sceneId === "authored-feature-book"){
     var frameIndex = opts && opts.frameIndex != null ? Math.max(0, opts.frameIndex | 0) : 0;
     var featureId = TERRAIN_AUTHORED_FEATURE_IDS[frameIndex % TERRAIN_AUTHORED_FEATURE_IDS.length];
@@ -861,9 +1539,22 @@ function terrainFeatureGateReport(seed){
   var ridge = terrainFeatureSceneBuild("defensive-ridgeworks", s);
   var gate = terrainFeatureSceneBuild("defensive-gateworks", s);
   var hillside = terrainFeatureSceneBuild("fft-hillside-proof", s);
+  var battlefieldScenes = [
+    hillside,
+    terrainFeatureSceneBuild("fft-reverse-ridge-proof", s),
+    terrainFeatureSceneBuild("fft-ravine-crossing-proof", s),
+    terrainFeatureSceneBuild("fft-terraced-bluff-proof", s),
+    terrainFeatureSceneBuild("fft-earthwork-breach-proof", s)
+  ];
   [ridge, gate].forEach(function(scene){
     rows.push({
       id: scene.featureId, scale: "defensive-site",
+      fingerprint: scene.primary.fingerprint, metrics: scene.primary.metrics
+    });
+  });
+  battlefieldScenes.forEach(function(scene){
+    rows.push({
+      id: scene.featureId, scale: "battlefield",
       fingerprint: scene.primary.fingerprint, metrics: scene.primary.metrics
     });
   });
@@ -897,6 +1588,7 @@ function terrainFeatureGateReport(seed){
   var smallCount = rows.filter(function(r){ return r.scale === "small"; }).length;
   var largeCount = rows.filter(function(r){ return r.scale === "large"; }).length;
   var defensiveCount = rows.filter(function(r){ return r.scale === "defensive-site"; }).length;
+  var battlefieldCount = rows.filter(function(r){ return r.scale === "battlefield"; }).length;
   var uniqueCount = new Set(rows.map(function(r){ return r.fingerprint; })).size;
   var defensive = {
     ridgeQuietGroundShare: Number(ridgeQuietShare.toFixed(4)),
@@ -941,6 +1633,7 @@ function terrainFeatureGateReport(seed){
     && zoneCoverage.every(function(zone){ return zone.covered; })
     && hillsideReport.faces > 0 && hillsideReport.faces <= 20
     && hillsideReport.scarpYRange[1] - hillsideReport.scarpYRange[0] <= 3;
+  var proofSuite = battlefieldScenes.slice(1).map(terrainFftBattlefieldGateReport);
   return {
     fixture: CL_F08_TERRAIN_FEATURE_BOOK.id,
     fixtureVersion: CL_F08_TERRAIN_FEATURE_BOOK.version,
@@ -949,14 +1642,17 @@ function terrainFeatureGateReport(seed){
     smallFeatures: smallCount,
     largeFeatures: largeCount,
     defensiveCompositions: defensiveCount,
+    battlefieldProofs: battlefieldCount,
     uniqueFingerprints: uniqueCount,
     illegal: illegal,
     camera: gate.cameraReport,
     defensive: defensive,
     hillside: hillsideReport,
+    proofSuite: proofSuite,
     rows: rows,
     ok: illegal.length === 0
       && smallCount === 4 && largeCount === 4 && defensiveCount === 2
+      && battlefieldCount === 5
       && uniqueCount === rows.length
       && ridgeQuietShare >= ridge.tacticalGrammar.quietGroundMinimumShare
       && gateQuietShare >= gate.tacticalGrammar.quietGroundMinimumShare
@@ -964,5 +1660,6 @@ function terrainFeatureGateReport(seed){
       && defensive.gateStructuresGrounded
       && gate.cameraReport.ok && gate.cameraReport.maxStoreys > 2
       && hillsideOk
+      && proofSuite.every(function(report){ return report.ok; })
   };
 }

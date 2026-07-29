@@ -1959,3 +1959,24 @@ Binding consequences:
 - The Clayroom has no two-storey height cap. Three-storey-and-taller masses are allowed; by default
   they occupy the camera-far band so their silhouettes do not hide the tactical ground. A specific
   foreground exception requires its own camera-occlusion proof.
+
+## GOLDEN-SITE FORM LANGUAGE AS THE TERRAIN TARGET (Adam, 2026-07-28 — binding; verbatim)
+
+> "ok, now can you review those critically from both a gameplay perspective and a beautification perspective? take a look at the renders that are being made in the other active session and study those forms, those are the ideal looks for the forms"
+
+Binding consequences:
+
+- The current Golden Site concept renders are the target for **form language**: a calm continuous
+  ground field, one or two coherent low-frequency landforms, embedded routes, and localized hard
+  breaks that have a visible geological or constructed cause.
+- Gameplay and beautification are judged together. A route must be legible as movement space while
+  also belonging to the landform; a strong silhouette may not erase flanks, escape routes, reverse
+  cover, or the readable five-foot grid.
+- Macro form leads. Meso transitions such as shoulders, saddles, cuts, talus, banks, and spoil
+  explain the silhouette. Micro material, vegetation, debris, and edge breakup reinforce those
+  transitions later and may not substitute for them.
+- This ruling adopts the renders' spatial hierarchy, not every generated detail. Their attractive
+  lighting, texture, vegetation, or implied geometry does not license a collision cheat, an
+  unwalkable visual shelf, a disconnected tile angle, or a second tactical grid.
+- Quiet ground is intentional negative space. A feature plate should not spend every cell proving
+  that the terrain system exists, and tall defensive masses remain biased to the camera-far band.

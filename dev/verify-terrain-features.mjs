@@ -1,6 +1,7 @@
 /* Verify CL-F08a — the authored terrain feature book (docs/TERRAIN-FEATURE-BOOK.md).
 
-   This gate proves the engine facts. It does not claim that the renders look good:
+   This gate proves the engine facts and the coarse form budgets that prevent known visual
+   regressions. It does not claim that the renders look good:
      * four small, four large, and two defensive compositions exist and differ;
      * authored geometry is seed-invariant until a later procedural-transform pass is approved;
      * walk, face ownership, and non-flying reachability remain legal;
@@ -154,9 +155,12 @@ guard("4. responsive surfaces", () => {
     rows.every((row) => row.id === "AF-L04" || row.variation.edgeKinds.curb === 0),
     JSON.stringify(rows.map((row) => [row.id, row.variation.edgeKinds.curb])));
   const roomSource = read("src/ui/theater-clay-room.js");
-  check("4d. rejected regular sedimentary face banding remains absent from the renderer",
+   check("4d. rejected regular sedimentary face banding remains absent from the renderer",
     roomSource.length > 2000
       && !/clayTerrainFaceBands|A7-face-band|flags\.facedress/.test(roomSource));
+  check("4e. natural ground has no hard faces except the explicitly authored bluff",
+    IDS.every((id) => id === "AF-L04"
+      || W.terrainFeatureBuild(id, SEED_A).field.faces.length === 0));
 });
 
 console.log("\n5. defensive terrain grammar and grounded tall masses");
@@ -202,6 +206,99 @@ guard("5. defensive grammar", () => {
   const teeth = W.terrainDefensiveCameraReport(mutated, gate.primary.extent, gate.cameraLaw);
   check("5g. TEETH — moving the four-storey gatehouse into the near band fails the law",
     !teeth.ok && teeth.violations.some((row) => row.id === "df-gatehouse-four-storey"));
+});
+
+console.log("\n6. authored form-language budgets");
+guard("6. form language", () => {
+  const built = IDS.map((id) => W.terrainFeatureBuild(id, SEED_A));
+  const stats = built.map((entry) => {
+    const heights = Array.from(entry.field.heights);
+    const min = Math.min(...heights);
+    const max = Math.max(...heights);
+    const datumCount = heights.filter((h) => h === entry.field.baseDatumH).length;
+    const topCount = heights.filter((h) => h === max).length;
+    return {
+      id: entry.recipe.id,
+      scale: entry.recipe.scale,
+      relief: max - min,
+      datumShare: datumCount / heights.length,
+      topShare: topCount / heights.length,
+      operations: entry.spec.pieces.flatMap((piece) => piece.ops || [])
+    };
+  });
+  check("6a. small forms stay low enough to read as terrain events rather than monuments",
+    stats.filter((row) => row.scale === "small").every((row) => row.relief <= 2),
+    JSON.stringify(stats.filter((row) => row.scale === "small")
+      .map((row) => [row.id, row.relief])));
+  check("6b. large natural forms stay within three quanta; the causal bluff alone may reach four",
+    stats.every((row) => row.id === "AF-L04" ? row.relief <= 4 : row.relief <= 3),
+    JSON.stringify(stats.map((row) => [row.id, row.relief])));
+  check("6c. every study preserves at least half its plate as calm datum ground",
+    stats.every((row) => row.datumShare >= 0.5),
+    JSON.stringify(stats.map((row) => [row.id, Number(row.datumShare.toFixed(3))])));
+  check("6d. no non-bluff feature is dominated by one flat summit tier",
+    stats.every((row) => row.id === "AF-L04" || row.topShare <= 0.22),
+    JSON.stringify(stats.map((row) => [row.id, Number(row.topShare.toFixed(3))])));
+  check("6e. the authored vocabulary actually uses directional masses and fading/tapering runs",
+    stats.every((row) => {
+      const directionalMass = row.operations.some((op) =>
+        (op.type === "radial" || op.type === "basin")
+          && op.params.radiusX !== op.params.radiusY
+          && Number.isFinite(op.params.rotationDeg));
+      const responsiveRun = row.operations.some((op) =>
+        (op.type === "ridge" || op.type === "slot")
+          && (op.params.endFadeCells > 0
+            || op.params.halfWidthStartCells !== op.params.halfWidthEndCells
+            || op.params.widthStartCells !== op.params.widthEndCells));
+      return directionalMass || responsiveRun;
+    }),
+    JSON.stringify(stats.map((row) => [row.id, row.operations.map((op) => op.type)])));
+  const tapered = W.terrainFieldBuild({
+    id: "verify-tapered-run",
+    segmentId: "verify-tapered-run",
+    seed: SEED_A,
+    extentCells: { x: 11, y: 12 },
+    baseDatumH: 0,
+    slopeClamp: Infinity,
+    noiseAmplitudeH: 0,
+    pieces: [{
+      id: "verify-run-piece",
+      pieceId: "R1-02",
+      ops: [{
+        type: "ridge",
+        mode: "max",
+        params: {
+          polyline: [{ x: 5, y: 1 }, { x: 5, y: 10 }],
+          halfWidthStartCells: 3,
+          halfWidthEndCells: 1,
+          heightStartH: 2,
+          heightEndH: 1,
+          crossProfile: "smooth",
+          endFadeCells: 0.6,
+          baseH: 0,
+          slopeClamp: Infinity,
+          kind: "ground"
+        }
+      }]
+    }]
+  });
+  function raisedInRow(field, y){
+    return Array.from(field.heights).slice(y * field.extent.x, (y + 1) * field.extent.x)
+      .filter((h) => h > field.baseDatumH).length;
+  }
+  check("6f. tapered runs are functionally broad/high upstream, narrow/low downstream, and fade at the end",
+    raisedInRow(tapered, 3) > raisedInRow(tapered, 8)
+      && raisedInRow(tapered, 3) > 0
+      && raisedInRow(tapered, 1) === 0,
+    JSON.stringify([raisedInRow(tapered, 1), raisedInRow(tapered, 3),
+      raisedInRow(tapered, 8)]));
+  const reverse = stats.find((row) => row.id === "AF-L02");
+  check("6g. the reverse-slope reference remains a low rolling ridge, not a wall or broad slab",
+    reverse.relief === 2 && reverse.topShare <= 0.18,
+    JSON.stringify(reverse));
+  const rejectedSlab = { ...reverse, relief: 4, topShare: 0.4 };
+  check("6h. TEETH — a tall broad summit fails the reverse-slope form budget",
+    !(rejectedSlab.relief === 2 && rejectedSlab.topShare <= 0.18));
 });
 
 console.log("\n" + (fail ? "FAIL" : "PASS") + ` — ${pass} passed, ${fail} failed\n`);

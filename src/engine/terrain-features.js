@@ -82,20 +82,26 @@ var TERRAIN_AUTHORED_FEATURES = Object.freeze({
       return terrainFeatureSpecBase("af-s01-root-lifted-hummock", seed, this.extent, [
         terrainFeaturePiece("af-s01-earth", "R1-02", "root-pushed earth", [
           terrainFeatureOp("radial", "max", {
-            cx: 4.0, cy: 4.2, radius: 4.0, peakH: 2, profile: "sigmoid",
-            asymmetry: -0.32, crownFlatCells: 0, baseH: 0, slopeClamp: 1, kind: "ground"
+            cx: 4.2, cy: 4.3, radiusX: 4.6, radiusY: 2.8, rotationDeg: -18,
+            peakH: 1.65, profile: "sigmoid", asymmetry: -0.12, crownFlatCells: 0,
+            baseH: 0, slopeClamp: 1, kind: "ground"
           }),
           terrainFeatureOp("radial", "max", {
-            cx: 5.8, cy: 3.0, radius: 2.6, peakH: 1, profile: "convex",
-            asymmetry: 0.2, crownFlatCells: 0, baseH: 0, slopeClamp: 1, kind: "ground"
+            cx: 5.8, cy: 4.0, radiusX: 2.5, radiusY: 1.7, rotationDeg: -26,
+            peakH: 1, profile: "convex", asymmetry: 0.1, crownFlatCells: 0,
+            baseH: 0, slopeClamp: 1, kind: "ground"
           })
         ]),
         terrainFeaturePiece("af-s01-root", "R1-13", "exposed root undercut", [
           terrainFeatureOp("slot", "min", {
-            polyline: [{ x: 1.5, y: 4.7 }, { x: 6.8, y: 4.0 }],
-            widthCells: 1, depthH: 2, baseH: 0, slopeClamp: Infinity, kind: "ground"
+            polyline: [{ x: 2.0, y: 5.0 }, { x: 4.1, y: 4.2 }, { x: 6.4, y: 4.3 }],
+            widthStartCells: 0.5, widthEndCells: 0.8,
+            depthStartH: 0.7, depthEndH: 1.0, endFadeCells: 1.35,
+            baseH: 1, slopeClamp: 1, kind: "ground"
           })
-        ], { spanCount: 1, heightAboveDatumH: 1, undercutDepthH: 2 })
+        ], {
+          spanCount: 1, diameterFt: 1.05, heightAboveDatumH: 0.4, undercutDepthH: 1
+        })
       ], { featureId: this.id, featureScale: this.scale, qualityLock: this.qualityLock });
     }
   }),
@@ -109,20 +115,26 @@ var TERRAIN_AUTHORED_FEATURES = Object.freeze({
     qualityLock: "the floor, both shoulders, and both exits read as one eroded event",
     extent: Object.freeze({ x: 10, y: 12 }),
     build: function(seed){
-      var line = [{ x: 2.0, y: 0.5 }, { x: 3.0, y: 3.5 }, { x: 6.2, y: 7.0 }, { x: 7.4, y: 11.0 }];
+      var line = [
+        { x: 1.8, y: -1.0 }, { x: 2.4, y: 2.2 }, { x: 3.8, y: 5.0 },
+        { x: 6.0, y: 8.0 }, { x: 7.7, y: 12.4 }
+      ];
       return terrainFeatureSpecBase("af-s02-sunken-runoff-lane", seed, this.extent, [
         terrainFeaturePiece("af-s02-landform", "R1-02", "eroded lane and shoulders", [
           terrainFeatureOp("slot", "min", {
-            polyline: line, widthCells: 1.6, depthH: 1, baseH: 0,
-            slopeClamp: 1, kind: "ground", floorProfile: "rising"
+            polyline: line, widthStartCells: 1.45, widthEndCells: 2.35,
+            depthStartH: 1.0, depthEndH: 1.35, endFadeCells: 1.5,
+            baseH: 0, slopeClamp: 1, kind: "ground"
           }),
-          terrainFeatureOp("ridge", "max", {
-            polyline: terrainOffsetPolyline(line, 1.55), halfWidthCells: 0.8,
-            heightH: 1, crestWidthCells: 0, baseH: 0, slopeClamp: 1, kind: "ground"
+          terrainFeatureOp("radial", "max", {
+            cx: 2.0, cy: 4.4, radiusX: 3.1, radiusY: 1.25, rotationDeg: 62,
+            peakH: 0.85, profile: "concave", asymmetry: -0.08,
+            baseH: 0, slopeClamp: 1, kind: "ground"
           }),
-          terrainFeatureOp("ridge", "max", {
-            polyline: terrainOffsetPolyline(line, -1.45), halfWidthCells: 0.7,
-            heightH: 1, crestWidthCells: 0, baseH: 0, slopeClamp: 1, kind: "ground"
+          terrainFeatureOp("radial", "max", {
+            cx: 7.3, cy: 8.5, radiusX: 3.0, radiusY: 1.2, rotationDeg: 56,
+            peakH: 0.8, profile: "concave", asymmetry: 0.1,
+            baseH: 0, slopeClamp: 1, kind: "ground"
           })
         ])
       ], { featureId: this.id, featureScale: this.scale, qualityLock: this.qualityLock });
@@ -141,18 +153,23 @@ var TERRAIN_AUTHORED_FEATURES = Object.freeze({
       return terrainFeatureSpecBase("af-s03-impact-hollow-and-spoil", seed, this.extent, [
         terrainFeaturePiece("af-s03-hollow", "R1-05", "impact bowl", [
           terrainFeatureOp("basin", "min", {
-            cx: 4.1, cy: 4.3, radius: 3.3, maxDepthH: 2,
+            cx: 4.5, cy: 4.1, radiusX: 3.8, radiusY: 2.75, rotationDeg: 24,
+            maxDepthH: 1,
             shoreProfile: "gentle-wade", baseH: 0, slopeClamp: 1, kind: "ground"
           })
         ]),
-        terrainFeaturePiece("af-s03-spoil", "R1-02", "thrown spoil shoulder", [
-          terrainFeatureOp("radial", "max", {
-            cx: 2.1, cy: 3.2, radius: 2.6, peakH: 1, profile: "concave",
-            asymmetry: -0.35, baseH: 0, slopeClamp: 1, kind: "ground"
+        terrainFeaturePiece("af-s03-spoil", "R1-02", "downrange spoil fan", [
+          terrainFeatureOp("ridge", "max", {
+            polyline: [{ x: 0.9, y: 3.0 }, { x: 2.1, y: 5.0 }, { x: 4.2, y: 6.6 }],
+            halfWidthStartCells: 0.8, halfWidthEndCells: 1.8,
+            heightStartH: 0.55, heightEndH: 1.15,
+            crossProfile: "smooth", endFadeCells: 0.9,
+            baseH: 0, slopeClamp: 1, kind: "ground"
           }),
           terrainFeatureOp("radial", "max", {
-            cx: 6.8, cy: 5.8, radius: 1.8, peakH: 1, profile: "convex",
-            asymmetry: 0.2, baseH: 0, slopeClamp: 1, kind: "ground"
+            cx: 2.2, cy: 5.8, radiusX: 2.7, radiusY: 1.35, rotationDeg: 28,
+            peakH: 1, profile: "concave", asymmetry: -0.12,
+            baseH: 0, slopeClamp: 1, kind: "ground"
           })
         ])
       ], { featureId: this.id, featureScale: this.scale, qualityLock: this.qualityLock });
@@ -171,19 +188,26 @@ var TERRAIN_AUTHORED_FEATURES = Object.freeze({
     build: function(seed){
       return terrainFeatureSpecBase("af-s04-slumped-bank-crossing", seed, this.extent, [
         terrainFeaturePiece("af-s04-bank", "R1-02", "connected earthen rise", [
-          terrainFeatureOp("ridge", "max", {
-            polyline: [{ x: -1.0, y: 1.0 }, { x: 3.8, y: 2.5 }, { x: 10.0, y: 4.8 }],
-            halfWidthCells: 3.2, heightH: 3, crestWidthCells: 0,
+          terrainFeatureOp("radial", "max", {
+            cx: 4.5, cy: 3.4, radiusX: 6.2, radiusY: 2.8, rotationDeg: 16,
+            peakH: 1.45, profile: "sigmoid", asymmetry: -0.1, crownFlatCells: 0,
             baseH: 0, slopeClamp: 1, kind: "ground"
           }),
           terrainFeatureOp("radial", "max", {
-            cx: 7.8, cy: 3.2, radius: 3.8, peakH: 2, profile: "convex",
-            asymmetry: 0.25, crownFlatCells: 0,
+            cx: 7.5, cy: 5.5, radiusX: 3.8, radiusY: 2.0, rotationDeg: 30,
+            peakH: 1.15, profile: "sigmoid", asymmetry: 0.08, crownFlatCells: 0,
             baseH: 0, slopeClamp: 1, kind: "ground"
           }),
           terrainFeatureOp("basin", "min", {
-            cx: 5.2, cy: 3.0, radius: 2.2, maxDepthH: 1,
-            shoreProfile: "gentle-wade", baseH: 2, slopeClamp: 1, kind: "ground"
+            cx: 5.8, cy: 4.1, radiusX: 2.7, radiusY: 1.65, rotationDeg: 20,
+            maxDepthH: 1, shoreProfile: "gentle-wade",
+            baseH: 1.2, slopeClamp: 1, kind: "ground"
+          }),
+          terrainFeatureOp("slot", "min", {
+            polyline: [{ x: 4.3, y: 3.6 }, { x: 5.7, y: 4.3 }, { x: 7.2, y: 5.2 }],
+            widthStartCells: 0.8, widthEndCells: 1.45,
+            depthStartH: 0.3, depthEndH: 1, endFadeCells: 0.8,
+            baseH: 0.8, slopeClamp: 1, kind: "ground"
           })
         ])
       ], { featureId: this.id, featureScale: this.scale, qualityLock: this.qualityLock });
@@ -202,17 +226,26 @@ var TERRAIN_AUTHORED_FEATURES = Object.freeze({
       return terrainFeatureSpecBase("af-l01-compound-hill-shoulder", seed, this.extent, [
         terrainFeaturePiece("af-l01-landform", "R1-02", "compound hill", [
           terrainFeatureOp("radial", "max", {
-            cx: 6.0, cy: 6.2, radius: 7.4, peakH: 5, profile: "sigmoid",
-            asymmetry: -0.28, crownFlatCells: 1, baseH: 0, slopeClamp: 1, kind: "ground"
+            cx: 6.8, cy: 7.0, radiusX: 7.5, radiusY: 5.35, rotationDeg: 32,
+            peakH: 3.05, profile: "sigmoid", asymmetry: -0.12, crownFlatCells: 0.35,
+            baseH: 0, slopeClamp: 1, kind: "ground"
           }),
           terrainFeatureOp("radial", "max", {
-            cx: 9.7, cy: 9.3, radius: 5.0, peakH: 4, profile: "convex",
-            asymmetry: 0.34, crownFlatCells: 0, baseH: 0, slopeClamp: 1, kind: "ground"
+            cx: 9.8, cy: 10.2, radiusX: 5.1, radiusY: 3.5, rotationDeg: -18,
+            peakH: 2.35, profile: "sigmoid", asymmetry: 0.1, crownFlatCells: 0,
+            baseH: 0, slopeClamp: 1, kind: "ground"
           }),
           terrainFeatureOp("ridge", "max", {
-            polyline: [{ x: 4.5, y: 6.0 }, { x: 2.0, y: 11.5 }],
-            halfWidthCells: 1.4, heightH: 3, crestWidthCells: 0,
+            polyline: [{ x: 5.7, y: 7.2 }, { x: 3.8, y: 10.0 }, { x: 1.8, y: 13.3 }],
+            halfWidthStartCells: 2.5, halfWidthEndCells: 1.15,
+            heightStartH: 2.05, heightEndH: 0.8,
+            crossProfile: "smooth", endFadeCells: 0.8,
             baseH: 0, slopeClamp: 1, kind: "ground"
+          }),
+          terrainFeatureOp("basin", "min", {
+            cx: 8.2, cy: 8.9, radiusX: 2.7, radiusY: 1.6, rotationDeg: -8,
+            maxDepthH: 0.45, shoreProfile: "gentle-wade",
+            baseH: 2.35, slopeClamp: 1, kind: "ground"
           })
         ])
       ], { featureId: this.id, featureScale: this.scale, qualityLock: this.qualityLock });
@@ -231,17 +264,34 @@ var TERRAIN_AUTHORED_FEATURES = Object.freeze({
       return terrainFeatureSpecBase("af-l02-reverse-slope-ridge", seed, this.extent, [
         terrainFeaturePiece("af-l02-ridge", "R1-02", "natural defended ridge", [
           terrainFeatureOp("ridge", "max", {
-            polyline: [{ x: 1, y: 5.4 }, { x: 7.0, y: 4.4 }, { x: 14, y: 5.8 }],
-            halfWidthCells: 2.4, heightH: 4, crestWidthCells: 0,
+            polyline: [{ x: -2, y: 6.8 }, { x: 2.8, y: 5.1 },
+              { x: 6.7, y: 6.2 }, { x: 10.4, y: 5.4 },
+              { x: 13.5, y: 6.6 }, { x: 17.5, y: 5.1 }],
+            halfWidthStartCells: 4.7, halfWidthEndCells: 3.5,
+            heightStartH: 1.65, heightEndH: 1.35,
+            crossProfile: "smooth", crestHalfWidthCells: 0.1,
+            baseH: 0, slopeClamp: 1, kind: "ground"
+          }),
+          terrainFeatureOp("radial", "max", {
+            cx: 4.5, cy: 5.8, radiusX: 5.3, radiusY: 3.2, rotationDeg: -7,
+            peakH: 2.15, profile: "sigmoid", asymmetry: -0.08, crownFlatCells: 0,
+            baseH: 0, slopeClamp: 1, kind: "ground"
+          }),
+          terrainFeatureOp("radial", "max", {
+            cx: 11.8, cy: 5.9, radiusX: 4.7, radiusY: 2.8, rotationDeg: 12,
+            peakH: 1.95, profile: "sigmoid", asymmetry: 0.1, crownFlatCells: 0,
             baseH: 0, slopeClamp: 1, kind: "ground"
           }),
           terrainFeatureOp("basin", "min", {
-            cx: 8, cy: 2.0, radius: 3.5, maxDepthH: 1,
-            shoreProfile: "gentle-wade", baseH: 1, slopeClamp: 1, kind: "ground"
+            cx: 8.4, cy: 2.8, radiusX: 4.5, radiusY: 2.3, rotationDeg: -8,
+            maxDepthH: 0.65, shoreProfile: "gentle-wade",
+            baseH: 1.6, slopeClamp: 1, kind: "ground"
           }),
           terrainFeatureOp("ridge", "max", {
-            polyline: [{ x: 11, y: 5.0 }, { x: 14.5, y: 11.0 }],
-            halfWidthCells: 1.1, heightH: 2, crestWidthCells: 0,
+            polyline: [{ x: 10.7, y: 5.8 }, { x: 13.2, y: 8.0 }, { x: 15.2, y: 11.2 }],
+            halfWidthStartCells: 2.1, halfWidthEndCells: 1.25,
+            heightStartH: 1.4, heightEndH: 0.6,
+            crossProfile: "smooth", endFadeCells: 0.8,
             baseH: 0, slopeClamp: 1, kind: "ground"
           })
         ])
@@ -261,19 +311,31 @@ var TERRAIN_AUTHORED_FEATURES = Object.freeze({
       function run(id, a, b){
         return terrainFeaturePiece(id, "R1-08", "ditch and spoil run", [
           terrainFeatureOp("ridge", "max", {
-            polyline: [a, b], halfWidthCells: 0.75, heightH: 2, crestWidthCells: 1,
-            pairedDitch: true, ditchDepthH: 2, ditchWidthCells: 2, ditchSide: -1,
-            baseH: 0, slopeClamp: Infinity, kind: "ground"
+            polyline: [a, b],
+            halfWidthStartCells: 1.25, halfWidthEndCells: 1.05,
+            heightStartH: 1.8, heightEndH: 1.45,
+            crossProfile: "smooth", crestHalfWidthCells: 0.25, endFadeCells: 1.25,
+            pairedDitch: true, ditchDepthH: 1, ditchWidthCells: 1.8, ditchSide: -1,
+            baseH: 0, slopeClamp: 1, kind: "ground"
           })
         ]);
       }
       return terrainFeatureSpecBase("af-l03-breached-ditch-rampart", seed, this.extent, [
-        run("af-l03-west", { x: 0.5, y: 7.0 }, { x: 6.5, y: 6.4 }),
-        run("af-l03-east", { x: 9.5, y: 6.4 }, { x: 15.0, y: 7.5 }),
+        run("af-l03-west", { x: -1.2, y: 7.4 }, { x: 6.4, y: 6.2 }),
+        run("af-l03-east", { x: 9.6, y: 6.3 }, { x: 16.7, y: 7.6 }),
+        terrainFeaturePiece("af-l03-breach-fan", "R1-02", "breach debris fan", [
+          terrainFeatureOp("radial", "max", {
+            cx: 8.0, cy: 7.1, radiusX: 2.7, radiusY: 1.5, rotationDeg: 4,
+            peakH: 1, profile: "concave", asymmetry: 0.05,
+            baseH: 0, slopeClamp: 1, kind: "ground"
+          })
+        ]),
         terrainFeaturePiece("af-l03-rear-step", "R1-02", "rear firing shoulder", [
           terrainFeatureOp("ridge", "max", {
-            polyline: [{ x: 2, y: 4.0 }, { x: 13, y: 4.3 }],
-            halfWidthCells: 1, heightH: 1, crestWidthCells: 0,
+            polyline: [{ x: 1.5, y: 3.8 }, { x: 7.0, y: 4.5 }, { x: 14.2, y: 3.8 }],
+            halfWidthStartCells: 2.4, halfWidthEndCells: 1.8,
+            heightStartH: 1.1, heightEndH: 0.85,
+            crossProfile: "smooth", endFadeCells: 1.0,
             baseH: 0, slopeClamp: 1, kind: "ground"
           })
         ])
@@ -290,34 +352,32 @@ var TERRAIN_AUTHORED_FEATURES = Object.freeze({
     qualityLock: "curbs occur on the built approach and bluff only; the surrounding ground remains natural",
     extent: Object.freeze({ x: 16, y: 18 }),
     build: function(seed){
-      var leftBounds = { x: 0, y: 0, w: 6, d: 7 };
-      var rightBounds = { x: 10, y: 0, w: 6, d: 7 };
       return terrainFeatureSpecBase("af-l04-terraced-bluff-approach", seed, this.extent, [
-        terrainFeaturePiece("af-l04-left-bluff", "R1-01", "left bluff shelf", [
+        terrainFeaturePiece("af-l04-bluff", "R1-01", "continuous bluff shelf", [
           terrainFeatureOp("ridge", "max", {
-            polyline: [{ x: 0, y: 5 }, { x: 15, y: 5 }],
+            polyline: [{ x: -1, y: 5.7 }, { x: 3.8, y: 4.7 }, { x: 8.2, y: 5.7 },
+              { x: 12.3, y: 4.6 }, { x: 17, y: 5.5 }],
             halfPlane: true, plateauSide: 1, heightH: 4, baseH: 0,
-            slopeClamp: Infinity, kind: "ground", bounds: leftBounds
-          })
-        ]),
-        terrainFeaturePiece("af-l04-right-bluff", "R1-01", "right bluff shelf", [
-          terrainFeatureOp("ridge", "max", {
-            polyline: [{ x: 0, y: 5 }, { x: 15, y: 5 }],
-            halfPlane: true, plateauSide: 1, heightH: 4, baseH: 0,
-            slopeClamp: Infinity, kind: "ground", bounds: rightBounds
+            slopeClamp: Infinity, kind: "ground", bounds: { x: 0, y: 0, w: 16, d: 7 }
           })
         ]),
         terrainFeaturePiece("af-l04-stair", "R1-09", "broad cut approach", [
           terrainFeatureOp("terrace", "set", {
             stepCount: 5, riseHPerStep: -1, treadDepthCells: 1,
-            axis: "y", originCell: { x: 6, y: 1 }, widthCells: 4,
+            axis: "y", originCell: { x: 6, y: 2 }, widthCells: 4,
             baseH: 4, slopeClamp: 1, kind: "ground",
-            bounds: { x: 6, y: 1, w: 4, d: 8 }
+            bounds: { x: 6, y: 2, w: 4, d: 8 }
           })
         ]),
         terrainFeaturePiece("af-l04-talus", "R1-10", "single talus fan", [
           terrainFeatureOp("radial", "max", {
-            cx: 12.5, cy: 7.0, radius: 3.2, peakH: 2, profile: "concave",
+            cx: 12.3, cy: 7.0, radiusX: 3.6, radiusY: 2.0, rotationDeg: -18,
+            peakH: 1, profile: "concave", asymmetry: -0.08,
+            baseH: 0, slopeClamp: 1, kind: "ground"
+          }),
+          terrainFeatureOp("radial", "max", {
+            cx: 2.7, cy: 6.3, radiusX: 2.7, radiusY: 1.45, rotationDeg: 22,
+            peakH: 1, profile: "concave", asymmetry: 0.05,
             baseH: 0, slopeClamp: 1, kind: "ground"
           })
         ])
@@ -346,18 +406,22 @@ function terrainDefensiveRidgeworksSpec(seed){
   function earthwork(id, line){
     return terrainFeaturePiece(id, "R1-08", "split ditch-and-bank line", [
       terrainFeatureOp("ridge", "max", {
-        polyline: line, halfWidthCells: 0.65,
-        heightH: 2, crestWidthCells: 1, pairedDitch: true,
-        ditchDepthH: 1, ditchWidthCells: 1.8, ditchSide: -1,
-        baseH: 0, slopeClamp: Infinity, kind: "ground"
+        polyline: line,
+        halfWidthStartCells: 1.35, halfWidthEndCells: 1.05,
+        heightStartH: 1.8, heightEndH: 1.45,
+        crossProfile: "smooth", crestHalfWidthCells: 0.25, endFadeCells: 1.1,
+        pairedDitch: true, ditchDepthH: 1, ditchWidthCells: 1.8, ditchSide: -1,
+        baseH: 0, slopeClamp: 1, kind: "ground"
       })
     ]);
   }
   var pieces = [
     terrainFeaturePiece("df-ridge-glacis", "R1-02", "broad natural glacis", [
       terrainFeatureOp("ridge", "max", {
-        polyline: [{ x: 0.5, y: 5.0 }, { x: 8, y: 4.2 }, { x: 17, y: 5.4 }],
-        halfWidthCells: 3.0, heightH: 3, crestWidthCells: 0,
+        polyline: [{ x: -1.5, y: 5.7 }, { x: 7.5, y: 4.5 }, { x: 18.5, y: 5.8 }],
+        halfWidthStartCells: 5.0, halfWidthEndCells: 4.0,
+        heightStartH: 2.4, heightEndH: 2.0,
+        crossProfile: "smooth", crestHalfWidthCells: 0.45,
         baseH: 0, slopeClamp: 1, kind: "ground"
       })
     ]),
@@ -391,15 +455,17 @@ function terrainDefensiveGateworksSpec(seed){
   var pieces = [
     terrainFeaturePiece("df-gate-natural-rise", "R1-02", "gate-seat shoulder", [
       terrainFeatureOp("radial", "max", {
-        cx: 8.3, cy: 4.0, radius: 6.3, peakH: 3, profile: "sigmoid",
-        asymmetry: -0.15, crownFlatCells: 1, baseH: 0, slopeClamp: 1, kind: "ground"
+        cx: 8.2, cy: 4.7, radiusX: 8.2, radiusY: 5.8, rotationDeg: -4,
+        peakH: 3, profile: "sigmoid", asymmetry: -0.08, crownFlatCells: 0.6,
+        baseH: 0, slopeClamp: 1, kind: "ground"
       })
     ]),
     terrainFeaturePiece("df-gate-seat", "R1-01", "far gate seat", [
       terrainFeatureOp("ridge", "max", {
-        polyline: [{ x: 0, y: 3 }, { x: 13.5, y: 3 }],
+        polyline: [{ x: -1, y: 3.8 }, { x: 3.8, y: 3.0 },
+          { x: 8.4, y: 3.5 }, { x: 13.5, y: 2.9 }, { x: 18.5, y: 3.9 }],
         halfPlane: true, plateauSide: 1, heightH: 4, baseH: 0,
-        slopeClamp: Infinity, kind: "ground", bounds: { x: 0, y: 0, w: 14, d: 4 }
+        slopeClamp: Infinity, kind: "ground", bounds: { x: 0, y: 0, w: 18, d: 5 }
       })
     ]),
     terrainFeaturePiece("df-gate-stair", "R1-09", "rising committed approach", [
@@ -412,14 +478,18 @@ function terrainDefensiveGateworksSpec(seed){
     ]),
     terrainFeaturePiece("df-gate-moat-west", "R1-05", "west moat", [
       terrainFeatureOp("slot", "min", {
-        polyline: [{ x: 0, y: 10 }, { x: 5.8, y: 9.2 }],
-        widthCells: 3, depthH: 3, baseH: 0, slopeClamp: Infinity, kind: "ground"
+        polyline: [{ x: -1, y: 9.8 }, { x: 2.8, y: 9.0 }, { x: 6.0, y: 8.2 }],
+        widthStartCells: 2.7, widthEndCells: 2.1,
+        depthStartH: 2, depthEndH: 1.5, endFadeCells: 1.0,
+        baseH: 0, slopeClamp: 1, kind: "ground"
       })
     ], null, -1, { x: 0, y: 7, w: 7, d: 6 }),
     terrainFeaturePiece("df-gate-moat-east", "R1-05", "east moat", [
       terrainFeatureOp("slot", "min", {
-        polyline: [{ x: 12.2, y: 9.2 }, { x: 17, y: 10.4 }],
-        widthCells: 3, depthH: 3, baseH: 0, slopeClamp: Infinity, kind: "ground"
+        polyline: [{ x: 12.0, y: 8.2 }, { x: 15.0, y: 9.0 }, { x: 18.5, y: 10.0 }],
+        widthStartCells: 2.1, widthEndCells: 2.8,
+        depthStartH: 1.5, depthEndH: 2, endFadeCells: 1.0,
+        baseH: 0, slopeClamp: 1, kind: "ground"
       })
     ], null, -1, { x: 11, y: 7, w: 7, d: 6 }),
     terrainFeaturePiece("df-gate-causeway", "R1-09", "broken causeway surface", [
@@ -496,8 +566,8 @@ function terrainDefensiveCameraReport(structures, extent, law){
 
 var CL_F08_TERRAIN_FEATURE_BOOK = Object.freeze({
   id: "cl-f08-terrain-feature-book",
-  version: 1,
-  status: "AUTHORED QUALITY BASELINE — procedural transforms intentionally deferred",
+  version: 2,
+  status: "AUTHORED FORM-LANGUAGE BASELINE — procedural transforms intentionally deferred",
   question: "Does each terrain feature read as one continuous, tactically useful landform?",
   proof: "CL-F08a",
   featureIds: TERRAIN_AUTHORED_FEATURE_IDS,

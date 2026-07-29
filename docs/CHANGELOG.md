@@ -8,6 +8,34 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-29 — Golden Site procedural-vignette master program [Codex]
+
+**Added**
+- `GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md`, the founder-authorized Waves 0–8
+  program for one terrain/construction synthesizer, the complete Golden/ordinary-venue
+  coverage matrix, semantic asset foundry, deterministic walk-demand observatory,
+  recurring synthesis/game/battle/visual evidence, walk-modification law, metrics,
+  stop conditions, and multi-session gate contract.
+- `docs/intel/golden-site-engine-coverage.json`, the machine-readable map from each
+  portfolio case to shared runtime owners, first proof, wave, semantic obligations,
+  and in-engine/Meshy/sprite/material demand, plus homes for the prior census gaps.
+- Canonical decisions for one engine and continuous walk, play, and PC/enemy battle
+  validation.
+
+**Changed**
+- Merged the compact Golden Site small/medium/large active-window portfolio into the
+  planning lineage; its extra-large overviews remain explicitly marked `NOT A GOAL`.
+- Routed the Golden catalog, ontology, roller ledger, proof queue, docs index, document
+  map, decision index, system ownership, next steps, art canon, design registry, and
+  handoff through the new execution owner without collapsing their individual jobs.
+- Reclassified the existing 1,050-walk census as a useful unseeded before-state. Its
+  successor separates full-site, continuation, transform, local-feature,
+  narrative-only, and unresolved demand under real world/fray context.
+
+**Deferred**
+- Product implementation remains at Wave 0. Later waves are authorized only after
+  their named gates; no paid asset generation or walk-content rewrite was started.
+
 ## 2026-07-29 — Natural-surface feature default and honest terrain evidence [Codex]
 
 **Changed**
@@ -776,48 +804,3 @@ exposure/bloom → 4) combat-in-room + staging beats → 5) P3-2 (auto-fires whe
 **Changed** — loop-gate evidence refreshed on today's stack (5/5 clean, AgX + open dioramas).
 **Deferred** — shattered shards have no prop-avoidance (2/3 occluded in the card — taste-pass item);
 PL-1b rig improvements (bot should fight; transition captures focus the right room; shop-panel check).
-
-## 2026-07-14 — PHASE-3 WAVE-1: no-spend visual wave + diorama cutaway restore + repo migration [Claude Opus 4.8, orchestrated]
-
-Phase-3 Wave-1 executed as background worktree-isolated Sonnet executors, each personally re-gated
-(harnesses re-run by me, visual units' PNGs READ, never self-report), landed `--no-ff`. Master tip
-after the wave: `a23d2eb2`.
-
-**Added**
-- **P3-1a Poisson dressing** (`src/engine/place-distribution.js`, `placeDistribute`) — seeded
-  Poisson-disk realization of incidental floor dressing behind `ROOM_PLACE_DISTRIBUTE=false`
-  (byte-identical until a follow-up flip). 27/27 (5 red-first), dungeon-dressing 655/0, interior
-  287/0, active-room p95 0.53ms.
-- **W0-c Open5e cross-check** (`build/sync-open5e.py`) — read-only SRD-Data validator vs Open5e
-  `srd-2024` (339/339 name join, 223 representation-format field diffs surfaced); NEVER writes SRD-Data.
-- **E0-1 wall-fixture occlusion-fade** — wall-mounted practicals fade with their occluded wall
-  segment (per-wall-mount body-material clone; append into the `ownerSegIndex` fadeEntry, never
-  overwrite). 32/0 + 3-way isolation proof; capture confirms suppressed torch dims, non-suppressed
-  stays lit. (Grew from a P3-1d out-of-scope finding.)
-- **P3-1e eyeball fixtures** (`dev/battle-gate/eyeball-fixtures/`) — legacy-vs-oss capture pairs
-  (tiered / aperture / dressed room), same scene/camera/crop taste-gate set; frames READ (tiers
-  render under both kernels — a staging gap, not a code defect).
-- **P3-1b depth-state audit** (`dev/audit-depth-state.mjs`) — four-yaw oss capture + material census;
-  PROVEN defect table EMPTY (renderer transparency clean), one latent wall-upper condition flagged for P3-3.
-
-**Fixed**
-- **P3-1d diorama cutaway restoration** — compiled rooms read as OPEN dioramas again, not closed
-  boxes (the C4.1b regression). Camera-side wall-upper band suppression restored via
-  `itrOcclusionClassify` (`wallUpperCameraSideBlockingSet`, `theater-shot.js`); occlusion subjects
-  extended anchors→all mounted figures (`OCCLUSION_SUBJECT_CAP=24`, loud warn). 14/14 red-first,
-  wall-occlusion 23/0, theater-shot 107/0, interior 287/0; before/after loop-gate PNGs READ.
-
-**Changed**
-- **CI scoped to master + PRs** (`.github/workflows/ci.yml`) — a blanket `on: push` (all branches)
-  turned a `git push --all` backup into ~100 failing CI runs (inbox flood); branch backups no longer
-  each trigger a run. Cancelled the active runs; deleted 81 junk `worktree-*` branches from origin.
-- **Repo migrated to an APFS sparsebundle on the Work Drive** (`/Volumes/Genesis/Genesis`) — off the
-  97%-full boot drive. exec bits preserved (git clean, no fileMode churn), all branches + Cowork
-  memory carried over, verified (check-manifest OK, harnesses green, app serves). Launchers +
-  `.claude/launch.json` rerouted; old copy removed (corrupt zip discarded — origin is the backup).
-- **P3-2 Stage B teed up** (`docs/PHASE-3-WAVE-2-SPECS.md`, B1–B4) — GATED on sprite-QA registry
-  coordination (B1 regenerates `sprite-registry.js`).
-
-**Deferred**
-- W0-b PRNG dedup — real surface is 20+ harness files, not 3; re-scope before executing.
-- W0-a struck — MF-3b hit-stop already shipped in BW4B (`17474b45`); wave plan listed a stale unit.

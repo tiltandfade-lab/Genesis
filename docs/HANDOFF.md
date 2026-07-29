@@ -1,10 +1,38 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-07-27
+updated: 2026-07-29
 ---
 
 # Genesis — Session Hand-off
+
+## ⭐ Latest (2026-07-29, GOLDEN SITE PROCEDURAL-VIGNETTE MASTER PROGRAM) [Codex]
+
+Adam designated the Golden Site engine as the next several-week program. The new
+`GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md` turns the existing portfolio,
+ontology, twelve generator-grade specs, ideal-art scale references, asset plans, walk
+census, playtest system, and combat harnesses into one Waves 0–8 execution order.
+Terrain and building/site construction are explicitly two stages of one synthesizer,
+not separate engines.
+
+The plan includes a twelve-site/ordinary-venue coverage matrix; clear in-engine,
+existing-donor, Meshy, sprite-extrusion/faced-box, material, standee, VFX/light, and
+context-plate routing; a deterministic world-aware successor to the existing
+1,050-roll census; recurring synthesis, game-flow, PC/enemy battle, and founder visual
+review; walk-modification safeguards; and the rule that multi-session work is legal
+only when it closes a named current-wave gate.
+
+The compact Golden scale portfolio from `feat/golden-sites-campaign` was merged into
+this planning branch before authoring the program. Active small/medium/large targets
+remain compact vignettes; extra-large overviews remain explicitly `NOT A GOAL`.
+
+**Do next:** finish Wave 0 by creating the machine-readable Golden coverage inventory,
+freezing the first `VignetteRequest`/plan/asset/receipt contracts, rehoming or
+rebuilding the private-scratchpad census harness, selecting exact Tavern/Guard Post
+source receipts, and capturing current baselines. Wave 1 is the read-only demand
+observatory and adapters; Wave 2 is the first compact end-to-end Tavern + Guard Post
+proof. The prior terrain checkpoint's full-CI marker remains pending until this
+docs/integration close is fully gated.
 
 ## ⭐ Latest (2026-07-29, TERRAIN NATURAL-SURFACE DEFAULT CORRECTION) [Codex]
 

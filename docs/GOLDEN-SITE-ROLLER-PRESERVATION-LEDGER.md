@@ -1,9 +1,10 @@
 ---
 type: design-audit
 created: 2026-07-25
-updated: 2026-07-26
-status: ACTIVE IMPLEMENTATION EVIDENCE — preservation contract; implementation unauthorized
+updated: 2026-07-29
+status: ACTIVE IMPLEMENTATION EVIDENCE — consumed by the current master-plan wave; never standalone build authority
 owner: current-roller lineage and retained Golden Site compositions
+master_plan: GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md
 authority:
   - GOLDEN-SITES-CATALOG.md
 scope:
@@ -12,6 +13,11 @@ scope:
 ---
 
 # GOLDEN SITE ROLLER-PRESERVATION LEDGER
+
+**Program routing update (2026-07-29):** this ledger is the before-state and
+preservation input for `GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md`. It supplies
+receipts and retained capabilities to the active wave; it never authorizes a
+seed-specific patch or a standalone adapter.
 
 ## Purpose
 

@@ -1,0 +1,234 @@
+{
+  "schemaVersion": 1,
+  "status": "planning-inventory",
+  "updated": "2026-07-29",
+  "authority": "docs/GOLDEN-SITES-CATALOG.md",
+  "masterPlan": "docs/GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md",
+  "law": "Golden ids label acceptance cases, never runtime generator branches.",
+  "sites": [
+    {
+      "id": 1,
+      "slug": "guard-post",
+      "portfolioRole": "host-program",
+      "runtimeOwners": ["DefenseRouteControlHost"],
+      "firstProof": "GP-SHAPE-01 shoulder-overlook through-road",
+      "wave": 2,
+      "spec": "docs/SITE-1-GUARD-POST-SPEC.md",
+      "obligations": ["route", "threshold", "observation", "support-room", "deck", "flank", "retreat"],
+      "assetDemand": {
+        "engine": ["graded-terrain", "foundation", "wall", "gate", "deck", "stair", "cover-and-collision"],
+        "meshy": ["barrier", "signal-fixture", "rock-transition", "repair-trace"],
+        "sprite": ["sign", "crest", "door-leaf", "notice"],
+        "material": ["road-ground", "stone", "timber", "metal", "repair-condition"]
+      }
+    },
+    {
+      "id": 2,
+      "slug": "camp-service",
+      "portfolioRole": "host-program",
+      "runtimeOwners": ["TransientServiceHost"],
+      "firstProof": "route-adjacent camp with center, shelter, service, water, waste and watch",
+      "wave": 3,
+      "spec": "docs/SITE-2-CAMP-SERVICE-SPEC.md",
+      "obligations": ["route-edge", "center", "shelter", "service", "water", "waste", "watch", "departure"],
+      "assetDemand": {
+        "engine": ["ground-anchor", "knoll", "route", "fire-clearance", "footprints", "support"],
+        "meshy": ["tent", "wagon", "cook-station", "water-service", "screen"],
+        "sprite": ["sign", "shield", "hanging-cloth", "shallow-camp-tools"],
+        "material": ["trampled-ground", "ash", "mud", "cloth", "timber", "occupation-wear"]
+      }
+    },
+    {
+      "id": 3,
+      "slug": "dormant-abandoned",
+      "portfolioRole": "cross-host-transform",
+      "runtimeOwners": ["DormantTransform", "CausalCondition"],
+      "firstProof": "aperture-first dormant delta on at least three unlike hosts",
+      "wave": 5,
+      "spec": "docs/SITE-3-DORMANT-CONCEPT.md",
+      "obligations": ["failed-function", "absence", "residue", "load-history", "water-history", "maintenance-history", "event-history"],
+      "assetDemand": {
+        "engine": ["breach", "collapse", "support-failure", "blocked-route", "repair"],
+        "meshy": ["rubble", "talus", "spent-trace", "reoccupation-cluster"],
+        "sprite": ["broken-leaf", "warning", "relic", "shallow-residue"],
+        "material": ["water", "soot", "moss", "wear", "rot", "fracture", "repair-mask"]
+      }
+    },
+    {
+      "id": 4,
+      "slug": "monastery-commune",
+      "portfolioRole": "host-program",
+      "runtimeOwners": ["CommunalInstitutionHost"],
+      "firstProof": "level wrapped court with grand stair and head position",
+      "wave": 4,
+      "spec": "docs/SITE-4-MONASTERY-COMMUNE-SPEC.md",
+      "obligations": ["court", "repeated-bays", "shared-space", "service", "ritual-head", "processional-route", "secondary-access"],
+      "assetDemand": {
+        "engine": ["terrace", "court", "arcade", "bay", "stair", "roof", "cutaway"],
+        "meshy": ["well", "bell", "lectern", "shrine", "communal-equipment"],
+        "sprite": ["icon", "reliquary-face", "door", "book-or-tablet", "motif"],
+        "material": ["court-ground", "masonry", "timber", "roof", "ritual-trim", "use-wear"]
+      }
+    },
+    {
+      "id": 5,
+      "slug": "mine-workshop",
+      "portfolioRole": "host-program",
+      "runtimeOwners": ["ExtractionWorkHost"],
+      "firstProof": "active upper works over strained or flooding lower workings",
+      "wave": 4,
+      "spec": "docs/SITE-5-MINE-WORKSHOP-CONCEPT.md",
+      "obligations": ["source", "haul", "process", "store", "service", "failure", "recovery"],
+      "assetDemand": {
+        "engine": ["shaft", "drift", "landing", "support", "rail", "platform", "haul-route"],
+        "meshy": ["ore-cart", "hoist", "pump", "crusher", "forge", "spoil"],
+        "sprite": ["warning", "work-sign", "tool-face", "ledger", "shutter-or-grate"],
+        "material": ["rock", "ore", "timber", "iron", "wetness", "soot", "tailings"]
+      }
+    },
+    {
+      "id": 6,
+      "slug": "prison-custody",
+      "portfolioRole": "host-program",
+      "runtimeOwners": ["CustodyHost"],
+      "firstProof": "four-cell civic jail with raised keeper landing",
+      "wave": 4,
+      "spec": "docs/SITE-6-PRISON-CUSTODY-SPEC.md",
+      "obligations": ["intake", "holding", "keeper-oversight", "property", "evidence", "service", "release", "transfer", "escape"],
+      "assetDemand": {
+        "engine": ["cell", "barrier", "keeper-landing", "door-frame", "route", "sightline"],
+        "meshy": ["holding-cage", "record-station", "service-fixture"],
+        "sprite": ["door-leaf", "bar-or-grate", "lock-face", "notice", "evidence-marker"],
+        "material": ["masonry", "timber", "iron", "wear", "damp", "breach", "repair"]
+      }
+    },
+    {
+      "id": 7,
+      "slug": "natural-lair",
+      "portfolioRole": "host-program",
+      "runtimeOwners": ["EcologyClaimHost"],
+      "firstProof": "walk-in karst chamber with floor and ledge route",
+      "wave": 3,
+      "spec": "docs/SITE-7-NATURAL-LAIR-SPEC.md",
+      "obligations": ["origin", "body-scaled-mouth", "claim", "nest", "floor-route", "ledge-route", "bolt-hole", "short-exit", "causal-light"],
+      "assetDemand": {
+        "engine": ["cave-field", "mouth-envelope", "ledge", "shelf", "route", "void-or-water", "cutaway"],
+        "meshy": ["cave-mouth", "tunnel-rib", "root", "nest", "dripstone", "pool-rim"],
+        "sprite": ["bones", "hide", "shallow-trace", "mark", "hanging-growth"],
+        "material": ["stone", "mud", "water", "mineral", "organic", "disturbance"]
+      }
+    },
+    {
+      "id": 8,
+      "slug": "layered-control",
+      "portfolioRole": "cross-host-transform",
+      "runtimeOwners": ["LayeredControlTransform"],
+      "firstProof": "compact hospitality threshold plus two unlike hosts",
+      "wave": 5,
+      "spec": "docs/SITE-8-LAYERED-CONTROL-SPEC.md",
+      "obligations": ["claimants", "recognition", "permissions", "service-delta", "property-delta", "information-delta", "schedule", "front"],
+      "assetDemand": {
+        "engine": ["access-state", "attributed-ground", "front", "barrier-state", "route-desirability"],
+        "meshy": ["claim-fixture", "barricade", "evidence-cluster"],
+        "sprite": ["banner", "seal", "notice", "ownership-mark", "record"],
+        "material": ["faction-accent", "overpaint", "repair", "occupation-wear"]
+      }
+    },
+    {
+      "id": 9,
+      "slug": "contested-fortress",
+      "portfolioRole": "scale-relationship-stress",
+      "runtimeOwners": ["DefenseFortificationHost", "LayeredControlTransform", "MaterializationWindow"],
+      "firstProof": "rising gate window linked to a contested wall segment",
+      "wave": 6,
+      "spec": "docs/SITE-9-CONTESTED-FORTRESS-SPEC.md",
+      "obligations": ["gate", "wall", "store", "barracks", "command", "wall-route", "service", "attributed-ground", "linked-windows"],
+      "assetDemand": {
+        "engine": ["high-approach", "switchback", "wall", "tower", "gate", "stair", "wall-walk", "frontier"],
+        "meshy": ["barricade", "signal", "siege-or-service-prop", "gabion"],
+        "sprite": ["banner", "gate-mark", "warning", "shield", "damage-face"],
+        "material": ["earthwork", "masonry", "timber", "metal", "siege-damage", "repair"]
+      }
+    },
+    {
+      "id": 10,
+      "slug": "urban-institution",
+      "portfolioRole": "host-program",
+      "runtimeOwners": ["UrbanInstitutionHost", "UrbanFabric"],
+      "firstProof": "open-flank market hall or public frontage slice",
+      "wave": 4,
+      "spec": "docs/SITE-10-URBAN-INSTITUTION-SPEC.md",
+      "obligations": ["frontage", "public-circuit", "service-circuit", "street-continuity", "cold-population", "aggregation", "cutaway"],
+      "assetDemand": {
+        "engine": ["street", "stair-street", "party-wall", "frontage", "gallery", "roof", "cutaway"],
+        "meshy": ["market-stall", "shutter-counter", "well-or-fountain", "notice-board", "public-equipment"],
+        "sprite": ["sign", "shutter-face", "awning", "poster", "authority-mark", "motif"],
+        "material": ["street-ground", "plaster", "masonry", "timber", "roof", "wear-and-message"]
+      }
+    },
+    {
+      "id": 11,
+      "slug": "mixed-scale-dragon-domain",
+      "portfolioRole": "scale-relational-stress",
+      "runtimeOwners": ["ScaleContract"],
+      "firstProof": "unlike-body aperture and route proof on two unlike hosts",
+      "wave": 6,
+      "spec": "docs/SITE-11-MIXED-SCALE-SPEC.md",
+      "obligations": ["body-relative-aperture", "body-relative-route", "body-relative-cover", "body-relative-interaction", "domain-continuity"],
+      "assetDemand": {
+        "engine": ["scale-aware-terrain", "aperture", "hall", "route", "support", "cover"],
+        "meshy": ["large-organic-form", "inherited-structural-donor", "hero-feature"],
+        "sprite": ["canonical-creature-standee", "scale-mark", "shallow-hoard-or-trace"],
+        "material": ["large-body-wear", "organic", "stone", "treasure-or-work-trace"]
+      }
+    },
+    {
+      "id": 12,
+      "slug": "anomalous-living-mobile",
+      "portfolioRole": "substrate-terminal-transform-stress",
+      "runtimeOwners": ["SubstratePlan", "TerminalSubstrateTransform"],
+      "firstProof": "bog crossing, raft quarter and living dorsal market windows",
+      "wave": 6,
+      "spec": "docs/SITE-12-ANOMALOUS-LIVING-MOBILE-SPEC.md",
+      "obligations": ["support-mode", "load", "mobility", "cyclic-datum", "agency", "tenure", "transformation-phase"],
+      "assetDemand": {
+        "engine": ["support-graph", "moving-datum", "bog", "raft", "living-ground", "frontier"],
+        "meshy": ["organic-support", "carrier", "raft-fixture", "reactive-formation"],
+        "sprite": ["membrane-or-scale-face", "mark", "shallow-growth", "signal"],
+        "material": ["wet", "organic", "reactive", "tidal", "repair", "emissive"]
+      }
+    }
+  ],
+  "ordinaryDemandHomes": [
+    {
+      "demand": "entertainment-strip",
+      "home": ["HospitalityEntertainmentVenue", "UrbanFabric"],
+      "goldenCoverage": [2, 10, 3, 8]
+    },
+    {
+      "demand": "harborfront-quay-ferry",
+      "home": ["ServiceInfrastructureHost", "UrbanFabric", "WaterEdgeSubstrate"],
+      "goldenCoverage": [10, 12, 5]
+    },
+    {
+      "demand": "slum-low-ward",
+      "home": ["UrbanFabric", "OperatingModel", "MaintenanceState"],
+      "goldenCoverage": [10, 3, 8]
+    },
+    {
+      "demand": "dungeon-infrastructure-hub",
+      "home": ["InfrastructureWorksHost"],
+      "goldenCoverage": [5, 10]
+    },
+    {
+      "demand": "crypt-mortuary-funerary",
+      "home": ["FuneraryMortuaryHost"],
+      "goldenCoverage": [3, 4, 10]
+    },
+    {
+      "demand": "wilderness-curiosity-monument-wreck",
+      "home": ["LocalFeature", "HeroFeature", "SubstratePlan", "NarrativeOnly"],
+      "goldenCoverage": [7, 11, 12, 3]
+    }
+  ]
+}

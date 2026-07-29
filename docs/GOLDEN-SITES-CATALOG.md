@@ -1,9 +1,10 @@
 ---
 type: design-study
-status: ACCEPTED DIRECTION; IMPLEMENTATION UNAUTHORIZED
+status: ACCEPTED PORTFOLIO — implementation routed wave-by-wave through GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md
 created: 2026-07-23
-updated: 2026-07-26
+updated: 2026-07-29
 owner: this file (the golden-site structure/material kit catalog and the Guard Post site brief)
+master_plan: GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md
 authority: subordinate to `ART-DIRECTION-CANON.md` (Adam's verbatim rulings),
   `GRAPHICS-CONVERGENCE-CHARTER.md` (graphics law), `canon/PRODUCT-SCOPE.md` (scope tiers) and
   `procedural-dungeon-direction/CLAY-PROOF-LADDER.md` (clay-pass ids). Gated by
@@ -19,6 +20,13 @@ sources: Desktop working packet, folded into the repository 2026-07-23 and left 
 ---
 
 # Golden Sites — structure/material catalog and the Guard Post brief
+
+**Program routing update (2026-07-29):** this catalog remains the authority for the
+twelve-case coverage portfolio and its status gates. The founder-authorized execution
+order, unified terrain/construction engine, asset-production router, walk census,
+intermittent game testing, battle simulation, and multi-session boundaries live in
+`GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md`. A numbered site never becomes a
+runtime generator merely because its proof enters an active wave.
 
 Wave 2 accepted **twelve golden sites** as the eventual representative acceptance portfolio
 (CLAY-PROOF-LADDER "Vocabulary"). They are accumulated, not built as a first batch. This file is

@@ -2,11 +2,17 @@
 
 type: execution-queue
 created: 2026-07-25
-updated: 2026-07-26
+updated: 2026-07-29
 authority: `GOLDEN-SITES-CATALOG.md` status gates
 founder choices: `GOLDEN-SITES-FOUNDER-QUEUE.md`
+master_plan: `GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md`
 
 ## Why this exists
+
+This queue now feeds the wave and gate that owns each proof in
+`GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md`. It still owns the exact evidence
+owed; the master plan owns order, integration, recurring play/battle tests, and whether
+a parallel session is justified.
 
 A study can be excellent without being a finished generator specification. A diagram
 can explain an idea without proving that it works on the Genesis grid. This queue holds

@@ -2,8 +2,9 @@
 type: system-contract
 created: 2026-07-26
 updated: 2026-07-28
-status: ACCEPTED DIRECTION — ontology and integration contract; 2026-07-28 adversarial-review redline; implementation unauthorized
+status: ACCEPTED FOUNDATION — implementation routed wave-by-wave through GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md
 owner: story-to-site semantic compilation and Golden Site coverage taxonomy
+master_plan: GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md
 authority:
   - PROCEDURAL-DUNGEON-ARCHITECTURE-SKETCH.md
   - BATTLEMAP-TOWNTRAY-COMPOSITION.md
@@ -17,6 +18,15 @@ related:
 ---
 
 # GOLDEN SITE ONTOLOGY / ENGINE MARRIAGE
+
+## Implementation routing update — 2026-07-29
+
+Adam has authorized the Golden Site procedural-vignette program as the next major
+multi-wave move. `GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md` now owns execution
+order, the one-engine terrain/construction ruling, asset routing, continuous walk/game/
+battle evidence, and multi-session gates. This document remains the semantic and
+ownership contract. It cannot be used to start an isolated implementation outside the
+master plan's current wave.
 
 ## Purpose
 
@@ -479,10 +489,10 @@ The ontology/engine marriage is not proven until retained fixtures demonstrate:
 not earn its portfolio gate from a tavern alone; it must also prove the transform on at
 least two unlike hosts.
 
-## 12. Implementation order
+## 12. Implementation dependency order
 
-This contract authorizes no implementation. When its lane opens, the smallest coherent
-order is:
+This contract does not authorize an isolated implementation. The founder-authorized
+master program incorporates the dependency order below into its wave gates:
 
 1. normalize existing world/place/walk/building provenance into one read-only semantic
    request;

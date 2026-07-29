@@ -1921,3 +1921,14 @@ failures and zero maximum gap. The thirteen-piece sheet contains all four requir
 22 distinct tangent planes; 4,665 joined-edge samples have zero failures. The route proof is no
 longer used as the natural-hill visual witness because its authored R1-09 terraces correctly retain
 curbs.
+
+## Locked decisions (2026-07-29 — Golden Site procedural-vignette master program)
+
+| Decision | Ruling |
+|---|---|
+| One engine | **Accepted and binding:** terrain synthesis and building/site construction are functions/stages of one Procedural Vignette Synthesizer. They share the normalized story request, macro topology, elevation/support field, connections, tactical reservations, semantic asset resolver, receipts, and projections. A second terrain, town, or building generator is forbidden. |
+| Program owner | **Founder-authorized:** `GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md` owns the next several weeks of integration order. The catalog retains the twelve-case portfolio; the ontology retains semantic ownership; subsystem specs retain their contracts. Implementation enters only through the current wave and passed gate. |
+| Asset foundry | Exact terrain, structure, sockets, collision, access, support, and tactical envelopes stay procedural/engine-owned. Existing admitted assets resolve first. Meshy supplies demand-backed complex-volume donors, sprite extrusion/faced boxes supply shallow identity and ordinary furniture, material tools supply surfaces and causal state, canonical standees supply actors, and every missing exact asset has a truthful fallback. |
+| Demand and play evidence | Deterministic natural-frequency plus stratified walk censuses, synthesis batches, intermittent end-to-end game tests, PC-versus-enemy battle simulations, visual contact-sheet review, performance, and replay receipts are continuous program tracks. They are not a final cleanup wave. |
+| Walk changes | Adapter and receipt work precede metadata; structural table changes require census evidence; authored content changes remain propose-and-review. Walks may not be rewritten simply to showcase generated art or force every segment to materialize a map. |
+| Multi-session boundary | A parallel session exists only to close a named current-wave gate after shared contracts are frozen. Every lane must state ownership, forbidden files, verifier, evidence, merge order, and stop condition. |

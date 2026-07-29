@@ -53,6 +53,29 @@ bespoke runtime images per seed.
 The first Guard Post render is the style calibration image:
 [modern-FFT style proof](style-calibration/guard-post-modern-fft-proof.png).
 
+## Small / medium / large-site-vignette scale pass — 2026-07-28
+
+The [2026-07-28 scale pass](scale-pass-2026-07-28/README.md) adds 27 separate targets:
+small, medium, and compact large-site vignettes for the five previously unrendered
+Golden Site families (3, 8, 9, 11, and 12) and the four previously rendered families
+whose spatial direction materially changed (2, 4, 5, and 10).
+
+This pass uses the current continuous terrain-field work as its primary landform
+reference rather than the earlier diagnostic terrain sheets. It also uses retained
+rolls, Golden Seeds, live plan diagrams, source-study images, and approved renders as
+host/style references. The [full contact sheet](scale-pass-2026-07-28/contact-sheets/00-full-portfolio.png)
+and [prompt/source receipt](scale-pass-2026-07-28/PROMPT-SET.md) sit with the images.
+
+The superseded extra-large overview boards are explicitly
+[archived as **NOT A GOAL**](scale-pass-2026-07-28/not-a-goal-extra-large/README.md).
+Their height and depth may still inform smaller windows; their acreage and traversal
+burden may not. For this target set, a large Golden Site is expressed through compact
+active windows and honest continuations, not one sprawling BattleMap.
+
+Site 6 is not rerendered in this pass. Its post-render changes deepen research and
+doctrine but do not materially replace the ruled visual chassis represented by the
+existing Prison / Custody targets.
+
 ## The 21 targets
 
 ### Guard Post

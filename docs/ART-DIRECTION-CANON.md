@@ -2056,3 +2056,19 @@ Binding consequences:
   evidence without being labeled as the rejected/control register.
 - Review packets must record the actual expression rung. An authored feature opened or captured
   without an explicit override uses the complete responsive terrain expression.
+
+## GOLDEN SITE ACTIVE-WINDOW SCALE — VIGNETTES, NOT SPRAWLING MAPS (Adam, 2026-07-28 — binding; verbatim)
+
+> "ok, so what i have learned here, is that the largest maps are a good bit too large. which makes me realized I am faced with a problem, one of the things I was hoping i could avoid in this game are big maps where players would have to walk around a lot. Honestly in RPGs walking is a total bore most of the time. Like it's fun the first time through but if you ever have to backtrack a single second it is instantly a total drag. which is why I was just hoping for vignettes rather than big sprawling XCOM battlemaps, even the biggest FFT battlemaps are pretty small."
+
+> "can i get some replacement renders? and can you mark the extra large map renders as not a goal? i really loved some of the height depth, but i think we can still achieve some of that in a smaller vignette"
+
+Implementation receipt for this ruling:
+
+- The 2026-07-28 third-column extra-large renders are retained only as explicitly marked
+  site-overview studies; they are not gameplay-footprint targets.
+- Replacement large-site targets materialize compact active vignettes. Large site identity
+  continues through honest frontiers, persistent ids, prose, and linked windows rather than a
+  sprawling continuously walked board.
+- Height, depth, stacked relations, overlooks, cutaways, and vertical route choice remain valid
+  goals inside the compact active vignette.

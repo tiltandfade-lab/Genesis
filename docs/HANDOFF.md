@@ -6,6 +6,30 @@ updated: 2026-07-28
 
 # Genesis — Session Hand-off
 
+## Latest (2026-07-28, ASSETFORGE PRIMARY FACTORY / CANDIDACY RESET) [Codex]
+
+Assetforge is now explicitly Genesis's primary asset factory, but none of its thirteen tools is
+proved, finished, or production-ready. Every tool is candidate-ready for the particular problem it
+addresses and still requires its own dedicated proving pass. `docs/ASSETFORGE.md` now separates
+candidate evidence and individual gate results from tool proof, founder visual acceptance, and
+production admission.
+
+- **Critical improvement debt:** modular repeat correctness and pixel-sharp low-light sprite
+  citizenship.
+- **High improvement debt:** emote anatomy/runtime breadth, boundary terrain presentation,
+  ground-field breadth, prop camera/depth correctness, stronger condition aging, and
+  material-authority consolidation.
+- **Medium improvement debt:** palette wrapper breadth/drift control, trim consumers, decal
+  projection, atlas runtime convergence, and regression baseline/perceptual coverage.
+- **Terrain ruling:** ground-field V2 is a marked improvement and a useful layer, not the final
+  terrain language. Its next work is biome vocabulary, richer paths/overlays, terrain-form
+  integration, and a real wilderness route.
+- **Architecture ruling:** Assetforge is the common front door, not a replacement for canonical
+  specialist engines. It wraps and verifies those engines rather than duplicating their algorithms.
+
+Improve the highest-debt tools before multiplying production assets. A receipt `PASS` continues to
+mean only that named invariants passed in one run; it is not a tool-level proof verdict.
+
 ## Latest (2026-07-28, ASSETFORGE GROUND-FIELD V2 / CLAYROOM) [Codex]
 
 The missing exterior-ground process now exists as a distinct Assetforge compiler and a production
@@ -34,9 +58,9 @@ Theater integration proof. It is not another seamless-single-tile claim.
   trilinear mipmapped minification and up to 8× anisotropy for wide oblique views; albedo
   magnification remains nearest. The separately rejected blurry citizenship-v2 work remains
   unresolved.
-- **Admission boundary:** receipts say `CANDIDATE`. The tool and integration are mechanically
-  proved; the generated field is prototype art awaiting founder visual review and is not routed
-  into a production wilderness board.
+- **Admission boundary:** receipts say `CANDIDATE`. Named compiler and integration gates pass, but
+  the tool is not proved; the generated field is prototype art and is not routed into a production
+  wilderness board.
 
 Evidence:
 
@@ -57,10 +81,11 @@ python3 build/assetforge.py suite self-test --force
 node dev/capture-ground-field-clayroom-proof.mjs
 ```
 
-**Next honest promotion:** Adam reviews the governed Clayroom compiled/control/rotated set. If the
-visual direction is accepted, route a real wilderness board descriptor to `board.groundField` and
-tune overlay/path vocabulary per biome; do not conflate that with the still-open pixel-safe
-sprite-citizenship correction.
+**Founder direction:** the governed result is a marked improvement, but it is not the target terrain
+language yet. Keep it as one useful candidate layer; next improve biome-specific overlay/path
+vocabulary, terrain-form integration, and a real wilderness route. This does not constitute the
+ground-field tool's dedicated proving pass, and it must not be conflated with the still-open
+pixel-safe sprite-citizenship correction.
 
 ## Latest (2026-07-28, ASSETFORGE V2 FOUNDER RE-REVIEW) [Codex]
 

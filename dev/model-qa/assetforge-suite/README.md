@@ -1,9 +1,9 @@
-# Assetforge suite proof
+# Assetforge candidacy fixture suite
 
-This directory is the retained executable proof corpus for the twelve non-emote Assetforge
+This directory is the retained executable candidacy-evidence corpus for the twelve non-emote Assetforge
 vertical slices.
 
-Run every proof:
+Run every fixture pair:
 
 ```bash
 python3 build/assetforge.py suite self-test --force
@@ -21,4 +21,5 @@ python3 build/assetforge.py boundary self-test --force
 receipt. Each `runs/<family>/negative/receipt.json` records the gate that bit.
 
 All artifacts are quarantined evidence. `PASS` means the family contract worked on its retained
-fixture; it does not mean the fixture art or any generated candidate is admitted to production.
+fixture. It does not prove the tool, complete its dedicated proving pass, or admit the fixture art
+or any generated candidate to production. Historical filenames retain `proof` for compatibility.

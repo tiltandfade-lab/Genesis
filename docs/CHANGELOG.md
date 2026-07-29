@@ -8,6 +8,27 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-28 — Assetforge primary-factory policy + candidacy ledger [Codex]
+
+**Changed**
+- Established Assetforge as Genesis's primary asset-production front door while preserving
+  canonical specialist engines as singular algorithm authorities.
+- Replaced binary “built + proven” status claims with one honest suite-wide state:
+  `CANDIDATE-READY / NOT PROVED`.
+- Added a concrete dedicated proving-pass target and improvement-debt severity for all thirteen
+  factory families.
+
+**Prioritized**
+- Marked repeat correctness and pixel-sharp low-light citizenship `CRITICAL`.
+- Marked emote, boundary, ground-field, prop, condition, and material consolidation `HIGH`.
+- Kept palette, trim, decal, atlas, and regression at `MEDIUM`; each remains improvement-bearing.
+
+**Corrected**
+- Existing fixtures, receipts, proof boards, and engine captures are preliminary evidence and
+  named gate results, not tool-level proof verdicts.
+- Ground-field V2 is a marked improvement and one terrain layer, not the final terrain language or
+  a claim that terrain is solved.
+
 ## 2026-07-28 — Assetforge ground-field compiler + governed Clayroom proof [Codex]
 
 **Added**
@@ -20,7 +41,7 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 - Added an optional `board.groundField` adapter shared by the production tabletop and interior
   realizers, plus the governed CL-F06 Clayroom fixture and capture script.
 
-**Proved**
+**Recorded evidence**
 - Real compile passes 17 gates: 64 variants, all 64 used in a 15×15 field, `0.04` maximum identical
   share, 4,096 exact compatible-edge checks, roughness range 148–238, matched PBR channel
   dimensions, and all four semantic overlay kinds.
@@ -73,7 +94,7 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 - Expanded boundary compilation into independent enclosure, eight-way wilderness-path,
   cardinal-road, and integer-elevation cliff dialects.
 
-**Proved**
+**Recorded evidence**
 - Real palette proof: mean/p95 CIEDE2000 `4.1830`/`8.2468`, hue shift `3.6507°`, value-rank
   agreement `0.9549`, zero forbidden pixels, preserved alpha and semantic colors.
 - Real citizenship A/B: moonlit, torchlit, magic-glow, and daylit captures across seven registry
@@ -736,46 +757,3 @@ check).
 ELEV-1b risers/stairs + gallery/chasm seam gaps · rest-prop collision-awareness · occlusion-aware
 combat cell pick · LL-1b light-lab live-replay for 2 tunables · the proving run + playtest (next
 wave head, per the meeting).
-
-## 2026-07-15 (later) — THE VQ2/FLIP PASS: Sol's laws folded · THE SPRITE FLIP LIVE · the demand census + ledger [Claude Fable 5, orchestrated]
-
-Adam's directives (VQ2 as suggestions-for-law · sprite flip w/ v3 reserve · faceted inventory ·
-gameplay rounds → demand-vs-null · extrusion plan · re-spec + orchestrate) executed end-to-end.
-Re-spec = `docs/VQ2-RESPEC.md` (Sol dispositions §1 + Waves S/L/F/X); every unit executor-built in
-an isolated worktree, orchestrator-re-gated (harnesses re-run personally, captures READ), landed
-`--no-ff`, pushed per landing.
-
-**Added**
-- **WAVE S COMPLETE — THE SPRITE FLIP IS LIVE.** S1 faceted corpus landed (419 candidates, F2–F15
-  packets) · S2 `build/cut-faceted.py` (252 figures cut to `assets/sprites-faceted/`, 47 loud
-  skips; multi-cell splits via provenance `cells[]`) · S3 B1 standee contract + admission schema +
-  the tags/heights INVENTORY (`faceted-inventory-report.json`) · S4 bestiary-id map join
-  (`SPRITE_BY_BESTIARY_ID`, ledger P0 #1 class killed) + 60 orphan fold-ins (registry 4316→4376,
-  252/252 joined) · S5 THE FLIP (252 `runtimeAdmitted:"candidate"`; `FACETED_FLIP_ENABLED` =
-  one-flag revert; `assets/sprites/` v3 = untouched reserve) · S6 sprite editor serves faceted,
-  legacy-vs-candidate side-by-side, editable `feet` (overlay > measured > band-default ladder).
-- **WAVE L COMPLETE — the demand instrument exists.** L1 rig extensions (the bot FIGHTS ·
-  transition camera · shop-render verdict · record-less settlement leg · `--force-realm` ·
-  `--route`) · L2 the census (5 seams instrumented, `census.json` per run, byte-identical-render
-  proof) · L3 **PL-4: 4 realms × routes, 96 shots, 65/65 legs → `dev/play-lens/DEMAND-LEDGER.md`**.
-- **B3 standee acceptance gallery** (core-three × light × yaw + flip pairs) — the P3-2 Stage B
-  taste artifact; **X1** extrusion spec + pilot artifacts landed (EXTRUDED-SPRITE-PROP-LIBRARY +
-  proofs + 42 library GLBs).
-
-**Ledger verdicts (PL-4, evidence-graded):** P0 #2 vanishing-PC **FIXED** (9 frames, 3 realms) ·
-P0 #1 rat-miscast **NOT-REPRO/reclassified** (faceted texture resolves every time; the rat is
-lane-STACKED invisible — F1 side-effect expected) · **null-facade root cause found**: settlement
-mint always degrades to realm key `frontier` which `REALM_TEXTURES` never defines (key-routing
-bug, not just missing art) · **shop panel never renders under the battle stage** (new wiring gap;
-chip filed) · 21 NPC role-portrait slugs = the measured art-packet demand list · daylit Large-
-creature blow-out across all realms (B3) = Stage E evidence.
-
-**Changed** — DESIGN.md 2026-07-15 entry (Sol dispositions + the flip ruling); NEXT-STEPS new
-Do-next; Sol's P-A..P-F folded per §1 (P-A gates→Stage E; P-B/C/D/E/F → F-wave units; cut list
-wholesale).
-
-**Deferred** — F1 combat-in-room + F2 staging beats (specced, next session's top; now with
-sharper evidence) · B2 physical standee + B4 kill size-inference (B2 is Adam's B3-gated taste
-build) · r*-v2 return dirs (56 files) unprocessed pending ruling · 21 fantasy orphan heights =
-`missing` (Adam's editor pass) · gloom/chrome faceted tranches (all 252 candidates are
-fantasy/pc).

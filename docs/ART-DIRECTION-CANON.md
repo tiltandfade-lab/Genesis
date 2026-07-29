@@ -1906,7 +1906,7 @@ front sprite.
 
 Resting is a quiet seated field-rest pose. The reference governs the emotional and pose read only;
 it does not license copied character design, grass, scenery, or other game content. Seated height
-compression is explicitly licensed and proven separately from ordinary standing-state scale drift.
+compression is explicitly licensed and screened separately from ordinary standing-state scale drift.
 
 > "his hand is a little weird in the rear view shot, make sure the process screens for that"
 
@@ -1919,24 +1919,25 @@ either result.
 > "can you go ahead and build and prove the other assetforge apps?"
 
 The eleven remaining Assetforge families require executable first vertical slices, not roadmap-only
-specs. Each is considered proven only when its compiler emits quarantined outputs, a visual proof
-board, a machine-readable receipt, a passing positive fixture, and a preserved red-first fixture
-that fails for the intended invariant. This build mandate does not grant production admission or
-allow a technical proof to substitute for art-direction review.
+specs. A first vertical slice reaches candidacy when its compiler emits quarantined outputs, a
+visual evidence board, a machine-readable receipt, a passing positive fixture, and a preserved
+red-first fixture that fails for the intended invariant. This is only the entry condition for a
+dedicated tool proving pass; it does not prove the tool, grant production admission, or substitute
+for art-direction review.
 
 ## ASSETFORGE REAL-ASSET PROOF STANDARD (Adam, 2026-07-28 — binding; verbatim)
 
 > "so i don't think that image serves as proof, can you run each of the assetforge processes with real assets and prove the results?"
 
-Synthetic fixtures prove deterministic contracts and preserved failure behavior; they do not prove
-that a compiler handles production-shaped Genesis art. Every Assetforge family must therefore also
+Synthetic fixtures exercise deterministic contracts and preserved failure behavior; they do not
+prove that a compiler handles production-shaped Genesis art. Every Assetforge family must therefore also
 run against a named, tracked, decodable repository asset, record the exact source hash and lineage,
 emit its own receipt and proof artifact, and receive individual visual inspection. A combined board
 is navigation only. It cannot substitute for the family receipts or individual proofs. Failures
 found during that inspection remain failures until repaired and rerun; an aggregate green status
 cannot hide clipped art, dirty sheet fragments, cadence defects, anatomy defects, or other visible
-problems. Real-asset technical qualification still does not grant runtime admission or Adam's taste
-approval.
+problems. Real-asset qualification is candidacy evidence, not a tool-level proof, runtime
+admission, or Adam's taste approval.
 
 ## ASSETFORGE FIRST REAL-ASSET FOUNDER REVIEW (Adam, 2026-07-28 — binding; verbatim)
 
@@ -2047,3 +2048,28 @@ cadence. A complete candidate requires all six stages named above, a determinist
 negative control, machine-verifiable edge and cadence gates, and retained production-Theater
 captures over a large field with the governed camera, lighting, shadows, props, and standees.
 Technical success establishes a prototype candidate only; visual admission remains Adam's.
+
+## ASSETFORGE PRIMARY-FACTORY AND CANDIDACY RULING (Adam, 2026-07-28 — binding; verbatim)
+
+> "ok, that is a marked improvement but not exactly where we want to be with terrain but that's ok
+> this is one part of the process, go ahead and clean anything up, make sure that we know that
+> assetforge is going to be our primary asset factory for this project and that each tool in the
+> factory still needs improvement, some more than others"
+
+> "definitely not proven, each tool still needs its own proving pass, but each tool is at least
+> ready for candidacy when it comes to solving the particular problem that it solves"
+
+Binding consequences:
+
+- Assetforge is the primary asset-production front door for Genesis. New visual tooling and
+  production candidates should use its shared manifest, quarantine, evidence, receipt, and
+  admission lifecycle rather than fragmenting into unaudited one-off paths.
+- Primary does not mean duplicate ownership. Existing canonical specialist engines remain singular;
+  Assetforge orchestrates them and owns the factory envelope.
+- Every current Assetforge family is candidate-ready and not proved. Existing fixture gates,
+  receipts, boards, and engine captures are preliminary evidence. Each tool still requires its own
+  problem-specific proving pass.
+- The ground-field result is a marked improvement and one useful terrain layer. It is not the final
+  terrain language and may not be documented as “terrain solved.”
+- Improvement debt is tracked per tool and weighted by severity. Rejected correctness or renderer
+  behavior receives priority over breadth, polish, or high-volume asset production.

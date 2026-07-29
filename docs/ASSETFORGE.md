@@ -1,6 +1,6 @@
 ---
 type: production-machinery-spec
-status: PROTOTYPE-TOOL-CONSOLIDATION-BUILT
+status: PRIMARY-ASSET-FACTORY-CANDIDATE-SUITE
 created: 2026-07-27
 owner: art-pipeline
 first_implementation: build/assetforge.py
@@ -10,9 +10,15 @@ first_implementation: build/assetforge.py
 
 ## Purpose
 
-Assetforge is the shared compiler protocol for turning generated visual material into reviewable,
-repeatable Genesis assets. It is not an art generator, a second registry, or an automatic taste
-authority.
+Assetforge is Genesis's **primary asset factory**: the shared front door and compiler protocol for
+turning generated or authored visual material into reviewable, repeatable asset candidates. New
+production-asset processes should enter through Assetforge's manifest, quarantine, evidence,
+receipt, and admission envelope instead of becoming disconnected one-off scripts.
+
+Primary does not mean monolithic. Assetforge wraps canonical specialist engines where they already
+exist, and it must consolidate duplicate algorithms rather than compete with them. It is not an
+automatic taste authority, a second registry, or permission to route compiler output directly into
+the game.
 
 The protocol is:
 
@@ -29,6 +35,38 @@ canonical source + typed manifest
 Image generation owns appearance proposals. Deterministic code owns topology, slicing, naming,
 alignment, packing, negative controls, and provenance. A technical `PASS` means that the artifact
 obeys measurable contracts; it never means that the art director approved its taste or identity.
+
+## Program policy and maturity
+
+All thirteen current factories are **candidate-ready and not yet proved**. Each has enough
+implementation to justify a dedicated proving pass for the particular problem it is intended to
+solve. Earlier positive fixtures, real-asset receipts, proof boards, and engine captures are
+preliminary evidence; they do not constitute a tool-level proof verdict.
+
+The proving and admission lifecycle is:
+
+```text
+source
+  -> Assetforge candidate
+  -> dedicated tool proving pass
+  -> governed engine proof where relevant
+  -> founder visual verdict
+  -> explicit production admission
+```
+
+Only the last step makes an asset live. In this document:
+
+- **Candidate-ready** means executable enough to enter its own proving pass.
+- **Gate PASS** means one named measurable invariant passed in one run.
+- **Tool proved** requires a dedicated, problem-specific pass and is currently `NO` for every
+  family.
+- **Visually accepted** means Adam accepted the demonstrated direction, not that the tool is
+  finished.
+- **Production-ready** is not currently claimed by any Assetforge family.
+
+Every factory remains an evolving prototype and carries improvement debt, some much more than
+others. Improve shared tooling before multiplying production outputs. Progress is judged by how
+much uncertainty a tool removes, not by the number of candidate images it emits.
 
 ## Build classification
 
@@ -115,25 +153,27 @@ Each family must provide:
 6. at least one preserved negative fixture which makes the verifier exit nonzero;
 7. a separate, explicit promotion step if the family is ever allowed to enter production.
 
-## Expansion map
+## Factory candidacy and improvement ledger
 
-The order below is based on reusable leverage, not visual novelty.
+Debt priority is relative within the prototype program. `CRITICAL` means the current correctness or
+visual result is rejected; it does not mean the candidate tool should be discarded. Every row is
+`CANDIDATE-READY / NOT PROVED`.
 
-| Order | Factory | Converts | Deterministic proof | Status |
-|---:|---|---|---|---|
-| 1 | Sprite-emote factory | one registered sprite + state vocabulary -> discrete state atlas | identity locks, alpha/chroma, occupancy, baseline, scale, atlas and play-scale board | **V1 BUILT + PROVEN** |
-| 2 | Boundary auto-tile compiler | paired material fields + enclosure/path/road/cliff dialect -> complete connected-boundary set | exhaustive masks, neighbor closure, topology/elevation renders | **V2 MULTI-DIALECT BUILT + PROVEN** |
-| 3 | Ground-field compiler | seamless parents -> large nonrepeating terrain field + path | quilt diversity, Wang closure/hash placement, macro variation, semantic overlays, tile-period A/B, production-engine captures | **V1 BUILT + PROVEN CANDIDATE** |
-| 4 | Modular repeat compiler | component sheet -> infinite course/field tile | toroidal closure, variant balance, seam/cadence board | **V1 BUILT; REAL CANDIDATE REJECTED** |
-| 5 | Prop/kit sheet compiler | related prop sheet -> isolated, named, anchored prop kit | count/order, alpha, footprint, scale ladder, contact board | **V1 BUILT + PROVEN** |
-| 6 | Condition-state factory | pristine asset -> damaged, burned, wet, frozen, corrupted variants | identity mask, damage locality, state ordering, no silhouette fraud | **V1 BUILT + PROVEN** |
-| 7 | Palette harmonizer | admitted art + realm palette -> constrained candidate variants | CIEDE2000, hue/value hierarchy, protected semantic colors | **CANONICAL WRAPPER BUILT + PROVEN** |
-| 8 | Trim and nine-slice compiler | ornament strips/corners -> stretch-safe UI/world trim | cap preservation, center repeat/stretch, every target dimension | **V1 BUILT + PROVEN** |
-| 9 | Decal/stamp compiler | marks sheet -> rotation/scale-safe decal library | alpha fringe, mip/readability, surface bleed, density board | **V1 BUILT + PROVEN** |
-| 10 | Sprite citizenship adapter | raw sprite -> canonical registry preflight + renderer contract | canonical metadata, canvas preservation, real low-light renderer A/B | **ADAPTER BUILT; RENDERER V2 VISUALLY REJECTED** |
-| 11 | Atlas optimizer | approved loose assets -> runtime atlases | padding/extrusion, UV accuracy, mip bleed, byte budget, stable ids | **V1 BUILT + PROVEN** |
-| 12 | Material-map baker | approved albedo -> normal/roughness/emissive proposals | channel ranges, seam preservation, light-rig boards | **V1 BUILT + PROVEN** |
-| 13 | Visual regression foundry | any approved family -> stable comparison corpus | fixed camera, perceptual diff, semantic overlays, receipt diff | **V1 BUILT + PROVEN** |
+| Factory | Candidacy evidence | Debt | Dedicated proving-pass target |
+|---|---|---:|---|
+| Sprite-emote factory | V1 compiles state atlases and screens declared identity invariants | **HIGH** | Diverse real PCs/NPCs/monsters; emotion read; seated rest; true rear anatomy; hands and equipment attachment; fixed-scale runtime presentation. |
+| Boundary auto-tile compiler | V2 emits enclosure/path/road/cliff topology dialects | **HIGH** | Engine-legible shoulders, intersections, cliff faces/elevation contact, biome language, ground-field integration, and governed-camera trials. |
+| Ground-field compiler | V2 emits quilt/Wang/hash fields and has a governed Clayroom candidate | **HIGH** | Anti-repetition across biomes and camera envelopes; richer overlays/path wear; terrain-form/elevation integration; real wilderness routing. |
+| Modular repeat compiler | V1 executes, but the real repeat result was rejected | **CRITICAL** | True component/course-period closure and multi-scale cadence without `forcePeriodic` edge laundering. |
+| Prop/kit sheet compiler | V1 isolates, names, anchors, and packs components | **HIGH** | Unclipped real sources, exact production-camera equivalence, stable anchors, and ground-depth behavior that never clips stand-in sprites. |
+| Condition-state factory | V1 registers and verifies declared state variants | **HIGH** | A visibly stronger canonical age ladder, broader conditions, identity continuity, and play-scale state readability. |
+| Palette harmonizer | Assetforge wraps canonical `unify-corpus.py` | **MEDIUM** | Multi-realm and protected-semantic-color cohorts, intentional controls, and evidence that wrapper behavior cannot drift from its single authority. |
+| Trim and nine-slice compiler | V1 emits fixed-cap/stretch-safe candidates | **MEDIUM** | More cap/center grammars, pathological dimensions, production consumer presets, and explicit routing versus CSS/runtime nine-slice. |
+| Decal/stamp compiler | V1 extracts and emits declared rotation/scale variants | **MEDIUM** | Semantic surface placement, density, mip/fringe behavior, projection trials, and atlas integration. |
+| Sprite citizenship adapter | Canonical registry adapter exists; low-light renderer candidate was rejected | **CRITICAL** | Pixel-sharp nearest-neighbor structure plus clean low-light readability in fixed-scale real-renderer A/Bs, without a second schema. |
+| Atlas optimizer | V1 packs, extrudes, records UVs, and round-trips payloads | **MEDIUM** | Potpack/runtime convergence, batching and mip behavior, sprite-item/3D balance, and textured stand-ins in Clayroom. |
+| Material-map baker | V1 proposal compiler exists; authority consolidation remains open | **HIGH** | Convert to a verifier/wrapper over Material Maker, the material workbench, and periodic-normal authority; do not retain parallel guessed-map authorship. |
+| Visual regression foundry | V1 compares fixed images and emits receipts/diffs | **MEDIUM** | Perceptual masks, governed engine scenes, semantic thresholds, and explicit baseline admission/versioning. |
 
 ### Useful factories that should remain separate
 
@@ -148,10 +188,10 @@ Some processes share the envelope but should not share algorithms:
 
 That separation keeps each tool narrow without duplicating provenance and receipt machinery.
 
-## V1 suite proof
+## V1 candidacy fixture suite
 
 `build/assetforge_apps.py` implements the twelve non-emote vertical slices and is loaded by the
-main `build/assetforge.py` command. The retained proof corpus lives at
+main `build/assetforge.py` command. The retained candidacy-evidence corpus lives at
 `dev/model-qa/assetforge-suite/`.
 
 The suite gate is:
@@ -178,16 +218,16 @@ as `FAIL`. Each invalid fixture owns a specific bite:
 | material | a required seamless albedo with mismatched edges |
 | regression | changed current capture against a zero-difference budget |
 
-The suite proof board shows each positive output at its actual aspect and labels the paired
-`PASS/FAIL` result. It also proves that the workspace root and live asset tree are rejected as
+The suite board shows each positive output at its actual aspect and labels the paired
+`PASS/FAIL` result. It also demonstrates in the retained run that the workspace root and live asset tree are rejected as
 destructive output targets. Receipts—not filenames or console prose—are the durable evidence.
 
-These are first vertical slices, not final production breadth. They prove the shared compiler
-architecture and the defining invariant of each family. Adding a new dialect, packing strategy,
-condition vocabulary, channel derivation, or runtime adapter requires new manifests and negative
-controls without weakening the V1 receipt.
+These are first vertical slices, not tool-level proofs or final production breadth. They establish
+that each candidate can enter a dedicated proving pass and that the shared envelope has executable
+failure behavior. Adding a new dialect, packing strategy, condition vocabulary, channel derivation,
+or runtime adapter requires new manifests and negative controls without weakening the V1 receipt.
 
-## Real-asset qualification
+## Real-asset candidacy evidence
 
 The synthetic suite above is the fast contract regression. Production-shaped qualification is a
 separate retained harness:
@@ -223,8 +263,9 @@ all-source-alpha-assigned gate; the prop qualification uses zero-gap component o
 records its cleanup ratio. The repeat compiler also rejects a visually repetitive selection policy
 in favor of deterministic adjacency-aware variant selection.
 
-This is a technical qualification boundary, not an art-admission boundary. Emote identity/taste,
-material-channel authorship, and every production routing decision remain explicitly reviewable.
+This is preliminary qualification evidence, not a tool-level proof or art-admission boundary.
+Emote identity/taste, material-channel authorship, and every production routing decision remain
+explicitly reviewable.
 
 ### Founder review correction — 2026-07-28
 
@@ -637,7 +678,7 @@ two-material transition records both source hashes and declares which material o
 
 `orientationPolicy` is one of:
 
-- `rotatable-organic`: rotations are allowed and are mechanically proven equivalent;
+- `rotatable-organic`: rotations are declared equivalent and verified on each candidate;
 - `authored-cardinals`: north/east/south/west pieces must be supplied separately;
 - `directional-construction`: rotation/flip is forbidden; roof courses, grain, writing, and gravity
   retain their authored direction.

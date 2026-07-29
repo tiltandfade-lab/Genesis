@@ -14,6 +14,48 @@ to load every session (the live file keeps the newest entries; see the script fo
 Newest-first, same as the live file — the two files read as one continuous history, live file
 first. Read-only record: never hand-edit, never add entries here directly.
 
+## 2026-07-15 (later) — THE VQ2/FLIP PASS: Sol's laws folded · THE SPRITE FLIP LIVE · the demand census + ledger [Claude Fable 5, orchestrated]
+
+Adam's directives (VQ2 as suggestions-for-law · sprite flip w/ v3 reserve · faceted inventory ·
+gameplay rounds → demand-vs-null · extrusion plan · re-spec + orchestrate) executed end-to-end.
+Re-spec = `docs/VQ2-RESPEC.md` (Sol dispositions §1 + Waves S/L/F/X); every unit executor-built in
+an isolated worktree, orchestrator-re-gated (harnesses re-run personally, captures READ), landed
+`--no-ff`, pushed per landing.
+
+**Added**
+- **WAVE S COMPLETE — THE SPRITE FLIP IS LIVE.** S1 faceted corpus landed (419 candidates, F2–F15
+  packets) · S2 `build/cut-faceted.py` (252 figures cut to `assets/sprites-faceted/`, 47 loud
+  skips; multi-cell splits via provenance `cells[]`) · S3 B1 standee contract + admission schema +
+  the tags/heights INVENTORY (`faceted-inventory-report.json`) · S4 bestiary-id map join
+  (`SPRITE_BY_BESTIARY_ID`, ledger P0 #1 class killed) + 60 orphan fold-ins (registry 4316→4376,
+  252/252 joined) · S5 THE FLIP (252 `runtimeAdmitted:"candidate"`; `FACETED_FLIP_ENABLED` =
+  one-flag revert; `assets/sprites/` v3 = untouched reserve) · S6 sprite editor serves faceted,
+  legacy-vs-candidate side-by-side, editable `feet` (overlay > measured > band-default ladder).
+- **WAVE L COMPLETE — the demand instrument exists.** L1 rig extensions (the bot FIGHTS ·
+  transition camera · shop-render verdict · record-less settlement leg · `--force-realm` ·
+  `--route`) · L2 the census (5 seams instrumented, `census.json` per run, byte-identical-render
+  proof) · L3 **PL-4: 4 realms × routes, 96 shots, 65/65 legs → `dev/play-lens/DEMAND-LEDGER.md`**.
+- **B3 standee acceptance gallery** (core-three × light × yaw + flip pairs) — the P3-2 Stage B
+  taste artifact; **X1** extrusion spec + pilot artifacts landed (EXTRUDED-SPRITE-PROP-LIBRARY +
+  proofs + 42 library GLBs).
+
+**Ledger verdicts (PL-4, evidence-graded):** P0 #2 vanishing-PC **FIXED** (9 frames, 3 realms) ·
+P0 #1 rat-miscast **NOT-REPRO/reclassified** (faceted texture resolves every time; the rat is
+lane-STACKED invisible — F1 side-effect expected) · **null-facade root cause found**: settlement
+mint always degrades to realm key `frontier` which `REALM_TEXTURES` never defines (key-routing
+bug, not just missing art) · **shop panel never renders under the battle stage** (new wiring gap;
+chip filed) · 21 NPC role-portrait slugs = the measured art-packet demand list · daylit Large-
+creature blow-out across all realms (B3) = Stage E evidence.
+
+**Changed** — DESIGN.md 2026-07-15 entry (Sol dispositions + the flip ruling); NEXT-STEPS new
+Do-next; Sol's P-A..P-F folded per §1 (P-A gates→Stage E; P-B/C/D/E/F → F-wave units; cut list
+wholesale).
+
+**Deferred** — F1 combat-in-room + F2 staging beats (specced, next session's top; now with
+sharper evidence) · B2 physical standee + B4 kill size-inference (B2 is Adam's B3-gated taste
+build) · r*-v2 return dirs (56 files) unprocessed pending ruling · 21 fantasy orphan heights =
+`missing` (Adam's editor pass) · gloom/chrome faceted tranches (all 252 candidates are
+fantasy/pc).
 ## 2026-07-15 — THE AUTONOMOUS ARC: quick-fix wave + ENV/EXTERIOR (daytime · sun/moon · biomes · town) + PL-3 [Claude Opus 4.8, autonomous per Adam's delegation]
 
 Adam delegated ("take your direction on the wave order, work autonomously"); the ledger ordered the

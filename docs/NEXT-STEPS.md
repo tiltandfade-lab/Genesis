@@ -25,15 +25,24 @@ The audit separated four gates that the 2026-07-24 running record had collapsed:
 “served” and “queue empty” below are preserved as session history but are **superseded
 as current status** by `GOLDEN-SITES-CATALOG.md`.
 
-**Assetforge ground-field side lane (2026-07-28): ☑ mechanically complete, founder review
-pending.** Built the distinct quilt/Wang/hash ground-field compiler, macro color/roughness field,
+**Assetforge factory program (2026-07-28): ◐ primary candidate factory; no tool proved.**
+Assetforge is the common production-asset front door. All thirteen tools are candidate-ready for
+their intended problems, but each still needs its own dedicated proving pass. Prioritize the
+maturity ledger in `ASSETFORGE.md`: repeat correctness and pixel-sharp low-light citizenship are
+`CRITICAL`; emote, boundary, ground-field, prop, condition, and material consolidation are `HIGH`;
+the remaining tools still carry `MEDIUM` improvement debt. Improve the factory before multiplying
+production assets, and consolidate canonical specialist engines rather than creating parallel
+implementations.
+
+**Assetforge ground-field side lane (2026-07-28): ☑ candidate built; direction marked improved,
+not final terrain.** Built the distinct quilt/Wang/hash ground-field compiler, macro color/roughness field,
 sparse semantic overlays, and blended path projection. CL-F06 now compares the corrected 15×15,
 2880×2880 PBR field with an exact repeated-single negative control through the governed Clayroom
 interior/camera/light/shadow path and at a rotated camera. The first flat battlefield-style proof
 and its physically enlarged material scale were withdrawn. All compiler and Clayroom gates pass;
-runtime admission remains `CANDIDATE`. Next promotion is a founder verdict on those individual
-Clayroom captures, followed by routing one real wilderness board if accepted. Pixel-safe sprite
-citizenship remains a separate open correction.
+runtime admission remains `CANDIDATE`, and this is not a tool-level proof. Next work is biome
+vocabulary, richer path/overlay treatment, terrain-form integration, and routing one real
+wilderness board. Pixel-safe sprite citizenship remains a separate open correction.
 
 1. ☑ Capture the docs-only engine marriage in
    `GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md`: the story engine remains authority;
@@ -456,16 +465,17 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
    amends; then the DESIGN.md entry flips from PROPOSED to RULED.
 5. ☐ **Adam's visual verdicts** — carried: the PENDING ADAM ledger (C2–C4 sheets, AO triptych,
    split equivalence, torchlit C3).
-6. ☑ **Assetforge V1 compiler family** — all twelve first vertical slices are executable. The
-   non-emote suite passes 11/11 positive controls and rejects 11/11 preserved red-first controls;
-   the emote suite passes 10/10 fixture outcomes plus its live-output guard, including the
-   rear-view hand failure.
-7. ☑ **Assetforge real-asset technical qualification** — all twelve processes ran against named,
-   hashed, decodable Genesis assets; 12/12 candidates passed and the deliberately changed real
-   regression control rejected. Individual inspection repaired clipped decal branches, foreign
-   prop-sheet fragments, and roof-repeat cadence before closure.
-8. ☐ **Assetforge art-admission gate** — Adam reviews the individual retained process proofs (the
-   aggregate board is navigation only). First review is complete: repeat + current prop proof
+6. ☑ **Assetforge candidate suite** — all thirteen factory candidates are executable. The twelve
+   non-emote fixture pairs pass 12/12 positive controls and reject 12/12 preserved red-first
+   controls; the emote suite also exercises its live-output guard and rear-view hand failure. These
+   are candidacy gates, not tool proofs.
+7. ☑ **Assetforge real-asset candidacy run** — all twelve non-emote processes ran against named,
+   hashed, decodable Genesis assets; 12/12 candidate runs met their declared gates and the
+   deliberately changed real regression control rejected. Individual inspection exposed clipped
+   decal branches, foreign prop-sheet fragments, and roof-repeat cadence. This remains preliminary
+   evidence for later dedicated proving passes.
+8. ☐ **Assetforge dedicated proving passes** — run and judge each tool separately; the aggregate
+   board is navigation only. First founder review found repeat + current prop evidence
    rejected; condition needs visibly more age; trim retained; atlas promising with Clayroom proof
    deferred. Palette consolidation and the citizenship canonical adapter are complete, but Adam
    rejected the trilinear-mipmap renderer v2 as blurry. Boundary V2 has separate

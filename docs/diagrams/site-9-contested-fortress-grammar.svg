@@ -1,0 +1,221 @@
+<!-- STATUS: CODEX REDLINE APPLIED (2026-07-28); PROPOSED PROFILE, NOT A GENERATOR -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 1000" width="1240" height="1000" font-family="Helvetica, Arial, sans-serif">
+  <title>Site 9 — Contested Fortress: the relational grammar (PROPOSED, 2026-07-27)</title>
+  <desc>STATUS: CODEX REDLINE APPLIED (2026-07-28). One Defense + LayeredControl + MaterializationWindow proof profile; not a unique fortress generator. Companion to docs/SITE-9-CONTESTED-FORTRESS-SPEC.md.</desc>
+
+  <rect x="0" y="0" width="1240" height="1000" fill="#f6f3ec"/>
+
+  <text x="40" y="46" font-size="25" font-weight="700" fill="#20242b">SITE 9 — CONTESTED FORTRESS · the relational grammar</text>
+  <text x="40" y="70" font-size="13.5" fill="#5d6470">STATUS: CODEX REDLINE APPLIED (2026-07-28). One proposed stress-proof profile; every number remains unruled and unproved in clay.</text>
+  <line x1="40" y1="88" x2="1200" y2="88" stroke="#c3bcae" stroke-width="1.5"/>
+
+  <!-- ============================================================ -->
+  <!-- PANEL A — PLAN                                                -->
+  <!-- ============================================================ -->
+  <text x="40" y="118" font-size="17" font-weight="700" fill="#20242b">A · PLAN — <tspan font-family="Menlo, Consolas, monospace" font-size="15">CF-SHAPE-01/IN</tspan> · the inside window</text>
+
+  <!-- outside field -->
+  <rect x="40" y="132" width="660" height="110" fill="#e3e7dc" stroke="#b6bda9" stroke-width="1.2"/>
+  <circle cx="130" cy="222" r="8" fill="#c9d0bb"/><circle cx="168" cy="208" r="5" fill="#c9d0bb"/>
+  <circle cx="612" cy="216" r="9" fill="#c9d0bb"/><circle cx="650" cy="200" r="5" fill="#c9d0bb"/>
+
+  <!-- attributed ground washes -->
+  <rect x="41" y="230" width="492" height="238" fill="#3f6fa8" fill-opacity="0.12"/>
+  <rect x="533" y="230" width="166" height="238" fill="#a8683f" fill-opacity="0.15"/>
+
+  <!-- wall band -->
+  <rect x="40" y="242" width="660" height="58" fill="#cfc7b6" stroke="#8b8371" stroke-width="1.6"/>
+  <rect x="40" y="254" width="660" height="34" fill="#efe9dc" stroke="#8b8371" stroke-width="1"/>
+
+  <!-- towers -->
+  <rect x="180" y="230" width="66" height="82" fill="#b9b09c" stroke="#6f6858" stroke-width="1.8"/>
+  <rect x="500" y="230" width="66" height="82" fill="#b9b09c" stroke="#6f6858" stroke-width="1.8"/>
+  <rect x="176" y="260" width="8" height="22" fill="#efe9dc" stroke="#6f6858" stroke-width="1.2"/>
+  <rect x="242" y="260" width="8" height="22" fill="#efe9dc" stroke="#6f6858" stroke-width="1.2"/>
+  <rect x="496" y="260" width="8" height="22" fill="#efe9dc" stroke="#6f6858" stroke-width="1.2"/>
+  <rect x="562" y="260" width="8" height="22" fill="#efe9dc" stroke="#6f6858" stroke-width="1.2"/>
+  <rect x="494" y="226" width="78" height="90" fill="none" stroke="#b5442e" stroke-width="2.2" stroke-dasharray="6 4"/>
+
+  <!-- inside court -->
+  <rect x="40" y="312" width="660" height="156" fill="#e9e2d3" stroke="#b6ad99" stroke-width="1.2"/>
+  <rect x="60" y="314" width="86" height="28" fill="#d6ccb8" stroke="#9a9080" stroke-width="1"/>
+  <rect x="288" y="314" width="112" height="24" fill="#d6ccb8" stroke="#9a9080" stroke-width="1"/>
+  <rect x="608" y="314" width="82" height="32" fill="#d6ccb8" stroke="#9a9080" stroke-width="1"/>
+
+  <!-- stair heads -->
+  <g stroke="#6f6858" stroke-width="1.2" fill="#efe9dc">
+    <rect x="90" y="288" width="38" height="10"/><rect x="90" y="298" width="38" height="10"/><rect x="90" y="308" width="38" height="10"/>
+    <rect x="628" y="288" width="38" height="10"/><rect x="628" y="298" width="38" height="10"/><rect x="628" y="308" width="38" height="10"/>
+  </g>
+
+  <!-- postern -->
+  <rect x="330" y="242" width="24" height="58" fill="#efe9dc" stroke="#2f5c8f" stroke-width="2"/>
+
+  <!-- THE LINE -->
+  <line x1="533" y1="226" x2="533" y2="468" stroke="#b5442e" stroke-width="3.6" stroke-dasharray="10 6"/>
+
+  <!-- frontier arrows -->
+  <path d="M30 271 l16 -10 v20 z" fill="#5d6470"/>
+  <path d="M710 271 l-16 -10 v20 z" fill="#5d6470"/>
+
+  <!-- ground labels inside the washes -->
+  <text x="60" y="404" font-size="13.5" font-weight="700" fill="#2f5c8f">ATTRIBUTED GROUND A</text>
+  <text x="60" y="422" font-size="11" fill="#3f6fa8">holder A · claim · recognition · reach · dependency · tell</text>
+  <text x="616" y="404" font-size="13.5" font-weight="700" fill="#8a5230">GROUND B</text>
+  <text x="616" y="422" font-size="11" fill="#a8683f">holder B</text>
+
+  <!-- numbered markers -->
+  <g font-size="12" font-weight="700" text-anchor="middle">
+    <circle cx="330" cy="168" r="12" fill="#20242b"/><text x="330" y="172" fill="#f6f3ec">1</text>
+    <circle cx="420" cy="271" r="12" fill="#20242b"/><text x="420" y="275" fill="#f6f3ec">2</text>
+    <circle cx="533" cy="205" r="12" fill="#b5442e"/><text x="533" y="209" fill="#f6f3ec">3</text>
+    <circle cx="109" cy="336" r="12" fill="#20242b"/><text x="109" y="340" fill="#f6f3ec">4</text>
+    <circle cx="230" cy="368" r="12" fill="#20242b"/><text x="230" y="372" fill="#f6f3ec">5</text>
+    <circle cx="470" cy="448" r="12" fill="#20242b"/><text x="470" y="452" fill="#f6f3ec">6</text>
+    <circle cx="596" cy="452" r="12" fill="#b5442e"/><text x="596" y="456" fill="#f6f3ec">7</text>
+    <circle cx="342" cy="216" r="12" fill="#2f5c8f"/><text x="342" y="220" fill="#f6f3ec">8</text>
+    <circle cx="24" cy="316" r="12" fill="#20242b"/><text x="24" y="320" fill="#f6f3ec">9</text>
+  </g>
+  <line x1="596" y1="440" x2="540" y2="412" stroke="#b5442e" stroke-width="1.2"/>
+  <line x1="24" y1="304" x2="30" y2="278" stroke="#5d6470" stroke-width="1.2"/>
+
+  <!-- PANEL A legend -->
+  <g font-size="12" fill="#3a3f48">
+    <text x="40" y="500" font-size="12.5" font-weight="700" fill="#20242b">1</text><text x="56" y="500">OUTSIDE FIELD — ditch / glacis / slope. This profile uses a large quiet region; other Defense hosts need not.</text>
+    <text x="40" y="520" font-size="12.5" font-weight="700" fill="#20242b">2</text><text x="56" y="520">WALL-WALK — the site's signature deck. A <tspan font-style="italic">route</tspan>, not a position: ≥ 2 access points, ≥ 1 chokepoint, ≥ 10 ft clear.</text>
+    <text x="40" y="540" font-size="12.5" font-weight="700" fill="#b5442e">3</text><text x="56" y="540" fill="#8a3524">CHOKEPOINT — the tower's two walk doors, one cell wide. The highest-value square on the board.</text>
+    <text x="40" y="560" font-size="12.5" font-weight="700" fill="#20242b">4</text><text x="56" y="560">STAIR HEAD — the walk's access from the court, and its own defensible cap.</text>
+    <text x="40" y="580" font-size="12.5" font-weight="700" fill="#20242b">5</text><text x="56" y="580">INSIDE COURT — 30–35 ft below the walk. Edge structures and open centre are this profile's defaults.</text>
+    <text x="40" y="600" font-size="12.5" font-weight="700" fill="#20242b">6</text><text x="56" y="600">ATTRIBUTED GROUND — named, contiguous, camera-readable. Narration alone does not satisfy the invariant.</text>
+    <text x="40" y="620" font-size="12.5" font-weight="700" fill="#b5442e">7</text><text x="56" y="620" fill="#8a3524">THE LINE — readable at the production camera without the receipt. Crossing has a stated cost, and the line can move.</text>
+    <text x="40" y="640" font-size="12.5" font-weight="700" fill="#2f5c8f">8</text><text x="56" y="640" fill="#2f5c8f">ALTERNATE CROSSING — postern / breach / mural passage / ladder point. Capacity 1, no cargo. Committed before observation.</text>
+    <text x="40" y="660" font-size="12.5" font-weight="700" fill="#20242b">9</text><text x="56" y="660">PRECOMMITTED FRONTIER — the wall continues into unmaterialised fortress. A run ending in a flat cap is a rejection.</text>
+  </g>
+
+  <!-- ============================================================ -->
+  <!-- PANEL B — SECTION                                             -->
+  <!-- ============================================================ -->
+  <text x="760" y="118" font-size="17" font-weight="700" fill="#20242b">B · SECTION — why the walk exists at all</text>
+
+  <!-- outside ground -->
+  <rect x="760" y="470" width="196" height="60" fill="#e3e7dc" stroke="#b6bda9" stroke-width="1.2"/>
+  <text x="772" y="494" font-size="11" font-weight="700" fill="#5f6b52">OUTSIDE GROUND</text>
+  <text x="772" y="510" font-size="10.5" fill="#78846a">40–50 ft below the head</text>
+
+  <!-- wall mass -->
+  <path d="M952 470 L980 262 L1064 262 L1064 470 Z" fill="#cfc7b6" stroke="#6f6858" stroke-width="2"/>
+  <path d="M968 360 L980 272 L1054 272 L1054 360 Z" fill="#bdb4a0"/>
+  <g stroke="#a79d88" stroke-width="1">
+    <line x1="970" y1="345" x2="1054" y2="345"/><line x1="973" y1="325" x2="1054" y2="325"/>
+    <line x1="976" y1="305" x2="1054" y2="305"/><line x1="978" y1="288" x2="1054" y2="288"/>
+  </g>
+
+  <!-- parapets, walk, banquette -->
+  <rect x="980" y="210" width="26" height="52" fill="#b9b09c" stroke="#6f6858" stroke-width="1.8"/>
+  <rect x="1046" y="222" width="18" height="40" fill="#b9b09c" stroke="#6f6858" stroke-width="1.8"/>
+  <rect x="1006" y="256" width="40" height="6" fill="#efe9dc" stroke="#6f6858" stroke-width="1.2"/>
+  <rect x="1006" y="236" width="18" height="20" fill="#d9d0bd" stroke="#6f6858" stroke-width="1.4"/>
+  <path d="M980 230 L1006 220 L1006 250 L980 238 Z" fill="#f6f3ec" stroke="#6f6858" stroke-width="1.2"/>
+
+  <!-- inside court -->
+  <rect x="1064" y="430" width="136" height="100" fill="#e9e2d3" stroke="#b6ad99" stroke-width="1.2"/>
+  <text x="1076" y="454" font-size="11" font-weight="700" fill="#6a6152">INSIDE COURT</text>
+  <text x="1076" y="470" font-size="10.5" fill="#857b69">30–35 ft below the walk</text>
+
+  <!-- section labels: left column -->
+  <g text-anchor="end" fill="#5d6470">
+    <text x="946" y="196" font-size="11" font-weight="700">OUTER PARAPET (2h)</text>
+    <text x="946" y="234" font-size="11" font-weight="700">LOOP</text>
+    <text x="946" y="248" font-size="10" fill="#78808c">a slot outside,</text>
+    <text x="946" y="260" font-size="10" fill="#78808c">splayed reveal inside</text>
+    <text x="946" y="378" font-size="11" font-weight="700">BATTER</text>
+    <text x="946" y="392" font-size="10" fill="#78808c">the outer face slopes back —</text>
+    <text x="946" y="404" font-size="10" fill="#78808c">the two relations are not mirror routes</text>
+  </g>
+  <line x1="950" y1="192" x2="978" y2="214" stroke="#9aa1ac" stroke-width="1"/>
+  <line x1="950" y1="234" x2="978" y2="234" stroke="#9aa1ac" stroke-width="1"/>
+  <line x1="950" y1="382" x2="964" y2="378" stroke="#9aa1ac" stroke-width="1"/>
+
+  <!-- section labels: right column -->
+  <g fill="#5d6470">
+    <text x="1078" y="200" font-size="10.5" font-weight="700">INBOARD PARAPET</text>
+    <text x="1078" y="213" font-size="9.5" fill="#78808c">stops lower than the outer</text>
+    <text x="1078" y="224" font-size="9.5" fill="#78808c">skin — that gap IS the walk</text>
+    <text x="1078" y="330" font-size="10.5" font-weight="700">RUBBLE CORE</text>
+    <text x="1078" y="343" font-size="9.5" fill="#78808c">two skins + core; thickness</text>
+    <text x="1078" y="354" font-size="9.5" fill="#78808c">≥ 15 ft wherever a walk exists</text>
+  </g>
+  <line x1="1074" y1="204" x2="1062" y2="224" stroke="#9aa1ac" stroke-width="1"/>
+  <line x1="1074" y1="326" x2="1050" y2="318" stroke="#9aa1ac" stroke-width="1"/>
+
+  <!-- walk callout above -->
+  <text x="1026" y="172" font-size="11" font-weight="700" text-anchor="middle" fill="#5a5346">WALK ≥ 10 ft clear</text>
+  <text x="1026" y="185" font-size="10" text-anchor="middle" fill="#7c7360">two standees abreast</text>
+  <line x1="1030" y1="190" x2="1030" y2="252" stroke="#9aa1ac" stroke-width="1" stroke-dasharray="3 3"/>
+
+  <!-- banquette tick -->
+  <text x="1000" y="250" font-size="10" font-weight="700" text-anchor="end" fill="#5a5346">1h</text>
+
+  <!-- figure behind parapet -->
+  <circle cx="1036" cy="244" r="5" fill="#2f5c8f"/>
+  <rect x="1032" y="249" width="8" height="7" fill="#2f5c8f"/>
+
+  <!-- PANEL B notes -->
+  <g font-size="11.5" fill="#3a3f48">
+    <text x="760" y="562" font-size="12.5" font-weight="700" fill="#b5442e">The walk is the gap between two skins, standing on the core.</text>
+    <text x="760" y="580">A run too thin to carry its walk is a countable rejection — not a</text>
+    <text x="760" y="596">detail. This is why wall <tspan font-style="italic">thickness</tspan> is a first-class runtime fact.</text>
+    <text x="760" y="620" font-weight="700">Two cover states from one section:</text>
+    <text x="760" y="636">behind the parapet = full cover · up on the banquette,</text>
+    <text x="760" y="652">shooting over = ¾ cover (the live <tspan font-family="Menlo, Consolas, monospace" font-size="10.5">urban-scene-frame</tspan> 206 number).</text>
+  </g>
+
+  <!-- ============================================================ -->
+  <!-- PANEL C — the scale case                                      -->
+  <!-- ============================================================ -->
+  <line x1="40" y1="686" x2="1200" y2="686" stroke="#c3bcae" stroke-width="1.5"/>
+  <text x="40" y="716" font-size="17" font-weight="700" fill="#20242b">C · THE SCALE CASE — one works, several committed windows, shared ids</text>
+
+  <rect x="40" y="732" width="238" height="96" fill="#eceff5" stroke="#8d9aae" stroke-width="1.6"/>
+  <text x="56" y="758" font-size="13" font-weight="700" fill="#2f5c8f">CF-SHAPE-01/IN</text>
+  <text x="56" y="778" font-size="11" fill="#4a5768">walk · stair heads · tower door pair</text>
+  <text x="56" y="794" font-size="11" fill="#4a5768">court edge · two grounds · the line</text>
+  <text x="56" y="814" font-size="11" font-style="italic" fill="#6b7686">the inside battlefield</text>
+
+  <rect x="330" y="732" width="238" height="96" fill="#f2ece4" stroke="#ae9a8d" stroke-width="1.6"/>
+  <text x="346" y="758" font-size="13" font-weight="700" fill="#8a5230">CF-SHAPE-01/OUT</text>
+  <text x="346" y="778" font-size="11" fill="#6a5a4a">wall face · batter · loop ranks</text>
+  <text x="346" y="794" font-size="11" fill="#6a5a4a">tower projection · ditch · sparse cover</text>
+  <text x="346" y="814" font-size="11" font-style="italic" fill="#877566">the outside battlefield</text>
+
+  <path d="M284 780 L324 780" stroke="#b5442e" stroke-width="3"/>
+  <path d="M324 780 l-11 -6 v12 z" fill="#b5442e"/>
+  <path d="M284 780 l11 -6 v12 z" fill="#b5442e"/>
+  <text x="304" y="766" font-size="10" font-weight="700" text-anchor="middle" fill="#b5442e">SAME</text>
+  <text x="304" y="802" font-size="10" font-weight="700" text-anchor="middle" fill="#b5442e">WALL</text>
+
+  <g font-size="12.5" fill="#3a3f48">
+    <text x="600" y="754">One persistent <tspan font-weight="700" font-family="Menlo, Consolas, monospace" font-size="12">siteId</tspan> · one <tspan font-weight="700" font-family="Menlo, Consolas, monospace" font-size="12">windowSetId</tspan> · byte-equivalent wall geometry,</text>
+    <text x="600" y="774">damage facts and holder attribution shared across both windows.</text>
+    <text x="600" y="800">This is the property nothing else in the portfolio proves — and the reason Site 9 is a</text>
+    <text x="600" y="820"><tspan font-weight="700">scale/relationship stress case</tspan>, not a bigger Guard Post. FFT built Bethla Garrison as</text>
+  </g>
+  <text x="600" y="840" font-size="12.5" fill="#3a3f48"><tspan font-weight="700">five</tspan> maps — sluice, granary, south wall, north wall, council chamber — for exactly this reason.</text>
+
+  <!-- ============================================================ -->
+  <!-- PANEL D — boundaries                                          -->
+  <!-- ============================================================ -->
+  <rect x="40" y="862" width="1160" height="112" fill="#efece4" stroke="#c3bcae" stroke-width="1.2"/>
+  <text x="56" y="886" font-size="13" font-weight="700" fill="#20242b">D · BOUNDARIES — the test that keeps Site 9 out of its neighbours</text>
+
+  <text x="56" y="910" font-size="12" fill="#3a3f48"><tspan font-weight="700" fill="#8a5230">SITE 8 composed with Defense:</tspan> claimant standing and material control difference may be overt or hidden; no concealment requirement.</text>
+  <text x="56" y="928" font-size="12" fill="#3a3f48">Site 9 asks <tspan font-style="italic">who holds which ground right now</tspan> — open, territorial, at a scale that exceeds one materialization window.</text>
+  <text x="56" y="950" font-size="12" font-weight="700" fill="#b5442e">Site 9 adds cohabiting armed populations, attributed ground, and persistent inside/outside windows to that composition.</text>
+  <text x="56" y="966" font-size="12" fill="#8a3524">A traitor in one gatehouse may be Layered Control alone; a divided fortress can exercise the full stress proof.</text>
+
+  <line x1="880" y1="898" x2="880" y2="962" stroke="#c3bcae" stroke-width="1.2"/>
+  <text x="900" y="910" font-size="11.5" fill="#3a3f48"><tspan font-weight="700">vs SITE 1:</tspan> controls a transition, not ground.</text>
+  <text x="900" y="928" font-size="11.5" fill="#3a3f48"><tspan font-weight="700">vs SITE 3:</tspan> no claimant left = dormant.</text>
+  <text x="900" y="946" font-size="11.5" fill="#3a3f48"><tspan font-weight="700">vs SITE 10:</tspan> Site 9 owns the envelope;</text>
+  <text x="900" y="962" font-size="11.5" fill="#3a3f48">Site 10 owns what it encloses.</text>
+</svg>

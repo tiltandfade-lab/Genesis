@@ -1,8 +1,8 @@
 ---
 type: system-contract
 created: 2026-07-26
-updated: 2026-07-26
-status: ACCEPTED DIRECTION — ontology and integration contract; implementation unauthorized
+updated: 2026-07-28
+status: ACCEPTED DIRECTION — ontology and integration contract; 2026-07-28 adversarial-review redline; implementation unauthorized
 owner: story-to-site semantic compilation and Golden Site coverage taxonomy
 authority:
   - PROCEDURAL-DUNGEON-ARCHITECTURE-SKETCH.md
@@ -99,8 +99,11 @@ authorities must remain separate.
 | `WorldContext` | Realm, region, climate, factions, pressures, history, architecture/material axis, nearby facts, time and weather | Local geometry or a preferred visual theme |
 | `WalkFamily` | The traversal grammar that brought play here: urban, wilderness, or dungeon; segments, approach, exits, and domain continuity | The complete program of every bounded place encountered |
 | `SiteIdentity` | Persistent identity, lineage, canonical extent, domain facets, observation hardness, and stable links | Current occupier, one building footprint, or active render window |
-| `HostProgram` | What the place does and must support: custody, worship, extraction, hospitality, market exchange, route service, habitation, predation, and so on | Culture, current crisis, material style, or exact coordinates |
+| `HostProgram` | What the place does and must support: custody, worship, extraction, hospitality, market exchange, route service, habitation, predation, defense/fortification, and so on | Culture, current crisis, material style, or exact coordinates |
 | `OperatingModel` | Required roles, workflows, services, capacities, property flows, schedules, permissions, maintenance, failure modes, and recoveries | Decorative dressing or an arbitrary room list |
+| `SubstratePlan` | What supports the host: support/foundation mode, thickness and load where consequential, datum, mobility, anchoring, perimeter, state, and trusted traversal where present | The host's purpose, an automatic ownership relationship, or a universal requirement that all ground be unusual |
+| `ScaleContract` | Body/object spans, aperture and route capacities, reach, traversability, reference scale, and the affordance differences that make scale consequential | Creature identity, a fixed three-to-one eligibility threshold, or permission to enlarge the tactical cell |
+| `GranularMass` | Shared loose-material terrain behavior: material class, repose/stability, flow trigger, support/burial state, accumulation source, and recovery | Hoard ownership by Site 11, a decorative pile, or one material-specific implementation |
 | `TransformStack` | Cross-host canonical changes such as dormant, layered control, siege, flooding, occupation, repurposing, damage, repair, or breach | A replacement host identity or automatic map growth |
 | `MaterializationWindow` | The finite active semantic/spatial slice needed for present play, with honest frontiers into latent or external truth | The whole canonical extent of a settlement, institution, wilderness, or living domain |
 | `SemanticSitePlan` | Stable zones, functional homes, required relationships, access profiles, capacities, property custody, secrets, fronts, and typed connections | Meshes, camera composition, incidental coordinates, or visual rolls |
@@ -123,6 +126,7 @@ story/world canon + remembered facts
   -> urban | wilderness | dungeon walk context
   -> persistent SiteIdentity
   -> HostProgram + OperatingModel
+  -> SubstratePlan + ScaleContract
   -> ordered TransformStack
   -> MaterializationWindow
   -> SemanticSitePlan
@@ -174,13 +178,14 @@ The semantic compiler asks, in order:
 
 1. What canonical identities and facts already exist?
 2. Which host program and operating obligations apply?
-3. Which transforms are active, in what causal order?
-4. What present action requires materialization?
-5. What is the smallest honest semantic window that supports those obligations?
-6. Which facts require exact spatial homes now, which remain stable latent commitments,
+3. Which substrate and scale facts are consequential in this scene?
+4. Which transforms are active, in what causal order?
+5. What present action requires materialization?
+6. What is the smallest honest semantic window that supports those obligations?
+7. Which facts require exact spatial homes now, which remain stable latent commitments,
    and which are presentation only?
-7. Can the licensed window support the result?
-8. Which legal composition best expresses it while preserving quiet space?
+8. Can the licensed window support the result?
+9. Which legal composition best expresses it while preserving quiet space?
 
 This is the seam that corrals general gameplay assets. A required hearth, intake desk,
 evidence cabinet, well, serving counter, holding cell, private room, or lookout is first
@@ -244,6 +249,36 @@ Quiet space is a planned role. It may carry:
 - simply the truthful scale of the place.
 
 The renderer may not scatter props merely to prove that a large map was used.
+
+### 4.4 Stress contracts are not hidden site generators
+
+Sites 9, 11, and 12 expose cross-cutting contracts the original ontology left implicit.
+They remain Golden proofs, but their runtime responsibilities belong to shared concepts:
+
+- **Site 9** proves a Defense/Fortification host under layered control across more than one
+  committed `MaterializationWindow`. The host owns gates, walls, stores, barracks, command,
+  wall routes, service, and defensive continuity. `LayeredControl` owns claimants,
+  attributed ground, recognition, permissions, and fronts. The window system owns stable
+  cross-window identity. Site 9 owns no fourth copy of those systems.
+- **Site 11** proves a `ScaleContract` across unlike hosts. A large-body aperture, an
+  inherited giant-built hall, or anatomy used as terrain may require shared assemblies,
+  but Golden number 11 is not their runtime owner.
+- **Site 12** proves a `SubstratePlan` and, separately, the case where a cross-host
+  transformation changes or destroys the substrate a host depends on. A raft, tidal
+  ground, living back, or reactive crust does not become a host program merely because it
+  supports one.
+
+The ordinary **Defense/Fortification** host is therefore a real program even when no Site-9
+relationship is active. It may be implemented as the large end of Site 1's defense family
+or as an unnumbered host family; that implementation choice does not change Site 9's proof
+role. A single-garrison fortress remains a fortress. A fortress becomes the Site-9 proof
+case only when the scale/window and attributed-ground obligations are both present.
+
+Likewise, `SubstratePlan` facts are orthogonal rather than one promotion ladder. Support
+mode, load behavior, mobility, cyclic datum, agency, transformation phase, and ownership
+may vary independently. `ScaleContract` eligibility is consequential affordance
+difference, not a magic ratio: the first retained proof may choose a visually obvious
+Huge-versus-Medium pair without making that ratio universal.
 
 ## 5. Layered control as a cross-host transform
 
@@ -311,14 +346,16 @@ The numbered portfolio remains useful, but its members prove different runtime r
 | 6 Prison / Custody | host/program family | custody, intake, property/evidence, control, release and escape |
 | 7 Natural Lair | host/program family | ecology/claim, body-scaled access, found or excavated space |
 | 8 Layered Control | cross-host transform | two or more persistent control systems over one host |
-| 9 Contested Fortress | scale/relationship stress case | large defense plus at least two populations and active fronts |
+| 9 Contested Fortress | scale/relationship stress case | Defense/Fortification host + attributed ground + persistent multi-window extent |
 | 10 Settlement / Urban Institution | host/program family | public frontage, aggregation, cold population, urban continuity |
-| 11 Mixed Scale / Dragon Domain | scale/relational stress case | extreme body/space scales and local-to-domain continuity |
-| 12 Anomalous / Living / Mobile | substrate/ownership stress case | non-building identity, unusual extent, motion or living ownership |
+| 11 Mixed Scale / Dragon Domain | scale/relational stress case | `ScaleContract`, unlike-body affordances, and local-to-domain continuity |
+| 12 Anomalous / Living / Mobile | substrate/terminal-transformation stress case | `SubstratePlan`, unusual support/extent/motion, optional tenure, and terminal substrate transformation |
 
 This classification prevents Sites 3 and 8 from growing rival room grammars while
-preserving their value as cross-host proofs. Sites 9, 11, and 12 remain essential
-because they stress combinations the ordinary host proofs do not.
+preserving their value as cross-host proofs. It also prevents Sites 9, 11, and 12 from
+becoming disguised generators: each composes a real host with shared window, scale,
+substrate, and transform contracts. They remain essential because they stress combinations
+the ordinary host proofs do not.
 
 ## 7. Ordinary venues and the Golden portfolio
 
@@ -430,7 +467,13 @@ The ontology/engine marriage is not proven until retained fixtures demonstrate:
 8. context-off/on views preserving mechanics, ids, portals, and knowledge;
 9. deterministic replay with `rollerLineage`, `sourceRollRefs`, transform receipts,
    materialization receipts, and fallback receipts; and
-10. no seed-, row-, culture-, host-, or Golden-number-specific patch.
+10. a Defense/Fortification host replayed as one claimant and as a Site-9 multi-window
+    composition without changing its host identity;
+11. one `ScaleContract` changing route/aperture affordances on two unlike hosts without a
+    Site-11-specific plan branch;
+12. one `SubstratePlan` supporting two unlike hosts, plus one Becoming/Intrusion delta that
+    changes substrate state without becoming a second host generator; and
+13. no seed-, row-, culture-, host-, or Golden-number-specific patch.
 
 `VENUE-TAVERN-01` is the first small-venue proof for items 2, 3, 6, and 7. Site 8 does
 not earn its portfolio gate from a tavern alone; it must also prove the transform on at
@@ -443,8 +486,8 @@ order is:
 
 1. normalize existing world/place/walk/building provenance into one read-only semantic
    request;
-2. introduce explicit `HostProgram`, `TransformStack`, and `MaterializationWindow`
-   boundaries without replacing live rollers;
+2. introduce explicit `HostProgram`, `SubstratePlan`, `ScaleContract`, `TransformStack`,
+   and `MaterializationWindow` boundaries without replacing live rollers;
 3. compile one existing tavern record into a minimal semantic venue plan;
 4. mount that plan on the shared composition compiler and preserve identity through
    SceneTray/BattleMap;

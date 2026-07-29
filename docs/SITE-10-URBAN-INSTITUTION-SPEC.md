@@ -1,17 +1,28 @@
+STATUS: DRAFT — CODEX ADVERSARIAL REDLINE APPLIED; FOUNDER QUESTIONS REMAIN OPEN
+
 ---
 type: working-site-spec
 created: 2026-07-25
-updated: 2026-07-26
-status: WORKING SPEC — research/founder/brief PARTIAL; clay OPEN
+updated: 2026-07-28 (Codex adversarial review applied to the 2026-07-27 gap-close addendum;
+  founder authority remains unchanged)
+status: WORKING SPEC — research/founder/brief PARTIAL (gap-close pass 2026-07-27 closes part
+  of the construction-evidence gap and reconciles the spec to BUILDING-PROGRAM-TABLE-FAMILIES.md
+  and URBAN-FABRIC.md; Codex adversarial review accepts the eighth-family direction but leaves
+  it pending founder approval; the proposed Market/Exchange taste sampler returned
+  2026-07-28); clay OPEN
 site: 10 — urban institution
 standard: SITE-5-MINE-WORKSHOP-CONCEPT.md
 authority:
   - GOLDEN-SITES-CATALOG.md
   - GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md
   - STRUCTURE-KIT-CATALOG.md
+  - BUILDING-PROGRAM-TABLE-FAMILIES.md
+  - URBAN-FABRIC.md
+  - SETTLED-LIFE-SITES-PROGRAM.md
 research:
   - ../Reference/Urban-Study/
   - ../Reference/Urban-Culture-Study/
+  - ../Reference/Urban-Institution-Study-0727/
 preservation: GOLDEN-SITE-ROLLER-PRESERVATION-LEDGER.md
 context-projection: GOLDEN-SITE-WORLD-CONTEXT-PROJECTION.md
 ---
@@ -46,6 +57,146 @@ Still proposed:
 The research gate remains partial because measured construction, direct shutter/gallery
 evidence, working historic-market imagery, fixed-camera overlook proof, early color, and
 cultural breadth remain insufficient.
+
+## Gap-closure addendum (2026-07-27 campaign) — authority, honest gates, reconciliation, and proposed status
+
+This section is additive. It changes no ruling, invariant, capsule, deck, growth ladder, or
+operating-circuit definition above or below it. It exists to hold the §1-equivalent authority
+statement the working-spec standard requires (guidelines step 8, section 1: "authority, honest
+gates, ruled decisions, and unresolved proposals") for the evidence and reconciliation added
+this pass.
+
+**Authority.** This addendum is authored under the 2026-07-27 golden-sites campaign brief:
+"Site 10 — GAP-CLOSE: declared gaps are load-bearing construction evidence and visual gaps.
+The building-program table families + urban fabric docs have LANDED since the spec was
+written — reconcile the spec to them (which BF- kits serve site 10, what the 42-roll audit
+proved), and close the construction-evidence gap with measured references (market halls,
+civic buildings, temple wards)." It is subordinate to every ruling already recorded in this
+document and in `GOLDEN-SITES-CATALOG.md`.
+
+**Honest gates.** The catalog's status-gate table (as of the 2026-07-25 audit) records Site 10
+as `RESEARCHED: PARTIAL`, `FOUNDER-RULED: PARTIAL`, `BRIEF-CONGRUENT: PARTIAL`, `CLAY-PROVED:
+OPEN`, with the stated reason: "body/culture studies returned, but load-bearing construction
+and visual gaps remain." This addendum partially closes the construction-evidence gap and
+fully performs the reconciliation:
+
+- real, dated measured references now exist for the market-hall family (Ledbury Market House,
+  16 posts/7 bays, built 1617-33; Tetbury Market House, built 1655; the Old Market Hall,
+  Shrewsbury, built 1596-97, master mason named; Sukiennice, Kraków, ~100+ m free-standing
+  block) and for civic buildings (Lavenham Guildhall, built 1529-30; Titchfield Market Hall
+  and the former Shire Hall, Llandeilo — both real buildings pairing a market-trading ground
+  floor with a civic-authority upper room), plus one temple-ward anchor (St Peter Mancroft
+  over Norwich's historic market place) —
+  `Reference/Urban-Institution-Study-0727/MEASURED-REFERENCES.md`;
+- a targeted FFT civic-authority cohort extension (Office of Lesalia Castle, Zeltennia Castle,
+  Bethla Garrison — three ids neither prior FFT lane opened), read in place from the sibling
+  `genesis` worktree's archive per THE FFT BOUNDARY —
+  `Reference/Urban-Institution-Study-0727/FFT-COHORT-COMPARISON.md`;
+- the spec is now reconciled against `BUILDING-PROGRAM-TABLE-FAMILIES.md` (which `BF-` kits
+  serve Site 10, and what the 42-roll audit proved), `URBAN-FABRIC.md` (the live typed-building
+  roller and district-fabric layer), and `SETTLED-LIFE-SITES-PROGRAM.md` (the settled-life
+  boundary at harborfront, slums, infrastructure hub, and home-settlement fabric) — see below.
+
+The frontage-bay/party-wall/balcony measurement gap, the two-state shutter-counter's own
+dimensions, fixed-camera overlook proof, and broad non-European cultural evidence remain
+genuinely open. Full detail: `Reference/Urban-Institution-Study-0727/`.
+
+**Which `BF-` kits serve Site 10 (reconciliation against `BUILDING-PROGRAM-TABLE-FAMILIES.md`).**
+
+| `BF-` family | programs | how it serves Site 10 |
+|---|---|---|
+| `BF-PUBLIC-SERVICE` | Tavern, Bathhouse, Gambling Den | Hosted frontage-bay venue programs (`TAVERN-VENUE-ROUTING-BRIEF.md`); Site 10 supplies public frontage and district continuity, not the venue's own operating model. |
+| `BF-CIVIC-AUTHORITY` | Guildhall, Garrison, Court | The catalog's "Courthouse/watch-house, temple, and guildhall are sibling institutions" — this is that family, and the gap-close packet's evidence shows it may also license the market hall's civic-upper-room variant (see below). |
+| `BF-RITUAL-INSTITUTION` | Temple | The temple sibling institution at the same catalog line; a real plaza-dominating anchor now exists (St Peter Mancroft, Norwich). |
+| `BF-LOGISTICS` | Warehouse, Dock-House | The "Service/delivery edge" zone and the "Commerce and goods" circuit's destinations. Does not extend to the water edge itself — that is a separate, not-yet-site-graded item per `SETTLED-LIFE-SITES-PROGRAM.md` §3.2. |
+| `BF-SHOP-WORKSHOP` | Smithy, Apothecary, General Store, Arcanist | Ordinary frontage-bay shopfront programs — the customer-edge relationship each committed bay owner/program fact must resolve before drawing an interior. |
+| `BF-MARKET-EXCHANGE` **(PROPOSED ADDENDUM)** | Market Hall, Exchange / Cloth Hall | Owns the Golden Seed's public trading ground, stall/bay allocation, measure/inspection, schedule and exchange record; may compose Civic, Logistics, or Exchange upper programs. |
+| `BF-HOUSEHOLD-ESTATE` | Manor | **Does not serve Site 10.** `SETTLED-LIFE-SITES-PROGRAM.md` §3.1 places the household/dwelling program outside Site 10 as its own habitation host (folding into the Manor's low end, Adam-ruled 2026-07-27). A Manor may stand adjacent to a Site 10 slice; Site 10 does not own housing. |
+| `BF-CUSTODY` | Prison/Custody | **Does not serve Site 10.** Owned by Site 6. A non-custodial public punishment fixture (stocks/pillory) stays Site 10; any actual custody lifecycle, however small, hands off to Site 6 (`BREADTH-SWEEP.md` §3). |
+
+**What the 42-roll audit proved, and why it binds Site 10's frontage bays.**
+`BUILDING-PROGRAM-TABLE-FAMILIES.md`'s 42-roll audit proved the flat `building-interior` d300
+table is "mechanically additive but semantically unconstrained": a committed Manor could roll
+a letter-writing shop or a private hospital, an Apothecary could roll a printer's basement, a
+Garrison could roll a mast-maker or an apothecary, and same-seed realm mirrors preserved the
+identical interior under every realm label. Every Site 10 frontage bay is exactly this kind of
+committed, typed building. **Generation-order step 5 ("Generate frontage runs, party walls,
+bay owners/programs, and physical shutters") must commit each bay's program first and draw
+that program's family/arrangement/state/scene/Spice stack from the relevant `BF-` family —
+never the flat d300** — or a rolled Site 10 scene would reproduce the exact failure the audit
+found, inside the Golden Seed itself. This is a clarification of existing generation-order
+intent, not a change to it.
+
+**The load-bearing reconciliation: add an eighth Market/Exchange family.** The founder-ruled
+seven-family core names no market hall, exchange, or cloth hall, even though the market hall
+is Site 10's own Golden Seed. Real market halls carry at
+least three different upper-room programs on the identical open-post-or-arcade ground floor —
+pure storage (Ledbury), a commodity exchange (Shrewsbury's wool hall), and civic authority
+itself as a council chamber (Titchfield) or a courtroom (the former Shire Hall, Llandeilo).
+**Adversarial direction, still pending founder:** add `BF-MARKET-EXCHANGE`, sharing the
+open-post/arcade ground-floor chassis and market/exchange operating model. A civic council or
+court above is an explicit `Market/Exchange + Civic` composition; storage is
+`Market/Exchange + Logistics`. Co-location does not turn the trading ground into Civic.
+Full reasoning: `Reference/Urban-Institution-Study-0727/synthesis.md` §3.
+
+**Reconciliation against `URBAN-FABRIC.md`.** `rollBuilding` + `data/building-kits.js` is
+`LIVE` for ten typed kinds including tavern, temple, guildhall, manor, garrison, court,
+bathhouse, warehouse, and the delegated shop kinds; district minting is `LIVE` and write-once
+per settlement node on first entry. This is the actual current implementation Site 10's
+frontage bays draw from today, one layer below the not-yet-built `BUILDING-PROGRAM-
+TABLE-FAMILIES.md` family stack. Both facts now belong in, and are added to, the
+`§Current-roller preservation` section below.
+
+**Reconciliation against `SETTLED-LIFE-SITES-PROGRAM.md`.** That program's own step-0.5 sweep
+already confirms, at four separate points, that Site 10 does **not** own: the harborfront/quay
+(a separate host, §3.2 — Site 10 is "the nearest existing host and it does not fit"); the
+slum/warren host (a separate host at habitation-at-density, §3.4 — the "shanty quarter" the
+shared catalog's Site 10 thin brief lists as an inherited "adjacent district expression" is
+that still-unbuilt host's aggregate form standing next to Site 10's slice, not Site 10's own
+geometry; this document's own "Inherited" list already says "hosted Camp vocabulary," which
+is the correct framing); the infrastructure-hub host (a separate host entering from the
+dungeon walk, §3.6); or the home-settlement fabric itself (not a site at all, owned by
+`URBAN-FABRIC.md`, §3.5). No capsule or invariant above changes; the catalog's "inherits...
+the guest family's shanty quarter" wording is flagged here as an unresolved proposal for a
+future precision pass on that shared file, which this pass does not edit.
+
+**Adversarially reviewed status-gate values (not founder rulings):**
+
+| gate | catalog value (2026-07-25) | proposed value (this pass) | reason |
+|---|---|---|---|
+| RESEARCHED | PARTIAL | PARTIAL (unchanged) | part of the construction-evidence gap closes (market-hall/civic-building measured references, civic-authority FFT cohort), but frontage-bay/party-wall/balcony/shutter-dimension measurement and broad non-European cultural evidence remain genuinely open |
+| FOUNDER-RULED | PARTIAL | PARTIAL (unchanged) | no card selection (shutter tier, produce-tray, market-hall/`BF-` boundary) was ruled this pass |
+| BRIEF-CONGRUENT | PARTIAL | PARTIAL (unchanged) | this pass adds an addendum and reconciliation; it does not restructure the existing fifteen-section standard |
+| CLAY-PROVED | OPEN | OPEN (unchanged) | no fixture was built this pass |
+
+The 2026-07-28 adversarial pass accepts this gate reading and folds it into
+`GOLDEN-SITES-CATALOG.md`. It does not rule the eighth family or any other founder proposal.
+
+**Unresolved proposals carried forward from this pass** (none are ruled; Codex's adversarial
+review has dispositioned them, and the Market/Exchange sampler has returned, but founder
+gates remain):
+
+1. **The market hall as a missing `BF-` program.** Accept, revise, or reject the proposed
+   eighth `BF-MARKET-EXCHANGE` family now sampled in
+   `Reference/Building-Family-Table-Samples/`. The returned taste tranche includes Market Hall
+   and Exchange / Cloth Hall program layers, six shared chassis, 32 packet-wide deterministic
+   receipts (four for this family), and explicit Civic/Logistics/Exchange upper-program
+   composition cards. Full reasoning and photographic anchors (Titchfield Market Hall, the
+   former Shire Hall at Llandeilo): `Reference/Urban-Institution-Study-0727/synthesis.md` §3.
+2. **A banner + dais + long-table composition as a licensed institution-threshold variant**
+   for courthouse/guildhall/garrison-headquarters siblings, distinct from the market-hall/
+   fountain composition and from the Monastery-Study's altar/shrine grammar.
+   `FFT-COHORT-COMPARISON.md` §4.
+3. **A records wall (full architectural bookcase run) as a candidate `BF-CIVIC-AUTHORITY`
+   fixture**, and a stone threshold antechamber as a candidate pattern for the "Institution
+   threshold" zone. `FFT-COHORT-COMPARISON.md` §4.
+4. **The "shanty quarter" ownership wording.** This document's own "Inherited" list already
+   says "hosted Camp vocabulary" (correctly hosted, not owned). `GOLDEN-SITES-CATALOG.md`'s
+   Site 10 thin-brief section instead reads "Inherits: ... the guest family's shanty quarter
+   as the adjacent district expression," which should read as a hosted adjacency to the
+   still-unbuilt slum/warren host (`SETTLED-LIFE-SITES-PROGRAM.md` §3.4), not as Site 10's
+   own inherited geometry. Flagged here as a proposed wording precision for that shared file;
+   this pass does not edit it. `BREADTH-SWEEP.md` §1.
 
 ## Plain-English promise
 
@@ -336,11 +487,25 @@ This spec consumes the Site 10 record in
   realm-skinned civic forms; `rollPlace`, typed building kits, and the live urban walk's
   topology, setup, skin, segment, scene, encounter, dressing, atmosphere, interactable,
   light, and background facts.
+- `LIVE` (named concretely, 2026-07-27 reconciliation pass): `rollBuilding` +
+  `data/building-kits.js` (`URBAN-FABRIC.md` §1) for ten typed kinds — tavern, temple,
+  guildhall, manor, garrison, court, bathhouse, gambling-den, warehouse, dock-house — plus
+  the shop kinds delegating to `makeShop`; and `URBAN-FABRIC.md` §2's district fabric,
+  minting write-once codex records on first settlement entry, buildings soft-minting on
+  approach and locking on contact. This is the actual current implementation a Site 10
+  frontage bay's typed interior draws from today — one layer below, and not yet replaced
+  by, the not-yet-implemented `BUILDING-PROGRAM-TABLE-FAMILIES.md` family/program stack
+  (`ACCEPTED DIRECTION`, live table compilation not yet authorized).
 - `AUTHORED-UNWIRED`: `urban-area-type`, including Suspended Cage, Prison Block, and
   Catwalk Maze, is not consumed by `rollUrbanWalk`.
 - `TARGET-ADAPTER`: the Urban Institution grammar must adapt the live urban graph and
   explicitly declare any future `urban-area-type` boundary; it may not create a parallel
-  town generator or claim unwired rows are live.
+  town generator or claim unwired rows are live. Once `BUILDING-PROGRAM-TABLE-FAMILIES.md`'s
+  family tables are implemented, each Site 10 frontage bay's committed program must draw its
+  interior from that family's chassis/arrangement/state/scene/Spice stack rather than the
+  flat `building-interior` d300 — the 42-roll audit's own finding (semantically
+  unconstrained, realm-invariant results) applies to a rolled Site 10 bay exactly as it does
+  to any other typed building; see the gap-closure addendum above.
 
 Before implementation, retain one non-market civic/service institution, one vertical
 or water-bound expression, and one strange setting/material result in addition to the
@@ -579,11 +744,43 @@ non-European urban evidence and culture cards.
 
 ## Remaining evidence and proof gaps
 
-- measured frontage, market-hall, party-wall, gallery, balcony, roof-access, and
-  terrain-street plans/sections;
-- direct shutter-counter construction and working-market evidence;
+- measured frontage, party-wall, gallery, balcony, roof-access, and terrain-street
+  plans/sections (market-hall measurement is now partly addressed — see the 2026-07-27
+  update below);
+- direct shutter-counter construction and working-market evidence (working-market evidence
+  is now partly addressed — see below; the shutter mechanism's own dimensions remain open);
 - fixed-camera roof/overlook and crowd/goods proof;
-- earlier and broader cultural/color evidence;
+- earlier and broader cultural/color evidence, including non-European urban/temple-ward
+  evidence (one European temple-ward anchor now exists — see below; broader breadth remains
+  open);
 - owning-system routing for time, fair, toll, destructibility, and trade memory;
-- rulings on produce tray and answer-object tier; and
+- rulings on produce tray, answer-object tier, and the market-hall/`BF-` family boundary
+  (new this pass — see the addendum);
 - retained mechanism and scene fixtures in `GOLDEN-SITES-PROOF-QUEUE.md`.
+
+**2026-07-27 update:** the construction-evidence gap for the market-hall family and civic
+buildings, and the reconciliation against `BUILDING-PROGRAM-TABLE-FAMILIES.md` /
+`URBAN-FABRIC.md` / `SETTLED-LIFE-SITES-PROGRAM.md`, are now addressed — see the
+Gap-closure addendum above and the packet listed below. Card selection (shutter tier,
+produce tray, the market-hall/`BF-` boundary) and the clay fixture remain the open
+next-phase work; they were not in scope for this evidence pass.
+
+Research packet (original, 2026-07-24/25):
+
+- `Reference/Urban-Study/synthesis.md`
+- `Reference/Urban-Culture-Study/synthesis.md`
+
+Research packet (gap-close addendum, 2026-07-27 — additive, does not replace the above):
+
+- `Reference/Urban-Institution-Study-0727/README.md`
+- `Reference/Urban-Institution-Study-0727/synthesis.md`
+- `Reference/Urban-Institution-Study-0727/FFT-COHORT-COMPARISON.md`
+- `Reference/Urban-Institution-Study-0727/MEASURED-REFERENCES.md`
+- `Reference/Urban-Institution-Study-0727/BREADTH-SWEEP.md`
+- `Reference/Urban-Institution-Study-0727/LICENSE-LEDGER.md`
+
+The original packets support this working spec; their declared gaps keep `RESEARCHED` at
+`PARTIAL`. The 2026-07-28 adversarial integration accepts that unchanged reading (see the
+addendum's reviewed status-gate table for the reasoning). This document still cannot
+advance `CLAY-PROVED` without the retained fixture, and `FOUNDER-RULED`/`BRIEF-CONGRUENT`
+remain `PARTIAL` until the open card selections are founder-ruled.

@@ -475,7 +475,8 @@ guard("10. renderer boundary", () => {
   check("10c. every device is gated on its own flag, so the ladder can isolate one bin",
     /flags\.chamfer/.test(region) && /flags\.rollover/.test(region) && /flags\.joint/.test(region)
     && /flags\.occluders/.test(region)
-    && /flags\.jitter/.test(region) && /flags\.nosing/.test(region) && /flags\.fold/.test(region));
+    && /flags\.jitter/.test(region) && /flags\.nosing/.test(region)
+    && /terrainCellTopH\(field, c\.index, u, v, flags\)/.test(region));
   check("10c2. rejected sedimentary face bands are absent from both registry and renderer—not "
     + "merely hidden by the current rung",
     read("src/engine/terrain-expression.js").length > 2000 && region.length > 2000
@@ -490,6 +491,7 @@ guard("10. renderer boundary", () => {
     + "the fine joint mesh consumes the clipped running-bond law",
     /terrainCellTopH/.test(region) && /const reliefSides =/.test(region)
     && /sideKinds\.[wnes] === "curb"/.test(region) && /const skirtRuns =/.test(region)
+    && /capGeo\.setIndex\(capIndex\)/.test(region)
     && /terrainFineJointSegments/.test(region) && /terrainFineJointReachesBoundary/.test(region)
     && /continuous-tactical/.test(region) && /relief-boundary/.test(region));
   const spritesSrc = read("src/ui/theater-sprites.js");

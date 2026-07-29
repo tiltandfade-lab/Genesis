@@ -8,6 +8,30 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-28 — FFT hillside, switchback, and cap-topology proof [Codex]
+
+**Added**
+- A retained `20 × 24` terrain battlefield with `12h / 30 ft` of relief, five macro elevation
+  zones, a three-hairpin `0h → 12h` switchback, a narrower `0h → 10h` gully, and one localized
+  middle-shoulder scarp.
+- Reusable `control-surface` and `graded-path` terrain operations. Graded paths preserve authored
+  vertex heights and widths under translation and blend cut/fill shoulders into the prior macro
+  field.
+- CL-F09 route, quiet-surface, continuity, variation, scarp-locality, and mutation gates plus a
+  retained zero-browser-error capture packet.
+
+**Changed**
+- Removed the verifier assumptions that isolated small/large feature relief was a global terrain
+  height ceiling.
+- Replaced the alternating 4×4 micro-quad cap with one indexed centre/edge/corner eight-facet cap.
+  Cap normals share responsive nodes; hard cliff skirts remain split.
+- Lightened natural tactical seams so terrain topology dominates the square lattice.
+
+**Fixed**
+- Graded switchback cells no longer inherit retaining-terrace curb semantics.
+- Route shoulders no longer cut a wall around a painted polyline.
+- The diagonal micro-grid no longer produces a zipper across continuous hillsides.
+
 ## 2026-07-27 — Integration close: four lanes landed; TIYL starts diversified; settled-life program ruled [Fable]
 
 **Added**
@@ -811,38 +835,4 @@ Fable's Phase-3 call; (2) **Open5e `srd-2024`** (CC-BY-4.0) as a build-time cros
 
 **Deferred.** Fable weighs in on Phase 3, potentially expands/orchestrates the next waves. All four adoption
 candidates are recommendations, not decisions.
-
-## 2026-07-13 — GEOMETRY DEFAULT FLIPPED legacy→oss (§15 step 8) + stabilization hold opened (orchestrated)
-
-Adam **delegated the flip verdict to Claude conditional on sound pre-flip evidence** ("run the pre-flip
-evidence wave, then if evidence is sound, authorize the flip, and continue fleshing out all visual
-engine changes as specified"). Branch `feat/geometry-oss-flip`, landed `--no-ff`, gates re-run by me.
-
-**Changed.**
-- **`ROOM_SHELL_POLYGON_KERNEL_FLAG` (theater-boot.js) `legacy`→`oss`** — production now renders the
-  PolygonKernel floor + aperture-delimited wall-run path (G1/G2/G3). The module-level
-  `ROOM_SHELL_POLYGON_KERNEL` const (theater-room-mesh.js) **stays `legacy`** as the bare-call/dev
-  fallback, retaining the legacy path for the §15 step-9 stabilization hold; the flag is still
-  seam-settable back via `window.Theater._setRoomShellPolygonKernel`.
-
-**Added.**
-- **`dev/capture-oss-integrated.mjs`** — filled OSS §15 promotion steps 6–7 (the only genuine pre-flip
-  gap; F1 outside-low grazing capture + F2 5000-room gap/provenance fuzz already existed and re-gated
-  green). Boots a real in-session room, mounts it under legacy then oss at the product camera, reads
-  `renderer.info` full-chain draw submissions + resource census. Output committed to
-  `dev/oss-integrated-shots/` for review.
-
-**Evidence (all re-run/read by me).** Numeric: verify-wall-runs-oss **92/0** (corner gap 0 at
-stem/cap/footing, both cap lips, 100% provenance), verify-wall-runs-oss-fuzz over **5000 randomized
-rooms** (zero join-gap, full segment provenance, acute-bevel + red-first negative control),
-verify-geometry-fixtures **28/0** (7 legacy defects fixed, 0 regressions), room-shell parity **48/0**.
-Visual: outside-low grazing — oss closes the corner with a continuous mitered cap lip; product-camera
-integrated — oss ≡ legacy at the player-visible shot. Perf: draw calls **Δ0**, triangles **Δ−286**
-(oss cheaper), geometries/programs **Δ0**, textures **+2** one-time. **Full 197-harness sweep: 4 reds,
-ALL verified pre-existing on master** (verify-{room-shell-render,diegetic-light,occlusion-fade,
-gallery-pass} — render-flake/CI-auto-skip, fail identically pre-flip). check-manifest OK.
-
-**Deferred.** §15 step 10 (remove the legacy triangulation path) waits until the stabilization hold
-passes with no rollback-worthy defect. Phase 3 (GP-2..4 visual production) now rides on the flipped
-geometry, gated on Codex research + charter tool-adoption/spend gates.
 

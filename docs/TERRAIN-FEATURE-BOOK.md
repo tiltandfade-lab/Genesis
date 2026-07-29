@@ -1,7 +1,7 @@
 ---
 type: working-build-spec
 created: 2026-07-28
-status: BUILT — CL-F08a form-language baseline; visual verdict remains Adam's
+status: BUILT — CL-F08a form-language baseline + CL-F09 vertical FFT battlefield proof
 owner: authored terrain features before procedural transformation
 authority:
   - ART-DIRECTION-CANON.md
@@ -78,6 +78,10 @@ with rotated elliptical ones, and lets ridge/channel width, height, and depth va
 Runs can fade at their ends. This gives an authored feature a beginning, continuation, and
 termination instead of a constant-width ribbon or a pile of independently randomized cells.
 
+CL-F09 removes the mistaken assumption that those isolated-study dimensions are terrain ceilings.
+It adds a battlefield-scale sparse control surface and a graded-corridor operation, then proves
+them together on a tall map before any procedural deformation is introduced.
+
 ## The eight feature baselines
 
 ### Small
@@ -123,6 +127,34 @@ This is the Igros/Riovanes FFT grammar, not a complete fortress. Gate machinery,
 heraldry, practical fire, wall-walk interiors, and persistent multi-window identity remain owned
 by the Site 9 structure/runtime program.
 
+## `FFT-H01` — vertical hillside and switchback proof
+
+The retained battlefield is a `20 × 24`-cell mountainside with `12h / 30 ft` of vertical travel.
+It is organized as five named tactical zones: lower approach, lower fighting bench, middle bench,
+saddle, and high overlook.
+
+Two reusable chassis operations author it:
+
+- `control-surface` bilinearly interpolates a sparse, asymmetric survey grid into one macro
+  heightfield. This prevents a pile of isolated peak stamps while retaining local FFT-style flat,
+  incline, convex, concave, and rolling tile responses after quantization.
+- `graded-path` assigns tactical heights along a polyline and blends the tread back into the prior
+  terrain through a cut/fill shoulder. A three-hairpin primary route connects `0h → 12h`; a
+  narrower direct gully connects `0h → 10h`.
+
+One broken middle-shoulder scarp gives the switchback a reason to round the open right flank. It is
+localized to one height band and may not repeat as parallel strata. The rest of the massif uses
+walkable continuous slope. At the retained seed the field has 480 standable cells, zero illegal
+walk edges, zero unowned faces, zero unreachable standable cells, and calm fighting surfaces in
+all five macro zones.
+
+The render cap is an indexed centre/edge/corner topology: eight broad facets share the nine
+responsive nodes inside a cell while real cliff skirts duplicate their vertices. This preserves
+the varying tile angles without exposing the former alternating micro-quad diagonal as a zipper.
+Natural tactical seams are lighter than relief boundaries, and the marked route material remains
+visible in the Clayroom proof so the switchback can be judged as a route rather than inferred from
+a receipt.
+
 ## Height and camera law
 
 The Clayroom's common two-storey examples are not a height limit.
@@ -152,6 +184,7 @@ specific cutaway/camera composition proves it does not hide tactical ground.
 - Feature scene: `?clayroom=1&clayfixture=terrain&terrainscene=authored-feature-book&terrainframe=0`
 - Defensive scenes: `terrainscene=defensive-ridgeworks` and
   `terrainscene=defensive-gateworks`
+- Vertical battlefield: `terrainscene=fft-hillside-proof&terrainrung=all`
 
 The headless gate requires:
 
@@ -168,10 +201,14 @@ The headless gate requires:
 - a real four-storey mass, with every tall mass inside the far-band rule.
 - no hard faces on natural ground except the explicitly authored bluff;
 - at least half of every feature study retained as calm datum ground;
-- a two-quantum maximum relief on small studies and a three-quantum maximum on large natural
-  studies, with the causal bluff as the four-quantum exception;
+- no global relief ceiling inferred from the isolated small/large feature studies;
 - a bounded summit share so the reverse-slope ridge cannot regress into a broad flat slab;
 - actual use of rotated directional masses and tapered or fading authored runs.
+- `12h / 30 ft` of battlefield relief with a connected legal switchback and alternate gully;
+- calm fighting ground in all five macro elevation zones;
+- one localized scarp rather than parallel sedimentary bands;
+- shared-edge continuity and varied tile tangents across the full tall field;
+- an indexed eight-facet cap with no alternating diagonal micro-grid.
 
 Visual acceptance remains Adam's. A green engine gate says the feature is legal, continuous,
 deterministic, and honestly placed; it does not say the feature looks good.

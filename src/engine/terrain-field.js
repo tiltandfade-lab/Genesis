@@ -165,7 +165,10 @@ function terrainShapeMask(shape, ex, ey){
    op writes a DEMAND in h units plus a per-cell clamp; the thirteen pieces are parameter sets that
    select ops and values, never new generators. Every op is pure and takes its randomness from a
    named sub-stream. */
-var TERRAIN_CHASSIS_OPS = Object.freeze(["radial", "ridge", "basin", "slot", "terrace", "apron", "scatter", "patch"]);
+var TERRAIN_CHASSIS_OPS = Object.freeze([
+  "radial", "ridge", "basin", "slot", "terrace", "apron", "scatter", "patch",
+  "control-surface", "graded-path"
+]);
 
 function terrainOpApply(op, ctx){
   var ex = ctx.ex, ey = ctx.ey;
@@ -190,7 +193,7 @@ function terrainOpApply(op, ctx){
       lengths.push(sl);
       total += sl;
     }
-    var best = Infinity, side = 1, along = 0, before = 0;
+    var best = Infinity, side = 1, along = 0, before = 0, segmentIndex = -1, segmentT = 0;
     for(var sj = 0; sj + 1 < points.length; sj++){
       var a = points[sj], b = points[sj + 1];
       var vx = b.x - a.x, vy = b.y - a.y;
@@ -202,11 +205,14 @@ function terrainOpApply(op, ctx){
         best = dd;
         side = ((px - qx) * vy - (py - qy) * vx) >= 0 ? 1 : -1;
         along = before + tt * (lengths[sj] || 0);
+        segmentIndex = sj;
+        segmentT = tt;
       }
       before += lengths[sj] || 0;
     }
     return {
       distance: best, side: side, along: along, total: total,
+      segmentIndex: segmentIndex, segmentT: segmentT,
       t01: total > 0 ? Math.max(0, Math.min(1, along / total)) : 0
     };
   }
@@ -451,6 +457,89 @@ function terrainOpApply(op, ctx){
     return;
   }
 
+  if(op.type === "control-surface"){
+    /* A sparse MACRO control mesh, not a pile of stamps. The rows and columns are authored terrain
+       relationships — lower approach, shoulder, bench, saddle, high shelf — and bilinear
+       interpolation fills the ground between them. This is the terrain equivalent of a surveyor's
+       contour framework: the controls may be moved procedurally later without changing which
+       elevation zones and routes the map contains.
+
+       Heights are still quantized by terrainFieldBuild after all operations have composed. A
+       control surface may deliberately contain a 2h+ transition; that is an escarpment and must be
+       paired with a route or climb in the authored composition, not silently smoothed into a ramp. */
+    var cols = p.columns || [];
+    var rows = p.rows || [];
+    var values = p.heightsH || [];
+    if(cols.length < 2 || rows.length < 2 || values.length !== rows.length){
+      throw new Error("terrainOpApply control-surface: columns, rows, and heightsH grid required");
+    }
+    function interval(stops, value){
+      if(value <= stops[0]) return { i: 0, t: 0 };
+      for(var si = 0; si + 1 < stops.length; si++){
+        if(value <= stops[si + 1]){
+          return {
+            i: si,
+            t: (value - stops[si]) / Math.max(0.000001, stops[si + 1] - stops[si])
+          };
+        }
+      }
+      return { i: stops.length - 2, t: 1 };
+    }
+    for(y = 0; y < ey; y++) for(x = 0; x < ex; x++){
+      var xi = interval(cols, x), yi = interval(rows, y);
+      var row0 = values[yi.i], row1 = values[yi.i + 1];
+      if(!row0 || !row1 || row0.length !== cols.length || row1.length !== cols.length){
+        throw new Error("terrainOpApply control-surface: every height row must match columns");
+      }
+      var h00 = row0[xi.i], h10 = row0[xi.i + 1];
+      var h01 = row1[xi.i], h11 = row1[xi.i + 1];
+      var ha = h00 + (h10 - h00) * xi.t;
+      var hb = h01 + (h11 - h01) * xi.t;
+      write(x, y, ha + (hb - ha) * yi.t, p.slopeClamp, p.kind || "ground");
+    }
+    return;
+  }
+
+  if(op.type === "graded-path"){
+    /* A switchback is a GRADED CORRIDOR, not a decorative zig-zag. Each polyline vertex owns a
+       tactical height. The cells within the route width interpolate those heights along the
+       nearest segment, producing a monotonic, traversable path with real landings at hairpins.
+       Where the corridor cuts into higher ground or fills over lower ground its sides may become
+       owned retaining faces; the centreline itself remains inside the walkable 1h-per-cell law. */
+    var gpts = p.polyline || [];
+    if(gpts.length < 2) return;
+    for(y = 0; y < ey; y++) for(x = 0; x < ex; x++){
+      var gp = polylineProjection(gpts, x, y);
+      if(gp.segmentIndex < 0) continue;
+      var ga = gpts[gp.segmentIndex], gb = gpts[gp.segmentIndex + 1];
+      var widthA = ga.widthCells == null ? (p.widthCells || 1) : ga.widthCells;
+      var widthB = gb.widthCells == null ? widthA : gb.widthCells;
+      var pathWidth = widthA + (widthB - widthA) * gp.segmentT;
+      var pathHalfWidth = pathWidth / 2;
+      var shoulderCells = Math.max(0, p.shoulderCells || 0);
+      if(gp.distance > pathHalfWidth + shoulderCells) continue;
+      var ah = ga.h == null ? (p.startH || 0) : ga.h;
+      var bh = gb.h == null ? ah : gb.h;
+      var pathH = ah + (bh - ah) * gp.segmentT;
+      /* Cut/fill is a transition, not a wall around a painted line. Outside the marked tread, blend
+         the corridor datum back into the terrain demand that earlier macro operations authored.
+         The shoulder therefore absorbs ordinary 1h differences while a genuinely deep uphill cut
+         can still earn a localized retaining face. */
+      var pathInfluence = 1;
+      if(gp.distance > pathHalfWidth && shoulderCells > 0){
+        var shoulderT = 1 - (gp.distance - pathHalfWidth) / shoulderCells;
+        pathInfluence = shoulderT * shoulderT * (3 - 2 * shoulderT);
+      }
+      var gi = y * ex + x;
+      var existingH = demand[gi];
+      var shapedH = existingH + (pathH - existingH) * pathInfluence;
+      write(x, y, shapedH, p.slopeClamp == null ? 1 : p.slopeClamp,
+        p.kind || "ground", p.mode || op.mode || "set");
+      if(gp.distance <= pathHalfWidth && p.surfaceKind) ctx.surface[gi] = p.surfaceKind;
+    }
+    return;
+  }
+
   throw new Error("terrainOpApply: unknown op type " + op.type);
 }
 
@@ -465,7 +554,9 @@ function terrainOpsTranslate(ops, dx, dy){
     if(p.cy != null) p.cy += dy;
     if(p.apexCell) p.apexCell = { x: p.apexCell.x + dx, y: p.apexCell.y + dy };
     if(p.originCell) p.originCell = { x: p.originCell.x + dx, y: p.originCell.y + dy };
-    if(p.polyline) p.polyline = p.polyline.map(function(pt){ return { x: pt.x + dx, y: pt.y + dy }; });
+    if(p.polyline) p.polyline = p.polyline.map(function(pt){
+      return Object.assign({}, pt, { x: pt.x + dx, y: pt.y + dy });
+    });
     if(p.cells) p.cells = p.cells.map(function(c){ return { x: c.x + dx, y: c.y + dy }; });
     if(p.bounds) p.bounds = { x: p.bounds.x + dx, y: p.bounds.y + dy, w: p.bounds.w, d: p.bounds.d };
     return Object.assign({}, op, { params: p });

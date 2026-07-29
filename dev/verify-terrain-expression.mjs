@@ -220,10 +220,12 @@ guard("5. stand plane", () => {
     pOff.centreH === pOn.centreH && Math.abs(pOn.centreH - f.cells[idx].h) < 1e-12);
   check("5c. with the shallow grade OFF the plane is exactly horizontal",
     pOff.dHdx === 0 && pOff.dHdz === 0 && pOff.slopeDeg === 0);
-  check("5d. the default is g3: the only grade that joins a real 1h-per-cell run without a residual "
-    + "riser or invented height",
-    on.gradeId === "g3" && Math.abs(pOn.slopeDeg - W.terrainSlopeDegForStepH(1)) < 0.001,
-    on.gradeId + " / " + pOn.slopeDeg);
+  const variation = W.terrainSurfaceVariationReport(f, on);
+  check("5d. the default g3 surface keeps varied tile tangents instead of replacing the field with "
+    + "one uniform ramp",
+    on.gradeId === "g3" && variation.ok && variation.distinctTangentPlanes >= 8
+      && variation.responsiveJoinedPairs > 0,
+    on.gradeId + " / " + JSON.stringify(variation));
   const g2 = W.terrainExpressionFlags("all", { gradeId: "g2" });
   check("5d2. the 18-degree FFT comparison grade remains explicitly selectable",
     g2.gradeId === "g2" && Math.abs(W.terrainSlopeDegForStepH(g2.gradeScale) - 18.0) < 0.05,
@@ -238,10 +240,13 @@ guard("5. stand plane", () => {
     worst <= W.TERRAIN_GRID_LAW.maxWalkableSlopeDeg + 1e-9, "worst=" + worst.toFixed(3) + "deg");
   check("5f. and none exceeds the 26.565 deg one-quantum step",
     worst <= W.terrainSlopeDegForStepH(1) + 1e-9, "worst=" + worst.toFixed(3));
+  check("5g. the live sheet contains FFT's flat, incline, convex and concave tile responses",
+    ["flat", "incline", "convex", "concave"].every(t => (variation.tileTypes[t] || 0) > 0),
+    JSON.stringify(variation.tileTypes));
 });
 
 // ============================================================================
-console.log("6. the tri-split fold, honestly (§3 B4)");
+console.log("6. FFT-style shared tile nodes + selective feature relief");
 guard("6. fold", () => {
   const f = W.terrainBenchSceneBuild("thirteen-piece-sheet").primary;
   const on = W.terrainExpressionFlags("all");
@@ -263,13 +268,17 @@ guard("6. fold", () => {
   const a = freshWin(), b = freshWin();
   const fa = a.terrainBenchSceneBuild("thirteen-piece-sheet").primary;
   const fb = b.terrainBenchSceneBuild("thirteen-piece-sheet").primary;
-  const seq = (w, fld) => fld.cells.slice(0, 60).map(c => w.terrainCellFoldDiagonal(fld, c.index)).join("");
-  check("6d. the per-cell diagonal is deterministic across two separate page loads",
+  const seq = (w, fld) => fld.cells.map(c => {
+    const p = w.terrainSurfaceTileProfile(fld, c.index, w.terrainExpressionFlags("all"));
+    return p.type + ":" + p.dHdx.toFixed(3) + ":" + p.dHdz.toFixed(3);
+  }).join("|");
+  check("6d. the complete responsive tile-profile field is deterministic across page loads",
     seq(a, fa) === seq(b, fb));
-  check("6e. the diagonal is not constant (it is a real per-cell choice, not a fixed split)",
-    new Set(seq(a, fa).split("")).size === 2, seq(a, fa).slice(0, 30));
-  check("6f. the tri-split declares ONE stand plane — a Medium needs 0.831 wu and a half-cell "
-    + "triangle inscribes only 0.586, so two standable triangles was never available",
+  const variation = W.terrainSurfaceVariationReport(f, on);
+  check("6e. continuity did not flatten the map: joined neighbours change tangent and curvature",
+    variation.ok && variation.responsiveJoinedPairs > 50 && variation.shapedCells > 50,
+    JSON.stringify(variation));
+  check("6f. every convex/concave/faceted tile still declares ONE stand plane for its miniature",
     Math.abs(W.terrainProtectedDiameter("medium") - 0.831) < 0.002
     && (1 + 1 - Math.SQRT2) < W.terrainProtectedDiameter("medium"),
     W.terrainProtectedDiameter("medium").toFixed(4));
@@ -286,10 +295,9 @@ guard("6. fold", () => {
   });
   check("6g. the fold is EXACTLY ZERO around the whole cell perimeter — adjacent cells cannot "
     + "publish unrelated relief at one edge", edgeFold === 0, String(edgeFold));
-  const route = W.terrainBenchSceneBuild("route-proof");
-  const reports = route.fields.map(field => W.terrainSurfaceContinuityReport(field, on));
-  check("6h. every declared terrace/ramp surface in the route proof publishes one shared edge "
-    + "height, with a non-empty measured sample",
+  const hill = W.terrainBenchSceneBuild("one-clamp-proof").fields[0];
+  const reports = [hill, f].map(field => W.terrainSurfaceContinuityReport(field, on));
+  check("6h. every natural hill/sheet surface publishes the same full edge curve from both tiles",
     reports.length > 0 && reports.every(r => r.ok && r.samplesChecked > 0),
     JSON.stringify(reports));
   const segs = W.terrainFineJointSegments(f, f.cells.find(c => c.inPlayfield).index);
@@ -305,6 +313,32 @@ guard("6. fold", () => {
       > W.TERRAIN_FINE_JOINT_LAW.reliefBoundaryValueMultiplier
     && W.TERRAIN_FINE_JOINT_LAW.fineValueMultiplier
       > W.TERRAIN_FINE_JOINT_LAW.continuousTacticalValueMultiplier);
+  const route = W.terrainBenchSceneBuild("route-proof").primary;
+  let curb = null;
+  route.cells.some(c => {
+    return [[1, 0], [0, 1]].some(d => {
+      const nx = c.x + d[0], ny = c.y + d[1];
+      if(nx >= route.extent.x || ny >= route.extent.y) return false;
+      const j = ny * route.extent.x + nx;
+      if(W.terrainSurfaceEdgeKind(route, c.index, j) !== "curb") return false;
+      curb = { a: c.index, b: j, dir: d }; return true;
+    });
+  });
+  let curbGap = 0;
+  if(curb){
+    curbGap = curb.dir[0]
+      ? Math.abs(W.terrainCellTopH(route, curb.a, 0.5, 0, on)
+        - W.terrainCellTopH(route, curb.b, -0.5, 0, on))
+      : Math.abs(W.terrainCellTopH(route, curb.a, 0, 0.5, on)
+        - W.terrainCellTopH(route, curb.b, 0, -0.5, on));
+  }
+  check("6k. an authored terrace retains a real 1h curb while natural 1h hill edges join",
+    curb && curbGap > 0.9, JSON.stringify({ curb, curbGap }));
+  const foldCells = f.cells.filter(c =>
+    Math.abs(W.terrainCellFoldOffset(f, c.index, 0.25, 0.1, on)) > 1e-9);
+  check("6l. B4 micro-relief is feature-scoped rather than random terrain on every tile",
+    foldCells.length > 0 && foldCells.length < f.cells.filter(c => c.inPlayfield).length * 0.2,
+    foldCells.length + " feature cells");
 });
 
 // ============================================================================
@@ -452,9 +486,10 @@ guard("10. renderer boundary", () => {
   check("10e. it reads the ONE published stand plane rather than deriving a second one",
     /terrainCellStandPlane/.test(region) && /standPlaneFor/.test(region)
     && (region.match(/function standPlaneFor/g) || []).length <= 1);
-  check("10e2. the cap samples the shared surface, only exposed/downhill edges get skirts, and "
+  check("10e2. the cap samples the shared FFT-style surface, skirts only semantic hard breaks, and "
     + "the fine joint mesh consumes the clipped running-bond law",
-    /terrainCellTopH/.test(region) && /const skirtEdges = \[sides\.n > 0/.test(region)
+    /terrainCellTopH/.test(region) && /const reliefSides =/.test(region)
+    && /sideKinds\.[wnes] === "curb"/.test(region) && /const skirtRuns =/.test(region)
     && /terrainFineJointSegments/.test(region) && /terrainFineJointReachesBoundary/.test(region)
     && /continuous-tactical/.test(region) && /relief-boundary/.test(region));
   const spritesSrc = read("src/ui/theater-sprites.js");

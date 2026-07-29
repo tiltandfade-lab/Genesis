@@ -7,9 +7,9 @@
          old "the sprite must NOT tilt" constant is gone rather than left lying around to be read by
          mistake. (The world-up AGREEMENT itself needs a scene graph: dev/verify-bw2-2-floor-contact
          group 21b and dev/verify-terrain-standee.cjs.)
-     R2  the base skirt's depth is DERIVED — the number is bounded above by the cap slab and below
-         by the worst daylight the fold can open, and both bounds are recomputed here rather than
-         copied from the comment that claims them.
+     R2  the base skirt is ADAPTIVE — each terrain witness derives its cosmetic depth from the
+         responsive rendered surface beneath the worst Medium-cap footprint, while the published
+         clamp remains inside the terrain column.
      R3  the overhang LICENCE: the rule, the forbidden list, and the scene cap, with the cap proved
          to actually withdraw licences on a field that would exceed it.
      R4  the grade ladder: every declared angle is arithmetically what it claims, the declared
@@ -112,29 +112,41 @@ guard("R1", () => {
 });
 
 // ============================================================================
-console.log("\nR2. the base skirt's depth is derived, not guessed");
+console.log("\nR2. the base skirt follows the responsive tile instead of flattening it");
 guard("R2", () => {
   const s = W.TERRAIN_BASE_SKIRT;
-  check("R2a. the skirt declares a depth, its ceiling and the need it was derived from",
-    s && s.depthWU > 0 && s.capCeilingWU > 0 && s.derivedNeedWU > 0, JSON.stringify(s));
-  /* recompute the FLOOR from the chassis's own constants rather than trusting the comment */
-  const budget = W.TERRAIN_WALK_NOISE_BUDGET_H.perCellH;              /* quanta */
-  const q = W.TERRAIN_GRID_LAW.verticalQuantumWorldUnits;             /* wu per quantum */
-  const dip = budget * q;                                             /* interior bell can reach 1 */
-  const need = dip - W.TERRAIN_STANDEE_CONTRACT.nominalEmbed;
-  check("R2b. the derived need recomputes to the declared one (full interior fold amplitude, less "
-    + "the authored embed) — " + need.toFixed(4) + " wu",
-    Math.abs(need - s.derivedNeedWU) < 0.0005, need.toFixed(5) + " vs " + s.derivedNeedWU);
-  check("R2c. the skirt is DEEPER than the daylight it exists to cover", s.depthWU > need,
-    s.depthWU + " vs " + need.toFixed(5));
-  check("R2d. and SHALLOWER than the cap slab, so it can never reach the A3 shaft's inset notch "
-    + "and be seen from a low camera", s.depthWU < s.capCeilingWU,
-    s.depthWU + " vs " + s.capCeilingWU);
-  check("R2e. the cap ceiling matches the renderer's own CLAY_TERRAIN_CAP_H (a skirt sized against "
-    + "a stale copy of that number would be a silent regression)",
-    new RegExp("CLAY_TERRAIN_CAP_H = " + s.capCeilingWU.toFixed(2))
-      .test(read("src/ui/theater-clay-room.js")),
-    "looking for CLAY_TERRAIN_CAP_H = " + s.capCeilingWU.toFixed(2));
+  check("R2a. the law declares an adaptive range, sample slack, and the terrain-column bound",
+    s && s.adaptive === true && s.minDepthWU > 0 && s.maxDepthWU > s.minDepthWU
+      && s.sampleSlackWU > 0 && s.minimumColumnDepthWU > s.maxDepthWU,
+    JSON.stringify(s));
+  const fields = allFields().map((x) => x.field);
+  const flatFlags = W.terrainExpressionFlags("material", { shallowgrade: true, gradeId: "g0" });
+  const gradeFlags = W.terrainExpressionFlags("material", { shallowgrade: true, gradeId: "g3" });
+  const flatDepths = [];
+  const gradeDepths = [];
+  fields.forEach((f) => f.cells.forEach((c, i) => {
+    if(!c.standable) return;
+    flatDepths.push(W.terrainStandeeSkirtNeedWU(f, i, flatFlags));
+    gradeDepths.push(W.terrainStandeeSkirtNeedWU(f, i, gradeFlags));
+  }));
+  check("R2b. a flat field asks only for the published minimum support",
+    flatDepths.length > 0 && flatDepths.every((d) => d === s.minDepthWU),
+    JSON.stringify([...new Set(flatDepths)]));
+  check("R2c. responsive convex/concave terrain derives several deeper supports from its actual "
+    + "surface, rather than applying one global guess",
+    gradeDepths.some((d) => d > s.minDepthWU)
+      && new Set(gradeDepths.map((d) => d.toFixed(4))).size >= 4,
+    JSON.stringify([...new Set(gradeDepths)].slice(0, 12)));
+  check("R2d. every derived support stays inside the declared adaptive range and the minimum "
+    + "terrain-column depth",
+    gradeDepths.every((d) => d >= s.minDepthWU && d <= s.maxDepthWU)
+      && s.maxDepthWU < s.minimumColumnDepthWU,
+    Math.min(...gradeDepths) + ".." + Math.max(...gradeDepths));
+  const room = read("src/ui/theater-clay-room.js");
+  check("R2e. the renderer requests the per-tile derived depth from the engine instead of "
+    + "silently falling back to one constant",
+    /terrainStandeeSkirtNeedWU\(field, index, expressionFlags\)/.test(room),
+    "no adaptive skirt call in theater-clay-room.js");
   check("R2f. the skirt is declared COSMETIC and scoped to terrain witnesses — the flat tabletop "
     + "and the interior boards keep the plinth they have",
     /contact Y/.test(String(s.cosmeticOnly)) && /terrain witnesses only/.test(String(s.defaultOn)));
@@ -463,6 +475,7 @@ guard("manifest", () => {
     && ["TERRAIN_GRADE_LADDER", "TERRAIN_OVERHANG_LAW", "TERRAIN_MEDIUM_ACCESS_LAW",
       "TERRAIN_CLIMB_EASED", "TERRAIN_BASE_SKIRT", "terrainOverhangCensus",
       "terrainMediumAccessCensus", "terrainFaceClimb", "terrainSurfaceContinuityReport",
+      "terrainSurfaceVariationReport", "terrainStandeeSkirtNeedWU",
       "TERRAIN_FINE_JOINT_LAW", "terrainFineJointSegments"].every((s) => mod.owns.includes(s)),
     mod ? JSON.stringify(mod.owns.filter((o) => /GRADE|OVERHANG|MEDIUM|CLIMB|SKIRT/.test(o))) : "no module");
   check("M2. the engine layer stays engine — no THREE construction, no DOM, no camera in the R2 "

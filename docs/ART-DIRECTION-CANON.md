@@ -1907,3 +1907,30 @@ Binding consequences:
 - This is the last additive terrain-expression pass before consolidation. Further work begins by
   cleaning the studies, receipts, amended decisions, and branch stack, then ruling on a cell-cap
   versus field-contour production architecture.
+
+## RESPONSIVE FFT TILE CONTOURS (Adam, 2026-07-28 — binding correction; verbatim)
+
+> "no, that's actually a downgrade, claudes take was closer because there were varying angles per grid tile, which is the idea, its just if one grid has an angle, in most cases the next grid til should connect in a responsive way so that terrain has hills, bumps, dips, natural rises, natural falls that make sense. sometimes a curb does make sense, if the riser is part of a rising cliff or canyon wall, other times the rising needs to be gradual like in hills, or places where roots might have pushed up the earth
+>
+> you just kind of gave each tile it's own random terrain and that's weird and can probably be used in this process but generally fails"
+
+> "study a FFT map! try to recreate some of the features in our own engine!"
+
+Binding consequences:
+
+- This correction supersedes the prior rule that isolated crests, feet, and corners should
+  generally be flattened. Variation in angle per tactical tile is required: a hill may pass through
+  incline, convex crest, concave transition, saddle, and rolling tiles.
+- Continuity is responsive, not uniform. Adjacent natural tiles negotiate shared edge-midpoint and
+  corner heights while retaining their own centre datum, so the local angle may change across the
+  join without opening a crack.
+- A curb is semantic. It remains where an authored terrace, cliff, canyon wall, crevice, chasm,
+  earthen bank, or root undercut needs a riser. A generic one-height natural neighbour relationship
+  is a grade at the production register, not an automatic curb.
+- Deterministic per-cell variation is not automatically terrain structure. Random folds and
+  independent height noise are forbidden as a field-wide terrain generator; local micro-relief is
+  limited to feature-bearing berm, scree, and root-ground pieces and must vanish at shared edges.
+- The generic engine uses FFT's corner-response grammar—flat, incline, convex, and concave as the
+  required core, with saddle and rolling transitions as modern extensions. Stronger regional
+  silhouettes and selective hard breaks provide the modern edge without converting the map into
+  Minecraft cubes with individually tilted tops.

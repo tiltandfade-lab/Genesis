@@ -3942,13 +3942,14 @@ function clayRoomTerrainOverhangFromLocation(){
    the pre-ruling render (no skirt at all) and is what the skirt-invisibility gate proves itself
    against: with no skirt the margin is exactly minus the daylight, so the check fails for the
    reason it exists. */
-function clayRoomTerrainSkirtDepth(){
+function clayRoomTerrainSkirtDepth(plane){
   try {
     const raw = window.location && window.location.search
       ? new URLSearchParams(window.location.search).get("terrainskirt") : null;
     if(raw != null && raw !== "" && isFinite(Number(raw))) return Math.max(0, Number(raw));
   } catch(e){}
   if(S.clayRoomTerrainSkirtDepth != null) return S.clayRoomTerrainSkirtDepth;
+  if(plane && Number.isFinite(plane.skirtDepthWU)) return Math.max(0, plane.skirtDepthWU);
   return (typeof TERRAIN_BASE_SKIRT === "object") ? TERRAIN_BASE_SKIRT.depthWU : 0;
 }
 
@@ -4009,9 +4010,8 @@ function clayTerrainExposedSides(field, c){
   return { w: drop(-1, 0), e: drop(1, 0), n: drop(0, -1), s: drop(0, 1) };
 }
 
-/* The cell's rendered top, as four corner heights in WORLD Y. Centre stays exactly at the chassis's
-   own (h + sub) — that is the guarantee that keeps the standee's foot height, the walk graph,
-   occupancy, cover and reach untouched while the surface bends. */
+/* The cell's rendered top, as four shared FFT-style corner heights in WORLD Y. These are corner
+   nodes of one responsive field, not four independent samples from a cell-local plane. */
 function clayTerrainCapCorners(field, index, flags, baseY){
   const q = TERRAIN_GRID_LAW.verticalQuantumWorldUnits;
   const uv = [[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]];
@@ -4255,7 +4255,8 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
   }
   field.cells.forEach(function(c){
     if(c.kind === "void") return;
-    const topH = c.h + c.sub;
+    const topH = (typeof terrainSurfaceCellDatumH === "function")
+      ? terrainSurfaceCellDatumH(field, c.index) : c.h;
     const cellBaseH = baseHFor(c);
     const columnH = Math.max(0.05, (topH - cellBaseH) * h);
     const kindColor = c.kind === "guarded-slope" ? CLAY_TERRAIN_COLORS.guarded
@@ -4281,7 +4282,6 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
     cellGroup.position.set(cx, 0, cz);
     const sides = clayTerrainExposedSides(field, c);
     const corners = clayTerrainCapCorners(field, c.index, flags, baseY);   /* nw ne se sw, world Y */
-    const centreTopY = baseY + topH * h;
     const minCornerY = Math.min.apply(null, corners);
     const capBottomY = minCornerY - CLAY_TERRAIN_CAP_H;
     const wash = (typeof terrainCellWashFactor === "function")
@@ -4321,22 +4321,43 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
       any: (iw > 0 || ie > 0 || inn > 0 || is > 0), cell: c.index, mode: overhangMode };
     cellGroup.add(shaft);
 
-    /* B2 — THE NOSING. FFT's cell-scale stair is tread = 1 cell, riser = 1 Genesis quantum, and the
-       device that stops the run reading as stacked cubes is the tread overhanging its riser. A side
-       whose neighbour is exactly one quantum down is a tread edge; give it a real nosing. */
-    const nose = flags.nosing ? CLAY_TERRAIN_NOSING : 0;
-    const nw = nose && sides.w === 1 ? nose : 0, ne2 = nose && sides.e === 1 ? nose : 0;
-    const nn = nose && sides.n === 1 ? nose : 0, ns = nose && sides.s === 1 ? nose : 0;
+    function sideIndex(dx, dy){
+      const nx = c.x + dx, ny = c.y + dy;
+      return nx < 0 || ny < 0 || nx >= field.extent.x || ny >= field.extent.y
+        ? -1 : ny * field.extent.x + nx;
+    }
+    function sideKind(dx, dy){
+      const j = sideIndex(dx, dy);
+      return j < 0 || typeof terrainSurfaceEdgeKind !== "function"
+        ? "boundary" : terrainSurfaceEdgeKind(field, c.index, j);
+    }
+    const sideKinds = {
+      w: sideKind(-1, 0), e: sideKind(1, 0), n: sideKind(0, -1), s: sideKind(0, 1)
+    };
+    const reliefSides = {
+      w: (sideKinds.w === "curb" || sideKinds.w === "cliff" || sideKinds.w === "boundary") ? sides.w : 0,
+      e: (sideKinds.e === "curb" || sideKinds.e === "cliff" || sideKinds.e === "boundary") ? sides.e : 0,
+      n: (sideKinds.n === "curb" || sideKinds.n === "cliff" || sideKinds.n === "boundary") ? sides.n : 0,
+      s: (sideKinds.s === "curb" || sideKinds.s === "cliff" || sideKinds.s === "boundary") ? sides.s : 0
+    };
 
-    /* The cap is a small faceted surface, not one arbitrarily tilted quad. Five samples per axis
-       give B4's interior fold somewhere to exist while the shared-boundary resolver guarantees
-       that equal terraces and genuine continuing ramps publish one height at their common edge.
-       The old two-triangle cap sampled the fold only where it was maximally discontinuous — the
-       four cell corners — and then hung a skirt from EVERY interior edge, which made the field
-       read as a tray of loose tiles. */
+    /* B2 — NOSING BELONGS TO A CURB/TREAD, not to every natural 1h rise. Mandalia-style hill
+       grades keep their shared edge; an authored terrace bench can still expose a short riser. */
+    const nose = flags.nosing ? CLAY_TERRAIN_NOSING : 0;
+    const nw = nose && reliefSides.w === 1 ? nose : 0;
+    const ne2 = nose && reliefSides.e === 1 ? nose : 0;
+    const nn = nose && reliefSides.n === 1 ? nose : 0;
+    const ns = nose && reliefSides.s === 1 ? nose : 0;
+
+    /* The cap is a small faceted surface, not one arbitrarily tilted quad. Its samples follow the
+       engine's shared centre/edge/corner network, so an incline can respond into a convex crest,
+       concave hollow, saddle, or rolling neighbour without reopening their common edge. B4 has
+       somewhere to add its feature-scoped interior relief while remaining zero at that edge. The
+       old two-triangle cap sampled unrelated cell-local folds at the four corners and hung a skirt
+       from EVERY interior edge, which made the field read as a tray of loose tiles. */
     const x0 = -0.5 - nw, x1 = 0.5 + ne2, z0 = -0.5 - nn, z1 = 0.5 + ns;
     const diag = flags.fold && typeof terrainCellFoldDiagonal === "function"
-      ? terrainCellFoldDiagonal(field, c.index) : 0;
+      ? terrainCellFoldDiagonal(field, c.index, flags) : 0;
     const capPos = [];
     function tri(a, b, cc){ capPos.push(a[0], a[1], a[2], b[0], b[1], b[2], cc[0], cc[1], cc[2]); }
     const samples = [-0.5, -0.25, 0, 0.25, 0.5];
@@ -4358,18 +4379,22 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
         else { tri(a, d, b); tri(b, d, cc); }
       }
     }
-    const P = [[x0, corners[0], z0], [x1, corners[1], z0],
-      [x1, corners[2], z1], [x0, corners[3], z1]];
-    /* Only a genuinely exposed/downhill edge gets a cap skirt. Equal-height interior seams and
-       uphill neighbours are welded by their top surfaces; drawing four skirts per cell was the
-       visual equivalent of outlining every tile. Edge order is north, east, south, west. */
-    const skirtEdges = [sides.n > 0, sides.e > 0, sides.s > 0, sides.w > 0];
-    for(let e = 0; e < 4; e++){
-      if(!skirtEdges[e]) continue;
-      const a = P[e], b = P[(e + 1) % 4];
-      tri(a, b, [b[0], capBottomY, b[2]]);
-      tri(a, [b[0], capBottomY, b[2]], [a[0], capBottomY, a[2]]);
-    }
+    /* A hard edge can bend through its shared midpoint, so its skirt follows two segments rather
+       than bridging corner-to-corner. Natural grades get no skirt at all. */
+    const skirtRuns = [
+      { on: reliefSides.n > 0, pts: [capPoint(-0.5, -0.5), capPoint(0, -0.5), capPoint(0.5, -0.5)] },
+      { on: reliefSides.e > 0, pts: [capPoint(0.5, -0.5), capPoint(0.5, 0), capPoint(0.5, 0.5)] },
+      { on: reliefSides.s > 0, pts: [capPoint(0.5, 0.5), capPoint(0, 0.5), capPoint(-0.5, 0.5)] },
+      { on: reliefSides.w > 0, pts: [capPoint(-0.5, 0.5), capPoint(-0.5, 0), capPoint(-0.5, -0.5)] }
+    ];
+    skirtRuns.forEach(function(run){
+      if(!run.on) return;
+      for(let k = 0; k + 1 < run.pts.length; k++){
+        const a = run.pts[k], b = run.pts[k + 1];
+        tri(a, b, [b[0], capBottomY, b[2]]);
+        tri(a, [b[0], capBottomY, b[2]], [a[0], capBottomY, a[2]]);
+      }
+    });
     const capGeo = new THREE.BufferGeometry();
     capGeo.setAttribute("position", new THREE.Float32BufferAttribute(capPos, 3));
     capGeo.computeVertexNormals();
@@ -4379,12 +4404,15 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
     cap.castShadow = true;
     cap.userData.terrainCell = { x: c.x, y: c.y, h: c.h, kind: c.kind,
       standable: c.standable, inPlayfield: c.inPlayfield, owner: c.owner,
-      surface: c.surface, localSlopeDeg: c.localSlopeDeg };
+      surface: c.surface, localSlopeDeg: c.localSlopeDeg,
+      tileType: (typeof terrainSurfaceTileProfile === "function")
+        ? terrainSurfaceTileProfile(field, c.index, flags).type : null,
+      edgeKinds: sideKinds };
     cellGroup.add(cap);
     cellMeshes.push(cap);
 
     if(flags.rollover){
-      const roll = clayTerrainRolloverMesh(field, c, sides, capBottomY + 0.004,
+      const roll = clayTerrainRolloverMesh(field, c, reliefSides, capBottomY + 0.004,
         clayTerrainScaleHex(cellColour, 0.86));
       if(roll) cellGroup.add(roll);
     }
@@ -4555,9 +4583,9 @@ function clayTerrainCellWorld(field, originCell, baseY, origin, index){
   const c = field.cells[index];
   return new THREE.Vector3(
     originCell.x + c.x - origin.cx + 0.5,
-    /* Match terrainCellStandPlane's centre law. Random per-cell relief remains available on
-       guarded/non-standable mass; a walkable stand point stays on its integer datum. */
-    baseY + (c.h + (c.standable ? 0 : c.sub)) * h,
+    /* Match the responsive field's authored centre node; independent `sub` noise is not terrain. */
+    baseY + ((typeof terrainSurfaceCellDatumH === "function")
+      ? terrainSurfaceCellDatumH(field, index) : c.h) * h,
     originCell.z + c.y - origin.cz + 0.5
   );
 }
@@ -4619,6 +4647,7 @@ function clayTerrainPlaceWitness(group, slug, position, label, failures, contact
   const figure = built.group;
   figure.position.set(position.x, interiorStandeeContactY(position.y), position.z);
   const support = interiorStandeeSupportMetrics(built.width, entry.size, 1);
+  const skirtDepth = clayRoomTerrainSkirtDepth(plane);
   /* R2 — THE BASE SKIRT (Adam 2026-07-28): *"we might need to extend the base down through the
      floor, so even on hills the base appears to make contact with the full ground, rather than just
      floating or teetering."* Passed as an option rather than baked into every plinth in the game:
@@ -4627,7 +4656,7 @@ function clayTerrainPlaceWitness(group, slug, position, label, failures, contact
      an old one. Terrain is where hills are, so terrain is where the skirt is. */
   const base = buildInteriorBase(support.width, support.depth,
     S.lastBoard && S.lastBoard.tileKit && S.lastBoard.tileKit.trimColor,
-    { skirtDepth: clayRoomTerrainSkirtDepth() });
+    { skirtDepth: skirtDepth });
   figure.add(base);
   figure.userData.standeeBaseMesh = base;
   figure.userData.interiorBaseWidth = support.width;
@@ -4675,7 +4704,7 @@ function clayTerrainPlaceWitness(group, slug, position, label, failures, contact
      against the surface a viewer actually sees rather than against the plane the plinth conforms
      to. Held as a live function; nothing serialises it. */
   figure.userData.clayStandeeRenderedTopAt = plane ? plane.renderedTopAt || null : null;
-  figure.userData.clayStandeeSkirtDepth = clayRoomTerrainSkirtDepth();
+  figure.userData.clayStandeeSkirtDepth = skirtDepth;
   figure.userData.clayStandeeBaseBox = (function(){
     const geo = base.geometry;
     if(geo && typeof geo.computeBoundingBox === "function"){
@@ -5182,6 +5211,8 @@ function clayRoomMountTerrainBench(){
     }
     return { dYdx: p.dYdx, dYdz: p.dYdz, slopeDeg: p.slopeDeg, normal: p.normal,
       gradeId: p.gradeId, renderedTopAt: renderedTopAt,
+      skirtDepthWU: (typeof terrainStandeeSkirtNeedWU === "function")
+        ? terrainStandeeSkirtNeedWU(field, index, expressionFlags) : clayRoomTerrainSkirtDepth(),
       tilt: !!expressionFlags.slopeplinth };
   };
   const fields = scene.fields || [];
@@ -5495,6 +5526,11 @@ function clayRoomMountTerrainBench(){
       surfaceContinuity: (typeof terrainSurfaceContinuityReport === "function")
         ? built.map(function(b){
             return { id: b.field.id, report: terrainSurfaceContinuityReport(b.field, expressionFlags) };
+          })
+        : null,
+      surfaceVariation: (typeof terrainSurfaceVariationReport === "function")
+        ? built.map(function(b){
+            return { id: b.field.id, report: terrainSurfaceVariationReport(b.field, expressionFlags) };
           })
         : null,
       fineJointLaw: (typeof TERRAIN_FINE_JOINT_LAW === "object")

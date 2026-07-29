@@ -56,8 +56,8 @@ var TERRAIN_EXPRESSION_DEVICES = Object.freeze([
     label: "cell-scale stair nosing (the tread overhangs its riser)", gameplay: false,
     grounds: "FFT-SURFACE-GRAMMAR §2.4 — the nosing is what stops a run reading as stacked cubes." }),
   Object.freeze({ id: "B4", key: "fold", bin: "geometry", rung: "B",
-    label: "tri-split fold as sub-quantum relief over one declared stand plane", gameplay: false,
-    grounds: "STANDEE-CONTRACT §4(A) — a Medium does not fit in a half-cell triangle at any yaw." }),
+    label: "feature-scoped interior relief over the responsive FFT facets", gameplay: false,
+    grounds: "local berm/root/scree relief only; it is zero at the cell centre and perimeter." }),
   Object.freeze({ id: "C1", key: "shallowgrade", bin: "geometry", rung: "C",
     label: "the render-only grade ladder (g3 continuity default; g2 FFT comparison)",
     gameplay: false,
@@ -151,11 +151,13 @@ function terrainExpressionFlags(rungId, overrides){
    The R1 build had ONE render-only grade, 0.65 quanta per cell = 18.00 deg. This is that single
    step turned into a declared ladder, so Adam can see every angle beside every other one and rule.
 
-   HOW TO READ `gradeH`. It is the multiplier on a continuing three-centre run. A terrace edge,
-   crest, foot, or isolated stair remains flat with an honest riser; only a monotone run becomes a
-   plane. `gradeH` is therefore the angle of that whole run, not a per-cell lean inferred from one
-   neighbour. `edgeDeg` is retained as comparison metadata from the R2 study, not as a production
-   shape Genesis now emits.
+   HOW TO READ `gradeH`. It is the maximum response a tile may spend while connecting its authored
+   centre to the shared edge/corner network. At g3, a natural 1h neighbour pair meets exactly at its
+   shared midpoint and the surrounding tiles can resolve as inclines, convex crests, concave
+   hollows, saddles, or rolling transitions. G1/g2 remain comparison registers: because their
+   declared angle is too shallow to bridge integer centres one cell apart, they retain the
+   unspent difference as a curb rather than lying about the angle. `edgeDeg` remains comparison
+   metadata from the R2 study.
 
    EVERY RUNG IS RENDER-ONLY. The integer heightfield, the walkable census, cover and LOS do not
    move for any of them — terrainWalkFingerprint is byte-identical across the whole ladder and that
@@ -310,177 +312,104 @@ function terrainCellNeighbourH(field, x, y, fallbackH){
   return c.h;
 }
 
-/* The gradient of the walkable neighbourhood, in quanta per cell, clamped to the walkable step so
-   a rendered plane can never claim a grade the walk law forbids. */
-function terrainCellGradient(field, index){
-  var c = field.cells[index];
-  var step = TERRAIN_GRID_LAW.walkableStepQuanta;
-  function clampStep(v){ return Math.max(-step, Math.min(step, v)); }
-  var wh = terrainCellNeighbourH(field, c.x - 1, c.y, c.h);
-  var eh = terrainCellNeighbourH(field, c.x + 1, c.y, c.h);
-  var nh = terrainCellNeighbourH(field, c.x, c.y - 1, c.h);
-  var sh = terrainCellNeighbourH(field, c.x, c.y + 1, c.h);
-  /* A grade is a CONTINUING RUN, not a cosmetic lean applied to every cell that happens to have a
-     high neighbour. Both halves of the cell must name the same signed step. Otherwise the shape is
-     a terrace edge, stair, crest, or foot and stays flat with an honest riser.
+/* ─── FFT-STYLE RESPONSIVE SURFACE TOPOLOGY ───────────────────────────────────────────────────
+   FFT does not choose between "flat cells" and "one long uniform ramp". Its terrain record lets a
+   tile be FLAT, INCLINE, CONVEX or CONCAVE by declaring which corners are high. Neighbouring tiles
+   share the relevant corner heights; a black contour/riser is reserved for a deliberate break.
 
-     This is the distinction the first expression pass missed: central differences turned isolated
-     steps and outside corners into unrelated little planes. Each plane passed its own angle gate,
-     while the field read like earthquake rubble. Requiring a monotone three-centre run makes angle
-     carry topological meaning. */
-  function continuing(prevH, nextH){
-    var into = clampStep(c.h - prevH);
-    var out = clampStep(nextH - c.h);
-    return Math.abs(into) > 1e-12 && Math.abs(out) > 1e-12
-      && Math.abs(into - out) < 1e-12 ? into : 0;
+   Genesis starts from logical heights at CELL CENTRES, so the equivalent is a dual mesh:
+     * every cell keeps its authored centre datum;
+     * every natural edge owns one shared midpoint;
+     * every natural vertex owns one shared corner height;
+     * the centre, four edge midpoints and four corners make eight broad facets per tile.
+
+   A crest therefore becomes a convex tile, a hollow becomes concave, and a changing hillside
+   naturally changes its angle from tile to tile without opening a crack. Curbs, retaining steps,
+   cliffs, canyon walls and root undercuts intentionally split the shared nodes. */
+var TERRAIN_FFT_SURFACE_LAW = Object.freeze({
+  tileTypes: Object.freeze(["flat", "incline", "convex", "concave", "saddle", "rolling"]),
+  /* Only pieces whose 1h relationship is itself constructed as a retaining step force a curb.
+     Cliffs, crevices, chasms, and root undercuts already classify as `cliff` at 2h+; leaving them
+     out of this list lets a softened 1h rim or root-pushed shoulder grade naturally. */
+  hardBreakPieceIds: Object.freeze(["R1-09", "R1-12"]),
+  fullResponseGradeH: 1,
+  statement: "cell centres author the landform; natural neighbours share edge and corner nodes; "
+    + "explicit structure and faces keep a riser"
+});
+
+function terrainCellPieceId(field, index){
+  var c = field.cells[index];
+  if(!c) return null;
+  var pieces = field.pieces || [];
+  for(var i = 0; i < pieces.length; i++){
+    if(pieces[i].id === c.owner) return pieces[i].pieceId || null;
   }
-  return { dx: continuing(wh, eh), dz: continuing(nh, sh) };
+  return null;
 }
 
-/* The declared stand plane for a cell, in quanta. `y` is the cell-centre height and NEVER moves —
-   that is what keeps the standee's foot height, the walk graph, occupancy, cover and reach
-   untouched (FFT-SURFACE-GRAMMAR option A's own guarantee). Only the gradient is new. */
-function terrainCellStandPlane(field, index, flags){
+function terrainSurfaceCellDatumH(field, index){
   var c = field.cells[index];
-  var on = !!(flags && flags.shallowgrade);
-  var g = on ? terrainCellGradient(field, index) : { dx: 0, dz: 0 };
-  /* R4 — the grade is the LADDER's, not one hard-coded constant. A partial legacy flag object uses
-     the ladder's current declared default; a caller must name g2 explicitly to request the old FFT
-     comparison angle. */
-  var scale = on
-    ? (flags && flags.gradeScale != null
-      ? flags.gradeScale : terrainGradeById(TERRAIN_GRADE_LADDER_DEFAULT).gradeH) : 0;
-  var dx = g.dx * scale, dz = g.dz * scale;
-  /* R4 — THE DECLARED MAXIMUM IS A CEILING ON THE PLANE, NOT ON EACH AXIS. A cell that falls in
-     BOTH x and z (an outside corner) has gradient magnitude sqrt(2) times the per-axis one, so
-     without this clamp a ladder rung labelled "30 deg" renders 39.2 deg at every corner — the
-     declared angle would be a floor rather than a maximum, which is the opposite of what Adam
-     asked for when he named the steepest ones as the max. Clamped UNIFORMLY (both axes scaled by
-     the same factor) so the plane's ASPECT is preserved and only its steepness is capped: the
-     slope still runs downhill in the true direction, just no faster than the declared rung.
-     Consequence worth stating plainly: this also caps R1's shipped g2 default, whose corner cells
-     previously rendered 24.7 deg against a declared 18. */
-  var mag = Math.sqrt(dx * dx + dz * dz);
-  var capped = false;
-  if(scale > 0 && mag > scale + 1e-12){
-    var k = scale / mag;
-    dx *= k; dz *= k; mag = scale; capped = true;
-  }
-  var q = TERRAIN_GRID_LAW.verticalQuantumWorldUnits;
-  /* the steepest rise the plane expresses across one cell, as a slope in degrees */
-  var riseH = mag;
-  return {
-    gradeId: (flags && flags.gradeId) || null,
-    gradeCapped: capped,
-    /* Per-cell random centre-height noise was another hidden seam generator: two cells at the same
-       logical tier disagreed by up to 0.077h before a grade was even applied. Walkable expression
-       spends its relief in the bounded fold and material wash instead; guarded/non-standable mass
-       may retain the authored break-up because no standee or walk seam depends on it. */
-    centreH: c.h + (c.standable ? 0 : c.sub),
-    dHdx: dx, dHdz: dz,                        /* quanta per cell */
-    dYdx: dx * q, dYdz: dz * q,                /* world units per cell */
-    slopeDeg: terrainSlopeDegForStepH(riseH),
-    /* unit normal in world space (y up), for the F9 pool-normal check */
-    normal: (function(){
-      var nx = -dx * q, ny = 1, nz = -dz * q;
-      var len = Math.sqrt(nx * nx + ny * ny + nz * nz) || 1;
-      return [nx / len, ny / len, nz / len];
-    })()
-  };
+  /* The old `sub` channel is independently random per cell. It remains field data for historical
+     receipts, but it is not a surface node: natural relief must come from a shared landform, not
+     from nudging every tile to an unrelated datum. */
+  return c ? c.h : 0;
 }
 
-/* ─── B4 · THE TRI-SPLIT FOLD ─────────────────────────────────────────────────────────────────
-   Honestly: a Medium standee cannot stand inside one half-cell triangle at any yaw (inscribed disc
-   0.586 against 0.831 needed), so the fold is NOT two surfaces. The cell declares ONE stand plane
-   and the fold is sub-quantum relief over it — the mechanism TERRAIN_WALK_NOISE_BUDGET_H already
-   provides, budgeted so it can never change a tier.
-
-   Two extra guarantees this implementation adds beyond the budget:
-     * the fold is ZERO at the stand point AND the cell perimeter, spending its relief only in the
-       interior so two neighbours can never disagree at a shared edge;
-     * the diagonal follows the local fall line or quiet neighbour axis, so its angle serves terrain
-       continuity rather than whichever bit a hash happened to return. */
-function terrainCellFoldDiagonal(field, index){
-  var c = field.cells[index];
-  var g = terrainCellGradient(field, index);
-  if(Math.abs(g.dx) > 1e-12 || Math.abs(g.dz) > 1e-12){
-    /* Run with the fall line. This makes neighbouring cells in a real ramp rhyme instead of
-       choosing unrelated creases from a hash. */
-    return g.dx * g.dz >= 0 ? 1 : 0;
-  }
-  var w = terrainCellNeighbourH(field, c.x - 1, c.y, c.h);
-  var e = terrainCellNeighbourH(field, c.x + 1, c.y, c.h);
-  var n = terrainCellNeighbourH(field, c.x, c.y - 1, c.h);
-  var s = terrainCellNeighbourH(field, c.x, c.y + 1, c.h);
-  /* On a flat/crest/basin cell, align the crease with the quieter pair of opposite neighbours.
-     Cell order breaks the exact tie deterministically without pretending randomness serves shape. */
-  var axisBias = Math.abs(w - e) - Math.abs(n - s);
-  if(Math.abs(axisBias) > 1e-12) return axisBias > 0 ? 1 : 0;
-  return ((c.x + c.y) & 1) ? 1 : 0;
-}
-
-/* u, v in [-0.5, 0.5] across the cell. Returns a height offset in QUANTA. */
-function terrainCellFoldOffset(field, index, u, v, flags){
-  if(!flags || !flags.fold) return 0;
-  var budget = TERRAIN_WALK_NOISE_BUDGET_H.perCellH;
-  var c = field.cells[index];
-  var diag = terrainCellFoldDiagonal(field, index);
-  /* the crease runs corner to corner; the ridge/valley sign is the fold bit */
-  var along = diag ? (u + v) : (u - v);
-  var crease = 1 - Math.abs(along) * Math.SQRT2;      /* 1 on the diagonal, 0 at the far corners */
-  var sign = (terrainHash32(field.seed + ":foldsign:" + c.x + "," + c.y) & 2) ? 1 : -1;
-  /* Zero under the stand point AND on every cell edge. The earlier r^2 profile reached its maximum
-     at the perimeter, so two adjacent cells added unrelated signed offsets to the same edge. The
-     random disagreement was literal geometric discontinuity. A square-radius bell keeps the fold
-     inside the cell: it peaks halfway out and returns to zero before any neighbour is met. */
-  var r = Math.min(1, Math.max(Math.abs(u), Math.abs(v)) / 0.5);
-  var interiorBell = 4 * r * (1 - r);
-  return sign * crease * budget * interiorBell;
-}
-
-function terrainCellLocalTopH(field, index, u, v, flags){
-  var plane = terrainCellStandPlane(field, index, flags);
-  return plane.centreH + plane.dHdx * u + plane.dHdz * v
-    + terrainCellFoldOffset(field, index, u, v, flags);
-}
-
-/* A shared boundary is averaged only where the two planes mean the same thing:
-     - equal logical tier (one continuous terrace), or
-     - a genuine continuing 1h run rendered at exactly the legal 1h grade.
-   A shallow g1/g2 grade cannot consume a whole 1h centre delta without a residual riser, and g4
-   overshoots it. Those remain intentional terrace seams. A 2h+ delta is always a face.
-
-   At a corner the up-to-four incident cells are split into local smooth components, then only the
-   component containing the caller contributes. Every member therefore publishes the same corner
-   height, while a cliff on the same vertex remains discontinuous. */
-function terrainCellsJoinAsSurface(field, aIndex, bIndex, flags){
+/* Semantic edge classification. A 1h difference is normally the walkable material BETWEEN two
+   centres and therefore grades. It stays a curb only where the authoring piece itself describes a
+   retaining/vertical break. A 2h+ difference is always the chassis's owned face. */
+function terrainSurfaceEdgeKind(field, aIndex, bIndex){
   var a = field.cells[aIndex], b = field.cells[bIndex];
   if(!a || !b || a.kind === "void" || b.kind === "void" || !a.inPlayfield || !b.inPlayfield){
-    return false;
+    return "boundary";
   }
-  var dh = b.h - a.h;
-  if(dh === 0) return true;
-  if(Math.abs(dh) !== TERRAIN_GRID_LAW.walkableStepQuanta) return false;
-  var grade = flags && flags.shallowgrade
-    ? (flags.gradeScale != null
-      ? flags.gradeScale : terrainGradeById(TERRAIN_GRADE_LADDER_DEFAULT).gradeH)
-    : 0;
-  if(Math.abs(grade - TERRAIN_GRID_LAW.walkableStepQuanta) > 1e-9) return false;
-  var ax = b.x - a.x, ay = b.y - a.y;
-  var ga = terrainCellGradient(field, aIndex), gb = terrainCellGradient(field, bIndex);
-  var ca = ax ? ga.dx * ax : ga.dz * ay;
-  var cb = ax ? gb.dx * ax : gb.dz * ay;
-  return Math.abs(ca - dh) < 1e-9 && Math.abs(cb - dh) < 1e-9;
+  if(Math.abs(a.x - b.x) + Math.abs(a.y - b.y) !== 1) return "separate";
+  var dh = Math.abs(b.h - a.h);
+  if(dh >= TERRAIN_GRID_LAW.faceStepQuanta) return "cliff";
+  if(dh === 0) return "continuous";
+  if(dh !== TERRAIN_GRID_LAW.walkableStepQuanta) return "separate";
+  var ap = terrainCellPieceId(field, aIndex), bp = terrainCellPieceId(field, bIndex);
+  var hard = TERRAIN_FFT_SURFACE_LAW.hardBreakPieceIds;
+  if(a.guarded || b.guarded || hard.indexOf(ap) >= 0 || hard.indexOf(bp) >= 0) return "curb";
+  return "grade";
 }
 
-function terrainCellSharedBoundaryH(field, index, u, v, flags){
-  var eps = 1e-9;
-  var atW = Math.abs(u + 0.5) < eps, atE = Math.abs(u - 0.5) < eps;
-  var atN = Math.abs(v + 0.5) < eps, atS = Math.abs(v - 0.5) < eps;
-  if(!(atW || atE || atN || atS)) return terrainCellLocalTopH(field, index, u, v, flags);
+function terrainGradeResponseH(flags){
+  if(!flags || !flags.shallowgrade) return 0;
+  return flags.gradeScale != null
+    ? flags.gradeScale : terrainGradeById(TERRAIN_GRADE_LADDER_DEFAULT).gradeH;
+}
+
+function terrainCellsJoinAsSurface(field, aIndex, bIndex, flags){
+  var kind = terrainSurfaceEdgeKind(field, aIndex, bIndex);
+  if(kind === "continuous") return true;
+  return kind === "grade"
+    && terrainGradeResponseH(flags) >= TERRAIN_FFT_SURFACE_LAW.fullResponseGradeH - 1e-9;
+}
+
+/* The caller's claim at an edge midpoint. At full response, two natural 1h neighbours each travel
+   half the rise and meet. A comparison rung below g3 deliberately leaves a residual curb; a hard
+   break never spends any of the rise in the cap. */
+function terrainSurfaceEdgeClaimH(field, index, dx, dy, flags){
   var c = field.cells[index];
-  var xs = atW ? [c.x - 1, c.x] : (atE ? [c.x, c.x + 1] : [c.x]);
-  var ys = atN ? [c.y - 1, c.y] : (atS ? [c.y, c.y + 1] : [c.y]);
+  var nx = c.x + dx, ny = c.y + dy;
+  var own = terrainSurfaceCellDatumH(field, index);
+  if(nx < 0 || ny < 0 || nx >= field.extent.x || ny >= field.extent.y) return own;
+  var j = ny * field.extent.x + nx;
+  var kind = terrainSurfaceEdgeKind(field, index, j);
+  if(kind === "continuous") return (own + terrainSurfaceCellDatumH(field, j)) / 2;
+  if(kind !== "grade") return own;
+  var response = Math.max(0, Math.min(0.5, terrainGradeResponseH(flags) / 2));
+  return own + (terrainSurfaceCellDatumH(field, j) - own) * response;
+}
+
+/* A corner can touch four tiles. Split those tiles into smooth components using the same edge law
+   and average only the component containing the caller. This is what lets a ramp run into a crest
+   while a cliff sharing that vertex keeps its own upper and lower corner claims. */
+function terrainSurfaceCornerH(field, index, sx, sy, flags){
+  var c = field.cells[index];
+  var xs = sx < 0 ? [c.x - 1, c.x] : [c.x, c.x + 1];
+  var ys = sy < 0 ? [c.y - 1, c.y] : [c.y, c.y + 1];
   var candidates = [];
   for(var yi = 0; yi < ys.length; yi++) for(var xi = 0; xi < xs.length; xi++){
     var x = xs[xi], y = ys[yi];
@@ -489,7 +418,6 @@ function terrainCellSharedBoundaryH(field, index, u, v, flags){
     var cell = field.cells[idx];
     if(cell && cell.kind !== "void" && cell.inPlayfield) candidates.push(idx);
   }
-  if(candidates.length <= 1) return terrainCellLocalTopH(field, index, u, v, flags);
   var allowed = {}, queue = [index];
   allowed[index] = true;
   while(queue.length){
@@ -504,26 +432,175 @@ function terrainCellSharedBoundaryH(field, index, u, v, flags){
     });
   }
   var rows = candidates.filter(function(idx){ return allowed[idx]; });
-  if(rows.length <= 1) return terrainCellLocalTopH(field, index, u, v, flags);
-  var worldX = c.x + 0.5 + u, worldY = c.y + 0.5 + v;
-  var sum = 0;
+  if(!rows.length) return terrainSurfaceCellDatumH(field, index);
+  var lo = Infinity, hi = -Infinity;
   rows.forEach(function(idx){
-    var cell = field.cells[idx];
-    sum += terrainCellLocalTopH(field, idx,
-      worldX - (cell.x + 0.5), worldY - (cell.y + 0.5), flags);
+    var h = terrainSurfaceCellDatumH(field, idx);
+    lo = Math.min(lo, h); hi = Math.max(hi, h);
   });
-  return sum / rows.length;
+  /* Midrange, not arithmetic mean. In a 2x2 corner with datums 0/0/1/2, a mean of 0.75 pulls the
+     h2 tile down by 1.25h and creates a needle even though every orthogonal edge is legal. The
+     midrange is 1h: the unique shared value that keeps every incident centre within one quantum,
+     matching FFT's binary high/low corner grammar. */
+  return (lo + hi) / 2;
 }
 
-/* The full rendered top, in QUANTA, at a point inside the cell. Boundary points are resolved by
-   the shared-surface law above; interior points use the cell's declared stand plane plus bounded
-   fold. */
+/* Ring order: NW, N, NE, E, SE, S, SW, W. It is the renderable FFT grammar in one record. */
+function terrainCellSurfaceNodes(field, index, flags){
+  var centre = terrainSurfaceCellDatumH(field, index);
+  var nw = terrainSurfaceCornerH(field, index, -1, -1, flags);
+  var ne = terrainSurfaceCornerH(field, index, 1, -1, flags);
+  var se = terrainSurfaceCornerH(field, index, 1, 1, flags);
+  var sw = terrainSurfaceCornerH(field, index, -1, 1, flags);
+  var n = terrainSurfaceEdgeClaimH(field, index, 0, -1, flags);
+  var e = terrainSurfaceEdgeClaimH(field, index, 1, 0, flags);
+  var s = terrainSurfaceEdgeClaimH(field, index, 0, 1, flags);
+  var w = terrainSurfaceEdgeClaimH(field, index, -1, 0, flags);
+  return {
+    centre: centre,
+    corners: [nw, ne, se, sw],
+    edges: { n: n, e: e, s: s, w: w },
+    ring: [
+      [-0.5, -0.5, nw], [0, -0.5, n], [0.5, -0.5, ne], [0.5, 0, e],
+      [0.5, 0.5, se], [0, 0.5, s], [-0.5, 0.5, sw], [-0.5, 0, w]
+    ]
+  };
+}
+
+function terrainSurfaceTileProfile(field, index, flags){
+  var nodes = terrainCellSurfaceNodes(field, index, flags);
+  var ringH = nodes.ring.map(function(p){ return p[2]; });
+  var all = ringH.concat([nodes.centre]);
+  var min = Math.min.apply(null, all), max = Math.max.apply(null, all);
+  var meanCorner = nodes.corners.reduce(function(a, b){ return a + b; }, 0) / 4;
+  var curvature = nodes.centre - ringH.reduce(function(a, b){ return a + b; }, 0) / 8;
+  var dx = nodes.edges.e - nodes.edges.w, dz = nodes.edges.s - nodes.edges.n;
+  var type = "rolling", orientation = null, eps = 0.04;
+  if(max - min < eps) type = "flat";
+  else if(curvature > 0.16) type = "convex";
+  else if(curvature < -0.16) type = "concave";
+  else {
+    var high = [], low = [];
+    nodes.corners.forEach(function(h, i){
+      if(h > meanCorner + eps) high.push(i);
+      else if(h < meanCorner - eps) low.push(i);
+    });
+    var names = ["NW", "NE", "SE", "SW"];
+    if(high.length === 1 && low.length >= 2){ type = "convex"; orientation = names[high[0]]; }
+    else if(low.length === 1 && high.length >= 2){ type = "concave"; orientation = names[low[0]]; }
+    else if(high.length === 2){
+      var opposite = Math.abs(high[0] - high[1]) === 2;
+      type = opposite ? "saddle" : "incline";
+      orientation = names[high[0]] + "-" + names[high[1]];
+    } else if(Math.sqrt(dx * dx + dz * dz) > eps){
+      type = "incline";
+      orientation = Math.abs(dx) >= Math.abs(dz) ? (dx > 0 ? "E" : "W") : (dz > 0 ? "S" : "N");
+    }
+  }
+  return {
+    type: type, orientation: orientation, centreH: nodes.centre,
+    minH: min, maxH: max, dHdx: dx, dHdz: dz, curvatureH: curvature
+  };
+}
+
+function terrainCellGradient(field, index, flags){
+  /* Callers that ask for the logical/render gradient without a ladder flag mean the production
+     responsive surface, not the naked control. */
+  var resolved = flags || { shallowgrade: true, gradeScale: 1 };
+  var p = terrainSurfaceTileProfile(field, index, resolved);
+  return { dx: p.dHdx, dz: p.dHdz };
+}
+
+/* The standee follows the tangent through the authored centre. A convex crest or concave hollow
+   can bend away outside the protected centre while still declaring one support plane for the
+   miniature; the skirt covers the bounded difference exactly as before. */
+function terrainCellStandPlane(field, index, flags){
+  var c = field.cells[index];
+  var on = !!(flags && flags.shallowgrade);
+  var profile = on ? terrainSurfaceTileProfile(field, index, flags)
+    : { dHdx: 0, dHdz: 0 };
+  var dx = profile.dHdx, dz = profile.dHdz;
+  var ceiling = on ? terrainGradeResponseH(flags) : 0;
+  var mag = Math.sqrt(dx * dx + dz * dz);
+  var capped = false;
+  if(ceiling > 0 && mag > ceiling + 1e-12){
+    var k = ceiling / mag;
+    dx *= k; dz *= k; mag = ceiling; capped = true;
+  }
+  var q = TERRAIN_GRID_LAW.verticalQuantumWorldUnits;
+  return {
+    gradeId: (flags && flags.gradeId) || null,
+    gradeCapped: capped,
+    centreH: terrainSurfaceCellDatumH(field, index),
+    dHdx: dx, dHdz: dz,
+    dYdx: dx * q, dYdz: dz * q,
+    slopeDeg: terrainSlopeDegForStepH(mag),
+    tileType: on ? profile.type : "flat",
+    normal: (function(){
+      var nx = -dx * q, ny = 1, nz = -dz * q;
+      var len = Math.sqrt(nx * nx + ny * ny + nz * nz) || 1;
+      return [nx / len, ny / len, nz / len];
+    })()
+  };
+}
+
+/* B4 survives only as LOCAL FEATURE RELIEF. It is not sprayed randomly over the whole grid. Berms,
+   scree and root ground may spend a third of the sub-quantum budget, and the sign comes from the
+   tile's actual convex/concave response rather than a hash. */
+function terrainCellFoldDiagonal(field, index, flags){
+  var p = terrainSurfaceTileProfile(field, index, flags);
+  if(Math.abs(p.dHdx) + Math.abs(p.dHdz) > 1e-9) return p.dHdx * p.dHdz >= 0 ? 1 : 0;
+  return Math.abs(p.dHdx) >= Math.abs(p.dHdz) ? 1 : 0;
+}
+
+function terrainCellFoldOffset(field, index, u, v, flags){
+  if(!flags || !flags.fold) return 0;
+  var pieceId = terrainCellPieceId(field, index);
+  var c = field.cells[index];
+  if(pieceId !== "R1-08" && pieceId !== "R1-10" && pieceId !== "R1-13"
+      && c.surface !== "scree") return 0;
+  var p = terrainSurfaceTileProfile(field, index, flags);
+  if(Math.abs(p.curvatureH) < 0.04) return 0;
+  var diag = terrainCellFoldDiagonal(field, index, flags);
+  var along = diag ? (u + v) : (u - v);
+  var crease = Math.max(-1, 1 - Math.abs(along) * Math.SQRT2);
+  var r = Math.min(1, Math.max(Math.abs(u), Math.abs(v)) / 0.5);
+  var interiorBell = 4 * r * (1 - r);
+  var sign = p.curvatureH > 0 ? 1 : -1;
+  return sign * crease * TERRAIN_WALK_NOISE_BUDGET_H.perCellH * 0.35 * interiorBell;
+}
+
+/* Piecewise-linear interpolation over the eight FFT-style facets. The same ring nodes are consumed
+   by both neighbouring cells, so the entire shared edge—not merely three test points—matches. */
+function terrainCellLocalTopH(field, index, u, v, flags){
+  var nodes = terrainCellSurfaceNodes(field, index, flags);
+  var eps = 1e-9;
+  if(Math.abs(u) < eps && Math.abs(v) < eps) return nodes.centre;
+  for(var i = 0; i < nodes.ring.length; i++){
+    var a = nodes.ring[i], b = nodes.ring[(i + 1) % nodes.ring.length];
+    var den = a[0] * b[1] - b[0] * a[1];
+    if(Math.abs(den) < eps) continue;
+    var wa = (u * b[1] - b[0] * v) / den;
+    var wb = (a[0] * v - u * a[1]) / den;
+    var wc = 1 - wa - wb;
+    if(wa >= -eps && wb >= -eps && wc >= -eps){
+      return wc * nodes.centre + wa * a[2] + wb * b[2]
+        + terrainCellFoldOffset(field, index, u, v, flags);
+    }
+  }
+  return nodes.centre + terrainCellFoldOffset(field, index, u, v, flags);
+}
+
+function terrainCellSharedBoundaryH(field, index, u, v, flags){
+  return terrainCellLocalTopH(field, index, u, v, flags);
+}
+
 function terrainCellTopH(field, index, u, v, flags){
-  return terrainCellSharedBoundaryH(field, index, u, v, flags);
+  return terrainCellLocalTopH(field, index, u, v, flags);
 }
 
-/* Executable visual-continuity instrument. The old gates proved each plane's angle separately and
-   never compared two cells' claims about the same point. This measures the missing proposition. */
+/* Executable continuity plus variation instruments. Zero cracks is necessary, but a field whose
+   only response is "flatten everything" now fails the separate variation proposition below. */
 function terrainSurfaceContinuityReport(field, flags){
   var checked = 0, failed = 0, maxGapH = 0, samples = [];
   field.cells.forEach(function(c){
@@ -533,12 +610,12 @@ function terrainSurfaceContinuityReport(field, flags){
       if(nx >= field.extent.x || ny >= field.extent.y) return;
       var j = ny * field.extent.x + nx;
       if(!terrainCellsJoinAsSurface(field, c.index, j, flags)) return;
-      var points = dir[0]
-        ? [[0.5, -0.5, -0.5, -0.5], [0.5, 0, -0.5, 0], [0.5, 0.5, -0.5, 0.5]]
-        : [[-0.5, 0.5, -0.5, -0.5], [0, 0.5, 0, -0.5], [0.5, 0.5, 0.5, -0.5]];
-      points.forEach(function(p){
-        var gap = Math.abs(terrainCellTopH(field, c.index, p[0], p[1], flags)
-          - terrainCellTopH(field, j, p[2], p[3], flags));
+      [-0.5, -0.25, 0, 0.25, 0.5].forEach(function(t){
+        var ah = dir[0] ? terrainCellTopH(field, c.index, 0.5, t, flags)
+          : terrainCellTopH(field, c.index, t, 0.5, flags);
+        var bh = dir[0] ? terrainCellTopH(field, j, -0.5, t, flags)
+          : terrainCellTopH(field, j, t, -0.5, flags);
+        var gap = Math.abs(ah - bh);
         checked++;
         if(gap > maxGapH) maxGapH = gap;
         if(gap > 1e-9){
@@ -549,13 +626,43 @@ function terrainSurfaceContinuityReport(field, flags){
     });
   });
   return {
-    law: "cells that declare one continuous surface publish one height at their shared edge",
+    law: "continuous FFT-style tiles share their full edge curve; explicit breaks retain a riser",
     gradeId: flags && flags.gradeId || null,
-    samplesChecked: checked,
-    failures: failed,
+    samplesChecked: checked, failures: failed,
     maxGapH: Number(maxGapH.toFixed(8)),
-    ok: checked > 0 && failed === 0,
-    sampleFailures: samples
+    ok: checked > 0 && failed === 0, sampleFailures: samples
+  };
+}
+
+function terrainSurfaceVariationReport(field, flags){
+  var types = {}, planes = {}, sloped = 0, responsivePairs = 0;
+  var edgeKinds = { continuous: 0, grade: 0, curb: 0, cliff: 0, boundary: 0, separate: 0 };
+  field.cells.forEach(function(c){
+    if(!c || c.kind === "void" || !c.inPlayfield) return;
+    var p = terrainSurfaceTileProfile(field, c.index, flags);
+    types[p.type] = (types[p.type] || 0) + 1;
+    var planeKey = p.dHdx.toFixed(3) + "," + p.dHdz.toFixed(3);
+    planes[planeKey] = true;
+    if(Math.sqrt(p.dHdx * p.dHdx + p.dHdz * p.dHdz) > 0.04 || Math.abs(p.curvatureH) > 0.08){
+      sloped++;
+    }
+    [[1, 0], [0, 1]].forEach(function(dir){
+      var nx = c.x + dir[0], ny = c.y + dir[1];
+      if(nx >= field.extent.x || ny >= field.extent.y) return;
+      var j = ny * field.extent.x + nx;
+      var kind = terrainSurfaceEdgeKind(field, c.index, j);
+      edgeKinds[kind] = (edgeKinds[kind] || 0) + 1;
+      if(!terrainCellsJoinAsSurface(field, c.index, j, flags)) return;
+      var q = terrainSurfaceTileProfile(field, j, flags);
+      if(Math.abs(p.dHdx - q.dHdx) + Math.abs(p.dHdz - q.dHdz)
+          + Math.abs(p.curvatureH - q.curvatureH) > 0.08) responsivePairs++;
+    });
+  });
+  return {
+    law: "continuity must preserve local angular response rather than flatten it",
+    tileTypes: types, distinctTangentPlanes: Object.keys(planes).length,
+    responsiveJoinedPairs: responsivePairs, shapedCells: sloped, edgeKinds: edgeKinds,
+    ok: sloped > 0 && Object.keys(planes).length > 2 && responsivePairs > 0
   };
 }
 
@@ -1043,6 +1150,32 @@ function terrainFaceClimbCensus(field){
   };
 }
 
+/* A rigid miniature base cannot itself become FFT's convex/concave tile. Size the buried support
+   skirt from the actual responsive surface under the worst Medium-cap footprint instead of making
+   every tile flatter to accommodate the prop. The 3x3 sample is the same footprint proposition the
+   live browser gate measures; the caller may still force zero for the red comparison. */
+function terrainStandeeSkirtNeedWU(field, index, flags){
+  var p = terrainCellStandPlane(field, index, flags);
+  var q = TERRAIN_GRID_LAW.verticalQuantumWorldUnits;
+  var r = terrainProtectedRadius("mediumCap");
+  var worst = 0;
+  [-r, 0, r].forEach(function(u){
+    [-r, 0, r].forEach(function(v){
+      var cu = Math.max(-0.5, Math.min(0.5, u));
+      var cv = Math.max(-0.5, Math.min(0.5, v));
+      var planeH = p.centreH + p.dHdx * cu + p.dHdz * cv;
+      var groundH = terrainCellTopH(field, index, cu, cv, flags);
+      var daylight = (planeH - groundH) * q - TERRAIN_STANDEE_CONTRACT.nominalEmbed;
+      if(daylight > worst) worst = daylight;
+    });
+  });
+  var law = (typeof TERRAIN_BASE_SKIRT === "object") ? TERRAIN_BASE_SKIRT : null;
+  var maxDepth = (law && law.maxDepthWU) || 0.20;
+  var minDepth = (law && law.minDepthWU) || 0.02;
+  var slack = (law && law.sampleSlackWU) || 0.014;
+  return Number(Math.min(maxDepth, Math.max(minDepth, worst + slack)).toFixed(4));
+}
+
 /* ─── R2 · THE BASE SKIRT ─────────────────────────────────────────────────────────────────────
    Adam, 2026-07-28: *"we might need to extend the base down through the floor, so even on hills the
    base appears to make contact with the full ground, rather than just floating or teetering."*
@@ -1053,27 +1186,20 @@ function terrainFaceClimbCensus(field){
    is a separate child mesh rather than a taller plinth geometry (a taller geometry would move the
    bounding box the contact probe reads, and the gate would start measuring the skirt).
 
-   HOW DEEP. Two numbers bound it, and the depth is derived rather than guessed:
-     CEILING — the cap slab is CLAY_TERRAIN_CAP_H = 0.10 wu tall and is the only part of a cell that
-       keeps its full 1x1 top; below it the A3 shaft is inset by up to 0.125 wu on an exposed side.
-       A skirt deeper than the cap could therefore reach into that notch and be seen from a low
-       camera. So depth <= 0.10.
-     FLOOR — the deepest daylight a plinth can open under its own footprint. The plinth conforms to
-       the cell's declared STAND PLANE, but the ground it sits on is the RENDERED top, which carries
-       B4's fold on top of that plane. The continuity repair moves the fold off the perimeter and
-       into an interior bell; a free-yaw Medium base can still cross the bell's peak, so the honest
-       bound is the FULL TERRAIN_WALK_NOISE_BUDGET_H.perCellH amplitude:
-       0.07735h * 0.5 wu/h = 0.03868 wu. Less the 0.006 authored embed, 0.03268 wu is the daylight
-       to cover.
-
-   0.06 wu is the chosen depth: 1.8x the derived need, and 0.04 wu clear of the cap ceiling. */
+   A convex/concave tile bends farther away from its centre tangent than the old micro-fold did.
+   A single global 0.06-wu depth therefore stopped being an honest bound. The renderer now asks
+   terrainStandeeSkirtNeedWU for the actual tile and clamps the answer into [0.02, 0.20] wu. That
+   preserves the varied landform instead of flattening it for the miniature. */
 var TERRAIN_BASE_SKIRT = Object.freeze({
-  depthWU: 0.06,
-  capCeilingWU: 0.10,
-  derivedNeedWU: 0.0327,
-  grounds: "the interior fold can reach its full 0.03868 wu amplitude under a free-yaw Medium; less "
-    + "the 0.006 authored embed = 0.03268 wu of daylight. The cap slab is 0.10 wu, so 0.06 clears "
-    + "the need 1.8x and stays 0.04 inside the ceiling.",
+  depthWU: 0.20,
+  minDepthWU: 0.02,
+  maxDepthWU: 0.20,
+  sampleSlackWU: 0.014,
+  minimumColumnDepthWU: 0.50,
+  adaptive: true,
+  grounds: "sample the responsive rendered tile under the worst Medium-cap footprint; add 0.014 wu "
+    + "slack and clamp to 0.02..0.20 wu. The 0.20 maximum remains inside every terrain column's "
+    + "minimum 0.50-wu solid depth.",
   cosmeticOnly: "may not change contact Y, the walkable census, or any contact measurement",
   defaultOn: "terrain witnesses only — the flat tabletop and interior boards are unchanged"
 });

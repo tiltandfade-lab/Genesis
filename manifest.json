@@ -1744,7 +1744,16 @@
         "terrainProtectedDiameter",
         "terrainProtectedRadius",
         "TERRAIN_SHALLOW_GRADE_H",
+        "TERRAIN_FFT_SURFACE_LAW",
+        "terrainCellPieceId",
+        "terrainSurfaceCellDatumH",
+        "terrainSurfaceEdgeKind",
+        "terrainGradeResponseH",
         "terrainCellNeighbourH",
+        "terrainSurfaceEdgeClaimH",
+        "terrainSurfaceCornerH",
+        "terrainCellSurfaceNodes",
+        "terrainSurfaceTileProfile",
         "terrainCellGradient",
         "terrainCellStandPlane",
         "terrainCellFoldDiagonal",
@@ -1754,6 +1763,7 @@
         "terrainCellSharedBoundaryH",
         "terrainCellTopH",
         "terrainSurfaceContinuityReport",
+        "terrainSurfaceVariationReport",
         "TERRAIN_FINE_JOINT_LAW",
         "terrainFineJointSegments",
         "terrainExpressionJitter",
@@ -1779,7 +1789,8 @@
         "TERRAIN_CLIMB_EASED",
         "terrainFaceClimb",
         "terrainFaceClimbCensus",
-        "TERRAIN_BASE_SKIRT"
+        "TERRAIN_BASE_SKIRT",
+        "terrainStandeeSkirtNeedWU"
       ],
       "callTimeDeps": [
         "TERRAIN_GRID_LAW",
@@ -1788,7 +1799,7 @@
         "terrainHash32",
         "terrainRng"
       ],
-      "desc": "TERRAIN EXPRESSION — the dressing chassis (docs/TERRAIN-EXPRESSION-BUILD.md, 2026-07-28). Eleven independently switchable live devices (A1-A6 arris/jitter/joint/occluder/wash, B1 the tilted plinth, B2 the cell-scale stair nosing, B4 the tri-split fold, C1 the grade ladder, R6 climb affordance) sorted into dressing bins plus an explicit `geometry` bin. Rejected A7 regular sedimentary face banding is absent; the historical `decal` rung remains only as an inert URL-compatible control. Publishes one stand plane per cell, then resolves declared continuous neighbours to one shared boundary height; only a continuing three-centre run slopes, so angles carry terrain topology instead of making isolated tiles lean. terrainSurfaceContinuityReport measures that missing cross-cell proposition. B4 relief is interior-only, and TERRAIN_FINE_JOINT_LAW replaces the quarter-cell square lattice with clipped running bond. Owns the F1/F2/F3 contact probe and terrainWalkFingerprint, expanded to cover difficult terrain, climb adjacency and face climb facts. Writes no height, no standable flag, no walk edge, no cover value. R2 adds the grade ladder, overhang licence, Medium-accessibility floor, eased climb band, and derived base skirt. F7 is REVERSED: the sprite now matches its base."
+      "desc": "TERRAIN EXPRESSION — the dressing chassis (docs/TERRAIN-EXPRESSION-BUILD.md, 2026-07-28). Eleven independently switchable live devices (A1-A6 arris/jitter/joint/occluder/wash, B1 the tilted plinth, B2 the cell-scale stair nosing, B4 feature-scoped interior relief, C1 the grade ladder, R6 climb affordance) sorted into dressing bins plus an explicit `geometry` bin. Rejected A7 regular sedimentary face banding is absent; the historical `decal` rung remains only as an inert URL-compatible control. TERRAIN_FFT_SURFACE_LAW publishes flat, incline, convex, concave, saddle, and rolling tile profiles from one cell datum plus shared edge-midpoint and corner nodes. Natural neighbours negotiate the same complete boundary curve; explicit cliffs, terraces, crevices, chasms, banks, and root undercuts retain authored breaks. terrainSurfaceContinuityReport measures shared boundaries and terrainSurfaceVariationReport proves continuity was not achieved by flattening the map. B4 relief is deterministic, perimeter-zero, and limited to feature-bearing pieces; TERRAIN_FINE_JOINT_LAW replaces the quarter-cell square lattice with clipped running bond. Owns the F1/F2/F3 contact probe and terrainWalkFingerprint, expanded to cover difficult terrain, climb adjacency and face climb facts. Writes no logical height, standable flag, walk edge, or cover value. R2 adds the grade ladder, overhang licence, Medium-accessibility floor, eased climb band, and an adaptive cosmetic base skirt. F7 is REVERSED: the sprite now matches its base."
     },
     {
       "id": "engine.terrain-bench",

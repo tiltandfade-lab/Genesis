@@ -1,11 +1,18 @@
 # Codex terrain-continuity review — 2026-07-28
 
+> **Founder correction, later the same day:** the first repair described below over-corrected by
+> flattening crests, feet, and outside corners. Adam rejected that result as a downgrade. The
+> current implementation preserves varying per-tile angles and connects them through shared
+> edge-midpoint and corner nodes. Read “Responsive FFT correction” below as the current verdict;
+> the monotone-three-centre material remains as the audit trail for the rejected intermediate.
+
 **Scope:** `feat/terrain-bench-r1` → `feat/terrain-expression` →
 `feat/terrain-expression-r2`, reviewed at `7fc21259` plus the edits named below.
 
-**Verdict:** **HOLDS WITH EDITS as a terrain-expression prototype.** It did not hold as a claim of
-FFT/XCOM-like continuous terrain before these edits, and it is not promoted to a final production
-terrain architecture here.
+**Current verdict:** **HOLDS WITH EDITS as a responsive FFT-style terrain-expression prototype.**
+It did not hold as a claim of FFT/XCOM-like continuous terrain before these edits, and the first
+flattening repair did not hold either. It is not promoted to a final production terrain
+architecture here.
 
 The chassis, deterministic field construction, fixture coverage, standee contact work, overhang
 licence, and render/gameplay separation are useful. The visible result nevertheless looked like
@@ -78,6 +85,9 @@ inert compatibility control identical to `material`.
 
 ## Edits applied
 
+The following table records the first repair. Its monotone-three-centre row was subsequently
+rejected and replaced by the responsive correction in the next section.
+
 | File | Edit | Why |
 |---|---|---|
 | `src/engine/terrain-expression.js` | A grade now requires a monotone three-centre run. Isolated steps, crests, feet, and corners stay flat with honest risers. | Angles now describe terrain topology rather than arbitrary neighbour differences. |
@@ -100,6 +110,52 @@ fine-joint boundary breach. The clean production view shows continuous floors an
 with the tactical lattice subordinate to actual risers and cliffs. A second clean capture after the
 A7 removal confirms exposed faces have no repeated horizontal ridge geometry.
 
+## Responsive FFT correction (current implementation)
+
+FFT's useful idea is not one uniform ramp; it is a small tile vocabulary whose corner state can
+change across a landform. Genesis now expresses the equivalent over its centre-authored
+heightfield:
+
+Reference study: Ganesha's FFT map-format documentation names the four slope records as
+flat (zero high corners), incline (two adjacent), convex (one), and concave (three). The
+[Mandalia Plains screenshot](https://www.moddb.com/games/final-fantasy-tactics/images/gameplay-mandalia-plains)
+and [Grogh Heights map](https://gamefaqs.gamespot.com/psp/937312-final-fantasy-tactics-the-war-of-the-lions/faqs/76070/grogh-heights-27)
+were used as the visual checks for a hill flowing through changing tile responses rather than a
+uniform diagonal strip. Format reference:
+[Ganesha](https://github.com/JustinMarshall98/Ganesha).
+
+- each cell retains its logical centre datum;
+- natural edges publish one shared midpoint;
+- natural four-cell junctions publish one shared corner height;
+- centre + four edge midpoints + four corners form eight broad facets;
+- profiles classify as flat, incline, convex, concave, saddle, or rolling;
+- cliffs, terraces, crevices, chasms, banks, and root undercuts deliberately split the nodes.
+
+This retains the useful variation in Claude's attempt while removing its unrelated per-cell
+surface choices. B4 is no longer a generic random fold; only berm, scree, and root-ground features
+may spend it, its sign follows actual curvature, and it is zero at the centre and perimeter.
+
+The new paired proof is important:
+
+1. `terrainSurfaceContinuityReport` fails if two joined tiles disagree anywhere on their sampled
+   edge curve.
+2. `terrainSurfaceVariationReport` fails if “continuity” was obtained by flattening the terrain.
+   It counts tile profiles, distinct tangent planes, responsive neighbour pairs, and shaped cells.
+
+At the default g3 register:
+
+- the one-clamp hill has **23 distinct tangent planes**, **106 responsive joined pairs**, and
+  **62 shaped cells**; its **720** shared-edge samples have **0 failures / 0 maximum gap**;
+- the thirteen-piece sheet includes all four core FFT profiles, has **22 distinct tangent planes**
+  and **226 responsive joined pairs**; its **4,665** shared-edge samples have
+  **0 failures / 0 maximum gap**;
+- the route proof remains flatter because R1-09 is an authored terrace and therefore keeps
+  **14 semantic curbs**. It is no longer the natural-hill visual witness.
+
+The renderer now gives vertical skirts and stair nosing only to semantic hard breaks. Natural
+grades keep the shared surface. Miniature support skirts derive their cosmetic depth per responsive
+tile, preserving convex/concave landforms instead of flattening the ground to suit a rigid base.
+
 ## What still does not hold
 
 - The renderer still assembles one shaft and cap per logical cell. This pass repairs how those cells
@@ -108,8 +164,9 @@ A7 removal confirms exposed faces have no repeated horizontal ridge geometry.
   and authored multi-cell shallow ramps remain future terrain-architecture work.
 - The fixture's route proof deliberately contains tall rectilinear walls. It should look like
   coherent terraces and ramp runs now, not like natural eroded geology.
-- G1, g2, and g4 remain comparison renders with intentional residual seams where their centre delta
-  cannot match the logical field. Only g3 joins a current one-quantum run.
+- G1 and g2 remain comparison renders with intentional residual curbs where their declared angle
+  cannot bridge integer centres. G3 is the connected production register. G4 remains a proposed
+  ceiling and may clamp local tangents.
 - The proposed eased-climb DC is gameplay data even if no current consumer reads it. This review
   does not adopt it.
 
@@ -135,11 +192,11 @@ Do not add more per-cell cosmetics until that architecture decision is made.
 
 ## Verification
 
-- `node dev/verify-terrain-expression.mjs` — **77 passed, 0 failed**
+- `node dev/verify-terrain-expression.mjs` — **80 passed, 0 failed**
 - `node dev/verify-terrain-expression-r2.mjs` — **53 passed, 0 failed**
 - `node dev/verify-terrain-bench.mjs` — **73 passed, 0 failed**
-- `node dev/verify-terrain-standee.cjs 5182` — **72 passed, 0 failed**
-- `node dev/verify-terrain-standee-r2.cjs 5182` — **71 passed, 0 failed**
+- `node dev/verify-terrain-standee.cjs 5183` — **72 passed, 0 failed**
+- `node dev/verify-terrain-standee-r2.cjs 5183` — **71 passed, 0 failed**
 - both expression `--red` runs — **0 accidental passes**
 - `python3 build/check-manifest.py` — **RESULT: OK**
-- official browser capture, `route-proof / all / g3` — continuity receipt **480 / 0 / 0**
+- official browser capture, `one-clamp-proof / material / g3` — responsive hill and paired cliff

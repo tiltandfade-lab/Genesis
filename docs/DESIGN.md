@@ -1892,3 +1892,32 @@ measures 480 declared shared-surface samples with zero failures and zero maximum
 render-only field interpretation: no logical height, walk edge, cover value, or LOS fact changed.
 The next terrain step is cleanup plus a founder decision on per-cell cap assembly versus a
 field-level contour mesh, not another layer of per-cell dressing.
+
+## 2026-07-28 — Responsive FFT tile contours (supersedes the flattening rule above)
+
+Adam rejected the first continuity repair as a downgrade: making crests, feet, and corners flat
+removed the varying tile angles that made Claude's attempt closer to FFT. The current production
+interpretation is therefore:
+
+1. Every natural cell keeps its authored centre datum. Natural neighbours share an edge midpoint,
+   and natural four-cell junctions share a corner height. The centre, four edge midpoints, and four
+   corners form eight broad, piecewise-linear facets.
+2. The required profile vocabulary is `flat`, `incline`, `convex`, and `concave`; `saddle` and
+   `rolling` cover transitions that do not collapse cleanly into FFT's four binary corner cases.
+   A connected hillside is expected to change profile and tangent from tile to tile.
+3. `cliff` and `curb` are explicit edge semantics. R1-01 cliffs, R1-03 crevices, R1-04 chasms,
+   R1-09 terraces, R1-12 banks, and R1-13 root undercuts may split the shared nodes. An ordinary 1h
+   hill neighbour does not earn a riser.
+4. B4 is feature-scoped micro-relief for berm, scree, and root ground. It is driven by the tile's
+   actual curvature, is zero at the centre and complete perimeter, and is not random terrain
+   sprayed over every cell.
+5. `terrainSurfaceContinuityReport` proves joined neighbours publish the same complete edge curve.
+   `terrainSurfaceVariationReport` is the paired anti-flattening proof: a passing field must also
+   retain responsive tangent changes, shaped cells, and the FFT profile vocabulary.
+
+At the default g3 register, the one-clamp hill currently contains 23 distinct tangent planes, 106
+responsive joined neighbour pairs, and 62 shaped cells; its 720 shared-edge samples have zero
+failures and zero maximum gap. The thirteen-piece sheet contains all four required FFT profiles and
+22 distinct tangent planes; 4,665 joined-edge samples have zero failures. The route proof is no
+longer used as the natural-hill visual witness because its authored R1-09 terraces correctly retain
+curbs.

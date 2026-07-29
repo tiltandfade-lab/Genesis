@@ -88,6 +88,9 @@ var CL_F07_TERRAIN_BENCH = Object.freeze({
    rendering black. */
 function terrainBenchSceneLightRecipe(sceneId){
   var scene = CL_F07_TERRAIN_BENCH.scenes.filter(function(s){ return s.id === sceneId; })[0];
+  if(!scene && typeof terrainFeatureSceneDefinition === "function"){
+    scene = terrainFeatureSceneDefinition(sceneId);
+  }
   if(!scene) throw new Error("terrainBenchSceneLightRecipe: unknown scene " + sceneId);
   if(!scene.lightRecipeId){
     throw new Error("terrainBenchSceneLightRecipe: scene " + sceneId + " declares no light case");
@@ -99,6 +102,9 @@ function terrainBenchSceneLightRecipe(sceneId){
    scene keeps it — that rig is what lights the clay. */
 function terrainBenchSceneNeutralizesRig(sceneId){
   var scene = CL_F07_TERRAIN_BENCH.scenes.filter(function(s){ return s.id === sceneId; })[0];
+  if(!scene && typeof terrainFeatureSceneDefinition === "function"){
+    scene = terrainFeatureSceneDefinition(sceneId);
+  }
   return !!(scene && scene.neutralizeHostRig);
 }
 
@@ -530,6 +536,13 @@ function terrainBenchSceneBuild(sceneId, seed, opts){
     var rfield = terrainFieldBuild(rspec);
     return { sceneId: sceneId, spec: rspec, fields: [rfield], primary: rfield,
       support: terrainSupportGraphReport(rfield) };
+  }
+  /* CL-F08a uses the same governed production renderer while keeping CL-F07a's original seven
+     proof scenes and gate count immutable. The feature module owns every height and structure
+     anchor; this bench remains only the shared scene dispatch. */
+  if(typeof terrainFeatureSceneBuild === "function"){
+    var featureScene = terrainFeatureSceneBuild(sceneId, s, opts);
+    if(featureScene) return featureScene;
   }
   throw new Error("terrainBenchSceneBuild: unknown scene " + sceneId);
 }

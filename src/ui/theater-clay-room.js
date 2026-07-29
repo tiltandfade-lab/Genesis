@@ -3822,7 +3822,8 @@ const CLAY_ROOM_TERRAIN_BENCH_ID = "cl-f07-terrain-bench";
 const CLAY_TERRAIN_SCENE_IDS = Object.freeze([
   "thirteen-piece-sheet", "one-clamp-proof", "boundary-sheet", "route-proof",
   "walk-down-16", "support-graph", "dark"
-]);
+].concat(typeof CL_F08_TERRAIN_FEATURE_BOOK === "object"
+  ? CL_F08_TERRAIN_FEATURE_BOOK.scenes.map(function(scene){ return scene.id; }) : []));
 /* Diagnostic colours, deliberately NOT art: the clay register stays neutral so Adam is ruling on
    FORM, and every non-clay colour here is an overlay that a capture can turn off. */
 const CLAY_TERRAIN_COLORS = Object.freeze({
@@ -5228,6 +5229,7 @@ function clayRoomMountTerrainBench(){
   const witnessContact = [];
   const contractProbe = clayRoomTerrainProbeFromLocation() === "standee-contract";
   const contractPicks = {};
+  const defenseStructures = [];
   fields.forEach(function(field, index){
     const originCell = { x: cursorX, z: room.y + 7 - field.extent.y / 2 };
     const fieldBuild = clayTerrainBuildFieldGroup(field, originCell, baseY, origin, {
@@ -5429,6 +5431,77 @@ function clayRoomMountTerrainBench(){
     cursorX += field.extent.x + gap;
   });
 
+  /* CL-F08a'S DEFENSIVE ANCHORS. These are exact engine-authored footprints, base datums, and
+     storey counts from terrain-features.js. The renderer projects the diagnostic masses but does
+     not decide where they stand or silently cap them at the Clayroom's usual two storeys.
+
+     A gatehouse is projected as two piers plus an upper bridge, leaving a true passage void. That
+     is still one declared mass and it keeps the terrain proof honest: the climbing causeway
+     arrives THROUGH the gate rather than into a painted rectangle. */
+  const declaredDefenseStructures = scene.structures || [];
+  if(declaredDefenseStructures.length && built.length){
+    const first = built[0];
+    const q = TERRAIN_GRID_LAW.verticalQuantumWorldUnits;
+    const storeyH = TERRAIN_GRID_LAW.storeyQuanta * q;
+    const cameraRows = scene.cameraReport && scene.cameraReport.rows
+      ? scene.cameraReport.rows : [];
+    function cameraRow(id){
+      return cameraRows.filter(function(row){ return row.id === id; })[0] || null;
+    }
+    function mountDefenseBox(parent, structure, part, x, z, w, d, bottomY, height, color){
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, height, d),
+        clayStructureMaterial(color));
+      mesh.position.set(x, bottomY + height / 2, z);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      mesh.userData.interiorKind = "clay-terrain-defense-structure";
+      mesh.userData.terrainDefenseStructure = {
+        id: structure.id, role: structure.role, storeys: structure.storeys, part: part
+      };
+      parent.add(mesh);
+      return mesh;
+    }
+    declaredDefenseStructures.forEach(function(structure){
+      const fp = structure.footprint;
+      const centerX = first.originCell.x + fp.x + fp.w / 2 - origin.cx;
+      const centerZ = first.originCell.z + fp.y + fp.d / 2 - origin.cz;
+      const bottomY = baseY + structure.baseH * q;
+      const height = structure.storeys * storeyH;
+      const structureGroup = new THREE.Group();
+      structureGroup.name = "terrain-defense-" + structure.id;
+      structureGroup.userData.terrainDefenseStructureGroup = {
+        id: structure.id, role: structure.role, storeys: structure.storeys
+      };
+      if(structure.role === "gatehouse"){
+        const pierW = Math.max(1, fp.w * 0.28);
+        const passageW = Math.max(1, fp.w - pierW * 2);
+        const openingH = Math.min(height * 0.42, storeyH * 1.55);
+        mountDefenseBox(structureGroup, structure, "west-pier",
+          centerX - (fp.w - pierW) / 2, centerZ, pierW, fp.d, bottomY, height, 0x77736e);
+        mountDefenseBox(structureGroup, structure, "east-pier",
+          centerX + (fp.w - pierW) / 2, centerZ, pierW, fp.d, bottomY, height, 0x77736e);
+        mountDefenseBox(structureGroup, structure, "upper-bridge",
+          centerX, centerZ, passageW, fp.d, bottomY + openingH, height - openingH, 0x827d77);
+      } else {
+        mountDefenseBox(structureGroup, structure, "mass",
+          centerX, centerZ, fp.w, fp.d, bottomY, height, 0x716d68);
+        /* A slightly broader cap prevents a tall diagnostic tower from reading as an extruded
+           cuboid while keeping the gameplay footprint unchanged. */
+        mountDefenseBox(structureGroup, structure, "point-deck-cap",
+          centerX, centerZ, fp.w + 0.24, fp.d + 0.24,
+          bottomY + height, 0.16, 0x8b857e);
+      }
+      group.add(structureGroup);
+      const row = cameraRow(structure.id);
+      defenseStructures.push({
+        id: structure.id, role: structure.role, storeys: structure.storeys,
+        footprint: Object.assign({}, fp), baseH: structure.baseH,
+        cameraDepth01: row ? row.cameraDepth01 : null,
+        inFarBand: row ? row.inFarBand : null
+      });
+    });
+  }
+
   S.interiorGroup.add(group);
   S.clayRoomTerrainBenchGroup = group;
   S.clayRoomTerrainForeignRestorePending = true;
@@ -5446,11 +5519,12 @@ function clayRoomMountTerrainBench(){
 
   /* The receipt. One source of numbers: the same terrainBenchGateReport() the jsdom harness calls,
      plus what this frame actually placed, so a capture can never disagree with the gate. */
+  const receiptFixture = scene.featureBook || CL_F07_TERRAIN_BENCH;
   S.clayRoomTerrainReport = {
-    fixtureId: CL_F07_TERRAIN_BENCH.id,
-    fixtureVersion: CL_F07_TERRAIN_BENCH.version,
-    status: CL_F07_TERRAIN_BENCH.status,
-    proof: CL_F07_TERRAIN_BENCH.proof,
+    fixtureId: receiptFixture.id,
+    fixtureVersion: receiptFixture.version,
+    status: receiptFixture.status,
+    proof: receiptFixture.proof,
     sceneId: sceneId,
     frameIndex: frameIndex,
     frameCount: scene.frameCount || 1,
@@ -5576,6 +5650,7 @@ function clayRoomMountTerrainBench(){
     }),
     frameCensus: (function(){
       const c = { terrainCells: 0, water: 0, volumes: 0, spans: 0, overlays: 0,
+        defenseStructures: 0,
         witnessFigures: 0, witnessParts: 0, foreignFigures: 0, untagged: 0, untaggedSample: [],
         expression: 0, occluders: 0,
         spanPositions: [], spansOutsideDeclaringBay: 0, fieldBounds: null };
@@ -5606,6 +5681,7 @@ function clayRoomMountTerrainBench(){
         if(ud.terrainCell) c.terrainCells++;
         else if(ud.terrainWater) c.water++;
         else if(ud.terrainVolume) c.volumes++;
+        else if(ud.terrainDefenseStructure) c.defenseStructures++;
         else if(ud.terrainSpan){
           c.spans++;
           /* A span must sit over the piece that declared it. Recording each beam's world position
@@ -5662,6 +5738,19 @@ function clayRoomMountTerrainBench(){
       ? Number(Math.max.apply(null, witnessContact.map(function(c){ return c.gap; })).toFixed(4)) : null,
     hostSuppressed: hostSuppressed,
     foreignLightsNeutralized: foreignLights,
+    featureBook: scene.featureBook ? {
+      id: scene.featureBook.id, version: scene.featureBook.version,
+      status: scene.featureBook.status, featureId: scene.featureId || null,
+      feature: scene.feature ? {
+        id: scene.feature.id, name: scene.feature.name, scale: scene.feature.scale,
+        construction: scene.feature.construction, tacticalRead: scene.feature.tacticalRead,
+        qualityLock: scene.feature.qualityLock
+      } : null,
+      tacticalGrammar: scene.tacticalGrammar || null,
+      cameraLaw: scene.cameraLaw || null,
+      cameraReport: scene.cameraReport || null,
+      structures: defenseStructures
+    } : null,
     oneClamp: scene.proof || null,
     route: scene.route ? {
       sourceRow: scene.route.sourceRow, namedEntries: scene.route.namedEntries,
@@ -5676,7 +5765,9 @@ function clayRoomMountTerrainBench(){
       finalFootprintCells: scene.walkDown.finalFootprintCells,
       trayCells: scene.walkDown.trayCells } : null,
     support: scene.support || null,
-    gate: (typeof terrainBenchGateReport === "function") ? terrainBenchGateReport(seed) : null
+    gate: scene.featureBook && typeof terrainFeatureGateReport === "function"
+      ? terrainFeatureGateReport(seed)
+      : ((typeof terrainBenchGateReport === "function") ? terrainBenchGateReport(seed) : null)
   };
   /* Read-only capture seams, in this file's established window.Theater._*ForTest convention.
      The view seam is the ONLY one that mutates, and it mutates exactly one governed camera mode —

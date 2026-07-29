@@ -1,6 +1,7 @@
-/* CL-F07a capture rig — the seven rung-1 terrain captures (docs/TERRAIN-PROGRAM.md §4.3).
+/* CL-F07a / CL-F08a capture rig — rung-1 terrain plus the authored feature book.
 
-   Production renderer only: genesis.html + the real ?clayroom=1 mount + the real CL-F07 fixture.
+   Production renderer only: genesis.html + the real ?clayroom=1 mount + the real CL-F07/CL-F08
+   fixtures.
    This rig never draws terrain, never sets a height, and never declares a visual verdict — it
    drives the page, banks frames, and writes a receipt. Judgement is Adam's and Codex's.
 
@@ -53,8 +54,14 @@ const SCENES = [
   { id: "route-proof",          capture: 4, light: null },
   { id: "walk-down-16",         capture: 5, light: null },
   { id: "support-graph",        capture: 6, light: null },
-  { id: "dark",                 capture: 7, light: "dark" }
+  { id: "dark",                 capture: 7, light: "dark" },
+  { id: "authored-feature-book",capture: 8, light: null, frames: 8 },
+  { id: "defensive-ridgeworks", capture: 9, light: null },
+  { id: "defensive-gateworks",  capture: 10, light: null }
 ];
+const FEATURE_SCENE_IDS = new Set([
+  "authored-feature-book", "defensive-ridgeworks", "defensive-gateworks"
+]);
 
 function pageProbe() {
   const T = window.Theater || {};
@@ -67,6 +74,13 @@ function pageProbe() {
           status: CL_F07_TERRAIN_BENCH.status, question: CL_F07_TERRAIN_BENCH.question,
           sourceRows: CL_F07_TERRAIN_BENCH.sourceRows,
           sheetField: CL_F07_TERRAIN_BENCH.sheetField, medianTray: CL_F07_TERRAIN_BENCH.medianTray }
+      : null,
+    featureBook: (typeof CL_F08_TERRAIN_FEATURE_BOOK !== "undefined")
+      ? { id: CL_F08_TERRAIN_FEATURE_BOOK.id, version: CL_F08_TERRAIN_FEATURE_BOOK.version,
+          status: CL_F08_TERRAIN_FEATURE_BOOK.status, question: CL_F08_TERRAIN_FEATURE_BOOK.question,
+          proof: CL_F08_TERRAIN_FEATURE_BOOK.proof,
+          featureIds: CL_F08_TERRAIN_FEATURE_BOOK.featureIds,
+          sources: CL_F08_TERRAIN_FEATURE_BOOK.sources }
       : null,
     /* The parameter sets and construction sentences that produced this exact frame — so the
        receipt carries the CLAIM beside the picture and Adam can check one against the other. */
@@ -95,7 +109,8 @@ function pageProbe() {
     /* Meshes actually placed, counted off the LIVE scene rather than off the spec — a receipt that
        reports what it intended to build is not a receipt. */
     placed: (function(){
-      const counts = { cells: 0, water: 0, volumes: 0, spans: 0, overlays: 0, witnesses: 0 };
+      const counts = { cells: 0, water: 0, volumes: 0, spans: 0, overlays: 0, witnesses: 0,
+        defenseStructures: 0 };
       const S = T._clayInteriorGroupForTest ? T._clayInteriorGroupForTest() : null;
       if (!S || !S.traverse) return Object.assign({ measured: false }, counts);
       S.traverse(function(node){
@@ -104,6 +119,7 @@ function pageProbe() {
         else if (ud.terrainWater) counts.water++;
         else if (ud.terrainVolume) counts.volumes++;
         else if (ud.terrainSpan) counts.spans++;
+        else if (ud.terrainDefenseStructure) counts.defenseStructures++;
         else if (ud.terrainSupportCell || ud.terrainRoute) counts.overlays++;
         else if (ud.clayTerrainWitness) counts.witnesses++;
       });
@@ -137,7 +153,13 @@ async function plate(page, filename) {
     defaultViewport: VIEWPORT,
   });
 
-  const index = { fixture: "cl-f07-terrain-bench", proof: "CL-F07a", captures: [],
+  const featureOnly = ONLY !== "all" && FEATURE_SCENE_IDS.has(ONLY);
+  const index = {
+    fixture: featureOnly ? "cl-f08-terrain-feature-book"
+      : (ONLY === "all" ? "cl-f07-terrain-bench + cl-f08-terrain-feature-book"
+        : "cl-f07-terrain-bench"),
+    proof: featureOnly ? "CL-F08a" : (ONLY === "all" ? "CL-F07a + CL-F08a" : "CL-F07a"),
+    captures: [],
     determinism: null, gate: null, rung: RUNG, probe: PROBE, seed: SEED,
     grade: GRADE, overhang: OVERHANG, skirt: SKIRT,
     generatedAt: new Date().toISOString(), viewport: VIEWPORT };

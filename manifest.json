@@ -83,6 +83,7 @@
     "src/engine/clay-room.js",
     "src/engine/terrain-field.js",
     "src/engine/terrain-pieces.js",
+    "src/engine/terrain-features.js",
     "src/engine/terrain-expression.js",
     "src/engine/terrain-bench.js",
     "src/engine/place-dressing.js",
@@ -1729,6 +1730,32 @@
       "desc": "R1-01…R1-13 as PARAMETER SETS over the chassis (docs/TERRAIN-PROGRAM.md §2.1, §3.5) — thirteen presets, not thirteen generators; each carries its real-world construction sentence as data. Also owns the three demand-table resolvers: the six wilderness-area-type boundary kinds, all 50 wilderness-tactical-terrain rows (piece+params, or non-terrain WITH a reason), and the wilderness-footing Coverage Area placement grammar. R1-13 ships chassis hooks (anchors, span solver, declared collapse trigger) — the full junction network is deferred."
     },
     {
+      "id": "engine.terrain-features",
+      "path": "src/engine/terrain-features.js",
+      "type": "logic",
+      "owns": [
+        "TERRAIN_DEFENSIVE_CAMERA_LAW",
+        "TERRAIN_AUTHORED_FEATURES",
+        "TERRAIN_AUTHORED_FEATURE_IDS",
+        "terrainFeatureRecipe",
+        "terrainFeatureBuild",
+        "terrainDefensiveRidgeworksSpec",
+        "terrainDefensiveGateworksSpec",
+        "terrainCameraDepth01",
+        "terrainDefensiveCameraReport",
+        "CL_F08_TERRAIN_FEATURE_BOOK",
+        "terrainFeatureSceneDefinition",
+        "terrainFeatureSceneBuild",
+        "terrainFeatureGateReport"
+      ],
+      "callTimeDeps": [
+        "terrainFieldBuild",
+        "terrainSeedFrom",
+        "terrainOffsetPolyline"
+      ],
+      "desc": "CL-F08a authored terrain feature book (docs/TERRAIN-FEATURE-BOOK.md): four small and four large coherent landforms plus two Golden Site 9 defensive compositions. Geometry is authored first and intentionally has no procedural transform layer yet. The defensive camera law permits three- and four-storey masses while placing them in the diagonal camera-far band; the gateworks follows the FFT gate grammar of one gate mass, one rising approach, and one water/void obstacle."
+    },
+    {
       "id": "engine.terrain-expression",
       "path": "src/engine/terrain-expression.js",
       "type": "logic",
@@ -1836,6 +1863,8 @@
         "terrainPieceFootprintCells",
         "terrainSubRng",
         "terrainSeedFrom",
+        "terrainFeatureSceneDefinition",
+        "terrainFeatureSceneBuild",
         "TERRAIN_R1_PRESETS",
         "TERRAIN_R1_PIECE_IDS",
         "TERRAIN_BOUNDARY_KINDS",

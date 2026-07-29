@@ -1934,3 +1934,28 @@ Binding consequences:
   required core, with saddle and rolling transitions as modern extensions. Stronger regional
   silhouettes and selective hard breaks provide the modern edge without converting the map into
   Minecraft cubes with individually tilted tops.
+
+## AUTHORED TERRAIN FEATURES + CAMERA-FAR HEIGHT (Adam, 2026-07-28 — binding; verbatim)
+
+> "after that, what I want to see is a series of terrain features large and small, let's try to just get the features accomplished first, then we can learn how to procedurally transform them and still retain the qualities of the feature"
+
+> "if you ever need to refer to the FFT maps during production please do"
+
+> "the new golden site sketches have just finished and i think you should go ahead and build those out as well, the defensive terrain"
+
+> "there seems to be a limit to two story buildings in the clayroom, but things can go higher than that, but they should generally be placed in the far end of the map from the camera so we don't run into weird camera blocking issues"
+
+Binding consequences:
+
+- Establish authored small, large, and defensive feature compositions before adding procedural
+  deformation. Each baseline names the spatial relationship a later resize, bend, erosion, realm
+  skin, or combination must retain.
+- FFT maps remain an available production reference, not only historical research. Their readable
+  approach, height, gate, obstacle, and terrain-dominant composition grammar may be consulted while
+  authoring Genesis features without copying a specific map.
+- The finished Golden Site defensive studies supply authored terrain compositions, beginning with
+  a lengthened turning earthwork entry and a gate window with one rising approach and split
+  obstacle.
+- The Clayroom has no two-storey height cap. Three-storey-and-taller masses are allowed; by default
+  they occupy the camera-far band so their silhouettes do not hide the tactical ground. A specific
+  foreground exception requires its own camera-occlusion proof.

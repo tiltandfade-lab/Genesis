@@ -8,6 +8,31 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-29 — Complementary FFT maps, ruined-tower centerpiece, and quarter-turn review [Codex]
+
+**Added**
+- Four authored `20 × 24` FFT-style battlefield proofs: reverse-slope ridge, wet ravine with two
+  crossings, localized terraced bluff, and breached double earthworks. Each has a distinct relief
+  budget, macro-zone graph, primary/alternate route tradeoff, and deterministic fingerprint.
+- A grounded three-storey ruined watchtower on the H04 camera-far crown. Its missing near corner,
+  unequal broken supports, partial L-shaped wall shell, and open centre make the four bearings
+  reveal different interior and terrain reads.
+- Terrain proof controls for the production Theater's four canonical quarter turns, plus
+  deterministic `terrainturn=0..3` capture input and a labeled eight-frame review sheet.
+
+**Changed**
+- The Clayroom terrain bench now delegates rotation to production `rotate()`/`rotationStep`, then
+  reapplies only its governed terrain fit. Pan/zoom and the fixed production/strategic pitches
+  remain governed; no free orbit was introduced.
+- CL-F08 fixture metadata and the feature book now cover five full battlefield proofs and four
+  complementary CL-F10 propositions before procedural transformation.
+
+**Fixed**
+- Capture now sweeps `45° → 135° → 225° → 315° → 45°` and fails unless every 90-degree increment
+  is exact, the starting bearing is restored, and all terrain fingerprints remain invariant.
+- The first skeletal tower mass was thickened into a readable ruined masonry corner rather than
+  three isolated posts.
+
 ## 2026-07-28 — FFT hillside, switchback, and cap-topology proof [Codex]
 
 **Added**
@@ -809,30 +834,4 @@ after the wave: `a23d2eb2`.
   height pass (5179) → registry regen → engine swap of the 896 pixel sprites.
 - 88 procedural realm-surfaces vs textured floors decision; 11 other realms (~3,420 refs); kit-sheet
   K1 QA (11 alpha-passed sheets on codex/extruded-prop-pilot).
-
-## 2026-07-13 (later) — OSS adoption research pass + Phase-3 brief + oss stabilization evidence
-
-Closed out the geometry-flip session. Adam asked whether Genesis is "rebuilding the wheel" on open-source;
-answered with a three-agent research pass (reference data · three.js graphics · procgen/infra).
-
-**Added.**
-- **`docs/PHASE-3-DIRECTOR-BRIEF.md`** — Fable's handoff into Phase 3 (flip evidence, a linked path to the
-  full Codex plugin-rec suite + plan, GP-2..4 terrain, the oracle/spend calls that are his, and a
-  smallest-correction-first recommendation). Now with a **§6 OSS-adoption findings** table folded in.
-- **Loop-gate captures regenerated under the oss default** (`dev/battle-gate/dungeon-loop/`) — 5 real
-  dungeons + combat, 5/5 clean, 0 breaks; the committed evidence for the §15 stabilization hold. (The
-  oss PNGs are notably *smaller* than the legacy ones they replace — consistent with the Δ−286-triangle
-  perf finding.)
-
-**Findings (headline: mostly NOT rebuilding the wheel).** Genesis already adopted the non-obvious infra
-(IndexedDB via `store.js`; vendored earcut/polygon-clipping/clipper2; the Codex graphics pin-table), and its
-bespoke systems are correct-by-design (script-owns-rolls, no-stored-terrain, band×lane combat; `postprocessing`
-already correctly rejected). Four genuine adoption candidates surfaced, detailed in the brief §6:
-(1) **`@three.ez/instanced-mesh`** (MIT) for the unbuilt/bespoke R3 sprite-atlas instancing — the big one,
-Fable's Phase-3 call; (2) **Open5e `srd-2024`** (CC-BY-4.0) as a build-time cross-check for the PDF-parsed
-`Reference/SRD-Data/`; (3) **AgX tone-curve** (free, already in vendored three) for the grade pass;
-(4) dedup a triplicated test-seed PRNG into `dev/lib/prng.mjs`.
-
-**Deferred.** Fable weighs in on Phase 3, potentially expands/orchestrates the next waves. All four adoption
-candidates are recommendations, not decisions.
 

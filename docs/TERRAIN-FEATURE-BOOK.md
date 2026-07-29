@@ -1,7 +1,7 @@
 ---
 type: working-build-spec
 created: 2026-07-28
-status: BUILT — CL-F08a form-language baseline + CL-F09 vertical FFT battlefield proof
+status: BUILT — CL-F08a feature baseline + CL-F09/CL-F10 FFT battlefield proofs + quarter-turn review
 owner: authored terrain features before procedural transformation
 authority:
   - ART-DIRECTION-CANON.md
@@ -82,6 +82,11 @@ CL-F09 removes the mistaken assumption that those isolated-study dimensions are 
 It adds a battlefield-scale sparse control surface and a graded-corridor operation, then proves
 them together on a tall map before any procedural deformation is introduced.
 
+CL-F10 adds four complementary full-map propositions. They are authored from the same terrain
+operations and reviewed together before transforms are allowed to vary them. The terraced bluff
+also carries a three-storey ruined tower, which makes the production camera's four canonical
+bearings part of terrain composition rather than an optional inspection convenience.
+
 ## The eight feature baselines
 
 ### Small
@@ -155,13 +160,33 @@ Natural tactical seams are lighter than relief boundaries, and the marked route 
 visible in the Clayroom proof so the switchback can be judged as a route rather than inferred from
 a receipt.
 
-## Height and camera law
+## `FFT-H02`–`FFT-H05` — complementary battlefield proofs
+
+All four retained maps use the same `20 × 24` tactical extent as H01 but make different promises:
+
+| id | proposition | relief | primary/alternate route |
+|---|---|---:|---|
+| `FFT-H02` | Reverse-slope ridge with an observation crest and playable defilade behind it | `8h / 20 ft` | Broad saddle crossing / narrower flank crossing |
+| `FFT-H03` | Diagonal water-cut ravine with localized hard faces | `9h / 22.5 ft` | Narrow high crossing / longer ravine-floor route |
+| `FFT-H04` | Localized bluff whose face ends before the safe route | `10h / 25 ft` | Long natural ascent plus short final stair / sheltered scramble to the climb face |
+| `FFT-H05` | Two ditch-and-bank lines with deliberately offset breaches | `7h / 17.5 ft` | Turning breach entry / shorter exposed sally route |
+
+The set is deliberately not five reskins of one mountain. Each map has a distinct fingerprint,
+profile, face budget, height, and tactical tradeoff. All primary and alternate routes remain
+connected at legal one-quantum steps; every named elevation zone retains calm fighting ground.
+
+H04's `20 × 20 ft` crown seats a three-storey ruined watchtower. The renderer builds a broken
+L-shaped shell from the declared footprint: one full-height corner, unequal broken supports,
+partial far and west walls, an open centre, and a physically missing camera-near corner. It is not
+a solid diagnostic cuboid carrying a “ruined” label.
+
+## Height and four-bearing camera law
 
 The Clayroom's common two-storey examples are not a height limit.
 
-The production camera approaches from positive world X and positive world Z. For an authored
-terrain field, local `(0, 0)` is therefore the camera-far corner. CL-F08a assigns every
-three-storey-and-taller mass a normalized camera-depth value and requires:
+At the authored starting bearing, the production camera approaches from positive world X and
+positive world Z. For an authored terrain field, local `(0, 0)` is therefore the camera-far corner.
+CL-F08a assigns every three-storey-and-taller mass a normalized starting-camera depth and requires:
 
 ```text
 tall structure = storeys >= 3
@@ -170,10 +195,25 @@ cameraDepth01 <= 0.42
 
 Depth is measured at each mass's **camera-nearest footprint edge**, not its more forgiving
 centroid. The gatehouse is four storeys at depth `0.3737`; the two three-storey towers are at
-`0.1793` and `0.4015`. A mutation that moves a tall mass toward the near corner fails the gate.
+`0.1793` and `0.4015`; the H04 ruined tower is at `0.2083`. A mutation that moves a tall mass
+toward the near corner of the starting composition fails the gate.
 
-This is a compositional default, not a ban. A future foreground tower may be accepted when a
-specific cutaway/camera composition proves it does not hide tactical ground.
+This is a starting-composition default, not a claim that one corner stays camera-far forever. The
+production Theater already owns a discrete `rotationStep` and a 90-degree `rotate()` verb. Terrain
+review now exposes that same verb as four canonical bearings:
+
+```text
+view 0 = 45 degrees
+view 1 = 135 degrees
+view 2 = 225 degrees
+view 3 = 315 degrees
+```
+
+There is no free orbit. Every quarter turn preserves the production pitch and governed pan/zoom,
+and the capture gate requires the terrain fingerprints to remain byte-identical through a complete
+four-step cycle. A centerpiece may occlude some ground from one bearing because the player can turn
+to reveal the opposite face; clipping, topology mutation, or a centerpiece that erases the useful
+read from every bearing still fails.
 
 ## Engine and proof
 
@@ -185,11 +225,16 @@ specific cutaway/camera composition proves it does not hide tactical ground.
 - Defensive scenes: `terrainscene=defensive-ridgeworks` and
   `terrainscene=defensive-gateworks`
 - Vertical battlefield: `terrainscene=fft-hillside-proof&terrainrung=all`
+- Complementary battlefields: `terrainscene=fft-reverse-ridge-proof`,
+  `fft-ravine-crossing-proof`, `fft-terraced-bluff-proof`, and
+  `fft-earthwork-breach-proof`
+- Canonical bearing: append `&terrainturn=0`, `1`, `2`, or `3`
 
 The headless gate requires:
 
 - four small, four large, and two defensive builds;
-- ten distinct heightfield fingerprints;
+- fifteen distinct heightfield fingerprints across eight features, two defensive sites, and five
+  battlefield proofs;
 - no walkable cell over 30 degrees;
 - no illegal walk edge;
 - no unowned face;
@@ -209,6 +254,11 @@ The headless gate requires:
 - one localized scarp rather than parallel sedimentary bands;
 - shared-edge continuity and varied tile tangents across the full tall field;
 - an indexed eight-facet cap with no alternating diagonal micro-grid.
+- four distinct CL-F10 tactical profiles with proposition-specific relief and face budgets;
+- two legal, connected routes and calm fighting ground across every named zone on each CL-F10 map;
+- a grounded three-storey H04 ruined tower on the camera-far crown of the starting composition;
+- an exact four-bearing 90-degree camera cycle with immutable terrain fingerprints and no free
+  orbit seam.
 
 Visual acceptance remains Adam's. A green engine gate says the feature is legal, continuous,
 deterministic, and honestly placed; it does not say the feature looks good.

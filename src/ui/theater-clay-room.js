@@ -3853,6 +3853,20 @@ function clayRoomTerrainFrameFromLocation(){
   return null;
 }
 
+/* The terrain proof uses the production Theater's own four rotationStep bearings. The URL seam is
+   deterministic capture input, not a second camera: 0/1/2/3 map to the same quarter turns that the
+   combat-stage rotate button drives. Absence means "keep the current production bearing." */
+function clayRoomTerrainQuarterTurnFromLocation(){
+  try {
+    const raw = window.location && window.location.search
+      ? new URLSearchParams(window.location.search).get("terrainturn") : null;
+    if(raw != null && raw !== "" && isFinite(Number(raw))){
+      return ((Number(raw) | 0) % 4 + 4) % 4;
+    }
+  } catch(e){}
+  return null;
+}
+
 function clayRoomSetTerrainFrame(frameIndex){
   S.clayRoomTerrainFrame = frameIndex == null ? null : Math.max(0, frameIndex | 0);
   if(S.clayRoomFixtureId !== CLAY_ROOM_TERRAIN_BENCH_ID) return false;
@@ -4202,6 +4216,24 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
   group.userData.terrainFieldId = field.id;
   group.userData.terrainFingerprint = field.fingerprint;
   const cellMeshes = [];
+  /* Authored proof routes stay visible through the neutral-clay sweep. Colour distinguishes the
+     two tactical propositions on a map; it does not decorate the ground or create geometry. */
+  const markedSurfaceColours = {
+    "switchback-trail": CLAY_TERRAIN_COLORS.trail,
+    "gully-route": CLAY_TERRAIN_COLORS.gully,
+    "ridge-saddle-track": 0xb49a72,
+    "ridge-flank-track": 0x827b70,
+    "ravine-high-crossing": 0xc0a36f,
+    "ravine-floor-route": 0x6f7f7d,
+    "bluff-ascent": 0xb99a6a,
+    "bluff-scramble": 0x89776b,
+    "earthwork-entry": 0xad9064,
+    "earthwork-sally": 0x786b61
+  };
+  function markedSurfaceColour(surface){
+    return Object.prototype.hasOwnProperty.call(markedSurfaceColours, surface)
+      ? markedSurfaceColours[surface] : null;
+  }
   /* A cell's column reaches down to its LOWEST ORTHOGONAL NEIGHBOUR, not to the deepest point of
      the whole field. Ground is a continuous mass and its exposed face is only as tall as the drop
      beside it — running every column to the field minimum turns a 1h berm into a 22-ft monolith
@@ -4261,10 +4293,10 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
       ? terrainSurfaceCellDatumH(field, c.index) : c.h;
     const cellBaseH = baseHFor(c);
     const columnH = Math.max(0.05, (topH - cellBaseH) * h);
+    const markedColour = markedSurfaceColour(c.surface);
     const kindColor = c.kind === "guarded-slope" ? CLAY_TERRAIN_COLORS.guarded
       : (c.kind === "boulder" ? CLAY_TERRAIN_COLORS.boulder
-        : (c.surface === "switchback-trail" ? CLAY_TERRAIN_COLORS.trail
-          : (c.surface === "gully-route" ? CLAY_TERRAIN_COLORS.gully : CLAY_TERRAIN_COLORS.ground)));
+        : (markedColour == null ? CLAY_TERRAIN_COLORS.ground : markedColour));
     const cx = originCell.x + c.x - origin.cx + 0.5;
     const cz = originCell.z + c.y - origin.cz + 0.5;
     if(!flags.anyDevice){
@@ -4424,7 +4456,7 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
        tread's authored colour through the neutral-clay sweep so a reviewer can distinguish the
        switchback from an accidental contour line. The shaft and every unmarked ground cap remain
        diagnostic clay. */
-    if(c.surface === "switchback-trail" || c.surface === "gully-route"){
+    if(markedColour != null){
       cap.userData.clayMaterialBenchSurface = true;
     }
     cellGroup.add(cap);
@@ -5531,6 +5563,44 @@ function clayRoomMountTerrainBench(){
           centerX, centerZ, passageW + 0.18, fp.d - 0.12,
           bottomY + openingH + Math.min(storeyH * 1.35, height - openingH),
           0.16, 0x918a82);
+      } else if(structure.role === "ruined-tower"){
+        /* A ruin is not a solid tower with a "ruined" label. The far/west corner still carries the
+           full three-storey silhouette, while the camera-near corner is physically absent and the
+           other two supports break at unequal heights. Two partial wall runs establish the tower's
+           former enclosure without closing its playable/readable centre. The four canonical FFT
+           bearings therefore reveal materially different interior/occlusion reads. */
+        const pier = Math.max(0.9, Math.min(1.08, Math.min(fp.w, fp.d) * 0.26));
+        const edge = pier / 2 + 0.12;
+        const westX = centerX - fp.w / 2 + edge;
+        const eastX = centerX + fp.w / 2 - edge;
+        const farZ = centerZ - fp.d / 2 + edge;
+        const nearZ = centerZ + fp.d / 2 - edge;
+        mountDefenseBox(structureGroup, structure, "weathered-plinth",
+          centerX, centerZ, fp.w, fp.d, bottomY, 0.22, 0x625e59);
+        mountDefenseTieredColumn(structureGroup, structure, "far-west-pier",
+          westX, farZ, pier, pier, bottomY + 0.22, height, 0x716d68);
+        mountDefenseTieredColumn(structureGroup, structure, "far-east-broken-pier",
+          eastX, farZ, pier, pier, bottomY + 0.22, height * 0.72, 0x746f69);
+        mountDefenseTieredColumn(structureGroup, structure, "near-west-broken-pier",
+          westX, nearZ, pier, pier, bottomY + 0.22, height * 0.46, 0x746f69);
+        /* Split wall remnants make a jagged skyline without a decorative sawtooth. Each fragment
+           is a structural continuation of the surviving far/west corner, and their unequal tops
+           leave the former upper room legible as missing volume. */
+        mountDefenseBox(structureGroup, structure, "far-wall-west-fragment",
+          westX + 0.95, farZ, 1.45, 0.5,
+          bottomY + 0.22, storeyH * 2.12, 0x77716a);
+        mountDefenseBox(structureGroup, structure, "far-wall-east-fragment",
+          eastX - 0.58, farZ, 0.74, 0.5,
+          bottomY + 0.22, storeyH * 1.48, 0x716c66);
+        mountDefenseBox(structureGroup, structure, "west-wall-far-fragment",
+          westX, farZ + 0.92, 0.5, 1.35,
+          bottomY + 0.22, storeyH * 1.72, 0x6d6964);
+        mountDefenseBox(structureGroup, structure, "west-wall-near-fragment",
+          westX, nearZ - 0.58, 0.5, 0.74,
+          bottomY + 0.22, storeyH * 1.02, 0x69645f);
+        mountDefenseBox(structureGroup, structure, "fallen-near-sill",
+          centerX + fp.w * 0.14, nearZ, Math.max(0.9, fp.w * 0.28), 0.42,
+          bottomY + 0.22, storeyH * 0.18, 0x69645f);
       } else {
         mountDefenseTieredColumn(structureGroup, structure, "mass",
           centerX, centerZ, fp.w, fp.d, bottomY, height, 0x716d68);
@@ -5846,9 +5916,15 @@ function clayRoomMountTerrainBench(){
     window.Theater._clayTerrainBenchForTest = function(){
       const report = S.clayRoomTerrainReport;
       if(!report) return null;
-      return Object.assign({}, report, { cameraProjection: clayTerrainCameraProjection() });
+      return Object.assign({}, report, {
+        cameraProjection: clayTerrainCameraProjection(),
+        cameraQuarterTurn: clayRoomTerrainQuarterTurnSnapshot()
+      });
     };
     window.Theater._clayTerrainSetViewForTest = function(view){ return clayRoomSetTerrainView(view); };
+    window.Theater._clayTerrainSetQuarterTurnForTest = function(step){
+      return clayRoomSetTerrainQuarterTurn(step);
+    };
     /* THE GOVERNED POSE, for the resize-survival probe (dev/verify-clay-camera-resize.cjs). Read
        seam reports what the pose actually produced — including the far plane, which is part of it —
        so a probe can ask the physical question (is the whole content sphere inside the frustum?)
@@ -5867,6 +5943,8 @@ function clayRoomMountTerrainBench(){
         contentRadius: clayRoomPosedContentRadius(),
         offset: S.clayCamOffset ? { x: S.clayCamOffset.x, z: S.clayCamOffset.z } : null,
         zoom: S.clayCamZoom != null ? S.clayCamZoom : null,
+        rotationStep: ((Number(S.rotationStep) || 0) % 4 + 4) % 4,
+        bearingDeg: clayRoomCameraBearingDeg(),
         fitPos: S.clayCamFit ? S.clayCamFit.pos.toArray() : null,
         posedAt: S.clayCamPosedAt ? S.clayCamPosedAt.toArray() : null
       };
@@ -5923,6 +6001,61 @@ function clayRoomSetTerrainView(view){
   S.clayRoomTerrainView = view;
   clayRoomApplyCamPose();
   return true;
+}
+
+function clayRoomCameraBearingDeg(){
+  if(!S.camera) return null;
+  const target = S.cameraLookTarget || (S.clayCamFit && S.clayCamFit.target);
+  if(!target) return null;
+  const dx = S.camera.position.x - target.x;
+  const dz = S.camera.position.z - target.z;
+  if(dx * dx + dz * dz < 0.000001) return null;
+  const bearing = ((Math.atan2(dx, dz) * 180 / Math.PI) % 360 + 360) % 360;
+  return Number(bearing.toFixed(3));
+}
+
+function clayRoomTerrainQuarterTurnSnapshot(){
+  const step = ((Number(S.rotationStep) || 0) % 4 + 4) % 4;
+  return {
+    step: step,
+    bearingDeg: clayRoomCameraBearingDeg(),
+    canonicalBearings: 4,
+    incrementDeg: 90,
+    freeOrbit: false,
+    productionRotateVerb: true
+  };
+}
+
+function clayRoomRefreshTerrainTurnControl(){
+  const control = S.clayRoomTerrainTurnControl;
+  if(!control) return;
+  const active = S.clayRoomFixtureId === CLAY_ROOM_TERRAIN_BENCH_ID;
+  control.root.style.display = active ? "flex" : "none";
+  const snap = clayRoomTerrainQuarterTurnSnapshot();
+  control.label.textContent = "VIEW " + snap.step + " · "
+    + (snap.bearingDeg == null ? "—" : snap.bearingDeg + "°");
+}
+
+/* Discrete and deliberately asymmetric: this delegates to production rotate(), whose public combat
+   control is also a clockwise quarter turn. Setting an earlier numbered view may invoke it up to
+   three times, but there is still no arbitrary yaw, pitch, or orbit seam. After rotate() performs
+   the host fit, the Clayroom captures that bearing as its fresh fit and reapplies only its governed
+   terrain pan/zoom. */
+function clayRoomSetTerrainQuarterTurn(step){
+  if(S.clayRoomFixtureId !== CLAY_ROOM_TERRAIN_BENCH_ID || !S.camera
+    || typeof rotate !== "function" || !isFinite(Number(step))) return false;
+  const desired = ((Number(step) | 0) % 4 + 4) % 4;
+  const current = ((Number(S.rotationStep) || 0) % 4 + 4) % 4;
+  const turns = (desired - current + 4) % 4;
+  for(let i = 0; i < turns; i++) rotate();
+  if(turns){
+    clayRoomSettleCameraPoseTween();
+    clayRoomCaptureCamFit();
+  }
+  S.clayRoomTerrainQuarterTurnRequested = desired;
+  clayRoomApplyCamPose();
+  clayRoomRefreshTerrainTurnControl();
+  return clayRoomTerrainQuarterTurnSnapshot();
 }
 
 function clayRoomTerrainBenchSnapshot(){
@@ -6652,7 +6785,14 @@ function clayRoomAfterInteriorBoardRebuild(){
   // drain; this live post-build hook preserves non-camera animation.
   clayRoomSettleCameraPoseTween();
   clayRoomCaptureCamFit();
-  clayRoomApplyCamPose();
+  if(S.clayRoomFixtureId === CLAY_ROOM_TERRAIN_BENCH_ID){
+    const requestedTurn = S.clayRoomTerrainQuarterTurnRequested == null
+      ? clayRoomTerrainQuarterTurnFromLocation()
+      : S.clayRoomTerrainQuarterTurnRequested;
+    if(requestedTurn == null) clayRoomApplyCamPose();
+    else clayRoomSetTerrainQuarterTurn(requestedTurn);
+  } else clayRoomApplyCamPose();
+  clayRoomRefreshTerrainTurnControl();
   if(S.clayRoomSelectedId) clayRoomHighlightSelection(S.clayRoomSelectedId);
   if(typeof S.clayRoomRefreshSprites === "function") S.clayRoomRefreshSprites();
 }
@@ -7935,6 +8075,29 @@ function clayRoomBuildWorkbenchChrome(record){
   catalogToggle.setAttribute("aria-label", "Collapse or expand Clayroom catalog");
   catalogToggle.style.cssText = "order:-1;background:#252a32;color:#ccd5df;border:1px solid #414955;border-radius:3px;padding:4px 6px;font:9px monospace;cursor:pointer;";
   top.appendChild(catalogToggle);
+  /* Same verb as the production combat-stage ⟳ control. Kept in the persistent top bar so the
+     terrain can be judged with the inspector open or closed; hidden for every non-terrain bench. */
+  const terrainTurnRoot = document.createElement("div");
+  terrainTurnRoot.setAttribute("data-clay-terrain-camera", "1");
+  terrainTurnRoot.style.cssText = "display:none;align-items:center;gap:5px;";
+  const terrainTurnButton = document.createElement("button");
+  terrainTurnButton.type = "button";
+  terrainTurnButton.textContent = "⟳ 90°";
+  terrainTurnButton.title = "Rotate to the next canonical FFT camera bearing";
+  terrainTurnButton.setAttribute("aria-label", "Rotate terrain camera 90 degrees clockwise");
+  terrainTurnButton.style.cssText = "background:#283644;color:#dcecff;border:1px solid #4a647c;border-radius:3px;padding:4px 7px;font:9px monospace;cursor:pointer;";
+  const terrainTurnLabel = document.createElement("span");
+  terrainTurnLabel.style.cssText = "color:#8fb0ca;font:9px monospace;min-width:88px;";
+  terrainTurnButton.addEventListener("click", function(){
+    const current = ((Number(S.rotationStep) || 0) % 4 + 4) % 4;
+    clayRoomSetTerrainQuarterTurn(current + 1);
+  });
+  terrainTurnRoot.appendChild(terrainTurnButton);
+  terrainTurnRoot.appendChild(terrainTurnLabel);
+  top.appendChild(terrainTurnRoot);
+  S.clayRoomTerrainTurnControl = {
+    root: terrainTurnRoot, button: terrainTurnButton, label: terrainTurnLabel
+  };
 
   const rail = document.createElement("aside");
   rail.id = "clay-room-workbench-catalog";
@@ -9749,6 +9912,7 @@ function clayRoomMountOverlay(record, host){
       button.style.opacity = mounted ? "1" : "0.42";
       if(!status) button.style.display = mounted ? "block" : "none";
     });
+    clayRoomRefreshTerrainTurnControl();
   }
   S.clayRoomRefreshFixtureControls = clayRefreshFixtureControls;
   restoreLightsBtn.addEventListener("click", function(){
@@ -10576,6 +10740,7 @@ export {
   clayRoomSetTerrainScene,
   clayRoomSetTerrainFrame,
   clayRoomSetTerrainView,
+  clayRoomSetTerrainQuarterTurn,
   clayRoomTerrainBenchSnapshot,
   CLAY_ROOM_TERRAIN_BENCH_ID,
   CLAY_TERRAIN_SCENE_IDS,

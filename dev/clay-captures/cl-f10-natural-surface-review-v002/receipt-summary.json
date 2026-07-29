@@ -1,0 +1,75 @@
+{
+  "proof": "CL-F10 natural-surface default correction",
+  "verdict": "visual acceptance remains Adam's",
+  "comparisonSheet": {
+    "file": "connected-vs-naked-labeled.png",
+    "sha256": "e2cf92d83fc5c0330cd4f713d39861c54a4bc580a507e461be5d66b626df3da0",
+    "layout": "top row: unqualified authored-feature scene default; bottom row: explicit naked diagnostic control"
+  },
+  "sceneDefaultPolicy": {
+    "clF07Diagnostics": "naked",
+    "authoredFeatures": "all",
+    "explicitOverride": "terrainrung URL parameter or --rung capture flag",
+    "defaultProofMethod": "the four top-row captures omitted terrainrung entirely; each live receipt resolved all, matched its expected rung, built, passed the quarter-turn gate, and reported zero console errors"
+  },
+  "defaultFeatureCaptures": [
+    {
+      "sceneId": "fft-reverse-ridge-proof",
+      "file": "reverse-ridge-responsive-default.png",
+      "resolvedRung": "all",
+      "consoleErrors": 0,
+      "quarterTurnGate": true
+    },
+    {
+      "sceneId": "fft-ravine-crossing-proof",
+      "file": "ravine-responsive-default.png",
+      "resolvedRung": "all",
+      "consoleErrors": 0,
+      "quarterTurnGate": true
+    },
+    {
+      "sceneId": "fft-terraced-bluff-proof",
+      "file": "terraced-bluff-mixed-default.png",
+      "resolvedRung": "all",
+      "consoleErrors": 0,
+      "quarterTurnGate": true
+    },
+    {
+      "sceneId": "fft-earthwork-breach-proof",
+      "file": "breached-earthworks-mixed-default.png",
+      "resolvedRung": "all",
+      "consoleErrors": 0,
+      "quarterTurnGate": true
+    }
+  ],
+  "explicitControlCaptures": [
+    {
+      "sceneId": "fft-reverse-ridge-proof",
+      "file": "reverse-ridge-naked-control.png",
+      "resolvedRung": "naked",
+      "consoleErrors": 0,
+      "quarterTurnGate": true
+    },
+    {
+      "sceneId": "fft-ravine-crossing-proof",
+      "file": "ravine-naked-control.png",
+      "resolvedRung": "naked",
+      "consoleErrors": 0,
+      "quarterTurnGate": true
+    },
+    {
+      "sceneId": "fft-terraced-bluff-proof",
+      "file": "terraced-bluff-naked-control.png",
+      "resolvedRung": "naked",
+      "consoleErrors": 0,
+      "quarterTurnGate": true
+    },
+    {
+      "sceneId": "fft-earthwork-breach-proof",
+      "file": "breached-earthworks-naked-control.png",
+      "resolvedRung": "naked",
+      "consoleErrors": 0,
+      "quarterTurnGate": true
+    }
+  ]
+}

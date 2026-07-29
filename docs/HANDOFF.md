@@ -6,6 +6,23 @@ updated: 2026-07-27
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-29, TERRAIN NATURAL-SURFACE DEFAULT CORRECTION) [Codex]
+
+The apparent return to Minecraft blocks was a proof/default regression, not a lost terrain field:
+the CL-F10 sheet had been captured through CL-F07's `naked` one-box-per-cell control. Authored
+terrain-feature scenes now default to the full responsive expression; the original seven CL-F07
+bin-isolation scenes keep the naked default, and explicit rung overrides still work.
+
+The retained comparison packet is
+`dev/clay-captures/cl-f10-natural-surface-review-v002/`: four unqualified feature URLs resolved
+`all` in the live page with zero browser errors and passing quarter-turn gates, beside four explicit
+`naked` controls. Natural slopes remain connected changing-angle skins; ruined masonry, stairs,
+fortifications, retaining work, earthworks, and causal cliffs retain deliberate hard geometry.
+
+Focused verification: terrain features **61/61**, terrain expression **80/80**, expression R2
+**53/53**, terrain bench **77/77**, Clayroom **272/272**, manifest `RESULT: OK`, archive/doc and
+diff checks green. **FULL CI PENDING** for the next clean close; this checkpoint does not push.
+
 ## ⭐ Latest (2026-07-28, GOLDEN-SITES ADVERSARIAL INTEGRATION + MARKET SAMPLER) [Codex]
 
 The 2026-07-27 Golden-Sites campaign has completed Codex adversarial review. The integrated

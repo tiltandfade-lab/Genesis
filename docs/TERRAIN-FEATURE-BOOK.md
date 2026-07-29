@@ -229,6 +229,11 @@ read from every bearing still fails.
   `fft-ravine-crossing-proof`, `fft-terraced-bluff-proof`, and
   `fft-earthwork-breach-proof`
 - Canonical bearing: append `&terrainturn=0`, `1`, `2`, or `3`
+- Authored feature scenes default to `terrainrung=all`, the complete responsive surface. The
+  original seven CL-F07 expression-ladder scenes continue to default to the explicit
+  box-per-cell `naked` control. Any URL may still name a rung for controlled comparison.
+- Corrected default/control evidence:
+  `dev/clay-captures/cl-f10-natural-surface-review-v002/connected-vs-naked-labeled.png`
 
 The headless gate requires:
 

@@ -1002,3 +1002,922 @@ while a settled character's line stays byte-identical in shape to the pre-unit o
 consumers without throwing. `dev/acceptance-opening-register.mjs` re-runs the 12-start batch
 protocol (one per class) against the built register — the monoculture is visibly broken (all five
 bands present across 12 rolls where the pre-unit chain produced 12/12 settlement, 11/12 calm).
+
+## The terrain chassis — TERRAIN-PROGRAM rung 1 / CL-F07a first pass (2026-07-27) — PROPOSED
+
+**Status: PROPOSED. First pass. Every visual verdict is Adam's and Codex's — nothing here declares
+a visual "on", and Codex revision is invited on all of it.** Cites `TERRAIN-PROGRAM.md` §2.0 (the
+chassis and the one geometric law), §2.1 (R1-01…R1-12), §3.5 (R1-13), §4.1/§4.2/§4.3 (the CL-F07
+fixture, the four required conditions, and the CL-F07a proof). That spec lives in the Genesis-clayspec
+lane and remains the authority; this entry records only what was BUILT against it and why.
+
+**What landed.** One chassis, thirteen presets, one bench, two gates.
+
+- `src/engine/terrain-field.js` — R1-00, the terrain field. Seeded, deterministic, cell-quantized to
+  the tactical grid, with the shaping-op vocabulary (radial · ridge · basin · slot · terrace · apron ·
+  scatter · patch), face minting at 2h+ deltas, the walk/non-flying support graphs, the 60%-tray
+  walk-down, and the heightfield fingerprint the determinism gate compares.
+- `src/engine/terrain-pieces.js` — the thirteen presets, plus the three demand-table resolvers
+  (boundary kinds, all 50 `wilderness-tactical-terrain` rows, the `wilderness-footing` coverage
+  grammar) and the R1-13 anchor/span hooks.
+- `src/engine/terrain-bench.js` — `CL-F07 terrain-bench` fixture data: the seven CL-F07a scenes as
+  field specs, and `terrainBenchGateReport()`, which IS the executable gate.
+- `src/ui/theater-clay-room.js` — the CL-F07 bench mount, projecting the chassis through the
+  production renderer.
+
+### Decisions made this pass, with grounds
+
+**1. The clamp is a min-plus Lipschitz lower envelope, not an iterative smoother.**
+`h_final[c] = min over d of (h_demand[d] + clamp · manhattan(c,d))`, edge cost `max(clamp[a],
+clamp[b])`, computed by alternating chamfer sweeps to a fixed point. *Grounds:* it is
+order-independent and terminating, so the same spec is byte-identical every run; and it **cannot**
+emit an illegal slope. §2.1 R1-02 names the >1h walkable step as "the single most likely place this
+system lies" — under a Lipschitz envelope that lie is structurally impossible rather than merely
+tested for. An edge touching a guarded cell costs nothing, which is precisely the statement "a face
+is permitted here, and the guarded piece owns it".
+
+**2. The one-clamp claim is measured, not asserted.** `terrainOneClampProof()` builds a hill and a
+cliff from **one parameter object used twice**, serializes both parameter sets with `slopeClamp`
+elided, and fails unless the two serializations are byte-identical. Result: same generator, sole
+diff `slopeClamp`, hill max walkable step **1h / 26.5651°** with **0 faces**, cliff **20 faces**,
+**20 cells lowered by the clamp**. If this had failed the instruction was to stop and report rather
+than fudge; it did not fail.
+
+**3. Sub-quantum noise is budgeted, not global.** Full requested amplitude on guarded cells; on
+walk-connected cells, capped at the 30° headroom (`(tan30·5/2.5 − 1)/2 = 0.0774h` per cell). Noise
+never changes a cell's tier, so the walk graph is unaffected by construction. *Grounds:* the 30°
+limit is measured on the RENDERED surface, and unbudgeted break-up on a 1h step would breach it
+while every integer-only check stayed green.
+
+**4. Water is a plane at a datum, and a field may carry more than one.** The basin op cuts the hole;
+the water surface is a horizontal plane and the shoreline is *derived* — so raising `waterDatumH`
+floods outward for free, correctly, following the real ground (§2.1 R1-05's "whole design"). Extended
+to **per-body planes**: a pond and a stream cut on one tray do not share a water table, and perched
+water tables are ordinary geology.
+
+**5. Reachability is measured twice; the gate is the non-flying number.** Walk-only and
+walk∪climb are both reported. A climb is not flight, so gating on walk-only would reject legal
+boards; reporting only non-flying would hide a board that needs a climb where none was intended.
+
+**6. An entry is a way IN, not a cell on the rim.** A playfield cell beside an 8h boundary cliff is
+not an entry; a cell beside a gap in it is. *Grounds:* 94.3% of area-type rows name an entry and
+every one must land on a walkable edge cell — a gate that counts every rim cell proves nothing. The
+measurable consequence is visible in the boundary sheet: the thicket frame admits **8** entry cells
+and the fog frame **36**, because fog blocks sight and not movement.
+
+**7. The coverage resolver places all 18 distinct live strings, not just the 13 the spec names.**
+The `wilderness-footing` table carries "One 10x10 patch" as well as "10x10 patch", plus "10x20
+patch". *Grounds:* CLAUDE.md's "validators preserve the thing's job" — reporting only the canonical
+13 would satisfy the gate while leaving five real strings unplaceable. Both counts are reported.
+
+**8. Berm-and-trench is guarded, not walkable-clamped.** A berm WITH its paired ditch is a 2h step
+from ditch floor to crest — which is exactly what d50 row 5's "5 extra feet of movement to climb
+out" means. Under the walkable clamp the chassis correctly flattened the earthwork to a stripe;
+the fix was to state the piece's real construction, not to weaken the law.
+
+**9. Thirteen bays are thirteen SITES, and the bench gutter is clamp-exempt.** On the sheet, a 1-cell
+gutter at the base datum would clamp every bay's crest down to its distance from that gutter. Marking
+the gutter exempt states the truth (this is a bench of separate sites side by side, not one
+continuous arrival) instead of shaving thirteen pieces to make one field legal. Recorded in the
+receipt as `gutterClampExempt` so no frame is read as a continuous arrival.
+
+**10. Renderer placement: the bench lives in `theater-clay-room.js` beside CL-F00…CL-F05.** *Grounds:*
+all five existing benches do; that module already holds every capability terrain needs (THREE, `S`,
+`interiorFloorTopAt`, the clay material/tag helpers, the standee mount, the governed 72° camera);
+and a sixth bench in a new theater ES module would have required rewiring the root's ctx injection —
+protected core the graphics charter forbids touching for a first pass. The chassis itself is three
+new **engine** modules in classic-script globals, registered in `manifest.json` and `genesis.html`.
+The renderer authors no terrain: it refuses to draw at all when the chassis is absent.
+
+### Declared deviations and deferrals
+
+- **§4.1 names the census median (12×16) as the fixture's field; capture 1 uses a 24×24 bench sheet.**
+  Thirteen pieces cannot be legible on 192 cells — five usable cells per bay is already the minimum
+  at which a 3h hill reaches its crest without the clamp shaving it, and thirteen such bays is 24×24.
+  Captures 3, 4 and 6 — the ones whose claim is about an *arrival* — use the median 12×16 kidney
+  exactly, so the arrival-sized proof is kept where it is load-bearing.
+- **R1-13 ships chassis hooks, not the full network** (as §3.5 permits and this pass declares).
+  Built: anchors derived from the field, the span solver, tread width *derived* from diameter, the
+  three roles, and collapse as a declared property with a countable trigger — all four §3.5 morph
+  cases come from one parameterization with no code branch. Deferred: multi-level junction routing
+  and the renderer's finished beam bodies (a placeholder cylinder stands in). `terrainSpanNetwork()`
+  returns its own `deferred` string so the gap is in the data, not only in this doc.
+- **The 12 of 13 witness placements on the sheet.** R1-13's bay is a stream cut; its witness cell is
+  not standable, so no witness is placed there. Reported, not padded.
+- **Rung-1 pieces are clay volumes, not materials.** Ground materials are a separate gated program
+  (M12 / CL-R4) and were not touched.
+- **Lighting is calibrated for the 15×15 host room.** A 24×24 field falls off at its edges. That is a
+  CL-R1 question, not a terrain one, and is flagged for Adam rather than patched from this lane.
+
+### Teeth
+
+`dev/verify-terrain-bench.mjs` — **60 passed, 0 failed**, and it carries a `--red` mode that re-runs
+every assertion against a blanked chassis: **0 passed, 20 failed**, so every gate is proven to have
+teeth in the same process rather than in a comment. The seven §4.3 gates, verbatim:
+
+| gate | measured |
+|---|---|
+| zero walkable cells above 30° | **0** (max walkable slope **26.5651°**, 13 fields) |
+| zero unowned faces at 2h+ neighbour deltas | **0** |
+| zero unreachable standable surfaces | **0** (non-flying) |
+| all 6 boundary strings resolve | **6 kinds / 7 distinct live strings, 7 resolve** |
+| all 50 d50 rows resolve or are declared non-terrain with a reason | **37 terrain + 13 non-terrain = 50, 0 unresolved** |
+| all 13 footing coverage strings place | **13 canonical + 5 more = 18/18 place** |
+| determinism, twice, in separate page loads | **PASS** — jsdom (2 fresh windows) *and* browser (2 fresh page loads, 13 fields byte-identical) |
+
+`dev/measure-clay-terrain-bench.py` is the capture-side half: it measures **edge density** inside the
+canvas, because a camera fitted past the far plane returns a smooth fog gradient that reads as
+"content" against any modal-colour test — which is exactly how this bench's first 72° strategic pass
+banked an empty brown rectangle that no green unit test noticed. It also fails a camera "pair" whose
+two frames are identical, a scene that reports built while placing zero cell meshes, and any refused
+witness. That failure is retained as diagnostic evidence, not hand-authored away.
+
+**Front-end gate (Adam's and Codex's — never mine): does the ground look like ground?** The capture
+packet is `dev/clay-captures/cl-f07a-terrain-bench-v001/` — the seven CL-F07a sets, each banked at
+the fixed production camera *and* the governed 72° map-reading pitch, with a receipt per frame
+carrying the committed layout ids, the parameter sets, the construction sentence each piece claims,
+and the rolled source rows.
+
+### CL-F07a fix pass — three capture defects, and what they cost (2026-07-27, stacked on cda3784c)
+
+Fable's independent audit re-derived slope and face ownership from the raw heightfields and
+confirmed the geometry (max walk step 1 quantum = 26.57° everywhere; face records match 2-quantum
+edges 1:1, hill 0/0 vs cliff 20/20). The **frames** carried three defects, all now fixed and all
+now gated. Every one of them was invisible to a green harness, which is the lesson.
+
+**1 · The dark capture was not dark — cause: an unowned base rig, not the recipe.** The clay recipe
+owns `S.ambientLight`/`S.pointLights` and reasserted them correctly; the dark profile's authored
+0.25 ambient *was* applied and the receipt's recipe id was honest. But `setInteriorBoard`'s own rig
+hangs lights the clay profile never touches — a **4.5-intensity AmbientLight** (18× the dark
+recipe's) and an **18.6-intensity sprite-camera-fill SpotLight** among six. In a 15×15 room the
+shell hides most of that rig; the terrain bench suppresses the shell, so it fell on the field
+unopposed. Two further teeth in the same defect: the camera-tracking fills have their **intensity
+re-driven every frame**, so a one-shot zero is overwritten before the capture (they are now
+neutralised by `visible`, which is not on that driver's path); and the recipe was only ever asserted
+by a **one-shot call from the capture rig**, so any later board replay silently dropped it. The
+light case is now **fixture data** (`terrainBenchSceneLightRecipe`), asserted from the mount on every
+rebuild, and the receipt records `requestedLightRecipe` / `appliedLightRecipe` / `lightRecipeDrift`
+so requested-vs-applied drift is visible forever.
+
+**2 · The "two floating standees" were the host's calibration bulbs.** A scripted ground-contact
+audit over all 12 sets found **zero airborne witnesses**: every standee sat at a uniform 0.096 world
+units above its own cell's rendered top, which is the standee base offset. The two objects hovering
+upper-left and upper-right were the Clayroom's diagnostic **calibration bulb practicals** (housing
+plus emitter, at ±4.24 either side of the room's centre line, 1.7 units up) — host bench chrome with
+no wall to live on. Every witness now records `groundY` / `standeeY` / `gap`, and the measurement
+fails any set whose max gap exceeds 0.2, so "0 refusals" is checkable against "0 levitations"
+instead of assumed.
+
+**3 · Host chrome bleed.** The door leaf, the calibration practicals, eight dust motes and the C1A
+crate all carried **no `interiorKind`**, which is exactly why a first pass that matched only on
+`interiorKind` missed every one of them. They are now matched on their own userData markers. The
+practicals are **detached**, not hidden, because the flicker driver writes `visible` on the fixture
+bodies every frame — the same race the camera-tracking lights win. Everything is restored on a
+fixture switch, so the other five benches cost nothing.
+
+**Three self-inflicted regressions in this pass, all caught by looking at the frames, all now
+gated.** They are recorded because the near-misses are the point:
+- Neutralising the base rig in **every** scene, not only the scene that declares a light case, left
+  the terrain unlit: the sheet came back as an empty rectangle with a few emissive standees in it.
+  Scoped to declared light cases.
+- Detaching **three ancestors** up from each emitter tore out a shared group and took the whole
+  terrain field off the scene. The detach is now surgical — the emitter's immediate parent only, and
+  only after proving that subtree holds no terrain.
+- Bucketing `clayRole` as host chrome hid **all 564 terrain cells** (`overlay: 577`), because
+  `clayRoomApplyDiagnosticSurfaces` tags every routed surface with `clayRole`/`clayRoute` before the
+  sweep's second pass. The matcher is now allow-listed against terrain ownership first and matches
+  only `clayRole === "furniture"`.
+
+**And a measurement defect worth naming.** Twice, a frame with no visible terrain **passed** the
+capture gate. The edge-density metric downsampled by `//4`, which left ~350 px of smooth fog
+gradient whose neighbouring pixels each cross a 6-luma step — enough to fake ~2% "edges" on an empty
+frame. Raising the threshold would have been tuning the validator to the answer; the metric's
+*sampling* was fixed instead (a fixed 200×200 grid, on which an empty region measures **0.00%** and
+modelled form measures 4.5–11%). The gate also now fails a luma-flat frame and requires the dark
+frame to be measurably darker than the lit sheet — a frame labelled "dark" is no longer allowed to
+be pale.
+
+**Gates after the fix:** `dev/verify-terrain-bench.mjs` **65 passed / 0 failed** (`--red` 0/21);
+`dev/measure-clay-terrain-bench.py` **RESULT: PASS** over 12 sets; `check-manifest` **RESULT: OK**;
+clay-room 272/0, theater-shot 107/0, standee-verbs 73/0, room-shell 53/0, active-room-only 22/0,
+theater-lighting 21/0, theater-sprites 12/0. Determinism still **PASS**, 13 fields, two page loads.
+All 12 capture sets re-banked. The front-end verdict remains Adam's and Codex's.
+
+### CL-F07a fix pass, round 2 — the lit scenes were unlit (2026-07-27, stacked on af5b1a49)
+
+Adam caught what Fable and I both missed: the round-1 light fix left **nine of the twelve capture
+sets rendering as unlit silhouettes** on a pale backdrop. Only the emissive witnesses read. This
+entry records the cause, the two design errors behind it, and the metric defect that hid it.
+
+**Cause: `clay-opposing-pair` is a two-point-light recipe whose lights live inside the calibration
+practicals — and round 1 DETACHED those practicals.** I removed the fixture groups to stop their
+housings floating over the field, and carried the scene's entire illumination out with them. What
+remained was a 0.18 ambient and a sprite-camera fill, which lights standees, not ground. Chrome
+suppression now hides the practical's **mesh bodies only** and never touches a light or a group that
+contains one.
+
+**Design error 1 — declaring a light case and taking the host rig down were the same decision.**
+Round 1 read "neutralise the rig iff the scene declares a light case." The dark scene declared one;
+the production scenes declared **nothing**, so they kept the neutralisation with no substitute.
+Those are now two independent per-scene facts: `lightRecipeId` (mandatory) and `neutralizeHostRig`
+(true for `dark` alone).
+
+**Design error 2 — absence of a declaration was a silent fallback.** `terrainBenchSceneLightRecipe`
+now **throws** for a scene with no declared light case. A scene cannot render black by omission any
+more; it fails at build time. Every production scene declares **`daylit`** — the standard clay
+production-capture illumination, the recipe `theater-clay-room`'s own `initialLightRecipeId` opens
+CL-F01/CL-F04/CL-F05 on and the one the known-good construction-bench captures were banked under.
+Scene 7 declares `dark`.
+
+**The metric defect that hid it, and why it was the same mistake twice.** My luma checks measured
+the **whole frame**, where a pale backdrop dominates: whole-frame p50 was **117.4 for a genuinely
+lit render and 117.4 for a near-black one — identical to the decimal**. The "lit sheet 119" figure
+in the round-1 entry was the backdrop's number, not the terrain's. Luma is now measured over the
+**terrain's own screen region** (every pixel more than 18 from the modal backdrop colour), with a
+minimum region size so an empty frame cannot pass by having no region at all. The floor (45) and the
+dark ceiling (40) are calibrated against `cda3784c`'s genuinely lit renders (terrain p50 65.9 and
+86.0), recovered from git history rather than guessed.
+
+**Proven red first, as required.** The new terrain-region check was run against the round-1 capture
+dir *before* the lighting fix landed and correctly failed nine sets by name. Round-1 → round-2
+terrain-region p50, all twelve:
+
+| set | round 1 | round 2 | |
+|---|---:|---:|---|
+| thirteen-piece-sheet | **32.0** | 141.0 | was unlit |
+| one-clamp-proof | 79.3 | 159.0 | survived |
+| boundary-sheet f0–f4 | **29.3** | 126.7–127.7 | was unlit |
+| boundary-sheet f5 | **39.4** | 137.6 | was unlit |
+| route-proof | **29.3** | 128.9 | was unlit |
+| walk-down-16 | 117.4 | 92.5 | survived |
+| support-graph | **37.8** | 131.7 | was unlit |
+| dark | 19.3 | 19.3 | correctly dark throughout |
+
+Two sets survived round 1 because their fields are small and sat close enough to the one surviving
+spot to keep some light — which is exactly why a whole-frame average could not tell the difference.
+
+**Gates:** `dev/verify-terrain-bench.mjs` **68 passed / 0 failed** (`--red` 0/21), with four new
+checks: every scene declares a light case, production scenes declare the standard illumination, a
+missing declaration throws, and only `dark` neutralises the rig — plus 17d rewritten to assert that
+chrome suppression never removes a light. `dev/measure-clay-terrain-bench.py` **RESULT: PASS** over
+12 sets. `check-manifest` **RESULT: OK**. clay-room 272/0, theater-shot 107/0, theater-verbs 100/0,
+standee-verbs 73/0, room-shell 53/0, active-room-only 22/0, theater-lighting 21/0, theater-sprites
+12/0. Determinism **PASS**, 13 fields, two page loads. All 12 sets re-captured.
+
+**Standing lesson for this program:** three times now a frame that rendered nothing, or rendered
+nothing *legible*, passed a green gate — once on fog gradient read as edges, twice on a backdrop
+read as illumination. Every capture-side gate here must be calibrated against a banked frame a human
+has actually looked at, and must measure the thing it names rather than the frame that contains it.
+
+### CL-F07a fix pass, round 3 — the two floating objects, finally identified (2026-07-27, on c4e17f71)
+
+Three rounds identified the same two objects three different ways. Two of those identifications were
+wrong, including one of mine that shipped in a commit message. The chain is recorded because the
+near-misses are the point.
+
+| round | claim | verdict |
+|---|---|---|
+| 1 (mine) | "the two hovering objects were the calibration bulb practicals" | **WRONG.** The bulbs were there and did need handling, but they were not the floaters. Detaching them removed the recipe's own point lights and caused round 2's unlit scenes. |
+| 2 (Fable) | "the host clay-room's RESIDENT CAST figures, mounting at room boot at default spawn height" | **WRONG.** A whole-scene walk finds no resident cast: `foreignFigures = 0` in every scene. |
+| 3 (measured) | **two stray R1-13 span beams, plus a witness on a one-cell pinnacle** | **CORRECT**, by isolation and projection. |
+
+**How it was settled — by removal, not by eye.** Hiding the whole bench group emptied the region;
+hiding only witnesses removed the *figure* but left the *wedge*; hiding only terrain cells removed
+the *wedge*. So they were two different objects with two different owners.
+
+**Object 1 — the figure: my own witness, on a pinnacle.** The R1-03 witness stood on the top of a
+**one-cell crevice wall**. A six-foot billboard on a five-foot pillar hides its own support, so it
+reads as hovering with the pillar's corner peeking out beneath. It was geometrically perfect the
+whole time — distance to its column 0.00, gap 0.096 — which is exactly why every contact
+measurement passed and the frame still looked wrong. Witnesses now take the **best-supported**
+standable cell in their piece's bay (most same-height orthogonal neighbours, then lowest, then cell
+order for determinism). All thirteen now report `sameHeightNeighbours: 4`, and R1-07 — which
+previously had no standable cell at its authored corner — now places, so the sheet carries 13
+witnesses rather than 12.
+
+**Object 2 — the wedge: two stray R1-13 span beams.** The renderer built spans on **every** field
+from **whatever anchors the whole field yielded**, so the sheet got two beams hanging 1h above the
+highest anchors available, at `z = -11.5` — off the far edge of a field whose bounds are
+`minZ -12 / maxZ 12`. Spans are now built only for a field whose spec actually declares an R1-13
+piece, and only from anchors inside that piece's own bay. Proven red first: with the pre-fix
+renderer the receipt reads `spans: 2, spansOutsideDeclaringBay: 2` at `[[-7, 1.69, -11.5],
+[-3, 0.94, -11.5]]`; after the fix, `spansOutsideDeclaringBay: 0` with both beams inside the R1-13
+bay at ground level.
+
+**One remaining grey wedge, named rather than hidden.** A small wedge persists at pixel
+(1461, 706) of the sheet. Projecting every cell through the live camera pose identifies it as
+terrain cell **[16, 4]** — `h=3, kind ground`, the corner of R1-03's crevice wall. It is real
+terrain doing its job; it looks detached only because the bench's one-cell gutter drops away on two
+sides of it. **This is a bench-layout artifact, not a defect, and it is Adam's call whether the
+gutter should be widened or the crevice inset.** It is named here rather than quietly deleted:
+deleting terrain to make a frame tidier is the one thing this program must never do.
+
+**New countable gates, so no future floater needs an eye.** The receipt now carries a **frame
+census** walked off the live scene — terrain cells, water, volumes, spans, overlays, witness figures,
+witness parts, **foreign figures**, and untagged objects with positions — plus each span's world
+position and whether it left its declaring bay, and the field's own world bounds. The measurement
+fails on any foreign figure, on `figures != witnesses placed`, and on any span outside its declaring
+bay. Chrome suppression also gained a **closing rule**: anything in the interior group the bench did
+not build is host chrome, matched by **ownership** rather than by a tag — because matching on
+`clayRole` once hid all 564 terrain cells, and the 17d law (never hide or detach a light) still
+stands above it.
+
+**Gates:** `dev/verify-terrain-bench.mjs` **71 passed / 0 failed** (`--red` 0/21) with three new
+checks (frame census present, spans scoped to the declaring piece, unowned meshes suppressed by
+ownership). `dev/measure-clay-terrain-bench.py` **RESULT: PASS** over 12 sets, every set reporting
+`figures = witnesses, foreign = 0, strays = 0`. `check-manifest` **RESULT: OK**. Determinism
+**PASS**. All 12 sets re-captured.
+
+### CL-F07a fix pass, round 4 — half the sheet was never drawn (2026-07-28, on e2e73b0b)
+
+Adam caught it: `01-thirteen-piece-sheet-02-settled-production.png` and `07-dark-02-settled-production.png`
+rendered only part of the 24×24 field — the far half gone along a clean cut, the surviving silhouette
+close enough to the 12×16 kidney footprint to look like a mask leak. It survived three fix rounds
+because **every number in the receipt agreed with the half that was there**: cells 564, frame census
+564, edge density 8.7%, terrain p50 luma 141. The field data was complete throughout.
+
+**THE CAUSE — the far plane was never part of the pose.** `setInteriorBoard` sizes the shared
+camera's clip range for the **15×15 host room's** own fit distance (`camDist + FOG_FAR + 20` =
+116.633). The clay benches then dolly along the view ray, and the terrain sheet's governed fit
+(`fitZoom = spanCells/15 × 1.28` = 2.048 for a 24-cell field) parked the camera **115.98** from its
+target — 0.65 inside its own far plane. Everything more than 0.65 world units *beyond the target*
+fell outside the frustum and was never drawn. The cut is a plane perpendicular to the view axis, so
+it reads on screen as a clean diagonal across the grid, and tall pillars survive past it because
+raising a point moves it *toward* the camera along that axis. Only the two 24×24 scenes were
+affected: the kidney scenes fit at zoom 1.365 (camera 77.32, 39 units of headroom).
+
+**PROVEN BY TOGGLE, NOT BY PIXELS.** With the sheet mounted, the Clayroom's own double-click reset
+(`clayCamZoom → 1`, camera 115.98 → 32.8/32.5/32.8, **no rebuild, no remount, 564 cell meshes before
+and after**) brings the whole field back; the governed wheel dollies back out and the missing half
+returns. One variable moves, the symptom moves with it. The gate then made it predictive: of the 211
+missing cells in the banked frame, **100% lie beyond `far`** — missing depth range
+[116.721, 127.755] against `far` 116.633. A single number partitions drawn from not-drawn.
+
+**THE FIX.** `clayRoomGrowCameraFar()` + `clayRoomPosedContentRadius()` in
+`src/ui/theater-clay-room.js`: the far plane is sized where the pose is set, from
+`distance-to-target + content radius + margin`, on **both** branches, and **grow-only** so no other
+bench's clip range can shrink. The sheet and dark grew 116.633 → 146.525; one-clamp 116.633 →
+124.354; the eight kidney sets kept 116.633 unchanged. The strategic branch's old
+`farLimit = far × 0.8` **clamp was itself treating this symptom** — it was pulling the sheet's 72°
+map read 14 units closer than the fit asked for — so the far plane is now sized to the requested fit
+first and the clamp survives as a geometric safety net (`far − contentRadius − 1`) that records
+itself when it fires. It fires nowhere; `strategicDistanceClamped` is null in all 12 sets.
+
+**THE NEW GATE — pixel coverage, red-first.** `dev/measure-clay-terrain-bench.py` now projects
+**every declared cell top** (the receipt carries `declaredCellTops` per field: one row per non-void
+cell, world coordinates from the same `clayTerrainCellWorld()` the witnesses use) through **that
+frame's own camera** (the receipt carries a live `cameraProjection`: the renderer's two matrices
+verbatim, the canvas rect, the device pixel ratio) and samples the banked PNG there. Cells occluded
+by the field's own heightfield are excluded by an honest ray march and counted separately; volumes
+are not marched, which can only leave a cell in the denominator, never remove one. Gate: **≥ 99% of
+provably-visible declared cells drawn, and ≥ 99% framed**, per scene, on the settled-production, 72°
+strategic, and clean-production frames.
+
+*"Drawn" is decided against a BACKDROP PLATE* — the identical render with the bench hidden, banked
+per pose. The first version tested against the frame's modal colour and inverted itself the moment a
+field filled the frame (the ground became the most common colour, so flat cells read as "nothing":
+boundary-f2's strategic frame measured 0.52% while being completely intact), and it could not
+survive the backdrop's own vignette, which spans 55 luma corner to centre. Against its plate the
+separation is not close: drawn cells measure 72–229 from the plate at the 5th percentile, missing
+cells measure 0, and the tolerance sits at 12.
+
+**Per-scene coverage, all 12 sets, before → after** (clean-production frame): sheet **57.29 → 100.00**
+(283/494 → 494/494), dark **57.29 → 100.00**, and the other ten sets 100.00 → 100.00 — the kidney
+scenes were **not** quietly losing cells inside their irregular outlines. Framed-out cells: sheet and
+dark 2 → 0 (the un-clamped strategic fit now contains the field it is a map of); every other set 0
+throughout.
+
+**THE STANDING LESSON: a rendered footprint must be gate-compared to a declared extent.** Every gate
+this bench had could see *whether* something rendered — none could see whether *all* of it did, and
+"most of it" satisfied all of them. Non-emptiness is not coverage. Half-missing is now exactly as
+countable as all-missing.
+
+**Not fixed here, and named rather than left silent:** a window resize (or a catalog-rail toggle)
+runs `S.resizeHandler → placeCamera()`, which re-places the camera at the host room's fit and resets
+`far` — discarding the governed pan/zoom *and* this round's clip sizing, so a live viewer who resizes
+the window on the sheet would see the far half clipped again. That is a pre-existing pose-loss defect
+affecting all six benches, and changing it changes behaviour Adam has not ruled on, so it is filed
+rather than folded into a one-cause round.
+
+**Gates:** `dev/verify-terrain-bench.mjs` **73 passed / 0 failed** (`--red` 0 passed / 21 failed)
+with two new checks — 17i (the far plane is sized to the posed camera) and 17j (the receipt carries
+the declared footprint and a live camera projection); both verified to fail against the round-3
+source, so both have teeth. `dev/measure-clay-terrain-bench.py <dir>` **RESULT: PASS** over 12 sets
+at 100.00% coverage on all three gated frames. `check-manifest` **RESULT: OK**. Determinism **PASS**,
+13 fields, two page loads. All 12 sets re-captured, each now banking two backdrop plates beside its
+four judged frames.
+
+### Clayroom camera — the pose did not survive a resize (2026-07-28, on 4732c829) — PROPOSED
+
+The item round 4 named rather than folded in. `S.resizeHandler` (`src/ui/theater-boot.js`) ends in
+`placeCamera()`, which re-fits the camera to the **host room** and hard-resets `S.camera.far` to
+`camDist + FOG_FAR + 20` — an absolute assignment at four sites in `theater-camera.js`, not a grow.
+Nothing re-applied the clay pose afterwards, so a window resize (or a catalog-rail toggle, or a
+material/trim bench mount) silently discarded the governed pan and zoom, and — since round 4 made the
+far plane part of the pose — the clip range that keeps a field inside the frustum. The captures never
+saw it because the capture rig never resizes.
+
+**Three call sites, not two.** `S.clayRoomPanelResizeHandler`, the catalog toggle, and a third at the
+material/trim bench mount path, which collapses the rail and fires the host resize in a `setTimeout`.
+All three now go through one funnel, `clayRoomResizeAndRestorePose()`, and none calls `S.resizeHandler`
+directly — the same "normalization at the boundary, not in handlers" rule the event contract already
+holds to. A fourth caller added later inherits the fix by construction.
+
+**The fit is RE-CAPTURED, not restored.** `clayCamFit` holds the *unposed* fit and is
+aspect-dependent; `placeCamera` has just computed the correct fit for the new aspect and left the
+camera sitting on it, which is the one moment where capturing cannot fold the pan and zoom into the
+fit itself. Restoring a stale fit would answer the new viewport with the old viewport's framing — the
+narrow-viewport crop the strategic fit already had to correct for. Offset and zoom are deltas and
+survive untouched.
+
+**The guard that looked right and was wrong.** The obvious protection against compounding is "only
+re-capture if the camera moved during the resize." That is false for the default, unpanned, unzoomed
+state — where the posed position *equals* the fit position, nothing appears to move, and yet `far`
+was still reset. It would have let the clipping straight back into exactly the state the sheet ships
+in. So the funnel re-applies unconditionally and re-captures only when the camera has drifted off
+`S.clayCamPosedAt` — the position `clayRoomApplyCamPose` records for itself, so the check reads the
+pose's own answer instead of keeping a second copy of the pose math to drift out of step.
+
+**Gate:** `dev/verify-clay-camera-resize.cjs` — the real page, the real governed pose, a `setViewport`
+that changes both extents *and* aspect (an aspect-preserving resize would let a stale fit pass by
+luck). **10 passed / 0 failed.** Its load-bearing assertion is that the camera sits where the pose
+last put it, red-proven at 9.03 world units off before the fix. Two earlier drafts of this probe
+passed against the unfixed code and were discarded rather than kept: one dollied *in*, which shrinks
+the distance to the target and satisfies the far-plane test trivially, and one compared the camera
+against the captured fit, which differs from the host's fresh fit after any resize and so reads
+"posed" even when the pose is gone. A probe that cannot fail against the defect is not a gate.
+
+**Not done here:** no visual verdict, and no re-capture — the banked CL-F07a frames are unchanged by
+this (the rig never resizes), and `measure` still reports **RESULT: PASS** at 100% coverage over all
+12 sets. Whether the live viewer's re-framing after a resize is the *right* framing is Adam's call.
+
+## Terrain expression R2 — Adam's seven rulings on the ladder (2026-07-28) — PROPOSED
+
+Built to `docs/TERRAIN-EXPRESSION-R2.md`, which records seven rulings verbatim off the naked /
+material / all ladder. **Several of them reverse what the research recommended, and Adam wins.**
+No visual verdict is taken here; the packet is `dev/clay-captures/cl-f07c-terrain-r2-v001/`.
+
+### R1 — THE SPRITE MATCHES ITS BASE (reverses STANDEE-CONTRACT-NONFLAT §3)
+
+*"the standee on the stairs is a perfect fit, except the sprite itself should always be fixed at the
+same angle as its base."* The study recommended tilting the plinth and keeping the card vertical;
+R1's build shipped that, and `TERRAIN_CONTACT_THRESHOLDS.spriteTiltDeg` enforced it as a law. It is
+now the opposite law and the old constant is **deleted**, not re-commented — a reversed ruling that
+leaves its old constant lying around is a trap for the next reader.
+
+**How it is written.** `updateSpriteBillboardYaw`'s facing pass already solved the plinth's
+conformance angles from the YXZ composition; the wrap now takes *those same two angles* as a
+quaternion, composed with the camera pitch: `wrap = R_plane · R_cameraPitch`. Plane OUTSIDE, pitch
+INSIDE. The order is the whole ruling: with the pitch inside, the un-foreshortening happens in the
+BASE's frame, so the angle between the sprite's world-up and the plinth's world-up is the
+camera-pitch constant and nothing else, at every grade and every yaw. The other order also leans the
+card and looks plausible in a still, but that angle then varies with the grade — the sprite would be
+matching the *ground* rather than its *base*.
+
+**The measurement, and why it is one number.** Every standee carries a fixed 35° camera-pitch tilt,
+so the two frames are never identical; the proposition is that their *difference* is exactly that
+constant. **Measured across five grade rungs × 25 witnesses at free yaw: worst deviation 0.0000°.**
+Before the change, the same instrument read **22.43° at g3 and 24.56° at g4**, growing with the
+grade, which is the signature of a sprite that is not leaning. `verify-bw2-2` group 21b-R1 runs the
+whole argument in one process on a 30° plane: plinth world-up 30.0000° off vertical, sprite world-up
+59.9101° off vertical, agreement 35.0000°; put the wrap back to the R1 write and the same assertion
+reads **25.4783°** and fires.
+
+**A latent bug the teeth probe found.** The conformance was written only when a stand plane was
+present and never un-written, so a figure that LOST its plane kept a tilted plinth forever while its
+card went back to vertical (read 20.64°), and writing the wrap's quaternion left its derived Euler
+with non-zero y and z that `rotation.x = tilt` did not clear (47.52°). Both cleared explicitly.
+Conditionally-written-never-reset is the HQ2-1 bug shape; production never hit it because the flag is
+set once at placement.
+
+### R2 — THE BASE SKIRT (numbers derived, not guessed)
+
+*"we might need to extend the base down through the floor, so even on hills the base appears to make
+contact with the full ground, rather than just floating or teetering."*
+
+**Decision: a separate child mesh, not a taller plinth geometry.** Grounds: every contact gate in the
+repo reads the base mesh's own `geometry.boundingBox`, so a taller geometry would silently repoint
+them at the skirt's bottom face and the nearest-contact gap would begin measuring the thing that is
+meant to be buried. R2 says the gap keeps measuring the CONTACT plane; a child mesh is how that stays
+true. Proved: the corner gaps are **byte-identical with the skirt on and off**.
+
+**Decision: opt-in, terrain only.** Grounds: the flat tabletop's tiles have a thickness this build has
+not measured, and a skirt poking through one would be a new defect in service of an old one.
+
+**Depth 0.06 wu, bounded on both sides.** Below: the fold's amplitude is
+`TERRAIN_WALK_NOISE_BUDGET_H.perCellH` = 0.03868 wu attenuated by r² at the worst Medium corner
+(0.8686) = 0.0336, less the 0.006 authored embed = **0.0276 wu of daylight to cover**. Above: the cap
+slab is `CLAY_TERRAIN_CAP_H` = 0.10 wu and below it the A3 shaft is inset, so a deeper skirt could
+reach the notch and be seen from a low camera. 0.06 clears the need 2.2× and stays 0.04 inside the
+ceiling. The gate recomputes both bounds from the chassis's own constants rather than trusting the
+comment.
+
+**The daylight was real and no previous gate could see it.** The contact probe evaluates the stand
+PLANE; the ground a viewer sees is the plane PLUS B4's fold. Sampling the rendered top under the
+plinth footprint measures **0.0154–0.0223 wu of daylight** per rung — up to 1.9× the 0.012 wu
+visibility floor — on frames whose corner gaps were all green. With the skirt the worst margin is
+**+0.0372 to +0.0446 wu buried**; with `?terrainskirt=0` it is **−0.0154 wu with 11 witnesses
+showing daylight**, which is the gate's own red proof.
+
+### R3 — OVERHANG NEEDS RULES (the ladder's third rung is overkill)
+
+*"i don't want EVERY single top level plane to overhang… specially on cliffsides, but it doesn't make
+sense on every single terrain surface."*
+
+**The rule, stated.** A side earns a cap overhang when it is EXPOSED **and** the drop below it is at
+least `faceStepQuanta` (2h = 5 ft) — a face, which is what the engine already calls a cliff, is
+guarded, and is never walked. Forbidden: interior seams (a welded joint, or the ground reads as loose
+tiles); **1h risers**, because that drop is a tread and belongs to B2's nosing — this is the clause
+that stops every stacked block growing a lip; boulder cells (a rounded mass carries no coping); cells
+under water; cells carrying a thicket or trunk-field volume.
+
+**The scene cap: ≤ 34% of a field's live cells, PROPOSED.** Derived from the measured rule-only share
+across all thirteen CL-F07 fields — 20.83 / 20.83 / 27.08 / 27.08 / 29.43 / 29.43 / 37.50 / 37.50 /
+39.51 / 41.67 / 41.67 / 59.26 / 100.00 % — so it sits just below the median (37.5%) and therefore
+governs the cliff-heavy tail while leaving ordinary fields to the rule. When the licence exceeds the
+cap it is **withdrawn from the shallowest faces first** (deepest drop descending, cell index as the
+deterministic tiebreak), which is Adam's "specially on cliffsides" bias implemented literally. Five
+of thirteen fields are capped; the 8-cell walk-down tray is the honest extreme — every cell of a 4×4
+chasm tray really does stand over a full face, and it is the cap that takes it from 100% to 25%.
+
+**Measured effect on the sheet: 166 of 564 cells (29.4%) against 227 (40.2%) universal.** Stated
+plainly: at whole-sheet scale the two are hard to tell apart; the difference is legible at detail
+scale, which is what the packet's crops are for.
+
+**A7's banding was worse than "proud".** Adam's read was *"drop it to a material value change, not a
+projecting ledge… 0.022 wu proud is what catches the wrong highlight."* Reading the geometry while
+dropping that number found the real defect: the bands were positioned at ±0.5 — the CELL boundary —
+while the shaft they dress is inset by up to 0.125 wu on an exposed side. On every overhung cell they
+were not proud of the face at all; they were **detached rails hanging 0.10 wu out in the air** below
+the cap. Now they sit on the face plane the shaft was actually built with, at 0.0015 wu proud —
+six times under the 0.012 wu visibility floor, so what remains is the tone change and nothing else.
+
+**Three modes ship, not one.** `rule` (the ruling, default), `universal` (what R1 shipped, kept so the
+comparison capture is the real prior render rather than a reconstruction — and so the R3 gate has
+something to fail against), `none`. The gate compares what the renderer BUILT, tagged per shaft,
+against the engine's licence; the universal mode fails that comparison, which is what makes it a gate.
+
+### R4 — PUSH THE ANGLE VARIATION, and a PROPOSED maximum
+
+*"we just need to change our own rules… though the steepest ones look like they should be the max."*
+
+`TERRAIN_GRADE_LADDER` replaces the single 18° constant with five declared render-only rungs. Per
+rung, the angle a RUN cell renders and — stated, not left for a reviewer to discover — the angle a
+one-sided EDGE cell renders, which is half of it:
+
+| rung | quanta/cell | run | edge | what it is |
+|---|---|---|---|---|
+| g0 | 0 | 0.0000° | 0.0000° | flat — the chassis as it always drew it |
+| g1 | 0.325 | 9.2299° | 4.6451° | the gentle grade |
+| g2 | 0.65 | 18.0042° | 9.2299° | the corpus grade — R1's shipped default, unchanged |
+| g3 | 1.0 | 26.5651° | 14.0362° | the walkable step — Genesis's only currently LEGAL slope |
+| g4 | 1.1547 | 30.0000° | 16.1021° | **PROPOSED MAXIMUM** |
+
+**THE PROPOSED MAXIMUM IS 30.000° (g4), and it is a proposal with two candidates, not an adoption.**
+26.565° (g3) is the walkable STEP — what the Lipschitz clamp already guarantees between two
+walk-connected cell centres, so a render at that angle can never overstate the walk graph.
+30.000° (g4) is the stated LIMIT: `TERRAIN_GRID_LAW.maxWalkableSlopeDeg` has read 30 since the
+chassis was written, and `TERRAIN_WALK_NOISE_BUDGET_H.maxRenderedStepH` = tan(30°)·5/2.5 = 1.1547h is
+already the chassis's own RENDERED ceiling — the number the walkable noise budget is *derived from*.
+**Grounds for proposing g4:** it is the engine's own published limit rather than a new number; the FFT
+corpus's steepest walkable measures ≈31°, so 30 sits just inside what FFT itself does; and "the
+steepest ones look like they should be the max" points at the top of the range, which g3 is not —
+g3 is the middle of the ladder and is already legal, so adopting it as the ceiling would make the
+ruling a no-op. **Adam rules.**
+
+**The declared angle is now a CEILING on the plane, not on each axis.** Without this a rung labelled
+30° rendered 39.2° at every outside corner, because a cell falling in both x and z has √2 the
+per-axis gradient — the declared angle would have been a floor. Clamped uniformly so the plane's
+aspect is preserved and only its steepness is capped. Consequence worth stating: this also caps
+**R1's shipped g2 default, whose corner cells previously rendered 24.7° against a declared 18°.**
+
+**Every rung is render-only, and that is now load-bearing.** The walk fingerprint is byte-identical
+across all five rungs in jsdom and again in the browser, and no witness stands on a plane steeper
+than its rung declares (measured steepest per rung: 0.0000 / 9.2299 / 18.0042 / 26.5651 / 30.0000).
+A LOGICAL grade changes walkability and is a gameplay change requiring Adam's sign-off; **not taken.**
+
+### R5 — THE MEDIUM-ACCESSIBILITY LAW (new), and the large-creature law verified
+
+**Step 1, verified rather than assumed. The law Adam remembers EXISTS, and it is not about terrain.**
+`docs/DUNGEON-GRAPH.md` law 2, SCALE-DOMAIN RULE, verbatim: *"A room that merely fits its monster is
+a prison. When a large+ resident rolls, the dungeon scales AROUND it: the connected subgraph the
+creature inhabits (its scale domain — lair chamber + the corridors/rooms it patrols) is built at that
+creature's scale."* It is BUILT: `src/engine/place-semantics.js` assigns a domain to *"every resident
+with `scaleVsHuman >= 2.0`"* and `dsmFitTestAndGrow` **grows** any domain room below `ceil(scale)+2`
+cells per axis, rebuilding the plan and re-verifying reachability. Three qualifications, all
+load-bearing: (a) it is a **dungeon-room** law — nothing in it touches terrain; (b) its trigger is
+`scaleVsHuman ≥ 2.0`, i.e. roughly HUGE, not the D&D size category "Large"; (c) it is **constrained by
+a later accepted ruling** — wave-06 P6.4/P3.4, closed: *"builder/original-use scale is canonical; a
+current occupant must use a compatible inherited domain, an explicitly caused adaptation, or an
+honest mismatch… Arrival alone never retroactively widens corridors or raises ceilings."*
+**And nothing anywhere states a floor for the ordinary Medium body.** Adam's instinct was half right;
+the missing half is exactly R5.
+
+**Step 2, the law, three clauses.** A generated field must admit the Medium protected disc on at
+least `minShare` of its standable cells (SHARE); the largest walk-connected admitting component must
+be at least `minShare` of the largest walk-connected STANDABLE component (COHESION); and every
+standable entry cell must admit a Medium (ENTRY). Gated against the **worst-case 0.932 wu cap disc**,
+not the average 0.831 — a law that only holds for the average body is not a law.
+
+**Why COHESION is a ratio and not "one component".** The first cut demanded one component containing
+every entry. Measured against the real fixture that is simply wrong: the 24×24 bench SHEET is thirteen
+separate bays and the 16-cell tray is split by its own chasm, so their standable sets are already
+several components before any body is considered — the gate would have failed three CL-F07 fields for
+having the topology they were built to have. What the law cares about is whether the Medium floor
+*shrinks* what already exists, so it compares like with like.
+
+**Step 3, the measurement Adam has never had. Every CL-F07 field is 100.00% Medium-accessible,
+cohesion 100.00%, zero entries blocked, zero Small/Tiny-only cells.** All thirteen fields, standable
+counts 8 to 546. So the pockets Adam wants **do not exist yet** — terrain's walk graph is entirely
+size-blind today, and there is nowhere on any generated field where Small or Tiny has an advantage.
+The floor is therefore free to adopt now and is a bound on what comes later.
+
+**`minShare = 0.85`, PROPOSED.** Grounds: measured today is 100%, so the number has to be chosen for
+what it PERMITS, not for what it costs. 15% of the census-median 60×80 arrival (192 cells) is up to 28
+cells — two to four pockets of 7–14 cells, which is the size at which a pocket reads as a place a
+Small creature can use rather than as one odd square. Below ~0.75 a 12×16 arrival can lose a whole
+quadrant, which is no longer "the majority of most of the map".
+
+**Teeth, three ways, red-first.** Intrusions that eat the usable top on 40% of standable cells drop
+the share to 59.89% and FAIL; stripe intrusions keep a PASSING 88.28% share while the largest
+admitting component collapses to 27.97% and fail COHESION — *the share clause alone would have called
+that fine*; blocking only the route-proof field's 8 entries leaves share and cohesion both passing and
+fails ENTRY. A Small body admits where a Medium does not on the same intruded field, so the
+Small/Tiny advantage is measurable rather than asserted.
+
+### R6 — THE EASED CLIMB BAND, with a visible affordance
+
+`TERRAIN_GRID_LAW.climbDcBands` is `[12, 15, 17]` and — measured, not assumed — **nothing in the
+engine consumes it**: no face carries a DC today. So `terrainFaceClimb` authors the mapping for the
+first time (2h→12, 3h→15, 4h+→17) and adds the eased band. **All DC values are PROPOSED**; the
+existing three bands are untouched.
+
+Which faces earn it: a face of exactly the minimum height (2h — the shortest thing the engine calls a
+face), drawn by a seeded per-face bit at 1/3. Short faces, so the easy ones are legible as the low
+ones. Measured: 0–25% of faces per field (sheet 16 of 143, one-clamp cliff 5 of 20, sheer-cliff 0 of
+88). **Eased at 2h is auto (DC 0); above that DC 10.**
+
+**The affordance is the same predicate, not a decoration beside it** — `reliefBits` from
+`terrainFaceClimb` is what the renderer draws, so a face cannot be easy without looking easy. It is
+registered as its **own device (R6, geometry bin)** rather than riding A7's decal bin: proud rock is
+geometry, and the geometry bin is what puts it in the MATERIAL rung — the frame Adam has already said
+he prefers, which is the one it needs to be judged in. Size and value were set **by looking**: the
+first cut (0.10–0.16 wu at 0.72–0.88 tone) was a 6–10 inch lump the same value as its face and was
+almost impossible to find in the banked crop — an affordance the player cannot read is the tooltip R6
+forbids. Now 0.16–0.26 wu (10–16 inches, a real hand- or foothold at 5 ft/cell) and LIGHTER than the
+face, because a proud rock on a shaded vertical catches the key.
+
+### R7 — recorded, not built
+
+The steep-surface shove bonus is written into `docs/COMBAT.md` as a PROPOSED section with a suggested
+shape and one explicit open question: if adopted it must read the LOGICAL grade, never a rung of the
+render-only ladder, or a cosmetic device would be changing a contest.
+
+### Gates
+
+`verify-terrain-bench` 73/0 · `verify-terrain-expression` 70/0 · **`verify-terrain-expression-r2`
+53/0 (new)** · `verify-terrain-standee` 72/0 · **`verify-terrain-standee-r2` 71/0 (new)** ·
+`verify-clay-camera-resize` 10/0 · `verify-bw2-2-floor-contact --with-render` 93/0 ·
+`verify-stage-c-terrain` 60/0 · `verify-clay-room` 272/0 · `check-manifest` OK. Pixel gate on the
+full bank: **100.00% coverage on every frame of every scene, both cameras, determinism PASS over 13
+fields in two page loads, dark p50 luma 6.8 unchanged.**
+
+### What LOOKING found, and what it could not settle
+
+1. **The plinth is the same grey as the ground on the clay bench.** The base mesh is present, visible
+   and opaque at `0x8a8a8a`; the clay diagnostic surface paints the terrain the same value. So on
+   this fixture "the base appears to make contact" is a claim about something a viewer can barely
+   see — the R2 skirt closes real, measured daylight, but the fixture cannot show Adam that it did.
+   Identical in the R1 bank, so it is the fixture's property, not this build's.
+2. **The rule/universal overhang difference does not read at whole-sheet scale**, only at detail
+   scale. The packet carries a 3× crop stack for that reason.
+3. **The climb bits read as pale pebbles, and in the DARK scene they are among the brightest things
+   in the frame.** That is arguably right — §4.2 asks that the edge stay findable in darkness — but
+   it is a taste call and it is Adam's.
+4. **The flat boundary fields read as a paved plaza**, not as wilderness ground: the two-frequency
+   joint plus the fold makes flagstones. Adam ruled the joint in R1; naming it again because the
+   effect is strongest exactly where there is no relief to break it up.
+
+## Terrain expression — getting off the chonky blocks, with standee proof (2026-07-28) — PROPOSED
+
+Adam, on the fixed CL-F07a frames: *"we just need a bit more expression to get us a little further
+from minecraft… perhaps the corners of each grid block can be expressed by a 1/9 sized block… let's
+explore some options with standee proof."* Built to `docs/TERRAIN-EXPRESSION-BUILD.md`, on the three
+research deliverables behind it (FFT surface grammar over the 22-map corpus, the standee contract
+measured against the real `ExtrudeGeometry`, and the XCOM / modular-tabletop grid-breaking study).
+**No visual verdict is taken here. Adam and Codex rule the look; this produces the evidence.**
+
+### THE PARTITION, and why the 1/9 corner block moved rather than shipped
+
+Three independent measurements say a walkable cell top must stay almost flat: the standee's
+protected area is a disc of **0.932 wu — 93% of the cell**, leaving a free ring of 0.034 wu (about
+two inches); `TERRAIN_WALK_NOISE_BUDGET_H.perCellH` allows **2.32 inches** of relief per walkable
+cell; and FFT itself keeps walkable tops flat or gently graded and spends its expression at the
+edges. So: **shape belongs on the faces, dressing belongs on the floor, and the arris carries both.**
+
+Adam's 1/9 instinct is right and its *size* is about half — a 3×3 subdivision cuts 1.15 ft into the
+protected disc at free yaw, and 1/6 of a cell edge is the largest that clears a Medium. But that
+whole calculation only applies if the corner treatment touches the **top plane**. Relocated below it
+— a cap that keeps its full 1×1 top and a shaft inset beneath — the corner softens at *any* size and
+intrudes **0.000 wu**. That is what A3 ships, and it is also FFT's own answer (the projecting
+coping/cornice on nearly every built edge in the corpus). A corner block that raises or lowers a cell
+top is a **gameplay change wearing a dressing label**: it shrinks the usable top to 0.333 wu while
+still reporting `standable: true`. Named in §6 of the build spec, not built.
+
+### Two prerequisites, both red-first
+
+**P1 — the terrain witnesses never billboarded.** `updateSpriteBillboardYaw`'s interior sweep walked
+*exactly two levels*; a CL-F07 witness lives three down (`interiorGroup → bench → field → figure`).
+Measured before the fix: **13 of 13 witnesses at 44.6–52.0° of facing error, `rotation.y = 0`, wrap
+tilt 0** — so every terrain proof ever banked in this repo had exercised only the easy axis-aligned
+plinth yaw, which is exactly the case that hides the slope and stair-overhang problems. Fixed
+generically (descend the whole interior subtree; a sprite group's children are never sprite groups,
+so the walk still stops at each hit) rather than special-cased for terrain — the asymmetry between
+this two-level walk and `mountedStandeeFigures`' full deep `traverse` *was* the bug.
+
+**P2 — two gates would have stayed green on the failure picture.** `WITNESS_MAX_GAP` measured the
+*origin* gap, which `interiorStandeeContactY` pins at exactly 0.096 and which therefore cannot move:
+it reads green on a plinth whose uphill corner is 0.217 wu buried and whose downhill corner is
+0.217 wu airborne. Replaced — not extended — with the **nearest-contact gap under the plinth
+footprint**, taken at the four corners of the plinth's *rendered* bbox through its own world matrix,
+against the support plane sampled at each corner. `verify-bw2-2` group 21b was titled *"the base's
+world-up stays +Y"* while asserting `fig.rotation.x === 0` on the **outer group** — a proposition the
+B1 slope treatment slips straight past. Rewritten to measure the base child's world-up off
+`matrixWorld`, and to state all three rotation channels with their owners. Both rewrites carry their
+own teeth proof in-process: the jsdom gate executes the flat-plant case and prints the legacy 0.096
+beside the new ±0.21; `--prove-21b-teeth` tilts the base child and shows the *old* assertion still
+green at 17.2° of measured tilt.
+
+### Decisions taken here, with grounds
+
+1. **The rung is a render-time device mask over an unchanged field, not an eighth scene.** Grounds:
+   §5 asks for "same seed, same camera, same layout throughout", which is exactly what a render mask
+   gives; and it keeps `CL_F07_TERRAIN_BENCH.scenes` at seven so every existing gate that counts them
+   stays as it was. `verify-terrain-bench` is **73 passed / 0 failed**, unchanged.
+2. **The geometry devices ride the MATERIAL rung.** Grounds: the ladder exists for *bin* isolation
+   and a geometry-only rung would isolate nothing Adam is ruling on. They are still bin-labelled
+   `geometry` in the registry — an explicit fourth bin exists so a shape change cannot hide in a
+   dressing bin — so the choice stays visible rather than laundered.
+3. **The declared stand plane has ONE publisher.** `terrainCellStandPlane` is read by the renderer
+   that draws the cap *and* by the standee mount that tilts the plinth. Grounds: two derivations
+   would be two truths and the plinth would float on one of them. Its centre is the chassis's own
+   `h + sub` and never moves, which is what keeps foot height, walk graph, occupancy, cover and reach
+   untouched while the surface bends.
+4. **The plinth tilt is written once per frame, in the facing pass, in world space.** Grounds: the
+   tilt is a world fact on a child of a group that turns with the camera; baking an angle at
+   placement points the plinth uphill at one camera step and downhill at the opposite one. The signs
+   were *solved* from the YXZ composition, not guessed — the wrong signs still tilt the plinth and
+   still look plausible, and the contact probe is what caught them: **corner spread 0.128–0.534 wu
+   with a sign flipped, 0.000 with them right.**
+5. **The tri-split fold is sub-quantum relief over one declared stand plane, not two surfaces.**
+   Grounds: a Medium needs 0.831 wu and a half-cell triangle inscribes 0.586 — two standable
+   triangles was never available, and minting one would change the walkable-cell count. The fold is
+   additionally attenuated to **exactly zero at the stand point**, so a plinth never sits on a crease.
+6. **The shallow grade is `TERRAIN_SHALLOW_GRADE_H = 0.65` quanta per cell = 18.00°** — the corpus's
+   common walkable grade, measured off `image2`'s move-range quads. Render-only: the integer field,
+   the walk census, cover and LOS do not move. **A true half-quantum height is a founder decision and
+   is explicitly NOT taken here** — this rung exists so Adam can see the shallow grade beside the
+   26.565° step and rule. Consequence worth stating: because the field stays integer, a 1h step under
+   C1 renders as an 18° graded top with a residual **0.675-quantum riser** at the boundary rather
+   than as a continuous ramp. That is the honest limit of render-only.
+7. **A4's two-frequency joint is expressed as coarse+fine joint LINES, not a UV scale.** Grounds:
+   the clay bench has no textures yet; the *rule* (fine unit far smaller than the cell, one coarse
+   course at the cell pitch to carry the ruled overlay) is the deliverable and the expression is
+   provisional. Recorded as provisional rather than presented as the final material.
+8. **The occluder law places on the boundary, never in the cell.** Every site's centre is exactly on
+   a grid line, 0.5 wu from either stand point — outside the 0.466 protected radius of the worst
+   Medium by the full 0.034 wu ring the contract leaves. Gated, not asserted.
+9. **F3 is measured against the support polygon the envelope actually owns** (one cell for a Medium,
+   two for a Large, three for a Huge). Measuring a Huge against one cell reports a 0.67 overhang that
+   is a category error, not a defect.
+10. **The B3 matrix rides a URL probe (`?terrainprobe=standee-contract`), not a new fixture**, and
+    the four "surface cases" are stated as the four **cell classes** they actually are — flat / edge /
+    run / face-top. Grounds: in an integer heightfield a cell-scale stair run and a graded slope are
+    the *same cell class*; only the render differs. Saying so is more honest than building four
+    fixtures that pretend otherwise.
+
+### The gate
+
+`terrainWalkFingerprint` folds only heights, `standable`, `inPlayfield`, `guarded`, walk adjacency,
+faces and entries — nothing a render device can reach. Cover and LOS are not folded separately
+because on this chassis both are *derived* from those same arrays. **The instrument is proved able
+to fail before it is trusted:** six gameplay mutations (a standable flag, a walk edge, a height, a
+face delta, an entry, a playfield flag) each move it, a purely visual edit does not, and the full
+`terrainFieldFingerprint` *does* move on that same visual edit — which is precisely why a walk-only
+instrument had to exist.
+
+**Result: byte-identical across all six rungs, on all seven scenes, in jsdom and again in the
+browser** — same walk fingerprint, same standable census, same walk edges, same faces, same entries,
+same full field fingerprint. This is a dressing pass, proved rather than claimed.
+
+### Two defects that only LOOKING found
+
+Both were caught in the eyes-on pass over the banked frames, and neither would have been caught by
+any number this build added. Recorded because the round-4 lesson was exactly this shape.
+
+1. **The cap's top face was wound backwards.** Three.js culls back faces; a top triangle wound
+   clockwise-from-above has its normal pointing DOWN, so the cell top simply is not drawn and the
+   backdrop shows through. The lit frames still measured **100% coverage** (the skirt, the shaft and
+   the neighbouring cells kept the sample points non-backdrop); the dark scene's 72° read was the
+   only gate that caught it, at **6 of 560 declared cells landing on backdrop**. Fixed by reversing
+   both top triangles, checked against the right-hand rule rather than by eye.
+2. **The two-frequency joint read as an unlit HUD cross-hatch.** `LineBasicMaterial` ignores every
+   light in the scene, so over the DARK scene the joint blazed bright over near-black ground —
+   precisely the opposite of the device's purpose, which is to stop the ruled overlay reading as
+   HUD. No number moved: the dark terrain got *brighter* (p50 luma 6.8 → 27), which the lit/dark gate
+   is happy with. Fixed with **MultiplyBlending**, the same mechanism the contact pool already uses:
+   white is the identity, so a grey joint darkens whatever is under it by a fixed ratio in any light
+   case and can never add light. **A joint is always darker than its surround** is now a property of
+   the blend rather than of the colour.
+
+Worth recording that the second fix subsumed a residual the first one left: with the additive joint
+the dark 72° read measured **99.64% (2 of 560)** against the 99.0% floor, both misses outer-rim
+cells whose sample sat inside the plate tolerance because the unlit joint had raised the whole dark
+frame toward the backdrop's own value. With the multiply joint, **every frame of both full sets is
+back to 100.00% coverage**. The threshold was never moved.
+
+### What the B3 envelope matrix actually proves, stated exactly
+
+`clayTerrainPlaceWitness` passes `authoredSpan = 1` for every witness (pre-existing, at both call
+sites), and `interiorStandeeSupportMetrics` bounds plinth width at `tacticalSpan × 0.82`. So the
+three plinths the matrix exercises measure **0.4697 × 0.2856 (Small), 0.7441 × 0.3693 (Medium) and
+0.856 × 0.3693** — the last being the Medium-CAP width, worn by the Huge witness whose *sprite* is
+huge but whose base is clamped. That is the worst case in the protected-disc table (0.932 wu) and it
+is the one that matters, so the matrix is worth what it says: **protected discs 0.550 / 0.831 / 0.932
+wu, all four surface classes, free yaw, zero corner spread, zero overhang.** A true Large or Huge
+plinth (1.676 / 2.496 wu wide, spanning 2 or 3 cells) is **NOT** proved by it. Changing the authored
+span would change what the bench shows, which is Adam's call, not a gate's.
+
+### Not done here (named, not built)
+
+Sub-cell corner blocks that move a cell top · true half-quantum heights · non-rectilinear footprints ·
+undercuts and floor-over-floor · live destruction · **the structure-kit stair's tread nosing**. That
+last one is deliberate: §5 of the standee research shows the 0.373 wu tread clears a Medium by
+0.0020 wu only because of an unrelated shadow-slit inflation, and that fixing it properly needs the
+founder ruling on tread count per stair unit (cap at 2 treads, shrink the base depth, or formalise
+the nosing). The **free-yaw failure is stated as a number instead** — a Medium-cap plinth spans
+0.866 wu along a 0.373 wu tread, 0.247 wu off each side — and `claySupportWorldYaw` is untouched.
+The cell-scale stair nosing that FFT actually uses (tread = 1 cell, riser = 1 quantum) IS built, on
+terrain, where the tread is a whole cell and free yaw is safe.
+
+**Pre-existing, found while gating, not fixed here:** `verify-bw2-2-floor-contact --with-render`
+check 23 (the fall-death tween reaching π/2) fails ~2 runs in 3 **at HEAD as well as on this branch**,
+with a different partial angle each time — a tween-timing race in the harness, not a regression.
+`verify-env1b-tabletop-shadows` fails its interior3d/torchlit pixel-diff identically at HEAD (34/1).
+
+## 2026-07-28 — Terrain continuity review (amends the expression decisions above)
+
+The adversarial review is recorded in `docs/CODEX-TERRAIN-CONTINUITY-REVIEW-0728.md`. Its central
+finding is that the expression pass proved legal angles per cell but never proved neighbouring
+cells agreed at a shared edge. The resulting maximum route-proof disagreement was 0.4463 wu and was
+the geometric cause of the “earthquake spell” reading.
+
+The production interpretation now differs from the historical decisions above in four explicit
+ways:
+
+1. A grade requires a monotone three-centre run. One-sided steps, crests, feet, and outside corners
+   no longer lean.
+2. The default is g3 / 26.565°, because it is the only current rung that exactly connects logical
+   centres one quantum apart. G2 / 18° remains an explicit FFT comparison, not the default.
+3. A standable centre is the integer `h`, not `h + sub`; same-tier walkable cells no longer receive
+   independent centre-height noise.
+4. B4 relief is zero on the whole perimeter, and A4 fine joints are clipped staggered courses.
+   Tactical shared edges have one owner and are strong only when they name real relief.
+5. A7's regular horizontal face banding is removed from the registry and renderer. Lowering its
+   proud offset did not cure the rejected sedimentary rhythm. The historical `decal` URL is an
+   inert compatibility control and cannot re-enable it.
+
+`terrainSurfaceContinuityReport` is the new executable proposition. The route-proof receipt at g3
+measures 480 declared shared-surface samples with zero failures and zero maximum gap. This remains a
+render-only field interpretation: no logical height, walk edge, cover value, or LOS fact changed.
+The next terrain step is cleanup plus a founder decision on per-cell cap assembly versus a
+field-level contour mesh, not another layer of per-cell dressing.
+
+## 2026-07-28 — Responsive FFT tile contours (supersedes the flattening rule above)
+
+Adam rejected the first continuity repair as a downgrade: making crests, feet, and corners flat
+removed the varying tile angles that made Claude's attempt closer to FFT. The current production
+interpretation is therefore:
+
+1. Every natural cell keeps its authored centre datum. Natural neighbours share an edge midpoint,
+   and natural four-cell junctions share a corner height. The centre, four edge midpoints, and four
+   corners form eight broad, piecewise-linear facets.
+2. The required profile vocabulary is `flat`, `incline`, `convex`, and `concave`; `saddle` and
+   `rolling` cover transitions that do not collapse cleanly into FFT's four binary corner cases.
+   A connected hillside is expected to change profile and tangent from tile to tile.
+3. `cliff` and `curb` are explicit edge semantics. R1-01 cliffs, R1-03 crevices, R1-04 chasms,
+   R1-09 terraces, R1-12 banks, and R1-13 root undercuts may split the shared nodes. An ordinary 1h
+   hill neighbour does not earn a riser.
+4. B4 is feature-scoped micro-relief for berm, scree, and root ground. It is driven by the tile's
+   actual curvature, is zero at the centre and complete perimeter, and is not random terrain
+   sprayed over every cell.
+5. `terrainSurfaceContinuityReport` proves joined neighbours publish the same complete edge curve.
+   `terrainSurfaceVariationReport` is the paired anti-flattening proof: a passing field must also
+   retain responsive tangent changes, shaped cells, and the FFT profile vocabulary.
+
+At the default g3 register, the one-clamp hill currently contains 23 distinct tangent planes, 106
+responsive joined neighbour pairs, and 62 shaped cells; its 720 shared-edge samples have zero
+failures and zero maximum gap. The thirteen-piece sheet contains all four required FFT profiles and
+22 distinct tangent planes; 4,665 joined-edge samples have zero failures. The route proof is no
+longer used as the natural-hill visual witness because its authored R1-09 terraces correctly retain
+curbs.

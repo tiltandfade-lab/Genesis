@@ -1,0 +1,207 @@
+{
+  "fixture": "cl-f07-terrain-bench",
+  "proof": "CL-F07a",
+  "captures": [
+    {
+      "capture": 1,
+      "sceneId": "thirteen-piece-sheet",
+      "label": "01-thirteen-piece-sheet",
+      "frameIndex": null,
+      "boundary": null,
+      "frames": [
+        "01-thirteen-piece-sheet-01-early-production.png",
+        "01-thirteen-piece-sheet-02-settled-production.png",
+        "01-thirteen-piece-sheet-03-settled-strategic.png",
+        "01-thirteen-piece-sheet-04-clean-production.png"
+      ],
+      "backdropPlates": {
+        "production": "01-thirteen-piece-sheet-06-production-backdrop-plate.png",
+        "strategic": "01-thirteen-piece-sheet-05-strategic-backdrop-plate.png"
+      },
+      "receipt": "01-thirteen-piece-sheet-receipt.json",
+      "built": true,
+      "consoleErrors": 2,
+      "fingerprints": [
+        {
+          "id": "cl-f07a-thirteen-piece-sheet",
+          "fingerprint": "79460788-46a623f4"
+        }
+      ]
+    }
+  ],
+  "determinism": null,
+  "gate": {
+    "fixture": "cl-f07-terrain-bench",
+    "fixtureVersion": 1,
+    "proof": "CL-F07a",
+    "seed": 471577311,
+    "fieldsMeasured": 13,
+    "gates": {
+      "walkableCellsAbove30Deg": 0,
+      "maxWalkableSlopeDeg": 26.5651,
+      "illegalWalkEdges": 0,
+      "unownedFacesAt2hPlus": 0,
+      "unreachableStandableSurfaces": 0,
+      "boundaryStringsResolved": 7,
+      "boundaryStringsTotal": 7,
+      "boundaryKinds": 6,
+      "d50Terrain": 37,
+      "d50NonTerrainDeclared": 13,
+      "d50Unresolved": 0,
+      "d50Total": 50,
+      "coveragePlaced": 18,
+      "coverageTotal": 18,
+      "coverageCanonicalForms": 13,
+      "coverageFailed": []
+    },
+    "oneClamp": {
+      "sameGenerator": true,
+      "sameParametersExceptClamp": true,
+      "parameterDiff": [
+        "slopeClamp"
+      ],
+      "hill": {
+        "maxWalkStepH": 1,
+        "maxWalkSlopeDeg": 26.56505117707799,
+        "faces": 0,
+        "maxH": 4,
+        "fingerprint": "daf2e882-0fc6d988"
+      },
+      "cliff": {
+        "maxWalkStepH": 1,
+        "maxWalkSlopeDeg": 26.56505117707799,
+        "faces": 20,
+        "maxH": 6,
+        "fingerprint": "c196c924-8e7b621e"
+      },
+      "cellsLoweredByClamp": 20,
+      "hillHasNoFaces": true,
+      "cliffHasFaces": true,
+      "verdict": "ONE CHASSIS — hill and cliff differ only by slopeClamp"
+    },
+    "walkDown": {
+      "degraded": true,
+      "legalBoard": true,
+      "requestedFootprintCells": 30,
+      "finalFootprintCells": 8,
+      "trayCells": 16
+    },
+    "d50NonTerrain": [
+      {
+        "d50": 4,
+        "reason": "tactical CEILING — an overhead volume, not ground; owned by the canopy/overhang volume system (§3.3), not by the heightfield"
+      },
+      {
+        "d50": 8,
+        "reason": "obscurement VOLUME (15' radius sphere) — blocks sight, occupies no ground; boundary kind fog-volume covers its perimeter form"
+      },
+      {
+        "d50": 9,
+        "reason": "hanging curtain from ABOVE — a vegetation drape, no ground state, does not impede movement by its own RAW"
+      },
+      {
+        "d50": 21,
+        "reason": "WIND corridor — an air-column effect over whatever ground is there; the corridor form is the crevice's own geometry when one is present"
+      },
+      {
+        "d50": 27,
+        "reason": "biological haze VOLUME (10' radius sphere) — a reaction-denial effect in air, no ground state"
+      },
+      {
+        "d50": 29,
+        "reason": "MAGICAL dampening field — a light/magic property of a region, no geometry and no movement cost"
+      },
+      {
+        "d50": 31,
+        "reason": "adhesive VOLUME with its own object stats (AC 10, 5 HP) — an interactable, not ground"
+      },
+      {
+        "d50": 33,
+        "reason": "ACTIVE flora that grapples — a creature-adjacent hazard volume, not a ground state"
+      },
+      {
+        "d50": 34,
+        "reason": "MAGNETIC ground property — changes movement cost for metal armour only; a material routing fact (M12), not geometry"
+      },
+      {
+        "d50": 35,
+        "reason": "falling WATER CURTAIN — a vertical volume; its ledge/cliff host is R1-01, the curtain itself is VFX"
+      },
+      {
+        "d50": 38,
+        "reason": "electrically CHARGED flora — a damage trigger on movement, no ground geometry of its own"
+      },
+      {
+        "d50": 45,
+        "reason": "persistent DIM LIGHT over an area — a lighting-recipe fact (CL-R1), not ground"
+      },
+      {
+        "d50": 47,
+        "reason": "forced-movement VORTEX — a per-turn pull effect, no surface and no walkability change"
+      }
+    ],
+    "fingerprints": [
+      {
+        "id": "cl-f07a-thirteen-piece-sheet",
+        "fingerprint": "79460788-46a623f4"
+      },
+      {
+        "id": "cl-f07a-one-clamp-hill",
+        "fingerprint": "daf2e882-0fc6d988"
+      },
+      {
+        "id": "cl-f07a-one-clamp-cliff",
+        "fingerprint": "c196c924-8e7b621e"
+      },
+      {
+        "id": "cl-f07a-boundary-sheer-cliff",
+        "fingerprint": "8a33b47a-5f625056"
+      },
+      {
+        "id": "cl-f07a-boundary-earthen-bank",
+        "fingerprint": "23d65508-2dd14e1c"
+      },
+      {
+        "id": "cl-f07a-boundary-water-mud",
+        "fingerprint": "3ef9da18-96212144"
+      },
+      {
+        "id": "cl-f07a-boundary-thorn-thicket",
+        "fingerprint": "f2eccc68-4b2a2106"
+      },
+      {
+        "id": "cl-f07a-boundary-trunk-field",
+        "fingerprint": "90037868-9d9c27ec"
+      },
+      {
+        "id": "cl-f07a-boundary-fog-volume",
+        "fingerprint": "7db7e418-a1cf0166"
+      },
+      {
+        "id": "cl-f07a-route-proof",
+        "fingerprint": "cd5337bb-de6ce58b"
+      },
+      {
+        "id": "cl-f07a-walk-down-16",
+        "fingerprint": "3aa808e1-8988671d"
+      },
+      {
+        "id": "cl-f07a-route-proof",
+        "fingerprint": "cd5337bb-de6ce58b"
+      },
+      {
+        "id": "cl-f07a-dark",
+        "fingerprint": "a471c61a-8d97041e"
+      }
+    ]
+  },
+  "rung": "decal",
+  "probe": null,
+  "seed": null,
+  "generatedAt": "2026-07-28T13:32:43.176Z",
+  "viewport": {
+    "width": 1280,
+    "height": 720,
+    "deviceScaleFactor": 2
+  }
+}

@@ -1,0 +1,571 @@
+{
+  "fixture": "cl-f07-terrain-bench",
+  "proof": "CL-F07a",
+  "captures": [
+    {
+      "capture": 1,
+      "sceneId": "thirteen-piece-sheet",
+      "label": "01-thirteen-piece-sheet",
+      "frameIndex": null,
+      "boundary": null,
+      "frames": [
+        "01-thirteen-piece-sheet-01-early-production.png",
+        "01-thirteen-piece-sheet-02-settled-production.png",
+        "01-thirteen-piece-sheet-03-settled-strategic.png",
+        "01-thirteen-piece-sheet-04-clean-production.png"
+      ],
+      "backdropPlates": {
+        "production": "01-thirteen-piece-sheet-06-production-backdrop-plate.png",
+        "strategic": "01-thirteen-piece-sheet-05-strategic-backdrop-plate.png"
+      },
+      "receipt": "01-thirteen-piece-sheet-receipt.json",
+      "built": true,
+      "consoleErrors": 2,
+      "fingerprints": [
+        {
+          "id": "cl-f07a-thirteen-piece-sheet",
+          "fingerprint": "79460788-46a623f4"
+        }
+      ]
+    },
+    {
+      "capture": 2,
+      "sceneId": "one-clamp-proof",
+      "label": "02-one-clamp-proof",
+      "frameIndex": null,
+      "boundary": null,
+      "frames": [
+        "02-one-clamp-proof-01-early-production.png",
+        "02-one-clamp-proof-02-settled-production.png",
+        "02-one-clamp-proof-03-settled-strategic.png",
+        "02-one-clamp-proof-04-clean-production.png"
+      ],
+      "backdropPlates": {
+        "production": "02-one-clamp-proof-06-production-backdrop-plate.png",
+        "strategic": "02-one-clamp-proof-05-strategic-backdrop-plate.png"
+      },
+      "receipt": "02-one-clamp-proof-receipt.json",
+      "built": true,
+      "consoleErrors": 2,
+      "fingerprints": [
+        {
+          "id": "cl-f07a-one-clamp-hill",
+          "fingerprint": "daf2e882-0fc6d988"
+        },
+        {
+          "id": "cl-f07a-one-clamp-cliff",
+          "fingerprint": "c196c924-8e7b621e"
+        }
+      ]
+    },
+    {
+      "capture": 3,
+      "sceneId": "boundary-sheet",
+      "label": "03-boundary-sheet-f0",
+      "frameIndex": 0,
+      "boundary": "sheer-cliff",
+      "frames": [
+        "03-boundary-sheet-f0-01-early-production.png",
+        "03-boundary-sheet-f0-02-settled-production.png",
+        "03-boundary-sheet-f0-03-settled-strategic.png",
+        "03-boundary-sheet-f0-04-clean-production.png"
+      ],
+      "backdropPlates": {
+        "production": "03-boundary-sheet-f0-06-production-backdrop-plate.png",
+        "strategic": "03-boundary-sheet-f0-05-strategic-backdrop-plate.png"
+      },
+      "receipt": "03-boundary-sheet-f0-receipt.json",
+      "built": true,
+      "consoleErrors": 2,
+      "fingerprints": [
+        {
+          "id": "cl-f07a-boundary-sheer-cliff",
+          "fingerprint": "8a33b47a-5f625056"
+        }
+      ]
+    },
+    {
+      "capture": 3,
+      "sceneId": "boundary-sheet",
+      "label": "03-boundary-sheet-f1",
+      "frameIndex": 1,
+      "boundary": "earthen-bank",
+      "frames": [
+        "03-boundary-sheet-f1-01-early-production.png",
+        "03-boundary-sheet-f1-02-settled-production.png",
+        "03-boundary-sheet-f1-03-settled-strategic.png",
+        "03-boundary-sheet-f1-04-clean-production.png"
+      ],
+      "backdropPlates": {
+        "production": "03-boundary-sheet-f1-06-production-backdrop-plate.png",
+        "strategic": "03-boundary-sheet-f1-05-strategic-backdrop-plate.png"
+      },
+      "receipt": "03-boundary-sheet-f1-receipt.json",
+      "built": true,
+      "consoleErrors": 2,
+      "fingerprints": [
+        {
+          "id": "cl-f07a-boundary-earthen-bank",
+          "fingerprint": "23d65508-2dd14e1c"
+        }
+      ]
+    },
+    {
+      "capture": 3,
+      "sceneId": "boundary-sheet",
+      "label": "03-boundary-sheet-f2",
+      "frameIndex": 2,
+      "boundary": "water-mud",
+      "frames": [
+        "03-boundary-sheet-f2-01-early-production.png",
+        "03-boundary-sheet-f2-02-settled-production.png",
+        "03-boundary-sheet-f2-03-settled-strategic.png",
+        "03-boundary-sheet-f2-04-clean-production.png"
+      ],
+      "backdropPlates": {
+        "production": "03-boundary-sheet-f2-06-production-backdrop-plate.png",
+        "strategic": "03-boundary-sheet-f2-05-strategic-backdrop-plate.png"
+      },
+      "receipt": "03-boundary-sheet-f2-receipt.json",
+      "built": true,
+      "consoleErrors": 2,
+      "fingerprints": [
+        {
+          "id": "cl-f07a-boundary-water-mud",
+          "fingerprint": "3ef9da18-96212144"
+        }
+      ]
+    },
+    {
+      "capture": 3,
+      "sceneId": "boundary-sheet",
+      "label": "03-boundary-sheet-f3",
+      "frameIndex": 3,
+      "boundary": "thorn-thicket",
+      "frames": [
+        "03-boundary-sheet-f3-01-early-production.png",
+        "03-boundary-sheet-f3-02-settled-production.png",
+        "03-boundary-sheet-f3-03-settled-strategic.png",
+        "03-boundary-sheet-f3-04-clean-production.png"
+      ],
+      "backdropPlates": {
+        "production": "03-boundary-sheet-f3-06-production-backdrop-plate.png",
+        "strategic": "03-boundary-sheet-f3-05-strategic-backdrop-plate.png"
+      },
+      "receipt": "03-boundary-sheet-f3-receipt.json",
+      "built": true,
+      "consoleErrors": 2,
+      "fingerprints": [
+        {
+          "id": "cl-f07a-boundary-thorn-thicket",
+          "fingerprint": "f2eccc68-4b2a2106"
+        }
+      ]
+    },
+    {
+      "capture": 3,
+      "sceneId": "boundary-sheet",
+      "label": "03-boundary-sheet-f4",
+      "frameIndex": 4,
+      "boundary": "trunk-field",
+      "frames": [
+        "03-boundary-sheet-f4-01-early-production.png",
+        "03-boundary-sheet-f4-02-settled-production.png",
+        "03-boundary-sheet-f4-03-settled-strategic.png",
+        "03-boundary-sheet-f4-04-clean-production.png"
+      ],
+      "backdropPlates": {
+        "production": "03-boundary-sheet-f4-06-production-backdrop-plate.png",
+        "strategic": "03-boundary-sheet-f4-05-strategic-backdrop-plate.png"
+      },
+      "receipt": "03-boundary-sheet-f4-receipt.json",
+      "built": true,
+      "consoleErrors": 2,
+      "fingerprints": [
+        {
+          "id": "cl-f07a-boundary-trunk-field",
+          "fingerprint": "90037868-9d9c27ec"
+        }
+      ]
+    },
+    {
+      "capture": 3,
+      "sceneId": "boundary-sheet",
+      "label": "03-boundary-sheet-f5",
+      "frameIndex": 5,
+      "boundary": "fog-volume",
+      "frames": [
+        "03-boundary-sheet-f5-01-early-production.png",
+        "03-boundary-sheet-f5-02-settled-production.png",
+        "03-boundary-sheet-f5-03-settled-strategic.png",
+        "03-boundary-sheet-f5-04-clean-production.png"
+      ],
+      "backdropPlates": {
+        "production": "03-boundary-sheet-f5-06-production-backdrop-plate.png",
+        "strategic": "03-boundary-sheet-f5-05-strategic-backdrop-plate.png"
+      },
+      "receipt": "03-boundary-sheet-f5-receipt.json",
+      "built": true,
+      "consoleErrors": 2,
+      "fingerprints": [
+        {
+          "id": "cl-f07a-boundary-fog-volume",
+          "fingerprint": "7db7e418-a1cf0166"
+        }
+      ]
+    },
+    {
+      "capture": 4,
+      "sceneId": "route-proof",
+      "label": "04-route-proof",
+      "frameIndex": null,
+      "boundary": null,
+      "frames": [
+        "04-route-proof-01-early-production.png",
+        "04-route-proof-02-settled-production.png",
+        "04-route-proof-03-settled-strategic.png",
+        "04-route-proof-04-clean-production.png"
+      ],
+      "backdropPlates": {
+        "production": "04-route-proof-06-production-backdrop-plate.png",
+        "strategic": "04-route-proof-05-strategic-backdrop-plate.png"
+      },
+      "receipt": "04-route-proof-receipt.json",
+      "built": true,
+      "consoleErrors": 2,
+      "fingerprints": [
+        {
+          "id": "cl-f07a-route-proof",
+          "fingerprint": "cd5337bb-de6ce58b"
+        }
+      ]
+    },
+    {
+      "capture": 5,
+      "sceneId": "walk-down-16",
+      "label": "05-walk-down-16",
+      "frameIndex": null,
+      "boundary": null,
+      "frames": [
+        "05-walk-down-16-01-early-production.png",
+        "05-walk-down-16-02-settled-production.png",
+        "05-walk-down-16-03-settled-strategic.png",
+        "05-walk-down-16-04-clean-production.png"
+      ],
+      "backdropPlates": {
+        "production": "05-walk-down-16-06-production-backdrop-plate.png",
+        "strategic": "05-walk-down-16-05-strategic-backdrop-plate.png"
+      },
+      "receipt": "05-walk-down-16-receipt.json",
+      "built": true,
+      "consoleErrors": 2,
+      "fingerprints": [
+        {
+          "id": "cl-f07a-walk-down-16",
+          "fingerprint": "3aa808e1-8988671d"
+        }
+      ]
+    },
+    {
+      "capture": 6,
+      "sceneId": "support-graph",
+      "label": "06-support-graph",
+      "frameIndex": null,
+      "boundary": null,
+      "frames": [
+        "06-support-graph-01-early-production.png",
+        "06-support-graph-02-settled-production.png",
+        "06-support-graph-03-settled-strategic.png",
+        "06-support-graph-04-clean-production.png"
+      ],
+      "backdropPlates": {
+        "production": "06-support-graph-06-production-backdrop-plate.png",
+        "strategic": "06-support-graph-05-strategic-backdrop-plate.png"
+      },
+      "receipt": "06-support-graph-receipt.json",
+      "built": true,
+      "consoleErrors": 2,
+      "fingerprints": [
+        {
+          "id": "cl-f07a-route-proof",
+          "fingerprint": "cd5337bb-de6ce58b"
+        }
+      ]
+    },
+    {
+      "capture": 7,
+      "sceneId": "dark",
+      "label": "07-dark",
+      "frameIndex": null,
+      "boundary": null,
+      "frames": [
+        "07-dark-01-early-production.png",
+        "07-dark-02-settled-production.png",
+        "07-dark-03-settled-strategic.png",
+        "07-dark-04-clean-production.png"
+      ],
+      "backdropPlates": {
+        "production": "07-dark-06-production-backdrop-plate.png",
+        "strategic": "07-dark-05-strategic-backdrop-plate.png"
+      },
+      "receipt": "07-dark-receipt.json",
+      "built": true,
+      "consoleErrors": 2,
+      "fingerprints": [
+        {
+          "id": "cl-f07a-dark",
+          "fingerprint": "a471c61a-8d97041e"
+        }
+      ]
+    }
+  ],
+  "determinism": {
+    "gate": "same segment id -> byte-identical heightfield, twice, in separate page loads",
+    "pageLoads": 2,
+    "fieldsCompared": 13,
+    "byteIdentical": true,
+    "fingerprintsIdentical": true,
+    "fingerprints": [
+      {
+        "scene": "thirteen-piece-sheet",
+        "id": "cl-f07a-thirteen-piece-sheet",
+        "fingerprint": "79460788-46a623f4"
+      },
+      {
+        "scene": "one-clamp-proof",
+        "id": "cl-f07a-one-clamp-hill",
+        "fingerprint": "daf2e882-0fc6d988"
+      },
+      {
+        "scene": "one-clamp-proof",
+        "id": "cl-f07a-one-clamp-cliff",
+        "fingerprint": "c196c924-8e7b621e"
+      },
+      {
+        "scene": "boundary-sheet",
+        "id": "cl-f07a-boundary-sheer-cliff",
+        "fingerprint": "8a33b47a-5f625056"
+      },
+      {
+        "scene": "boundary-sheet",
+        "id": "cl-f07a-boundary-earthen-bank",
+        "fingerprint": "23d65508-2dd14e1c"
+      },
+      {
+        "scene": "boundary-sheet",
+        "id": "cl-f07a-boundary-water-mud",
+        "fingerprint": "3ef9da18-96212144"
+      },
+      {
+        "scene": "boundary-sheet",
+        "id": "cl-f07a-boundary-thorn-thicket",
+        "fingerprint": "f2eccc68-4b2a2106"
+      },
+      {
+        "scene": "boundary-sheet",
+        "id": "cl-f07a-boundary-trunk-field",
+        "fingerprint": "90037868-9d9c27ec"
+      },
+      {
+        "scene": "boundary-sheet",
+        "id": "cl-f07a-boundary-fog-volume",
+        "fingerprint": "7db7e418-a1cf0166"
+      },
+      {
+        "scene": "route-proof",
+        "id": "cl-f07a-route-proof",
+        "fingerprint": "cd5337bb-de6ce58b"
+      },
+      {
+        "scene": "walk-down-16",
+        "id": "cl-f07a-walk-down-16",
+        "fingerprint": "3aa808e1-8988671d"
+      },
+      {
+        "scene": "support-graph",
+        "id": "cl-f07a-route-proof",
+        "fingerprint": "cd5337bb-de6ce58b"
+      },
+      {
+        "scene": "dark",
+        "id": "cl-f07a-dark",
+        "fingerprint": "a471c61a-8d97041e"
+      }
+    ],
+    "result": "PASS"
+  },
+  "gate": {
+    "fixture": "cl-f07-terrain-bench",
+    "fixtureVersion": 1,
+    "proof": "CL-F07a",
+    "seed": 471577311,
+    "fieldsMeasured": 13,
+    "gates": {
+      "walkableCellsAbove30Deg": 0,
+      "maxWalkableSlopeDeg": 26.5651,
+      "illegalWalkEdges": 0,
+      "unownedFacesAt2hPlus": 0,
+      "unreachableStandableSurfaces": 0,
+      "boundaryStringsResolved": 7,
+      "boundaryStringsTotal": 7,
+      "boundaryKinds": 6,
+      "d50Terrain": 37,
+      "d50NonTerrainDeclared": 13,
+      "d50Unresolved": 0,
+      "d50Total": 50,
+      "coveragePlaced": 18,
+      "coverageTotal": 18,
+      "coverageCanonicalForms": 13,
+      "coverageFailed": []
+    },
+    "oneClamp": {
+      "sameGenerator": true,
+      "sameParametersExceptClamp": true,
+      "parameterDiff": [
+        "slopeClamp"
+      ],
+      "hill": {
+        "maxWalkStepH": 1,
+        "maxWalkSlopeDeg": 26.56505117707799,
+        "faces": 0,
+        "maxH": 4,
+        "fingerprint": "daf2e882-0fc6d988"
+      },
+      "cliff": {
+        "maxWalkStepH": 1,
+        "maxWalkSlopeDeg": 26.56505117707799,
+        "faces": 20,
+        "maxH": 6,
+        "fingerprint": "c196c924-8e7b621e"
+      },
+      "cellsLoweredByClamp": 20,
+      "hillHasNoFaces": true,
+      "cliffHasFaces": true,
+      "verdict": "ONE CHASSIS — hill and cliff differ only by slopeClamp"
+    },
+    "walkDown": {
+      "degraded": true,
+      "legalBoard": true,
+      "requestedFootprintCells": 30,
+      "finalFootprintCells": 8,
+      "trayCells": 16
+    },
+    "d50NonTerrain": [
+      {
+        "d50": 4,
+        "reason": "tactical CEILING — an overhead volume, not ground; owned by the canopy/overhang volume system (§3.3), not by the heightfield"
+      },
+      {
+        "d50": 8,
+        "reason": "obscurement VOLUME (15' radius sphere) — blocks sight, occupies no ground; boundary kind fog-volume covers its perimeter form"
+      },
+      {
+        "d50": 9,
+        "reason": "hanging curtain from ABOVE — a vegetation drape, no ground state, does not impede movement by its own RAW"
+      },
+      {
+        "d50": 21,
+        "reason": "WIND corridor — an air-column effect over whatever ground is there; the corridor form is the crevice's own geometry when one is present"
+      },
+      {
+        "d50": 27,
+        "reason": "biological haze VOLUME (10' radius sphere) — a reaction-denial effect in air, no ground state"
+      },
+      {
+        "d50": 29,
+        "reason": "MAGICAL dampening field — a light/magic property of a region, no geometry and no movement cost"
+      },
+      {
+        "d50": 31,
+        "reason": "adhesive VOLUME with its own object stats (AC 10, 5 HP) — an interactable, not ground"
+      },
+      {
+        "d50": 33,
+        "reason": "ACTIVE flora that grapples — a creature-adjacent hazard volume, not a ground state"
+      },
+      {
+        "d50": 34,
+        "reason": "MAGNETIC ground property — changes movement cost for metal armour only; a material routing fact (M12), not geometry"
+      },
+      {
+        "d50": 35,
+        "reason": "falling WATER CURTAIN — a vertical volume; its ledge/cliff host is R1-01, the curtain itself is VFX"
+      },
+      {
+        "d50": 38,
+        "reason": "electrically CHARGED flora — a damage trigger on movement, no ground geometry of its own"
+      },
+      {
+        "d50": 45,
+        "reason": "persistent DIM LIGHT over an area — a lighting-recipe fact (CL-R1), not ground"
+      },
+      {
+        "d50": 47,
+        "reason": "forced-movement VORTEX — a per-turn pull effect, no surface and no walkability change"
+      }
+    ],
+    "fingerprints": [
+      {
+        "id": "cl-f07a-thirteen-piece-sheet",
+        "fingerprint": "79460788-46a623f4"
+      },
+      {
+        "id": "cl-f07a-one-clamp-hill",
+        "fingerprint": "daf2e882-0fc6d988"
+      },
+      {
+        "id": "cl-f07a-one-clamp-cliff",
+        "fingerprint": "c196c924-8e7b621e"
+      },
+      {
+        "id": "cl-f07a-boundary-sheer-cliff",
+        "fingerprint": "8a33b47a-5f625056"
+      },
+      {
+        "id": "cl-f07a-boundary-earthen-bank",
+        "fingerprint": "23d65508-2dd14e1c"
+      },
+      {
+        "id": "cl-f07a-boundary-water-mud",
+        "fingerprint": "3ef9da18-96212144"
+      },
+      {
+        "id": "cl-f07a-boundary-thorn-thicket",
+        "fingerprint": "f2eccc68-4b2a2106"
+      },
+      {
+        "id": "cl-f07a-boundary-trunk-field",
+        "fingerprint": "90037868-9d9c27ec"
+      },
+      {
+        "id": "cl-f07a-boundary-fog-volume",
+        "fingerprint": "7db7e418-a1cf0166"
+      },
+      {
+        "id": "cl-f07a-route-proof",
+        "fingerprint": "cd5337bb-de6ce58b"
+      },
+      {
+        "id": "cl-f07a-walk-down-16",
+        "fingerprint": "3aa808e1-8988671d"
+      },
+      {
+        "id": "cl-f07a-route-proof",
+        "fingerprint": "cd5337bb-de6ce58b"
+      },
+      {
+        "id": "cl-f07a-dark",
+        "fingerprint": "a471c61a-8d97041e"
+      }
+    ]
+  },
+  "rung": "all",
+  "probe": null,
+  "seed": null,
+  "generatedAt": "2026-07-28T13:21:56.243Z",
+  "viewport": {
+    "width": 1280,
+    "height": 720,
+    "deviceScaleFactor": 2
+  }
+}

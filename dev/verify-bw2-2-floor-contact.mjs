@@ -468,12 +468,34 @@ async function runRenderCheck(){
     browser = await puppeteer.launch({ executablePath: CHROME, headless: "new", args, defaultViewport: { width: 800, height: 600, deviceScaleFactor: 1 } });
     const page = await browser.newPage();
     await page.goto(`${BASE}/genesis.html`, { waitUntil: "load", timeout: 30000 });
-    for(let i = 0; i < 40; i++){
-      const ready = await page.evaluate(() => !!(window.Theater && typeof window.Theater.setInteriorBoard === "function"));
-      if(ready) break;
+    // THE ONE-TIME REPLAY BARRIER (2026-07-28) — gate on window.Theater.ready, not merely on the
+    // API surface existing. `ready` flips true inside loadWholeObjectBuilders' settle callback
+    // (src/ui/theater-boot.js ~5171), and that SAME callback replays
+    // `setInteriorBoard(S.lastBoard)` + `setUnits(S.lastUnits)` whenever S.mounted — a few hundred
+    // ms after load, at a wall-clock offset that varies run to run with how fast the dynamic
+    // imports resolve. That replay's teardown phase runs drainTweens(S), which force-runs every
+    // in-flight tween's onDone and then rebuilds the unit group. Landing mid-verb, it (a) freezes
+    // fall-death's tip at whatever partial angle the last tick wrote — drainTweens fires the
+    // persist:true verb's onDone, which by contract LEAVES the current pose rather than snapping
+    // to the terminal keyframe — and (b) leaves this harness's captured `fig` handle pointing at a
+    // discarded figure that will never move again. That was check 23's flake: it failed ~2 runs in
+    // 3, each time with a DIFFERENT partial angle (0.364 / 0.462 / 0.614 / 0.769 / 1.055 / 1.379),
+    // and NO amount of extra sleep could fix it because the animation had been destroyed, not
+    // merely under-ticked. Mounting only AFTER the flag flips removes the collision entirely: the
+    // callback is module-scope and fires exactly once, and with nothing mounted when it runs there
+    // is no replay to fire at all. Measured: builds stay 1/1 for the whole check and the tip lands
+    // on exactly PI/2.
+    let theaterReady = false;
+    for(let i = 0; i < 80; i++){
+      theaterReady = await page.evaluate(() => !!(window.Theater && typeof window.Theater.setInteriorBoard === "function") && window.Theater.ready === true);
+      if(theaterReady) break;
       await sleep(150);
     }
+    ok(theaterReady, "window.Theater.ready flipped true before this check mounts anything — the one-time whole-object-builder replay (which drains every live tween and rebuilds the unit group) is guaranteed to have already fired, so it cannot land in the middle of check 23's fall-death tween");
 
+    if(process.argv.includes("--prove-21b-teeth")){
+      await page.evaluate(() => { window.__BW22_PROVE_21B_TEETH = true; });
+    }
     const result = await page.evaluate(async () => {
       const el = document.createElement("div");
       el.style.width = "800px"; el.style.height = "600px";
@@ -516,9 +538,101 @@ async function runRenderCheck(){
       // rotation.x; today that must read 0 (world +Y, floor-flat) while the sprite's inner wrap alone
       // carries the camera-pitch tilt.
       T._updateSpriteBillboardYawForTest();
-      r.figRotationXBeforeTip = fig.rotation.x;         // expect 0 — the base's own world-up stays +Y
+      r.figRotationXBeforeTip = fig.rotation.x;         // fall-death's channel: 0 until a verb plays
       r.wrapRotationXBeforeTip = fig.userData.standeeWrap.rotation.x; // expect the nonzero camera tilt
+      // TERRAIN-EXPRESSION §1 P2 (2026-07-28) — 21b USED TO ASSERT THE WRONG THING. Its title claimed
+      // "the base's world-up stays +Y" but its assertion read `fig.rotation.x`, the OUTER group. The
+      // B1 slope treatment puts ground conformance on the BASE CHILD's own .x/.z, so the old
+      // assertion would have stayed green while the base tilted — a gate silently no longer covering
+      // its subject, which is worse than one that fails. So MEASURE THE BASE'S OWN WORLD UP, through
+      // its own world matrix, and record every rotation channel beside it so the three-owner split is
+      // stated rather than implied.
+      const baseChild = fig.children.filter((c) => c.userData && c.userData.standeeBase)[0] || null;
+      r.baseChildFound = !!baseChild;
+      // THE TEETH PROOF, run in the same process rather than asserted in a comment (--prove-21b-teeth):
+      // tilt the base child by 0.3 rad and re-read BOTH assertions. The OLD one (fig.rotation.x === 0)
+      // stays green on a visibly tilted plinth; the NEW one fires. That single pair of numbers is the
+      // whole argument for the rewrite, and it means this gate has demonstrably not stopped covering
+      // its subject.
+      if(window.__BW22_PROVE_21B_TEETH && baseChild){
+        baseChild.rotation.x = 0.3;
+        baseChild.updateMatrixWorld(true);
+        const te = baseChild.matrixWorld.elements;
+        const tl = Math.hypot(te[4], te[5], te[6]) || 1;
+        r.teeth = {
+          tiltedBaseWorldUpTiltDeg: Math.acos(Math.max(-1, Math.min(1, te[5] / tl))) * 180 / Math.PI,
+          oldAssertionStillGreen: fig.rotation.x === 0
+        };
+        baseChild.rotation.x = 0;
+        baseChild.updateMatrixWorld(true);
+      }
+      if(baseChild){
+        baseChild.updateMatrixWorld(true);
+        const e = baseChild.matrixWorld.elements;   // column-major; column 1 is the local +Y axis
+        const ux = e[4], uy = e[5], uz = e[6];
+        const len = Math.hypot(ux, uy, uz) || 1;
+        r.baseWorldUp = [ux / len, uy / len, uz / len];
+        r.baseWorldUpTiltDeg = Math.acos(Math.max(-1, Math.min(1, uy / len))) * 180 / Math.PI;
+        r.baseLocalRotation = { x: baseChild.rotation.x, y: baseChild.rotation.y, z: baseChild.rotation.z };
+      }
+      r.tiltChannelOwners = {
+        outerGroupRotationX: "standee-verbs.js fall-death — tips the whole miniature, base included",
+        standeeWrapRotationX: "updateSpriteBillboardYaw camera-pitch tilt — the CARD only",
+        baseChildRotationXZ: "TERRAIN-EXPRESSION B1 ground conformance — the PLINTH only"
+      };
+      r.planeTiltRecorded = fig.userData.clayStandeePlaneTilt || null;
       r.figRotationYBeforeTip = fig.rotation.y;          // facing (+ this unit's own kilter offset)
+
+      // ── TERRAIN-EXPRESSION R2 · R1 (Adam 2026-07-28) — THE SPRITE MATCHES ITS BASE ────────────
+      // 21b's rewrite measures the base child's own world-up. Adam's R1 ruling REVERSES what the
+      // standee-contract study recommended — "the sprite itself should always be fixed at the same
+      // angle as its base" — so the base's world-up is now only half the proposition. This measures
+      // the other half in the same process, on a figure given a real stand plane, because on the
+      // flat board of this check both frames are +Y and the claim is untestable.
+      //
+      // WHAT IS ASSERTED, and why it is one number rather than "they look the same": every standee
+      // carries a fixed camera-pitch tilt on its wrap (the un-foreshortening trick), so the sprite's
+      // up and the base's up are NEVER identical. If the sprite leans WITH the base, the angle
+      // between them is that pitch CONSTANT and nothing else, at any grade. If the sprite stays
+      // vertical while the base conforms — the pre-ruling build — the angle wanders with the grade.
+      // Measured before the change at 22.4 deg of deviation on a 26.6 deg plane; 0 after.
+      (function proveR1Agreement(){
+        const up = (obj) => {
+          obj.updateMatrixWorld(true);
+          const e = obj.matrixWorld.elements;              // column 1 = local +Y
+          const l = Math.hypot(e[4], e[5], e[6]) || 1;
+          return [e[4] / l, e[5] / l, e[6] / l];
+        };
+        const angle = (a, b) => Math.acos(Math.max(-1, Math.min(1,
+          a[0] * b[0] + a[1] * b[1] + a[2] * b[2]))) * 180 / Math.PI;
+        const wrap = fig.userData.standeeWrap;
+        const bc = fig.children.filter((c) => c.userData && c.userData.standeeBase)[0];
+        r.r1 = { flatAgreementDeg: angle(up(wrap), up(bc)) };
+        // give it the steepest legal ground the R4 ladder declares (30 deg, all in +x) and re-run
+        // the REAL facing pass — not a hand-set rotation, the shipped writer.
+        const dY = Math.tan(30 * Math.PI / 180);
+        fig.userData.clayStandeePlaneTilt = { dYdx: dY, dYdz: 0, tiltDeg: 30 };
+        T._updateSpriteBillboardYawForTest();
+        r.r1.tiltedBaseWorldUpTiltDeg = angle(up(bc), [0, 1, 0]);
+        r.r1.tiltedAgreementDeg = angle(up(wrap), up(bc));
+        r.r1.tiltedSpriteWorldUpTiltDeg = angle(up(wrap), [0, 1, 0]);
+        // THE PRE-RULING READING, produced in the same process so the receipt carries the argument
+        // rather than a claim about it: put the wrap back to EXACTLY what the R1 build wrote — a
+        // plain camera-pitch Euler and nothing else — while the base stays conformed to the same
+        // 30 deg plane, and take the identical measurement. This is the number the assertion below
+        // has to be able to fail on, and it is why this is a gate.
+        const wrapQBefore = wrap.quaternion.clone();
+        wrap.quaternion.identity();
+        wrap.rotation.order = "YXZ";
+        wrap.rotation.set((35 * Math.PI) / 180, 0, 0, "YXZ");
+        r.r1.preRulingAgreementDeg = angle(up(wrap), up(bc));
+        r.r1.preRulingSpriteWorldUpTiltDeg = angle(up(wrap), [0, 1, 0]);
+        wrap.quaternion.copy(wrapQBefore);
+        wrap.updateMatrixWorld(true);
+        fig.userData.clayStandeePlaneTilt = null;
+        T._updateSpriteBillboardYawForTest();
+        r.r1.restoredAgreementDeg = angle(up(wrap), up(bc));
+      })();
 
       const mountedRing = T.setActingUnit("u1");
       r.ringMounted = mountedRing;
@@ -539,9 +653,43 @@ async function runRenderCheck(){
       r.postTipChildCountImmediate = fig.children.length;
       r.wrapStillChild0Immediate = fig.children[0] === fig.userData.standeeWrap;
       r.baseStillSiblingImmediate = fig.children[1] === actingBase;
-      // let the real tween ticker (rAF + wall-clock Date.now()) actually run fall-death's 480ms duration
-      // to completion, then re-run the facing pass once more (a corpse still renders every frame).
-      await new Promise((res) => setTimeout(res, 1000));
+      // SETTLE, DON'T SLEEP (2026-07-28). This was a flat `await sleep(1000)` — long enough on
+      // paper (fall-death is 480ms + an 80ms MF-3 hit-stop hold = 560ms of wall clock) but it
+      // sampled `fig.rotation.x` at a fixed instant with nothing checking the tween had actually
+      // got there. Poll the page's OWN settle seam instead: Theater.tweensLive() (the live S.tweens
+      // depth — its own header names "poll-until-settled instead of guessing a fixed sleep" as the
+      // reason it exists) plus a value-stability check on the very field check 23 asserts on.
+      // BOTH halves are load-bearing and neither alone is enough: an empty queue with a still-
+      // moving value would mean something re-pushed, and a value that has merely stopped moving
+      // proves nothing on its own (that is EXACTLY the frozen-corpse failure the replay barrier
+      // above fixes — a drained mid-flight tween holds a partial angle rock-steady forever).
+      // Bounded by a real deadline, and the receipt below is asserted, so a stall FAILS LOUDLY with
+      // the angle and the reason rather than silently handing check 23 an early sample.
+      const tipSettle = await (async () => {
+        const DEADLINE_MS = 6000, STABLE_FRAMES = 2;
+        const startedAt = Date.now();
+        const buildsAtStart = T.stats.boardBuilds + "/" + T.stats.unitBuilds;
+        const frame = () => new Promise((res) => requestAnimationFrame(() => res()));
+        let frames = 0, stable = 0, prev = null;
+        while(Date.now() - startedAt < DEADLINE_MS){
+          await frame();
+          frames++;
+          const rot = fig.rotation.x;
+          if(T.tweensLive() === 0 && prev !== null && rot === prev) stable++; else stable = 0;
+          prev = rot;
+          if(stable >= STABLE_FRAMES) break;
+        }
+        return {
+          settled: stable >= STABLE_FRAMES, frames, elapsedMs: Date.now() - startedAt,
+          tweensLiveAtExit: T.tweensLive(), rotAtExit: fig.rotation.x,
+          // if either of these two flipped, a board/unit replay tore the animation down mid-flight
+          // (the old flake's mechanism) — named separately so the failure says WHICH thing happened.
+          figStillLive: T._findUnitForTest("u1") === fig,
+          buildsUnchanged: (T.stats.boardBuilds + "/" + T.stats.unitBuilds) === buildsAtStart,
+          builds: buildsAtStart + " -> " + T.stats.boardBuilds + "/" + T.stats.unitBuilds
+        };
+      })();
+      r.tipSettle = tipSettle;
       T._updateSpriteBillboardYawForTest();
       r.postTipChildCountFinal = fig.children.length;
       r.figRotationXAfterTip = fig.rotation.x;              // expect PI/2 — the corpse tip, on the OUTER group
@@ -577,10 +725,39 @@ async function runRenderCheck(){
       ok(Math.abs(result.baseRadius - result.baseWidth * 0.5) < 1e-6,
         `combat standee selection-ring radius (${result.baseRadius}) === the natural support width (${result.baseWidth}) / 2`);
 
-      group("21b — GREEN (live values, BW2-2b item 1): under a REAL render pass, the base's world-up stays +Y (outer group rotation.x === 0) while the sprite's inner wrap alone carries the nonzero camera-pitch tilt");
-      ok(result.figRotationXBeforeTip === 0, `BEFORE any verb plays, the OUTER group's rotation.x (what the base/ring inherit as plain siblings) is exactly 0 — floor-flat — found ${result.figRotationXBeforeTip}`);
+      group("21b — GREEN (live values, BW2-2b item 1 + TERRAIN-EXPRESSION §1 P2): THREE ROTATION CHANNELS, THREE OWNERS, stated explicitly — and the base's world-up is MEASURED off its own world matrix rather than inferred from the outer group");
+      ok(result.baseChildFound, "the base child exists to be measured");
+      ok(Array.isArray(result.baseWorldUp) && result.baseWorldUpTiltDeg < 0.001,
+        `CHANNEL 3 (base child .x/.z — TERRAIN-EXPRESSION B1 ground conformance): on this FLAT board the plinth's own world-up is +Y to within ${(result.baseWorldUpTiltDeg || 0).toFixed(6)} deg, measured through baseChild.matrixWorld — up=[${(result.baseWorldUp || []).map((v) => v.toFixed(6)).join(", ")}]. This is the assertion the old 21b only appeared to make: it read fig.rotation.x, so a tilted BASE would have left it green`);
+      ok(result.planeTiltRecorded === null,
+        `and no stand-plane tilt is recorded on a flat interior board (clayStandeePlaneTilt === null) — B1 conforms to graded ground and does nothing at all on level ground`);
+      ok(result.figRotationXBeforeTip === 0, `CHANNEL 1 (outer group .x — standee-verbs.js fall-death): exactly 0 before any verb plays — found ${result.figRotationXBeforeTip}`);
       ok(typeof result.wrapRotationXBeforeTip === "number" && Math.abs(result.wrapRotationXBeforeTip) > 0.01,
-        `the sprite's OWN inner wrap carries the nonzero camera-pitch tilt (${result.wrapRotationXBeforeTip}) — the split is real, not just "nothing rotates"`);
+        `CHANNEL 2 (standeeWrap .x — the camera-pitch tilt, the CARD only): carries the nonzero tilt (${result.wrapRotationXBeforeTip}) — the split is real, not just "nothing rotates"`);
+      if(result.teeth){
+        group("21b-TEETH — the rewrite proved: tilt the base child and watch the OLD assertion stay green");
+        ok(result.teeth.tiltedBaseWorldUpTiltDeg > 15,
+          `with the base child tilted 0.3 rad, the NEW assertion measures ${result.teeth.tiltedBaseWorldUpTiltDeg.toFixed(3)} deg of world-up tilt and FIRES`);
+        ok(result.teeth.oldAssertionStillGreen === true,
+          `...while the OLD assertion (fig.rotation.x === 0) is STILL TRUE on that same tilted plinth. A gate that cannot fail is not a gate`);
+      }
+      group("21b-R1 — TERRAIN-EXPRESSION R2's first ruling: THE SPRITE MATCHES ITS BASE (reverses the standee-contract study; Adam wins)");
+      console.log(`  measured: flat agreement ${(result.r1 && result.r1.flatAgreementDeg || 0).toFixed(4)} deg · on a 30 deg plane, plinth world-up ${(result.r1 && result.r1.tiltedBaseWorldUpTiltDeg || 0).toFixed(4)} deg off vertical, sprite world-up ${(result.r1 && result.r1.tiltedSpriteWorldUpTiltDeg || 0).toFixed(4)} deg off vertical, agreement ${(result.r1 && result.r1.tiltedAgreementDeg || 0).toFixed(4)} deg · PRE-RULING (sprite vertical) agreement would read ${(result.r1 && result.r1.preRulingAgreementDeg || 0).toFixed(4)} deg · plane removed, restored to ${(result.r1 && result.r1.restoredAgreementDeg || 0).toFixed(4)} deg`);
+      ok(result.r1 && Math.abs(result.r1.flatAgreementDeg - 35) < 0.001,
+        `on FLAT ground the angle between the sprite's world-up and the plinth's world-up is the camera-pitch constant itself (${(result.r1 && result.r1.flatAgreementDeg || 0).toFixed(4)} deg vs CAM_ELEV_DEG=35) — the baseline both halves of this ruling are measured against`);
+      ok(result.r1 && Math.abs(result.r1.tiltedBaseWorldUpTiltDeg - 30) < 0.01,
+        `given the steepest grade the R4 ladder declares, the PLINTH conforms: its world-up is ${(result.r1 && result.r1.tiltedBaseWorldUpTiltDeg || 0).toFixed(4)} deg off vertical, written by the shipped facing pass and not by this harness`);
+      ok(result.r1 && Math.abs(result.r1.tiltedAgreementDeg - 35) < 0.5,
+        `AND THE SPRITE CAME WITH IT: on that same 30 deg plane the ONLY angle between the sprite's world-up and the plinth's world-up is still the camera-pitch constant (${(result.r1 && result.r1.tiltedAgreementDeg || 0).toFixed(4)} deg). A miniature on a wedge leans with the wedge`);
+      ok(result.r1 && result.r1.tiltedSpriteWorldUpTiltDeg > 5,
+        `and the sprite is genuinely off vertical in world space (${(result.r1 && result.r1.tiltedSpriteWorldUpTiltDeg || 0).toFixed(4)} deg) — this is not "nothing moved"`);
+      ok(result.r1 && Math.abs(result.r1.preRulingAgreementDeg - 35) > 5,
+        `THE TEETH: put the wrap back to what the R1 build wrote — a plain camera-pitch Euler, sprite vertical — against the SAME conformed plinth, and this assertion reads ${(result.r1 && result.r1.preRulingAgreementDeg || 0).toFixed(4)} deg against the 35 deg it must equal, i.e. it FIRES. A gate that cannot fail is not a gate`);
+      ok(result.r1 && Math.abs(result.r1.restoredAgreementDeg - 35) < 0.001,
+        `and with the stand plane removed again the wrap is back on the byte-identical legacy path (${(result.r1 && result.r1.restoredAgreementDeg || 0).toFixed(4)} deg) — a standee on level ground renders exactly as it always did`);
+
+      ok(JSON.stringify(Object.keys(result.tiltChannelOwners || {})) === JSON.stringify(["outerGroupRotationX", "standeeWrapRotationX", "baseChildRotationXZ"]),
+        `all three channels are NAMED with their owner in the receipt, so a future change that puts tilt on the wrong one is a contradiction rather than a silent overlap: ${JSON.stringify(result.tiltChannelOwners)}`);
 
       group("22 — GREEN: the acting ring relocates to wrap the base rim (BW2-2 item 2)");
       ok(result.ringMounted === 1, "setActingUnit mounted exactly one ring");
@@ -598,6 +775,13 @@ async function runRenderCheck(){
       ok(result.wrapStillChild0Immediate, `the sprite's own camera-tilt wrap is STILL children[0] immediately after the verb starts (never moved)`);
       ok(result.baseStillSiblingImmediate, `the base mesh is STILL a plain sibling at children[1] immediately after the verb starts (never moved into any wrapper)`);
       ok(result.postTipChildCountFinal === result.preTipChildren, `the child count is STILL unchanged once the tween has actually run to completion (${result.postTipChildCountFinal})`);
+      // THE SETTLE RECEIPT — asserted, not just recorded, so the tip angle below is only ever read
+      // off a tween that DEMONSTRABLY finished. These three fire instead of (not as well as) a
+      // mysterious partial angle, and each names its own cause.
+      const st = result.tipSettle || {};
+      ok(st.settled === true, `fall-death's tween SETTLED within the harness deadline — queue empty (Theater.tweensLive()===0) with rotation.x unchanged across 2 consecutive animation frames, reached after ${st.elapsedMs}ms / ${st.frames} frames. Timed out instead: tweensLive=${st.tweensLiveAtExit}, rotation.x=${st.rotAtExit}`);
+      ok(st.figStillLive === true, `the figure handle check 23 measures is STILL the live mounted u1 (a board/unit replay mid-verb would swap it and leave this harness reading a discarded standee frozen at a partial angle)`);
+      ok(st.buildsUnchanged === true, `no board/unit rebuild landed during the tween (${st.builds}) — a rebuild's own drainTweens(S) force-completes every in-flight tween, and fall-death is persist:true, so its onDone LEAVES the partial pose rather than snapping to PI/2`);
       ok(Math.abs(result.figRotationXAfterTip - Math.PI / 2) < 0.05, `the OUTER group's rotation.x reaches the floor plane (PI/2=${(Math.PI/2).toFixed(4)}) once fall-death's tween completes — found ${result.figRotationXAfterTip} — tipping \`fig\` tips the base (a plain sibling) right along with it`);
       ok(Math.abs(result.wrapRotationXAfterTip - result.wrapRotationXBeforeTip) < 1e-9, `the sprite's inner wrap's OWN rotation.x is UNCHANGED by the corpse tip (still just the plain camera-pitch tilt, ${result.wrapRotationXAfterTip}) — verb-tilt and camera-tilt never fight over the same field`);
 

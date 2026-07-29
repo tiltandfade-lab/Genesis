@@ -1,0 +1,2648 @@
+{
+  "captureDir": "dev/clay-captures/cl-f07a-terrain-bench-v001",
+  "fixture": "cl-f07-terrain-bench",
+  "proof": "CL-F07a",
+  "scenes": [
+    {
+      "capture": 1,
+      "sceneId": "thirteen-piece-sheet",
+      "label": "01-thirteen-piece-sheet",
+      "frameIndex": null,
+      "boundary": null,
+      "built": true,
+      "fieldCount": 1,
+      "cellMeshes": 564,
+      "standableCells": 546,
+      "witnesses": 13,
+      "witnessFailures": 0,
+      "frames": [
+        {
+          "file": "01-thirteen-piece-sheet-01-early-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 20168,
+          "terrainP05Luma": 24.29,
+          "terrainP50Luma": 126.67,
+          "terrainP95Luma": 171.11,
+          "contentPct": 69.235,
+          "edgePct": 12.515,
+          "meanLuma": 148.95,
+          "p05Luma": 50.07,
+          "p50Luma": 171.4,
+          "p95Luma": 177.61
+        },
+        {
+          "file": "01-thirteen-piece-sheet-02-settled-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 20168,
+          "terrainP05Luma": 24.29,
+          "terrainP50Luma": 126.67,
+          "terrainP95Luma": 171.11,
+          "contentPct": 69.235,
+          "edgePct": 12.515,
+          "meanLuma": 148.95,
+          "p05Luma": 50.07,
+          "p50Luma": 171.4,
+          "p95Luma": 177.61,
+          "lumaSpread": 127.54
+        },
+        {
+          "file": "01-thirteen-piece-sheet-03-settled-strategic.png",
+          "pixels": 40000,
+          "backdrop": [
+            143,
+            123,
+            115
+          ],
+          "terrainPx": 29417,
+          "terrainP05Luma": 32.8,
+          "terrainP50Luma": 171.11,
+          "terrainP95Luma": 177.61,
+          "contentPct": 76.805,
+          "edgePct": 14.353,
+          "meanLuma": 141.31,
+          "p05Luma": 49.58,
+          "p50Luma": 163.11,
+          "p95Luma": 177.4,
+          "lumaSpread": 127.82
+        },
+        {
+          "file": "01-thirteen-piece-sheet-04-clean-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 19840,
+          "terrainP05Luma": 12.65,
+          "terrainP50Luma": 126.67,
+          "terrainP95Luma": 171.11,
+          "contentPct": 69.067,
+          "edgePct": 10.892,
+          "meanLuma": 148.29,
+          "p05Luma": 29.71,
+          "p50Luma": 172.11,
+          "p95Luma": 177.61
+        }
+      ],
+      "productionContentPct": 69.235,
+      "strategicContentPct": 76.805,
+      "productionEdgePct": 12.515,
+      "strategicEdgePct": 14.353,
+      "cameraPairDistinct": true,
+      "coverage": {
+        "settled": {
+          "measured": true,
+          "declaredCells": 564,
+          "outOfFrame": 0,
+          "selfOccluded": 70,
+          "visibleCells": 494,
+          "coveredCells": 494,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "01-thirteen-piece-sheet-06-production-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 146.5246159106866,
+          "cameraNear": 0.1,
+          "clayZoom": 2.048
+        },
+        "strategic": {
+          "measured": true,
+          "declaredCells": 564,
+          "outOfFrame": 0,
+          "selfOccluded": 4,
+          "visibleCells": 560,
+          "coveredCells": 560,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "01-thirteen-piece-sheet-05-strategic-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 146.5246159106866,
+          "cameraNear": 0.1,
+          "clayZoom": 2.048
+        },
+        "clean": {
+          "measured": true,
+          "declaredCells": 564,
+          "outOfFrame": 0,
+          "selfOccluded": 70,
+          "visibleCells": 494,
+          "coveredCells": 494,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "01-thirteen-piece-sheet-06-production-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 146.5246159106866,
+          "cameraNear": 0.1,
+          "clayZoom": 2.048
+        }
+      },
+      "coveragePct": 100.0,
+      "coverageMissing": 0,
+      "witnessMaxGap": 0.096,
+      "requestedLightRecipe": "daylit",
+      "appliedLightRecipe": "daylit",
+      "frameCensus": {
+        "terrainCells": 564,
+        "water": 5,
+        "volumes": 0,
+        "spans": 2,
+        "overlays": 0,
+        "witnessFigures": 13,
+        "witnessParts": 39,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [
+          [
+            -11.5,
+            -0.3,
+            8
+          ],
+          [
+            -11,
+            -0.3,
+            8
+          ]
+        ],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
+      "figuresInScene": 13,
+      "foreignFigures": 0,
+      "spansOutsideDeclaringBay": 0,
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 0,
+        "mote": 8,
+        "overlay": 1,
+        "unowned": 0,
+        "detachedPracticals": 0
+      },
+      "foreignLightsNeutralized": 0,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ],
+      "terrainPx": 20168,
+      "terrainP50Luma": 126.67
+    },
+    {
+      "capture": 2,
+      "sceneId": "one-clamp-proof",
+      "label": "02-one-clamp-proof",
+      "frameIndex": null,
+      "boundary": null,
+      "built": true,
+      "fieldCount": 2,
+      "cellMeshes": 162,
+      "standableCells": 162,
+      "witnesses": 4,
+      "witnessFailures": 0,
+      "frames": [
+        {
+          "file": "02-one-clamp-proof-01-early-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 14695,
+          "terrainP05Luma": 22.86,
+          "terrainP50Luma": 158.97,
+          "terrainP95Luma": 171.4,
+          "contentPct": 55.615,
+          "edgePct": 8.676,
+          "meanLuma": 158.7,
+          "p05Luma": 51.28,
+          "p50Luma": 174.4,
+          "p95Luma": 177.61
+        },
+        {
+          "file": "02-one-clamp-proof-02-settled-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 14695,
+          "terrainP05Luma": 22.86,
+          "terrainP50Luma": 158.97,
+          "terrainP95Luma": 171.4,
+          "contentPct": 55.615,
+          "edgePct": 8.676,
+          "meanLuma": 158.7,
+          "p05Luma": 51.28,
+          "p50Luma": 174.4,
+          "p95Luma": 177.61,
+          "lumaSpread": 126.33
+        },
+        {
+          "file": "02-one-clamp-proof-03-settled-strategic.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 16959,
+          "terrainP05Luma": 23.36,
+          "terrainP50Luma": 136.55,
+          "terrainP95Luma": 171.33,
+          "contentPct": 61.297,
+          "edgePct": 10.481,
+          "meanLuma": 156.18,
+          "p05Luma": 49.87,
+          "p50Luma": 173.4,
+          "p95Luma": 177.61,
+          "lumaSpread": 127.74
+        },
+        {
+          "file": "02-one-clamp-proof-04-clean-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 14368,
+          "terrainP05Luma": 12.37,
+          "terrainP50Luma": 160.18,
+          "terrainP95Luma": 171.4,
+          "contentPct": 55.458,
+          "edgePct": 7.055,
+          "meanLuma": 158.05,
+          "p05Luma": 44.5,
+          "p50Luma": 174.61,
+          "p95Luma": 177.61
+        }
+      ],
+      "productionContentPct": 55.615,
+      "strategicContentPct": 61.297,
+      "productionEdgePct": 8.676,
+      "strategicEdgePct": 10.481,
+      "cameraPairDistinct": true,
+      "coverage": {
+        "settled": {
+          "measured": true,
+          "declaredCells": 162,
+          "outOfFrame": 0,
+          "selfOccluded": 18,
+          "visibleCells": 144,
+          "coveredCells": 144,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "02-one-clamp-proof-06-production-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 124.35384659223885,
+          "cameraNear": 0.1,
+          "clayZoom": 1.7066666666666666
+        },
+        "strategic": {
+          "measured": true,
+          "declaredCells": 162,
+          "outOfFrame": 0,
+          "selfOccluded": 0,
+          "visibleCells": 162,
+          "coveredCells": 162,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "02-one-clamp-proof-05-strategic-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 124.35384659223885,
+          "cameraNear": 0.1,
+          "clayZoom": 1.7066666666666666
+        },
+        "clean": {
+          "measured": true,
+          "declaredCells": 162,
+          "outOfFrame": 0,
+          "selfOccluded": 18,
+          "visibleCells": 144,
+          "coveredCells": 144,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "02-one-clamp-proof-06-production-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 124.35384659223885,
+          "cameraNear": 0.1,
+          "clayZoom": 1.7066666666666666
+        }
+      },
+      "coveragePct": 100.0,
+      "coverageMissing": 0,
+      "witnessMaxGap": 0.096,
+      "requestedLightRecipe": "daylit",
+      "appliedLightRecipe": "daylit",
+      "frameCensus": {
+        "terrainCells": 162,
+        "water": 0,
+        "volumes": 0,
+        "spans": 0,
+        "overlays": 0,
+        "witnessFigures": 4,
+        "witnessParts": 12,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
+      "figuresInScene": 4,
+      "foreignFigures": 0,
+      "spansOutsideDeclaringBay": 0,
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 0,
+        "mote": 8,
+        "overlay": 1,
+        "unowned": 0,
+        "detachedPracticals": 0
+      },
+      "foreignLightsNeutralized": 0,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ],
+      "terrainPx": 14695,
+      "terrainP50Luma": 158.97
+    },
+    {
+      "capture": 3,
+      "sceneId": "boundary-sheet",
+      "label": "03-boundary-sheet-f0",
+      "frameIndex": 0,
+      "boundary": "sheer-cliff",
+      "built": true,
+      "fieldCount": 1,
+      "cellMeshes": 192,
+      "standableCells": 100,
+      "witnesses": 1,
+      "witnessFailures": 0,
+      "frames": [
+        {
+          "file": "03-boundary-sheet-f0-01-early-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 19074,
+          "terrainP05Luma": 24.29,
+          "terrainP50Luma": 126.67,
+          "terrainP95Luma": 171.11,
+          "contentPct": 66.662,
+          "edgePct": 9.389,
+          "meanLuma": 148.03,
+          "p05Luma": 46.21,
+          "p50Luma": 172.4,
+          "p95Luma": 177.61
+        },
+        {
+          "file": "03-boundary-sheet-f0-02-settled-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 19074,
+          "terrainP05Luma": 24.29,
+          "terrainP50Luma": 126.67,
+          "terrainP95Luma": 171.11,
+          "contentPct": 66.662,
+          "edgePct": 9.389,
+          "meanLuma": 148.03,
+          "p05Luma": 46.21,
+          "p50Luma": 172.4,
+          "p95Luma": 177.61,
+          "lumaSpread": 131.4
+        },
+        {
+          "file": "03-boundary-sheet-f0-03-settled-strategic.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 21734,
+          "terrainP05Luma": 25.08,
+          "terrainP50Luma": 126.67,
+          "terrainP95Luma": 171.11,
+          "contentPct": 73.183,
+          "edgePct": 9.994,
+          "meanLuma": 145.89,
+          "p05Luma": 49.43,
+          "p50Luma": 170.4,
+          "p95Luma": 177.61,
+          "lumaSpread": 128.18
+        },
+        {
+          "file": "03-boundary-sheet-f0-04-clean-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 18746,
+          "terrainP05Luma": 12.58,
+          "terrainP50Luma": 126.67,
+          "terrainP95Luma": 171.33,
+          "contentPct": 66.495,
+          "edgePct": 7.769,
+          "meanLuma": 147.38,
+          "p05Luma": 31.0,
+          "p50Luma": 172.4,
+          "p95Luma": 177.61
+        }
+      ],
+      "productionContentPct": 66.662,
+      "strategicContentPct": 73.183,
+      "productionEdgePct": 9.389,
+      "strategicEdgePct": 9.994,
+      "cameraPairDistinct": true,
+      "coverage": {
+        "settled": {
+          "measured": true,
+          "declaredCells": 192,
+          "outOfFrame": 0,
+          "selfOccluded": 91,
+          "visibleCells": 101,
+          "coveredCells": 101,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "03-boundary-sheet-f0-06-production-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 1.3653333333333333
+        },
+        "strategic": {
+          "measured": true,
+          "declaredCells": 192,
+          "outOfFrame": 0,
+          "selfOccluded": 39,
+          "visibleCells": 153,
+          "coveredCells": 153,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "03-boundary-sheet-f0-05-strategic-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 1.3653333333333333
+        },
+        "clean": {
+          "measured": true,
+          "declaredCells": 192,
+          "outOfFrame": 0,
+          "selfOccluded": 91,
+          "visibleCells": 101,
+          "coveredCells": 101,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "03-boundary-sheet-f0-06-production-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 1.3653333333333333
+        }
+      },
+      "coveragePct": 100.0,
+      "coverageMissing": 0,
+      "witnessMaxGap": 0.096,
+      "requestedLightRecipe": "daylit",
+      "appliedLightRecipe": "daylit",
+      "frameCensus": {
+        "terrainCells": 192,
+        "water": 0,
+        "volumes": 0,
+        "spans": 0,
+        "overlays": 0,
+        "witnessFigures": 1,
+        "witnessParts": 3,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
+      "figuresInScene": 1,
+      "foreignFigures": 0,
+      "spansOutsideDeclaringBay": 0,
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 0,
+        "mote": 8,
+        "overlay": 1,
+        "unowned": 0,
+        "detachedPracticals": 0
+      },
+      "foreignLightsNeutralized": 0,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ],
+      "terrainPx": 19074,
+      "terrainP50Luma": 126.67
+    },
+    {
+      "capture": 3,
+      "sceneId": "boundary-sheet",
+      "label": "03-boundary-sheet-f1",
+      "frameIndex": 1,
+      "boundary": "earthen-bank",
+      "built": true,
+      "fieldCount": 1,
+      "cellMeshes": 192,
+      "standableCells": 100,
+      "witnesses": 1,
+      "witnessFailures": 0,
+      "frames": [
+        {
+          "file": "03-boundary-sheet-f1-01-early-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 17928,
+          "terrainP05Luma": 24.29,
+          "terrainP50Luma": 127.67,
+          "terrainP95Luma": 171.33,
+          "contentPct": 63.667,
+          "edgePct": 9.283,
+          "meanLuma": 152.48,
+          "p05Luma": 48.21,
+          "p50Luma": 173.33,
+          "p95Luma": 177.61
+        },
+        {
+          "file": "03-boundary-sheet-f1-02-settled-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 17928,
+          "terrainP05Luma": 24.29,
+          "terrainP50Luma": 127.67,
+          "terrainP95Luma": 171.33,
+          "contentPct": 63.667,
+          "edgePct": 9.283,
+          "meanLuma": 152.48,
+          "p05Luma": 48.21,
+          "p50Luma": 173.33,
+          "p95Luma": 177.61,
+          "lumaSpread": 129.4
+        },
+        {
+          "file": "03-boundary-sheet-f1-03-settled-strategic.png",
+          "pixels": 40000,
+          "backdrop": [
+            143,
+            123,
+            115
+          ],
+          "terrainPx": 32852,
+          "terrainP05Luma": 39.58,
+          "terrainP50Luma": 173.33,
+          "terrainP95Luma": 177.61,
+          "contentPct": 83.713,
+          "edgePct": 9.971,
+          "meanLuma": 148.6,
+          "p05Luma": 49.7,
+          "p50Luma": 170.4,
+          "p95Luma": 177.61,
+          "lumaSpread": 127.91
+        },
+        {
+          "file": "03-boundary-sheet-f1-04-clean-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 17600,
+          "terrainP05Luma": 12.58,
+          "terrainP50Luma": 127.67,
+          "terrainP95Luma": 171.33,
+          "contentPct": 63.5,
+          "edgePct": 7.658,
+          "meanLuma": 151.83,
+          "p05Luma": 30.28,
+          "p50Luma": 173.33,
+          "p95Luma": 177.61
+        }
+      ],
+      "productionContentPct": 63.667,
+      "strategicContentPct": 83.713,
+      "productionEdgePct": 9.283,
+      "strategicEdgePct": 9.971,
+      "cameraPairDistinct": true,
+      "coverage": {
+        "settled": {
+          "measured": true,
+          "declaredCells": 192,
+          "outOfFrame": 0,
+          "selfOccluded": 53,
+          "visibleCells": 139,
+          "coveredCells": 139,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "03-boundary-sheet-f1-06-production-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 1.3653333333333333
+        },
+        "strategic": {
+          "measured": true,
+          "declaredCells": 192,
+          "outOfFrame": 0,
+          "selfOccluded": 18,
+          "visibleCells": 174,
+          "coveredCells": 174,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "03-boundary-sheet-f1-05-strategic-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 1.3653333333333333
+        },
+        "clean": {
+          "measured": true,
+          "declaredCells": 192,
+          "outOfFrame": 0,
+          "selfOccluded": 53,
+          "visibleCells": 139,
+          "coveredCells": 139,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "03-boundary-sheet-f1-06-production-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 1.3653333333333333
+        }
+      },
+      "coveragePct": 100.0,
+      "coverageMissing": 0,
+      "witnessMaxGap": 0.096,
+      "requestedLightRecipe": "daylit",
+      "appliedLightRecipe": "daylit",
+      "frameCensus": {
+        "terrainCells": 192,
+        "water": 0,
+        "volumes": 0,
+        "spans": 0,
+        "overlays": 0,
+        "witnessFigures": 1,
+        "witnessParts": 3,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
+      "figuresInScene": 1,
+      "foreignFigures": 0,
+      "spansOutsideDeclaringBay": 0,
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 0,
+        "mote": 8,
+        "overlay": 1,
+        "unowned": 0,
+        "detachedPracticals": 0
+      },
+      "foreignLightsNeutralized": 0,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ],
+      "terrainPx": 17928,
+      "terrainP50Luma": 127.67
+    },
+    {
+      "capture": 3,
+      "sceneId": "boundary-sheet",
+      "label": "03-boundary-sheet-f2",
+      "frameIndex": 2,
+      "boundary": "water-mud",
+      "built": true,
+      "fieldCount": 1,
+      "cellMeshes": 192,
+      "standableCells": 100,
+      "witnesses": 1,
+      "witnessFailures": 0,
+      "frames": [
+        {
+          "file": "03-boundary-sheet-f2-01-early-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 17574,
+          "terrainP05Luma": 24.29,
+          "terrainP50Luma": 127.67,
+          "terrainP95Luma": 171.33,
+          "contentPct": 62.742,
+          "edgePct": 7.198,
+          "meanLuma": 156.46,
+          "p05Luma": 56.21,
+          "p50Luma": 173.4,
+          "p95Luma": 177.61
+        },
+        {
+          "file": "03-boundary-sheet-f2-02-settled-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 17574,
+          "terrainP05Luma": 24.29,
+          "terrainP50Luma": 127.67,
+          "terrainP95Luma": 171.33,
+          "contentPct": 62.742,
+          "edgePct": 7.198,
+          "meanLuma": 156.46,
+          "p05Luma": 56.21,
+          "p50Luma": 173.4,
+          "p95Luma": 177.61,
+          "lumaSpread": 121.4
+        },
+        {
+          "file": "03-boundary-sheet-f2-03-settled-strategic.png",
+          "pixels": 40000,
+          "backdrop": [
+            143,
+            123,
+            115
+          ],
+          "terrainPx": 30049,
+          "terrainP05Luma": 33.58,
+          "terrainP50Luma": 174.33,
+          "terrainP95Luma": 177.61,
+          "contentPct": 76.635,
+          "edgePct": 6.175,
+          "meanLuma": 152.49,
+          "p05Luma": 87.84,
+          "p50Luma": 170.4,
+          "p95Luma": 177.61,
+          "lumaSpread": 89.77
+        },
+        {
+          "file": "03-boundary-sheet-f2-04-clean-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 17247,
+          "terrainP05Luma": 12.58,
+          "terrainP50Luma": 127.67,
+          "terrainP95Luma": 171.33,
+          "contentPct": 62.585,
+          "edgePct": 5.577,
+          "meanLuma": 155.81,
+          "p05Luma": 51.0,
+          "p50Luma": 173.4,
+          "p95Luma": 177.61
+        }
+      ],
+      "productionContentPct": 62.742,
+      "strategicContentPct": 76.635,
+      "productionEdgePct": 7.198,
+      "strategicEdgePct": 6.175,
+      "cameraPairDistinct": true,
+      "coverage": {
+        "settled": {
+          "measured": true,
+          "declaredCells": 192,
+          "outOfFrame": 0,
+          "selfOccluded": 0,
+          "visibleCells": 192,
+          "coveredCells": 192,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "03-boundary-sheet-f2-06-production-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 1.3653333333333333
+        },
+        "strategic": {
+          "measured": true,
+          "declaredCells": 192,
+          "outOfFrame": 0,
+          "selfOccluded": 0,
+          "visibleCells": 192,
+          "coveredCells": 192,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "03-boundary-sheet-f2-05-strategic-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 1.3653333333333333
+        },
+        "clean": {
+          "measured": true,
+          "declaredCells": 192,
+          "outOfFrame": 0,
+          "selfOccluded": 0,
+          "visibleCells": 192,
+          "coveredCells": 192,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "03-boundary-sheet-f2-06-production-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 1.3653333333333333
+        }
+      },
+      "coveragePct": 100.0,
+      "coverageMissing": 0,
+      "witnessMaxGap": 0.096,
+      "requestedLightRecipe": "daylit",
+      "appliedLightRecipe": "daylit",
+      "frameCensus": {
+        "terrainCells": 192,
+        "water": 0,
+        "volumes": 0,
+        "spans": 0,
+        "overlays": 0,
+        "witnessFigures": 1,
+        "witnessParts": 3,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
+      "figuresInScene": 1,
+      "foreignFigures": 0,
+      "spansOutsideDeclaringBay": 0,
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 0,
+        "mote": 8,
+        "overlay": 1,
+        "unowned": 0,
+        "detachedPracticals": 0
+      },
+      "foreignLightsNeutralized": 0,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ],
+      "terrainPx": 17574,
+      "terrainP50Luma": 127.67
+    },
+    {
+      "capture": 3,
+      "sceneId": "boundary-sheet",
+      "label": "03-boundary-sheet-f3",
+      "frameIndex": 3,
+      "boundary": "thorn-thicket",
+      "built": true,
+      "fieldCount": 1,
+      "cellMeshes": 192,
+      "standableCells": 100,
+      "witnesses": 1,
+      "witnessFailures": 0,
+      "frames": [
+        {
+          "file": "03-boundary-sheet-f3-01-early-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 17854,
+          "terrainP05Luma": 23.51,
+          "terrainP50Luma": 127.6,
+          "terrainP95Luma": 171.33,
+          "contentPct": 63.52,
+          "edgePct": 10.269,
+          "meanLuma": 151.58,
+          "p05Luma": 32.8,
+          "p50Luma": 173.33,
+          "p95Luma": 177.61
+        },
+        {
+          "file": "03-boundary-sheet-f3-02-settled-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 17854,
+          "terrainP05Luma": 23.51,
+          "terrainP50Luma": 127.6,
+          "terrainP95Luma": 171.33,
+          "contentPct": 63.52,
+          "edgePct": 10.269,
+          "meanLuma": 151.58,
+          "p05Luma": 32.8,
+          "p50Luma": 173.33,
+          "p95Luma": 177.61,
+          "lumaSpread": 144.81
+        },
+        {
+          "file": "03-boundary-sheet-f3-03-settled-strategic.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 21499,
+          "terrainP05Luma": 24.72,
+          "terrainP50Luma": 126.67,
+          "terrainP95Luma": 171.11,
+          "contentPct": 72.51,
+          "edgePct": 11.073,
+          "meanLuma": 147.68,
+          "p05Luma": 42.08,
+          "p50Luma": 170.4,
+          "p95Luma": 177.61,
+          "lumaSpread": 135.53
+        },
+        {
+          "file": "03-boundary-sheet-f3-04-clean-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 17527,
+          "terrainP05Luma": 12.58,
+          "terrainP50Luma": 126.89,
+          "terrainP95Luma": 171.33,
+          "contentPct": 63.36,
+          "edgePct": 8.643,
+          "meanLuma": 150.92,
+          "p05Luma": 19.57,
+          "p50Luma": 173.33,
+          "p95Luma": 177.61
+        }
+      ],
+      "productionContentPct": 63.52,
+      "strategicContentPct": 72.51,
+      "productionEdgePct": 10.269,
+      "strategicEdgePct": 11.073,
+      "cameraPairDistinct": true,
+      "coverage": {
+        "settled": {
+          "measured": true,
+          "declaredCells": 192,
+          "outOfFrame": 0,
+          "selfOccluded": 0,
+          "visibleCells": 192,
+          "coveredCells": 192,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "03-boundary-sheet-f3-06-production-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 1.3653333333333333
+        },
+        "strategic": {
+          "measured": true,
+          "declaredCells": 192,
+          "outOfFrame": 0,
+          "selfOccluded": 0,
+          "visibleCells": 192,
+          "coveredCells": 192,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "03-boundary-sheet-f3-05-strategic-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 1.3653333333333333
+        },
+        "clean": {
+          "measured": true,
+          "declaredCells": 192,
+          "outOfFrame": 0,
+          "selfOccluded": 0,
+          "visibleCells": 192,
+          "coveredCells": 192,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "03-boundary-sheet-f3-06-production-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 1.3653333333333333
+        }
+      },
+      "coveragePct": 100.0,
+      "coverageMissing": 0,
+      "witnessMaxGap": 0.096,
+      "requestedLightRecipe": "daylit",
+      "appliedLightRecipe": "daylit",
+      "frameCensus": {
+        "terrainCells": 192,
+        "water": 0,
+        "volumes": 32,
+        "spans": 0,
+        "overlays": 0,
+        "witnessFigures": 1,
+        "witnessParts": 3,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
+      "figuresInScene": 1,
+      "foreignFigures": 0,
+      "spansOutsideDeclaringBay": 0,
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 0,
+        "mote": 8,
+        "overlay": 1,
+        "unowned": 0,
+        "detachedPracticals": 0
+      },
+      "foreignLightsNeutralized": 0,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ],
+      "terrainPx": 17854,
+      "terrainP50Luma": 127.6
+    },
+    {
+      "capture": 3,
+      "sceneId": "boundary-sheet",
+      "label": "03-boundary-sheet-f4",
+      "frameIndex": 4,
+      "boundary": "trunk-field",
+      "built": true,
+      "fieldCount": 1,
+      "cellMeshes": 192,
+      "standableCells": 100,
+      "witnesses": 1,
+      "witnessFailures": 0,
+      "frames": [
+        {
+          "file": "03-boundary-sheet-f4-01-early-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 17964,
+          "terrainP05Luma": 22.86,
+          "terrainP50Luma": 127.67,
+          "terrainP95Luma": 171.33,
+          "contentPct": 63.925,
+          "edgePct": 10.773,
+          "meanLuma": 150.65,
+          "p05Luma": 26.9,
+          "p50Luma": 173.33,
+          "p95Luma": 177.61
+        },
+        {
+          "file": "03-boundary-sheet-f4-02-settled-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 17964,
+          "terrainP05Luma": 22.86,
+          "terrainP50Luma": 127.67,
+          "terrainP95Luma": 171.33,
+          "contentPct": 63.925,
+          "edgePct": 10.773,
+          "meanLuma": 150.65,
+          "p05Luma": 26.9,
+          "p50Luma": 173.33,
+          "p95Luma": 177.61,
+          "lumaSpread": 150.71
+        },
+        {
+          "file": "03-boundary-sheet-f4-03-settled-strategic.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 21491,
+          "terrainP05Luma": 24.29,
+          "terrainP50Luma": 126.67,
+          "terrainP95Luma": 171.11,
+          "contentPct": 72.485,
+          "edgePct": 10.965,
+          "meanLuma": 147.49,
+          "p05Luma": 33.58,
+          "p50Luma": 170.4,
+          "p95Luma": 177.61,
+          "lumaSpread": 144.03
+        },
+        {
+          "file": "03-boundary-sheet-f4-04-clean-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 17637,
+          "terrainP05Luma": 12.58,
+          "terrainP50Luma": 127.67,
+          "terrainP95Luma": 171.33,
+          "contentPct": 63.767,
+          "edgePct": 9.148,
+          "meanLuma": 150.0,
+          "p05Luma": 18.76,
+          "p50Luma": 173.33,
+          "p95Luma": 177.61
+        }
+      ],
+      "productionContentPct": 63.925,
+      "strategicContentPct": 72.485,
+      "productionEdgePct": 10.773,
+      "strategicEdgePct": 10.965,
+      "cameraPairDistinct": true,
+      "coverage": {
+        "settled": {
+          "measured": true,
+          "declaredCells": 192,
+          "outOfFrame": 0,
+          "selfOccluded": 0,
+          "visibleCells": 192,
+          "coveredCells": 192,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "03-boundary-sheet-f4-06-production-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 1.3653333333333333
+        },
+        "strategic": {
+          "measured": true,
+          "declaredCells": 192,
+          "outOfFrame": 0,
+          "selfOccluded": 0,
+          "visibleCells": 192,
+          "coveredCells": 192,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "03-boundary-sheet-f4-05-strategic-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 1.3653333333333333
+        },
+        "clean": {
+          "measured": true,
+          "declaredCells": 192,
+          "outOfFrame": 0,
+          "selfOccluded": 0,
+          "visibleCells": 192,
+          "coveredCells": 192,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "03-boundary-sheet-f4-06-production-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 1.3653333333333333
+        }
+      },
+      "coveragePct": 100.0,
+      "coverageMissing": 0,
+      "witnessMaxGap": 0.096,
+      "requestedLightRecipe": "daylit",
+      "appliedLightRecipe": "daylit",
+      "frameCensus": {
+        "terrainCells": 192,
+        "water": 0,
+        "volumes": 32,
+        "spans": 0,
+        "overlays": 0,
+        "witnessFigures": 1,
+        "witnessParts": 3,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
+      "figuresInScene": 1,
+      "foreignFigures": 0,
+      "spansOutsideDeclaringBay": 0,
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 0,
+        "mote": 8,
+        "overlay": 1,
+        "unowned": 0,
+        "detachedPracticals": 0
+      },
+      "foreignLightsNeutralized": 0,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ],
+      "terrainPx": 17964,
+      "terrainP50Luma": 127.67
+    },
+    {
+      "capture": 3,
+      "sceneId": "boundary-sheet",
+      "label": "03-boundary-sheet-f5",
+      "frameIndex": 5,
+      "boundary": "fog-volume",
+      "built": true,
+      "fieldCount": 1,
+      "cellMeshes": 192,
+      "standableCells": 100,
+      "witnesses": 1,
+      "witnessFailures": 0,
+      "frames": [
+        {
+          "file": "03-boundary-sheet-f5-01-early-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 17707,
+          "terrainP05Luma": 24.29,
+          "terrainP50Luma": 137.53,
+          "terrainP95Luma": 171.33,
+          "contentPct": 63.312,
+          "edgePct": 8.131,
+          "meanLuma": 156.48,
+          "p05Luma": 56.21,
+          "p50Luma": 173.33,
+          "p95Luma": 177.61
+        },
+        {
+          "file": "03-boundary-sheet-f5-02-settled-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 17707,
+          "terrainP05Luma": 24.29,
+          "terrainP50Luma": 137.53,
+          "terrainP95Luma": 171.33,
+          "contentPct": 63.312,
+          "edgePct": 8.131,
+          "meanLuma": 156.48,
+          "p05Luma": 56.21,
+          "p50Luma": 173.33,
+          "p95Luma": 177.61,
+          "lumaSpread": 121.4
+        },
+        {
+          "file": "03-boundary-sheet-f5-03-settled-strategic.png",
+          "pixels": 40000,
+          "backdrop": [
+            143,
+            123,
+            115
+          ],
+          "terrainPx": 31758,
+          "terrainP05Luma": 35.51,
+          "terrainP50Luma": 173.4,
+          "terrainP95Luma": 177.61,
+          "contentPct": 81.605,
+          "edgePct": 7.902,
+          "meanLuma": 152.96,
+          "p05Luma": 87.84,
+          "p50Luma": 170.4,
+          "p95Luma": 177.61,
+          "lumaSpread": 89.77
+        },
+        {
+          "file": "03-boundary-sheet-f5-04-clean-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 17380,
+          "terrainP05Luma": 12.58,
+          "terrainP50Luma": 135.18,
+          "terrainP95Luma": 171.33,
+          "contentPct": 63.155,
+          "edgePct": 6.506,
+          "meanLuma": 155.83,
+          "p05Luma": 51.0,
+          "p50Luma": 173.4,
+          "p95Luma": 177.61
+        }
+      ],
+      "productionContentPct": 63.312,
+      "strategicContentPct": 81.605,
+      "productionEdgePct": 8.131,
+      "strategicEdgePct": 7.902,
+      "cameraPairDistinct": true,
+      "coverage": {
+        "settled": {
+          "measured": true,
+          "declaredCells": 192,
+          "outOfFrame": 0,
+          "selfOccluded": 0,
+          "visibleCells": 192,
+          "coveredCells": 192,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "03-boundary-sheet-f5-06-production-backdrop-plate.png",
+          "plateDistanceP05": 127,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 1.3653333333333333
+        },
+        "strategic": {
+          "measured": true,
+          "declaredCells": 192,
+          "outOfFrame": 0,
+          "selfOccluded": 0,
+          "visibleCells": 192,
+          "coveredCells": 192,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "03-boundary-sheet-f5-05-strategic-backdrop-plate.png",
+          "plateDistanceP05": 112,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 1.3653333333333333
+        },
+        "clean": {
+          "measured": true,
+          "declaredCells": 192,
+          "outOfFrame": 0,
+          "selfOccluded": 0,
+          "visibleCells": 192,
+          "coveredCells": 192,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "03-boundary-sheet-f5-06-production-backdrop-plate.png",
+          "plateDistanceP05": 127,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 1.3653333333333333
+        }
+      },
+      "coveragePct": 100.0,
+      "coverageMissing": 0,
+      "witnessMaxGap": 0.096,
+      "requestedLightRecipe": "daylit",
+      "appliedLightRecipe": "daylit",
+      "frameCensus": {
+        "terrainCells": 192,
+        "water": 0,
+        "volumes": 32,
+        "spans": 0,
+        "overlays": 0,
+        "witnessFigures": 1,
+        "witnessParts": 3,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
+      "figuresInScene": 1,
+      "foreignFigures": 0,
+      "spansOutsideDeclaringBay": 0,
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 0,
+        "mote": 8,
+        "overlay": 1,
+        "unowned": 0,
+        "detachedPracticals": 0
+      },
+      "foreignLightsNeutralized": 0,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ],
+      "terrainPx": 17707,
+      "terrainP50Luma": 137.53
+    },
+    {
+      "capture": 4,
+      "sceneId": "route-proof",
+      "label": "04-route-proof",
+      "frameIndex": null,
+      "boundary": null,
+      "built": true,
+      "fieldCount": 1,
+      "cellMeshes": 192,
+      "standableCells": 100,
+      "witnesses": 2,
+      "witnessFailures": 0,
+      "frames": [
+        {
+          "file": "04-route-proof-01-early-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 17798,
+          "terrainP05Luma": 24.29,
+          "terrainP50Luma": 128.89,
+          "terrainP95Luma": 171.33,
+          "contentPct": 63.355,
+          "edgePct": 9.907,
+          "meanLuma": 152.93,
+          "p05Luma": 48.28,
+          "p50Luma": 173.33,
+          "p95Luma": 177.61
+        },
+        {
+          "file": "04-route-proof-02-settled-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 17798,
+          "terrainP05Luma": 24.29,
+          "terrainP50Luma": 128.89,
+          "terrainP95Luma": 171.33,
+          "contentPct": 63.355,
+          "edgePct": 9.907,
+          "meanLuma": 152.93,
+          "p05Luma": 48.28,
+          "p50Luma": 173.33,
+          "p95Luma": 177.61,
+          "lumaSpread": 129.33
+        },
+        {
+          "file": "04-route-proof-03-settled-strategic.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 21393,
+          "terrainP05Luma": 24.72,
+          "terrainP50Luma": 126.67,
+          "terrainP95Luma": 171.11,
+          "contentPct": 72.245,
+          "edgePct": 11.867,
+          "meanLuma": 148.8,
+          "p05Luma": 49.43,
+          "p50Luma": 170.4,
+          "p95Luma": 177.61,
+          "lumaSpread": 128.18
+        },
+        {
+          "file": "04-route-proof-04-clean-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 17471,
+          "terrainP05Luma": 12.58,
+          "terrainP50Luma": 127.89,
+          "terrainP95Luma": 171.4,
+          "contentPct": 63.197,
+          "edgePct": 8.284,
+          "meanLuma": 152.28,
+          "p05Luma": 30.21,
+          "p50Luma": 173.4,
+          "p95Luma": 177.61
+        }
+      ],
+      "productionContentPct": 63.355,
+      "strategicContentPct": 72.245,
+      "productionEdgePct": 9.907,
+      "strategicEdgePct": 11.867,
+      "cameraPairDistinct": true,
+      "coverage": {
+        "settled": {
+          "measured": true,
+          "declaredCells": 192,
+          "outOfFrame": 0,
+          "selfOccluded": 54,
+          "visibleCells": 138,
+          "coveredCells": 138,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "04-route-proof-06-production-backdrop-plate.png",
+          "plateDistanceP05": 72,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 1.3653333333333333
+        },
+        "strategic": {
+          "measured": true,
+          "declaredCells": 192,
+          "outOfFrame": 0,
+          "selfOccluded": 17,
+          "visibleCells": 175,
+          "coveredCells": 175,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "04-route-proof-05-strategic-backdrop-plate.png",
+          "plateDistanceP05": 72,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 1.3653333333333333
+        },
+        "clean": {
+          "measured": true,
+          "declaredCells": 192,
+          "outOfFrame": 0,
+          "selfOccluded": 54,
+          "visibleCells": 138,
+          "coveredCells": 138,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "04-route-proof-06-production-backdrop-plate.png",
+          "plateDistanceP05": 72,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 1.3653333333333333
+        }
+      },
+      "coveragePct": 100.0,
+      "coverageMissing": 0,
+      "witnessMaxGap": 0.096,
+      "requestedLightRecipe": "daylit",
+      "appliedLightRecipe": "daylit",
+      "frameCensus": {
+        "terrainCells": 192,
+        "water": 0,
+        "volumes": 0,
+        "spans": 0,
+        "overlays": 20,
+        "witnessFigures": 2,
+        "witnessParts": 6,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
+      "figuresInScene": 2,
+      "foreignFigures": 0,
+      "spansOutsideDeclaringBay": 0,
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 0,
+        "mote": 8,
+        "overlay": 1,
+        "unowned": 0,
+        "detachedPracticals": 0
+      },
+      "foreignLightsNeutralized": 0,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ],
+      "terrainPx": 17798,
+      "terrainP50Luma": 128.89
+    },
+    {
+      "capture": 5,
+      "sceneId": "walk-down-16",
+      "label": "05-walk-down-16",
+      "frameIndex": null,
+      "boundary": null,
+      "built": true,
+      "fieldCount": 1,
+      "cellMeshes": 8,
+      "standableCells": 8,
+      "witnesses": 1,
+      "witnessFailures": 0,
+      "frames": [
+        {
+          "file": "05-walk-down-16-01-early-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 25940,
+          "terrainP05Luma": 26.08,
+          "terrainP50Luma": 92.76,
+          "terrainP95Luma": 170.4,
+          "contentPct": 77.097,
+          "edgePct": 7.43,
+          "meanLuma": 125.85,
+          "p05Luma": 49.57,
+          "p50Luma": 159.19,
+          "p95Luma": 177.61
+        },
+        {
+          "file": "05-walk-down-16-02-settled-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 25940,
+          "terrainP05Luma": 26.08,
+          "terrainP50Luma": 92.76,
+          "terrainP95Luma": 170.4,
+          "contentPct": 77.097,
+          "edgePct": 7.43,
+          "meanLuma": 125.85,
+          "p05Luma": 49.57,
+          "p50Luma": 159.19,
+          "p95Luma": 177.61,
+          "lumaSpread": 128.04
+        },
+        {
+          "file": "05-walk-down-16-03-settled-strategic.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 19487,
+          "terrainP05Luma": 24.29,
+          "terrainP50Luma": 126.67,
+          "terrainP95Luma": 171.11,
+          "contentPct": 67.498,
+          "edgePct": 7.01,
+          "meanLuma": 147.43,
+          "p05Luma": 53.28,
+          "p50Luma": 172.33,
+          "p95Luma": 177.61,
+          "lumaSpread": 124.33
+        },
+        {
+          "file": "05-walk-down-16-04-clean-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 25612,
+          "terrainP05Luma": 13.58,
+          "terrainP50Luma": 92.54,
+          "terrainP95Luma": 170.4,
+          "contentPct": 76.93,
+          "edgePct": 5.808,
+          "meanLuma": 125.2,
+          "p05Luma": 16.23,
+          "p50Luma": 161.19,
+          "p95Luma": 177.61
+        }
+      ],
+      "productionContentPct": 77.097,
+      "strategicContentPct": 67.498,
+      "productionEdgePct": 7.43,
+      "strategicEdgePct": 7.01,
+      "cameraPairDistinct": true,
+      "coverage": {
+        "settled": {
+          "measured": true,
+          "declaredCells": 8,
+          "outOfFrame": 0,
+          "selfOccluded": 0,
+          "visibleCells": 8,
+          "coveredCells": 8,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "05-walk-down-16-06-production-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 0.3413333333333333
+        },
+        "strategic": {
+          "measured": true,
+          "declaredCells": 8,
+          "outOfFrame": 0,
+          "selfOccluded": 0,
+          "visibleCells": 8,
+          "coveredCells": 8,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "05-walk-down-16-05-strategic-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 0.3413333333333333
+        },
+        "clean": {
+          "measured": true,
+          "declaredCells": 8,
+          "outOfFrame": 0,
+          "selfOccluded": 0,
+          "visibleCells": 8,
+          "coveredCells": 8,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "05-walk-down-16-06-production-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 0.3413333333333333
+        }
+      },
+      "coveragePct": 100.0,
+      "coverageMissing": 0,
+      "witnessMaxGap": 0.096,
+      "requestedLightRecipe": "daylit",
+      "appliedLightRecipe": "daylit",
+      "frameCensus": {
+        "terrainCells": 8,
+        "water": 0,
+        "volumes": 0,
+        "spans": 0,
+        "overlays": 0,
+        "witnessFigures": 1,
+        "witnessParts": 3,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
+      "figuresInScene": 1,
+      "foreignFigures": 0,
+      "spansOutsideDeclaringBay": 0,
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 0,
+        "mote": 8,
+        "overlay": 1,
+        "unowned": 0,
+        "detachedPracticals": 0
+      },
+      "foreignLightsNeutralized": 0,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ],
+      "terrainPx": 25940,
+      "terrainP50Luma": 92.76
+    },
+    {
+      "capture": 6,
+      "sceneId": "support-graph",
+      "label": "06-support-graph",
+      "frameIndex": null,
+      "boundary": null,
+      "built": true,
+      "fieldCount": 1,
+      "cellMeshes": 192,
+      "standableCells": 100,
+      "witnesses": 2,
+      "witnessFailures": 0,
+      "frames": [
+        {
+          "file": "06-support-graph-01-early-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 17798,
+          "terrainP05Luma": 24.29,
+          "terrainP50Luma": 131.69,
+          "terrainP95Luma": 171.33,
+          "contentPct": 63.355,
+          "edgePct": 9.606,
+          "meanLuma": 152.96,
+          "p05Luma": 49.21,
+          "p50Luma": 173.33,
+          "p95Luma": 177.61
+        },
+        {
+          "file": "06-support-graph-02-settled-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 17798,
+          "terrainP05Luma": 24.29,
+          "terrainP50Luma": 131.69,
+          "terrainP95Luma": 171.33,
+          "contentPct": 63.355,
+          "edgePct": 9.606,
+          "meanLuma": 152.96,
+          "p05Luma": 49.21,
+          "p50Luma": 173.33,
+          "p95Luma": 177.61,
+          "lumaSpread": 128.4
+        },
+        {
+          "file": "06-support-graph-03-settled-strategic.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 21393,
+          "terrainP05Luma": 24.72,
+          "terrainP50Luma": 127.63,
+          "terrainP95Luma": 171.11,
+          "contentPct": 72.245,
+          "edgePct": 11.232,
+          "meanLuma": 148.88,
+          "p05Luma": 52.0,
+          "p50Luma": 170.4,
+          "p95Luma": 177.61,
+          "lumaSpread": 125.61
+        },
+        {
+          "file": "06-support-graph-04-clean-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            192,
+            174,
+            171
+          ],
+          "terrainPx": 17471,
+          "terrainP05Luma": 12.58,
+          "terrainP50Luma": 130.54,
+          "terrainP95Luma": 171.33,
+          "contentPct": 63.197,
+          "edgePct": 7.982,
+          "meanLuma": 152.31,
+          "p05Luma": 32.0,
+          "p50Luma": 173.4,
+          "p95Luma": 177.61
+        }
+      ],
+      "productionContentPct": 63.355,
+      "strategicContentPct": 72.245,
+      "productionEdgePct": 9.606,
+      "strategicEdgePct": 11.232,
+      "cameraPairDistinct": true,
+      "coverage": {
+        "settled": {
+          "measured": true,
+          "declaredCells": 192,
+          "outOfFrame": 0,
+          "selfOccluded": 54,
+          "visibleCells": 138,
+          "coveredCells": 138,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "06-support-graph-06-production-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 1.3653333333333333
+        },
+        "strategic": {
+          "measured": true,
+          "declaredCells": 192,
+          "outOfFrame": 0,
+          "selfOccluded": 17,
+          "visibleCells": 175,
+          "coveredCells": 175,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "06-support-graph-05-strategic-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 1.3653333333333333
+        },
+        "clean": {
+          "measured": true,
+          "declaredCells": 192,
+          "outOfFrame": 0,
+          "selfOccluded": 54,
+          "visibleCells": 138,
+          "coveredCells": 138,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "06-support-graph-06-production-backdrop-plate.png",
+          "plateDistanceP05": 156,
+          "plateDistanceP50": 156,
+          "cameraFar": 116.63311323763995,
+          "cameraNear": 0.1,
+          "clayZoom": 1.3653333333333333
+        }
+      },
+      "coveragePct": 100.0,
+      "coverageMissing": 0,
+      "witnessMaxGap": 0.096,
+      "requestedLightRecipe": "daylit",
+      "appliedLightRecipe": "daylit",
+      "frameCensus": {
+        "terrainCells": 192,
+        "water": 0,
+        "volumes": 0,
+        "spans": 0,
+        "overlays": 0,
+        "witnessFigures": 2,
+        "witnessParts": 6,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
+      "figuresInScene": 2,
+      "foreignFigures": 0,
+      "spansOutsideDeclaringBay": 0,
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 0,
+        "mote": 8,
+        "overlay": 1,
+        "unowned": 0,
+        "detachedPracticals": 0
+      },
+      "foreignLightsNeutralized": 0,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ],
+      "terrainPx": 17798,
+      "terrainP50Luma": 131.69
+    },
+    {
+      "capture": 7,
+      "sceneId": "dark",
+      "label": "07-dark",
+      "frameIndex": null,
+      "boundary": null,
+      "built": true,
+      "fieldCount": 1,
+      "cellMeshes": 564,
+      "standableCells": 546,
+      "witnesses": 13,
+      "witnessFailures": 0,
+      "frames": [
+        {
+          "file": "07-dark-01-early-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            87,
+            80,
+            88
+          ],
+          "terrainPx": 15377,
+          "terrainP05Luma": 5.73,
+          "terrainP50Luma": 6.8,
+          "terrainP95Luma": 75.07,
+          "contentPct": 58.78,
+          "edgePct": 4.366,
+          "meanLuma": 59.94,
+          "p05Luma": 6.73,
+          "p50Luma": 78.85,
+          "p95Luma": 82.07
+        },
+        {
+          "file": "07-dark-02-settled-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            87,
+            80,
+            88
+          ],
+          "terrainPx": 15377,
+          "terrainP05Luma": 5.73,
+          "terrainP50Luma": 6.8,
+          "terrainP95Luma": 75.07,
+          "contentPct": 58.78,
+          "edgePct": 4.366,
+          "meanLuma": 59.94,
+          "p05Luma": 6.73,
+          "p50Luma": 78.85,
+          "p95Luma": 82.07,
+          "lumaSpread": 75.34
+        },
+        {
+          "file": "07-dark-03-settled-strategic.png",
+          "pixels": 40000,
+          "backdrop": [
+            3,
+            7,
+            16
+          ],
+          "terrainPx": 24956,
+          "terrainP05Luma": 25.29,
+          "terrainP50Luma": 79.07,
+          "terrainP95Luma": 82.07,
+          "contentPct": 65.418,
+          "edgePct": 4.971,
+          "meanLuma": 48.4,
+          "p05Luma": 5.87,
+          "p50Luma": 74.07,
+          "p95Luma": 81.35,
+          "lumaSpread": 75.48
+        },
+        {
+          "file": "07-dark-04-clean-production.png",
+          "pixels": 40000,
+          "backdrop": [
+            87,
+            80,
+            88
+          ],
+          "terrainPx": 14920,
+          "terrainP05Luma": 5.59,
+          "terrainP50Luma": 6.8,
+          "terrainP95Luma": 75.07,
+          "contentPct": 58.42,
+          "edgePct": 3.407,
+          "meanLuma": 59.04,
+          "p05Luma": 6.73,
+          "p50Luma": 79.07,
+          "p95Luma": 82.07
+        }
+      ],
+      "productionContentPct": 58.78,
+      "strategicContentPct": 65.418,
+      "productionEdgePct": 4.366,
+      "strategicEdgePct": 4.971,
+      "cameraPairDistinct": true,
+      "coverage": {
+        "settled": {
+          "measured": true,
+          "declaredCells": 564,
+          "outOfFrame": 0,
+          "selfOccluded": 70,
+          "visibleCells": 494,
+          "coveredCells": 494,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "07-dark-06-production-backdrop-plate.png",
+          "plateDistanceP05": 229,
+          "plateDistanceP50": 229,
+          "cameraFar": 146.5246159106866,
+          "cameraNear": 0.1,
+          "clayZoom": 2.048
+        },
+        "strategic": {
+          "measured": true,
+          "declaredCells": 564,
+          "outOfFrame": 0,
+          "selfOccluded": 4,
+          "visibleCells": 560,
+          "coveredCells": 560,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "07-dark-05-strategic-backdrop-plate.png",
+          "plateDistanceP05": 227,
+          "plateDistanceP50": 229,
+          "cameraFar": 146.5246159106866,
+          "cameraNear": 0.1,
+          "clayZoom": 2.048
+        },
+        "clean": {
+          "measured": true,
+          "declaredCells": 564,
+          "outOfFrame": 0,
+          "selfOccluded": 70,
+          "visibleCells": 494,
+          "coveredCells": 494,
+          "coveragePct": 100.0,
+          "framedPct": 100.0,
+          "missingCells": 0,
+          "missingSample": [],
+          "plate": "07-dark-06-production-backdrop-plate.png",
+          "plateDistanceP05": 229,
+          "plateDistanceP50": 229,
+          "cameraFar": 146.5246159106866,
+          "cameraNear": 0.1,
+          "clayZoom": 2.048
+        }
+      },
+      "coveragePct": 100.0,
+      "coverageMissing": 0,
+      "witnessMaxGap": 0.096,
+      "requestedLightRecipe": "dark",
+      "appliedLightRecipe": "dark",
+      "frameCensus": {
+        "terrainCells": 564,
+        "water": 5,
+        "volumes": 0,
+        "spans": 2,
+        "overlays": 0,
+        "witnessFigures": 13,
+        "witnessParts": 39,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [
+          [
+            -11.5,
+            -0.3,
+            8
+          ],
+          [
+            -11,
+            -0.3,
+            8
+          ]
+        ],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
+      "figuresInScene": 13,
+      "foreignFigures": 0,
+      "spansOutsideDeclaringBay": 0,
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 0,
+        "mote": 8,
+        "overlay": 1,
+        "unowned": 0,
+        "detachedPracticals": 0
+      },
+      "foreignLightsNeutralized": 6,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ],
+      "terrainPx": 15377,
+      "terrainP50Luma": 6.8
+    }
+  ],
+  "gates": {
+    "walkableCellsAbove30Deg": 0,
+    "maxWalkableSlopeDeg": 26.5651,
+    "illegalWalkEdges": 0,
+    "unownedFacesAt2hPlus": 0,
+    "unreachableStandableSurfaces": 0,
+    "boundaryStringsResolved": 7,
+    "boundaryStringsTotal": 7,
+    "boundaryKinds": 6,
+    "d50Terrain": 37,
+    "d50NonTerrainDeclared": 13,
+    "d50Unresolved": 0,
+    "d50Total": 50,
+    "coveragePlaced": 18,
+    "coverageTotal": 18,
+    "coverageCanonicalForms": 13,
+    "coverageFailed": []
+  },
+  "failures": [],
+  "oneClamp": {
+    "sameGenerator": true,
+    "sameParametersExceptClamp": true,
+    "parameterDiff": [
+      "slopeClamp"
+    ],
+    "hill": {
+      "maxWalkStepH": 1,
+      "maxWalkSlopeDeg": 26.56505117707799,
+      "faces": 0,
+      "maxH": 4,
+      "fingerprint": "daf2e882-0fc6d988"
+    },
+    "cliff": {
+      "maxWalkStepH": 1,
+      "maxWalkSlopeDeg": 26.56505117707799,
+      "faces": 20,
+      "maxH": 6,
+      "fingerprint": "c196c924-8e7b621e"
+    },
+    "cellsLoweredByClamp": 20,
+    "hillHasNoFaces": true,
+    "cliffHasFaces": true,
+    "verdict": "ONE CHASSIS \u2014 hill and cliff differ only by slopeClamp"
+  },
+  "walkDown": {
+    "degraded": true,
+    "legalBoard": true,
+    "requestedFootprintCells": 30,
+    "finalFootprintCells": 8,
+    "trayCells": 16
+  },
+  "fingerprints": [
+    {
+      "id": "cl-f07a-thirteen-piece-sheet",
+      "fingerprint": "79460788-46a623f4"
+    },
+    {
+      "id": "cl-f07a-one-clamp-hill",
+      "fingerprint": "daf2e882-0fc6d988"
+    },
+    {
+      "id": "cl-f07a-one-clamp-cliff",
+      "fingerprint": "c196c924-8e7b621e"
+    },
+    {
+      "id": "cl-f07a-boundary-sheer-cliff",
+      "fingerprint": "8a33b47a-5f625056"
+    },
+    {
+      "id": "cl-f07a-boundary-earthen-bank",
+      "fingerprint": "23d65508-2dd14e1c"
+    },
+    {
+      "id": "cl-f07a-boundary-water-mud",
+      "fingerprint": "3ef9da18-96212144"
+    },
+    {
+      "id": "cl-f07a-boundary-thorn-thicket",
+      "fingerprint": "f2eccc68-4b2a2106"
+    },
+    {
+      "id": "cl-f07a-boundary-trunk-field",
+      "fingerprint": "90037868-9d9c27ec"
+    },
+    {
+      "id": "cl-f07a-boundary-fog-volume",
+      "fingerprint": "7db7e418-a1cf0166"
+    },
+    {
+      "id": "cl-f07a-route-proof",
+      "fingerprint": "cd5337bb-de6ce58b"
+    },
+    {
+      "id": "cl-f07a-walk-down-16",
+      "fingerprint": "3aa808e1-8988671d"
+    },
+    {
+      "id": "cl-f07a-route-proof",
+      "fingerprint": "cd5337bb-de6ce58b"
+    },
+    {
+      "id": "cl-f07a-dark",
+      "fingerprint": "a471c61a-8d97041e"
+    }
+  ],
+  "litTerrainP50": {
+    "01-thirteen-piece-sheet": 126.67,
+    "02-one-clamp-proof": 158.97,
+    "03-boundary-sheet-f0": 126.67,
+    "03-boundary-sheet-f1": 127.67,
+    "03-boundary-sheet-f2": 127.67,
+    "03-boundary-sheet-f3": 127.6,
+    "03-boundary-sheet-f4": 127.67,
+    "03-boundary-sheet-f5": 137.53,
+    "04-route-proof": 128.89,
+    "05-walk-down-16": 92.76,
+    "06-support-graph": 131.69
+  },
+  "determinism": {
+    "gate": "same segment id -> byte-identical heightfield, twice, in separate page loads",
+    "pageLoads": 2,
+    "fieldsCompared": 13,
+    "byteIdentical": true,
+    "fingerprintsIdentical": true,
+    "fingerprints": [
+      {
+        "scene": "thirteen-piece-sheet",
+        "id": "cl-f07a-thirteen-piece-sheet",
+        "fingerprint": "79460788-46a623f4"
+      },
+      {
+        "scene": "one-clamp-proof",
+        "id": "cl-f07a-one-clamp-hill",
+        "fingerprint": "daf2e882-0fc6d988"
+      },
+      {
+        "scene": "one-clamp-proof",
+        "id": "cl-f07a-one-clamp-cliff",
+        "fingerprint": "c196c924-8e7b621e"
+      },
+      {
+        "scene": "boundary-sheet",
+        "id": "cl-f07a-boundary-sheer-cliff",
+        "fingerprint": "8a33b47a-5f625056"
+      },
+      {
+        "scene": "boundary-sheet",
+        "id": "cl-f07a-boundary-earthen-bank",
+        "fingerprint": "23d65508-2dd14e1c"
+      },
+      {
+        "scene": "boundary-sheet",
+        "id": "cl-f07a-boundary-water-mud",
+        "fingerprint": "3ef9da18-96212144"
+      },
+      {
+        "scene": "boundary-sheet",
+        "id": "cl-f07a-boundary-thorn-thicket",
+        "fingerprint": "f2eccc68-4b2a2106"
+      },
+      {
+        "scene": "boundary-sheet",
+        "id": "cl-f07a-boundary-trunk-field",
+        "fingerprint": "90037868-9d9c27ec"
+      },
+      {
+        "scene": "boundary-sheet",
+        "id": "cl-f07a-boundary-fog-volume",
+        "fingerprint": "7db7e418-a1cf0166"
+      },
+      {
+        "scene": "route-proof",
+        "id": "cl-f07a-route-proof",
+        "fingerprint": "cd5337bb-de6ce58b"
+      },
+      {
+        "scene": "walk-down-16",
+        "id": "cl-f07a-walk-down-16",
+        "fingerprint": "3aa808e1-8988671d"
+      },
+      {
+        "scene": "support-graph",
+        "id": "cl-f07a-route-proof",
+        "fingerprint": "cd5337bb-de6ce58b"
+      },
+      {
+        "scene": "dark",
+        "id": "cl-f07a-dark",
+        "fingerprint": "a471c61a-8d97041e"
+      }
+    ],
+    "result": "PASS"
+  },
+  "scenesMeasured": 12,
+  "result": "PASS"
+}

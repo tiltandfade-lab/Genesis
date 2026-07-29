@@ -1878,3 +1878,84 @@ Binding consequences:
   inside inner wall bounds, rises remain equal, adjacent solids overlap at contact, the top tread
   meets its landing, a retaining curb yields the stair opening, and a doorway cannot intersect the
   raised platform. Illegal compositions reject loudly instead of rendering a curated exception.
+
+## TERRAIN CONTINUITY OVER CELLWISE DISRUPTION (Adam, 2026-07-28 — binding; verbatim)
+
+> "the repo is starting to get messy, so this should be the last run before a clean up most likely, but claude took a stab at starting to build terrain, and it did a decent job at getting us started, though things are a bit random and disjointed, looks more like the effects of an earthquake spell, but still, we are getting somewhere"
+
+> "it has drafted some changes, problems etc...i just need you to do a deep review of it's work and see where you can make some improvements based on the idea that we are aiming for FFT XCOM, FFT terrain is great, but we do want some modern edges to the shapes so that things don't just look like a minecraft map with terrain angle modifier, the angles need to matter and suggest continuity of terrain"
+
+> "but this has that kind of sedimentary regular ridge that i rejected in the claude pass, make sure that's not part of the actual terrain engine"
+
+Binding consequences:
+
+- An angle is evidence of a continuing landform, not a cosmetic rotation applied independently to
+  cells. A slope must have a readable approach, continuation, and termination; isolated steps,
+  crests, and feet remain terraces or risers unless the logical field authors a real run.
+- Cells that visually claim one terrace or ramp publish the same height at their shared boundary.
+  Per-cell noise, folds, diagonals, skirts, and material seams may not reopen that edge.
+- FFT supplies the readable tier-and-ramp grammar. The modern/XCOM edge is stronger regional
+  silhouette, restrained construction seams, selective relief boundaries, and facets aligned to the
+  terrain's fall line. The result may retain a five-foot grid without making the square lattice the
+  darkest or most important shape.
+- Fine material structure does not mint a second tactical grid. It terminates, staggers, or reduces
+  to value texture before the cell boundary; each tactical shared edge is drawn once.
+- Repeated horizontal sedimentary ridges are not a terrain-engine dressing device. They may not be
+  retained as low-relief geometry, a material-value stripe, a hidden rung, or a fixture-only toggle.
+  A realm-specific material may express geology later only through its own approved irregular
+  parent; the generic terrain silhouette cannot impose regular strata.
+- This is the last additive terrain-expression pass before consolidation. Further work begins by
+  cleaning the studies, receipts, amended decisions, and branch stack, then ruling on a cell-cap
+  versus field-contour production architecture.
+
+## RESPONSIVE FFT TILE CONTOURS (Adam, 2026-07-28 — binding correction; verbatim)
+
+> "no, that's actually a downgrade, claudes take was closer because there were varying angles per grid tile, which is the idea, its just if one grid has an angle, in most cases the next grid til should connect in a responsive way so that terrain has hills, bumps, dips, natural rises, natural falls that make sense. sometimes a curb does make sense, if the riser is part of a rising cliff or canyon wall, other times the rising needs to be gradual like in hills, or places where roots might have pushed up the earth
+>
+> you just kind of gave each tile it's own random terrain and that's weird and can probably be used in this process but generally fails"
+
+> "study a FFT map! try to recreate some of the features in our own engine!"
+
+Binding consequences:
+
+- This correction supersedes the prior rule that isolated crests, feet, and corners should
+  generally be flattened. Variation in angle per tactical tile is required: a hill may pass through
+  incline, convex crest, concave transition, saddle, and rolling tiles.
+- Continuity is responsive, not uniform. Adjacent natural tiles negotiate shared edge-midpoint and
+  corner heights while retaining their own centre datum, so the local angle may change across the
+  join without opening a crack.
+- A curb is semantic. It remains where an authored terrace, cliff, canyon wall, crevice, chasm,
+  earthen bank, or root undercut needs a riser. A generic one-height natural neighbour relationship
+  is a grade at the production register, not an automatic curb.
+- Deterministic per-cell variation is not automatically terrain structure. Random folds and
+  independent height noise are forbidden as a field-wide terrain generator; local micro-relief is
+  limited to feature-bearing berm, scree, and root-ground pieces and must vanish at shared edges.
+- The generic engine uses FFT's corner-response grammar—flat, incline, convex, and concave as the
+  required core, with saddle and rolling transitions as modern extensions. Stronger regional
+  silhouettes and selective hard breaks provide the modern edge without converting the map into
+  Minecraft cubes with individually tilted tops.
+
+## AUTHORED TERRAIN FEATURES + CAMERA-FAR HEIGHT (Adam, 2026-07-28 — binding; verbatim)
+
+> "after that, what I want to see is a series of terrain features large and small, let's try to just get the features accomplished first, then we can learn how to procedurally transform them and still retain the qualities of the feature"
+
+> "if you ever need to refer to the FFT maps during production please do"
+
+> "the new golden site sketches have just finished and i think you should go ahead and build those out as well, the defensive terrain"
+
+> "there seems to be a limit to two story buildings in the clayroom, but things can go higher than that, but they should generally be placed in the far end of the map from the camera so we don't run into weird camera blocking issues"
+
+Binding consequences:
+
+- Establish authored small, large, and defensive feature compositions before adding procedural
+  deformation. Each baseline names the spatial relationship a later resize, bend, erosion, realm
+  skin, or combination must retain.
+- FFT maps remain an available production reference, not only historical research. Their readable
+  approach, height, gate, obstacle, and terrain-dominant composition grammar may be consulted while
+  authoring Genesis features without copying a specific map.
+- The finished Golden Site defensive studies supply authored terrain compositions, beginning with
+  a lengthened turning earthwork entry and a gate window with one rising approach and split
+  obstacle.
+- The Clayroom has no two-storey height cap. Three-storey-and-taller masses are allowed; by default
+  they occupy the camera-far band so their silhouettes do not hide the tactical ground. A specific
+  foreground exception requires its own camera-occlusion proof.

@@ -3,15 +3,26 @@ type: system-spec
 project: Genesis
 status: DRAFT
 created: 2026-07-27
+updated: 2026-07-29
 audience: Adam (founder rulings), Codex (MM authoring), Claude orchestration sessions
 authority: the GROUND composition layer — what covers the ground between and around the architecture
 companions: MATERIAL-LANE.md, ART-DIRECTION-CANON.md, TRIM-SHEET-PIPELINE.md,
-  CLAYROOM-RESET-LADDER.md, GOLDEN-SITES-CATALOG.md, FLOOR-TEXTURES.md, REALM-SURFACES-WIRING.md
+  CLAYROOM-RESET-LADDER.md, GOLDEN-SITES-CATALOG.md, FLOOR-TEXTURES.md, REALM-SURFACES-WIRING.md,
+  GOLDEN-VIGNETTE-VISUAL-GUIDE.md, ASSETFORGE.md
 ---
 
 # GROUND-MATERIALS-PROGRAM
 
 **STATUS: DRAFT — Opus lane 2026-07-27**
+
+**2026-07-29 integration note.** This program now feeds the Golden face/material
+pipeline without becoming a second material owner. A rolled ground composition first
+binds to real `WALKABLE_TOP` / `NATURAL_SLOPE` faces and their stable projection frames.
+The `AF-GV-2 material-family` application composes admitted parents/patches/trim with
+the rest of the window's material family; `AF-GV-3 surface-project` proves the result
+over connected hills, cuts, landings, and four bearings. The existing Assetforge
+ground-field compiler remains an anti-repetition/material-field tool. It does not own
+terrain shape and a flat-field proof does not prove slope projection.
 
 Adam's brief, verbatim (2026-07-27):
 

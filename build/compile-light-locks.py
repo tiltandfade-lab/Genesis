@@ -190,10 +190,10 @@ def validate_lock(lock: object) -> dict:
                 f"{label}: sprite colorSpace is invariant srgb")
         require(invariants.get("magnificationFilter") == "nearest",
                 f"{label}: sprite magnificationFilter is invariant nearest")
-        require(invariants.get("minificationFilter") == "linear",
-                f"{label}: sprite minificationFilter is invariant linear")
-        require(invariants.get("alphaMode") == "registry-cutoff",
-                f"{label}: sprite alphaMode is invariant registry-cutoff")
+        require(invariants.get("minificationFilter") == "trilinear-mipmap",
+                f"{label}: sprite minificationFilter is invariant trilinear-mipmap")
+        require(invariants.get("alphaMode") == "registry-cutoff+alpha-to-coverage",
+                f"{label}: sprite alphaMode is invariant registry-cutoff+alpha-to-coverage")
 
         lights = profile.get("lights")
         require(isinstance(lights, list), f"{label}.lights must be an array")

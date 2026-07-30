@@ -48,6 +48,9 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 | Is the Clayroom fixture trustworthy? (reset ladder CL-R0…CL-R6) | `docs/CLAYROOM-RESET-LADDER.md` | renderer/fixture-trust gate across passes; gates C1H/C1I/Guard Post 1 |
 | Golden Site authority and four status gates | `docs/GOLDEN-SITES-CATALOG.md` | audited briefs, recommendation classes, Proof/MVP/Ideal, FFT/import boundary |
 | Golden Site procedural-vignette execution program | `docs/GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md` | one terrain/construction engine, coverage and asset routing, walk/game/battle loops, Waves 0–8, multi-session gates |
+| Golden Vignette visual/material execution standard | `docs/GOLDEN-VIGNETTE-VISUAL-GUIDE.md` | compact composition, connected-natural/chunky-constructed form, face/material staging, four bearings, context, persistence, review rubric |
+| FFT × Triangle Strategy evidence packet | `Reference/FFT-Triangle-Strategy-World-Study/` | retained research, measurements, estimates, sources, and experiments; guide routes supported findings without promoting every number to law |
+| Assetforge primary factory and Golden applications | `docs/ASSETFORGE.md` | shared quarantine/proof/admission envelope; thirteen current candidates; eight Golden surface/material/context/proof applications specified/unbuilt |
 | Frozen procedural-vignette integration boundary | `docs/GOLDEN-SITE-VIGNETTE-CONTRACTS.md` | v1 request/plan/asset-demand/receipt fields, terrain/structure join law, negative controls |
 | Latest passed Golden engine gate | `docs/GOLDEN-SITE-WAVE-1-OBSERVATORY-BRIEF.md` | Gate W1 passed: deterministic demand census, read-only adapters, dispositions, unresolved/asset ledgers |
 | Current Golden engine implementation cut | `docs/GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md` § Wave 2 | proxy-first Tavern identity and Guard Post visual/tactical compiler proof |
@@ -111,6 +114,7 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 - docs/ARCHITECTURE.md — current-canon (implementation map) — architecture/living(2026-07-05) — describes CURRENT code; predates dungeon program by design
 - docs/ART-DEPARTMENT.md — current-canon — style-canon/LAW(2026-07-24) — pixel register home; sibling of ART-DIRECTION-CANON (scoped, not rival); routes new packet formatting to dev/model-qa/sprite-sheets/PRODUCTION-FORMAT
 - docs/ART-DIRECTION-CANON.md — current-canon — style-canon/LAW(2026-07-14) — faceted RESERVE register master copy
+- docs/ASSETFORGE.md — accepted-supporting + implementation-evidence — production-machinery-spec/PRIMARY-ASSET-FACTORY-CANDIDATE-SUITE(2026-07-29) — thirteen candidate-ready/not-proved factories plus eight Golden applications specified/unbuilt; canonical specialists remain singular
 - docs/ASSET-PROMPTS.md — operations — working-doc(2026-07-01) — image-gen shopping list; no frontmatter
 - docs/ASSET-SOURCING-RESEARCH.md — research — research(2026-07-16) — license-safe source shortlist
 - docs/ASSET-SYNC.md — operations — ops-note/ADOPTED(2026-07-09) — fetch-on-demand heavy assets
@@ -201,6 +205,7 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 - docs/GEOMETRY-OSS-INTEGRATION.md — proposed — system-spec/SPECCED(2026-07-12) — landed pieces tracked in CHANGELOG (geometry default flip)
 - docs/GIT-LFS-MIGRATION.md — operations (done) — runbook/"READY"(2026-07-10) — ⚠ stale: LFS live since 2026-07-18 per DESIGN.md infra note
 - docs/GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md — current-canon — orchestration-plan/FOUNDER-AUTHORIZED-PROGRAM(2026-07-29) — unified terrain/construction vignette engine, Golden/ordinary coverage, asset foundry routes, deterministic demand census, recurring game/battle/visual proof, Waves 0–8, multi-session law
+- docs/GOLDEN-VIGNETTE-VISUAL-GUIDE.md — current-canon — design-guide/FOUNDER-AUTHORIZED-WORKING-GUIDE(2026-07-29) — FFT/TS/Genesis visual front door; face/material pipeline; hard/soft/provisional machine rubric; governed four-bearing review
 - docs/GOLDEN-SITE-VIGNETTE-CONTRACTS.md — current-canon — system-contract/WAVE-0-FROZEN-FOR-WAVE-1(2026-07-29) — v1 request/plan/asset-demand/receipt integration boundary and terrain/structure join law; machine companion under docs/intel
 - docs/GOLDEN-SITE-WAVE-1-OBSERVATORY-BRIEF.md — passed-evidence — implementation-brief/GATE-W1-PASSED(2026-07-29) — deterministic audit harness, read-only adapters, demand/disposition ledgers, replayable corpus and Gate-W1 verification under docs/intel
 - docs/GOLDEN-SITES-CATALOG.md — accepted-supporting — design-study/ACCEPTED-PORTFOLIO(audited 2026-07-29) — Golden Site authority; four status gates + audited site briefs; implementation order routes through the master plan

@@ -3,7 +3,7 @@ type: design-study
 status: ACCEPTED DIRECTION; IMPLEMENTATION UNAUTHORIZED
 priority: HIGH SUPPORTING MODULE
 created: 2026-07-22
-updated: 2026-07-22
+updated: 2026-07-29
 scope: deterministic architectural trim-sheet creation, packing, projection, and proof
 parents:
   - PROCEDURAL-DUNGEON-DIRECTION.md
@@ -17,6 +17,14 @@ related:
 ---
 
 # Architectural Trim-Sheet Pipeline
+
+**2026-07-29 Golden integration.** Trim slots are requested only after a real face/run
+and stable local frame exist. `AF-GV-2 material-family` may package admitted sheets
+with compatible body materials; `AF-GV-4 identity-face` and `AF-GV-6 join-kit` may
+mount them to eligible faces/joins. Those Assetforge applications wrap this pipeline's
+packing/projection authority rather than replacing it. A semantic identity reservation
+may protect the future need for a cap, reveal, sign, claimant band, or threshold
+treatment before topology, but it cannot preselect a slot or invent a run.
 
 This study answers the design request to determine how Genesis should create and implement trim sheets. It records
 the current-engine audit, accepted first scaffold and feature goal, procedural UV/run contract, creation pipeline,

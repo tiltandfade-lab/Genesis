@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "family": "visual-regression",
+  "baseline": "dev/model-qa/assetforge-suite/fixtures/regression-same.png",
+  "current": "dev/model-qa/assetforge-suite/fixtures/regression-changed.png",
+  "maximumDifference": 0
+}

@@ -43,13 +43,20 @@ and visual review now advance through the same Waves 0–8 gates.
    718 stratified cases, and retained production regressions pass under corpus
    fingerprint `vgo1-edf8cc39`. Evidence:
    `intel/golden-vignette-wave1-verification.md`.
-6. ☐ Enter Wave 2 with proxy-first composition: Tavern proves semantic/identity
+6. ☑ **Close the visual/material marriage prerequisite:** retain the complete FFT ×
+   Triangle Strategy evidence packet; route supported findings into
+   `GOLDEN-VIGNETTE-VISUAL-GUIDE.md`; preserve hard/soft/provisional distinctions in
+   a verified machine rubric; merge the Assetforge candidate factory; freeze
+   semantic-reservation → real-face → exact-material-demand timing; and specify the
+   eight Golden Assetforge applications without claiming they are built.
+7. ☐ Enter Wave 2 with proxy-first composition: Tavern proves semantic/identity
    continuity and Guard Post proves the first compact visible/tactical vignette. Add
-   only demand-backed assets after clay, route, camera, and battle gates pass.
-7. ☐ Run multi-session work only when a current wave has frozen its shared contract
+   only demand-backed assets after clay, route, camera, and battle gates pass. Build
+   only the minimum AF-GV-1/2/3/8 slices required by those fixtures.
+8. ☐ Run multi-session work only when a current wave has frozen its shared contract
    and each lane names a bounded gate, owned files, verifier, evidence, merge order,
    and stop condition.
-8. ☐ Run intermittent game flows and PC-versus-enemy battle simulations throughout,
+9. ☐ Run intermittent game flows and PC-versus-enemy battle simulations throughout,
    escalating from current zone combat to exact-cell assertions only after that
    separate replacement-proof cutover is ready.
 
@@ -59,6 +66,25 @@ The audit separated four gates that the 2026-07-24 running record had collapsed:
 `RESEARCHED` · `FOUNDER-RULED` · `BRIEF-CONGRUENT` · `CLAY-PROVED`. The older uses of
 “served” and “queue empty” below are preserved as session history but are **superseded
 as current status** by `GOLDEN-SITES-CATALOG.md`.
+
+**Assetforge factory program (2026-07-28): ◐ primary candidate factory; no tool proved.**
+Assetforge is the common production-asset front door. All thirteen tools are candidate-ready for
+their intended problems, but each still needs its own dedicated proving pass. Prioritize the
+maturity ledger in `ASSETFORGE.md`: repeat correctness and pixel-sharp low-light citizenship are
+`CRITICAL`; emote, boundary, ground-field, prop, condition, and material consolidation are `HIGH`;
+the remaining tools still carry `MEDIUM` improvement debt. Improve the factory before multiplying
+production assets, and consolidate canonical specialist engines rather than creating parallel
+implementations.
+
+**Assetforge ground-field side lane (2026-07-28): ☑ candidate built; direction marked improved,
+not final terrain.** Built the distinct quilt/Wang/hash ground-field compiler, macro color/roughness field,
+sparse semantic overlays, and blended path projection. CL-F06 now compares the corrected 15×15,
+2880×2880 PBR field with an exact repeated-single negative control through the governed Clayroom
+interior/camera/light/shadow path and at a rotated camera. The first flat battlefield-style proof
+and its physically enlarged material scale were withdrawn. All compiler and Clayroom gates pass;
+runtime admission remains `CANDIDATE`, and this is not a tool-level proof. Next work is biome
+vocabulary, richer path/overlay treatment, terrain-form integration, and routing one real
+wilderness board. Pixel-safe sprite citizenship remains a separate open correction.
 
 1. ☑ Capture the docs-only engine marriage in
    `GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md`: the story engine remains authority;
@@ -280,3 +306,22 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
    amends; then the DESIGN.md entry flips from PROPOSED to RULED.
 5. ☐ **Adam's visual verdicts** — carried: the PENDING ADAM ledger (C2–C4 sheets, AO triptych,
    split equivalence, torchlit C3).
+6. ☑ **Assetforge candidate suite** — all thirteen factory candidates are executable. The twelve
+   non-emote fixture pairs pass 12/12 positive controls and reject 12/12 preserved red-first
+   controls; the emote suite also exercises its live-output guard and rear-view hand failure. These
+   are candidacy gates, not tool proofs.
+7. ☑ **Assetforge real-asset candidacy run** — all twelve non-emote processes ran against named,
+   hashed, decodable Genesis assets; 12/12 candidate runs met their declared gates and the
+   deliberately changed real regression control rejected. Individual inspection exposed clipped
+   decal branches, foreign prop-sheet fragments, and roof-repeat cadence. This remains preliminary
+   evidence for later dedicated proving passes.
+8. ☐ **Assetforge dedicated proving passes** — run and judge each tool separately; the aggregate
+   board is navigation only. First founder review found repeat + current prop evidence
+   rejected; condition needs visibly more age; trim retained; atlas promising with Clayroom proof
+   deferred. Palette consolidation and the citizenship canonical adapter are complete, but Adam
+   rejected the trilinear-mipmap renderer v2 as blurry. Boundary V2 has separate
+   enclosure/path/road/cliff topology dialects, but Adam rejected the path board as non-engine-legible
+   and the single-tile ground field as brutally repetitive. Next: restore pixel-safe sampling; build
+   deterministic ground anti-repetition; prove paths through the production terrain renderer and
+   governed camera. Repeat period closure, prop source-edge/camera/depth contracts, stronger
+   canonical age generation, and material-baker consolidation also remain.

@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "family": "ground-field",
+  "baseMaterial": {
+    "tile": "dev/model-qa/assetforge-suite/fixtures/ground-field-base.png",
+    "sha256": "3960004197055ff1d312ba131a2ef58214a7af3c1a16a6033583df9b143a33a1"
+  },
+  "pathMaterial": {
+    "tile": "dev/model-qa/assetforge-suite/fixtures/ground-field-path.png",
+    "sha256": "84ef93ccf15b3b1f0c5ea0736f910c098287fea1819fd83142c72e3fa5e06f2c"
+  },
+  "tileSizePx": 64,
+  "edgeBandPx": 6,
+  "quiltPatchPx": 32,
+  "quiltOverlapPx": 8,
+  "wangEdgeColors": 2,
+  "fieldCells": [
+    10,
+    8
+  ],
+  "minimumFieldCellCount": 80,
+  "macroGrid": [
+    4,
+    3
+  ],
+  "placementMode": "repeated-single",
+  "semanticOverlays": {
+    "bareSoil": 3,
+    "stones": 6,
+    "grassClumps": 4,
+    "wear": 3
+  },
+  "path": {
+    "points": [
+      [
+        0.02,
+        0.72
+      ],
+      [
+        0.48,
+        0.58
+      ],
+      [
+        0.98,
+        0.3
+      ]
+    ],
+    "widthCells": 0.8,
+    "shoulderCells": 0.45
+  },
+  "seed": 48271
+}

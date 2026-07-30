@@ -1,0 +1,351 @@
+{
+  "schemaVersion": 1,
+  "proof": "assetforge-ground-field-governed-clayroom-pbr-v2",
+  "technicalStatus": "PASS",
+  "runtimePath": "genesis.html?clayroom=1&clayfixture=ground-field -> clayRoomBoardFrom -> interiorBuildBoard -> setInteriorBoard -> shared ground-field mount",
+  "gates": {
+    "actualGovernedClayroomRoute": true,
+    "productionInteriorRealizer": true,
+    "clF06FixtureMounted": true,
+    "compiledPbrChannelsLoaded": true,
+    "standardLitShadowReceivingSurface": true,
+    "fullFifteenByFifteenField": true,
+    "compilerSurfaceSurvivesClayRouting": true,
+    "noLegacyBattlefieldCast": true,
+    "repeatedNegativeControlRendered": true,
+    "alternateClayroomCameraRendered": true,
+    "wideAngleMaterialSampling": true,
+    "noUnexpectedConsoleOrPageErrors": true,
+    "noFailedRequests": true,
+    "noUnexpectedHttpErrors": true
+  },
+  "captures": {
+    "compiledDefault": "dev/model-qa/assetforge-real/runs/ground-field/clayroom-proof/clayroom-compiled-default.png",
+    "repeatedControl": "dev/model-qa/assetforge-real/runs/ground-field/clayroom-proof/clayroom-repeated-control.png",
+    "compiledRotated": "dev/model-qa/assetforge-real/runs/ground-field/clayroom-proof/clayroom-compiled-rotated.png"
+  },
+  "compiledReport": {
+    "url": "/genesis.html?clayroom=1&clayfixture=ground-field&groundfield=compiled",
+    "groundField": {
+      "mounted": true,
+      "renderChannel": "interior3d",
+      "fixtureId": "cl-f06-ground-field",
+      "comparisonMode": "compiled",
+      "width": 15,
+      "depth": 15,
+      "center": [
+        0,
+        0
+      ],
+      "surfaceY": -0.21910779694654048,
+      "albedoReady": true,
+      "normalReady": true,
+      "ormReady": true,
+      "roughnessReady": true,
+      "loadErrors": 0,
+      "receivesShadow": true,
+      "materialType": "MeshStandardMaterial",
+      "minFilter": 1008,
+      "magFilter": 1003,
+      "generatedMipmaps": true,
+      "anisotropy": 8,
+      "materialChannels": {
+        "albedo": true,
+        "normal": true,
+        "ao": true,
+        "roughness": true,
+        "metalness": true
+      },
+      "source": {
+        "albedo": "dev/model-qa/assetforge-real/runs/ground-field/positive/field-albedo.png",
+        "normal": "dev/model-qa/assetforge-real/runs/ground-field/positive/field-normal.png",
+        "orm": "dev/model-qa/assetforge-real/runs/ground-field/positive/field-orm.png",
+        "roughness": "dev/model-qa/assetforge-real/runs/ground-field/positive/field-roughness.png",
+        "compilerReceipt": "dev/model-qa/assetforge-real/runs/ground-field/positive/receipt.json"
+      }
+    },
+    "clayroom": {
+      "hostCanvasCount": 1,
+      "viewportPresent": true,
+      "overlayPresent": true,
+      "perspectiveCamera": true,
+      "shadowMap": true,
+      "piecesRequested": 0,
+      "piecesResolved": 0,
+      "surfaceCensus": {
+        "unclaimedCount": 0,
+        "texturedClayCount": 0,
+        "groundRows": [
+          {
+            "role": "ground-field-proof",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              0,
+              -0.219,
+              0
+            ],
+            "size": [
+              15,
+              15,
+              0
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/ground-field-proof",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          }
+        ]
+      }
+    },
+    "renderer": {
+      "cssPx": "950x956",
+      "backingPx": "1900x1912"
+    },
+    "stats": {
+      "boardBuilds": 6,
+      "boardSkips": 0,
+      "modelPaths": {
+        "exact": 0,
+        "alias": 0,
+        "blank": 0,
+        "glb": 0,
+        "pcRecipe": 0,
+        "recipe": 0,
+        "cuboid": 0,
+        "loadFail": 0,
+        "sprite": 0,
+        "misses": {}
+      }
+    }
+  },
+  "repeatedReport": {
+    "url": "/genesis.html?clayroom=1&clayfixture=ground-field&groundfield=control",
+    "groundField": {
+      "mounted": true,
+      "renderChannel": "interior3d",
+      "fixtureId": "cl-f06-ground-field",
+      "comparisonMode": "repeated-control",
+      "width": 15,
+      "depth": 15,
+      "center": [
+        0,
+        0
+      ],
+      "surfaceY": -0.21910779694654048,
+      "albedoReady": true,
+      "normalReady": false,
+      "ormReady": false,
+      "roughnessReady": true,
+      "loadErrors": 0,
+      "receivesShadow": true,
+      "materialType": "MeshStandardMaterial",
+      "minFilter": 1008,
+      "magFilter": 1003,
+      "generatedMipmaps": true,
+      "anisotropy": 8,
+      "materialChannels": {
+        "albedo": true,
+        "normal": false,
+        "ao": false,
+        "roughness": true,
+        "metalness": false
+      },
+      "source": {
+        "albedo": "dev/model-qa/assetforge-real/runs/ground-field/positive/repeated-single-baseline.png",
+        "normal": null,
+        "orm": null,
+        "roughness": "dev/model-qa/assetforge-real/runs/ground-field/positive/field-roughness.png",
+        "compilerReceipt": "dev/model-qa/assetforge-real/runs/ground-field/positive/receipt.json"
+      }
+    },
+    "clayroom": {
+      "hostCanvasCount": 1,
+      "viewportPresent": true,
+      "overlayPresent": true,
+      "perspectiveCamera": true,
+      "shadowMap": true,
+      "piecesRequested": 0,
+      "piecesResolved": 0,
+      "surfaceCensus": {
+        "unclaimedCount": 0,
+        "texturedClayCount": 0,
+        "groundRows": [
+          {
+            "role": "ground-field-proof",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              0,
+              -0.219,
+              0
+            ],
+            "size": [
+              15,
+              15,
+              0
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/ground-field-proof",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          }
+        ]
+      }
+    },
+    "renderer": {
+      "cssPx": "950x956",
+      "backingPx": "1900x1912"
+    },
+    "stats": {
+      "boardBuilds": 4,
+      "boardSkips": 0,
+      "modelPaths": {
+        "exact": 0,
+        "alias": 0,
+        "blank": 0,
+        "glb": 0,
+        "pcRecipe": 0,
+        "recipe": 0,
+        "cuboid": 0,
+        "loadFail": 0,
+        "sprite": 0,
+        "misses": {}
+      }
+    }
+  },
+  "rotatedReport": {
+    "url": "/genesis.html?clayroom=1&clayfixture=ground-field&groundfield=compiled",
+    "groundField": {
+      "mounted": true,
+      "renderChannel": "interior3d",
+      "fixtureId": "cl-f06-ground-field",
+      "comparisonMode": "compiled",
+      "width": 15,
+      "depth": 15,
+      "center": [
+        0,
+        0
+      ],
+      "surfaceY": -0.21910779694654048,
+      "albedoReady": true,
+      "normalReady": true,
+      "ormReady": true,
+      "roughnessReady": true,
+      "loadErrors": 0,
+      "receivesShadow": true,
+      "materialType": "MeshStandardMaterial",
+      "minFilter": 1008,
+      "magFilter": 1003,
+      "generatedMipmaps": true,
+      "anisotropy": 8,
+      "materialChannels": {
+        "albedo": true,
+        "normal": true,
+        "ao": true,
+        "roughness": true,
+        "metalness": true
+      },
+      "source": {
+        "albedo": "dev/model-qa/assetforge-real/runs/ground-field/positive/field-albedo.png",
+        "normal": "dev/model-qa/assetforge-real/runs/ground-field/positive/field-normal.png",
+        "orm": "dev/model-qa/assetforge-real/runs/ground-field/positive/field-orm.png",
+        "roughness": "dev/model-qa/assetforge-real/runs/ground-field/positive/field-roughness.png",
+        "compilerReceipt": "dev/model-qa/assetforge-real/runs/ground-field/positive/receipt.json"
+      }
+    },
+    "clayroom": {
+      "hostCanvasCount": 1,
+      "viewportPresent": true,
+      "overlayPresent": true,
+      "perspectiveCamera": true,
+      "shadowMap": true,
+      "piecesRequested": 0,
+      "piecesResolved": 0,
+      "surfaceCensus": {
+        "unclaimedCount": 0,
+        "texturedClayCount": 0,
+        "groundRows": [
+          {
+            "role": "ground-field-proof",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              0,
+              -0.219,
+              0
+            ],
+            "size": [
+              15,
+              15,
+              0
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/ground-field-proof",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          }
+        ]
+      }
+    },
+    "renderer": {
+      "cssPx": "950x956",
+      "backingPx": "1900x1912"
+    },
+    "stats": {
+      "boardBuilds": 6,
+      "boardSkips": 0,
+      "modelPaths": {
+        "exact": 0,
+        "alias": 0,
+        "blank": 0,
+        "glb": 0,
+        "pcRecipe": 0,
+        "recipe": 0,
+        "cuboid": 0,
+        "loadFail": 0,
+        "sprite": 0,
+        "misses": {}
+      }
+    }
+  },
+  "errors": {
+    "unexpectedConsoleErrors": [],
+    "pageErrors": [],
+    "failedRequests": [],
+    "unexpectedHttpErrors": [],
+    "knownClayroomAssetDebt": [
+      {
+        "url": "http://127.0.0.1:5291/dev/material-lane/exports/b06-trim-packed-v001/run-a/trim-institutional-h6-v1-basecolor-512-v001.png",
+        "status": 404
+      },
+      {
+        "url": "http://127.0.0.1:5291/dev/material-lane/exports/b06-trim-packed-v001/run-a/trim-upland-h6-v1-basecolor-512-v001.png",
+        "status": 404
+      },
+      {
+        "url": "http://127.0.0.1:5291/dev/material-lane/exports/b06-trim-packed-v001/run-a/trim-institutional-h6-v1-basecolor-512-v001.png",
+        "status": 404
+      },
+      {
+        "url": "http://127.0.0.1:5291/dev/material-lane/exports/b06-trim-packed-v001/run-a/trim-upland-h6-v1-basecolor-512-v001.png",
+        "status": 404
+      },
+      {
+        "url": "http://127.0.0.1:5291/dev/material-lane/exports/b06-trim-packed-v001/run-a/trim-institutional-h6-v1-basecolor-512-v001.png",
+        "status": 404
+      },
+      {
+        "url": "http://127.0.0.1:5291/dev/material-lane/exports/b06-trim-packed-v001/run-a/trim-upland-h6-v1-basecolor-512-v001.png",
+        "status": 404
+      }
+    ]
+  },
+  "claimBoundary": "Governed Clayroom technical proof. The candidate field still requires founder visual admission."
+}

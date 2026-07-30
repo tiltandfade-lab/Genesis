@@ -1,0 +1,195 @@
+{
+  "schemaVersion": 1,
+  "suite": "assetforge-suite-v1",
+  "technicalStatus": "PASS",
+  "familiesRequested": [
+    "boundary",
+    "ground-field",
+    "repeat",
+    "prop-kit",
+    "condition",
+    "palette",
+    "trim",
+    "decal",
+    "citizenship",
+    "atlas",
+    "material",
+    "regression"
+  ],
+  "familyCount": 12,
+  "positiveControlsPassed": 12,
+  "negativeControlsRejected": 12,
+  "destructiveOutputGuards": {
+    "workspaceRoot": true,
+    "liveAssetChild": true
+  },
+  "proofBoard": "dev/model-qa/assetforge-suite/suite-proof-board.png",
+  "results": [
+    {
+      "family": "boundary",
+      "positiveExpected": "PASS",
+      "positiveActual": "PASS",
+      "positiveProofBoard": "dev/model-qa/assetforge-suite/runs/boundary/positive/proof-board.png",
+      "positiveReceipt": "dev/model-qa/assetforge-suite/runs/boundary/positive/receipt.json",
+      "negativeExpected": "FAIL",
+      "negativeActual": "FAIL",
+      "negativeFailedGates": [
+        "sourceWithinSeamBudget",
+        "compiledSourceSeamExact",
+        "neighborClosureExhaustive"
+      ],
+      "negativeReceipt": "dev/model-qa/assetforge-suite/runs/boundary/negative/receipt.json"
+    },
+    {
+      "family": "ground-field",
+      "positiveExpected": "PASS",
+      "positiveActual": "PASS",
+      "positiveProofBoard": "dev/model-qa/assetforge-suite/runs/ground-field/positive/proof-board.png",
+      "positiveReceipt": "dev/model-qa/assetforge-suite/runs/ground-field/positive/receipt.json",
+      "negativeExpected": "FAIL",
+      "negativeActual": "FAIL",
+      "negativeFailedGates": [
+        "deterministicWangHashPlacement",
+        "singleTileCadenceBroken",
+        "compiledPixelsBreakExactTilePeriod"
+      ],
+      "negativeReceipt": "dev/model-qa/assetforge-suite/runs/ground-field/negative/receipt.json"
+    },
+    {
+      "family": "repeat",
+      "positiveExpected": "PASS",
+      "positiveActual": "PASS",
+      "positiveProofBoard": "dev/model-qa/assetforge-suite/runs/repeat/positive/proof-board.png",
+      "positiveReceipt": "dev/model-qa/assetforge-suite/runs/repeat/positive/receipt.json",
+      "negativeExpected": "FAIL",
+      "negativeActual": "FAIL",
+      "negativeFailedGates": [
+        "componentsIsolated"
+      ],
+      "negativeReceipt": "dev/model-qa/assetforge-suite/runs/repeat/negative/receipt.json"
+    },
+    {
+      "family": "prop-kit",
+      "positiveExpected": "PASS",
+      "positiveActual": "PASS",
+      "positiveProofBoard": "dev/model-qa/assetforge-suite/runs/prop-kit/positive/proof-board.png",
+      "positiveReceipt": "dev/model-qa/assetforge-suite/runs/prop-kit/positive/receipt.json",
+      "negativeExpected": "FAIL",
+      "negativeActual": "FAIL",
+      "negativeFailedGates": [
+        "componentCountMatches"
+      ],
+      "negativeReceipt": "dev/model-qa/assetforge-suite/runs/prop-kit/negative/receipt.json"
+    },
+    {
+      "family": "condition",
+      "positiveExpected": "PASS",
+      "positiveActual": "PASS",
+      "positiveProofBoard": "dev/model-qa/assetforge-suite/runs/condition/positive/proof-board.png",
+      "positiveReceipt": "dev/model-qa/assetforge-suite/runs/condition/positive/receipt.json",
+      "negativeExpected": "FAIL",
+      "negativeActual": "FAIL",
+      "negativeFailedGates": [
+        "silhouetteWithinLicense"
+      ],
+      "negativeReceipt": "dev/model-qa/assetforge-suite/runs/condition/negative/receipt.json"
+    },
+    {
+      "family": "palette",
+      "positiveExpected": "PASS",
+      "positiveActual": "PASS",
+      "positiveProofBoard": "dev/model-qa/assetforge-suite/runs/palette/positive/proof-board.png",
+      "positiveReceipt": "dev/model-qa/assetforge-suite/runs/palette/positive/receipt.json",
+      "negativeExpected": "FAIL",
+      "negativeActual": "FAIL",
+      "negativeFailedGates": [
+        "protectedColorsRepresentable"
+      ],
+      "negativeReceipt": "dev/model-qa/assetforge-suite/runs/palette/negative/receipt.json"
+    },
+    {
+      "family": "trim",
+      "positiveExpected": "PASS",
+      "positiveActual": "PASS",
+      "positiveProofBoard": "dev/model-qa/assetforge-suite/runs/trim/positive/proof-board.png",
+      "positiveReceipt": "dev/model-qa/assetforge-suite/runs/trim/positive/receipt.json",
+      "negativeExpected": "FAIL",
+      "negativeActual": "FAIL",
+      "negativeFailedGates": [
+        "outputInsetsValid",
+        "allTargetsLegal",
+        "capsPreservedExactly",
+        "everyTargetDimensionProved"
+      ],
+      "negativeReceipt": "dev/model-qa/assetforge-suite/runs/trim/negative/receipt.json"
+    },
+    {
+      "family": "decal",
+      "positiveExpected": "PASS",
+      "positiveActual": "PASS",
+      "positiveProofBoard": "dev/model-qa/assetforge-suite/runs/decal/positive/proof-board.png",
+      "positiveReceipt": "dev/model-qa/assetforge-suite/runs/decal/positive/receipt.json",
+      "negativeExpected": "FAIL",
+      "negativeActual": "FAIL",
+      "negativeFailedGates": [
+        "sourceComponentsDoNotBleedOffSheet"
+      ],
+      "negativeReceipt": "dev/model-qa/assetforge-suite/runs/decal/negative/receipt.json"
+    },
+    {
+      "family": "citizenship",
+      "positiveExpected": "PASS",
+      "positiveActual": "PASS",
+      "positiveProofBoard": "dev/model-qa/assetforge-suite/runs/citizenship/positive/proof-board.png",
+      "positiveReceipt": "dev/model-qa/assetforge-suite/runs/citizenship/positive/receipt.json",
+      "negativeExpected": "FAIL",
+      "negativeActual": "FAIL",
+      "negativeFailedGates": [
+        "sourceHasSafeBorder"
+      ],
+      "negativeReceipt": "dev/model-qa/assetforge-suite/runs/citizenship/negative/receipt.json"
+    },
+    {
+      "family": "atlas",
+      "positiveExpected": "PASS",
+      "positiveActual": "PASS",
+      "positiveProofBoard": "dev/model-qa/assetforge-suite/runs/atlas/positive/proof-board.png",
+      "positiveReceipt": "dev/model-qa/assetforge-suite/runs/atlas/positive/receipt.json",
+      "negativeExpected": "FAIL",
+      "negativeActual": "FAIL",
+      "negativeFailedGates": [
+        "assetIdsUnique",
+        "allAssetsPacked",
+        "payloadRoundTripsExactly"
+      ],
+      "negativeReceipt": "dev/model-qa/assetforge-suite/runs/atlas/negative/receipt.json"
+    },
+    {
+      "family": "material",
+      "positiveExpected": "PASS",
+      "positiveActual": "PASS",
+      "positiveProofBoard": "dev/model-qa/assetforge-suite/runs/material/positive/proof-board.png",
+      "positiveReceipt": "dev/model-qa/assetforge-suite/runs/material/positive/receipt.json",
+      "negativeExpected": "FAIL",
+      "negativeActual": "FAIL",
+      "negativeFailedGates": [
+        "sourceSeamWithinBudget",
+        "compiledAlbedoSeamExact"
+      ],
+      "negativeReceipt": "dev/model-qa/assetforge-suite/runs/material/negative/receipt.json"
+    },
+    {
+      "family": "regression",
+      "positiveExpected": "PASS",
+      "positiveActual": "PASS",
+      "positiveProofBoard": "dev/model-qa/assetforge-suite/runs/regression/positive/proof-board.png",
+      "positiveReceipt": "dev/model-qa/assetforge-suite/runs/regression/positive/receipt.json",
+      "negativeExpected": "FAIL",
+      "negativeActual": "FAIL",
+      "negativeFailedGates": [
+        "perceptualDifferenceWithinThreshold"
+      ],
+      "negativeReceipt": "dev/model-qa/assetforge-suite/runs/regression/negative/receipt.json"
+    }
+  ]
+}

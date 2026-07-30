@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "family": "sprite-emote-visual-review-receipt",
+  "jobId": "emote-spr-pc-human-fighter-male-v001",
+  "spriteSlug": "spr-pc-human-fighter-male",
+  "reviewSource": "dev/model-qa/emote-factory/self-test/reviews/rear-hand-fail.json",
+  "reviewSourceSha256": "20bd65fcee068e4902f89defdebd2dd23e1bbdff6a6b7226b1a1365d1d11da8b",
+  "reviewer": "Assetforge self-test",
+  "reviewedOn": "2026-07-28",
+  "visualIdentity": "FAIL",
+  "failedChecks": [
+    "rear-view:verdict",
+    "rear-view:anatomyAndHands"
+  ],
+  "incompleteChecks": [],
+  "runtimeAdmission": "REJECTED",
+  "notes": ""
+}

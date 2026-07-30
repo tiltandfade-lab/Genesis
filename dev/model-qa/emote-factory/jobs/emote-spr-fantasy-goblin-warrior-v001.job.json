@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "family": "sprite-emote",
+  "algorithmVersion": "sprite-emote-v1",
+  "jobId": "emote-spr-fantasy-goblin-warrior-v001",
+  "created": "2026-07-27",
+  "source": {
+    "path": "assets/sprites/spr-fantasy-goblin-warrior.png",
+    "sha256": "d49935c34ebe4a3e3e97994c328754cfb0d20e7e1a805a3877d9d0399c819086",
+    "pixelDimensions": [
+      215,
+      207
+    ],
+    "contentBounds": [
+      0.023256,
+      0.024155,
+      0.981395,
+      0.975845
+    ],
+    "footX": 0.086449,
+    "footY": 0.975728,
+    "worldHeightFeet": 3.5,
+    "sizeBand": "small",
+    "registryScale": 0.583,
+    "sizingSource": "dev/model-qa/corpus-sizing.json"
+  },
+  "subject": {
+    "slug": "spr-fantasy-goblin-warrior",
+    "name": "Goblin Warrior",
+    "realm": "fantasy",
+    "kind": "monster",
+    "cue": "Small Fey (Goblinoid), Chaotic Neutral_ _The standard rank-and-file raider, armed with bows and rusted blades., CR 0.25 — signature move: Multiattack",
+    "manifestPath": "dev/sprite-manifests/v2-manifest.json",
+    "sheetId": "fantasy-monsters-4",
+    "cell": 9
+  },
+  "style": {
+    "authority": "dev/model-qa/sprite-sheets/fantasy.md",
+    "exactBlock": "Style block: Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from."
+  },
+  "states": [
+    {
+      "id": "idle",
+      "label": "Idle / characteristic ready",
+      "cue": "Characteristic ready or resting expression; alert and alive, never mannequin-neutral."
+    },
+    {
+      "id": "furious",
+      "label": "Furious",
+      "cue": "Anger or hostile intent at maximum readable clarity without changing equipment."
+    },
+    {
+      "id": "wounded",
+      "label": "Wounded",
+      "cue": "Pain and strain, still recognizably the same individual with the complete loadout."
+    },
+    {
+      "id": "grim",
+      "label": "Grim",
+      "cue": "Resolve, dread, or sorrow held under control; readable even at small play scale."
+    },
+    {
+      "id": "triumphant",
+      "label": "Triumphant",
+      "cue": "Relief, pride, or victory without adding trophies, props, or replacement gear."
+    },
+    {
+      "id": "afraid",
+      "label": "Afraid",
+      "cue": "Alarm or fear; non-humanoids communicate it through stance, eyes, ears, tail, wings, or compression."
+    }
+  ],
+  "identityLocks": [
+    "Preserve the exact individual: apparent age, face/head anatomy, body plan, proportions, skin/fur/scales, and major markings.",
+    "Preserve every clothing, armor, weapon, and carried-equipment identity; keep them on the same side of the body.",
+    "Preserve realm palette, pixel grid/density, outline language, value hierarchy, and lighting direction.",
+    "Preserve camera, facing direction, apparent world scale, grounding, and foot/contact line.",
+    "Do not add or remove limbs, horns, wings, tail sections, equipment, trophies, scenery, or replacement effects.",
+    "Do not turn states into progressive action frames; each cell must stand alone as one readable portrayal."
+  ],
+  "production": {
+    "gridColumns": 3,
+    "gridRows": 2,
+    "capacity": 6,
+    "cellAspect": "1:1",
+    "aspectStatus": "subject-derived",
+    "aspectReason": "Subject-derived: source visible silhouette is approximately square (1.046 width/height).",
+    "cellWidthPx": 384,
+    "cellHeightPx": 384,
+    "requestedCanvas": [
+      1152,
+      768
+    ],
+    "chromaKey": "#FF00FF",
+    "camera": "Match the source sprite's ground-level/eye-level view, facing direction, and projection exactly.",
+    "order": "left-to-right, then top-to-bottom"
+  },
+  "proof": {
+    "alphaCutoff": 24,
+    "chromaTolerance": 60,
+    "minimumBorderClearance": 0.99,
+    "maximumBaselineDelta": 0.05,
+    "maximumRelativeHeightDelta": 0.25,
+    "minimumSourcePaletteCoverage": 0.45,
+    "maximumMagentaEdgeResidue": 0.04,
+    "maximumCellAspectError": 0.08,
+    "visualIdentity": "REVIEW_REQUIRED"
+  },
+  "generation": {
+    "generationPacketPath": "dev/model-qa/emote-factory/jobs/emote-spr-fantasy-goblin-warrior-v001.prompt.md",
+    "promptPath": "dev/model-qa/emote-factory/jobs/emote-spr-fantasy-goblin-warrior-v001.imagegen-call.prompt.md",
+    "provider": "OpenAI built-in image_gen",
+    "model": "unreported-by-built-in-tool",
+    "generationCallId": "call_J0Mvbf47dJGqNnmpIUQhaDQE",
+    "seed": null,
+    "returnPath": "dev/model-qa/emote-factory/returns/emote-spr-fantasy-goblin-warrior-v001-imagegen.png",
+    "returnSha256": "c5945b71e478f0fa3fa4698bf6247a2a1f0b8f275d9a81efa999fbba83b0d505"
+  },
+  "admission": {
+    "scope": "candidate-only",
+    "defaultRuntimePriority": "pc-or-boss",
+    "tasteApproval": null,
+    "approvedBy": null
+  }
+}

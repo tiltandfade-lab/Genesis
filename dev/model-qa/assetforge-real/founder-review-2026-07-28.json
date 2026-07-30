@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 2,
+  "reviewKind": "founder-real-asset-review",
+  "reviewedOn": "2026-07-28",
+  "reviewer": "Adam",
+  "technicalReceipt": "dev/model-qa/assetforge-real/qualification-receipt.json",
+  "technicalReceiptStatus": "PASS",
+  "founderStatus": "REVISE_AND_CONSOLIDATE",
+  "runtimeAdmission": "BLOCKED",
+  "claimBoundary": "Adam's rulings remain authoritative. Implementation responses document repaired prototype tools and new proof candidates; they do not convert a technical PASS into art admission or make any current sprite final.",
+  "rulings": [
+    {
+      "family": "repeat",
+      "verdict": "FAIL",
+      "finding": "The real infinite-repeat output is broken. A one-pixel edge equality gate is not periodic course closure.",
+      "requiredNext": "Use rectangular period-closed dimensions; require width mod xStep = 0, height mod yStep = 0, and an even course-row count for stagger parity. Remove forcePeriodic as a seam-laundering fallback."
+    },
+    {
+      "family": "prop-kit",
+      "verdict": "FAIL_CURRENT_PROOF",
+      "finding": "Camera equivalence is unproved and the chosen leaf sources are already clipped at image boundaries.",
+      "requiredNext": "Reject edge-clipped leaf art before staging, declare the production 35-degree elevation, 45-degree bearing, 20-degree FOV and rotation policy, and prove the card through the real dressing renderer with standee-wins-ground depth behavior."
+    },
+    {
+      "family": "condition",
+      "verdict": "REVISE_MORE_AGE",
+      "finding": "The current aged state is too conservative.",
+      "requiredNext": "Generate a stronger age ladder in the canonical material workbench, then use Assetforge only to register and verify the selected states."
+    },
+    {
+      "family": "palette",
+      "verdict": "CONSOLIDATE",
+      "canonicalAuthority": "build/unify-corpus.py",
+      "implementationResponse": "CONSOLIDATED_CANONICAL_PASS",
+      "proof": "dev/model-qa/assetforge-real/runs/palette/candidate/proof-board.png",
+      "finding": "Assetforge now wraps the canonical Lab/CIEDE2000 pipeline and shared defringe instead of owning a nearest-RGB variant. The real candidate preserves alpha and semantic colors, reports mean CIEDE2000 4.1830 and p95 8.2468, shifts dominant hue 3.6507 degrees, preserves value rank at 0.9549, and contains zero forbidden-chroma pixels.",
+      "requiredNext": "Keep build/unify-corpus.py as the only palette algorithm authority. Treat future Assetforge work as manifest, quarantine, proof, and receipt orchestration."
+    },
+    {
+      "family": "trim",
+      "verdict": "RETAIN",
+      "finding": "Useful for offline/world/canvas sprite elongation even where CSS border-image or nine-slice layout can serve DOM UI."
+    },
+    {
+      "family": "citizenship",
+      "verdict": "CONSOLIDATE",
+      "canonicalAuthority": "build/gen-sprite-registry.py + src/ui/theater-sprites.js + Clayroom citizenship proof",
+      "implementationResponse": "CANONICAL_ADAPTER_PASS_RENDERER_V2_VISUAL_FAIL",
+      "proof": "dev/model-qa/assetforge-real/runs/citizenship/low-light-proof/citizenship-v2-before-after.png",
+      "finding": "Assetforge is correctly consolidated as a single-asset adapter over the canonical registry contract, but the renderer candidate is visually rejected. Magnification remained nearest while play-scale minification changed from single-level linear to trilinear mipmaps; the mip chain softened the authored pixel sprites and reads extra blurry.",
+      "requiredNext": "Keep the canonical adapter, restore a nearest-neighbor-sharp gameplay read, and solve low-light dust without trilinear softening. Re-prove fixed-scale real sprites under the same lighting set."
+    },
+    {
+      "family": "boundary",
+      "verdict": "EXPAND_BEYOND_ARCHITECTURE",
+      "implementationResponse": "TOPOLOGY_CANDIDATE_VISUAL_PROOF_FAIL",
+      "proof": "dev/model-qa/assetforge-real/runs/boundary/candidate/proof-board.png",
+      "finding": "The expanded mask coverage remains useful technical topology, but the wilderness-path board is not engine-legible. It is a continuous top-down 2D route over a periodic material canvas, not production terrain/camera proof. Its single grass tile repeats brutally; road and cliff boards share the same unresolved one-source repetition class.",
+      "requiredNext": "Build deterministic ground anti-repetition, consume the topology through the production terrain projection, and render governed-camera scenes with standees, elevation/contact, path width, edge blend, intersections, and nearby dressing."
+    },
+    {
+      "family": "atlas",
+      "verdict": "PROMISING",
+      "finding": "Potential route for sprite items to coexist with 3D construction.",
+      "requiredNext": "Converge on the documented potpack/runtime-atlas contract. Defer Clayroom and 3D-texturing proof until Adam requests it."
+    },
+    {
+      "family": "material",
+      "verdict": "CONSOLIDATE",
+      "canonicalAuthority": "dev/lit-texture-proof/generate-normal-companions.py + dev/material-workbench-proof/generate-condition-maps.py + Material Maker lane",
+      "requiredNext": "Retire the parallel luminance baker; retain only Assetforge orchestration and receipt wrapping over canonical material tools."
+    }
+  ]
+}

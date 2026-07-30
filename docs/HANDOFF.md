@@ -6,6 +6,36 @@ updated: 2026-07-29
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-29, GOLDEN VISUAL / MATERIAL / ASSETFORGE MARRIAGE) [Codex]
+
+The visual foundation required before Wave 2 is now explicit. The complete retained
+`Reference/FFT-Triangle-Strategy-World-Study/` packet remains research evidence.
+`GOLDEN-VIGNETTE-VISUAL-GUIDE.md` promotes the supported direction into one routed
+standard: FFT composition economy, Triangle Strategy material/presentation discipline,
+and Genesis persistent consequence. Its verified JSON companion separates fifteen hard
+rejections, six soft targets, two provisional A/B calibrations, twelve face roles,
+four material stages, the four quarter turns, and the required capture packet.
+
+Material demand is two-stage: reserve semantic identity before topology, then bind
+exact material/trim/decal/projection/shallow-relief work only after stable faces exist.
+The boundary is folded through the Golden contracts, composition plan, Material Lane,
+ground and trim programs, context projection, master program, canonical ownership, and
+decision routing. Prison/Asylum, cavern/lair, ruin/operation, urban/window, scale,
+wilderness promotion, and demand/materialization founder dispositions are recorded.
+
+The previously unmerged Assetforge work is retained: thirteen current factories remain
+`CANDIDATE-READY / NOT PROVED`; the ground-field material bench and the terrain-feature
+bench both survive the Clayroom merge. Eight Golden applications are now
+`SPECCED / UNBUILT`: surface-demand, material-family, surface-project, identity-face,
+causal-surface-state, join-kit, context-band, and vignette-proof. They wrap canonical
+specialists and cannot become duplicate material engines.
+
+**Do next:** Wave 2 remains the first product cut. Prove Tavern identity continuity
+and the Guard Post composition in proxy/clay, then build only the smallest
+AF-GV-1/2/3/8 slices demanded by their real faces and review packet. Do not start broad
+material production, causal mutation, join, or context factories ahead of their
+owning wave.
+
 ## ⭐ Latest (2026-07-29, GOLDEN VIGNETTE WAVE 1 PASSED) [Codex]
 
 Gate W1 is closed. The new read-only `src/engine/vignette-observatory.js` validates
@@ -138,6 +168,235 @@ Validation: building-family generator `--check` passes; `git diff --check` passe
 queue; the Golden lane otherwise stays out of the active CL-R3 files. After construction
 reconciliation, execute the retained semantic/composition and clay proofs from
 `GOLDEN-SITES-PROOF-QUEUE.md` before any broad runtime compiler rollout.
+
+## Latest (2026-07-28, ASSETFORGE PRIMARY FACTORY / CANDIDACY RESET) [Codex]
+
+Assetforge is now explicitly Genesis's primary asset factory, but none of its thirteen tools is
+proved, finished, or production-ready. Every tool is candidate-ready for the particular problem it
+addresses and still requires its own dedicated proving pass. `docs/ASSETFORGE.md` now separates
+candidate evidence and individual gate results from tool proof, founder visual acceptance, and
+production admission.
+
+- **Critical improvement debt:** modular repeat correctness and pixel-sharp low-light sprite
+  citizenship.
+- **High improvement debt:** emote anatomy/runtime breadth, boundary terrain presentation,
+  ground-field breadth, prop camera/depth correctness, stronger condition aging, and
+  material-authority consolidation.
+- **Medium improvement debt:** palette wrapper breadth/drift control, trim consumers, decal
+  projection, atlas runtime convergence, and regression baseline/perceptual coverage.
+- **Terrain ruling:** ground-field V2 is a marked improvement and a useful layer, not the final
+  terrain language. Its next work is biome vocabulary, richer paths/overlays, terrain-form
+  integration, and a real wilderness route.
+- **Architecture ruling:** Assetforge is the common front door, not a replacement for canonical
+  specialist engines. It wraps and verifies those engines rather than duplicating their algorithms.
+
+Improve the highest-debt tools before multiplying production assets. A receipt `PASS` continues to
+mean only that named invariants passed in one run; it is not a tool-level proof verdict.
+
+## Latest (2026-07-28, ASSETFORGE GROUND-FIELD V2 / CLAYROOM) [Codex]
+
+The missing exterior-ground process now exists as a distinct Assetforge compiler and a production
+Theater integration proof. It is not another seamless-single-tile claim.
+
+- **Compiler:** `ground-field` quilts 64 deterministic interior variants behind exact two-color
+  Wang edges, hash-selects them across a 15×15 field, adds a 6×5 low-frequency color/roughness
+  field, scatters bare-soil/stones/grass-clumps/wear overlays, and projects a smoothed path with
+  blended shoulders.
+- **Anti-repeat evidence:** all 64 variants appear in the real field; the largest identical-tile
+  share is `0.04`. The repeated-single negative control retains an exact tile-period pixel
+  difference of `0.0`; the compiled field measures `14.321615`. All 4,096 compatible Wang
+  neighbor pairs close exactly.
+- **Scale correction:** V1 enlarged a 96 px crop from a 1,254 px one-cell meadow source over a
+  whole world cell. V2 first normalizes the complete admitted material to one cell, bakes at
+  192 texels/cell, and emits a 2880×2880 field plus height, normal, and ORM.
+- **Production seam:** boards may optionally supply `board.groundField`. The production
+  interior and tabletop realizers share one adapter that mounts compiled albedo/normal/ORM on a
+  subdivided shadow-receiving `MeshStandardMaterial` plane. Boards without the payload retain the
+  existing ground path.
+- **Actual Clayroom proof:** CL-F06 uses the governed
+  `clayRoomBoardFrom → interiorBuildBoard → setInteriorBoard` route, production perspective camera,
+  lights, shadows, and interior surface routing. It requests zero pieces and resolves zero legacy
+  model fallbacks. The old flat battlefield-style proof was withdrawn and removed.
+- **Sampling boundary:** this change does not alter sprite sampling. Ground-field textures use
+  trilinear mipmapped minification and up to 8× anisotropy for wide oblique views; albedo
+  magnification remains nearest. The separately rejected blurry citizenship-v2 work remains
+  unresolved.
+- **Admission boundary:** receipts say `CANDIDATE`. Named compiler and integration gates pass, but
+  the tool is not proved; the generated field is prototype art and is not routed into a production
+  wilderness board.
+
+Evidence:
+
+- Compiler receipt:
+  `dev/model-qa/assetforge-real/runs/ground-field/positive/receipt.json`
+- Governed Clayroom receipt:
+  `dev/model-qa/assetforge-real/runs/ground-field/clayroom-proof/clayroom-proof-receipt.json`
+- Compiled/control/rotated captures:
+  `dev/model-qa/assetforge-real/runs/ground-field/clayroom-proof/`
+
+Reproduce:
+
+```bash
+python3 build/assetforge.py ground-field compile \
+  dev/model-qa/assetforge-real/manifests/ground-field-real.json \
+  --output-dir dev/model-qa/assetforge-real/runs/ground-field/positive --force
+python3 build/assetforge.py suite self-test --force
+node dev/capture-ground-field-clayroom-proof.mjs
+```
+
+**Founder direction:** the governed result is a marked improvement, but it is not the target terrain
+language yet. Keep it as one useful candidate layer; next improve biome-specific overlay/path
+vocabulary, terrain-form integration, and a real wilderness route. This does not constitute the
+ground-field tool's dedicated proving pass, and it must not be conflated with the still-open
+pixel-safe sprite-citizenship correction.
+
+## Latest (2026-07-28, ASSETFORGE V2 FOUNDER RE-REVIEW) [Codex]
+
+Adam rejected the newest citizenship and path presentation proofs. Their mechanical receipts remain
+useful diagnostics, but the visual claims are withdrawn.
+
+- **Citizenship v2 is too blurry.** The exact change was nearest magnification + one-level linear
+  minification -> nearest magnification + trilinear mipmapped minification. At gameplay scale the
+  sprites are minified, so the mip chain averages authored texels even though close-up magnification
+  still says nearest. Restore a pixel-sharp sampling baseline and solve dark-scene dust without
+  trilinear softening.
+- **Path proof is not engine-legible.** It currently draws a continuous 2D route over a tiled
+  material canvas. It does not consume the production terrain renderer, governed camera, standee
+  scale, elevation, dressing, or runtime material projection. The 256-mask topology compiler may be
+  retained, but the current board is not proof of what players will see.
+- **Ground repetition is unresolved and exposed.** The path helper reduces one grass source to one
+  periodic tile and copies it across the whole field. Runtime interiors have small deterministic
+  room/cell tone variation and 1-3 cover splats, but the live texture pools still contain one variant
+  for most surfaces; none of that breaks the source albedo's repeated landmarks. The prior modular
+  repeat compiler remains rejected because `forcePeriodic` did not close its real course period.
+
+**Next honest build:** (1) pixel-safe sprite sampling A/B in the real low-light renderer; (2) a
+deterministic ground anti-repeat compiler/runtime adapter; (3) an in-engine path scene consuming
+both, with individual camera-scale renders. Do not re-present the current citizenship or path boards
+as visual PASS.
+
+## Latest (2026-07-28, ASSETFORGE CONSOLIDATION + BOUNDARY V2) [Codex]
+
+Adam's palette, low-light citizenship, and boundary-breadth corrections are implemented as
+prototype-tool candidates. No current sprite is final and no output is runtime-admitted.
+
+- **Palette duplicate resolved:** Assetforge now wraps `build/unify-corpus.py` for shared defringe,
+  Lab palette mapping, CIEDE2000, dominant-hue, and forbidden-chroma checks. The real proof passes
+  with mean/p95 CIEDE2000 `4.1830`/`8.2468`, `3.6507°` hue shift, `0.9549` value-rank agreement,
+  zero forbidden pixels, identical alpha, and preserved semantic colors.
+- **Citizenship duplicate resolved:** Assetforge is a source-canvas-preserving adapter over
+  `build/gen-sprite-registry.py`; it does not own a second foot/height/bounds schema.
+- **Low-light renderer candidate (subsequently rejected above):** `lit-standee-v2` uses trilinear mipmaps, alpha-to-coverage, a
+  `0.12` readability floor, and reduced realm-tint contamination (`0.15`). The real
+  production-renderer A/B covers moonlight, torchlight, magic glow, and a daylit negative control
+  across seven registry sprites and 63 standee materials.
+- **Boundary V2 topology built; current path presentation rejected above:** Blob47 architectural enclosure remains intact. New independent dialects
+  cover 256 eight-way path masks, 16 cardinal road masks with shoulders/ruts, and 16 cliff
+  transitions across four integer elevation bands. Path, road, and cliff each retain four
+  individual real-material renders; the combined board is navigation only.
+- **Real qualification remains green:** 12/12 real candidates pass their mechanical gates and the
+  changed-real-image control rejects, for 13/13 expected outcomes. The hash-bound inspection ledger
+  now lists all individual dialect boards and the citizenship A/B.
+- **Still unresolved from Adam's first review:** repeat period closure, clipped/camera-unproved prop
+  sources and standee-ground depth, stronger condition aging, canonical material-baker
+  consolidation, and later atlas/runtime convergence. These keep overall runtime admission
+  blocked.
+
+Proofs:
+
+- Palette: `dev/model-qa/assetforge-real/runs/palette/candidate/proof-board.png`
+- Citizenship A/B:
+  `dev/model-qa/assetforge-real/runs/citizenship/low-light-proof/citizenship-v2-before-after.png`
+- Path: `dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/wilderness-path/proof-board.png`
+- Road: `dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/wilderness-road/proof-board.png`
+- Cliff: `dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/cliff-elevation/proof-board.png`
+
+Reproduce:
+
+```bash
+python3 build/assetforge.py suite self-test --force
+python3 build/qualify-assetforge-real.py --force
+node dev/capture-clay-sprite-citizenship.cjs \
+  dev/model-qa/assetforge-real/runs/citizenship/renderer-v2
+python3 build/prove-assetforge-citizenship.py
+```
+
+**Next honest promotion:** Adam reviews the five individual proof boards above. Tool consolidation
+is complete for palette/citizenship; visual taste and production routing are not.
+
+## Latest (2026-07-28, ASSETFORGE FOUNDER REVIEW CORRECTION) [Codex]
+
+Adam's individual review overturned several of the real-qualification visual claims. Technical
+receipts remain useful evidence, but art admission is blocked. The machine-readable correction is
+`dev/model-qa/assetforge-real/founder-review-2026-07-28.json`.
+
+- Repeat is genuinely broken: 512 does not close the 82×72 staggered-course period; edge-pixel
+  copying produced a false seamless PASS.
+- Prop cleanup removed neighboring fragments but laundered source-edge clipping. Camera equivalence
+  and standee-wins-ground rendering were never tested.
+- Age is too conservative: real changed ratios are only 0.0125 and 0.0169.
+- At review time, palette, citizenship, and material map implementations were parallel duplicates.
+  The newer block above records palette/citizenship consolidation; material consolidation remains
+  open.
+- Trim remains useful as an offline/non-DOM nine-slice tool.
+- Atlas remains promising, but runtime/Clayroom proof is deferred at Adam's request and must first
+  converge on the documented potpack atlas contract.
+
+## Latest (2026-07-28, ASSETFORGE REAL-ASSET QUALIFICATION) [Codex]
+
+The twelve Assetforge processes now have a retained production-shaped qualification harness in
+`build/qualify-assetforge-real.py`. It uses tracked, hydrated Genesis assets rather than treating
+the synthetic suite board as production proof, records exact SHA-256 source evidence, and runs
+twelve candidates plus a real changed-image negative control.
+
+- Final qualification: 13/13 expectations met. All twelve real candidates pass their mechanical
+  gates; the changed floor state is correctly rejected by the zero-difference regression gate.
+- Individual inspection found and fixed three proof-quality issues during the run: nominal grid
+  crops split the lower-right crack decal, nearby-fragment tolerance retained foreign chest/barrel
+  sheet debris, and the roof repeat used an obvious diagonal variant cadence. The repaired decal
+  uses anchor-assigned alpha groups with complete source-alpha accounting; prop cleanup is
+  zero-gap and audited; roof selection is deterministic, coverage-preserving, and adjacency-aware.
+- The individual proofs, manifests, outputs, receipts, evidence ledger, and navigation-only board
+  are retained under `dev/model-qa/assetforge-real/`. The hash-bound individual inspection is
+  `individual-visual-review.json`.
+- Synthetic regressions remain green: non-emote 11/11 positive + 11/11 negative controls, and
+  sprite-emote 10/10 outcomes plus all safety assertions. The rear-hand visual-failure fixture
+  still rejects.
+- PC emote v003 is mechanically 11/11. The seated rest and true rear view are present; individual
+  inspection found no obvious malformed rear hand or broken sword grip. It remains visual
+  `REVIEW_REQUIRED`, not admitted.
+
+**Next honest promotion:** Adam reviews the individual process proofs—not the navigation board—and
+selects any candidates worth a runtime-specific admission design. Material maps remain proposals.
+
+## Latest (2026-07-27, ASSETFORGE TWELVE-FAMILY V1) [Codex]
+
+Assetforge now has executable first vertical slices for all twelve planned visual compiler
+families. `build/assetforge.py` owns the public CLI; `build/assetforge_apps.py` owns the eleven
+non-emote compilers. Every output stays quarantined and `PASS` never means art admission.
+
+- The sprite-emote factory accepts registered PC/NPC/monster sources, emits exact realm-style
+  prompt packets, ingests keyed six-state sheets, and proves baselines, seated compression, scale,
+  palette, atlas metadata, and a mandatory visual checklist. Canonical states are neutral, angry,
+  happy, near-death, seated field-rest, and true rear view. The rear-view hand defect is preserved
+  as a failing visual-review control; corrected PC v003 is mechanically green but still visually
+  `INCOMPLETE`, not admitted.
+- The boundary compiler resolves all 256 raw eight-neighbor masks to exactly 47 legal blob shapes,
+  checks 2,312 compatible neighbor pairs, preserves all eleven torture-map topologies, and proves a
+  seeded field containing every canonical shape.
+- Modular repeat, prop kit, condition state, palette, trim/nine-slice, decal/stamp, sprite
+  citizenship, atlas optimization, material-map proposal, and visual-regression compilers are
+  executable through the same CLI.
+- Retained suite: `dev/model-qa/assetforge-suite/`; command:
+  `python3 build/assetforge.py suite self-test --force`. Final V1 receipt: 11/11 positive controls
+  pass and 11/11 red-first controls reject. The emote suite separately passes all ten fixture
+  outcomes plus its live-output safety guard, including PC/NPC/humanoid/non-humanoid coverage and
+  the rear-hand rejection.
+- Canon/spec/index: `docs/ASSETFORGE.md`, `docs/ART-DEPARTMENT.md`,
+  `docs/ART-DIRECTION-CANON.md`, `docs/DEV-PORTAL.md`, and `docs/README.md`.
+
+**Next honest promotion:** run the boundary and repeat compilers on one admitted Genesis material/
+component sheet, then seek Adam's visual verdict before routing any output into a runtime registry.
 
 ## ⭐ Latest (2026-07-27, INTEGRATION CLOSE + CAMPAIGN LAUNCH) [Fable]
 

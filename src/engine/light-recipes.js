@@ -65,8 +65,8 @@ function lightRecipeValidate(profile) {
   var invariants = profile.spriteResponse && profile.spriteResponse.invariants;
   if (!invariants || invariants.colorSpace !== "srgb"
     || invariants.magnificationFilter !== "nearest"
-    || invariants.minificationFilter !== "linear"
-    || invariants.alphaMode !== "registry-cutoff") errors.push("profile.spriteResponse.invariants are invalid");
+    || invariants.minificationFilter !== "trilinear-mipmap"
+    || invariants.alphaMode !== "registry-cutoff+alpha-to-coverage") errors.push("profile.spriteResponse.invariants are invalid");
   if (!Array.isArray(profile.lights)) errors.push("profile.lights must be an array");
   if (Array.isArray(profile.lights) && profile.lights.length > LIGHT_RECIPE_MAX_LIGHTS) {
     errors.push("profile.lights exceeds the " + LIGHT_RECIPE_MAX_LIGHTS + "-light bound");

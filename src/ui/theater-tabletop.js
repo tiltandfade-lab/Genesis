@@ -64,6 +64,7 @@
 import * as THREE from "three";
 import * as Parts from "./theater-parts.js";
 import { clearGroup, disposeGroupChild } from "./theater-dispose.js";
+import { mountCompiledGroundField } from "./theater-ground-field.js";
 import { placeCamera, refitTabletopHeightFit } from "./theater-camera.js";
 import {
   LIGHT_DEFAULT_PROFILE, applyLightProfile, applyTabletopExteriorLook, applyCelestialArc,
@@ -85,7 +86,7 @@ let DEFAULT_FIGURE_ZOOM_STEPS, FIGURE_SCALE, HEMI_INTENSITY_DEFAULT, SMALL_BOARD
 let addGroundingBlob, applyConditionMods, applyPsxShaderTweaks, baseDiscMatFor, buildTheaterCtx,
     drainTweens, flatTints, gradeColorLocal, hashSeed, interiorFloorTopAt, kilterFor, markDirty,
     mfDespawnGraceFor, mfMountGraceFor, mountLightProp, recipeFor, renderPartInto, scorchTintFor,
-    sizeScaleFor, tileMaterialsFor, unitTint;
+    sizeScaleFor, tileMaterialsFor, unitTint, nearestify, textureLoader;
 let tabletopCtxWholeObjectEnabled, tabletopCtxSetSpriteEmissiveTint;
 let S = null;
 
@@ -119,6 +120,8 @@ export function tabletopInit(ctx){
   sizeScaleFor = ctx.sizeScaleFor;
   tileMaterialsFor = ctx.tileMaterialsFor;
   unitTint = ctx.unitTint;
+  nearestify = ctx.nearestify;
+  textureLoader = ctx.textureLoader;
   tabletopCtxWholeObjectEnabled = ctx.tabletopCtxWholeObjectEnabled;
   tabletopCtxSetSpriteEmissiveTint = ctx.tabletopCtxSetSpriteEmissiveTint;
   if(ctx.S) S = ctx.S;
@@ -402,6 +405,20 @@ export function setBoard(data){
     // convention this unit follows throughout).
     mesh.receiveShadow = true;
     S.tileGroup.add(mesh);
+  });
+  mountCompiledGroundField({
+    S,
+    data,
+    group: S.tileGroup,
+    bounds: { minX, maxX, minZ, maxZ },
+    centerX: (minX + maxX) * 0.5,
+    centerZ: (minZ + maxZ) * 0.5,
+    y: 0.016,
+    textureLoader,
+    nearestify,
+    applyPsxShaderTweaks,
+    rebuild: function(current){ setBoard(current); },
+    renderChannel: "tabletop",
   });
 
   (data.props || []).forEach(p => {
@@ -1016,4 +1033,3 @@ export function setUnits(data){
   updateSpriteBillboardYaw();
   markDirty();
 }
-

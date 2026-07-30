@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "family": "sprite-citizenship",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-suite/manifests/citizenship-negative-edge.json",
+  "manifestSha256": "78fa402bc7d49bac35997f18c75a52cb674f874811fdf53d8c993c6db6d8962a",
+  "technicalStatus": "FAIL",
+  "gates": {
+    "sourceHashMatches": true,
+    "opaqueContentPresent": true,
+    "sourceHasSafeBorder": false,
+    "worldHeightResolved": true,
+    "canonicalContractComplete": true,
+    "footAnchorNormalized": true,
+    "sourceCanvasPreserved": true,
+    "thumbnailGenerated": true
+  },
+  "outputs": {
+    "sprite": "dev/model-qa/assetforge-suite/runs/citizenship/negative/sprite.png",
+    "metadata": "dev/model-qa/assetforge-suite/runs/citizenship/negative/citizenship.json",
+    "proofBoard": "dev/model-qa/assetforge-suite/runs/citizenship/negative/proof-board.png"
+  },
+  "details": {
+    "engineAuthority": "build/gen-sprite-registry.py",
+    "rendererAuthority": "src/ui/theater-sprites.js",
+    "coordinateSystem": "original source canvas; normalized top-down anchors",
+    "chroma": {
+      "requested": "auto",
+      "detected": null,
+      "dominantBorderRgb": [
+        0,
+        0,
+        0
+      ],
+      "keyRgb": null,
+      "tolerance": 12,
+      "softness": 0,
+      "keyedPixelCount": 0
+    }
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

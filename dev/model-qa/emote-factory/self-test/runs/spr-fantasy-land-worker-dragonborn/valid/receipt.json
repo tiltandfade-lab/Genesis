@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 1,
+  "family": "sprite-emote",
+  "algorithmVersion": "sprite-emote-v1",
+  "jobId": "emote-spr-fantasy-land-worker-dragonborn-v001",
+  "spriteSlug": "spr-fantasy-land-worker-dragonborn",
+  "subjectKind": "npc",
+  "inputs": {
+    "job": "dev/model-qa/emote-factory/self-test/jobs/emote-spr-fantasy-land-worker-dragonborn-v001.job.json",
+    "jobSha256": "a736256a07606548a22cf45e0147862bc25fe5d99d3660c301493140d7c3c9e6",
+    "source": "assets/sprites/spr-fantasy-land-worker-dragonborn.png",
+    "sourceSha256": "13f5fad109669afc5a146f864a4908bd379abeb63516d8578985812a29d97444",
+    "sheet": "dev/model-qa/emote-factory/self-test/fixtures/spr-fantasy-land-worker-dragonborn--valid.png",
+    "sheetSha256": "42badb08649c1634fcd46d787e267900a410b14b0ee0b0f4e0fccc3067d93b25"
+  },
+  "generation": {
+    "provider": null,
+    "model": null,
+    "generationCallId": null,
+    "seed": null,
+    "promptPath": "dev/model-qa/emote-factory/self-test/jobs/emote-spr-fantasy-land-worker-dragonborn-v001.prompt.md"
+  },
+  "format": {
+    "requestedCanvas": [
+      960,
+      800
+    ],
+    "actualCanvas": [
+      960,
+      800
+    ],
+    "requestedCellAspect": "4:5",
+    "requestedCellDimensions": [
+      320,
+      400
+    ],
+    "actualDerivedCellDimensions": [
+      320,
+      400
+    ],
+    "cellAspectRelativeError": 0.0,
+    "stateCountExpected": 6,
+    "stateCountObserved": 6
+  },
+  "crossStateMetrics": {
+    "medianFootY": 0.879699,
+    "maximumBaselineDelta": 0.0,
+    "medianHeightOccupancy": 0.6175,
+    "maximumRelativeHeightDelta": 0.0,
+    "licensedCompressionRatios": [
+      1.0
+    ]
+  },
+  "states": {
+    "neutral": {
+      "contentBounds": [
+        0.15,
+        0.2625,
+        0.85,
+        0.88
+      ],
+      "footX": 0.3814,
+      "footY": 0.879699,
+      "widthOccupancy": 0.7,
+      "heightOccupancy": 0.6175,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 1.0,
+      "heightPolicy": "standard",
+      "path": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-land-worker-dragonborn/valid/states/spr-fantasy-land-worker-dragonborn--neutral.png",
+      "sha256": "aac19164afef8f425e7ba556fa69ed35f29de606e43074184457f0c378b92ba4"
+    },
+    "angry": {
+      "contentBounds": [
+        0.15,
+        0.2625,
+        0.85,
+        0.88
+      ],
+      "footX": 0.3814,
+      "footY": 0.879699,
+      "widthOccupancy": 0.7,
+      "heightOccupancy": 0.6175,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 1.0,
+      "heightPolicy": "standard",
+      "path": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-land-worker-dragonborn/valid/states/spr-fantasy-land-worker-dragonborn--angry.png",
+      "sha256": "aac19164afef8f425e7ba556fa69ed35f29de606e43074184457f0c378b92ba4"
+    },
+    "happy": {
+      "contentBounds": [
+        0.15,
+        0.2625,
+        0.85,
+        0.88
+      ],
+      "footX": 0.3814,
+      "footY": 0.879699,
+      "widthOccupancy": 0.7,
+      "heightOccupancy": 0.6175,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 1.0,
+      "heightPolicy": "standard",
+      "path": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-land-worker-dragonborn/valid/states/spr-fantasy-land-worker-dragonborn--happy.png",
+      "sha256": "aac19164afef8f425e7ba556fa69ed35f29de606e43074184457f0c378b92ba4"
+    },
+    "near-death": {
+      "contentBounds": [
+        0.15,
+        0.2625,
+        0.85,
+        0.88
+      ],
+      "footX": 0.3814,
+      "footY": 0.879699,
+      "widthOccupancy": 0.7,
+      "heightOccupancy": 0.6175,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 1.0,
+      "heightPolicy": "standard",
+      "path": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-land-worker-dragonborn/valid/states/spr-fantasy-land-worker-dragonborn--near-death.png",
+      "sha256": "aac19164afef8f425e7ba556fa69ed35f29de606e43074184457f0c378b92ba4"
+    },
+    "resting": {
+      "contentBounds": [
+        0.15,
+        0.2625,
+        0.85,
+        0.88
+      ],
+      "footX": 0.3814,
+      "footY": 0.879699,
+      "widthOccupancy": 0.7,
+      "heightOccupancy": 0.6175,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 1.0,
+      "heightPolicy": "licensed-compression",
+      "path": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-land-worker-dragonborn/valid/states/spr-fantasy-land-worker-dragonborn--resting.png",
+      "sha256": "aac19164afef8f425e7ba556fa69ed35f29de606e43074184457f0c378b92ba4"
+    },
+    "rear-view": {
+      "contentBounds": [
+        0.15,
+        0.2625,
+        0.85,
+        0.88
+      ],
+      "footX": 0.3814,
+      "footY": 0.879699,
+      "widthOccupancy": 0.7,
+      "heightOccupancy": 0.6175,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 1.0,
+      "heightPolicy": "standard",
+      "path": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-land-worker-dragonborn/valid/states/spr-fantasy-land-worker-dragonborn--rear-view.png",
+      "sha256": "aac19164afef8f425e7ba556fa69ed35f29de606e43074184457f0c378b92ba4"
+    }
+  },
+  "gates": {
+    "sourceHashMatchesJob": true,
+    "sheetDimensionsDivisibleByGrid": true,
+    "cellAspectWithinTolerance": true,
+    "allRequiredStatesPopulated": true,
+    "cellBordersClear": true,
+    "magentaEdgeResidueWithinLimit": true,
+    "sharedBaselineWithinTolerance": true,
+    "relativeHeightWithinTolerance": true,
+    "licensedCompressionWithinEnvelope": true,
+    "sourcePaletteCoverageWithinBudget": true,
+    "atlasDimensionsMatchSheet": true
+  },
+  "mechanicalIdentity": "PASS",
+  "visualIdentity": "REVIEW_REQUIRED",
+  "tasteStatus": "REVIEW_REQUIRED",
+  "runtimeAdmission": "CANDIDATE",
+  "technicalStatus": "PASS",
+  "failureReasons": [],
+  "outputs": {
+    "atlas": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-land-worker-dragonborn/valid/atlas.png",
+    "atlasSha256": "09289f086c5d3bdcf3fcc750a76581661269263b0c0ba229010a4499a7d15e3a",
+    "metadata": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-land-worker-dragonborn/valid/atlas.json",
+    "metadataSha256": "a09ae45b2f0f271f38fc04c48e91536bd26333f35d2106fa990e2c394b16b1c5",
+    "proofBoard": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-land-worker-dragonborn/valid/proof-board.png",
+    "proofBoardSha256": "04a9bdcc10fc4dcf293144571c2eedeb3e92371d78749000f4c4802a5b194647",
+    "visualReview": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-land-worker-dragonborn/valid/visual-review.json",
+    "visualReviewSha256": "f11aa7c9aa62ce289bf26c99215a6ad44260fa12adf5c55a32ece01c4979aae9"
+  }
+}

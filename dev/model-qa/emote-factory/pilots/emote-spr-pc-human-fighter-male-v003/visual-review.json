@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "family": "sprite-emote-visual-review",
+  "jobId": "emote-spr-pc-human-fighter-male-v003",
+  "spriteSlug": "spr-pc-human-fighter-male",
+  "technicalReceipt": "dev/model-qa/emote-factory/pilots/emote-spr-pc-human-fighter-male-v003/receipt.json",
+  "proofBoard": "dev/model-qa/emote-factory/pilots/emote-spr-pc-human-fighter-male-v003/proof-board.png",
+  "reviewer": null,
+  "reviewedOn": null,
+  "states": {
+    "neutral": {
+      "label": "Neutral",
+      "verdict": null,
+      "checks": {
+        "stateRead": null,
+        "identityContinuity": null,
+        "anatomyAndHands": null,
+        "equipmentPresenceAndAttachment": null,
+        "equipmentGripAndContact": null,
+        "silhouetteContinuity": null,
+        "playScaleRead": null
+      },
+      "notes": ""
+    },
+    "angry": {
+      "label": "Angry",
+      "verdict": null,
+      "checks": {
+        "stateRead": null,
+        "identityContinuity": null,
+        "anatomyAndHands": null,
+        "equipmentPresenceAndAttachment": null,
+        "equipmentGripAndContact": null,
+        "silhouetteContinuity": null,
+        "playScaleRead": null
+      },
+      "notes": ""
+    },
+    "happy": {
+      "label": "Happy",
+      "verdict": null,
+      "checks": {
+        "stateRead": null,
+        "identityContinuity": null,
+        "anatomyAndHands": null,
+        "equipmentPresenceAndAttachment": null,
+        "equipmentGripAndContact": null,
+        "silhouetteContinuity": null,
+        "playScaleRead": null
+      },
+      "notes": ""
+    },
+    "near-death": {
+      "label": "Near death",
+      "verdict": null,
+      "checks": {
+        "stateRead": null,
+        "identityContinuity": null,
+        "anatomyAndHands": null,
+        "equipmentPresenceAndAttachment": null,
+        "equipmentGripAndContact": null,
+        "silhouetteContinuity": null,
+        "playScaleRead": null
+      },
+      "notes": ""
+    },
+    "resting": {
+      "label": "Resting",
+      "verdict": null,
+      "checks": {
+        "stateRead": null,
+        "identityContinuity": null,
+        "anatomyAndHands": null,
+        "equipmentPresenceAndAttachment": null,
+        "equipmentGripAndContact": null,
+        "silhouetteContinuity": null,
+        "playScaleRead": null
+      },
+      "notes": ""
+    },
+    "rear-view": {
+      "label": "Rear view",
+      "verdict": null,
+      "checks": {
+        "stateRead": null,
+        "identityContinuity": null,
+        "anatomyAndHands": null,
+        "equipmentPresenceAndAttachment": null,
+        "equipmentGripAndContact": null,
+        "silhouetteContinuity": null,
+        "playScaleRead": null,
+        "trueRearConstructionNotMirror": null,
+        "rearEquipmentAttachment": null
+      },
+      "notes": ""
+    }
+  },
+  "overallNotes": "",
+  "allowedCheckValues": [
+    "PASS",
+    "FAIL"
+  ],
+  "instructions": "Inspect the source, full-size states, and play-scale row. Set every applicable check to PASS or FAIL and each state verdict to PASS or FAIL. Any FAIL rejects visual identity. Blank checks keep the review incomplete. Technical PASS cannot fill these."
+}

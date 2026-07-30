@@ -19,6 +19,8 @@ execution_inputs:
   - STRUCTURE-KIT-CATALOG.md
   - EXTRUDED-SPRITE-PROP-LIBRARY.md
   - MESHY-PREMIUM-MONTH-1-MODEL-SLATE.md
+  - GOLDEN-VIGNETTE-VISUAL-GUIDE.md
+  - ASSETFORGE.md
   - MATERIAL-LANE.md
   - GROUND-MATERIALS-PROGRAM.md
   - TRIM-SHEET-PIPELINE.md
@@ -104,6 +106,8 @@ The corpus is organized by job. No one document should absorb the others.
 | `GOLDEN-SITES-FOUNDER-QUEUE.md` | unresolved founder taste/build-order questions only | research and implementation tasks |
 | `Reference/Golden-Site-Ideal-Art/` | visual form oracle and active-window scale targets | copied layouts or unverified mechanics |
 | `intel/golden-site-engine-coverage.json` | machine-readable site/owner/obligation/wave/asset-demand routing inventory | runtime selection weights or independent canon |
+| `GOLDEN-VIGNETTE-VISUAL-GUIDE.md` + machine rubric | shared visual review grammar; hard/soft/provisional distinctions; face/material/camera/context success | subsystem algorithms or research-law inflation |
+| `ASSETFORGE.md` + Golden application ledger | primary factory envelope and demand-backed visual compiler applications | taste, mechanics, or duplicate specialist algorithms |
 | this master plan | integration order, coverage, asset routing, test cadence, wave gates, multi-session law | subsystem contract duplication |
 
 Existing “implementation unauthorized” banners mean that a reader may not build
@@ -157,7 +161,9 @@ real story/world/walk facts
   -> form one substrate/terrain field
   -> embed host construction, mechanisms, apertures, and supports in that field
   -> reserve tactical cells, routes, deployment, cover, sight, and interactions
-  -> compile surfaces, seams, condition, dressing, light, and context
+  -> compile stable faces and surface roles
+  -> emit exact material/trim/decal/shallow-relief demands from those faces
+  -> compile seams, causal condition, dressing, light, and context
   -> resolve semantic asset requests through the asset foundry
   -> validate, score, reject/repair, and retain the complete receipt
   -> project SceneTray / TownTray / BattleMap / text / DM digest
@@ -177,7 +183,8 @@ One committed `VignettePlan` contains:
 - `MaterializationWindow`: active obligations, quiet space, stable frontiers;
 - `SpatialPlanV2`: cells, volumes, elevation, boundaries, connections, provenance;
 - `TacticalCompositionPlan`: routes, cover, sight, deployment, objectives, reservations;
-- `SurfaceAssemblyPlan`: terrain/structure pieces, seams, materials, condition, light;
+- `SurfaceAssemblyPlan`: terrain/structure pieces, stable face frames/roles, seams,
+  material demands, condition, light;
 - `AssetResolutionPlan`: exact recipes, fallbacks, omissions, and unresolved debt;
 - projection records for each view; and
 - `SynthesisReceipt`: source lineage, seed chain, candidate scores, rejections, repairs,
@@ -272,8 +279,9 @@ machine, evidence store, light source, or person.
 
 | Route | It owns | It must not own |
 |---|---|---|
+| **Assetforge factory envelope** | typed demand manifests; source hashes; quarantine; deterministic specialist-tool orchestration/assembly; negative controls; proof boards; receipts; explicit admission | mechanics, taste approval, live-output shortcuts, or duplicate material/palette/registry algorithms |
 | **In-engine procedural geometry** | terrain fields; water/void/support boundaries; roads and graded paths; walls, corners, ends, foundations, floors, roofs, apertures, stairs, ladders, landings, rails, platforms; collision/cover/occlusion; simple prisms/lathes/sweeps; exact sockets and stateful structural parts | noisy prop identity, finished culture, or render-time gameplay invention |
-| **Existing admitted kits/donors** | first-choice reusable chassis and pieces with normalized scale, sockets, materials, collision, provenance, and fixed-camera proof | unreviewed pack dumping or kit-specific site logic |
+| **Existing admitted kits/donors** | first-choice reusable chassis and pieces with normalized scale, sockets, materials, collision, provenance, and four-bearing proof | unreviewed pack dumping or kit-specific site logic |
 | **Meshy donor generation** | difficult reusable volume and silhouette: natural formations, cave mouths/ribs, tents/canopies, wagons, mechanisms, civic/ritual equipment, defensive hero props, trace clusters, practical-light fixtures | whole buildings/sites, exact walls/stairs/roads/floors/roofs, ordinary boxes/furniture, condition masks, characters, LOD/recolor variants |
 | **Sprite extrusion** | shallow silhouette nouns, apertures, shields, keys, signs, grates, door leaves, reliefs, emblems, foliage/board clusters, layered shallow assemblies | beds, barrels, trees, large mechanisms, architecture, or anything whose missing depth changes gameplay |
 | **Faced boxes/chassis + generated faces** | beds, tables, cabinets, crates, pews, counters, shelves, sarcophagi, ordinary containers and coordinated state faces | replacing exact collision/support or baking directional scene light |
@@ -293,7 +301,8 @@ machine, evidence store, light source, or person.
    require a Golden demand id, fallback, admission checklist, and reuse estimate.
 5. Use sprite extrusion/faced boxes when front/side identity carries the noun and a
    trusted chassis can own volume.
-6. Generate materials after shape, route, and contact pass. Condition derives from
+6. Reserve semantic identity before topology, but request exact materials only after
+   shape, route, contact, and stable faces exist. Condition derives from
    event/load/water/use/maintenance fields; it is not a grunge roll.
 7. Every admitted asset carries dimensions, footprint, height, cover, walkability,
    support/mount, sockets, materials, scaling bounds, collision/occlusion, provenance,
@@ -554,6 +563,12 @@ Deliver:
 - macro topology, terrain, construction, tactical reservations, surfaces, asset
   resolver, projections, and complete receipt;
 - proxy-first clay proof, then only the demand-backed minimum admitted assets;
+- the smallest AF-GV-1 surface-demand, AF-GV-2 material-family, and AF-GV-3
+  world-surface-projection slices needed to bind real Guard/Tavern faces without
+  duplicating Material Maker, ground, palette, trim, decal, or runtime projection
+  authority;
+- AF-GV-8 governed review packaging for clay, four bearings, gameplay/contact-sheet
+  scale, grayscale, material/identity overlay, and changed-seed siblings;
 - SceneTray-to-BattleMap identity;
 - first intermittent arrival/play/exit and PC-versus-enemy simulations.
 

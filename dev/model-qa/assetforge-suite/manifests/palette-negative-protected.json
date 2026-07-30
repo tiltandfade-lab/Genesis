@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "family": "palette-harmonizer",
+  "source": "dev/model-qa/assetforge-suite/fixtures/palette-source.png",
+  "palette": [
+    "#705B43",
+    "#455267",
+    "#97774B"
+  ],
+  "protectedColors": [
+    "#D6403D"
+  ]
+}

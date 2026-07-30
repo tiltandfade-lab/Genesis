@@ -79,6 +79,48 @@ The Sprite Editor's identity workflow therefore manages discrete expression/emot
 animation frames. Emote sets are exceptional content reserved primarily for bosses and player
 characters; ordinary NPC sprites remain a single static standee unless separately licensed.
 
+## Adam's ruling (2026-07-27, verbatim) — sprite-emote factory
+
+> "on top of that a sprite-emote factory would also be nice, like if I could get you to just take any sprite and generate/proof/prove emote states for any monster/pc/npc sprite"
+
+The build-time factory may accept any registered monster, player-character, or NPC sprite. This
+expands candidate generation and proof coverage, not automatic runtime admission: the earlier
+boss/PC priority remains the default content budget, while any other sprite can be separately
+licensed after technical and visual review. Emotes remain discrete static states, never sprite
+animation frames. The factory contract and its expansion roadmap live in `docs/ASSETFORGE.md`.
+
+## Adam's ruling (2026-07-27, verbatim) — canonical emote pack and rear view
+
+> "we probably need emotes like neutral, angry, happy, near death, resting, and facing the other direction"
+>
+> "as in viewed from behind"
+
+The default factory pack is therefore `neutral`, `angry`, `happy`, `near-death`, `resting`, and
+`rear-view`. Rear view means the same individual turned 180 degrees and genuinely viewed from
+behind—not a horizontally mirrored front sprite. It is the one default state licensed to change
+view direction; scale, ground line, projection, body identity, and physical equipment attachment
+remain locked.
+
+## Adam's ruling (2026-07-27, verbatim) — resting emote pose
+
+> "resting should be more like a seated pose, think of ramza in the field blowing the grass"
+
+Resting is a quiet seated field-rest pose: contemplative, momentarily unguarded, and visually
+compressed. The reference supplies pose logic, not licensed scene content—do not add literal grass,
+landscape, or another game's character design. Seated compression uses its own proof envelope
+instead of being falsely rejected as scale drift; identity, ground contact, equipment, palette, and
+play-scale review remain binding.
+
+## Adam's ruling (2026-07-27, verbatim) — rear-view anatomy screen
+
+> "his hand is a little weird in the rear view shot, make sure the process screens for that"
+
+Every emote ingest must emit a mandatory state-by-state visual checklist. It explicitly screens
+limb and hand anatomy, plausible grips/contact, equipment presence/attachment, silhouette
+continuity, and play-scale read. Rear view additionally proves true back construction and rear
+equipment attachment. These are visual-review gates, not fake pixel heuristics: any failure rejects
+the candidate, any blank keeps review incomplete, and technical metrics cannot promote it.
+
 ## Adam's ruling (2026-07-17, verbatim) — sprite retirement
 
 > "i also need the ability to retire a sprite from the sprite editor"

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "qualification": {
+    "kind": "real-repository-asset",
+    "admission": "candidate-only"
+  },
+  "family": "material-map-baker",
+  "albedo": "assets/textures/fantasy-floor-1.png",
+  "sourceSha256": "f427c445e6c7b8b1c5b7eccc2181d29d81d9619ff2a1a60e8a7093b62b30502b",
+  "seamRequired": true,
+  "allowSeamLock": true,
+  "maxRepairableSourceEdgeDelta": 10,
+  "heightBlur": 1.2,
+  "normalStrength": 1.8
+}

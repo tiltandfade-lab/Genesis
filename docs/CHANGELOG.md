@@ -8,6 +8,48 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-29 — Golden Vignette visual/material/Assetforge marriage [Codex]
+
+**Added**
+- `GOLDEN-VIGNETTE-VISUAL-GUIDE.md`, the execution-facing standard joining FFT
+  composition economy, Triangle Strategy material/presentation discipline, and
+  Genesis persistent consequence.
+- `intel/golden-vignette-visual-rubric-v1.json` and
+  `dev/verify-golden-vignette-visual-guide.mjs`, preserving hard rejection, soft
+  targets, provisional calibration, face roles, material stages, quarter turns, and
+  required evidence as machine-checkable contracts.
+- Eight Golden Assetforge applications—surface-demand, material-family,
+  surface-project, identity-face, causal-surface-state, join-kit, context-band, and
+  vignette-proof—with a machine ledger and negative-control boundaries.
+
+**Changed**
+- Retained the completed FFT × Triangle Strategy world-study packet and its exact FFT
+  measurements as evidence rather than universal law.
+- Merged the thirteen-tool Assetforge candidate suite, factory policy, proof corpus,
+  ground-field adapter, and governed Clayroom candidate into the Golden branch.
+- Integrated the two-stage material boundary across Golden contracts, composition,
+  the master plan, Material Lane, ground materials, trim sheets, world context,
+  ownership routing, and the canonical decision index.
+- Defined `SemanticIdentityReservation` before topology and exact
+  `SurfaceMaterialDemand` after stable geometry faces exist. Material families now
+  route by face role, construction, realm/culture, causal condition, projection,
+  trim/decal/relief, and truthful fallback.
+
+**Resolved**
+- Recorded the accepted Prison/Asylum purpose discriminator; cavern/lair separation;
+  ruin-versus-operating-state separation; typed urban/linked-window routing; scale
+  fallback; wilderness promotion; and demand-versus-materialization rulings.
+- Superseded the stale no-player-rotation index entry with four governed 90-degree
+  bearings over one immutable plan.
+- Preserved both the CL-F07 terrain-feature bench and the separate CL-F06 Assetforge
+  ground-field/material bench during merge resolution.
+
+**Deferred**
+- The eight Golden Assetforge applications are specified/unbuilt. Wave 2 may build
+  only the minimum AF-GV-1/2/3/8 slices required by the Tavern/Guard fixtures.
+- Research highlight/texel numbers remain provisional A/B calibrations pending
+  Genesis scene and founder taste evidence.
+
 ## 2026-07-29 — Golden Vignette Wave 1 observatory [Codex]
 
 **Added**
@@ -163,6 +205,173 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 - Graded switchback cells no longer inherit retaining-terrace curb semantics.
 - Route shoulders no longer cut a wall around a painted polyline.
 - The diagonal micro-grid no longer produces a zipper across continuous hillsides.
+
+## 2026-07-28 — Assetforge primary-factory policy + candidacy ledger [Codex]
+
+**Changed**
+- Established Assetforge as Genesis's primary asset-production front door while preserving
+  canonical specialist engines as singular algorithm authorities.
+- Replaced binary “built + proven” status claims with one honest suite-wide state:
+  `CANDIDATE-READY / NOT PROVED`.
+- Added a concrete dedicated proving-pass target and improvement-debt severity for all thirteen
+  factory families.
+
+**Prioritized**
+- Marked repeat correctness and pixel-sharp low-light citizenship `CRITICAL`.
+- Marked emote, boundary, ground-field, prop, condition, and material consolidation `HIGH`.
+- Kept palette, trim, decal, atlas, and regression at `MEDIUM`; each remains improvement-bearing.
+
+**Corrected**
+- Existing fixtures, receipts, proof boards, and engine captures are preliminary evidence and
+  named gate results, not tool-level proof verdicts.
+- Ground-field V2 is a marked improvement and one terrain layer, not the final terrain language or
+  a claim that terrain is solved.
+
+## 2026-07-28 — Assetforge ground-field compiler + governed Clayroom proof [Codex]
+
+**Added**
+- Added the `ground-field` Assetforge family: deterministic texture quilting, exact Wang-edge
+  closure, hash placement, large low-frequency albedo/roughness variation, sparse semantic
+  bare-soil/stone/grass/wear overlays, and smoothed paths with blended shoulders.
+- Added a real B03 manifest and retained compiler products: field albedo/height/normal/ORM,
+  Wang atlas and placement metadata, macro/semantic/path masks, repeated-single control, proof
+  board, and machine-readable receipt.
+- Added an optional `board.groundField` adapter shared by the production tabletop and interior
+  realizers, plus the governed CL-F06 Clayroom fixture and capture script.
+
+**Recorded evidence**
+- Real compile passes 17 gates: 64 variants, all 64 used in a 15×15 field, `0.04` maximum identical
+  share, 4,096 exact compatible-edge checks, roughness range 148–238, matched PBR channel
+  dimensions, and all four semantic overlay kinds.
+- The exact repeated control has `0.0` tile-period pixel difference; the compiled field has
+  `14.321615`, providing a direct cadence-breaking negative control.
+- Governed Clayroom receipt passes compiled albedo/normal/ORM loading, standard lit material,
+  shadow receipt, full 15×15 coverage, wide-angle mipmapped/anisotropic ground sampling, repeated
+  control, alternate camera, zero legacy cast/model resolution, and zero unexpected runtime errors.
+- The non-emote Assetforge suite is now 12/12 positive and 12/12 expected negative.
+
+**Corrected**
+- Withdrew and removed the flat battlefield-style proof after founder review identified that it
+  was not the governed Clayroom.
+- Fixed a physical-scale error that cropped 96 px from a 1,254 px one-cell source and enlarged it
+  over one world cell. V2 normalizes the complete source material to one cell, uses 192 texels per
+  cell, emits a 2880×2880 field, and binds full material channels. Sprite sampling was not changed.
+
+**Deferred**
+- The output remains a prototype `CANDIDATE`, not admitted production art. A real wilderness board
+  route and biome-specific visual tuning wait for founder review.
+- Sprite scaling was not changed. The previously rejected mipmapped citizenship-v2 implementation
+  remains a separate open problem.
+
+## 2026-07-28 — Assetforge v2 founder re-review [Codex]
+
+**Corrected**
+- Withdrew the citizenship-v2 visual PASS. Magnification remained nearest, but play-scale
+  minification changed to trilinear mipmaps and visibly blurred the authored pixel sprites.
+- Withdrew the wilderness-path visual proof. The board is a continuous 2D topology renderer, not a
+  production terrain/camera integration proof.
+- Confirmed the path board repeats one periodic grass tile across the field. Existing room/cell tone
+  variation and sparse cover splats do not solve repeated albedo landmarks; the rejected
+  `forcePeriodic` repeat compiler did not solve it either.
+
+**Next**
+- Prove pixel-safe low-light sprite sampling, deterministic ground anti-repetition, and an in-engine
+  path scene before restoring either visual claim.
+
+## 2026-07-28 — Assetforge consolidation + boundary V2 [Codex]
+
+**Changed**
+- Replaced Assetforge's parallel nearest-RGB palette path with an orchestration wrapper over
+  `build/unify-corpus.py`: shared defringe, Lab quantization, CIEDE2000, dominant-hue preservation,
+  forbidden-chroma rejection, alpha preservation, and semantic-color gates.
+- Converted sprite citizenship into a source-canvas-preserving adapter over
+  `build/gen-sprite-registry.py`; the canonical foot/height/bounds/alpha/shadow schema remains
+  singular.
+- Upgraded the production standee renderer to `lit-standee-v2`: trilinear mipmapped minification,
+  alpha-to-coverage, a `0.12` low-light readability floor, and reduced realm-tint contamination.
+- Expanded boundary compilation into independent enclosure, eight-way wilderness-path,
+  cardinal-road, and integer-elevation cliff dialects.
+
+**Recorded evidence**
+- Real palette proof: mean/p95 CIEDE2000 `4.1830`/`8.2468`, hue shift `3.6507°`, value-rank
+  agreement `0.9549`, zero forbidden pixels, preserved alpha and semantic colors.
+- Real citizenship A/B: moonlit, torchlit, magic-glow, and daylit captures across seven registry
+  sprites and 63 standee materials.
+- Boundary proof: Blob47 enclosure; all 256 path masks with 49,152 compatibility checks; all 16
+  road masks with 128 checks; 16 cliff transitions across four elevation bands. Path, road, and
+  cliff each retain four individual real-material field renders.
+- Real qualification remains 13/13 expected outcomes. Outputs remain prototype candidates; no
+  sprite or boundary dialect is production-admitted.
+
+## 2026-07-28 — Assetforge founder-review correction [Codex]
+
+**Corrected**
+- Adam's individual review is now authoritative over the earlier aggregate technical PASS.
+  `founder-review-2026-07-28.json` records repeat and prop rejection, stronger-age direction, the
+  consolidation mandate, retained trim utility, and deferred atlas/Clayroom proof.
+- Confirmed the repeat's 512-pixel tile does not close its 82×72 placement period; outer-edge
+  equality was a false seam proxy.
+- Confirmed the prop qualifier restaged already edge-clipped leaf art and proved neither the
+  production camera nor dressing-card ground-depth behavior.
+
+**Consolidation**
+- `build/unify-corpus.py` remains the palette authority.
+- `build/gen-sprite-registry.py` plus the Theater/Clayroom standee contract remain citizenship
+  authority.
+- The periodic normal companion, material workbench, and Material Maker lane remain material-map
+  authority. Parallel Assetforge algorithms are not eligible for production.
+- Atlas remains a promising retained compiler but must converge on the documented potpack/runtime
+  contract; Clayroom proof is explicitly deferred.
+
+## 2026-07-28 — Assetforge real-asset qualification [Codex]
+
+**Added**
+- `build/qualify-assetforge-real.py` and retained
+  `dev/model-qa/assetforge-real/` evidence: tracked/decodable source ledger, exact hashes, twelve
+  real candidate runs, one changed-real-image negative control, per-process receipts/proofs, and a
+  navigation-only aggregate board. Final technical result: 13/13 expectations met.
+
+**Changed**
+- Decal isolation can assign every nonzero source-alpha component to declared semantic anchors,
+  preserving overlapping loose-sheet art without clipping it at nominal cell boundaries.
+- Prop cleanup records pruned-alpha budgets and can enforce zero-gap ownership; repeat courses use
+  deterministic adjacency-aware selection instead of a forever-repeating shuffled sequence.
+- Real regression difference boards now visualize RGB change independently of transparent output
+  alpha.
+
+**Fixed**
+- Repaired a clipped lower-right crack, removed neighboring chest/barrel fragments present in real
+  dressing exports, and broke the obvious diagonal cadence found during individual roof-repeat
+  inspection.
+
+**Verified**
+- Real qualification 13/13; synthetic non-emote suite 11/11 positive and 11/11 expected negative;
+  sprite-emote suite 10/10 expected outcomes plus its live-output guard and rear-hand rejection.
+  No candidate was admitted to runtime.
+
+## 2026-07-27 — Assetforge twelve-family V1 [Codex]
+
+**Added**
+- `build/assetforge.py` + `build/assetforge_apps.py`: manifest-driven sprite-emote, boundary,
+  modular-repeat, prop-kit, condition-state, palette, nine-slice, decal, sprite-citizenship, atlas,
+  material-map, and visual-regression compilers. Every family writes quarantined outputs, a proof
+  board, and a machine-readable receipt.
+- Retained positive and red-first corpus under `dev/model-qa/assetforge-suite/`. The suite passes
+  all 11 positive controls and rejects all 11 invalid controls. Boundary proof resolves 256 raw
+  masks to 47 legal shapes, checks 2,312 compatible neighbor pairs, preserves eleven torture-map
+  topologies, and covers all 47 shapes in one seeded field.
+- Sprite-emote pilot corpus with exact ImageGen provenance, three PC iterations, one historical
+  goblin pilot, runtime-ready candidate atlas/state metadata, and explicit visual-review receipts.
+
+**Changed**
+- Canonical emote pack is neutral, angry, happy, near-death, seated field-rest, and true rear view.
+  Rear anatomy, hands, grip/contact, and equipment attachment are mandatory visual checks; the
+  rejected v002 hand and corrected-but-still-unreviewed v003 remain honestly distinct.
+
+**Deferred**
+- No candidate is automatically admitted. PC v003 remains visual-review `INCOMPLETE`; the
+  non-emote suite proves compiler invariants on fixtures, not production-art taste. The first
+  production promotion begins with one admitted material/component sheet and Adam's verdict.
 
 ## 2026-07-27 — Integration close: four lanes landed; TIYL starts diversified; settled-life program ruled [Fable]
 
@@ -575,257 +784,3 @@ close, not to this checkpoint.
 - DOCS-INDEX tooling (DI-1/2/3): deferred with a mandatory re-scope precondition before execution. Gemini-
   transcript gather, FOREVER-STORAGE wiring verify, and sidekick-data gather remain queued mechanical follow-ups.
   FULL CI PENDING — fast checkpoint only, no push.
-
-## 2026-07-22 — WAVE 10 PHASED THROUGH BOUNDED TOWN CONTINUITY [Codex]
-
-**Added**
-- Split the oversized procedural-dungeon direction into an immutable stable index, preservation/protocol files,
-  bounded wave indexes, and bounded chronological wave parts without deleting the original record. Added the Clay
-  Proof Ladder and Feature-Promotion Ledger so every accepted ideal can retain an explicit scaffold, MVP gate,
-  feature goal, and promotion test.
-- Added the high-priority shared BattleMap/TownTray composition study derived from FFT-map and GaneshaDx analysis:
-  semantic plan before geometry, exact-cell authority, navigable elevation, landmarked encounter spaces, measured
-  composition diagnostics, C1H clay proof, and procedural UV/surface-frame requirements without copying FFT assets,
-  layouts, or code.
-- Added the accepted architectural trim-sheet pipeline: stable manifest, horizontal multi-band base-color sheets,
-  canonical-material-first variant selection, independently sourced/deterministically packed strips, run-aware UV
-  segmentation and fallback, plus a separate C1I proof after composition-first C1H.
-
-**Changed**
-- Reframed implementation around small retained proofs rather than same-sized design/build waves. The first playable
-  spine is canonical mechanics -> exact BattleMat plus mandatory EngagementLens -> provider-neutral DM seat and
-  fallback -> persistence/recovery; a single small clay room precedes multi-room, site/cold, relational, travel,
-  town, and portfolio modules. Borderline features remain in the MVP with narrowed breadth.
-- Closed F10.9g on staged land travel: deterministic rational macro-biomes, existing Fray/Spice edge authority,
-  persistent grid/node-owned journeys, route choices, encounter/remount continuity, and minimal transport identity
-  and capability before later horse/wagon integration. Bespoke generated choice imagery is not a pre-alpha
-  dependency.
-- Closed F10.9h and h.1-h.15 on bounded town continuity. C2M retains one canonical district/venue chain through
-  arrival, Urban Walk, real-roll venue, social/exploration, battle, aftermath, remount, pursuit, civic response,
-  transport anchoring, schedule/access gates, departure, and return.
-- Advanced the live Wave 10 record to the five-question F10.9i-F10.9m batch at section 11.95. P10.9 and Wave 10
-  remain open; performance/device/accessibility stays P10.10.
-
-**Deferred**
-- No procedural-dungeon, BattleMap/TownTray, trim-sheet, travel, town, companion-autonomy, or information-layer code
-  was implemented. C1H, C1I, C2M, the remaining P10.9 cases, P10.10-P10.12, and explicit Wave 10 closure remain
-  future work.
-- `Reference/FFT Battle Maps/` remains local and untracked pending production-rights/provenance review.
-
-**Verified**
-- Full local CI-equivalent close gate: manifest `RESULT: OK`; 223 verifier harnesses with 0 real reds and 17
-  expected optional-dependency skips; bridge 64/64; table lint 37/37; playtest probes green with only the two
-  already documented/WAI present cases.
-
-## 2026-07-19 (later) — CI GREENED + WAVE 1 DESIGN LANE LANDED [Claude Code]
-
-**Fixed**
-- The master CI red (4 straight failures since 2026-07-18): the one surviving real failure after
-  PR #1's LFS repairs was `dev/verify-wiring-a.mjs` §13c — a fixed six-montage count can't
-  guarantee crossing a 5-day-out wakeAt now that HQ3-C2 makes an interrupted rest burn a rolled
-  partial window (`restInterruptMinutes`: 360–1080 of 1440). Node 20 (CI) consumed the seeded
-  rest-risk stream differently than node 22 (local), interrupting enough montages that the KO'd
-  PC *correctly* stayed down. §13c now montages until the clock has actually crossed wakeAt
-  (bounded ×40) and asserts the crossing wakes exactly once — E21's real claim; the exactly-once
-  + no-refire assertions stay load-bearing. 10/10 green at the CI default seed + a 13-seed sweep.
-
-**Changed**
-- Landed `docs/procedural-dungeon-wave1-checkpoint` to master as one --no-ff merge (79 docs
-  commits): `PROCEDURAL-DUNGEON-DIRECTION.md` grew to 9,872 lines of settled Wave 1 rulings and
-  `PROCEDURAL-DUNGEON-ARCHITECTURE-SKETCH.md` (1,155 lines) was born. The lane's own HANDOFF
-  pointer ("resume at question 12") was stale — the file actually runs through question 20, a
-  Wave 1 audit, roster/light-sim/realization design, and ends at **open decision 3C** (typed
-  TerminalDisposition vs the `obliterated` boolean), awaiting Adam.
-- Discharged Codex's `FULL CI PENDING` marker: this close ran the full CI-equivalent gate
-  (check-manifest, the whole verify-*.mjs sweep with CI's dep-skip posture + seed shim,
-  verify-bridge, verify-table-lint, playtest-bug-probes) and pushed with the GitHub run watched
-  to green. Pruned the two merged dungeon worktrees (`Genesis-dungeon-wave1`,
-  `Genesis-procedural-dungeon`) + their branches.
-
-## 2026-07-19 - PROCEDURAL DUNGEON WAVE 1 CHECKPOINT + FAST-COMMIT MODE [Codex]
-
-**Added**
-- Wave 1 questions 1-10 and follow-ups to `PROCEDURAL-DUNGEON-DIRECTION.md`: lore-first purpose
-  authority, operator/doctrine/construction identity, resource ecology and occupancy, historical
-  lineage, misunderstood rooms, and the bounded-place extension for manors/castles/other sites.
-- A two-mode git close policy in `CLAUDE.md`, `AGENTS.md`, and both Genesis clean-close skill variants:
-  proportional fast checkpoints versus the single full final/evening close.
-
-**Changed**
-- Purpose now gates a coherent whole-site roster without absolutely blacklisting rooms. The working
-  affinity vocabulary is core/supporting/compatible/exceptional/conflicting; culture and history can
-  make a sacrificial chamber native to a military fort.
-- The clean-close skill no longer triggers for docs checkpoints, local-only merges, or explicit
-  no-CI/no-push requests. Existing worktrees must be reused; genuinely new worktrees use
-  `GIT_LFS_SKIP_SMUDGE=1` unless the task needs binary assets.
-
-**Deferred**
-- Wave 1 remains open at question 11; exact purpose profiles/weights, questions 12-20, and all
-  follow-ups remain discussion work. No dungeon implementation is authorized.
-- `FULL CI PENDING - Opus owns the next full gate`; Codex intentionally ran no CI and did not push.
-
-## 2026-07-18 (later) — PROCEDURAL DUNGEON DISCOVERY: research corpus + direction captured [Codex]
-
-**Added**
-- `PROCEDURAL-DUNGEON-DIRECTION.md`: the accepted high-level room-compiler direction, open design
-  forks, implementation boundary, and a twelve-wave discussion map with a strict closure gate.
-- A deep technical research package: long-form synthesis, audited engine crosswalk, verified 22-page
-  report PDF, nine primary-source PDFs, and a checksum/source index under
-  `Reference/Procedural-Dungeon-Research/`.
-- A three-option interim visual-engine comparison covering range-strip, schematic-board, and hybrid
-  storyboard presentations.
-
-**Changed**
-- Recorded the procedural-room shift from independent decorative/structural rolls toward function-led
-  recipes compiled through tile/slot legality, portal-first placement, assemblies, degradation, and
-  persistent diagnostics—without authorizing implementation yet.
-- Added Adam's verbatim interim-visualizer ruling to `ART-DIRECTION-CANON.md`: lighting, normal maps,
-  useful existing sprites, and environmental beauty remain required even if the room view simplifies.
-- Opened Wave 1 (Dungeon Function, History, and Strange Compatibility) in `NEXT-STEPS.md`; later waves
-  cannot begin until all material follow-ups are exhausted and Adam explicitly closes the current wave.
-
-**Deferred**
-- No room compiler, table rebuild, walk mutation, renderer cutover, or final A/B/C visualizer choice.
-- Push is deliberately deferred until Adam calls for the before-bed backup.
-
-## 2026-07-18 — COME-HOME: repo back on the internal SSD + Git LFS live [Claude Opus 4.8, scheduled task]
-
-**Changed**
-- Repo migrated from the external `/Volumes/Genesis/Genesis` back to `~/Desktop/Work/projects/Genesis` (internal SSD). `git status` ~25 s → **0.16 s** warm. The external copy is left untouched as the cold backup (delete nothing there).
-- **Git LFS adopted** (git-lfs 3.7.1). History rewritten via `git lfs migrate import --everything`; all binaries now globally tracked (`*.png,*.jpg,*.psd,*.mov,*.zip`, …). **6.3 GB / 11,222 objects on GitHub LFS** (of the 10 GiB free tier). The 134 MB `quarantine-pack/pre-unification/originals-r2.zip` push blocker dissolved into an LFS pointer; rewritten history force-pushed for all 122 branches (Adam pre-authorized). master `3aa59f88` → **`e5511e98`**.
-- Launchers (`~/Desktop/Launchers/Open Genesis*.command`, Model QA, Light Lab) + `.claude/launch.json` rerouted home. After a fresh checkout, run `git lfs checkout` to smudge pointers to real content (the game needs it).
-
-**Added**
-- Cold shelf on Google Drive (`My Drive/Genesis Cold Shelf/`): Reference/*.pdf scans, quarantine-pack zips, faceted-harvest-2026-07-14, the sprite-r4 discarded round — restorable via `dev/cold-shelf/fetch-cold.mjs` (reads `dev/cold-shelf/manifest.json`). Reference/SRD-Data + _Index stayed in-repo.
-
-**Deferred**
-- ~8.5 GB orphan worktree dirs on `/Volumes/Genesis` (`…-spec.incomplete-20260716`, `…-kgr7-texture-readiness`, `…-kgr4c-promote`) left in place pending Adam's delete confirmation (possibly-unique generated art).
-
-## 2026-07-16 — THE KENNEY-SOCKET WAVE LANDS + PIXEL-FIRST + the design meeting executed [Claude Fable 5, orchestrated]
-
-The 2026-07-15 design meeting's rulings (DESIGN.md, three entries) executed end-to-end overnight.
-Every unit executor-built, orchestrator-re-gated (harnesses re-run, every card READ), landed
---no-ff, pushed per landing.
-
-**Added — THE KIT ENGINE:** all 16 Kenney packs banked · KS-1 donor adapter + THE SOCKET SCHEMA
-(47 structural pieces normalized to the 5-ft grid; floor/butt-join/top/hinge sockets; three-card
-bridge gate, all DIRECT_MODULATED) · KS-2 THE DOOR IS AN ASSEMBLY (kit frame + hinge-socket leaf;
-4 states as hinge rotations; QF-D1 wall-run axis fix kills the sideways-frame "hollow column";
-floating leaves structurally impossible) · KS-3 kit room shells (rect/octagon/L assemble from
-socketed modules, mixed kit+prism legal, realm-graded, KIT_SHELL_ENABLED one-flag revert) ·
-KS-3b look pass (the checkerboard floor was Z-FIGHTING — hull-on-flat-quad — killed; kit walls
-join the camera-side cutaway; gate-door "defect" DISPROVEN honestly; corners ruled
-prism-permanent on measurement).
-
-**Added — CONTINUITY + LIGHT + ELEVATION:** F1 combat is a STATE of the explored room (ledger
-#10 CLOSED; identical scene recipe across explore→fight→end on all 5 shapes; every combatant on
-its own real cell — the stacked-invisible-rat fixed) · F2 staging-beat registry (ledger #11
-CLOSED; shop_open/closed/long_rest/walk_complete micro-stages, stable ids, provenance-stamped,
-zero boot edits) · LL-1 Stage-E mechanisms (exposure floor + emissive-masked bloom — the daylit
-blow-out killed: 3.4%→0.0% clipped) + LIGHT-LAB (18 live tunables, export→fold round-trip;
-parked dormant per Adam's Q11) + "Open Genesis Light Lab.command" launcher · ELEV-1 rolled room
-elevation (Adam's d100 table live in Engine markdown; weighted roller + min-dims walk-down +
-depth bias; shape-generic tiers ±3; ELEV-1b render-polish before-state banked).
-
-**Changed — PIXEL-FIRST (Adam's sheets verdict):** the faceted flip RETREATED — registry
-all-legacy, faceted = per-creature-re-admissible reserve; docs/ART-DEPARTMENT.md = the pixel
-register's canonical home + regeneration runbook (CLAUDE.md mandate updated; ART-DIRECTION-CANON
-carries the ruling verbatim) · MC-1+MC-2 magenta crud killed (148 fleck-cleans + 372
-hole-punches adjudicated against originals; cloud class verified clean by eye; PC lane + 33
-orig-unavailable slugs deferred to eyes) · flip-verdict sheets (21, all 252 pairs) + faceted
-mismatch audit (206/252 sound; two pipeline bugs — r3a off-by-one file-save + 4 byte-dup PC
-files; 22 salvageable by re-cut) · the washout evidence stack (PAL-AB + retina card 4): palette
-quantization = hue-specific loss (blue dragon −47% sat) AND manufactured magenta from blue
-(djinni); AgX = dominant chain lever. **Adam's originals restoration ruling PENDING — one word.**
-
-**Fixed:** F1 harness red-first baseline pinned (the HEAD-staleness class, 3rd occurrence — now
-a named pattern); stray root-tree palette regen reverted (lane violation caught by the dirty-file
-check).
-
-**Deferred:** KS-3c sawtooth on far-wall top rims (same hull class, orchestrator-flagged) ·
-ELEV-1b risers/stairs + gallery/chasm seam gaps · rest-prop collision-awareness · occlusion-aware
-combat cell pick · LL-1b light-lab live-replay for 2 tunables · the proving run + playtest (next
-wave head, per the meeting).
-
-## 2026-07-15 (later) — THE VQ2/FLIP PASS: Sol's laws folded · THE SPRITE FLIP LIVE · the demand census + ledger [Claude Fable 5, orchestrated]
-
-Adam's directives (VQ2 as suggestions-for-law · sprite flip w/ v3 reserve · faceted inventory ·
-gameplay rounds → demand-vs-null · extrusion plan · re-spec + orchestrate) executed end-to-end.
-Re-spec = `docs/VQ2-RESPEC.md` (Sol dispositions §1 + Waves S/L/F/X); every unit executor-built in
-an isolated worktree, orchestrator-re-gated (harnesses re-run personally, captures READ), landed
-`--no-ff`, pushed per landing.
-
-**Added**
-- **WAVE S COMPLETE — THE SPRITE FLIP IS LIVE.** S1 faceted corpus landed (419 candidates, F2–F15
-  packets) · S2 `build/cut-faceted.py` (252 figures cut to `assets/sprites-faceted/`, 47 loud
-  skips; multi-cell splits via provenance `cells[]`) · S3 B1 standee contract + admission schema +
-  the tags/heights INVENTORY (`faceted-inventory-report.json`) · S4 bestiary-id map join
-  (`SPRITE_BY_BESTIARY_ID`, ledger P0 #1 class killed) + 60 orphan fold-ins (registry 4316→4376,
-  252/252 joined) · S5 THE FLIP (252 `runtimeAdmitted:"candidate"`; `FACETED_FLIP_ENABLED` =
-  one-flag revert; `assets/sprites/` v3 = untouched reserve) · S6 sprite editor serves faceted,
-  legacy-vs-candidate side-by-side, editable `feet` (overlay > measured > band-default ladder).
-- **WAVE L COMPLETE — the demand instrument exists.** L1 rig extensions (the bot FIGHTS ·
-  transition camera · shop-render verdict · record-less settlement leg · `--force-realm` ·
-  `--route`) · L2 the census (5 seams instrumented, `census.json` per run, byte-identical-render
-  proof) · L3 **PL-4: 4 realms × routes, 96 shots, 65/65 legs → `dev/play-lens/DEMAND-LEDGER.md`**.
-- **B3 standee acceptance gallery** (core-three × light × yaw + flip pairs) — the P3-2 Stage B
-  taste artifact; **X1** extrusion spec + pilot artifacts landed (EXTRUDED-SPRITE-PROP-LIBRARY +
-  proofs + 42 library GLBs).
-
-**Ledger verdicts (PL-4, evidence-graded):** P0 #2 vanishing-PC **FIXED** (9 frames, 3 realms) ·
-P0 #1 rat-miscast **NOT-REPRO/reclassified** (faceted texture resolves every time; the rat is
-lane-STACKED invisible — F1 side-effect expected) · **null-facade root cause found**: settlement
-mint always degrades to realm key `frontier` which `REALM_TEXTURES` never defines (key-routing
-bug, not just missing art) · **shop panel never renders under the battle stage** (new wiring gap;
-chip filed) · 21 NPC role-portrait slugs = the measured art-packet demand list · daylit Large-
-creature blow-out across all realms (B3) = Stage E evidence.
-
-**Changed** — DESIGN.md 2026-07-15 entry (Sol dispositions + the flip ruling); NEXT-STEPS new
-Do-next; Sol's P-A..P-F folded per §1 (P-A gates→Stage E; P-B/C/D/E/F → F-wave units; cut list
-wholesale).
-
-**Deferred** — F1 combat-in-room + F2 staging beats (specced, next session's top; now with
-sharper evidence) · B2 physical standee + B4 kill size-inference (B2 is Adam's B3-gated taste
-build) · r*-v2 return dirs (56 files) unprocessed pending ruling · 21 fantasy orphan heights =
-`missing` (Adam's editor pass) · gloom/chrome faceted tranches (all 252 candidates are
-fantasy/pc).
-
-## 2026-07-15 — THE AUTONOMOUS ARC: quick-fix wave + ENV/EXTERIOR (daytime · sun/moon · biomes · town) + PL-3 [Claude Opus 4.8, autonomous per Adam's delegation]
-
-Adam delegated ("take your direction on the wave order, work autonomously"); the ledger ordered the
-waves. Every unit orchestrator-re-gated (own harness runs, every card READ + shared in-chat per
-Adam's ask), landed `--no-ff`, pushed. Master tip `c0a60b77`.
-
-**Fixed (QUICK-FIX WAVE, ledger P0):**
-- QF-B: the "wireframe cage" = buildWebMass (spider web, baked ghost-silk vertex colors) reused as
-  placeholder for ~15 props → luma-preserving `retint` authored in realm-props.json (generator-
-  threaded); head-clip + arrival-blob shared one root (tabletop camera carried no figure height) →
-  TABLETOP_CAMERA_HEADROOM. QF-A: class-wide scoping bug — the active-room render mounted the WHOLE
-  plan's doors+dressing in the current room's frame (also explains ledger P2 #14) + the door
-  cell-pick could land on the neighbor's paired entry; 8/8 rooms now at the 0.5u wall offset.
-  Rat-miscast + vanishing-PC honestly could-not-reproduce (leads documented; lens re-tests).
-
-**Added (ENV/EXTERIOR WAVE — Adam's "we don't even have daytime! or a town scene", measured then built):**
-- **ENV-1 light profiles differentiate everywhere** (root: void tint env-keyed never profile-keyed +
-  STAGE_AMBIENT_FLOOR clamping; daylit-vs-moonlit luma 0.0254 → 0.528; TABLETOP_EXTERIOR_LOOK = the
-  re-tune table). **ENV-1b cast shadows on the tabletop** (Adam's ruling; the fake "no shadow maps"
-  law retired — see DESIGN.md 2026-07-14; darkening 0.154 proven; fps floor ~660). **ENV-1c the
-  sun and moon MOVE** (Adam's ruling; continuous clock → celestial arc; key travels 11.25u dawn→noon,
-  shadows flip sides morning/dusk; CELESTIAL_ARC keyframes; manual 3-way merge composed with ENV-3 —
-  towns carry the clock). **ENV-2 travel legs project their ROLLED biome** (wild-walk already rolled
-  one per leg — the tray discarded it; BIOME_DRESSING 10 biomes → existing-asset pools; ground-map
-  fix for Deeplands/Underwater; the "missing PC" = arrangeTableau centering (0,0) on corner-anchored
-  boards). **ENV-3 the settlement tray** (root: settlements deliberately bind no place record →
-  fell to idle; nodeIsSettlementKind routes them; diner-class proven untouched) + **ENV-3b the
-  composition** (orchestrator bounced round 1: monolith cubes/maze camera/fused lots/toast/mirrored
-  cards — all 5 root-caused, incl. one race with two symptoms: the async art-arrival replay dropped
-  the height-fit AND rebuilt cards unfaced).
-
-**PL-3 (the composed-stack lens re-run):** same route, 26 shots, 0 breaks — **6 ledger items
-verified FIXED in real play** (travel biomes under a morning sky; the PC casting a morning-direction
-shadow; profiles distinct; PC centered/framed; no wireframes; arrival real). Deltas appended to
-dev/play-lens/ledger.md.
-
-**Deferred / Adam's red-pen packet:** facade art (doors/windows/roofs) + NPC card art (ImageGen/kit
-lane) · daylit soft-shadow + arc keyframe tuning (one table each) · Stage E exposure/bloom (next in
-  ledger order) · combat-leg delta read next audit · town lens-read at a record-less settlement node.

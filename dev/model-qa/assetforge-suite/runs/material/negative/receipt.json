@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "family": "material-map-baker",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-suite/manifests/material-negative-seam.json",
+  "manifestSha256": "269736e9f5d1fdb587a1c57e0b9c181b01299efc10a0cbde1e24a4f74dd83022",
+  "technicalStatus": "FAIL",
+  "gates": {
+    "sourceHashMatches": true,
+    "sourceSeamWithinBudget": false,
+    "compiledAlbedoSeamExact": false,
+    "allChannelsMatchDimensions": true,
+    "heightRangeValid": true,
+    "normalRangeValid": true,
+    "derivedSeamsExact": true,
+    "channelsRemainProposals": true
+  },
+  "outputs": {
+    "albedo": "dev/model-qa/assetforge-suite/runs/material/negative/albedo.png",
+    "height": "dev/model-qa/assetforge-suite/runs/material/negative/height.png",
+    "normal": "dev/model-qa/assetforge-suite/runs/material/negative/normal.png",
+    "roughness": "dev/model-qa/assetforge-suite/runs/material/negative/roughness.png",
+    "emissive": "dev/model-qa/assetforge-suite/runs/material/negative/emissive.png",
+    "proofBoard": "dev/model-qa/assetforge-suite/runs/material/negative/proof-board.png"
+  },
+  "details": {
+    "sourceEdgeDelta": 42.833333333333336,
+    "compiledAlbedoEdgeDelta": 42.833333333333336,
+    "seamLockApplied": false,
+    "normalBlueMinimum": 253
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

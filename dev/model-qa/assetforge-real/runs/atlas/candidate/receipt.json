@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "family": "atlas-optimizer",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-real/manifests/atlas-real.json",
+  "manifestSha256": "eec4cfb2338da1c92853367cbe5510ce41ff786d3ee5c914a17016cf5a316ef4",
+  "technicalStatus": "PASS",
+  "gates": {
+    "assetIdsUnique": true,
+    "allSourcesPresent": true,
+    "allAssetsPacked": true,
+    "payloadRoundTripsExactly": true,
+    "uvsNormalized": true,
+    "byteBudgetRespected": true
+  },
+  "outputs": {
+    "atlas": "dev/model-qa/assetforge-real/runs/atlas/candidate/atlas.png",
+    "metadata": "dev/model-qa/assetforge-real/runs/atlas/candidate/atlas.json",
+    "proofBoard": "dev/model-qa/assetforge-real/runs/atlas/candidate/proof-board.png"
+  },
+  "details": {
+    "errors": [],
+    "assetCount": 3
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

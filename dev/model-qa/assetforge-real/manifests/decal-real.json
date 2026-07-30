@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "qualification": {
+    "kind": "real-repository-asset",
+    "admission": "candidate-only"
+  },
+  "family": "decal-stamp",
+  "sheet": "assets/decals/shared/shared-crack-decal-set-3.png",
+  "sourceSha256": "9e5694b8aa094f1e0f5e08046efcd320363294cbcbfceac0c66d556128075f52",
+  "sourceMaster": "assets/decals/source/shared-crack-decal-set-3.png",
+  "sourceMasterSha256": "2b2862765a917fc6a965be5b3fae3d1068cf77a4f8e5d1349003637a6fcf683d",
+  "chromaKey": "none",
+  "alphaCutoff": 12,
+  "isolationMode": "alpha-component-groups",
+  "componentGroupAlphaCutoff": 0,
+  "componentAnchors": [
+    [
+      256,
+      256
+    ],
+    [
+      768,
+      256
+    ],
+    [
+      1280,
+      256
+    ],
+    [
+      256,
+      768
+    ],
+    [
+      768,
+      768
+    ],
+    [
+      1280,
+      768
+    ]
+  ],
+  "ids": [
+    "impact",
+    "spiderweb",
+    "fault",
+    "craze",
+    "radial",
+    "branch"
+  ],
+  "maxBaseDimensionPx": 192,
+  "atlasMaxWidthPx": 1536
+}

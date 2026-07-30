@@ -1,0 +1,24 @@
+{
+  "slug": "fixture-guard",
+  "source": "dev/model-qa/assetforge-suite/fixtures/sprite.png",
+  "sourceSha256": "97b25d23afa67c8effc165e4e02b5a43c51fab609855aa7698037715aa769c63",
+  "footX": 0.465278,
+  "footY": 0.920455,
+  "contentBounds": [
+    0.25,
+    0.136364,
+    0.819444,
+    0.920455
+  ],
+  "alphaCutoff": 0.5,
+  "shadowProfile": "soft-pool",
+  "worldHeight": 6.0,
+  "heightSource": "overlay",
+  "runtimeContract": {
+    "materialRecipe": "lit-standee-v2",
+    "colorSpace": "srgb",
+    "magnificationFilter": "nearest",
+    "minificationFilter": "trilinear-mipmap",
+    "alphaMode": "registry-cutoff+alpha-to-coverage"
+  }
+}

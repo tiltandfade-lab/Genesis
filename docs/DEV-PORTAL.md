@@ -226,17 +226,21 @@ Reuse `dev/sprite-review.py` data and the real `assets/sprites/` file. Editable 
 
 ```js
 {feet, floorLinePx, anchorXPx, anchorYPx, offsetXPx, offsetYPx,
- emotes:{idle?,furious?,wounded?,grim?,triumphant?},
+ emotes:{neutral?,angry?,happy?,nearDeath?,resting?,rearView?},
  lifecycle:{status:"live"|"retired",reason?,replacementId?}}
 ```
 
-Emote controls appear only for `pc` or `boss`-tagged entries. They bind discrete sprite ids; there is
-no frame/timeline UI. Save updates the source overlay through the server, regenerates
+Assetforge may compile candidate emote bundles for any registered monster, NPC, or PC, but the
+portal remains the runtime-admission boundary. Emote controls appear only for `pc`, `boss`-tagged,
+or separately `emoteLicensed` entries. They bind discrete sprite ids; there is no frame/timeline UI.
+The canonical external state ids are `neutral`, `angry`, `happy`, `near-death`, `resting`, and
+`rear-view`; camel-case names in the pseudo-shape above are UI bindings, not alternate runtime ids.
+Save updates the source overlay through the server, regenerates
 `data/sprite-registry.js`, and writes an audit lock. `RETIRE SPRITE` is a separate red outlined action
 requiring reason and typed confirmation of the stable id. Retirement keeps the PNG and registry row,
 sets `status:"retired"`, removes it from casting pools, and preserves direct old-save resolution.
-Verification proves an ordinary NPC cannot receive an emote set, a retired sprite is not cast, and
-its stable id/replacement/provenance still resolve.
+Verification proves an ordinary NPC without `emoteLicensed` cannot receive an emote set, a retired
+sprite is not cast, and its stable id/replacement/provenance still resolve.
 
 ### 6.3 Lighting Lab
 

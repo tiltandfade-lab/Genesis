@@ -2101,3 +2101,227 @@ Binding consequences:
   showcase art, force every segment into a board, or reject a legal surprising roll.
 - Multi-session work is admitted only when it closes a current master-plan gate with a frozen
   shared contract, bounded ownership, verifiable output, evidence, merge order, and stop condition.
+
+## ASSETFORGE SPRITE-EMOTE AND BOUNDARY-COMPILER RULINGS (Adam, 2026-07-27 — binding; verbatim)
+
+> "on top of that a sprite-emote factory would also be nice, like if I could get you to just take any sprite and generate/proof/prove emote states for any monster/pc/npc sprite"
+
+The build-time sprite-emote factory may accept any registered monster, PC, or NPC sprite as input.
+That broad input scope creates quarantined candidates; it does not supersede the existing boss/PC
+runtime priority or grant automatic admission.
+
+> "please spec the expansions that you mentioned too, the boundary auto tile compiler would be so incredibly useful"
+
+The Assetforge expansion family includes a boundary auto-tile compiler. Its contract is semantic
+neighbor topology compiled into deterministic boundary variants and proof maps, not a prompt-only
+tile sheet or a renderer-owned adjacency guess. The detailed compiler and proof contract live in
+`ASSETFORGE.md`.
+
+> "we probably need emotes like neutral, angry, happy, near death, resting, and facing the other direction"
+
+> "as in viewed from behind"
+
+The default six-state pack is `neutral`, `angry`, `happy`, `near-death`, `resting`, and
+`rear-view`. Rear view is a true 180-degree back construction of the same subject, not a mirrored
+front sprite.
+
+> "resting should be more like a seated pose, think of ramza in the field blowing the grass"
+
+Resting is a quiet seated field-rest pose. The reference governs the emotional and pose read only;
+it does not license copied character design, grass, scenery, or other game content. Seated height
+compression is explicitly licensed and screened separately from ordinary standing-state scale drift.
+
+> "his hand is a little weird in the rear view shot, make sure the process screens for that"
+
+Every state requires explicit visual review of anatomy and hands, equipment presence and
+attachment, grip/contact, silhouette continuity, identity, and play-scale read. Rear view also
+requires true-back construction and rear equipment-attachment review. A failed check rejects the
+candidate; an unanswered check keeps it incomplete; technical measurements can never override
+either result.
+
+> "can you go ahead and build and prove the other assetforge apps?"
+
+The eleven remaining Assetforge families require executable first vertical slices, not roadmap-only
+specs. A first vertical slice reaches candidacy when its compiler emits quarantined outputs, a
+visual evidence board, a machine-readable receipt, a passing positive fixture, and a preserved
+red-first fixture that fails for the intended invariant. This is only the entry condition for a
+dedicated tool proving pass; it does not prove the tool, grant production admission, or substitute
+for art-direction review.
+
+## ASSETFORGE REAL-ASSET PROOF STANDARD (Adam, 2026-07-28 — binding; verbatim)
+
+> "so i don't think that image serves as proof, can you run each of the assetforge processes with real assets and prove the results?"
+
+Synthetic fixtures exercise deterministic contracts and preserved failure behavior; they do not
+prove that a compiler handles production-shaped Genesis art. Every Assetforge family must therefore also
+run against a named, tracked, decodable repository asset, record the exact source hash and lineage,
+emit its own receipt and proof artifact, and receive individual visual inspection. A combined board
+is navigation only. It cannot substitute for the family receipts or individual proofs. Failures
+found during that inspection remain failures until repaired and rerun; an aggregate green status
+cannot hide clipped art, dirty sheet fragments, cadence defects, anatomy defects, or other visible
+problems. Real-asset qualification is candidacy evidence, not a tool-level proof, runtime
+admission, or Adam's taste approval.
+
+## ASSETFORGE FIRST REAL-ASSET FOUNDER REVIEW (Adam, 2026-07-28 — binding; verbatim)
+
+> "the infinite repeat compiler seems to have changed or given us broken results
+>
+> the prop/kit compiler might actually work if the angle matches the exact camera angle, i am not sure that it does, but also the sprite clips at the bottom, sprites that are meant to stand in for 3d objects would always layer in front of the ground and never be clipped by the ground
+>
+> condition state factory is a step forward, but i think we need to see MORE age, that's some pretty conservative aging
+>
+> the palette harmonizer is very similar to the process we already had in the game, does this conflict with the standing harmonizer?
+>
+> the trim slice compiler seems very useful, there are CSS tricks to achieve the same effect without cutting a new sprite but it still seems like a useful tool for elongating sprites like that
+>
+> did the sprite citizen compiler build on our current tools? i just want to make sure we don't have several duplicate tools in the system now
+>
+> the atlas optimizer is an actually very promising tool, this might allow us to use sprite items again instead of relying on 3d construction, we have to find the happy balance of both, and test the texturing of the 3d sprites, nice job with that, though i would eventually need to see those proven in the clay room, just not now.
+>
+> material map baker was another that was alreadt formed, as long as we don't have duplicates that are slightly different this is good"
+
+Binding consequences:
+
+- The current real repeat candidate is rejected. Exact equality of the outermost pixel rows cannot
+  substitute for closure of the declared component/course period.
+- A sprite used as a 3D-object stand-in must declare and match the production camera contract. Its
+  leaf art may not already be clipped, and its visible pixels win depth ties against the ground.
+- The retained aged condition state is too conservative. The canonical material lane must propose
+  a visibly stronger age ladder before condition registration is re-reviewed.
+- Palette harmonization, sprite citizenship, and material-map derivation each have one canonical
+  authority. Assetforge may wrap those tools with manifests, quarantine, proof, and receipts; it
+  may not ship a slightly different parallel algorithm or metadata schema.
+- Offline trim/nine-slice compilation remains useful alongside CSS `border-image`/nine-slice UI
+  techniques, particularly for canvas, WebGL, exported textures, and other non-DOM consumers.
+- Atlas work is promising and may help sprite items coexist with 3D construction. Runtime and
+  Clayroom proof are explicitly deferred until Adam requests them; atlas packing alone cannot claim
+  renderer batching or successful 3D-texturing integration.
+
+## ASSETFORGE PROTOTYPE-TOOL CONSOLIDATION AND BOUNDARY BREADTH (Adam, 2026-07-28 — binding; verbatim)
+
+> "reolace asset forge's palette harmonizer with the current version, or merge the two and get a best of both worlds thing. No sprites in the current build are the final sprites so nothing is lost, we want the best tools in assetforge first, then we can start to actually develop production assets, right now we are still in the prototype zone
+>
+> i am still unconvinced of the current implemented sprite citizenship, as of now sprites still look crust and dusty in the renderer in low light environments, so the citizenship sucks. I am open to modification of the current imoplementation
+>
+> the boundary tiler was cool, and i could see how that wouild work in manors, churches etc, but i think we want to see a more verbose and versatile version for things like cliffsides, or paths in the wilderness or roads, etc... I would need a set of renders to really believe if works"
+
+Binding consequences:
+
+- Assetforge is presently a prototype-tool program. No sprite in the current build is final or
+  production-admitted; optimize the compilers, renderer contracts, and proofs before producing the
+  production asset set.
+- Palette harmonization has one perceptual algorithm authority: `build/unify-corpus.py`. Assetforge
+  may expose that engine through typed manifests, quarantine, proof boards, and receipts, but may
+  not retain a second color-mapping implementation.
+- Sprite citizenship is judged in the actual production renderer under low-value light, not by an
+  isolated metadata card. Improve the existing registry/renderer path rather than adding a second
+  schema. Low-light proofs must include real sprites, multiple lighting recipes, play-scale crops,
+  and an over-bright negative-control context.
+- Boundary compilation has distinct dialects. Blob47 enclosure serves rooms, manors, churches, and
+  other architecture; wilderness paths require diagonal network grammar; roads require their own
+  width, shoulder, and track language; cliffs require explicit elevation transitions and visible
+  faces. Each dialect must have individual real-material renders. A combined board is navigation
+  only.
+- A mechanical `PASS` establishes a prototype candidate. It does not establish beauty, runtime
+  routing, production-asset admission, or final sprite identity.
+
+## PIXEL-SHARP CITIZENSHIP, ENGINE-LEGIBLE PATHS, AND GROUND ANTI-REPETITION (Adam, 2026-07-28 — binding; verbatim)
+
+> "did you chagne the scaling mode on the sprites? we were using nearest neighbor, the sprites look extra blurry now in the newest citizenship tests
+>
+> i have no idea what i am looking at on that path boundary compiler, what would that actally look like in the engine?
+>
+> and weren't you working on something to help with the ground texture repetition issue? that single tile repeating pattern is brutally repetitive"
+
+Binding consequences:
+
+- The `lit-standee-v2` trilinear-mipmap citizenship candidate is visually rejected. Pixel-sprite
+  citizenship must preserve a nearest-neighbor-sharp gameplay read; solving low-light dust or
+  shimmer may not soften the authored texel structure. Future proofs compare pixel-safe sampling
+  candidates in the real renderer at fixed play scale.
+- A top-down line diagram is not sufficient boundary/path proof. The path compiler must be consumed
+  by the production terrain projection and shown through the governed camera with real scale,
+  standees, elevation/contact, path width, shoulders/edge blend, intersections, and nearby dressing.
+  The viewer should understand the result as a wilderness path without interpreting a compiler
+  schematic.
+- Exact seam closure is necessary but does not solve visible cadence. Repeating one seamless tile
+  across a field is rejected when its internal landmarks form an obvious grid. Ground proof needs a
+  deterministic anti-repetition system—compatible variants or texture quilting, world-locked
+  selection, low-frequency macro variation, and sparse semantic overlays—before boundary beauty
+  renders can pass.
+- The existing per-room/per-cell tone jitter and small cover splats are supporting layers, not an
+  adequate substitute for breaking albedo repetition. The previously rejected `forcePeriodic`
+  modular-repeat output remains rejected.
+
+## GROUND-FIELD COMPILER MANDATE (Adam, 2026-07-28 — binding; verbatim)
+
+> "The missing tool is really a ground-field compiler, not another seamless-tile maker:
+> Generate several edge-compatible variants through texture quilting.
+> Select them deterministically using Wang/hash placement.
+> Add a much larger low-frequency color/roughness variation field.
+> Place sparse semantic overlays—bare soil, stones, grass clumps, wear.
+> Project paths into that field with blended shoulders.
+> Prove it in the actual engine across a large camera-visible area.
+>
+> this sounds like it should happen now"
+
+The ground-field compiler is a distinct Assetforge family and an immediate implementation mandate.
+It consumes seamless material parents but may not claim that one repeated parent solves visible
+cadence. A complete candidate requires all six stages named above, a deterministic repeated-tile
+negative control, machine-verifiable edge and cadence gates, and retained production-Theater
+captures over a large field with the governed camera, lighting, shadows, props, and standees.
+Technical success establishes a prototype candidate only; visual admission remains Adam's.
+
+## ASSETFORGE PRIMARY-FACTORY AND CANDIDACY RULING (Adam, 2026-07-28 — binding; verbatim)
+
+> "ok, that is a marked improvement but not exactly where we want to be with terrain but that's ok
+> this is one part of the process, go ahead and clean anything up, make sure that we know that
+> assetforge is going to be our primary asset factory for this project and that each tool in the
+> factory still needs improvement, some more than others"
+
+> "definitely not proven, each tool still needs its own proving pass, but each tool is at least
+> ready for candidacy when it comes to solving the particular problem that it solves"
+
+Binding consequences:
+
+- Assetforge is the primary asset-production front door for Genesis. New visual tooling and
+  production candidates should use its shared manifest, quarantine, evidence, receipt, and
+  admission lifecycle rather than fragmenting into unaudited one-off paths.
+- Primary does not mean duplicate ownership. Existing canonical specialist engines remain singular;
+  Assetforge orchestrates them and owns the factory envelope.
+- Every current Assetforge family is candidate-ready and not proved. Existing fixture gates,
+  receipts, boards, and engine captures are preliminary evidence. Each tool still requires its own
+  problem-specific proving pass.
+- The ground-field result is a marked improvement and one useful terrain layer. It is not the final
+  terrain language and may not be documented as “terrain solved.”
+- Improvement debt is tracked per tool and weighted by severity. Rejected correctness or renderer
+  behavior receives priority over breadth, polish, or high-volume asset production.
+
+## FFT/TS FINDINGS INTO ART DIRECTION, MATERIALS, AND ASSETFORGE (Adam, 2026-07-29 — binding; verbatim)
+
+> "a lot of those observations sounds like they should become art direction guides"
+
+> "please go ahead and lets harness what weve learned, especially about materials!"
+
+> "during this marriage pass you can you also spec any additional assetforge applications that could help us achieve this standard?"
+
+Binding consequences:
+
+- `GOLDEN-VIGNETTE-VISUAL-GUIDE.md` becomes the concise execution-facing visual guide beneath this
+  verbatim canon. The retained FFT/Triangle Strategy study remains evidence; estimates and proposed
+  thresholds do not silently become founder law.
+- The target combination is FFT composition economy, Triangle Strategy material/presentation
+  discipline, and Genesis persistent roll-authored consequence. Grammar may transfer; protected
+  layouts, meshes, textures, palettes, or content may not.
+- Material planning is two-stage. Semantic identity and recognition obligations are reserved
+  before topology; exact material, trim, decal, projection, and shallow-relief demands bind only
+  after real faces and stable local frames exist.
+- Materials carry surface identity, construction, culture, exposure, maintenance, use, causal
+  condition, focus, and persistent history. They may clarify geometry and mechanics but may not
+  invent either.
+- Assetforge is the primary factory envelope for these demands. The new Golden applications are
+  specified in `ASSETFORGE.md`; they orchestrate the canonical material, ground, palette, trim,
+  decal, extrusion, context, camera, and regression owners rather than duplicating them.
+- All Golden visual thresholds distinguish hard rejection, soft target, and provisional A/B
+  calibration. A tool receipt cannot promote taste or hide an individual failed frame behind an
+  aggregate score.

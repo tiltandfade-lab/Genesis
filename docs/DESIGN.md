@@ -1936,3 +1936,37 @@ curbs.
 | Natural/constructed join | **Binding for the synthesizer:** natural terrain is a connected responsive field whose shared edges/gradients negotiate continuity unless a sourced break is intended. Constructed form may cut, retain, bridge, pin, abut, rest on, or bury that field and records the join. Independent random tile slopes, diagonal zippers, and a global terrain-height cap are rejection cases. |
 | Wave-0 gate | **PASS (2026-07-29):** owners, contracts, selectors, negative controls, old census before-state, Wave-1 brief, and pre-change walk/game/combat/save/terrain/Clayroom baselines are retained. Wave 1 is authorized; later gates remain locked. |
 | Wave-1 gate | **PASS (2026-07-29):** the read-only observatory retains 12,718 deterministic validated rows under fingerprint `vgo1-edf8cc39`, all source facts receive explicit treatment, every required role is countable through truthful proxy demand, all adapters/dispositions/negative controls/selectors pass, and production walk/game/combat/save/terrain behavior remains green and unchanged. The combined `Prison / Asylum` source remains honestly unresolved; eight structured founder-review flags retain other questionable patterns and options without auto-changing source tables. Wave 2 is authorized next; later gates remain locked. |
+
+## Assetforge visual-compiler family (2026-07-27)
+
+Assetforge is the build-time compiler boundary between generated visual proposals and Genesis
+runtime citizenship. Its shared envelope is manifest → exact source/prompt provenance →
+quarantined ingest → deterministic compilation → family-specific proof → receipt → separate
+admission. A technical `PASS` can never make a taste ruling or silently replace a live asset.
+
+All twelve planned first vertical slices are built. Sprite emotes retain an additional explicit
+visual-identity/anatomy checklist; all other V1 families pair one passing fixture with one
+preserved red-first control. The boundary dialect is `boundary-blob47-v1`: eight-neighbor raw masks
+sanitize into 47 canonical semantic shapes and runtime consumers address semantic ids rather than
+atlas coordinates. Inferred material maps remain proposals, atlas packing remains lossless
+infrastructure, and regression detection reports change without deciding whether it is good.
+
+Owning contract: `ASSETFORGE.md`. Executable surface: `build/assetforge.py`. Retained evidence:
+`dev/model-qa/emote-factory/` and `dev/model-qa/assetforge-suite/`.
+
+## Locked decisions (2026-07-29 — Wave-1 founder dispositions and visual/material marriage)
+
+| Decision | Ruling |
+|---|---|
+| `MATERIALIZE_NEW` | This disposition says activation requires a new persistent site/window commitment. Classification is not an instruction to generate it immediately. |
+| `DECORATE_LOCAL` | This disposition realizes a licensed local feature, trace, fixture, encounter, or evidence inside the current window. “Decorate” is not limited to cosmetic or mechanically irrelevant clutter. |
+| Prison / Asylum | **Accepted recommendation:** the combined source requires an explicit purpose discriminator before materialization. Custody/confinement and care/treatment route to their own owners; absent that evidence, remain `UNRESOLVED`. |
+| Cavern / lair | A pure cavern does not imply a lair. An explicit creature lair is legal and should express creature-caused shaping, access, abrasion, nesting, waste/food, ecology, and claim appropriate to its occupant. |
+| Ruin | Ruin is physical condition, not operating state. Occupancy, dormancy, service, maintenance, control, and claim remain independent. |
+| Urban breadth | **Accepted recommendation:** district and typed-venue demand uses the existing Urban/Service or typed host and linked materialization windows rather than inventing a Golden Site or one giant board. |
+| Scale/window fallback | **Accepted recommendation:** every requested scale receives an explicit smallest-honest envelope and owner-backed linked-window fallback; unsupported scale stays countable rather than expanding the board silently. |
+| Wilderness promotion | **Accepted recommendation:** a wilderness feature promotes from `DECORATE_LOCAL` to a persistent site/window only when a functional circuit, objective, claimant, return-state obligation, or equivalent persistent relationship earns it. |
+| Demand vs materialization | **Accepted recommendation:** observatory demand counts and actual runtime materialization frequency remain separate measures. Common source demand does not require every occurrence to instantiate a board. |
+| Identity/material timing | **Accepted recommendation:** reserve identity faces/communication obligations during semantic planning; emit exact material, trim, decal, projection, and shallow-extrusion demands only after geometry has produced actual stable faces. |
+| Visual guide authority | `GOLDEN-VIGNETTE-VISUAL-GUIDE.md` routes the founder law and retained FFT/TS evidence into execution. Machine companions preserve hard rejection versus soft target versus provisional calibration. |
+| Assetforge Golden applications | Eight additions are **SPECCED / UNBUILT** under `ASSETFORGE.md`: surface-demand, material-family, surface-project, identity-face, causal-surface-state, join-kit, context-band, and vignette-proof. They do not alter the thirteen current candidate-ready/not-proved tools or duplicate canonical specialist algorithms. |

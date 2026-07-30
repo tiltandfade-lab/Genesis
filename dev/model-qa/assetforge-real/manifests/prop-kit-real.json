@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "qualification": {
+    "kind": "real-repository-asset",
+    "admission": "candidate-only"
+  },
+  "family": "prop-kit",
+  "sheet": "dev/model-qa/assetforge-real/sources/prop-kit-real-sheet.png",
+  "sourceSha256": "6b7d69d5e9eef5d49bb3270c5ff299ebcd145da5f86a691838b3eef6c3d3d23f",
+  "chromaKey": "none",
+  "grid": [
+    3,
+    1
+  ],
+  "ids": [
+    "chest",
+    "shrine",
+    "barrel"
+  ],
+  "paddingPx": 8,
+  "pruneDetachedFragments": true,
+  "fragmentMergePx": 0,
+  "maxPrunedAlphaRatio": 0.2
+}

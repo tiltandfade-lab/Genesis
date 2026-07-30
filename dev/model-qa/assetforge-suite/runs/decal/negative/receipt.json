@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "family": "decal-stamp",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-suite/manifests/decal-negative-bleed.json",
+  "manifestSha256": "8f6ce801d6d533d30a91121cccfb643b8bf62be7324d33633cf0b0762ea18525",
+  "technicalStatus": "FAIL",
+  "gates": {
+    "sourceHashMatches": true,
+    "componentCountMatches": true,
+    "sourceComponentsDoNotBleedOffSheet": false,
+    "everySourceAlphaPixelAssigned": true,
+    "transparentPixelsDefringed": true,
+    "halfScaleRemainsReadable": true,
+    "rotationScaleMatrixComplete": true,
+    "atlasContainsEveryVariant": true
+  },
+  "outputs": {
+    "atlas": "dev/model-qa/assetforge-suite/runs/decal/negative/atlas.png",
+    "proofBoard": "dev/model-qa/assetforge-suite/runs/decal/negative/proof-board.png"
+  },
+  "details": {
+    "componentCount": 2,
+    "variantCount": 24,
+    "chroma": {
+      "requested": "auto",
+      "detected": "magenta",
+      "dominantBorderRgb": [
+        255,
+        0,
+        255
+      ],
+      "keyRgb": [
+        255,
+        0,
+        255
+      ],
+      "tolerance": 12,
+      "softness": 0,
+      "keyedPixelCount": 7044
+    },
+    "extraction": {
+      "mode": "connected-components",
+      "declaredCellCount": null
+    },
+    "errors": []
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

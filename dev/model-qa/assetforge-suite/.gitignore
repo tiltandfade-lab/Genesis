@@ -1,0 +1,5 @@
+/single/
+/runs/*/negative/*
+!/runs/*/negative/receipt.json
+/runs/boundary/positive/proof-*.png
+!/runs/boundary/positive/proof-board.png

@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "family": "decal-stamp",
+  "sheet": "dev/model-qa/assetforge-suite/fixtures/decal-sheet.png",
+  "sourceSha256": "1b74a1aebf74a4e782d8eec746b4b417afae07288ada09c27370b914a98f767a",
+  "ids": [
+    "blood-pool",
+    "scorch"
+  ]
+}

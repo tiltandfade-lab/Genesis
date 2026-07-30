@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "qualification": {
+    "kind": "real-repository-asset",
+    "admission": "candidate-only"
+  },
+  "family": "condition-state",
+  "source": "dev/material-workbench-proof/generated/fantasy-floor-albedo.png",
+  "sourceSha256": "f427c445e6c7b8b1c5b7eccc2181d29d81d9619ff2a1a60e8a7093b62b30502b",
+  "chromaKey": "none",
+  "expectedStateCount": 2,
+  "maxChangedRatio": 0.25,
+  "states": [
+    {
+      "id": "aged",
+      "path": "dev/material-workbench-proof/generated/fantasy-floor-albedo-aged.png"
+    },
+    {
+      "id": "aged-wet",
+      "path": "dev/model-qa/assetforge-real/sources/fantasy-floor-aged-wet.png"
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "family": "ground-field",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-suite/manifests/ground-field-positive.json",
+  "manifestSha256": "21b04bce8ecad24bc5bf0493cde01d2a13c0b40ffab5a47b8e859da594996a74",
+  "technicalStatus": "PASS",
+  "gates": {
+    "baseSourceHashMatches": true,
+    "pathSourceHashMatches": true,
+    "textureQuiltingProducedDistinctVariants": true,
+    "wangTileSetComplete": true,
+    "wangNeighborClosureExact": true,
+    "deterministicWangHashPlacement": true,
+    "singleTileCadenceBroken": true,
+    "repeatedControlRetainsExactTilePeriod": true,
+    "compiledPixelsBreakExactTilePeriod": true,
+    "largeCameraFieldCompiled": true,
+    "macroFieldLargerThanTileCadence": true,
+    "roughnessHasLowFrequencyRange": true,
+    "materialLaneChannelsShareDimensions": true,
+    "normalChannelHasValidHemisphere": true,
+    "allSemanticOverlayKindsPresent": true,
+    "pathCoreContinuous": true,
+    "pathShouldersContainBlendValues": true
+  },
+  "outputs": {
+    "albedo": "dev/model-qa/assetforge-suite/runs/ground-field/positive/field-albedo.png",
+    "height": "dev/model-qa/assetforge-suite/runs/ground-field/positive/field-height.png",
+    "normal": "dev/model-qa/assetforge-suite/runs/ground-field/positive/field-normal.png",
+    "orm": "dev/model-qa/assetforge-suite/runs/ground-field/positive/field-orm.png",
+    "repeatedSingleBaseline": "dev/model-qa/assetforge-suite/runs/ground-field/positive/repeated-single-baseline.png",
+    "wangOnlyField": "dev/model-qa/assetforge-suite/runs/ground-field/positive/field-wang-only.png",
+    "roughness": "dev/model-qa/assetforge-suite/runs/ground-field/positive/field-roughness.png",
+    "macroVariation": "dev/model-qa/assetforge-suite/runs/ground-field/positive/macro-variation.png",
+    "semanticOverlayMask": "dev/model-qa/assetforge-suite/runs/ground-field/positive/semantic-overlay-mask.png",
+    "semanticOverlays": "dev/model-qa/assetforge-suite/runs/ground-field/positive/semantic-overlays.json",
+    "pathCoreMask": "dev/model-qa/assetforge-suite/runs/ground-field/positive/path-core-mask.png",
+    "pathShoulderMask": "dev/model-qa/assetforge-suite/runs/ground-field/positive/path-shoulder-mask.png",
+    "wangAtlas": "dev/model-qa/assetforge-suite/runs/ground-field/positive/wang-atlas.png",
+    "wangAtlasMetadata": "dev/model-qa/assetforge-suite/runs/ground-field/positive/wang-atlas.json",
+    "wangPlacement": "dev/model-qa/assetforge-suite/runs/ground-field/positive/wang-placement.json",
+    "proofBoard": "dev/model-qa/assetforge-suite/runs/ground-field/positive/proof-board.png"
+  },
+  "details": {
+    "compiler": "ground-field-quilt-wang-macro-semantic-path-pbr-v2",
+    "fieldCells": [
+      10,
+      8
+    ],
+    "fieldSizePx": [
+      640,
+      512
+    ],
+    "sourceMaterialScale": {
+      "baseAuthoredPx": [
+        128,
+        128
+      ],
+      "pathAuthoredPx": [
+        128,
+        128
+      ],
+      "normalizedWorldTilePx": 64
+    },
+    "wangVariantCount": 16,
+    "variantsPerWangCode": 1,
+    "wangNeighborPairsChecked": 256,
+    "variantDifference": 0.034975,
+    "uniqueTilesPlaced": 16,
+    "maximumIdenticalTileShare": 0.1875,
+    "repeatedTilePeriodDifference": 0.0,
+    "compiledTilePeriodDifference": 8.695838,
+    "macroGrid": [
+      4,
+      3
+    ],
+    "macroCellSpanInTiles": [
+      2.5,
+      2.667
+    ],
+    "roughnessRange": [
+      142,
+      236
+    ],
+    "normalBlueMinimum": 250,
+    "semanticOverlayCounts": {
+      "bare-soil": 3,
+      "stones": 6,
+      "grass-clumps": 4,
+      "wear": 3
+    },
+    "pathPointCount": 5,
+    "placementSha256": "171039ed66a3def1e1a57201764178e9aae324f472e66e313b51e0348ea278af"
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

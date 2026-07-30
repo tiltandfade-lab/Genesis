@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "family": "condition-state",
+  "source": "dev/model-qa/assetforge-suite/fixtures/sprite.png",
+  "sourceSha256": "97b25d23afa67c8effc165e4e02b5a43c51fab609855aa7698037715aa769c63",
+  "expectedStateCount": 3,
+  "maxChangedRatio": 0.25,
+  "states": [
+    {
+      "id": "damaged",
+      "path": "dev/model-qa/assetforge-suite/fixtures/condition-damaged.png"
+    },
+    {
+      "id": "burned",
+      "path": "dev/model-qa/assetforge-suite/fixtures/condition-burned.png"
+    },
+    {
+      "id": "corrupted",
+      "path": "dev/model-qa/assetforge-suite/fixtures/condition-corrupted.png"
+    }
+  ]
+}

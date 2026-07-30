@@ -1,0 +1,356 @@
+{
+  "schemaVersion": 1,
+  "rubricId": "golden-vignette-visual-rubric-v1",
+  "status": "FOUNDER_AUTHORIZED_WORKING_RUBRIC",
+  "updated": "2026-07-29",
+  "authority": {
+    "founderLaw": "docs/ART-DIRECTION-CANON.md",
+    "visualGuide": "docs/GOLDEN-VIGNETTE-VISUAL-GUIDE.md",
+    "programOwner": "docs/GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md",
+    "contractOwner": "docs/GOLDEN-SITE-VIGNETTE-CONTRACTS.md",
+    "assetforgeOwner": "docs/ASSETFORGE.md",
+    "assetforgeApplications": "docs/intel/golden-vignette-assetforge-applications-v1.json"
+  },
+  "evidence": [
+    "Reference/FFT-Triangle-Strategy-World-Study/synthesis.md",
+    "Reference/FFT-Triangle-Strategy-World-Study/lane-1-footprint-topology-pacing.md",
+    "Reference/FFT-Triangle-Strategy-World-Study/lane-2-geometry-shape-language.md",
+    "Reference/FFT-Triangle-Strategy-World-Study/lane-3-material-texture-palette.md",
+    "Reference/FFT-Triangle-Strategy-World-Study/lane-6-diorama-worldfulness.md",
+    "Reference/FFT-Triangle-Strategy-World-Study/lane-7-state-mutation-consequence.md"
+  ],
+  "target": "FFT_COMPOSITION_ECONOMY__TS_MATERIAL_PRESENTATION_DISCIPLINE__GENESIS_PERSISTENT_CONSEQUENCE",
+  "executionOrder": [
+    "STORY_AND_PLAY_TRUTH",
+    "TACTICAL_COMPOSITION",
+    "GEOMETRY_AND_CAUSAL_JOINS",
+    "FACE_AND_MATERIAL_RESOLUTION",
+    "LIGHT_AND_ATMOSPHERE",
+    "CITIZENS_AND_OBJECTS",
+    "WORLD_CONTEXT",
+    "PERSISTENT_CONSEQUENCE"
+  ],
+  "hardRejections": [
+    {
+      "code": "RANDOM_TILE_TERRAIN",
+      "test": "Natural cells behave as unrelated per-tile slope events."
+    },
+    {
+      "code": "DIAGONAL_ZIPPER",
+      "test": "Arbitrary triangulation creates a visible zig-zag seam across a landform."
+    },
+    {
+      "code": "SEDIMENTARY_RIDGE_REPEAT",
+      "test": "Repeated parallel bands or scarps substitute for a coherent landform."
+    },
+    {
+      "code": "GLOBAL_HEIGHT_CAP",
+      "test": "Terrain or structure height is globally limited to one quantum, five feet, or two storeys."
+    },
+    {
+      "code": "UNOWNED_TRAVERSABLE_HEIGHT",
+      "test": "A traversable height change lacks a mechanics-owned connector."
+    },
+    {
+      "code": "MATERIAL_INVENTS_AFFORDANCE",
+      "test": "Paint, decal, context, or donor art implies an opening, route, cover, support, or interaction the geometry and mechanics do not own."
+    },
+    {
+      "code": "UNCAUSED_JOIN",
+      "test": "Constructed and natural masses meet without a sourced cut, rest, retain, bridge, pin, abut, or bury relation."
+    },
+    {
+      "code": "FALSE_CONTEXT_AFFORDANCE",
+      "test": "Context implies a reachable surface, exit, opening, hiding place, bridge, or route that does not exist."
+    },
+    {
+      "code": "CAMERA_MUTATES_TRUTH",
+      "test": "Quarter-turn rotation changes geometry, routes, object identity, state, or tactical fingerprints."
+    },
+    {
+      "code": "UNCAUSED_WEAR",
+      "test": "Wear or condition is evenly random or lacks an exposure, use, event, ecology, maintenance, or authority cause."
+    },
+    {
+      "code": "PHYSICAL_STATE_INVENTS_OPERATION",
+      "test": "Ruin, damage, repair, or age is used to infer occupancy, dormancy, ownership, or operating state without a source fact."
+    },
+    {
+      "code": "SHARED_PARENT_MUTATION",
+      "test": "An instance consequence changes a shared material parent or unrelated sibling instances."
+    },
+    {
+      "code": "ACTIVE_FLOOR_OBSCURED",
+      "test": "Depth of field, fog, grade, particles, bloom, or foreground framing hides active tactical truth."
+    },
+    {
+      "code": "QUIET_GROUND_CONSUMED",
+      "test": "Incidental dressing consumes protected quiet ground, route space, deployment, or an interaction apron."
+    },
+    {
+      "code": "IDENTITY_OBLIGATION_DROPPED",
+      "test": "A semantic identity reservation has neither a realized face treatment nor an explicit truthful fallback."
+    }
+  ],
+  "softTargets": [
+    {
+      "id": "BROAD_MASS_COUNT",
+      "binding": "SOFT",
+      "target": {
+        "min": 2,
+        "max": 4
+      },
+      "measure": "ranked broad composition masses"
+    },
+    {
+      "id": "FIRST_DECISION_DISTANCE",
+      "binding": "SOFT",
+      "target": {
+        "minCells": 1,
+        "maxCells": 3
+      },
+      "measure": "entry to first meaningful route, cover, height, interaction, or threat choice"
+    },
+    {
+      "id": "MATERIAL_FAMILY_COUNT",
+      "binding": "SOFT",
+      "target": {
+        "min": 3,
+        "max": 6
+      },
+      "measure": "broad coherent material families in the active window"
+    },
+    {
+      "id": "SPATIAL_SENTENCE_COUNT",
+      "binding": "SOFT",
+      "target": {
+        "preferred": 1
+      },
+      "measure": "primary describable spatial relationship"
+    },
+    {
+      "id": "ACCENT_FAMILY_COUNT",
+      "binding": "SOFT",
+      "target": {
+        "preferred": 1
+      },
+      "measure": "controlled saturation or emissive accent family"
+    },
+    {
+      "id": "QUIET_GROUND_RESERVED",
+      "binding": "SOFT",
+      "target": {
+        "preferred": true
+      },
+      "measure": "deliberate low-complexity tactical/compositional space"
+    }
+  ],
+  "provisionalCalibrations": [
+    {
+      "id": "DAYLIGHT_HIGHLIGHT_P98",
+      "binding": "PROVISIONAL_AB",
+      "target": {
+        "minimum": 85,
+        "scale": "0_TO_100_LUMA"
+      },
+      "scope": "sun-keyed daylight face only",
+      "exclusions": [
+        "dark realm",
+        "night",
+        "interior",
+        "snow",
+        "metal",
+        "emissive"
+      ]
+    },
+    {
+      "id": "TEXEL_DENSITY_VARIANCE",
+      "binding": "PROVISIONAL_AB",
+      "target": {
+        "maximumPercentFromApprovedRegister": 25
+      },
+      "scope": "production material family A/B"
+    }
+  ],
+  "materialPipeline": {
+    "stages": [
+      {
+        "id": "SEMANTIC_IDENTITY_RESERVATION",
+        "timing": "BEFORE_TOPOLOGY",
+        "owns": [
+          "communication obligation",
+          "semantic role",
+          "source facts",
+          "visibility priority",
+          "interaction priority",
+          "fallback requirement"
+        ],
+        "forbids": [
+          "inventing geometry",
+          "choosing an asset id",
+          "choosing a vendor",
+          "pretending a face already exists"
+        ]
+      },
+      {
+        "id": "FACE_TOPOLOGY",
+        "timing": "DURING_GEOMETRY_AND_SURFACE_ASSEMBLY",
+        "owns": [
+          "surfaceRef",
+          "faceRef",
+          "role",
+          "local frame",
+          "boundary",
+          "mask",
+          "mechanical truths"
+        ]
+      },
+      {
+        "id": "SURFACE_MATERIAL_DEMAND",
+        "timing": "AFTER_FACE_EXISTS",
+        "owns": [
+          "material family",
+          "realm and culture",
+          "construction",
+          "condition channels",
+          "texel scale",
+          "trim and decal reservations",
+          "cause refs",
+          "candidate lanes",
+          "truthful fallback"
+        ]
+      },
+      {
+        "id": "ASSET_RESOLUTION",
+        "timing": "AFTER_DEMAND",
+        "owns": [
+          "admitted material",
+          "Material Maker output",
+          "ground recipe",
+          "trim atlas",
+          "decal",
+          "shallow extrusion",
+          "procedural fallback",
+          "unresolved debt"
+        ]
+      }
+    ],
+    "identityReservationRoles": [
+      "PURPOSE_RECOGNITION",
+      "CONTROLLED_THRESHOLD",
+      "CLAIMANT_MARK",
+      "PUBLIC_SIGN",
+      "CREST_OR_BANNER",
+      "SERVICE_OR_WORK_TRACE",
+      "CREATURE_SHAPING",
+      "CONDITION_EVIDENCE",
+      "OPERATING_STATE_EVIDENCE",
+      "OBJECTIVE_EMPHASIS",
+      "PERSISTENT_CONSEQUENCE"
+    ],
+    "surfaceRoles": [
+      "WALKABLE_TOP",
+      "NATURAL_SLOPE",
+      "CUT_FACE",
+      "RETAINING_FACE",
+      "WALL_FIELD",
+      "CROWN_COPING",
+      "JAMB_REVEAL",
+      "ROOF_DECK",
+      "WATERLINE_EDGE",
+      "UNDERSIDE_SUPPORT",
+      "MOUNT_FACE",
+      "SCENERY_FACE"
+    ],
+    "surfaceMaterialDemandRequiredFields": [
+      "demandId",
+      "planRef",
+      "surfaceRef",
+      "faceRef",
+      "role",
+      "localFrame",
+      "sourceFactRefs",
+      "mechanicTruthRefs",
+      "materialFamily",
+      "realm",
+      "culture",
+      "construction",
+      "conditionChannels",
+      "texelScale",
+      "causeRefs",
+      "candidateLanes",
+      "fallbackPolicy"
+    ],
+    "conditionChannels": [
+      "AGE",
+      "MOISTURE",
+      "DAMAGE",
+      "REPAIR",
+      "USE",
+      "MAINTENANCE",
+      "MAGIC",
+      "OCCUPATION",
+      "CLAIM",
+      "EMPHASIS"
+    ]
+  },
+  "geometryMaterialBoundary": {
+    "geometryOwns": [
+      "shape",
+      "support",
+      "collision",
+      "cover",
+      "sight",
+      "walkability",
+      "interaction reach",
+      "openings"
+    ],
+    "materialsOwn": [
+      "surface identity",
+      "construction read",
+      "realm and culture",
+      "exposure",
+      "maintenance",
+      "use",
+      "causal condition",
+      "visual emphasis"
+    ],
+    "materialsMayClarifyButNeverCreateMechanics": true
+  },
+  "camera": {
+    "mode": "FOUR_GOVERNED_QUARTER_TURNS",
+    "bearingsDegrees": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "freeOrbit": false,
+    "worldTruthImmutableAcrossBearings": true,
+    "tallMassDefault": "CAMERA_FAR_IN_AUTHORED_STARTING_BEARING"
+  },
+  "context": {
+    "bands": [
+      "NEAR_APRON_OR_FRAME",
+      "ACTIVE_TACTICAL_FLOOR",
+      "FAR_PREMISE"
+    ],
+    "activeFloorSharpest": true,
+    "mustRemainTruthfulAcrossFourBearings": true,
+    "falseAffordancesForbidden": true
+  },
+  "captureSet": [
+    "MECHANICS_CLAY_WITH_ROUTES_CONNECTORS_OBJECTIVES_FACE_ROLES",
+    "STARTING_BEARING_BEAUTY",
+    "QUARTER_TURN_90",
+    "QUARTER_TURN_180",
+    "QUARTER_TURN_270",
+    "GAMEPLAY_SCALE",
+    "CONTACT_SHEET_50_PERCENT",
+    "GRAYSCALE_VALUE",
+    "MATERIAL_FAMILY_AND_IDENTITY_OVERLAY",
+    "CONTEXT_OFF_ON_WHEN_PRESENT",
+    "STATE_BEFORE_AFTER_WHEN_PRESENT",
+    "CHANGED_SEED_SIBLINGS"
+  ]
+}

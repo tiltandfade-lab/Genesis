@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "qualification": {
+    "kind": "real-repository-asset",
+    "admission": "candidate-only"
+  },
+  "family": "trim-nine-slice",
+  "source": "assets/plaques/scene-banner.png",
+  "sourceSha256": "31c60f115a9d2cb1c60ecf9dd97dbbaed8ed681ab6d42751de5cdfd9c6861209",
+  "chromaKey": "#FF00FF",
+  "chromaTolerance": 55,
+  "sourceInsets": [
+    320,
+    0,
+    320,
+    0
+  ],
+  "outputInsets": [
+    46,
+    0,
+    46,
+    0
+  ],
+  "targets": [
+    [
+      260,
+      40
+    ],
+    [
+      500,
+      40
+    ],
+    [
+      900,
+      40
+    ]
+  ]
+}

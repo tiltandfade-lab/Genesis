@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "family": "visual-regression",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-suite/manifests/regression-negative-change.json",
+  "manifestSha256": "25d3eea29345563b2b97337cb0767a5114012a9ddde3d61fee0e40f575dc7ad4",
+  "technicalStatus": "FAIL",
+  "gates": {
+    "baselineHashMatches": true,
+    "currentHashRecorded": true,
+    "dimensionsMatch": true,
+    "perceptualDifferenceWithinThreshold": false,
+    "semanticOverlayPresentWhenRequired": true
+  },
+  "outputs": {
+    "diff": "dev/model-qa/assetforge-suite/runs/regression/negative/diff.png",
+    "proofBoard": "dev/model-qa/assetforge-suite/runs/regression/negative/proof-board.png"
+  },
+  "details": {
+    "differenceScore": 0.012865655637254902,
+    "maximumDifference": 0.0,
+    "baselineSha256": "99acc4dbe6efef259e338ccb38119e9632017d684b0fed76a163576cd6322a32",
+    "currentSha256": "80f2adc543dbc976053550c814259d947cec8fc217e4f2e6d0ef03419d465500"
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

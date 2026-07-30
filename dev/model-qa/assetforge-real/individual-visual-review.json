@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 2,
+  "reviewKind": "individual-real-asset-proof-inspection",
+  "reviewedOn": "2026-07-28",
+  "reviewer": "Codex",
+  "technicalQualification": "PASS",
+  "founderReview": "REVISE_AND_CONSOLIDATE",
+  "artAdmission": "BLOCKED",
+  "claimBoundary": "Every listed board was opened individually at original detail. Mechanical receipts do not override Adam's rulings. Adam subsequently rejected the trilinear citizenship render as blurry, the path board as non-engine-legible, and the repeated single-tile ground field. No current sprite or boundary presentation is final.",
+  "boardsInspected": 18,
+  "reviews": [
+    {
+      "family": "emote",
+      "run": "candidate",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/emote/candidate/proof-board.png",
+      "proofSha256": "c42a1f23bd26860713bd1734000973dbccdf60331d6eee0784fb8fcea21d9cf1",
+      "visualStatus": "REVIEW_REQUIRED",
+      "finding": "All six states read at proof and play scale. Resting is seated and rear view is a true back construction. The rear gauntlet and sword grip show no obvious malformed hand or broken contact in this return. Identity and taste still require Adam."
+    },
+    {
+      "family": "boundary",
+      "run": "candidate-navigation",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/boundary/candidate/proof-board.png",
+      "proofSha256": "6b46eb847b365c742d93abfb7758d65b74584c96a30fdf9889feeeed34f3e2a8",
+      "visualStatus": "NAVIGATION_ONLY",
+      "finding": "The combined four-dialect board is an index. It is not accepted as proof in place of the individual enclosure, path, road, and cliff boards below."
+    },
+    {
+      "family": "boundary-enclosure",
+      "run": "architectural-enclosure",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/architectural-enclosure/proof-board.png",
+      "proofSha256": "8815dcf3fc6b05832d839e7a17b42632e2049862cc09103b87287a2f09da5248",
+      "visualStatus": "PASS_CANDIDATE",
+      "finding": "The original Blob47 dialect remains coherent across architectural islands, holes, corners, necks, stairs, diagonal contacts, and its all-shapes stress field."
+    },
+    {
+      "family": "boundary-path",
+      "run": "wilderness-path",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/wilderness-path/proof-board.png",
+      "proofSha256": "614ac0384c5a7e8758d7b2d9dfdcdcffb0ea4fcc8b04f5652e80541787c74b20",
+      "visualStatus": "FAIL_NOT_ENGINE_LEGIBLE_AND_REPETITIVE",
+      "founderFinding": "The board does not communicate what a path would actually look like in the engine, and the single ground tile repeats brutally.",
+      "finding": "All 256 masks remain a useful topology result, but the beauty board uses Assetforge's continuous 2D route renderer over a periodically tiled grass canvas. It proves neither the production terrain projection nor an acceptable ground material field."
+    },
+    {
+      "family": "boundary-road",
+      "run": "wilderness-road",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/wilderness-road/proof-board.png",
+      "proofSha256": "14728cd15eac6429af6f8efa44441e0c2296bd478443ca04b4c5c20c0986bca7",
+      "visualStatus": "REVISE_GROUND_ANTI_REPEAT_AND_ENGINE_PROOF",
+      "finding": "All 16 cardinal masks remain mechanically covered, but the board repeats one grass source and one road source across the field. It is not yet a production terrain/camera proof."
+    },
+    {
+      "family": "boundary-cliff",
+      "run": "cliff-elevation",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/cliff-elevation/proof-board.png",
+      "proofSha256": "e2059584b69f0662f27bab8f1111ddce002f8e1d0fd0550e70f5a419629e3f1b",
+      "visualStatus": "REVISE_GROUND_ANTI_REPEAT_AND_ENGINE_PROOF",
+      "finding": "The four elevation bands and 16 cardinal transitions remain mechanically useful, but repeated top/face landmarks and the standalone dimetric harness still require anti-repeat and production terrain/camera proof."
+    },
+    {
+      "family": "repeat",
+      "run": "candidate",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/repeat/candidate/proof-board.png",
+      "proofSha256": "3347c33b5ed2892d7b82b57f9956cfdb8f735099cc97ab663a6df316d7157b98",
+      "visualStatus": "FAIL",
+      "founderFinding": "The infinite repeat result appears changed or broken.",
+      "finding": "Confirmed contract failure: the 512x512 tile does not divide the declared 82px horizontal and 72px vertical course periods. forcePeriodic copies only the outermost pixels and produces a false exact-seam PASS."
+    },
+    {
+      "family": "prop-kit",
+      "run": "candidate",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/prop-kit/candidate/proof-board.png",
+      "proofSha256": "67551a4449beed65e33d00f5ca833191bedb752d7939d58c391cf93baa752287",
+      "visualStatus": "FAIL_CURRENT_PROOF",
+      "founderFinding": "The camera match is unproved and the sprites visibly clip at the bottom. A 2D stand-in for a 3D object must layer in front of the ground and never be ground-clipped.",
+      "finding": "Cleanup removed foreign fragments, but the proof restages already-clipped leaf sources. It records no production camera contract and does not exercise the dressing-card ground-depth path."
+    },
+    {
+      "family": "condition",
+      "run": "candidate",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/condition/candidate/proof-board.png",
+      "proofSha256": "0fec6aadf7ffd94ecac7f531ac922310849e09637224eaa8870a465156d6d24a",
+      "visualStatus": "REVISE_MORE_AGE",
+      "founderFinding": "The condition-state result is a step forward but the aging is too conservative.",
+      "finding": "The state registration proof remains mechanically useful, but a stronger authored age ladder must be generated by the standing material workbench and then re-verified here."
+    },
+    {
+      "family": "palette",
+      "run": "candidate",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/palette/candidate/proof-board.png",
+      "proofSha256": "b8dfc4ff5a0c68bcbbe3ba63400e08fc0baa56264faa3a7f71f5edc92db75902",
+      "visualStatus": "CONSOLIDATED_CANONICAL_PASS",
+      "finding": "Assetforge now calls build/unify-corpus.py for shared defringe, Lab quantization, CIEDE2000 metrics, dominant-hue preservation, and forbidden-chroma checks. The real proof preserves alpha and semantic colors with mean CIEDE2000 4.1830, p95 8.2468, hue shift 3.6507 degrees, value-rank agreement 0.9549, and zero forbidden pixels."
+    },
+    {
+      "family": "trim",
+      "run": "candidate",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/trim/candidate/proof-board.png",
+      "proofSha256": "892a3f5c3e86aecc710cfcbed3d13244b77acb71838edb925d1adf97306a2d57",
+      "visualStatus": "PASS",
+      "finding": "Decorative caps remain intact at 260, 500, and 900 pixels; only the declared center span changes. The 40-pixel delivery height remains exact."
+    },
+    {
+      "family": "decal",
+      "run": "candidate",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/decal/candidate/proof-board.png",
+      "proofSha256": "71171801530f828c39de8687f86e3ad59f439c5864527250154382712473e373",
+      "visualStatus": "PASS_WITH_LIMITATION",
+      "finding": "All six crack families remain intact through four rotations with no nominal-cell clipping or chroma fringe. Final scene readability remains surface-dependent."
+    },
+    {
+      "family": "citizenship",
+      "run": "canonical-adapter",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/citizenship/candidate/proof-board.png",
+      "proofSha256": "ca21b84a2139c39a043a79ca86f47304558cdebd8ec7398d9f3a69ce31cec523",
+      "visualStatus": "CONSOLIDATED_CANONICAL_PASS",
+      "finding": "Assetforge now delegates foot anchors, content bounds, alpha cutoff, shadow profile, and world height to build/gen-sprite-registry.py and preserves the original source canvas. It is an adapter, not a second schema."
+    },
+    {
+      "family": "citizenship",
+      "run": "renderer-v2-low-light",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/citizenship/low-light-proof/citizenship-v2-before-after.png",
+      "proofSha256": "2de78f496c8b829be00fdccb9e95bb0ca1d63290d44bed19fba34c341b04e563",
+      "visualStatus": "FAIL_BLURRY_SAMPLING",
+      "founderFinding": "The newest citizenship sprites look extra blurry; nearest-neighbor sharpness was expected.",
+      "finding": "The A/B proves the trilinear-mipmap renderer contract, but that contract is visually rejected. At gameplay scale the sprites are minified, so averaged mip levels soften authored texels even though magnification remains nearest. Keep the canonical metadata adapter and rework sampling."
+    },
+    {
+      "family": "atlas",
+      "run": "candidate",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/atlas/candidate/proof-board.png",
+      "proofSha256": "e6127c3fad693ebf5f80670587412b020b2d988d0fe01b372e11684614dc126a",
+      "visualStatus": "PROMISING_FUTURE_CLAY_PROOF",
+      "founderFinding": "Promising route back to sprite items alongside 3D construction; Clayroom and 3D-texturing proof are required later, not now.",
+      "finding": "The pack/extract proof remains useful but is not yet the canonical runtime atlas lane."
+    },
+    {
+      "family": "material",
+      "run": "candidate",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/material/candidate/proof-board.png",
+      "proofSha256": "b9373c32942d59d2d698daeb1934c7815be4c10b0a9c3f73f1faecb86d92f9f9",
+      "visualStatus": "CONSOLIDATE_WITH_EXISTING",
+      "founderFinding": "This is acceptable only if it does not create a slightly different duplicate of the existing material-map machinery.",
+      "finding": "The duplicate baker remains unresolved. Assetforge may retain only manifest, quarantine, proof, and receipt orchestration over the canonical material pipeline."
+    },
+    {
+      "family": "regression",
+      "run": "candidate",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/regression/candidate/proof-board.png",
+      "proofSha256": "1c00c08710b0d0ceede719b082cfd8fc26485b5cb1008d506c2641630310e0b5",
+      "visualStatus": "PASS",
+      "finding": "Identical real floor inputs produce a visibly black difference panel and pass the zero-difference budget."
+    },
+    {
+      "family": "regression",
+      "run": "real-change-control",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/regression/real-change-control/proof-board.png",
+      "proofSha256": "5f39af15d358c7bee61502734f58c5bbe94b224a27a38af5ecc5c582975fece1",
+      "visualStatus": "EXPECTED_REJECTION_CONFIRMED",
+      "finding": "The changed aged-wet real floor produces a strong visible RGB difference and is correctly rejected by the zero-difference gate."
+    }
+  ]
+}

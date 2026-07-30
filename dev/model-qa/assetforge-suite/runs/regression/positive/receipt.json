@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "family": "visual-regression",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-suite/manifests/regression-positive.json",
+  "manifestSha256": "320bf42e34e2c66068cf940166c1585f37c4882b87a4992bd01e5a3051871548",
+  "technicalStatus": "PASS",
+  "gates": {
+    "baselineHashMatches": true,
+    "currentHashRecorded": true,
+    "dimensionsMatch": true,
+    "perceptualDifferenceWithinThreshold": true,
+    "semanticOverlayPresentWhenRequired": true
+  },
+  "outputs": {
+    "diff": "dev/model-qa/assetforge-suite/runs/regression/positive/diff.png",
+    "proofBoard": "dev/model-qa/assetforge-suite/runs/regression/positive/proof-board.png"
+  },
+  "details": {
+    "differenceScore": 0.0,
+    "maximumDifference": 0.0,
+    "baselineSha256": "99acc4dbe6efef259e338ccb38119e9632017d684b0fed76a163576cd6322a32",
+    "currentSha256": "99acc4dbe6efef259e338ccb38119e9632017d684b0fed76a163576cd6322a32"
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

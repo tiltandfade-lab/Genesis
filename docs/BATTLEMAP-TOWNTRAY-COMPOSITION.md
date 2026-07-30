@@ -377,30 +377,43 @@ must be visible in diagnostics.
 
 ### Pass 7 - surface assembly and art mounting
 
-Emit a `SurfaceAssemblyPlan` with one stable local frame per surface:
+Emit a `SurfaceAssemblyPlan` with one stable local frame per renderable face:
 
 ```text
+surfaceRef / faceRef / face role
 origin O
 normal N
 tangent T
 bitangent B
 boundary / mask
+adjacent face refs / intentional chart breaks
 material role
 UV method and scale
 edge/corner/run sockets
+mechanic truth refs
 source and composition provenance
 ```
 
 The frame is the bridge between procedural geometry and generated art. It tells the engine which projection a
 panel or decal needs, which way grain runs, where a trim strip repeats, and how an interaction face mounts.
 
-### Pass 8 - fixed-production-view composition and occlusion validation
+Before topology, the semantic plan may reserve an identity obligation but may not pretend the face exists.
+After this pass, the real face can emit a `SurfaceMaterialDemandCandidateV1` with realm/culture/construction,
+condition channels, cause refs, texel register, trim/decal/shallow-relief reservations, candidate lanes, and a
+truthful fallback. The baseline face roles and two-stage boundary live in
+`GOLDEN-SITE-VIGNETTE-CONTRACTS.md` §4.1 and `GOLDEN-VIGNETTE-VISUAL-GUIDE.md` §4.
 
-Capture and evaluate the fixed production view at gameplay scale across governed overview, room/exploration, and
-action/combat focus plus representative cutaway/ghosting states. Protect critical actor, objective, connector,
-route, and landmark visibility. Dynamic cutaway may repair foreground obstruction, but it may not erase so much
-architecture that elevation and negative space stop reading. Optional nonproduction yaw diagnostics may expose
-malformed backsides, false adjacency, or candidate fragility without becoming player-facing beauty gates.
+### Pass 8 - four-bearing composition and occlusion validation
+
+Capture the authored starting bearing and the other three governed quarter turns at gameplay scale across
+overview, room/exploration, action/combat focus, and representative cutaway/ghosting states. The starting bearing
+establishes the primary silhouette and biases tall masses camera-far. The other bearings must reveal useful
+ground, opposite faces, interiors, routes, or material/state information rather than expose unfinished backsides.
+
+Protect critical actor, objective, connector, route, and landmark visibility. Dynamic cutaway may repair
+foreground obstruction, but it may not erase so much architecture that elevation and negative space stop reading.
+Rotation changes projection and visible information only; plan, geometry, routes, ids, mechanics, state, and
+tactical fingerprints remain invariant.
 
 ### Pass 9 - deterministic relaxation and fallback
 
@@ -466,8 +479,10 @@ Procedural material fallback is mandatory.
 ### 7.3 Orientation and camera are separate
 
 A surface's angle means its **world/local normal and tangent**, not the player's current camera yaw. The mesh and
-material rotate with the board. Only standees, certain billboards, and view-governed UI care about the camera.
-Painting four camera-specific wall textures would create a combinatorial asset problem and lighting contradictions.
+material retain world orientation while the camera moves through four governed bearings. Only standees, certain
+billboards, and view-governed UI care about the camera. Painting four camera-specific wall textures would create a
+combinatorial asset problem and lighting contradictions; writing, heraldry, grain, drainage, and directional wear
+must not flip to face the viewer.
 
 ### 7.4 Material identity without texture explosion
 
@@ -484,6 +499,11 @@ Each realm/biome/town kit should define a small material family across semantic 
 
 The same family can vary through authored panel choice, deterministic tint/value bands, normals/roughness, wear
 masks, and edge modules. It should not require one image per map, cell, compass direction, or camera.
+
+The retained FFT/TS evidence supports three to six broad families per active window as a **soft composition
+budget**, not a hard count. A family is reviewed as a composed scene with standees under the governed light and
+camera, not accepted because its isolated slab looks attractive. Wear and state require source causes, and
+persistent changes bind to surface/object instances rather than mutating a shared parent.
 
 ## 8. Shared BattleMap and TownTray behavior
 

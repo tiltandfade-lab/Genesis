@@ -162,6 +162,12 @@ canon-and-scope pass). Small index-and-law files, never spec duplicates: `canon/
 
 **Research / exploration** — thinking not yet promoted to normative spec.
 
+- `FFT-TRIANGLE-STRATEGY-WORLD-STUDY-BRIEF.md` (`type: research-brief`) — executor-ready
+  comparative visual study: controlled FFT / Ivalice Chronicles / Triangle Strategy cohorts,
+  current-terrain capture audit across active worktrees, measured map footprint and topology,
+  geometry/material/light/post/sprite/context decomposition, state-mutation translation, and a
+  solo-project adoption/decline matrix. Research only; no map cap, build wave, or target-art
+  replacement is authorized. (2026-07-29)
 - `FEATURE-PRIORITIZATION.md` (`type: build-plan`) — the readable answer to "what do we build, in
   what order, what's prototype vs MVP, how is each tested, and when is it declared arrived" —
   derived 2026-07-23 from the closed twelve-wave program (ladder/ledger/wave records stay

@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "family": "decal-stamp",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-suite/manifests/decal-positive.json",
+  "manifestSha256": "0b2017b384884ce95fdae64f5129a2eabd225362cba213da2f4268961cfb175f",
+  "technicalStatus": "PASS",
+  "gates": {
+    "sourceHashMatches": true,
+    "componentCountMatches": true,
+    "sourceComponentsDoNotBleedOffSheet": true,
+    "everySourceAlphaPixelAssigned": true,
+    "transparentPixelsDefringed": true,
+    "halfScaleRemainsReadable": true,
+    "rotationScaleMatrixComplete": true,
+    "atlasContainsEveryVariant": true
+  },
+  "outputs": {
+    "atlas": "dev/model-qa/assetforge-suite/runs/decal/positive/atlas.png",
+    "proofBoard": "dev/model-qa/assetforge-suite/runs/decal/positive/proof-board.png"
+  },
+  "details": {
+    "componentCount": 2,
+    "variantCount": 24,
+    "chroma": {
+      "requested": "auto",
+      "detected": "magenta",
+      "dominantBorderRgb": [
+        255,
+        0,
+        255
+      ],
+      "keyRgb": [
+        255,
+        0,
+        255
+      ],
+      "tolerance": 12,
+      "softness": 0,
+      "keyedPixelCount": 7044
+    },
+    "extraction": {
+      "mode": "connected-components",
+      "declaredCellCount": null
+    },
+    "errors": []
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

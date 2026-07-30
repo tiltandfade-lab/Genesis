@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "family": "visual-regression",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-real/manifests/regression-real-changed.json",
+  "manifestSha256": "211c7dc8e8d76bd2ee71f1908f6d049e52e66783679ef15db492c74f8019c89d",
+  "technicalStatus": "FAIL",
+  "gates": {
+    "baselineHashMatches": true,
+    "currentHashRecorded": true,
+    "dimensionsMatch": true,
+    "perceptualDifferenceWithinThreshold": false,
+    "semanticOverlayPresentWhenRequired": true
+  },
+  "outputs": {
+    "diff": "dev/model-qa/assetforge-real/runs/regression/real-change-control/diff.png",
+    "proofBoard": "dev/model-qa/assetforge-real/runs/regression/real-change-control/proof-board.png"
+  },
+  "details": {
+    "differenceScore": 0.01690685795802696,
+    "maximumDifference": 0.0,
+    "baselineSha256": "f427c445e6c7b8b1c5b7eccc2181d29d81d9619ff2a1a60e8a7093b62b30502b",
+    "currentSha256": "ce012d5ddf987c779da311090c2bb63332b8f631ce3a377ddb0cb266b4194a46"
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

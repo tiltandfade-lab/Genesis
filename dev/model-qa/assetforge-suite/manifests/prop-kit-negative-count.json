@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "family": "prop-kit",
+  "sheet": "dev/model-qa/assetforge-suite/fixtures/prop-sheet.png",
+  "ids": [
+    "crate",
+    "shield"
+  ]
+}

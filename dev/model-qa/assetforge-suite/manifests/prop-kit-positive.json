@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "family": "prop-kit",
+  "sheet": "dev/model-qa/assetforge-suite/fixtures/prop-sheet.png",
+  "sourceSha256": "96e1f8d45ddd3a1750308f774d3a6281000c21b0e806274f022d7293ed445d96",
+  "ids": [
+    "crate",
+    "shield",
+    "urn"
+  ]
+}

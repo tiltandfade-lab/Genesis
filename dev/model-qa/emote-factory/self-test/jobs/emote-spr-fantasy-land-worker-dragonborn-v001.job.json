@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "family": "sprite-emote",
+  "algorithmVersion": "sprite-emote-v1",
+  "jobId": "emote-spr-fantasy-land-worker-dragonborn-v001",
+  "created": "2026-07-28",
+  "source": {
+    "path": "assets/sprites/spr-fantasy-land-worker-dragonborn.png",
+    "sha256": "13f5fad109669afc5a146f864a4908bd379abeb63516d8578985812a29d97444",
+    "pixelDimensions": [
+      209,
+      229
+    ],
+    "contentBounds": [
+      0.023923,
+      0.017467,
+      0.976077,
+      0.978166
+    ],
+    "footX": 0.338141,
+    "footY": 0.97807,
+    "worldHeightFeet": 6.2,
+    "sizeBand": "medium",
+    "registryScale": 1.1,
+    "sizingSource": "dev/model-qa/corpus-sizing.json"
+  },
+  "subject": {
+    "slug": "spr-fantasy-land-worker-dragonborn",
+    "name": "Land-worker (Dragonborn)",
+    "realm": "fantasy",
+    "kind": "npc",
+    "cue": "Tied to the land and its seasons; the base everyone eats from.",
+    "manifestPath": "dev/sprite-manifests/v2-manifest.json",
+    "sheetId": "fantasy-npcs-1",
+    "cell": 1
+  },
+  "style": {
+    "authority": "dev/model-qa/sprite-sheets/fantasy.md",
+    "exactBlock": "Style block: Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from."
+  },
+  "states": [
+    {
+      "id": "neutral",
+      "label": "Neutral",
+      "cue": "Characteristic baseline expression and ready stance; alive and specific, but not signaling a strong emotion."
+    },
+    {
+      "id": "angry",
+      "label": "Angry",
+      "cue": "Anger or hostile intent at maximum readable clarity without changing equipment."
+    },
+    {
+      "id": "happy",
+      "label": "Happy",
+      "cue": "Unmistakable warmth, delight, or relieved happiness while remaining the same individual."
+    },
+    {
+      "id": "near-death",
+      "label": "Near death",
+      "cue": "Severe exhaustion and pain, slumped but still a complete grounded standee with the full loadout."
+    },
+    {
+      "id": "resting",
+      "label": "Resting",
+      "cue": "A quiet seated field-rest pose, contemplative and momentarily unguarded, with the weapon safely settled; no grass, scenery, or added prop.",
+      "heightPolicy": "licensed-compression"
+    },
+    {
+      "id": "rear-view",
+      "label": "Rear view",
+      "cue": "The same individual viewed from directly behind after a 180-degree turn; reveal true back anatomy and equipment attachment, never a mirrored front."
+    }
+  ],
+  "identityLocks": [
+    "Preserve the exact individual: apparent age, face/head anatomy, body plan, proportions, skin/fur/scales, and major markings.",
+    "Preserve every clothing, armor, weapon, and carried-equipment identity; keep them on the same side of the body.",
+    "Preserve realm palette, pixel grid/density, outline language, value hierarchy, and lighting direction.",
+    "Preserve camera, apparent world scale, grounding, and foot/contact line; preserve source facing in all states except the explicitly licensed rear-view.",
+    "For rear-view only, rotate the same individual 180 degrees and reveal the true back; preserve physical equipment attachment and never mirror the front artwork.",
+    "Do not add or remove limbs, horns, wings, tail sections, equipment, trophies, scenery, or replacement effects.",
+    "Do not turn states into progressive action frames; each cell must stand alone as one readable portrayal."
+  ],
+  "production": {
+    "gridColumns": 3,
+    "gridRows": 2,
+    "capacity": 6,
+    "cellAspect": "4:5",
+    "aspectStatus": "default",
+    "aspectReason": "Character default: source is a PC/NPC full-body figure.",
+    "cellWidthPx": 320,
+    "cellHeightPx": 400,
+    "requestedCanvas": [
+      960,
+      800
+    ],
+    "chromaKey": "#FF00FF",
+    "camera": "Match the source ground-level/eye-level projection; source-facing for states 1–5 and a true 180-degree back view for rear-view.",
+    "order": "left-to-right, then top-to-bottom"
+  },
+  "proof": {
+    "alphaCutoff": 24,
+    "chromaTolerance": 60,
+    "minimumBorderClearance": 0.99,
+    "maximumBaselineDelta": 0.05,
+    "maximumRelativeHeightDelta": 0.25,
+    "minimumLicensedCompressionRatio": 0.4,
+    "maximumLicensedCompressionRatio": 1.05,
+    "minimumSourcePaletteCoverage": 0.45,
+    "maximumMagentaEdgeResidue": 0.04,
+    "maximumCellAspectError": 0.08,
+    "visualIdentity": "REVIEW_REQUIRED"
+  },
+  "generation": {
+    "promptPath": "dev/model-qa/emote-factory/self-test/jobs/emote-spr-fantasy-land-worker-dragonborn-v001.prompt.md",
+    "provider": null,
+    "model": null,
+    "generationCallId": null,
+    "seed": null
+  },
+  "admission": {
+    "scope": "candidate-only",
+    "defaultRuntimePriority": "pc-or-boss",
+    "tasteApproval": null,
+    "approvedBy": null
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "qualification": {
+    "kind": "real-repository-asset",
+    "admission": "candidate-only"
+  },
+  "family": "visual-regression",
+  "baseline": "dev/material-workbench-proof/generated/fantasy-floor-albedo.png",
+  "current": "dev/material-workbench-proof/generated/fantasy-floor-albedo.png",
+  "baselineSha256": "f427c445e6c7b8b1c5b7eccc2181d29d81d9619ff2a1a60e8a7093b62b30502b",
+  "maximumDifference": 0
+}

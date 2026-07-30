@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "family": "boundary-cliff",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-real/manifests/boundary-real.json",
+  "manifestSha256": "942063bb3bcca44b6c7da886d6cc3512c05b48b64f3d23864b0251b247ebac5e",
+  "technicalStatus": "PASS",
+  "gates": {
+    "insideSourceHashMatches": true,
+    "outsideSourceHashMatches": true,
+    "all16CardinalShapesCompiled": true,
+    "multipleElevationBandsProved": true,
+    "allCliffTortureMapsRendered": true,
+    "everyProofHasVisibleFaces": true
+  },
+  "outputs": {
+    "atlas": "dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/cliff-elevation/atlas.png",
+    "metadata": "dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/cliff-elevation/atlas.json",
+    "proofBoard": "dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/cliff-elevation/proof-board.png"
+  },
+  "details": {
+    "topology": "cardinal16+integer-elevation",
+    "heightBandCountProved": 4,
+    "renderDialect": "dimetric-height-field"
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

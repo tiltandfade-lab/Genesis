@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "family": "condition-state",
+  "source": "dev/model-qa/assetforge-suite/fixtures/sprite.png",
+  "expectedStateCount": 3,
+  "states": [
+    {
+      "id": "damaged",
+      "path": "dev/model-qa/assetforge-suite/fixtures/condition-damaged.png"
+    },
+    {
+      "id": "burned",
+      "path": "dev/model-qa/assetforge-suite/fixtures/condition-burned.png"
+    },
+    {
+      "id": "corrupted",
+      "path": "dev/model-qa/assetforge-suite/fixtures/condition-silhouette-fraud.png"
+    }
+  ]
+}

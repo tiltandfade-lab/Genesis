@@ -1,0 +1,1305 @@
+{
+  "schemaVersion": 1,
+  "fieldSizePx": [
+    2880,
+    2880
+  ],
+  "records": [
+    {
+      "id": "bare-soil-001",
+      "kind": "bare-soil",
+      "centerPx": [
+        756,
+        757
+      ],
+      "centerNormalized": [
+        0.2625,
+        0.262847
+      ],
+      "bboxPx": [
+        685,
+        731,
+        827,
+        783
+      ]
+    },
+    {
+      "id": "bare-soil-002",
+      "kind": "bare-soil",
+      "centerPx": [
+        802,
+        265
+      ],
+      "centerNormalized": [
+        0.278472,
+        0.092014
+      ],
+      "bboxPx": [
+        709,
+        207,
+        895,
+        323
+      ]
+    },
+    {
+      "id": "bare-soil-003",
+      "kind": "bare-soil",
+      "centerPx": [
+        2365,
+        1185
+      ],
+      "centerNormalized": [
+        0.821181,
+        0.411458
+      ],
+      "bboxPx": [
+        2286,
+        1132,
+        2444,
+        1238
+      ]
+    },
+    {
+      "id": "bare-soil-004",
+      "kind": "bare-soil",
+      "centerPx": [
+        1951,
+        1181
+      ],
+      "centerNormalized": [
+        0.677431,
+        0.410069
+      ],
+      "bboxPx": [
+        1859,
+        1122,
+        2043,
+        1240
+      ]
+    },
+    {
+      "id": "bare-soil-005",
+      "kind": "bare-soil",
+      "centerPx": [
+        1144,
+        346
+      ],
+      "centerNormalized": [
+        0.397222,
+        0.120139
+      ],
+      "bboxPx": [
+        1098,
+        287,
+        1190,
+        405
+      ]
+    },
+    {
+      "id": "bare-soil-006",
+      "kind": "bare-soil",
+      "centerPx": [
+        2602,
+        2640
+      ],
+      "centerNormalized": [
+        0.903472,
+        0.916667
+      ],
+      "bboxPx": [
+        2543,
+        2601,
+        2661,
+        2679
+      ]
+    },
+    {
+      "id": "bare-soil-007",
+      "kind": "bare-soil",
+      "centerPx": [
+        1776,
+        1464
+      ],
+      "centerNormalized": [
+        0.616667,
+        0.508333
+      ],
+      "bboxPx": [
+        1697,
+        1403,
+        1855,
+        1525
+      ]
+    },
+    {
+      "id": "bare-soil-008",
+      "kind": "bare-soil",
+      "centerPx": [
+        2200,
+        568
+      ],
+      "centerNormalized": [
+        0.763889,
+        0.197222
+      ],
+      "bboxPx": [
+        2115,
+        516,
+        2285,
+        620
+      ]
+    },
+    {
+      "id": "bare-soil-009",
+      "kind": "bare-soil",
+      "centerPx": [
+        2363,
+        626
+      ],
+      "centerNormalized": [
+        0.820486,
+        0.217361
+      ],
+      "bboxPx": [
+        2323,
+        594,
+        2403,
+        658
+      ]
+    },
+    {
+      "id": "bare-soil-010",
+      "kind": "bare-soil",
+      "centerPx": [
+        855,
+        367
+      ],
+      "centerNormalized": [
+        0.296875,
+        0.127431
+      ],
+      "bboxPx": [
+        792,
+        333,
+        918,
+        401
+      ]
+    },
+    {
+      "id": "bare-soil-011",
+      "kind": "bare-soil",
+      "centerPx": [
+        1926,
+        2099
+      ],
+      "centerNormalized": [
+        0.66875,
+        0.728819
+      ],
+      "bboxPx": [
+        1853,
+        2065,
+        1999,
+        2133
+      ]
+    },
+    {
+      "id": "bare-soil-012",
+      "kind": "bare-soil",
+      "centerPx": [
+        972,
+        760
+      ],
+      "centerNormalized": [
+        0.3375,
+        0.263889
+      ],
+      "bboxPx": [
+        923,
+        735,
+        1021,
+        785
+      ]
+    },
+    {
+      "id": "bare-soil-013",
+      "kind": "bare-soil",
+      "centerPx": [
+        202,
+        2545
+      ],
+      "centerNormalized": [
+        0.070139,
+        0.883681
+      ],
+      "bboxPx": [
+        128,
+        2486,
+        276,
+        2604
+      ]
+    },
+    {
+      "id": "bare-soil-014",
+      "kind": "bare-soil",
+      "centerPx": [
+        615,
+        2008
+      ],
+      "centerNormalized": [
+        0.213542,
+        0.697222
+      ],
+      "bboxPx": [
+        530,
+        1961,
+        700,
+        2055
+      ]
+    },
+    {
+      "id": "stones-001",
+      "kind": "stones",
+      "centerPx": [
+        1957,
+        951
+      ],
+      "centerNormalized": [
+        0.679514,
+        0.330208
+      ],
+      "bboxPx": [
+        1942,
+        936,
+        1972,
+        966
+      ]
+    },
+    {
+      "id": "stones-002",
+      "kind": "stones",
+      "centerPx": [
+        1912,
+        1692
+      ],
+      "centerNormalized": [
+        0.663889,
+        0.5875
+      ],
+      "bboxPx": [
+        1904,
+        1684,
+        1920,
+        1700
+      ]
+    },
+    {
+      "id": "stones-003",
+      "kind": "stones",
+      "centerPx": [
+        679,
+        1816
+      ],
+      "centerNormalized": [
+        0.235764,
+        0.630556
+      ],
+      "bboxPx": [
+        664,
+        1801,
+        694,
+        1831
+      ]
+    },
+    {
+      "id": "stones-004",
+      "kind": "stones",
+      "centerPx": [
+        2271,
+        765
+      ],
+      "centerNormalized": [
+        0.788542,
+        0.265625
+      ],
+      "bboxPx": [
+        2263,
+        757,
+        2279,
+        773
+      ]
+    },
+    {
+      "id": "stones-005",
+      "kind": "stones",
+      "centerPx": [
+        1552,
+        1437
+      ],
+      "centerNormalized": [
+        0.538889,
+        0.498958
+      ],
+      "bboxPx": [
+        1537,
+        1422,
+        1567,
+        1452
+      ]
+    },
+    {
+      "id": "stones-006",
+      "kind": "stones",
+      "centerPx": [
+        2760,
+        356
+      ],
+      "centerNormalized": [
+        0.958333,
+        0.123611
+      ],
+      "bboxPx": [
+        2746,
+        342,
+        2774,
+        370
+      ]
+    },
+    {
+      "id": "stones-007",
+      "kind": "stones",
+      "centerPx": [
+        1942,
+        1867
+      ],
+      "centerNormalized": [
+        0.674306,
+        0.648264
+      ],
+      "bboxPx": [
+        1933,
+        1858,
+        1951,
+        1876
+      ]
+    },
+    {
+      "id": "stones-008",
+      "kind": "stones",
+      "centerPx": [
+        907,
+        172
+      ],
+      "centerNormalized": [
+        0.314931,
+        0.059722
+      ],
+      "bboxPx": [
+        892,
+        157,
+        922,
+        187
+      ]
+    },
+    {
+      "id": "stones-009",
+      "kind": "stones",
+      "centerPx": [
+        1710,
+        2539
+      ],
+      "centerNormalized": [
+        0.59375,
+        0.881597
+      ],
+      "bboxPx": [
+        1698,
+        2527,
+        1722,
+        2551
+      ]
+    },
+    {
+      "id": "stones-010",
+      "kind": "stones",
+      "centerPx": [
+        1053,
+        101
+      ],
+      "centerNormalized": [
+        0.365625,
+        0.035069
+      ],
+      "bboxPx": [
+        1047,
+        95,
+        1059,
+        107
+      ]
+    },
+    {
+      "id": "stones-011",
+      "kind": "stones",
+      "centerPx": [
+        1658,
+        645
+      ],
+      "centerNormalized": [
+        0.575694,
+        0.223958
+      ],
+      "bboxPx": [
+        1645,
+        632,
+        1671,
+        658
+      ]
+    },
+    {
+      "id": "stones-012",
+      "kind": "stones",
+      "centerPx": [
+        1939,
+        2417
+      ],
+      "centerNormalized": [
+        0.673264,
+        0.839236
+      ],
+      "bboxPx": [
+        1931,
+        2409,
+        1947,
+        2425
+      ]
+    },
+    {
+      "id": "stones-013",
+      "kind": "stones",
+      "centerPx": [
+        305,
+        390
+      ],
+      "centerNormalized": [
+        0.105903,
+        0.135417
+      ],
+      "bboxPx": [
+        296,
+        381,
+        314,
+        399
+      ]
+    },
+    {
+      "id": "stones-014",
+      "kind": "stones",
+      "centerPx": [
+        2673,
+        495
+      ],
+      "centerNormalized": [
+        0.928125,
+        0.171875
+      ],
+      "bboxPx": [
+        2665,
+        487,
+        2681,
+        503
+      ]
+    },
+    {
+      "id": "stones-015",
+      "kind": "stones",
+      "centerPx": [
+        831,
+        786
+      ],
+      "centerNormalized": [
+        0.288542,
+        0.272917
+      ],
+      "bboxPx": [
+        817,
+        772,
+        845,
+        800
+      ]
+    },
+    {
+      "id": "stones-016",
+      "kind": "stones",
+      "centerPx": [
+        1593,
+        667
+      ],
+      "centerNormalized": [
+        0.553125,
+        0.231597
+      ],
+      "bboxPx": [
+        1587,
+        661,
+        1599,
+        673
+      ]
+    },
+    {
+      "id": "stones-017",
+      "kind": "stones",
+      "centerPx": [
+        2648,
+        1298
+      ],
+      "centerNormalized": [
+        0.919444,
+        0.450694
+      ],
+      "bboxPx": [
+        2639,
+        1289,
+        2657,
+        1307
+      ]
+    },
+    {
+      "id": "stones-018",
+      "kind": "stones",
+      "centerPx": [
+        2292,
+        1726
+      ],
+      "centerNormalized": [
+        0.795833,
+        0.599306
+      ],
+      "bboxPx": [
+        2283,
+        1717,
+        2301,
+        1735
+      ]
+    },
+    {
+      "id": "stones-019",
+      "kind": "stones",
+      "centerPx": [
+        225,
+        1668
+      ],
+      "centerNormalized": [
+        0.078125,
+        0.579167
+      ],
+      "bboxPx": [
+        213,
+        1656,
+        237,
+        1680
+      ]
+    },
+    {
+      "id": "stones-020",
+      "kind": "stones",
+      "centerPx": [
+        2704,
+        2431
+      ],
+      "centerNormalized": [
+        0.938889,
+        0.844097
+      ],
+      "bboxPx": [
+        2696,
+        2423,
+        2712,
+        2439
+      ]
+    },
+    {
+      "id": "stones-021",
+      "kind": "stones",
+      "centerPx": [
+        1963,
+        2101
+      ],
+      "centerNormalized": [
+        0.681597,
+        0.729514
+      ],
+      "bboxPx": [
+        1952,
+        2090,
+        1974,
+        2112
+      ]
+    },
+    {
+      "id": "stones-022",
+      "kind": "stones",
+      "centerPx": [
+        589,
+        659
+      ],
+      "centerNormalized": [
+        0.204514,
+        0.228819
+      ],
+      "bboxPx": [
+        575,
+        645,
+        603,
+        673
+      ]
+    },
+    {
+      "id": "stones-023",
+      "kind": "stones",
+      "centerPx": [
+        805,
+        1641
+      ],
+      "centerNormalized": [
+        0.279514,
+        0.569792
+      ],
+      "bboxPx": [
+        795,
+        1631,
+        815,
+        1651
+      ]
+    },
+    {
+      "id": "stones-024",
+      "kind": "stones",
+      "centerPx": [
+        2521,
+        1678
+      ],
+      "centerNormalized": [
+        0.875347,
+        0.582639
+      ],
+      "bboxPx": [
+        2515,
+        1672,
+        2527,
+        1684
+      ]
+    },
+    {
+      "id": "stones-025",
+      "kind": "stones",
+      "centerPx": [
+        1924,
+        1937
+      ],
+      "centerNormalized": [
+        0.668056,
+        0.672569
+      ],
+      "bboxPx": [
+        1916,
+        1929,
+        1932,
+        1945
+      ]
+    },
+    {
+      "id": "stones-026",
+      "kind": "stones",
+      "centerPx": [
+        1507,
+        1661
+      ],
+      "centerNormalized": [
+        0.523264,
+        0.576736
+      ],
+      "bboxPx": [
+        1499,
+        1653,
+        1515,
+        1669
+      ]
+    },
+    {
+      "id": "stones-027",
+      "kind": "stones",
+      "centerPx": [
+        1736,
+        2722
+      ],
+      "centerNormalized": [
+        0.602778,
+        0.945139
+      ],
+      "bboxPx": [
+        1726,
+        2712,
+        1746,
+        2732
+      ]
+    },
+    {
+      "id": "stones-028",
+      "kind": "stones",
+      "centerPx": [
+        299,
+        1041
+      ],
+      "centerNormalized": [
+        0.103819,
+        0.361458
+      ],
+      "bboxPx": [
+        286,
+        1028,
+        312,
+        1054
+      ]
+    },
+    {
+      "id": "grass-clumps-001",
+      "kind": "grass-clumps",
+      "centerPx": [
+        2001,
+        2392
+      ],
+      "centerNormalized": [
+        0.694792,
+        0.830556
+      ],
+      "bboxPx": [
+        1974,
+        2365,
+        2028,
+        2419
+      ]
+    },
+    {
+      "id": "grass-clumps-002",
+      "kind": "grass-clumps",
+      "centerPx": [
+        1605,
+        2275
+      ],
+      "centerNormalized": [
+        0.557292,
+        0.789931
+      ],
+      "bboxPx": [
+        1580,
+        2250,
+        1630,
+        2300
+      ]
+    },
+    {
+      "id": "grass-clumps-003",
+      "kind": "grass-clumps",
+      "centerPx": [
+        776,
+        2065
+      ],
+      "centerNormalized": [
+        0.269444,
+        0.717014
+      ],
+      "bboxPx": [
+        745,
+        2034,
+        807,
+        2096
+      ]
+    },
+    {
+      "id": "grass-clumps-004",
+      "kind": "grass-clumps",
+      "centerPx": [
+        1547,
+        1183
+      ],
+      "centerNormalized": [
+        0.537153,
+        0.410764
+      ],
+      "bboxPx": [
+        1524,
+        1160,
+        1570,
+        1206
+      ]
+    },
+    {
+      "id": "grass-clumps-005",
+      "kind": "grass-clumps",
+      "centerPx": [
+        878,
+        2158
+      ],
+      "centerNormalized": [
+        0.304861,
+        0.749306
+      ],
+      "bboxPx": [
+        846,
+        2126,
+        910,
+        2190
+      ]
+    },
+    {
+      "id": "grass-clumps-006",
+      "kind": "grass-clumps",
+      "centerPx": [
+        1988,
+        2667
+      ],
+      "centerNormalized": [
+        0.690278,
+        0.926042
+      ],
+      "bboxPx": [
+        1954,
+        2633,
+        2022,
+        2701
+      ]
+    },
+    {
+      "id": "grass-clumps-007",
+      "kind": "grass-clumps",
+      "centerPx": [
+        2689,
+        287
+      ],
+      "centerNormalized": [
+        0.933681,
+        0.099653
+      ],
+      "bboxPx": [
+        2655,
+        253,
+        2723,
+        321
+      ]
+    },
+    {
+      "id": "grass-clumps-008",
+      "kind": "grass-clumps",
+      "centerPx": [
+        2191,
+        2455
+      ],
+      "centerNormalized": [
+        0.760764,
+        0.852431
+      ],
+      "bboxPx": [
+        2165,
+        2429,
+        2217,
+        2481
+      ]
+    },
+    {
+      "id": "grass-clumps-009",
+      "kind": "grass-clumps",
+      "centerPx": [
+        1069,
+        1860
+      ],
+      "centerNormalized": [
+        0.371181,
+        0.645833
+      ],
+      "bboxPx": [
+        1039,
+        1830,
+        1099,
+        1890
+      ]
+    },
+    {
+      "id": "grass-clumps-010",
+      "kind": "grass-clumps",
+      "centerPx": [
+        1539,
+        1611
+      ],
+      "centerNormalized": [
+        0.534375,
+        0.559375
+      ],
+      "bboxPx": [
+        1504,
+        1576,
+        1574,
+        1646
+      ]
+    },
+    {
+      "id": "grass-clumps-011",
+      "kind": "grass-clumps",
+      "centerPx": [
+        105,
+        1849
+      ],
+      "centerNormalized": [
+        0.036458,
+        0.642014
+      ],
+      "bboxPx": [
+        73,
+        1817,
+        137,
+        1881
+      ]
+    },
+    {
+      "id": "grass-clumps-012",
+      "kind": "grass-clumps",
+      "centerPx": [
+        1903,
+        2283
+      ],
+      "centerNormalized": [
+        0.660764,
+        0.792708
+      ],
+      "bboxPx": [
+        1884,
+        2264,
+        1922,
+        2302
+      ]
+    },
+    {
+      "id": "grass-clumps-013",
+      "kind": "grass-clumps",
+      "centerPx": [
+        1337,
+        2521
+      ],
+      "centerNormalized": [
+        0.464236,
+        0.875347
+      ],
+      "bboxPx": [
+        1319,
+        2503,
+        1355,
+        2539
+      ]
+    },
+    {
+      "id": "grass-clumps-014",
+      "kind": "grass-clumps",
+      "centerPx": [
+        1450,
+        442
+      ],
+      "centerNormalized": [
+        0.503472,
+        0.153472
+      ],
+      "bboxPx": [
+        1417,
+        409,
+        1483,
+        475
+      ]
+    },
+    {
+      "id": "grass-clumps-015",
+      "kind": "grass-clumps",
+      "centerPx": [
+        798,
+        991
+      ],
+      "centerNormalized": [
+        0.277083,
+        0.344097
+      ],
+      "bboxPx": [
+        774,
+        967,
+        822,
+        1015
+      ]
+    },
+    {
+      "id": "grass-clumps-016",
+      "kind": "grass-clumps",
+      "centerPx": [
+        970,
+        2464
+      ],
+      "centerNormalized": [
+        0.336806,
+        0.855556
+      ],
+      "bboxPx": [
+        947,
+        2441,
+        993,
+        2487
+      ]
+    },
+    {
+      "id": "grass-clumps-017",
+      "kind": "grass-clumps",
+      "centerPx": [
+        1689,
+        1750
+      ],
+      "centerNormalized": [
+        0.586458,
+        0.607639
+      ],
+      "bboxPx": [
+        1664,
+        1725,
+        1714,
+        1775
+      ]
+    },
+    {
+      "id": "grass-clumps-018",
+      "kind": "grass-clumps",
+      "centerPx": [
+        2133,
+        365
+      ],
+      "centerNormalized": [
+        0.740625,
+        0.126736
+      ],
+      "bboxPx": [
+        2109,
+        341,
+        2157,
+        389
+      ]
+    },
+    {
+      "id": "wear-001",
+      "kind": "wear",
+      "centerPx": [
+        104,
+        1619
+      ],
+      "centerNormalized": [
+        0.036111,
+        0.562153
+      ],
+      "bboxPx": [
+        56,
+        1604,
+        152,
+        1634
+      ]
+    },
+    {
+      "id": "wear-002",
+      "kind": "wear",
+      "centerPx": [
+        2468,
+        2369
+      ],
+      "centerNormalized": [
+        0.856944,
+        0.822569
+      ],
+      "bboxPx": [
+        2414,
+        2346,
+        2522,
+        2392
+      ]
+    },
+    {
+      "id": "wear-003",
+      "kind": "wear",
+      "centerPx": [
+        425,
+        1808
+      ],
+      "centerNormalized": [
+        0.147569,
+        0.627778
+      ],
+      "bboxPx": [
+        389,
+        1794,
+        461,
+        1822
+      ]
+    },
+    {
+      "id": "wear-004",
+      "kind": "wear",
+      "centerPx": [
+        1365,
+        135
+      ],
+      "centerNormalized": [
+        0.473958,
+        0.046875
+      ],
+      "bboxPx": [
+        1306,
+        123,
+        1424,
+        147
+      ]
+    },
+    {
+      "id": "wear-005",
+      "kind": "wear",
+      "centerPx": [
+        2372,
+        414
+      ],
+      "centerNormalized": [
+        0.823611,
+        0.14375
+      ],
+      "bboxPx": [
+        2344,
+        395,
+        2400,
+        433
+      ]
+    },
+    {
+      "id": "wear-006",
+      "kind": "wear",
+      "centerPx": [
+        1930,
+        497
+      ],
+      "centerNormalized": [
+        0.670139,
+        0.172569
+      ],
+      "bboxPx": [
+        1891,
+        485,
+        1969,
+        509
+      ]
+    },
+    {
+      "id": "wear-007",
+      "kind": "wear",
+      "centerPx": [
+        511,
+        2655
+      ],
+      "centerNormalized": [
+        0.177431,
+        0.921875
+      ],
+      "bboxPx": [
+        484,
+        2636,
+        538,
+        2674
+      ]
+    },
+    {
+      "id": "wear-008",
+      "kind": "wear",
+      "centerPx": [
+        1236,
+        745
+      ],
+      "centerNormalized": [
+        0.429167,
+        0.258681
+      ],
+      "bboxPx": [
+        1182,
+        729,
+        1290,
+        761
+      ]
+    },
+    {
+      "id": "wear-009",
+      "kind": "wear",
+      "centerPx": [
+        460,
+        1388
+      ],
+      "centerNormalized": [
+        0.159722,
+        0.481944
+      ],
+      "bboxPx": [
+        405,
+        1371,
+        515,
+        1405
+      ]
+    },
+    {
+      "id": "wear-010",
+      "kind": "wear",
+      "centerPx": [
+        1292,
+        1504
+      ],
+      "centerNormalized": [
+        0.448611,
+        0.522222
+      ],
+      "bboxPx": [
+        1263,
+        1487,
+        1321,
+        1521
+      ]
+    },
+    {
+      "id": "wear-011",
+      "kind": "wear",
+      "centerPx": [
+        1461,
+        1890
+      ],
+      "centerNormalized": [
+        0.507292,
+        0.65625
+      ],
+      "bboxPx": [
+        1409,
+        1868,
+        1513,
+        1912
+      ]
+    },
+    {
+      "id": "wear-012",
+      "kind": "wear",
+      "centerPx": [
+        2113,
+        2100
+      ],
+      "centerNormalized": [
+        0.733681,
+        0.729167
+      ],
+      "bboxPx": [
+        2053,
+        2080,
+        2173,
+        2120
+      ]
+    }
+  ]
+}

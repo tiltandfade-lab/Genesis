@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "qualification": {
+    "kind": "real-repository-asset",
+    "admission": "candidate-only"
+  },
+  "family": "sprite-citizenship",
+  "slug": "spr-pc-human-fighter-male",
+  "source": "assets/sprites/spr-pc-human-fighter-male.png",
+  "sourceSha256": "d307d7ac9183075b11a7cc922e0bb1dcc71041397727a43c1fac7abc883fa7a8",
+  "chromaKey": "none",
+  "worldHeightFeet": 6,
+  "paddingPx": 4
+}

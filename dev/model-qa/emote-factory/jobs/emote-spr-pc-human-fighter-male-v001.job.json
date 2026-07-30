@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "family": "sprite-emote",
+  "algorithmVersion": "sprite-emote-v1",
+  "jobId": "emote-spr-pc-human-fighter-male-v001",
+  "created": "2026-07-27",
+  "source": {
+    "path": "assets/sprites/spr-pc-human-fighter-male.png",
+    "sha256": "d307d7ac9183075b11a7cc922e0bb1dcc71041397727a43c1fac7abc883fa7a8",
+    "pixelDimensions": [
+      174,
+      222
+    ],
+    "contentBounds": [
+      0.028736,
+      0.022523,
+      0.971264,
+      0.977477
+    ],
+    "footX": 0.83526,
+    "footY": 0.977376,
+    "worldHeightFeet": 5.9,
+    "sizeBand": "medium",
+    "registryScale": 0.967,
+    "sizingSource": "dev/model-qa/corpus-sizing.json"
+  },
+  "subject": {
+    "slug": "spr-pc-human-fighter-male",
+    "name": "Human Fighter (Male)",
+    "realm": "pc",
+    "kind": "pc",
+    "cue": "braced combat stance, weapon mid-swing, shield up",
+    "manifestPath": "dev/sprite-manifests/v2-manifest.json",
+    "sheetId": "pc-pcs-7",
+    "cell": 3
+  },
+  "style": {
+    "authority": "dev/model-qa/sprite-sheets/pc-characters.md",
+    "exactBlock": "Style block: clean painterly fantasy character-portrait style turned pixel-sprite, warm parchment-adjacent palette, medium value contrast, class-appropriate gear/armor readable in silhouette — matches the `fantasy.md` default-world style so PCs and monsters share one visual language."
+  },
+  "states": [
+    {
+      "id": "neutral",
+      "label": "Neutral",
+      "cue": "Characteristic baseline expression and ready stance; alive and specific, but not signaling a strong emotion."
+    },
+    {
+      "id": "angry",
+      "label": "Angry",
+      "cue": "Anger or hostile intent at maximum readable clarity without changing equipment."
+    },
+    {
+      "id": "happy",
+      "label": "Happy",
+      "cue": "Unmistakable warmth, delight, or relieved happiness while remaining the same individual."
+    },
+    {
+      "id": "near-death",
+      "label": "Near death",
+      "cue": "Severe exhaustion and pain, slumped but still a complete grounded standee with the full loadout."
+    },
+    {
+      "id": "resting",
+      "label": "Resting",
+      "cue": "A standing, weight-settled rest with weapon or hands lowered; calm and visibly recovering, not seated or asleep."
+    },
+    {
+      "id": "rear-view",
+      "label": "Rear view",
+      "cue": "The same individual viewed from directly behind after a 180-degree turn; reveal true back anatomy and equipment attachment, never a mirrored front."
+    }
+  ],
+  "identityLocks": [
+    "Preserve the exact individual: apparent age, face/head anatomy, body plan, proportions, skin/fur/scales, and major markings.",
+    "Preserve every clothing, armor, weapon, and carried-equipment identity; keep them on the same side of the body.",
+    "Preserve realm palette, pixel grid/density, outline language, value hierarchy, and lighting direction.",
+    "Preserve camera, apparent world scale, grounding, and foot/contact line; preserve source facing in all states except the explicitly licensed rear-view.",
+    "For rear-view only, rotate the same individual 180 degrees and reveal the true back; preserve physical equipment attachment and never mirror the front artwork.",
+    "Do not add or remove limbs, horns, wings, tail sections, equipment, trophies, scenery, or replacement effects.",
+    "Do not turn states into progressive action frames; each cell must stand alone as one readable portrayal."
+  ],
+  "production": {
+    "gridColumns": 3,
+    "gridRows": 2,
+    "capacity": 6,
+    "cellAspect": "1:1",
+    "aspectStatus": "provisional-test",
+    "aspectReason": "Explicit Assetforge override from the subject-derived 4:5 candidate; retain comparison evidence.",
+    "cellWidthPx": 384,
+    "cellHeightPx": 384,
+    "requestedCanvas": [
+      1152,
+      768
+    ],
+    "chromaKey": "#FF00FF",
+    "camera": "Match the source ground-level/eye-level projection; source-facing for states 1–5 and a true 180-degree back view for rear-view.",
+    "order": "left-to-right, then top-to-bottom"
+  },
+  "proof": {
+    "alphaCutoff": 24,
+    "chromaTolerance": 60,
+    "minimumBorderClearance": 0.99,
+    "maximumBaselineDelta": 0.05,
+    "maximumRelativeHeightDelta": 0.25,
+    "minimumSourcePaletteCoverage": 0.45,
+    "maximumMagentaEdgeResidue": 0.04,
+    "maximumCellAspectError": 0.08,
+    "visualIdentity": "REVIEW_REQUIRED"
+  },
+  "generation": {
+    "generationPacketPath": "dev/model-qa/emote-factory/jobs/emote-spr-pc-human-fighter-male-v001.prompt.md",
+    "promptPath": "dev/model-qa/emote-factory/jobs/emote-spr-pc-human-fighter-male-v001.imagegen-call.prompt.md",
+    "provider": "OpenAI built-in image_gen",
+    "model": "unreported-by-built-in-tool",
+    "generationCallId": "call_iHGfSFHZj49jHzDx6NEbIfug",
+    "seed": null,
+    "returnPath": "dev/model-qa/emote-factory/returns/emote-spr-pc-human-fighter-male-v001-imagegen.png",
+    "returnSha256": "152d0ec847641d0ba38c88330a46431eb68501e556b0449cae80d09738dfd20f"
+  },
+  "admission": {
+    "scope": "candidate-only",
+    "defaultRuntimePriority": "pc-or-boss",
+    "tasteApproval": null,
+    "approvedBy": null
+  }
+}

@@ -35,6 +35,7 @@ Adam) can jump straight to the right doc instead of grepping/reading its way the
 | Frozen vignette request/plan/asset/receipt boundary | `GOLDEN-SITE-VIGNETTE-CONTRACTS.md` — Wave-0 v1 integration fields, terrain/structure join law, negative controls, versioning |
 | Latest passed Golden engine gate | `GOLDEN-SITE-WAVE-1-OBSERVATORY-BRIEF.md` — Gate W1 passed; deterministic audit harness, read-only adapters, disposition/unresolved ledgers, 12,000-request checkpoint |
 | Next Golden engine implementation cut | `GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md` § Wave 2 — proxy-first Tavern identity and Guard Post visual/tactical compiler proof |
+| Generated-asset compilers, sprite emotes, and boundary auto-tiles | `ASSETFORGE.md` — shared quarantine/proof/admission protocol, built sprite-emote vertical slice, and boundary compiler specification |
 | Shared procedural battlefield and town-tray composition | `BATTLEMAP-TOWNTRAY-COMPOSITION.md` (high-priority accepted direction; implementation unauthorized) |
 | Table architecture (markdown source → compiled JSON) | `Two tracks run in parallel` section below + `compile-tables.py` |
 | Module list / what owns what symbol | `manifest.json` (repo root) |
@@ -78,6 +79,11 @@ canon-and-scope pass). Small index-and-law files, never spec duplicates: `canon/
 
 **System specs** (`type: system-spec`) — normative "this is how the subsystem works." The buildable contracts.
 
+- `ASSETFORGE.md` (`type: production-machinery-spec`) — the shared generated-asset compiler
+  protocol: manifest, exact prompt packet, quarantined ingest, deterministic assembly, adversarial
+  proof, receipt, and explicit admission. The sprite-emote factory is the first built vertical
+  slice; the boundary auto-tile compiler and ten other reusable visual factories are specified as
+  expansions. (2026-07-27)
 - `NEW-GAME-FLOW.md` — the bardo / guided new-game passage.
 - `CHAR-CREATION.md` — the two-layer character creation system.
 - `SPATIAL-MODEL.md` — the lazy hex/node world-geometry model.

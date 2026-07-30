@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "family": "material-map-baker",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-real/manifests/material-real.json",
+  "manifestSha256": "c4c0a5e800576492a977c22088136a17bad89f3ee903348cb963c99182d05904",
+  "technicalStatus": "PASS",
+  "gates": {
+    "sourceHashMatches": true,
+    "sourceSeamWithinBudget": true,
+    "compiledAlbedoSeamExact": true,
+    "allChannelsMatchDimensions": true,
+    "heightRangeValid": true,
+    "normalRangeValid": true,
+    "derivedSeamsExact": true,
+    "channelsRemainProposals": true
+  },
+  "outputs": {
+    "albedo": "dev/model-qa/assetforge-real/runs/material/candidate/albedo.png",
+    "height": "dev/model-qa/assetforge-real/runs/material/candidate/height.png",
+    "normal": "dev/model-qa/assetforge-real/runs/material/candidate/normal.png",
+    "roughness": "dev/model-qa/assetforge-real/runs/material/candidate/roughness.png",
+    "emissive": "dev/model-qa/assetforge-real/runs/material/candidate/emissive.png",
+    "proofBoard": "dev/model-qa/assetforge-real/runs/material/candidate/proof-board.png"
+  },
+  "details": {
+    "sourceEdgeDelta": 7.147135416666667,
+    "compiledAlbedoEdgeDelta": 0.0,
+    "seamLockApplied": true,
+    "normalBlueMinimum": 250
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

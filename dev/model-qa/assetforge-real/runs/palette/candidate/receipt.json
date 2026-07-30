@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "family": "palette-harmonizer",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-real/manifests/palette-real.json",
+  "manifestSha256": "89fab225c63e73ef7b8cdfc0d79747000d95e60910752151af470a883ed6a958",
+  "technicalStatus": "PASS",
+  "gates": {
+    "sourceHashMatches": true,
+    "paletteSourceHashMatches": true,
+    "paletteNonEmpty": true,
+    "protectedColorsRepresentable": true,
+    "everyOpaquePixelInPalette": true,
+    "alphaByteIdentical": true,
+    "meanCiede2000WithinBudget": true,
+    "dominantHuePreserved": true,
+    "forbiddenChromaAbsent": true,
+    "valueHierarchyPreserved": true
+  },
+  "outputs": {
+    "image": "dev/model-qa/assetforge-real/runs/palette/candidate/harmonized.png",
+    "proofBoard": "dev/model-qa/assetforge-real/runs/palette/candidate/proof-board.png"
+  },
+  "details": {
+    "engineAuthority": "build/unify-corpus.py",
+    "engineAlgorithm": "Lab nearest + CIEDE2000 + dominant-hue + forbidden-chroma + shared defringe",
+    "engineSha256": "70fcfa56e3f24bb2f308fdbe4c4007ba3bb103c959212acb0d6c49ab0814720c",
+    "defringeApplied": true,
+    "meanCiede2000": 4.183042425623829,
+    "p95Ciede2000": 8.246794434119016,
+    "dominantHueBeforeDeg": 14.688118259262206,
+    "dominantHueAfterDeg": 11.037435660946933,
+    "dominantHueShiftDeg": 3.6506825983152726,
+    "forbiddenChromaPixelCount": 0,
+    "valueRankAgreement": 0.9549019607843138,
+    "outputColorCount": 35,
+    "chroma": {
+      "requested": "none",
+      "detected": null,
+      "dominantBorderRgb": [
+        193,
+        31,
+        181
+      ],
+      "keyRgb": null,
+      "tolerance": 12,
+      "softness": 0,
+      "keyedPixelCount": 0
+    }
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

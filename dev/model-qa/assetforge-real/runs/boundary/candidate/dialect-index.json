@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "dialects": [
+    {
+      "id": "architectural-enclosure",
+      "kind": "enclosure",
+      "technicalStatus": "PASS",
+      "failedGates": [],
+      "receipt": "dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/architectural-enclosure/receipt.json",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/architectural-enclosure/proof-board.png",
+      "details": {
+        "canonicalShapeCount": 47,
+        "rawMaskCount": 256,
+        "sourceEdgeDelta": 7.147135416666667,
+        "compiledSourceEdgeDelta": 0.0,
+        "seamLockApplied": true,
+        "compatibleNeighborPairsChecked": 2312,
+        "seededFieldShapeCoverage": 47
+      }
+    },
+    {
+      "id": "wilderness-path",
+      "kind": "path",
+      "technicalStatus": "PASS",
+      "failedGates": [],
+      "receipt": "dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/wilderness-path/receipt.json",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/wilderness-path/proof-board.png",
+      "details": {
+        "topology": "eightway256-network",
+        "routeWidthPx": 22,
+        "shoulderWidthPx": 6,
+        "compatibleNeighborPairsChecked": 49152,
+        "shapeCoverage": 256,
+        "seededStressShapeCoverage": 256
+      }
+    },
+    {
+      "id": "wilderness-road",
+      "kind": "road",
+      "technicalStatus": "PASS",
+      "failedGates": [],
+      "receipt": "dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/wilderness-road/receipt.json",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/wilderness-road/proof-board.png",
+      "details": {
+        "topology": "cardinal16-network",
+        "routeWidthPx": 44,
+        "shoulderWidthPx": 9,
+        "compatibleNeighborPairsChecked": 128,
+        "shapeCoverage": 16,
+        "seededStressShapeCoverage": 16
+      }
+    },
+    {
+      "id": "cliff-elevation",
+      "kind": "cliff",
+      "technicalStatus": "PASS",
+      "failedGates": [],
+      "receipt": "dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/cliff-elevation/receipt.json",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/cliff-elevation/proof-board.png",
+      "details": {
+        "topology": "cardinal16+integer-elevation",
+        "heightBandCountProved": 4,
+        "renderDialect": "dimetric-height-field"
+      }
+    }
+  ]
+}

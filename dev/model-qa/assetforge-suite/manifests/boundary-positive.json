@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "family": "boundary-autotile",
+  "insideMaterial": {
+    "tile": "dev/model-qa/assetforge-suite/fixtures/periodic-material.png",
+    "sha256": "53b62db24d3fc77f773c2fc8794ee9a23afe1a3b9d9b8000f21b79886c158589"
+  },
+  "edgeLanguage": {
+    "borderWidthPx": 6,
+    "orientationPolicy": "rotatable-organic",
+    "phasePolicy": "world-locked"
+  },
+  "tileSizePx": 64,
+  "seed": 73129,
+  "maxSourceEdgeDelta": 0
+}

@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "qualification": "assetforge-real-v1",
+  "technicalStatus": "PASS",
+  "claimBoundary": "Real tracked inputs, source hashes, compiler gates, and a real changed-image detector are proven here. Mechanical PASS does not grant runtime admission or replace individual human taste review.",
+  "processCount": 12,
+  "runCount": 13,
+  "expectationsMet": 13,
+  "sourceEvidence": "dev/model-qa/assetforge-real/source-evidence.json",
+  "navigationBoard": "dev/model-qa/assetforge-real/qualification-navigation-board.png",
+  "results": [
+    {
+      "family": "emote",
+      "run": "candidate",
+      "expected": "PASS",
+      "actual": "PASS",
+      "failedGates": [],
+      "receipt": "dev/model-qa/assetforge-real/runs/emote/candidate/receipt.json",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/emote/candidate/proof-board.png",
+      "visualIdentity": "REVIEW_REQUIRED"
+    },
+    {
+      "family": "boundary",
+      "run": "candidate",
+      "expected": "PASS",
+      "actual": "PASS",
+      "failedGates": [],
+      "receipt": "dev/model-qa/assetforge-real/runs/boundary/candidate/receipt.json",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/boundary/candidate/proof-board.png"
+    },
+    {
+      "family": "repeat",
+      "run": "candidate",
+      "expected": "PASS",
+      "actual": "PASS",
+      "failedGates": [],
+      "receipt": "dev/model-qa/assetforge-real/runs/repeat/candidate/receipt.json",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/repeat/candidate/proof-board.png"
+    },
+    {
+      "family": "prop-kit",
+      "run": "candidate",
+      "expected": "PASS",
+      "actual": "PASS",
+      "failedGates": [],
+      "receipt": "dev/model-qa/assetforge-real/runs/prop-kit/candidate/receipt.json",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/prop-kit/candidate/proof-board.png"
+    },
+    {
+      "family": "condition",
+      "run": "candidate",
+      "expected": "PASS",
+      "actual": "PASS",
+      "failedGates": [],
+      "receipt": "dev/model-qa/assetforge-real/runs/condition/candidate/receipt.json",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/condition/candidate/proof-board.png"
+    },
+    {
+      "family": "palette",
+      "run": "candidate",
+      "expected": "PASS",
+      "actual": "PASS",
+      "failedGates": [],
+      "receipt": "dev/model-qa/assetforge-real/runs/palette/candidate/receipt.json",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/palette/candidate/proof-board.png"
+    },
+    {
+      "family": "trim",
+      "run": "candidate",
+      "expected": "PASS",
+      "actual": "PASS",
+      "failedGates": [],
+      "receipt": "dev/model-qa/assetforge-real/runs/trim/candidate/receipt.json",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/trim/candidate/proof-board.png"
+    },
+    {
+      "family": "decal",
+      "run": "candidate",
+      "expected": "PASS",
+      "actual": "PASS",
+      "failedGates": [],
+      "receipt": "dev/model-qa/assetforge-real/runs/decal/candidate/receipt.json",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/decal/candidate/proof-board.png"
+    },
+    {
+      "family": "citizenship",
+      "run": "candidate",
+      "expected": "PASS",
+      "actual": "PASS",
+      "failedGates": [],
+      "receipt": "dev/model-qa/assetforge-real/runs/citizenship/candidate/receipt.json",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/citizenship/candidate/proof-board.png"
+    },
+    {
+      "family": "atlas",
+      "run": "candidate",
+      "expected": "PASS",
+      "actual": "PASS",
+      "failedGates": [],
+      "receipt": "dev/model-qa/assetforge-real/runs/atlas/candidate/receipt.json",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/atlas/candidate/proof-board.png"
+    },
+    {
+      "family": "material",
+      "run": "candidate",
+      "expected": "PASS",
+      "actual": "PASS",
+      "failedGates": [],
+      "receipt": "dev/model-qa/assetforge-real/runs/material/candidate/receipt.json",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/material/candidate/proof-board.png"
+    },
+    {
+      "family": "regression",
+      "run": "candidate",
+      "expected": "PASS",
+      "actual": "PASS",
+      "failedGates": [],
+      "receipt": "dev/model-qa/assetforge-real/runs/regression/candidate/receipt.json",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/regression/candidate/proof-board.png"
+    },
+    {
+      "family": "regression",
+      "run": "real-change-control",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "failedGates": [
+        "perceptualDifferenceWithinThreshold"
+      ],
+      "receipt": "dev/model-qa/assetforge-real/runs/regression/real-change-control/receipt.json",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/regression/real-change-control/proof-board.png"
+    }
+  ]
+}

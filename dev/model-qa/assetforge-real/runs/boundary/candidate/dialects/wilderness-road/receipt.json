@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "family": "boundary-road",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-real/manifests/boundary-real.json",
+  "manifestSha256": "942063bb3bcca44b6c7da886d6cc3512c05b48b64f3d23864b0251b247ebac5e",
+  "technicalStatus": "PASS",
+  "gates": {
+    "insideSourceHashMatches": true,
+    "outsideSourceHashMatches": true,
+    "everyNetworkShapeCompiled": true,
+    "everyNetworkShapeProved": true,
+    "connectedEdgesCloseExactly": true,
+    "allNetworkTortureMapsRendered": true
+  },
+  "outputs": {
+    "atlas": "dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/wilderness-road/atlas.png",
+    "metadata": "dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/wilderness-road/atlas.json",
+    "proofBoard": "dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/wilderness-road/proof-board.png"
+  },
+  "details": {
+    "topology": "cardinal16-network",
+    "routeWidthPx": 44,
+    "shoulderWidthPx": 9,
+    "compatibleNeighborPairsChecked": 128,
+    "shapeCoverage": 16,
+    "seededStressShapeCoverage": 16
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

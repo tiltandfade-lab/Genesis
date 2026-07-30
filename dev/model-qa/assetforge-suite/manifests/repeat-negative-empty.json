@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "family": "modular-repeat",
+  "componentSheet": "dev/model-qa/assetforge-suite/fixtures/components-empty.png",
+  "tileSizePx": 96,
+  "minimumComponents": 2
+}

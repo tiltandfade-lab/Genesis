@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "family": "boundary-autotile",
+  "insideMaterial": {
+    "tile": "dev/model-qa/assetforge-suite/fixtures/nonperiodic-material.png"
+  },
+  "tileSizePx": 64,
+  "maxSourceEdgeDelta": 0
+}

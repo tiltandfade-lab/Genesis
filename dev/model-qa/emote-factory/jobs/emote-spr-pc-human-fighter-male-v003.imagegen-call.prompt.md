@@ -1,0 +1,8 @@
+Use case: precise-object-edit
+Asset type: corrected Genesis sprite-emote production sheet v003.
+
+Edit ONLY the bottom-right cell (row 2, column 3), the REAR-VIEW state. Correct the hand and weapon-contact anatomy while preserving the true back view. The sword-side arm must connect through a plausible wrist into one clearly readable human hand wrapped naturally around the sword hilt. Show a clean, simplified pixel-art grip with a credible palm/thumb/finger mass at this resolution: no fused wrist, missing hand, extra hand, extra fingers, melted knuckles, disconnected hilt, or blade growing from the arm. Keep the sword hanging safely downward. On the shield side, make the forearm/hand and inner shield straps attach plausibly so the shield does not float. Preserve exactly two arms and two hands.
+
+Keep the same individual viewed directly from behind: same black hair and beard-edge read, blue-and-gold armor back construction, brown leather cross-body strap, belt, boots, proportions, sword, and round blue-and-gold shield. Preserve the same apparent scale, baseline, silhouette, palette, pixel density, outline language, and lighting. This must remain a genuine rear construction, never a mirrored front.
+
+Lock every other part of the input image exactly. Do not alter, repaint, move, resize, or reinterpret the neutral, angry, happy, near-death, or seated resting cells. Preserve the seated field-rest pose in the bottom-middle cell exactly. Preserve the 3×2 square-cell layout, 3:2 canvas, uniform solid #FF00FF background, clear cell boundaries, and generous padding. No text, labels, dividers, transparency, watermark, scenery, floor, grass, cast shadow, or contact shadow.

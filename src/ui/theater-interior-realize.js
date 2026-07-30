@@ -111,6 +111,7 @@
 
 import * as THREE from "three";
 import { clearGroup } from "./theater-dispose.js";
+import { mountCompiledGroundField } from "./theater-ground-field.js";
 import {
   CAM_ELEV_DEG, CAM_YAW_OFFSET_DEG, F1_COMBAT_CAM_CLAMP_FRAC, ITR_SHOT_COMPOSE,
   f1ClampCamFit, fitFromComposedCameraWideForTest, fitFromComposedShot,
@@ -164,7 +165,7 @@ let HEMI_INTENSITY_DEFAULT, INTERIOR_CAM_MODE, ITR_BRIGHT_PROFILES, ITR_EMISSIVE
 let applyPsxShaderTweaks, buildTheaterCtx, drainTweens, gradeColorLocal, hexStrToNum,
     interiorBuildInteractables, interiorBuildKitShellFloors, interiorBuildKitShellWalls,
     interiorFloorTopAt, interiorFloorTopMapFrom, itrApplyDoorMounts, itrBrightRealmFillFor,
-    itrDoorMountMapFrom, itrScaleHexValue, markDirty, startTweenLoop;
+    itrDoorMountMapFrom, itrScaleHexValue, markDirty, nearestify, startTweenLoop, textureLoader;
 let itrCtxGetRoomShell, itrCtxRoomShellPolygonKernel, itrCtxOcclusionFadeDisabled,
     itrCtxEmissiveFillDisabled, itrCtxEmissiveAlbedoLiftDisabled, itrCtxSetSpriteEmissiveTint;
 let S = null;
@@ -208,7 +209,9 @@ export function interiorRealizeInit(ctx){
   itrDoorMountMapFrom = ctx.itrDoorMountMapFrom;
   itrScaleHexValue = ctx.itrScaleHexValue;
   markDirty = ctx.markDirty;
+  nearestify = ctx.nearestify;
   startTweenLoop = ctx.startTweenLoop;
+  textureLoader = ctx.textureLoader;
   itrCtxGetRoomShell = ctx.itrCtxGetRoomShell;
   itrCtxRoomShellPolygonKernel = ctx.itrCtxRoomShellPolygonKernel;
   itrCtxOcclusionFadeDisabled = ctx.itrCtxOcclusionFadeDisabled;
@@ -1561,7 +1564,7 @@ function realizePhasePillars(pass){
    sweep (itrAllInteriorMeshes) that seats every architectural mesh in S.interiorGroup and stamps
    S.interiorMeshCount. VERBATIM from theater-boot.js lines 6384-6409. */
 function realizePhaseGroups(pass){
-  const { data, variant, cx, cz, doorMountMap, useCompiledRoomShell, roomShellMeshes, floorMesh,
+  const { data, variant, b, cx, cz, doorMountMap, useCompiledRoomShell, roomShellMeshes, floorMesh,
          wallMesh, wallGhostMesh, doorMesh, doorGhostMesh, pillarMeshes, pillarGhostMeshes } = pass;
   // GR4 (docs/GRAPHICS-ENGINE.md build unit GR4): the diorama edge skirt — data.skirt (src/ui/theater-
   // interior.js's interiorBuildBoard, GR4 addition), a sibling of `instances` (never counted toward the
@@ -1588,7 +1591,29 @@ function realizePhaseGroups(pass){
   const itrFloorWallMeshes = (useCompiledRoomShell && roomShellMeshes.length) ? roomShellMeshes : [floorMesh, wallMesh, wallGhostMesh];
   const itrAllInteriorMeshes = itrFloorWallMeshes.concat([doorMesh, doorGhostMesh, skirtMesh, portalMesh]).concat(pillarMeshes).concat(pillarGhostMeshes);
   itrAllInteriorMeshes.forEach((mesh) => { if(mesh) S.interiorGroup.add(mesh); });
-  S.interiorMeshCount = itrAllInteriorMeshes.filter(Boolean).length;
+  const floorSurfaceY = (pass.floorList || []).reduce(function(top, inst){
+    const sy = (inst && typeof inst.sy === "number" && Number.isFinite(inst.sy))
+      ? inst.sy : ITR_FLOOR_HEIGHT_FALLBACK;
+    return Math.max(top, ITR_FLOOR_BASE_Y + sy);
+  }, ITR_FLOOR_BASE_Y + ITR_FLOOR_HEIGHT_FALLBACK);
+  const groundFieldBounds = data.focusRect || b;
+  const groundFieldMesh = mountCompiledGroundField({
+    S,
+    data,
+    group: S.interiorGroup,
+    bounds: groundFieldBounds,
+    centerX: (groundFieldBounds.minX + groundFieldBounds.maxX) * 0.5 - cx,
+    centerZ: (groundFieldBounds.minZ + groundFieldBounds.maxZ) * 0.5 - cz,
+    y: floorSurfaceY + 0.006,
+    textureLoader,
+    nearestify,
+    applyPsxShaderTweaks,
+    rebuild: function(current){
+      setInteriorBoard(current, { roomTransition: false, reason: "ground-field-texture-settle" });
+    },
+    renderChannel: "interior3d",
+  });
+  S.interiorMeshCount = itrAllInteriorMeshes.filter(Boolean).length + (groundFieldMesh ? 1 : 0);
 }
 
 /* PHASE 10 (realizePhasePracticals) — the wall-mount slot filter, interiorBuildLights, the E0-1

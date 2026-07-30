@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "family": "sprite-emote-visual-review-receipt",
+  "jobId": "emote-spr-pc-human-fighter-male-v001",
+  "spriteSlug": "spr-pc-human-fighter-male",
+  "reviewSource": "dev/model-qa/emote-factory/self-test/reviews/all-pass.json",
+  "reviewSourceSha256": "0425fecbfa14ae3ff0ca81e6d6191e5bcc7ecea5e4fd2b9f864b1a28688a23aa",
+  "reviewer": "Assetforge self-test",
+  "reviewedOn": "2026-07-28",
+  "visualIdentity": "PASS",
+  "failedChecks": [],
+  "incompleteChecks": [],
+  "runtimeAdmission": "CANDIDATE",
+  "notes": ""
+}

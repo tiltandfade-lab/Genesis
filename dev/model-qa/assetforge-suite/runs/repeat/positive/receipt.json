@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "family": "modular-repeat",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-suite/manifests/repeat-positive.json",
+  "manifestSha256": "4d5c9ddbf6683cf22bbcad79e9787e45ab2df73d432a980c9e9f35d516fa0a4d",
+  "technicalStatus": "PASS",
+  "gates": {
+    "sourceHashMatches": true,
+    "componentsIsolated": true,
+    "toroidalClosureExact": true,
+    "allComponentsPlaced": true,
+    "variantCadencePresent": true
+  },
+  "outputs": {
+    "tile": "dev/model-qa/assetforge-suite/runs/repeat/positive/tile.png",
+    "proofBoard": "dev/model-qa/assetforge-suite/runs/repeat/positive/proof-board.png"
+  },
+  "details": {
+    "componentCount": 3,
+    "placements": [
+      {
+        "component": 0,
+        "x": -10,
+        "y": -17
+      },
+      {
+        "component": 1,
+        "x": 91,
+        "y": 47
+      },
+      {
+        "component": 2,
+        "x": 59,
+        "y": 10
+      }
+    ],
+    "edgeDelta": 0.0,
+    "layout": "seeded-scatter",
+    "chroma": {
+      "requested": "auto",
+      "detected": "magenta",
+      "dominantBorderRgb": [
+        255,
+        0,
+        255
+      ],
+      "keyRgb": [
+        255,
+        0,
+        255
+      ],
+      "tolerance": 12,
+      "softness": 0,
+      "keyedPixelCount": 9984
+    },
+    "extraction": {
+      "mode": "connected-components",
+      "declaredCellCount": null
+    }
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

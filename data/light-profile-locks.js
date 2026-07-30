@@ -19,7 +19,7 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
       "OVERCAST_DESAT": 0.4,
       "OVERCAST_SHADOW_DAMP": 0.55
     },
-    "spriteEmissiveFloor": 0.05,
+    "spriteEmissiveFloor": 0.12,
     "sceneAmbient": 0.13,
     "lightRenderGain": 4.5
   },
@@ -36,13 +36,13 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
       },
       "atmosphereFact": null,
       "spriteResponse": {
-        "emissiveFloor": 0.05,
-        "materialRecipe": "lit-standee-v1",
+        "emissiveFloor": 0.12,
+        "materialRecipe": "lit-standee-v2",
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "linear",
-          "alphaMode": "registry-cutoff"
+          "minificationFilter": "trilinear-mipmap",
+          "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       }
     },
@@ -93,13 +93,13 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
       },
       "atmosphereFact": null,
       "spriteResponse": {
-        "emissiveFloor": 0.05,
-        "materialRecipe": "lit-standee-v1",
+        "emissiveFloor": 0.12,
+        "materialRecipe": "lit-standee-v2",
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "linear",
-          "alphaMode": "registry-cutoff"
+          "minificationFilter": "trilinear-mipmap",
+          "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       },
       "id": "dark",
@@ -178,13 +178,13 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
       },
       "atmosphereFact": null,
       "spriteResponse": {
-        "emissiveFloor": 0.05,
-        "materialRecipe": "lit-standee-v1",
+        "emissiveFloor": 0.12,
+        "materialRecipe": "lit-standee-v2",
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "linear",
-          "alphaMode": "registry-cutoff"
+          "minificationFilter": "trilinear-mipmap",
+          "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       },
       "id": "torchlit",
@@ -266,13 +266,13 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
       },
       "atmosphereFact": null,
       "spriteResponse": {
-        "emissiveFloor": 0.05,
-        "materialRecipe": "lit-standee-v1",
+        "emissiveFloor": 0.12,
+        "materialRecipe": "lit-standee-v2",
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "linear",
-          "alphaMode": "registry-cutoff"
+          "minificationFilter": "trilinear-mipmap",
+          "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       },
       "id": "lavalit",
@@ -351,13 +351,13 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
       },
       "atmosphereFact": null,
       "spriteResponse": {
-        "emissiveFloor": 0.05,
-        "materialRecipe": "lit-standee-v1",
+        "emissiveFloor": 0.12,
+        "materialRecipe": "lit-standee-v2",
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "linear",
-          "alphaMode": "registry-cutoff"
+          "minificationFilter": "trilinear-mipmap",
+          "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       },
       "id": "fungal-glow",
@@ -436,13 +436,13 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
       },
       "atmosphereFact": null,
       "spriteResponse": {
-        "emissiveFloor": 0.05,
-        "materialRecipe": "lit-standee-v1",
+        "emissiveFloor": 0.12,
+        "materialRecipe": "lit-standee-v2",
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "linear",
-          "alphaMode": "registry-cutoff"
+          "minificationFilter": "trilinear-mipmap",
+          "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       },
       "id": "magic-glow",
@@ -521,13 +521,13 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
       },
       "atmosphereFact": null,
       "spriteResponse": {
-        "emissiveFloor": 0.05,
-        "materialRecipe": "lit-standee-v1",
+        "emissiveFloor": 0.12,
+        "materialRecipe": "lit-standee-v2",
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "linear",
-          "alphaMode": "registry-cutoff"
+          "minificationFilter": "trilinear-mipmap",
+          "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       },
       "id": "lamplit",
@@ -606,13 +606,13 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
       },
       "atmosphereFact": null,
       "spriteResponse": {
-        "emissiveFloor": 0.05,
-        "materialRecipe": "lit-standee-v1",
+        "emissiveFloor": 0.12,
+        "materialRecipe": "lit-standee-v2",
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "linear",
-          "alphaMode": "registry-cutoff"
+          "minificationFilter": "trilinear-mipmap",
+          "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       },
       "id": "moonlit",
@@ -691,13 +691,13 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
       },
       "atmosphereFact": null,
       "spriteResponse": {
-        "emissiveFloor": 0.05,
-        "materialRecipe": "lit-standee-v1",
+        "emissiveFloor": 0.12,
+        "materialRecipe": "lit-standee-v2",
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "linear",
-          "alphaMode": "registry-cutoff"
+          "minificationFilter": "trilinear-mipmap",
+          "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       },
       "id": "daylit",
@@ -776,13 +776,13 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
       },
       "atmosphereFact": null,
       "spriteResponse": {
-        "emissiveFloor": 0.05,
-        "materialRecipe": "lit-standee-v1",
+        "emissiveFloor": 0.12,
+        "materialRecipe": "lit-standee-v2",
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "linear",
-          "alphaMode": "registry-cutoff"
+          "minificationFilter": "trilinear-mipmap",
+          "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       },
       "id": "overcast",
@@ -813,13 +813,13 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
       },
       "atmosphereFact": null,
       "spriteResponse": {
-        "emissiveFloor": 0.05,
-        "materialRecipe": "lit-standee-v1",
+        "emissiveFloor": 0.12,
+        "materialRecipe": "lit-standee-v2",
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "linear",
-          "alphaMode": "registry-cutoff"
+          "minificationFilter": "trilinear-mipmap",
+          "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       },
       "id": "voidlit",
@@ -898,13 +898,13 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
       },
       "atmosphereFact": null,
       "spriteResponse": {
-        "emissiveFloor": 0.05,
-        "materialRecipe": "lit-standee-v1",
+        "emissiveFloor": 0.12,
+        "materialRecipe": "lit-standee-v2",
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "linear",
-          "alphaMode": "registry-cutoff"
+          "minificationFilter": "trilinear-mipmap",
+          "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       },
       "id": "clay-neutral-truth",
@@ -983,13 +983,13 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
       },
       "atmosphereFact": null,
       "spriteResponse": {
-        "emissiveFloor": 0.05,
-        "materialRecipe": "lit-standee-v1",
+        "emissiveFloor": 0.12,
+        "materialRecipe": "lit-standee-v2",
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "linear",
-          "alphaMode": "registry-cutoff"
+          "minificationFilter": "trilinear-mipmap",
+          "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       },
       "id": "clay-opposing-pair",

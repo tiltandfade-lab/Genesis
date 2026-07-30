@@ -1,0 +1,389 @@
+{
+  "schemaVersion": 1,
+  "family": "modular-repeat",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-real/manifests/repeat-real.json",
+  "manifestSha256": "8bd7f88bc18720db059f7d086549bf4ea7379f4cadb289da837184a71f594478",
+  "technicalStatus": "PASS",
+  "gates": {
+    "sourceHashMatches": true,
+    "componentsIsolated": true,
+    "toroidalClosureExact": true,
+    "allComponentsPlaced": true,
+    "variantCadencePresent": true
+  },
+  "outputs": {
+    "tile": "dev/model-qa/assetforge-real/runs/repeat/candidate/tile.png",
+    "proofBoard": "dev/model-qa/assetforge-real/runs/repeat/candidate/proof-board.png"
+  },
+  "details": {
+    "componentCount": 6,
+    "placements": [
+      {
+        "component": 0,
+        "x": 0,
+        "y": 0,
+        "row": 0
+      },
+      {
+        "component": 1,
+        "x": 82,
+        "y": 0,
+        "row": 0
+      },
+      {
+        "component": 5,
+        "x": 164,
+        "y": 0,
+        "row": 0
+      },
+      {
+        "component": 4,
+        "x": 246,
+        "y": 0,
+        "row": 0
+      },
+      {
+        "component": 2,
+        "x": 328,
+        "y": 0,
+        "row": 0
+      },
+      {
+        "component": 3,
+        "x": 410,
+        "y": 0,
+        "row": 0
+      },
+      {
+        "component": 5,
+        "x": 492,
+        "y": 0,
+        "row": 0
+      },
+      {
+        "component": 3,
+        "x": -41,
+        "y": 72,
+        "row": 1
+      },
+      {
+        "component": 2,
+        "x": 41,
+        "y": 72,
+        "row": 1
+      },
+      {
+        "component": 0,
+        "x": 123,
+        "y": 72,
+        "row": 1
+      },
+      {
+        "component": 2,
+        "x": 205,
+        "y": 72,
+        "row": 1
+      },
+      {
+        "component": 3,
+        "x": 287,
+        "y": 72,
+        "row": 1
+      },
+      {
+        "component": 0,
+        "x": 369,
+        "y": 72,
+        "row": 1
+      },
+      {
+        "component": 2,
+        "x": 451,
+        "y": 72,
+        "row": 1
+      },
+      {
+        "component": 0,
+        "x": 0,
+        "y": 144,
+        "row": 2
+      },
+      {
+        "component": 1,
+        "x": 82,
+        "y": 144,
+        "row": 2
+      },
+      {
+        "component": 4,
+        "x": 164,
+        "y": 144,
+        "row": 2
+      },
+      {
+        "component": 3,
+        "x": 246,
+        "y": 144,
+        "row": 2
+      },
+      {
+        "component": 5,
+        "x": 328,
+        "y": 144,
+        "row": 2
+      },
+      {
+        "component": 4,
+        "x": 410,
+        "y": 144,
+        "row": 2
+      },
+      {
+        "component": 5,
+        "x": 492,
+        "y": 144,
+        "row": 2
+      },
+      {
+        "component": 2,
+        "x": -41,
+        "y": 216,
+        "row": 3
+      },
+      {
+        "component": 5,
+        "x": 41,
+        "y": 216,
+        "row": 3
+      },
+      {
+        "component": 0,
+        "x": 123,
+        "y": 216,
+        "row": 3
+      },
+      {
+        "component": 3,
+        "x": 205,
+        "y": 216,
+        "row": 3
+      },
+      {
+        "component": 0,
+        "x": 287,
+        "y": 216,
+        "row": 3
+      },
+      {
+        "component": 4,
+        "x": 369,
+        "y": 216,
+        "row": 3
+      },
+      {
+        "component": 5,
+        "x": 451,
+        "y": 216,
+        "row": 3
+      },
+      {
+        "component": 4,
+        "x": 0,
+        "y": 288,
+        "row": 4
+      },
+      {
+        "component": 2,
+        "x": 82,
+        "y": 288,
+        "row": 4
+      },
+      {
+        "component": 3,
+        "x": 164,
+        "y": 288,
+        "row": 4
+      },
+      {
+        "component": 0,
+        "x": 246,
+        "y": 288,
+        "row": 4
+      },
+      {
+        "component": 1,
+        "x": 328,
+        "y": 288,
+        "row": 4
+      },
+      {
+        "component": 5,
+        "x": 410,
+        "y": 288,
+        "row": 4
+      },
+      {
+        "component": 4,
+        "x": 492,
+        "y": 288,
+        "row": 4
+      },
+      {
+        "component": 1,
+        "x": -41,
+        "y": 360,
+        "row": 5
+      },
+      {
+        "component": 5,
+        "x": 41,
+        "y": 360,
+        "row": 5
+      },
+      {
+        "component": 3,
+        "x": 123,
+        "y": 360,
+        "row": 5
+      },
+      {
+        "component": 0,
+        "x": 205,
+        "y": 360,
+        "row": 5
+      },
+      {
+        "component": 4,
+        "x": 287,
+        "y": 360,
+        "row": 5
+      },
+      {
+        "component": 3,
+        "x": 369,
+        "y": 360,
+        "row": 5
+      },
+      {
+        "component": 4,
+        "x": 451,
+        "y": 360,
+        "row": 5
+      },
+      {
+        "component": 3,
+        "x": 0,
+        "y": 432,
+        "row": 6
+      },
+      {
+        "component": 2,
+        "x": 82,
+        "y": 432,
+        "row": 6
+      },
+      {
+        "component": 0,
+        "x": 164,
+        "y": 432,
+        "row": 6
+      },
+      {
+        "component": 2,
+        "x": 246,
+        "y": 432,
+        "row": 6
+      },
+      {
+        "component": 1,
+        "x": 328,
+        "y": 432,
+        "row": 6
+      },
+      {
+        "component": 0,
+        "x": 410,
+        "y": 432,
+        "row": 6
+      },
+      {
+        "component": 2,
+        "x": 492,
+        "y": 432,
+        "row": 6
+      },
+      {
+        "component": 0,
+        "x": -41,
+        "y": 504,
+        "row": 7
+      },
+      {
+        "component": 1,
+        "x": 41,
+        "y": 504,
+        "row": 7
+      },
+      {
+        "component": 0,
+        "x": 123,
+        "y": 504,
+        "row": 7
+      },
+      {
+        "component": 4,
+        "x": 205,
+        "y": 504,
+        "row": 7
+      },
+      {
+        "component": 1,
+        "x": 287,
+        "y": 504,
+        "row": 7
+      },
+      {
+        "component": 3,
+        "x": 369,
+        "y": 504,
+        "row": 7
+      },
+      {
+        "component": 4,
+        "x": 451,
+        "y": 504,
+        "row": 7
+      }
+    ],
+    "edgeDelta": 0.0,
+    "layout": "staggered-courses",
+    "chroma": {
+      "requested": "none",
+      "detected": null,
+      "dominantBorderRgb": [
+        0,
+        0,
+        0
+      ],
+      "keyRgb": null,
+      "tolerance": 12,
+      "softness": 0,
+      "keyedPixelCount": 0
+    },
+    "extraction": {
+      "mode": "declared-grid",
+      "grid": [
+        3,
+        2
+      ],
+      "gridCuts": {
+        "x": null,
+        "y": null
+      },
+      "declaredCellCount": 6,
+      "emptyCellIndexes": []
+    }
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

@@ -1,0 +1,8 @@
+Use case: precise-object-edit
+Asset type: corrected Genesis sprite-emote production sheet v002.
+
+Edit ONLY the bottom-middle cell (row 2, column 2), the RESTING state. Replace its standing pose with a quiet seated field-rest pose: the same armored human fighter seated low on the ground in contemplative profile/three-quarter view, momentarily unguarded, shoulders relaxed, one knee comfortably raised or legs loosely folded, sword safely settled beside or across him, shield resting naturally against him. The feeling is a solitary warrior pausing peacefully in an open field, but include NO literal field, grass, wind effect, scenery, ground plane, shadow, or added prop. Keep the solid #FF00FF background visible around the complete seated silhouette. Keep generous cell padding and ground the seated body to the same baseline as the other bottom-row states.
+
+Preserve the exact individual: same face, black hair, beard, blue-and-gold armor, brown leather, sword, round blue-and-gold shield, proportions, pixel density, outline language, palette, and lighting. Do not remove the sword or shield. The seated pose should be intentionally height-compressed, not a smaller person.
+
+Lock every other part of the input image exactly: do not alter, repaint, move, resize, or reinterpret the neutral, angry, happy, near-death, or rear-view cells. Preserve the true rear view in the bottom-right cell. Preserve the 3×2 square-cell layout, 3:2 canvas, uniform #FF00FF background, and clear cell boundaries. No text, labels, dividers, transparency, watermark, scenery, floor, grass, cast shadow, or contact shadow.

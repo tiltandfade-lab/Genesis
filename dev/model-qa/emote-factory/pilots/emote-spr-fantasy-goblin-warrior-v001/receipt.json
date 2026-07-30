@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 1,
+  "family": "sprite-emote",
+  "algorithmVersion": "sprite-emote-v1",
+  "jobId": "emote-spr-fantasy-goblin-warrior-v001",
+  "spriteSlug": "spr-fantasy-goblin-warrior",
+  "subjectKind": "monster",
+  "inputs": {
+    "job": "dev/model-qa/emote-factory/jobs/emote-spr-fantasy-goblin-warrior-v001.job.json",
+    "jobSha256": "6691432369c549894d847b6976597b46455f13314a3b34012c30fe2186b669b9",
+    "source": "assets/sprites/spr-fantasy-goblin-warrior.png",
+    "sourceSha256": "d49935c34ebe4a3e3e97994c328754cfb0d20e7e1a805a3877d9d0399c819086",
+    "sheet": "dev/model-qa/emote-factory/returns/emote-spr-fantasy-goblin-warrior-v001-imagegen.png",
+    "sheetSha256": "c5945b71e478f0fa3fa4698bf6247a2a1f0b8f275d9a81efa999fbba83b0d505"
+  },
+  "generation": {
+    "provider": "OpenAI built-in image_gen",
+    "model": "unreported-by-built-in-tool",
+    "generationCallId": "call_J0Mvbf47dJGqNnmpIUQhaDQE",
+    "seed": null,
+    "promptPath": "dev/model-qa/emote-factory/jobs/emote-spr-fantasy-goblin-warrior-v001.imagegen-call.prompt.md"
+  },
+  "format": {
+    "requestedCanvas": [
+      1152,
+      768
+    ],
+    "actualCanvas": [
+      1536,
+      1024
+    ],
+    "requestedCellAspect": "1:1",
+    "requestedCellDimensions": [
+      384,
+      384
+    ],
+    "actualDerivedCellDimensions": [
+      512,
+      512
+    ],
+    "cellAspectRelativeError": 0.0,
+    "stateCountExpected": 6,
+    "stateCountObserved": 6
+  },
+  "crossStateMetrics": {
+    "medianFootY": 0.862035,
+    "maximumBaselineDelta": 0.034246,
+    "medianHeightOccupancy": 0.806641,
+    "maximumRelativeHeightDelta": 0.058111
+  },
+  "states": {
+    "idle": {
+      "contentBounds": [
+        0.136719,
+        0.087891,
+        0.964844,
+        0.894531
+      ],
+      "footX": 0.191781,
+      "footY": 0.894325,
+      "widthOccupancy": 0.828125,
+      "heightOccupancy": 0.806641,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 0.99828,
+      "path": "dev/model-qa/emote-factory/pilots/emote-spr-fantasy-goblin-warrior-v001/states/spr-fantasy-goblin-warrior--idle.png",
+      "sha256": "1746c161cbff2c67de228d6062c987de27fbdaa0428a1c62ed0de8b24b178d5a"
+    },
+    "furious": {
+      "contentBounds": [
+        0.115234,
+        0.083984,
+        0.933594,
+        0.894531
+      ],
+      "footX": 0.181018,
+      "footY": 0.894325,
+      "widthOccupancy": 0.818359,
+      "heightOccupancy": 0.810547,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 0.996803,
+      "path": "dev/model-qa/emote-factory/pilots/emote-spr-fantasy-goblin-warrior-v001/states/spr-fantasy-goblin-warrior--furious.png",
+      "sha256": "f7b479088f4b5497cb70f5f244f6a3eb75aa9e2e209d3206ebacde6ceb2575da"
+    },
+    "wounded": {
+      "contentBounds": [
+        0.066406,
+        0.132812,
+        0.832031,
+        0.894531
+      ],
+      "footX": 0.11546,
+      "footY": 0.894325,
+      "widthOccupancy": 0.765625,
+      "heightOccupancy": 0.761719,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 0.99808,
+      "path": "dev/model-qa/emote-factory/pilots/emote-spr-fantasy-goblin-warrior-v001/states/spr-fantasy-goblin-warrior--wounded.png",
+      "sha256": "055fb232fb2647d2f1ff5d0b8e8480b2d83bae7998e08a4d802ee433bf25a5a4"
+    },
+    "grim": {
+      "contentBounds": [
+        0.148438,
+        0.009766,
+        0.962891,
+        0.828125
+      ],
+      "footX": 0.206458,
+      "footY": 0.827789,
+      "widthOccupancy": 0.814453,
+      "heightOccupancy": 0.818359,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 0.997007,
+      "path": "dev/model-qa/emote-factory/pilots/emote-spr-fantasy-goblin-warrior-v001/states/spr-fantasy-goblin-warrior--grim.png",
+      "sha256": "d2e1acdc807db54d12a2cba298b699bae054ff95215567dc86a6818f0572b008"
+    },
+    "triumphant": {
+      "contentBounds": [
+        0.072266,
+        0.021484,
+        0.871094,
+        0.828125
+      ],
+      "footX": 0.187867,
+      "footY": 0.827789,
+      "widthOccupancy": 0.798828,
+      "heightOccupancy": 0.806641,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 0.996974,
+      "path": "dev/model-qa/emote-factory/pilots/emote-spr-fantasy-goblin-warrior-v001/states/spr-fantasy-goblin-warrior--triumphant.png",
+      "sha256": "8314680ab2116223d832a1cab959066103c2a15f12042545b5a151ec48ce7773"
+    },
+    "afraid": {
+      "contentBounds": [
+        0.101562,
+        0.070312,
+        0.873047,
+        0.830078
+      ],
+      "footX": 0.149706,
+      "footY": 0.829746,
+      "widthOccupancy": 0.771484,
+      "heightOccupancy": 0.759766,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 0.99802,
+      "path": "dev/model-qa/emote-factory/pilots/emote-spr-fantasy-goblin-warrior-v001/states/spr-fantasy-goblin-warrior--afraid.png",
+      "sha256": "5102a4e6ba0a5138957655b98491c9ed05ab9bef4c0ff6daaa206b019ea1fac7"
+    }
+  },
+  "gates": {
+    "sourceHashMatchesJob": true,
+    "sheetDimensionsDivisibleByGrid": true,
+    "cellAspectWithinTolerance": true,
+    "allRequiredStatesPopulated": true,
+    "cellBordersClear": true,
+    "magentaEdgeResidueWithinLimit": true,
+    "sharedBaselineWithinTolerance": true,
+    "relativeHeightWithinTolerance": true,
+    "sourcePaletteCoverageWithinBudget": true,
+    "atlasDimensionsMatchSheet": true
+  },
+  "mechanicalIdentity": "PASS",
+  "visualIdentity": "REVIEW_REQUIRED",
+  "tasteStatus": "REVIEW_REQUIRED",
+  "runtimeAdmission": "CANDIDATE",
+  "technicalStatus": "PASS",
+  "failureReasons": [],
+  "outputs": {
+    "atlas": "dev/model-qa/emote-factory/pilots/emote-spr-fantasy-goblin-warrior-v001/atlas.png",
+    "atlasSha256": "9b0edaa22965980255b8a65b37835b55dcaa862037b74d37f233c6813bce0865",
+    "metadata": "dev/model-qa/emote-factory/pilots/emote-spr-fantasy-goblin-warrior-v001/atlas.json",
+    "metadataSha256": "fe386fd078e614d76cd6eaa1378383cea5172cbbeba0d8357b003ce0d50c146e",
+    "proofBoard": "dev/model-qa/emote-factory/pilots/emote-spr-fantasy-goblin-warrior-v001/proof-board.png",
+    "proofBoardSha256": "d9701ebf5bd1bcd3f3a1227b39731185fb2bcf2a7fe5a8bc4c2329c0605a932b"
+  }
+}

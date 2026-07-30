@@ -164,6 +164,173 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 - Route shoulders no longer cut a wall around a painted polyline.
 - The diagonal micro-grid no longer produces a zipper across continuous hillsides.
 
+## 2026-07-28 — Assetforge primary-factory policy + candidacy ledger [Codex]
+
+**Changed**
+- Established Assetforge as Genesis's primary asset-production front door while preserving
+  canonical specialist engines as singular algorithm authorities.
+- Replaced binary “built + proven” status claims with one honest suite-wide state:
+  `CANDIDATE-READY / NOT PROVED`.
+- Added a concrete dedicated proving-pass target and improvement-debt severity for all thirteen
+  factory families.
+
+**Prioritized**
+- Marked repeat correctness and pixel-sharp low-light citizenship `CRITICAL`.
+- Marked emote, boundary, ground-field, prop, condition, and material consolidation `HIGH`.
+- Kept palette, trim, decal, atlas, and regression at `MEDIUM`; each remains improvement-bearing.
+
+**Corrected**
+- Existing fixtures, receipts, proof boards, and engine captures are preliminary evidence and
+  named gate results, not tool-level proof verdicts.
+- Ground-field V2 is a marked improvement and one terrain layer, not the final terrain language or
+  a claim that terrain is solved.
+
+## 2026-07-28 — Assetforge ground-field compiler + governed Clayroom proof [Codex]
+
+**Added**
+- Added the `ground-field` Assetforge family: deterministic texture quilting, exact Wang-edge
+  closure, hash placement, large low-frequency albedo/roughness variation, sparse semantic
+  bare-soil/stone/grass/wear overlays, and smoothed paths with blended shoulders.
+- Added a real B03 manifest and retained compiler products: field albedo/height/normal/ORM,
+  Wang atlas and placement metadata, macro/semantic/path masks, repeated-single control, proof
+  board, and machine-readable receipt.
+- Added an optional `board.groundField` adapter shared by the production tabletop and interior
+  realizers, plus the governed CL-F06 Clayroom fixture and capture script.
+
+**Recorded evidence**
+- Real compile passes 17 gates: 64 variants, all 64 used in a 15×15 field, `0.04` maximum identical
+  share, 4,096 exact compatible-edge checks, roughness range 148–238, matched PBR channel
+  dimensions, and all four semantic overlay kinds.
+- The exact repeated control has `0.0` tile-period pixel difference; the compiled field has
+  `14.321615`, providing a direct cadence-breaking negative control.
+- Governed Clayroom receipt passes compiled albedo/normal/ORM loading, standard lit material,
+  shadow receipt, full 15×15 coverage, wide-angle mipmapped/anisotropic ground sampling, repeated
+  control, alternate camera, zero legacy cast/model resolution, and zero unexpected runtime errors.
+- The non-emote Assetforge suite is now 12/12 positive and 12/12 expected negative.
+
+**Corrected**
+- Withdrew and removed the flat battlefield-style proof after founder review identified that it
+  was not the governed Clayroom.
+- Fixed a physical-scale error that cropped 96 px from a 1,254 px one-cell source and enlarged it
+  over one world cell. V2 normalizes the complete source material to one cell, uses 192 texels per
+  cell, emits a 2880×2880 field, and binds full material channels. Sprite sampling was not changed.
+
+**Deferred**
+- The output remains a prototype `CANDIDATE`, not admitted production art. A real wilderness board
+  route and biome-specific visual tuning wait for founder review.
+- Sprite scaling was not changed. The previously rejected mipmapped citizenship-v2 implementation
+  remains a separate open problem.
+
+## 2026-07-28 — Assetforge v2 founder re-review [Codex]
+
+**Corrected**
+- Withdrew the citizenship-v2 visual PASS. Magnification remained nearest, but play-scale
+  minification changed to trilinear mipmaps and visibly blurred the authored pixel sprites.
+- Withdrew the wilderness-path visual proof. The board is a continuous 2D topology renderer, not a
+  production terrain/camera integration proof.
+- Confirmed the path board repeats one periodic grass tile across the field. Existing room/cell tone
+  variation and sparse cover splats do not solve repeated albedo landmarks; the rejected
+  `forcePeriodic` repeat compiler did not solve it either.
+
+**Next**
+- Prove pixel-safe low-light sprite sampling, deterministic ground anti-repetition, and an in-engine
+  path scene before restoring either visual claim.
+
+## 2026-07-28 — Assetforge consolidation + boundary V2 [Codex]
+
+**Changed**
+- Replaced Assetforge's parallel nearest-RGB palette path with an orchestration wrapper over
+  `build/unify-corpus.py`: shared defringe, Lab quantization, CIEDE2000, dominant-hue preservation,
+  forbidden-chroma rejection, alpha preservation, and semantic-color gates.
+- Converted sprite citizenship into a source-canvas-preserving adapter over
+  `build/gen-sprite-registry.py`; the canonical foot/height/bounds/alpha/shadow schema remains
+  singular.
+- Upgraded the production standee renderer to `lit-standee-v2`: trilinear mipmapped minification,
+  alpha-to-coverage, a `0.12` low-light readability floor, and reduced realm-tint contamination.
+- Expanded boundary compilation into independent enclosure, eight-way wilderness-path,
+  cardinal-road, and integer-elevation cliff dialects.
+
+**Recorded evidence**
+- Real palette proof: mean/p95 CIEDE2000 `4.1830`/`8.2468`, hue shift `3.6507°`, value-rank
+  agreement `0.9549`, zero forbidden pixels, preserved alpha and semantic colors.
+- Real citizenship A/B: moonlit, torchlit, magic-glow, and daylit captures across seven registry
+  sprites and 63 standee materials.
+- Boundary proof: Blob47 enclosure; all 256 path masks with 49,152 compatibility checks; all 16
+  road masks with 128 checks; 16 cliff transitions across four elevation bands. Path, road, and
+  cliff each retain four individual real-material field renders.
+- Real qualification remains 13/13 expected outcomes. Outputs remain prototype candidates; no
+  sprite or boundary dialect is production-admitted.
+
+## 2026-07-28 — Assetforge founder-review correction [Codex]
+
+**Corrected**
+- Adam's individual review is now authoritative over the earlier aggregate technical PASS.
+  `founder-review-2026-07-28.json` records repeat and prop rejection, stronger-age direction, the
+  consolidation mandate, retained trim utility, and deferred atlas/Clayroom proof.
+- Confirmed the repeat's 512-pixel tile does not close its 82×72 placement period; outer-edge
+  equality was a false seam proxy.
+- Confirmed the prop qualifier restaged already edge-clipped leaf art and proved neither the
+  production camera nor dressing-card ground-depth behavior.
+
+**Consolidation**
+- `build/unify-corpus.py` remains the palette authority.
+- `build/gen-sprite-registry.py` plus the Theater/Clayroom standee contract remain citizenship
+  authority.
+- The periodic normal companion, material workbench, and Material Maker lane remain material-map
+  authority. Parallel Assetforge algorithms are not eligible for production.
+- Atlas remains a promising retained compiler but must converge on the documented potpack/runtime
+  contract; Clayroom proof is explicitly deferred.
+
+## 2026-07-28 — Assetforge real-asset qualification [Codex]
+
+**Added**
+- `build/qualify-assetforge-real.py` and retained
+  `dev/model-qa/assetforge-real/` evidence: tracked/decodable source ledger, exact hashes, twelve
+  real candidate runs, one changed-real-image negative control, per-process receipts/proofs, and a
+  navigation-only aggregate board. Final technical result: 13/13 expectations met.
+
+**Changed**
+- Decal isolation can assign every nonzero source-alpha component to declared semantic anchors,
+  preserving overlapping loose-sheet art without clipping it at nominal cell boundaries.
+- Prop cleanup records pruned-alpha budgets and can enforce zero-gap ownership; repeat courses use
+  deterministic adjacency-aware selection instead of a forever-repeating shuffled sequence.
+- Real regression difference boards now visualize RGB change independently of transparent output
+  alpha.
+
+**Fixed**
+- Repaired a clipped lower-right crack, removed neighboring chest/barrel fragments present in real
+  dressing exports, and broke the obvious diagonal cadence found during individual roof-repeat
+  inspection.
+
+**Verified**
+- Real qualification 13/13; synthetic non-emote suite 11/11 positive and 11/11 expected negative;
+  sprite-emote suite 10/10 expected outcomes plus its live-output guard and rear-hand rejection.
+  No candidate was admitted to runtime.
+
+## 2026-07-27 — Assetforge twelve-family V1 [Codex]
+
+**Added**
+- `build/assetforge.py` + `build/assetforge_apps.py`: manifest-driven sprite-emote, boundary,
+  modular-repeat, prop-kit, condition-state, palette, nine-slice, decal, sprite-citizenship, atlas,
+  material-map, and visual-regression compilers. Every family writes quarantined outputs, a proof
+  board, and a machine-readable receipt.
+- Retained positive and red-first corpus under `dev/model-qa/assetforge-suite/`. The suite passes
+  all 11 positive controls and rejects all 11 invalid controls. Boundary proof resolves 256 raw
+  masks to 47 legal shapes, checks 2,312 compatible neighbor pairs, preserves eleven torture-map
+  topologies, and covers all 47 shapes in one seeded field.
+- Sprite-emote pilot corpus with exact ImageGen provenance, three PC iterations, one historical
+  goblin pilot, runtime-ready candidate atlas/state metadata, and explicit visual-review receipts.
+
+**Changed**
+- Canonical emote pack is neutral, angry, happy, near-death, seated field-rest, and true rear view.
+  Rear anatomy, hands, grip/contact, and equipment attachment are mandatory visual checks; the
+  rejected v002 hand and corrected-but-still-unreviewed v003 remain honestly distinct.
+
+**Deferred**
+- No candidate is automatically admitted. PC v003 remains visual-review `INCOMPLETE`; the
+  non-emote suite proves compiler invariants on fixtures, not production-art taste. The first
+  production promotion begins with one admitted material/component sheet and Adam's verdict.
+
 ## 2026-07-27 — Integration close: four lanes landed; TIYL starts diversified; settled-life program ruled [Fable]
 
 **Added**
@@ -746,7 +913,6 @@ check).
 ELEV-1b risers/stairs + gallery/chasm seam gaps · rest-prop collision-awareness · occlusion-aware
 combat cell pick · LL-1b light-lab live-replay for 2 tunables · the proving run + playtest (next
 wave head, per the meeting).
-
 ## 2026-07-15 (later) — THE VQ2/FLIP PASS: Sol's laws folded · THE SPRITE FLIP LIVE · the demand census + ledger [Claude Fable 5, orchestrated]
 
 Adam's directives (VQ2 as suggestions-for-law · sprite flip w/ v3 reserve · faceted inventory ·

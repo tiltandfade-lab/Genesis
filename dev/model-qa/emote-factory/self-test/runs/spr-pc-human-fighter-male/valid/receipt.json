@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 1,
+  "family": "sprite-emote",
+  "algorithmVersion": "sprite-emote-v1",
+  "jobId": "emote-spr-pc-human-fighter-male-v001",
+  "spriteSlug": "spr-pc-human-fighter-male",
+  "subjectKind": "pc",
+  "inputs": {
+    "job": "dev/model-qa/emote-factory/self-test/jobs/emote-spr-pc-human-fighter-male-v001.job.json",
+    "jobSha256": "2f2531b14d908e1ee848b5c5ec352cfb25004d86c4d6d392476d8247684bbb23",
+    "source": "assets/sprites/spr-pc-human-fighter-male.png",
+    "sourceSha256": "d307d7ac9183075b11a7cc922e0bb1dcc71041397727a43c1fac7abc883fa7a8",
+    "sheet": "dev/model-qa/emote-factory/self-test/fixtures/spr-pc-human-fighter-male--valid.png",
+    "sheetSha256": "5a491077714b29a7d7409461d3c31a08b831299273143a2e34915e042ef21741"
+  },
+  "generation": {
+    "provider": null,
+    "model": null,
+    "generationCallId": null,
+    "seed": null,
+    "promptPath": "dev/model-qa/emote-factory/self-test/jobs/emote-spr-pc-human-fighter-male-v001.prompt.md"
+  },
+  "format": {
+    "requestedCanvas": [
+      960,
+      800
+    ],
+    "actualCanvas": [
+      960,
+      800
+    ],
+    "requestedCellAspect": "4:5",
+    "requestedCellDimensions": [
+      320,
+      400
+    ],
+    "actualDerivedCellDimensions": [
+      320,
+      400
+    ],
+    "cellAspectRelativeError": 0.0,
+    "stateCountExpected": 6,
+    "stateCountObserved": 6
+  },
+  "crossStateMetrics": {
+    "medianFootY": 0.879699,
+    "maximumBaselineDelta": 0.0,
+    "medianHeightOccupancy": 0.62,
+    "maximumRelativeHeightDelta": 0.0,
+    "licensedCompressionRatios": [
+      1.0
+    ]
+  },
+  "states": {
+    "neutral": {
+      "contentBounds": [
+        0.2,
+        0.26,
+        0.8,
+        0.88
+      ],
+      "footX": 0.713166,
+      "footY": 0.879699,
+      "widthOccupancy": 0.6,
+      "heightOccupancy": 0.62,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 1.0,
+      "heightPolicy": "standard",
+      "path": "dev/model-qa/emote-factory/self-test/runs/spr-pc-human-fighter-male/valid/states/spr-pc-human-fighter-male--neutral.png",
+      "sha256": "4cff1e6cf40e94b32667c507182ed582bea8f9226384dd9d7f2f5ec080044557"
+    },
+    "angry": {
+      "contentBounds": [
+        0.2,
+        0.26,
+        0.8,
+        0.88
+      ],
+      "footX": 0.713166,
+      "footY": 0.879699,
+      "widthOccupancy": 0.6,
+      "heightOccupancy": 0.62,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 1.0,
+      "heightPolicy": "standard",
+      "path": "dev/model-qa/emote-factory/self-test/runs/spr-pc-human-fighter-male/valid/states/spr-pc-human-fighter-male--angry.png",
+      "sha256": "4cff1e6cf40e94b32667c507182ed582bea8f9226384dd9d7f2f5ec080044557"
+    },
+    "happy": {
+      "contentBounds": [
+        0.2,
+        0.26,
+        0.8,
+        0.88
+      ],
+      "footX": 0.713166,
+      "footY": 0.879699,
+      "widthOccupancy": 0.6,
+      "heightOccupancy": 0.62,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 1.0,
+      "heightPolicy": "standard",
+      "path": "dev/model-qa/emote-factory/self-test/runs/spr-pc-human-fighter-male/valid/states/spr-pc-human-fighter-male--happy.png",
+      "sha256": "4cff1e6cf40e94b32667c507182ed582bea8f9226384dd9d7f2f5ec080044557"
+    },
+    "near-death": {
+      "contentBounds": [
+        0.2,
+        0.26,
+        0.8,
+        0.88
+      ],
+      "footX": 0.713166,
+      "footY": 0.879699,
+      "widthOccupancy": 0.6,
+      "heightOccupancy": 0.62,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 1.0,
+      "heightPolicy": "standard",
+      "path": "dev/model-qa/emote-factory/self-test/runs/spr-pc-human-fighter-male/valid/states/spr-pc-human-fighter-male--near-death.png",
+      "sha256": "4cff1e6cf40e94b32667c507182ed582bea8f9226384dd9d7f2f5ec080044557"
+    },
+    "resting": {
+      "contentBounds": [
+        0.2,
+        0.26,
+        0.8,
+        0.88
+      ],
+      "footX": 0.713166,
+      "footY": 0.879699,
+      "widthOccupancy": 0.6,
+      "heightOccupancy": 0.62,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 1.0,
+      "heightPolicy": "licensed-compression",
+      "path": "dev/model-qa/emote-factory/self-test/runs/spr-pc-human-fighter-male/valid/states/spr-pc-human-fighter-male--resting.png",
+      "sha256": "4cff1e6cf40e94b32667c507182ed582bea8f9226384dd9d7f2f5ec080044557"
+    },
+    "rear-view": {
+      "contentBounds": [
+        0.2,
+        0.26,
+        0.8,
+        0.88
+      ],
+      "footX": 0.713166,
+      "footY": 0.879699,
+      "widthOccupancy": 0.6,
+      "heightOccupancy": 0.62,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 1.0,
+      "heightPolicy": "standard",
+      "path": "dev/model-qa/emote-factory/self-test/runs/spr-pc-human-fighter-male/valid/states/spr-pc-human-fighter-male--rear-view.png",
+      "sha256": "4cff1e6cf40e94b32667c507182ed582bea8f9226384dd9d7f2f5ec080044557"
+    }
+  },
+  "gates": {
+    "sourceHashMatchesJob": true,
+    "sheetDimensionsDivisibleByGrid": true,
+    "cellAspectWithinTolerance": true,
+    "allRequiredStatesPopulated": true,
+    "cellBordersClear": true,
+    "magentaEdgeResidueWithinLimit": true,
+    "sharedBaselineWithinTolerance": true,
+    "relativeHeightWithinTolerance": true,
+    "licensedCompressionWithinEnvelope": true,
+    "sourcePaletteCoverageWithinBudget": true,
+    "atlasDimensionsMatchSheet": true
+  },
+  "mechanicalIdentity": "PASS",
+  "visualIdentity": "REVIEW_REQUIRED",
+  "tasteStatus": "REVIEW_REQUIRED",
+  "runtimeAdmission": "CANDIDATE",
+  "technicalStatus": "PASS",
+  "failureReasons": [],
+  "outputs": {
+    "atlas": "dev/model-qa/emote-factory/self-test/runs/spr-pc-human-fighter-male/valid/atlas.png",
+    "atlasSha256": "8cff98fbc7d527d7950189928e3b529b3805604564e0573ef3030183c09bb485",
+    "metadata": "dev/model-qa/emote-factory/self-test/runs/spr-pc-human-fighter-male/valid/atlas.json",
+    "metadataSha256": "9e65679a32a05def89650611206fbd55534a9236159044d51d2563b5aaaac355",
+    "proofBoard": "dev/model-qa/emote-factory/self-test/runs/spr-pc-human-fighter-male/valid/proof-board.png",
+    "proofBoardSha256": "f9c8aa09d00f1559f371f19537fe131ae66f561a0cd9c94a7d2aaf44fa104453",
+    "visualReview": "dev/model-qa/emote-factory/self-test/runs/spr-pc-human-fighter-male/valid/visual-review.json",
+    "visualReviewSha256": "a6a23f971ba170e7a59a1073c4f7aca8da1f35ad16dd4df4876103b839c8a694"
+  }
+}

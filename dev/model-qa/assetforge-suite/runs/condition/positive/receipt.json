@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "family": "condition-state",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-suite/manifests/condition-positive.json",
+  "manifestSha256": "f16d48e9f680c6370dbe023d6dd853aa7ec5a60b1eecfc90b08ec78b02a14e9d",
+  "technicalStatus": "PASS",
+  "gates": {
+    "sourceHashMatches": true,
+    "allStatesPresent": true,
+    "dimensionsLocked": true,
+    "silhouetteWithinLicense": true,
+    "damageIsLocalNotReplacement": true,
+    "declaredSeverityOrdered": true,
+    "registrationContractSatisfied": true
+  },
+  "outputs": {
+    "proofBoard": "dev/model-qa/assetforge-suite/runs/condition/positive/proof-board.png"
+  },
+  "details": {
+    "outsideAlphaRatio": {
+      "damaged": 0.0,
+      "burned": 0.0,
+      "corrupted": 0.0
+    },
+    "changedRatio": {
+      "damaged": 0.00039426123984947516,
+      "burned": 0.0011632872846108141,
+      "corrupted": 0.0016377005347593583
+    },
+    "originalDimensions": {
+      "source": [
+        72,
+        88
+      ],
+      "damaged": [
+        72,
+        88
+      ],
+      "burned": [
+        72,
+        88
+      ],
+      "corrupted": [
+        72,
+        88
+      ]
+    },
+    "registeredDimensions": [
+      72,
+      88
+    ],
+    "registration": null,
+    "sourceChroma": {
+      "requested": "auto",
+      "detected": null,
+      "dominantBorderRgb": [
+        0,
+        0,
+        0
+      ],
+      "keyRgb": null,
+      "tolerance": 12,
+      "softness": 0,
+      "keyedPixelCount": 0
+    },
+    "stateSha256": {
+      "damaged": "b091f413db56f7574957abe8e940592b031061557170b9a4314f9a575e663663",
+      "burned": "0c7c420d9fd4d2b07ee6a00751b63055cacfac9371799a7f7e112a811668846c",
+      "corrupted": "02d4e307a3135d5b22c70e40b232cb173b31c6ab5842e33a9166856a7f9e7b9f"
+    }
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

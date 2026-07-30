@@ -1,0 +1,165 @@
+{
+  "schemaVersion": 1,
+  "family": "decal-stamp",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-real/manifests/decal-real.json",
+  "manifestSha256": "cc3254bbbf6867ca151a024ff5111be2e5964c9b5849c864887cef894103e6e6",
+  "technicalStatus": "PASS",
+  "gates": {
+    "sourceHashMatches": true,
+    "componentCountMatches": true,
+    "sourceComponentsDoNotBleedOffSheet": true,
+    "everySourceAlphaPixelAssigned": true,
+    "transparentPixelsDefringed": true,
+    "halfScaleRemainsReadable": true,
+    "rotationScaleMatrixComplete": true,
+    "atlasContainsEveryVariant": true
+  },
+  "outputs": {
+    "atlas": "dev/model-qa/assetforge-real/runs/decal/candidate/atlas.png",
+    "proofBoard": "dev/model-qa/assetforge-real/runs/decal/candidate/proof-board.png"
+  },
+  "details": {
+    "componentCount": 6,
+    "variantCount": 72,
+    "chroma": {
+      "requested": "none",
+      "detected": null,
+      "dominantBorderRgb": [
+        0,
+        0,
+        0
+      ],
+      "keyRgb": null,
+      "tolerance": 12,
+      "softness": 0,
+      "keyedPixelCount": 0
+    },
+    "extraction": {
+      "mode": "alpha-component-groups",
+      "anchors": [
+        [
+          256.0,
+          256.0
+        ],
+        [
+          768.0,
+          256.0
+        ],
+        [
+          1280.0,
+          256.0
+        ],
+        [
+          256.0,
+          768.0
+        ],
+        [
+          768.0,
+          768.0
+        ],
+        [
+          1280.0,
+          768.0
+        ]
+      ],
+      "groups": [
+        {
+          "index": 0,
+          "anchor": [
+            256.0,
+            256.0
+          ],
+          "componentCount": 48,
+          "alphaPixelCount": 13386,
+          "bbox": [
+            70,
+            91,
+            449,
+            457
+          ]
+        },
+        {
+          "index": 1,
+          "anchor": [
+            768.0,
+            256.0
+          ],
+          "componentCount": 8,
+          "alphaPixelCount": 5792,
+          "bbox": [
+            575,
+            92,
+            958,
+            452
+          ]
+        },
+        {
+          "index": 2,
+          "anchor": [
+            1280.0,
+            256.0
+          ],
+          "componentCount": 28,
+          "alphaPixelCount": 9862,
+          "bbox": [
+            1062,
+            47,
+            1439,
+            492
+          ]
+        },
+        {
+          "index": 3,
+          "anchor": [
+            256.0,
+            768.0
+          ],
+          "componentCount": 96,
+          "alphaPixelCount": 8331,
+          "bbox": [
+            72,
+            555,
+            456,
+            930
+          ]
+        },
+        {
+          "index": 4,
+          "anchor": [
+            768.0,
+            768.0
+          ],
+          "componentCount": 26,
+          "alphaPixelCount": 6040,
+          "bbox": [
+            563,
+            544,
+            1012,
+            932
+          ]
+        },
+        {
+          "index": 5,
+          "anchor": [
+            1280.0,
+            768.0
+          ],
+          "componentCount": 28,
+          "alphaPixelCount": 7604,
+          "bbox": [
+            1013,
+            589,
+            1451,
+            930
+          ]
+        }
+      ],
+      "sourceAlphaPixelCount": 51015,
+      "assignedAlphaPixelCount": 51015,
+      "everySourceAlphaPixelAssigned": true
+    },
+    "errors": []
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

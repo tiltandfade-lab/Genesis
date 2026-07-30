@@ -21,6 +21,15 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
   and in-engine/Meshy/sprite/material demand, plus homes for the prior census gaps.
 - Canonical decisions for one engine and continuous walk, play, and PC/enemy battle
   validation.
+- Wave-0 contract and execution packet:
+  `GOLDEN-SITE-VIGNETTE-CONTRACTS.md`,
+  `GOLDEN-SITE-WAVE-1-OBSERVATORY-BRIEF.md`,
+  `intel/golden-vignette-contract-v1.json`,
+  `intel/golden-site-wave0-work-inventory.json`,
+  `intel/golden-vignette-wave0-fixtures.json`, and
+  `intel/golden-vignette-wave0-baseline.md`.
+- `dev/verify-walk-census-baseline.mjs`, which proves the retained 1,050-call
+  before-state without depending on an expired private scratchpad.
 
 **Changed**
 - Merged the compact Golden Site small/medium/large active-window portfolio into the
@@ -31,10 +40,17 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 - Reclassified the existing 1,050-walk census as a useful unseeded before-state. Its
   successor separates full-site, continuation, transform, local-feature,
   narrative-only, and unresolved demand under real world/fray context.
+- Closed Gate W0: exact Tavern/Guard selectors and negative controls are retained;
+  all open Golden work is classified by owner; the frozen contract explicitly rejects
+  independent random tile slopes, diagonal zipper seams, global terrain-height caps,
+  camera/combat geometry mutation, and whole-site donor substitution.
+- Captured green pre-change walk, combat, state/storage, terrain, Clayroom, manifest,
+  and bridgeless playable-turn baselines. Wave 1 is now the active implementation cut.
 
 **Deferred**
-- Product implementation remains at Wave 0. Later waves are authorized only after
-  their named gates; no paid asset generation or walk-content rewrite was started.
+- Product implementation now enters Wave 1 only. Later waves remain gate-locked; no
+  paid asset generation, terrain/building compiler, or walk-content rewrite was
+  started.
 
 ## 2026-07-29 — Natural-surface feature default and honest terrain evidence [Codex]
 

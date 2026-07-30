@@ -1,7 +1,7 @@
 ---
 type: orchestration-plan
 project: Genesis
-status: FOUNDER-AUTHORIZED PROGRAM — Wave 0 is next; later waves are gate-locked
+status: FOUNDER-AUTHORIZED PROGRAM — Wave 0 passed; Wave 1 is next; later waves are gate-locked
 created: 2026-07-29
 updated: 2026-07-29
 owner: the unified Procedural Vignette Synthesizer program
@@ -492,6 +492,23 @@ Deliver:
 routed rather than duplicated, and the first build wave can be described without a
 Golden-number conditional.
 
+**Wave-0 close — PASS, 2026-07-29.** The required outputs are:
+
+- contract freeze: `GOLDEN-SITE-VIGNETTE-CONTRACTS.md` and
+  `intel/golden-vignette-contract-v1.json`;
+- owner/class inventory: `intel/golden-site-wave0-work-inventory.json`;
+- first retained selectors and negative controls:
+  `intel/golden-vignette-wave0-fixtures.json`;
+- repository-owned before-state: `intel/walk-census.md`,
+  `dev/verify-walk-census-baseline.mjs`, and
+  `intel/golden-vignette-wave0-baseline.md`; and
+- next implementation cut: `GOLDEN-SITE-WAVE-1-OBSERVATORY-BRIEF.md`.
+
+The inventory homes every open category in the Catalog, founder queue, proof queue,
+coverage inventory, or specialist spec. Neither contract nor fixture selectors branch
+on a Golden number. Planned Guard changed-seed/adversarial receipts remain honestly
+unminted. Wave 1 may now begin.
+
 ### Wave 1 — Demand observatory and semantic boundary
 
 **Goal:** prove what real play asks for before building broadly.
@@ -760,19 +777,19 @@ Pause the current build wave when:
 - camera rotation changes world truth; or
 - documentation cannot name the single owner of a new fact.
 
-## 12. Immediate Wave-0 close queue
+## 12. Immediate Wave-1 queue
 
-1. Adopt this document as the orchestration owner and route the Golden corpus to it.
-2. Preserve the newly merged compact Golden scale portfolio as the visual active-window
-   oracle; keep extra-large overviews marked `NOT A GOAL`.
-3. Keep `intel/golden-site-engine-coverage.json` synchronized as wave contracts and
-   asset demands are frozen.
-4. Freeze the first-pass request/plan/asset/receipt schemas and negative controls.
-5. Rehome or rebuild the census scripts so no retained report depends on a private
-   scratchpad path.
-6. Produce the Wave-1 implementation brief for the observatory and read-only adapters.
-7. Select the exact `VENUE-TAVERN-01` and `GP-SHAPE-01` retained source receipts.
-8. Run the current walk, combat, automated-playtest, save/load, manifest, and relevant
-   terrain/Clayroom baselines before product changes.
+1. Implement the isolated deterministic audit PRNG and corpus namespace without
+   changing production roller APIs.
+2. Validate the frozen v1 records and build read-only urban/dungeon/wilderness,
+   travel, job, capture, return, venue, and persisted-site adapters.
+3. Classify every request into one disposition and retain unresolved reason codes.
+4. Run the 12,000-request natural-frequency checkpoint separately from the stratified
+   corpus.
+5. Produce the proxy-only semantic asset-demand ledger and before-state distribution
+   comparison.
+6. Rerun the retained walk/game/combat/save/terrain baselines and load the Tavern/Guard
+   selectors by source hash.
 
-Wave 1 begins only after those outputs are reviewable from one canonical branch.
+Wave 2 begins only after the ten gates in
+`GOLDEN-SITE-WAVE-1-OBSERVATORY-BRIEF.md` pass.

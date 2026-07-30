@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "status": "wave-0-retained-selectors",
+  "updated": "2026-07-29",
+  "authority": [
+    "docs/GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md",
+    "docs/GOLDEN-SITE-VIGNETTE-CONTRACTS.md"
+  ],
+  "fixtures": [
+    {
+      "fixtureId": "VENUE-TAVERN-01",
+      "kind": "semantic-identity-microfixture",
+      "status": "SELECTED_FOR_WAVE_2_NOT_CLAY_PROVED",
+      "hero": {
+        "receiptId": "TVR-CHROME-04",
+        "seedLabel": "VENUE-TAVERN-01/chrome/6",
+        "seedValue": 301847567,
+        "place": "The Dorsal Market",
+        "venue": "The Golden Dolphin",
+        "typedProgram": "Noodle Bar",
+        "formerUse": "self-working workshop"
+      },
+      "changedSeed": {
+        "receiptId": "TVR-GLOOM-01",
+        "seedLabel": "VENUE-TAVERN-01/gloom/0",
+        "seedValue": 2760356655
+      },
+      "lodgingAdversarial": {
+        "receiptId": "TVR-FRONTIER-04",
+        "seedLabel": "VENUE-TAVERN-01/frontier/18",
+        "seedValue": 396057179
+      },
+      "source": {
+        "path": "Reference/Tavern-Study/ROLL-RECEIPTS.json",
+        "sha256": "b867d65019219f5261721538c652e6f8536cb2f0663a485f658553660aea7000"
+      },
+      "selectionSource": "docs/TAVERN-VENUE-ROUTING-BRIEF.md"
+    },
+    {
+      "fixtureId": "GP-SHAPE-01",
+      "kind": "visual-tactical-synthesis",
+      "name": "Shoulder Overlook Through-Road",
+      "status": "SELECTED_FOR_WAVE_2_NOT_CLAY_PROVED",
+      "requiredZoneCount": 11,
+      "worldContext": {
+        "receiptId": "CTX-GP-19",
+        "replayHarnessSeed": 19,
+        "directProjection": [
+          "mist-shrouded mountain pass",
+          "fortification",
+          "Bone & Sinew construction"
+        ],
+        "source": {
+          "path": "Reference/Golden-Site-World-Context/ROLL-RECEIPTS.json",
+          "sha256": "449eb16b87b0b1715af11c753c04b1c002d2282b094069862e812449ebd4c6ad"
+        }
+      },
+      "shapeSource": {
+        "path": "docs/SITE-1-GUARD-POST-SPEC.md",
+        "sha256": "9d029b717e0a65af83adb6cd26b0250bb13c493e373d15e78b736b86fe43efed"
+      },
+      "plannedEvidence": [
+        {
+          "selector": "GP-SHAPE-01/changed-seed-a",
+          "status": "PLANNED_NO_RECEIPT_ID"
+        },
+        {
+          "selector": "GP-SHAPE-01/changed-seed-b",
+          "status": "PLANNED_NO_RECEIPT_ID"
+        },
+        {
+          "selector": "GP-SHAPE-01/hostile-shoulder-camera",
+          "status": "PLANNED_NO_RECEIPT_ID"
+        }
+      ]
+    }
+  ],
+  "negativeControls": [
+    "NC-GOLDEN-BRANCH",
+    "NC-RANDOM-TILE-TERRAIN",
+    "NC-DIAGONAL-ZIPPER",
+    "NC-HEIGHT-CAP",
+    "NC-CAMERA-MUTATES-PLAN",
+    "NC-COMBAT-REGENERATES",
+    "NC-MISSING-REQUIRED-ROLE",
+    "NC-WHOLE-SITE-DONOR",
+    "NC-RANDOM-CONDITION",
+    "NC-FALSE-CONTEXT-ROUTE",
+    "NC-TRANSFORM-REPLACES-HOST",
+    "NC-SPRAWLING-WINDOW"
+  ]
+}

@@ -48,6 +48,8 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 | Is the Clayroom fixture trustworthy? (reset ladder CL-R0…CL-R6) | `docs/CLAYROOM-RESET-LADDER.md` | renderer/fixture-trust gate across passes; gates C1H/C1I/Guard Post 1 |
 | Golden Site authority and four status gates | `docs/GOLDEN-SITES-CATALOG.md` | audited briefs, recommendation classes, Proof/MVP/Ideal, FFT/import boundary |
 | Golden Site procedural-vignette execution program | `docs/GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md` | one terrain/construction engine, coverage and asset routing, walk/game/battle loops, Waves 0–8, multi-session gates |
+| Frozen procedural-vignette integration boundary | `docs/GOLDEN-SITE-VIGNETTE-CONTRACTS.md` | v1 request/plan/asset-demand/receipt fields, terrain/structure join law, negative controls |
+| Current Golden engine implementation cut | `docs/GOLDEN-SITE-WAVE-1-OBSERVATORY-BRIEF.md` | deterministic demand census, read-only adapters, dispositions, unresolved/asset ledgers, Gate W1 |
 | Golden Site concepting sessions | `docs/GOLDEN-SITE-CONCEPTING-GUIDELINES.md` | generator-first, visual, plain-English session method |
 | Golden Site ontology and engine marriage | `docs/GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md` | story/walk/site/program/transform/materialization/projection authority; ordinary Defense/Fortification host; shared ScaleContract, SubstratePlan, and GranularMass |
 | Golden Site current-roller lineage and retained compositions | `docs/GOLDEN-SITE-ROLLER-PRESERVATION-LEDGER.md` | implementation-evidence statuses, per-site preservation records, receipt contract, known wiring gaps |
@@ -198,6 +200,8 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 - docs/GEOMETRY-OSS-INTEGRATION.md — proposed — system-spec/SPECCED(2026-07-12) — landed pieces tracked in CHANGELOG (geometry default flip)
 - docs/GIT-LFS-MIGRATION.md — operations (done) — runbook/"READY"(2026-07-10) — ⚠ stale: LFS live since 2026-07-18 per DESIGN.md infra note
 - docs/GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md — current-canon — orchestration-plan/FOUNDER-AUTHORIZED-PROGRAM(2026-07-29) — unified terrain/construction vignette engine, Golden/ordinary coverage, asset foundry routes, deterministic demand census, recurring game/battle/visual proof, Waves 0–8, multi-session law
+- docs/GOLDEN-SITE-VIGNETTE-CONTRACTS.md — current-canon — system-contract/WAVE-0-FROZEN-FOR-WAVE-1(2026-07-29) — v1 request/plan/asset-demand/receipt integration boundary and terrain/structure join law; machine companion under docs/intel
+- docs/GOLDEN-SITE-WAVE-1-OBSERVATORY-BRIEF.md — current-build — implementation-brief/ACTIVE-W1(2026-07-29) — deterministic audit harness, read-only adapters, demand/disposition ledgers, corpus and Gate W1
 - docs/GOLDEN-SITES-CATALOG.md — accepted-supporting — design-study/ACCEPTED-PORTFOLIO(audited 2026-07-29) — Golden Site authority; four status gates + audited site briefs; implementation order routes through the master plan
 - docs/GOLDEN-SITE-CONCEPTING-GUIDELINES.md — operations — workflow-guide/ACTIVE(2026-07-25) — generator-first concepting rhythm, visual proof cadence, and session completion checklist
 - docs/GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md — accepted-supporting — system-contract/ACCEPTED-FOUNDATION(2026-07-29) — story/walk/site/program/transform/materialization/projection authority split; implementation routes through the current master-plan wave

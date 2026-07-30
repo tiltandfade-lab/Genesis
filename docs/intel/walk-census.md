@@ -1,7 +1,13 @@
 # Walk Census — empirical demand curve for the golden-sites program
 
-Repo: `/Users/adamstephenson/Desktop/Work/projects/Genesis/genesis` (no commits made; nothing in
-this repo was touched — the runner and this report live only in the scratchpad).
+Status: retained **unseeded before-state**, generated 2026-07-26 and admitted to the
+Golden Site program in Wave 0 on 2026-07-29.
+
+This report and both JSON products are now repository-owned evidence. They are
+historical measurements, not the mapping authority for the Procedural Vignette
+Synthesizer. `golden-site-engine-coverage.json` owns the corrected host/transform/
+local-feature homes; the deterministic successor is specified in
+`../GOLDEN-SITE-WAVE-1-OBSERVATORY-BRIEF.md`.
 
 ## 1. Method — exactly what was rolled
 
@@ -15,18 +21,19 @@ harnesses (never invented):
 | **Travel** (`play.js`'s `explore()` → `travelDepart()`, always wilderness — confirmed in code, `rollWildernessWalk({kind:"travel"})` is its only path) | `dev/verify-travel-walks.mjs` (stub globals + explicit file list, `new Function`) | wilderness 300 | 300 |
 | **Job** (`jobPosting()` + `jobWalkAccept()`, envHint rolled uniform urban/wilderness/dungeon) | `dev/verify-job-walks.mjs` (full jsdom + `manifest.json` `loadOrder`) | urban 108, dungeon 103, wilderness 89 | 300 |
 
-- **Script:** `/private/tmp/claude-501/-Users-adamstephenson-Desktop-Work-projects-Genesis/589ad7ff-ea0a-40c8-8fcd-90b141422348/scratchpad/walk-census.mjs` (rolls + tallies) +
-  `walk-census-map.mjs` (second pass: merges each field across flavors and maps to the twelve golden sites; rolls no new dice).
-- **Reproduction:**
+- **Original runner:** a temporary two-pass scratch harness patterned after
+  `dev/verify-walk.mjs`, `dev/verify-travel-walks.mjs`, and
+  `dev/verify-job-walks.mjs`. It was intentionally unseeded because the live rollers
+  expose no seed surface. Its exact output is retained in `walk-census-tally.json` and
+  `walk-census-mapping.json`; its private temporary path is no longer a dependency.
+- **Before-state verification:**
   ```
-  node /private/tmp/claude-501/-Users-adamstephenson-Desktop-Work-projects-Genesis/589ad7ff-ea0a-40c8-8fcd-90b141422348/scratchpad/walk-census.mjs
-  node /private/tmp/claude-501/-Users-adamstephenson-Desktop-Work-projects-Genesis/589ad7ff-ea0a-40c8-8fcd-90b141422348/scratchpad/walk-census-map.mjs
+  node dev/verify-walk-census-baseline.mjs
   ```
-  Run from any working directory (both scripts hardcode the absolute repo path). `walk-census.mjs`
-  uses the repo's own `node_modules`-free "new Function" pattern for the frontier/travel sections
-  and the repo's jsdom install (`~/.genesis-jsdom`, `JSDOM_HOME` override honored) for the job
-  section, exactly as `dev/verify-job-walks.mjs` does. Actual run output: `errors: 0` across all
-  three sections; `node --version` = v22.15.0 at run time.
+  This checks the retained sample sizes, zero-error record, cross-file totals, and
+  mapped/unmapped partitions. It does not pretend a fresh unseeded run can reproduce
+  the same random sample. Actual original output recorded `errors: 0`;
+  `node --version` was v22.15.0.
 - **"Seeds":** this engine has **no PRNG-seed parameter** on any walk roller — `rollUrbanWalk`/
   `rollDungeonWalk`/`rollWildernessWalk` call `Math.random()` directly (confirmed by reading
   `src/engine/walk.js`, `dungeon-walk.js`, `wild-walk.js`; the only `SEED` symbol in the codebase

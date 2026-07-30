@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "status": "wave-0-frozen-design-boundary",
+  "updated": "2026-07-29",
+  "authority": "docs/GOLDEN-SITE-VIGNETTE-CONTRACTS.md",
+  "note": "This is a machine-readable design inventory, not a runtime JSON Schema.",
+  "records": {
+    "VignetteRequestV1": {
+      "required": [
+        "schemaVersion",
+        "requestId",
+        "seedNamespace",
+        "sourceProvenance",
+        "worldContext",
+        "walkContext",
+        "siteIdentity",
+        "hostProgram",
+        "operatingModel",
+        "substratePlan",
+        "scaleContract",
+        "transformStack",
+        "materializationIntent",
+        "encounterIntent",
+        "actors",
+        "knowledge",
+        "budgets"
+      ]
+    },
+    "VignettePlanV1": {
+      "required": [
+        "schemaVersion",
+        "planId",
+        "requestRef",
+        "selectedCandidateId",
+        "semanticSitePlan",
+        "materializationWindow",
+        "spatialPlan",
+        "tacticalCompositionPlan",
+        "surfaceAssemblyPlan",
+        "assetResolutionPlan",
+        "projections",
+        "diagnostics"
+      ]
+    },
+    "SemanticAssetDemandV1": {
+      "required": [
+        "schemaVersion",
+        "demandId",
+        "planRef",
+        "sourceFactRefs",
+        "semanticRole",
+        "nounFamily",
+        "requiredState",
+        "physicalEnvelope",
+        "supportAndMount",
+        "interactions",
+        "tactical",
+        "appearance",
+        "routeConstraints",
+        "priority",
+        "fallbackPolicy"
+      ]
+    },
+    "SynthesisReceiptV1": {
+      "required": [
+        "schemaVersion",
+        "receiptId",
+        "requestRef",
+        "planRef",
+        "engineVersions",
+        "seedChain",
+        "sourceLineage",
+        "candidates",
+        "selectedCandidateId",
+        "hardRejections",
+        "scoring",
+        "repairs",
+        "relaxations",
+        "assetDecisions",
+        "omissions",
+        "unresolved",
+        "validation",
+        "performance",
+        "evidence",
+        "fingerprints"
+      ]
+    },
+    "TacticalCompositionPlanV1": {
+      "required": [
+        "id",
+        "version",
+        "seed",
+        "sourceRefs",
+        "modeFamily",
+        "envelope",
+        "regions",
+        "surfaces",
+        "connectors",
+        "routes",
+        "anchors",
+        "reservations",
+        "placementSlots",
+        "relaxations",
+        "diagnostics"
+      ]
+    }
+  },
+  "enums": {
+    "materializationDisposition": [
+      "MATERIALIZE_NEW",
+      "CONTINUE_EXISTING",
+      "TRANSFORM_EXISTING",
+      "DECORATE_LOCAL",
+      "NARRATIVE_ONLY",
+      "UNRESOLVED"
+    ],
+    "sourceTreatment": [
+      "HARD_CANON",
+      "ARRANGEABLE_CANON",
+      "DERIVED_SUPPORT",
+      "OPTIONAL_CONTEXT"
+    ],
+    "terrainStructureRelation": [
+      "CUT_INTO",
+      "RESTS_ON",
+      "RETAINS",
+      "BRIDGES",
+      "PINS",
+      "ABUTS",
+      "BURIES"
+    ],
+    "terrainBreak": [
+      "NATURAL_BREAK"
+    ],
+    "projectionKind": [
+      "SCENE_TRAY",
+      "TOWN_TRAY",
+      "BATTLE_MAP",
+      "TEXT",
+      "DM_DIGEST"
+    ],
+    "resolutionDisposition": [
+      "ADMITTED_ASSET",
+      "ENGINE_RECIPE",
+      "TRUTHFUL_PROXY",
+      "OMITTED",
+      "UNRESOLVED"
+    ]
+  },
+  "invariants": [
+    "golden ids never select runtime generator behavior",
+    "natural terrain edges and gradients negotiate continuity unless a sourced break is intended",
+    "height is budgeted rather than globally capped",
+    "terrain and construction share one datum, support graph, route graph and reservation set",
+    "combat and camera projections cannot change committed topology",
+    "all semantic asset demands receive a resolution disposition",
+    "all fallbacks and repairs are named and receipted"
+  ]
+}

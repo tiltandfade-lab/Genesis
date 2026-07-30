@@ -25,20 +25,22 @@ several weeks. Terrain and construction are stages of one synthesizer. The Golde
 portfolio, ordinary venues, asset foundry, walk demand, game play, battle simulation,
 and visual review now advance through the same Waves 0–8 gates.
 
-1. ◐ **Close Wave 0:** finish canonical routing, create the machine-readable
+1. ☑ **Close Wave 0:** finish canonical routing, create the machine-readable
    twelve-site/ordinary-venue coverage inventory, classify all open work by owner, and
    freeze first-pass `VignetteRequest`, `VignettePlan`, asset-demand, receipt, and
    negative-control contracts.
-2. ☐ Rehome or rebuild the private-scratchpad 1,050-walk census as a checked-in,
-   deterministic, world-context-aware observatory with natural-frequency and
-   stratified/exhaustive corpora. Classify full-site, continuation, transform, local
-   feature, narrative-only, and unresolved demand separately.
-3. ☐ Capture the current walk, combat, automated-playtest, save/load, manifest,
+2. ☑ Preserve the private-scratchpad 1,050-walk census as a repository-owned,
+   verified **unseeded before-state** and specify its deterministic,
+   world-context-aware successor. Wave 1 now builds the natural-frequency and
+   stratified/exhaustive observatory.
+3. ☑ Capture the current walk, combat, automated-playtest, save/load, manifest,
    terrain, Clayroom, and visual baselines before product changes.
-4. ☐ Select the exact retained live receipts for `VENUE-TAVERN-01` and Site 1
+4. ☑ Select the exact retained live receipts for `VENUE-TAVERN-01` and Site 1
    `GP-SHAPE-01`; write the Wave-1 observatory/read-only-adapter implementation brief.
-5. ☐ Enter Wave 1 only after W0 passes. Do not change walk content to improve coverage;
-   adapter, provenance, and typed metadata come first.
+5. ◐ **Execute Wave 1 from `GOLDEN-SITE-WAVE-1-OBSERVATORY-BRIEF.md`.** Build the
+   isolated deterministic audit harness, read-only adapters, disposition classifier,
+   unresolved-demand ledger, and proxy-only asset-demand report. Do not change walk
+   content to improve coverage; adapter, provenance, and typed metadata come first.
 6. ☐ Enter Wave 2 with proxy-first composition: Tavern proves semantic/identity
    continuity and Guard Post proves the first compact visible/tactical vignette. Add
    only demand-backed assets after clay, route, camera, and battle gates pass.

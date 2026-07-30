@@ -1,0 +1,219 @@
+{
+  "schemaVersion": 1,
+  "status": "wave-0-open-work-classification",
+  "updated": "2026-07-29",
+  "authority": [
+    "docs/GOLDEN-SITES-CATALOG.md",
+    "docs/GOLDEN-SITES-FOUNDER-QUEUE.md",
+    "docs/GOLDEN-SITES-PROOF-QUEUE.md",
+    "docs/GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md"
+  ],
+  "classificationLaw": {
+    "founder-decision": "Only an unresolved taste or build-order choice that Adam must answer.",
+    "source-evidence": "Research, measured reference, provenance, or evidence breadth still owed.",
+    "engine-work": "Shared runtime/compiler/validator work; never a Golden-number branch.",
+    "asset-work": "Demand to be counted and routed through the shared semantic resolver.",
+    "visual-proof": "Clay, tactical, dressed, lighting, camera, context, changed-seed, or adversarial capture.",
+    "gameplay-proof": "Playable route, interaction, persistence, escape, social, tactical, or combat evidence.",
+    "deferred-ideal": "A declared Ideal horizon that does not block the current wave."
+  },
+  "completeness": "Each open Catalog gate and each founder/proof-queue category is classified here. Detailed evidence bullets remain canonical in the named owner rather than being duplicated into this inventory.",
+  "sharedOpenWork": [
+    {
+      "id": "SHARED-CONTRACT-RUNTIME",
+      "class": "engine-work",
+      "owner": "ProceduralVignetteSynthesizer",
+      "wave": 1,
+      "status": "DESIGN_FROZEN_RUNTIME_OPEN",
+      "source": "docs/GOLDEN-SITE-VIGNETTE-CONTRACTS.md"
+    },
+    {
+      "id": "SHARED-DEMAND-OBSERVATORY",
+      "class": "engine-work",
+      "owner": "VignetteRequestAdapterAndCensus",
+      "wave": 1,
+      "status": "OPEN",
+      "source": "docs/GOLDEN-SITE-WAVE-1-OBSERVATORY-BRIEF.md"
+    },
+    {
+      "id": "SHARED-ASSET-DEMAND-LEDGER",
+      "class": "asset-work",
+      "owner": "SemanticAssetResolver",
+      "wave": 1,
+      "status": "OPEN_PROXY_ONLY",
+      "source": "docs/GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md"
+    },
+    {
+      "id": "SHARED-WORLD-CONTEXT",
+      "class": "visual-proof",
+      "owner": "WorldContextProjectionPlan",
+      "wave": 2,
+      "status": "OPEN",
+      "source": "docs/GOLDEN-SITES-PROOF-QUEUE.md#shared-world-context-projection-proof"
+    },
+    {
+      "id": "SHARED-SCENE-BATTLE-IDENTITY",
+      "class": "gameplay-proof",
+      "owner": "ProjectionAndCombatPromotion",
+      "wave": 2,
+      "status": "OPEN",
+      "source": "docs/GOLDEN-SITES-PROOF-QUEUE.md#shared-ontology--host-transform-proof"
+    },
+    {
+      "id": "SHARED-GOLDEN-VENUE",
+      "class": "visual-proof",
+      "owner": "HospitalityVenue",
+      "wave": 2,
+      "status": "SELECTED_NOT_CLAY_PROVED",
+      "source": "docs/intel/golden-vignette-wave0-fixtures.json"
+    }
+  ],
+  "sites": [
+    {
+      "site": 1,
+      "slug": "guard-post",
+      "gates": {"researched": "PASS", "founderRuled": "PASS", "briefCongruent": "PASS", "clayProved": "OPEN"},
+      "founderDecision": [],
+      "sourceEvidence": ["recent-repair material card", "license-clean reference packet confirmation"],
+      "engineWork": ["DefenseRouteControlHost", "terrain-structure join", "graded through-road", "threshold/deck/flank composition"],
+      "assetWork": {"inventory": "docs/intel/golden-site-engine-coverage.json", "siteId": 1},
+      "visualProof": ["GP-SHAPE-01 hero", "Institutional/Upland pair", "night", "two changed seeds", "hostile shoulder/camera"],
+      "gameplayProof": ["checkpoint/social", "terrain flank", "deck/timing", "retreat", "equal cover"],
+      "deferredIdeal": "docs/SITE-1-GUARD-POST-SPEC.md#proof--mvp--ideal"
+    },
+    {
+      "site": 2,
+      "slug": "camp-service",
+      "gates": {"researched": "PASS", "founderRuled": "PARTIAL", "briefCongruent": "PARTIAL", "clayProved": "OPEN"},
+      "founderDecision": ["FQ-CS-1", "FQ-CS-2", "FQ-CS-3"],
+      "sourceEvidence": ["measured tent footprint tiers", "form compatibility evidence", "hosted-camp caps after host proofs"],
+      "engineWork": ["TransientServiceHost", "permanence ladder", "route edge", "terrain-owned occupation deck"],
+      "assetWork": {"inventory": "docs/intel/golden-site-engine-coverage.json", "siteId": 2},
+      "visualProof": ["ordinary ring camp", "changed seeds", "dense/sparse adversarial"],
+      "gameplayProof": ["front", "shelter seam", "terrain", "schedule", "departure/retreat"],
+      "deferredIdeal": "docs/SITE-2-CAMP-SERVICE-SPEC.md#proof--mvp--ideal"
+    },
+    {
+      "site": 3,
+      "slug": "dormant-abandoned",
+      "gates": {"researched": "PARTIAL", "founderRuled": "OPEN", "briefCongruent": "PARTIAL", "clayProved": "OPEN"},
+      "founderDecision": ["Q3-1", "Q3-2", "Q3-3"],
+      "sourceEvidence": ["three unlike host histories", "causal load/water/maintenance/event evidence"],
+      "engineWork": ["DormantTransform", "CausalCondition", "aperture/service/load consequence propagation"],
+      "assetWork": {"inventory": "docs/intel/golden-site-engine-coverage.json", "siteId": 3},
+      "visualProof": ["aperture-first transform on three unlike hosts", "tiny venue", "frontier overflow"],
+      "gameplayProof": ["failed function remains legible", "persistent transform identity", "legal reoccupation"],
+      "deferredIdeal": "docs/SITE-3-DORMANT-CONCEPT.md"
+    },
+    {
+      "site": 4,
+      "slug": "monastery-commune",
+      "gates": {"researched": "PASS", "founderRuled": "PARTIAL", "briefCongruent": "PARTIAL", "clayProved": "OPEN"},
+      "founderDecision": ["M1", "M2", "M4", "M5", "processional-campus order", "communal-hall head variant"],
+      "sourceEvidence": ["measured arcade bay/section", "broader non-Christian/non-European compounds", "school/hospital/inn/prison guest expressions"],
+      "engineWork": ["CommunalInstitutionHost", "court/arcade/repeated-bay grammar", "processional and service circulation"],
+      "assetWork": {"inventory": "docs/intel/golden-site-engine-coverage.json", "siteId": 4},
+      "visualProof": ["level wrapped court hero", "changed seeds", "occlusion-heavy court"],
+      "gameplayProof": ["ceremonial", "arcade", "service/timing", "head-position"],
+      "deferredIdeal": "docs/SITE-4-MONASTERY-COMMUNE-SPEC.md#proof--mvp--ideal"
+    },
+    {
+      "site": 5,
+      "slug": "mine-workshop",
+      "gates": {"researched": "PARTIAL", "founderRuled": "PARTIAL", "briefCongruent": "PARTIAL", "clayProved": "OPEN"},
+      "founderDecision": ["main-haul oversize policy", "FFT repeated-portal support rhythm"],
+      "sourceEvidence": ["direct FFT/tactical mine cohort", "measured preindustrial plans/sections", "support/carrier/pump/ventilation/process/light cards", "two culture cards"],
+      "engineWork": ["ExtractionWorkHost", "source-haul-process-store circuit", "shaft/drift/landing/water failure"],
+      "assetWork": {"inventory": "docs/intel/golden-site-engine-coverage.json", "siteId": 5},
+      "visualProof": ["Rung-B drift mine", "pump repaired/worsened", "two geology/resource seeds", "narrow-seam/high-water adversarial"],
+      "gameplayProof": ["direct", "indirect", "conditional", "noncombat", "short exit"],
+      "deferredIdeal": "docs/SITE-5-MINE-WORKSHOP-CONCEPT.md"
+    },
+    {
+      "site": 6,
+      "slug": "prison-custody",
+      "gates": {"researched": "PARTIAL", "founderRuled": "PARTIAL", "briefCongruent": "PARTIAL", "clayProved": "OPEN"},
+      "founderDecision": ["Yamen doctrine sequencing"],
+      "sourceEvidence": ["measured non-European small custody plans", "premodern non-carceral custody", "hostage/surety/quarantine/penance evidence"],
+      "engineWork": ["CustodyHost", "eight operating circuits", "property/evidence lifecycle", "access views"],
+      "assetWork": {"inventory": "docs/intel/golden-site-engine-coverage.json", "siteId": 6},
+      "visualProof": ["PR-SHAPE-01", "matched doctrine pair", "Rung-A degradation", "RC-PRISON-01", "body/camera/darkness/provider adversarial"],
+      "gameplayProof": ["social/legal", "routine/procedural", "covert/secret", "force/disruption", "identity-preserving property return"],
+      "deferredIdeal": "docs/SITE-6-PRISON-CUSTODY-SPEC.md#proof--mvp--ideal"
+    },
+    {
+      "site": 7,
+      "slug": "natural-lair",
+      "gates": {"researched": "PASS", "founderRuled": "PASS", "briefCongruent": "PASS", "clayProved": "OPEN"},
+      "founderDecision": [],
+      "sourceEvidence": ["additional cave surveys before route weighting", "body/behavior evidence for bolt holes"],
+      "engineWork": ["EcologyClaimHost", "connected cave field", "floor/ledge route", "causal darkness", "short exit"],
+      "assetWork": {"inventory": "docs/intel/golden-site-engine-coverage.json", "siteId": 7},
+      "visualProof": ["walk-in karst chamber", "changed seeds", "adversarial deep-room darkness"],
+      "gameplayProof": ["floor", "ledge", "light/ecology", "licensed conditional", "retreat"],
+      "deferredIdeal": "docs/SITE-7-NATURAL-LAIR-SPEC.md#proof--mvp--ideal"
+    },
+    {
+      "site": 8,
+      "slug": "layered-control",
+      "gates": {"researched": "PARTIAL", "founderRuled": "PARTIAL", "briefCongruent": "PARTIAL", "clayProved": "OPEN"},
+      "founderDecision": ["Q1 SharedCentre many-claimant shape", "Q2 actor-relative route desirability", "Q3 legitimacy evidence"],
+      "sourceEvidence": ["same-host eligibility measurements", "culture/control evidence"],
+      "engineWork": ["LayeredControlTransform", "actor-relative route costs", "claims/permissions/schedule/front deltas"],
+      "assetWork": {"inventory": "docs/intel/golden-site-engine-coverage.json", "siteId": 8},
+      "visualProof": ["compact Tavern transform", "same transform on two unlike hosts"],
+      "gameplayProof": ["two non-identical resolutions", "stable host topology", "attributed consequences"],
+      "deferredIdeal": "docs/SITE-8-LAYERED-CONTROL-SPEC.md#proof--mvp--ideal"
+    },
+    {
+      "site": 9,
+      "slug": "contested-fortress",
+      "gates": {"researched": "PARTIAL", "founderRuled": "OPEN", "briefCongruent": "PARTIAL", "clayProved": "OPEN"},
+      "founderDecision": ["FQ-1 window pair", "FQ-2 cohabitation before siege", "FQ-3 wall-walk first-class route"],
+      "sourceEvidence": ["fortification interior evidence", "contested operation evidence"],
+      "engineWork": ["DefenseFortificationHost", "LayeredControlTransform", "MaterializationWindow", "linked frontiers"],
+      "assetWork": {"inventory": "docs/intel/golden-site-engine-coverage.json", "siteId": 9},
+      "visualProof": ["rising gate window", "linked wall segment", "changed control states"],
+      "gameplayProof": ["gate", "wall-walk", "service", "cohabitation/contest", "window continuation"],
+      "deferredIdeal": "docs/SITE-9-CONTESTED-FORTRESS-SPEC.md#proof--mvp--ideal"
+    },
+    {
+      "site": 10,
+      "slug": "urban-institution",
+      "gates": {"researched": "PARTIAL", "founderRuled": "PARTIAL", "briefCongruent": "PARTIAL", "clayProved": "OPEN"},
+      "founderDecision": ["UB-PROP-01", "UC10-T1", "eighth BF-MARKET-EXCHANGE taste tranche", "frontage-bay lockout", "civic-assembly grammar"],
+      "sourceEvidence": ["measured frontage bay and market hall", "shutter/party-wall/gallery/roof construction", "working-market evidence", "broader cultural/urban evidence"],
+      "engineWork": ["UrbanInstitutionHost", "UrbanFabric", "frontage/market aggregation", "street continuity", "cutaway"],
+      "assetWork": {"inventory": "docs/intel/golden-site-engine-coverage.json", "siteId": 10},
+      "visualProof": ["frontage and open-post market hall", "changed seeds", "fixed-camera overlook adversarial"],
+      "gameplayProof": ["public", "frontage/covered", "vertical", "service/schedule"],
+      "deferredIdeal": "docs/SITE-10-URBAN-INSTITUTION-SPEC.md#proof--mvp--ideal"
+    },
+    {
+      "site": 11,
+      "slug": "mixed-scale-dragon-domain",
+      "gates": {"researched": "PARTIAL", "founderRuled": "OPEN", "briefCongruent": "PARTIAL", "clayProved": "OPEN"},
+      "founderDecision": ["FQ-11-1 relational build order", "FQ-11-2 GranularMass ownership", "FQ-11-3 mixed-register sprite density"],
+      "sourceEvidence": ["mixed-body affordance evidence", "culture and GranularMass evidence"],
+      "engineWork": ["ScaleContract", "body-relative aperture/route/cover/interaction", "domain continuity"],
+      "assetWork": {"inventory": "docs/intel/golden-site-engine-coverage.json", "siteId": 11},
+      "visualProof": ["unlike-body aperture and route on two unlike hosts"],
+      "gameplayProof": ["body-relative access", "cover", "interaction", "retreat"],
+      "deferredIdeal": "docs/SITE-11-MIXED-SCALE-SPEC.md#proof--mvp--ideal"
+    },
+    {
+      "site": 12,
+      "slug": "anomalous-living-mobile",
+      "gates": {"researched": "PARTIAL", "founderRuled": "OPEN", "briefCongruent": "PARTIAL", "clayProved": "OPEN"},
+      "founderDecision": ["FQ-1 raft before whale", "FQ-2 ordinary grounded substrate", "FQ-3 optional tenure", "FQ-4 raft datum states", "FQ-5 megastructure composition"],
+      "sourceEvidence": ["measured drawings", "culture evidence", "support/load/mobility evidence"],
+      "engineWork": ["SubstratePlan", "TerminalSubstrateTransform", "moving/cyclic datum", "support graph", "frontier"],
+      "assetWork": {"inventory": "docs/intel/golden-site-engine-coverage.json", "siteId": 12},
+      "visualProof": ["bog crossing", "raft quarter", "living dorsal market", "two datum states"],
+      "gameplayProof": ["support/load", "mobility", "tenure", "agency", "continuation"],
+      "deferredIdeal": "docs/SITE-12-ANOMALOUS-LIVING-MOBILE-SPEC.md#proof--mvp--ideal"
+    }
+  ],
+  "ordinaryDemandHomes": "docs/intel/golden-site-engine-coverage.json#ordinaryDemandHomes",
+  "closureRule": "An item closes only in its owning document; this inventory reports classification and routing, never promotes a gate."
+}

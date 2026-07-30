@@ -26,13 +26,24 @@ The compact Golden scale portfolio from `feat/golden-sites-campaign` was merged 
 this planning branch before authoring the program. Active small/medium/large targets
 remain compact vignettes; extra-large overviews remain explicitly `NOT A GOAL`.
 
-**Do next:** finish Wave 0 by creating the machine-readable Golden coverage inventory,
-freezing the first `VignetteRequest`/plan/asset/receipt contracts, rehoming or
-rebuilding the private-scratchpad census harness, selecting exact Tavern/Guard Post
-source receipts, and capturing current baselines. Wave 1 is the read-only demand
-observatory and adapters; Wave 2 is the first compact end-to-end Tavern + Guard Post
-proof. The prior terrain checkpoint's full-CI marker remains pending until this
-docs/integration close is fully gated.
+**Wave 0 passed.** The v1 request/plan/asset-demand/receipt boundary is frozen in
+`GOLDEN-SITE-VIGNETTE-CONTRACTS.md`; machine fields, open-work ownership, exact
+Tavern/Guard selectors, negative controls, and the complete before-state live under
+`docs/intel/`. The old 1,050-call census is now repository-owned and independently
+verified without a private scratchpad dependency. Its limitations remain explicit.
+
+The before-state is green across walk/travel/job adapters, provenance and consumption,
+combat/lifecycle/exact-room promotion, capture/DM/state/storage, terrain continuity and
+expression, Stage-C risers, Clayroom, manifest/doc gates, and one real bridgeless
+arrival→digest→response→player-view turn. See
+`intel/golden-vignette-wave0-baseline.md` for commands, counts, and two inherited
+warning classes. No production module or table changed.
+
+**Do next:** execute Wave 1 from
+`GOLDEN-SITE-WAVE-1-OBSERVATORY-BRIEF.md`: isolated deterministic audit PRNG,
+read-only adapters, six-way disposition classification, unresolved-demand ledger,
+12,000-request natural corpus, separate stratified corpus, and proxy-only asset-demand
+report. Wave 2 remains the first compact end-to-end Tavern + Guard Post proof.
 
 ## ⭐ Latest (2026-07-29, TERRAIN NATURAL-SURFACE DEFAULT CORRECTION) [Codex]
 

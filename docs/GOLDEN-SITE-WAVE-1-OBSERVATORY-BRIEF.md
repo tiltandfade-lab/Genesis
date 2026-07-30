@@ -1,7 +1,7 @@
 ---
 type: implementation-brief
 project: Genesis
-status: ACTIVE — WAVE-0 GATE PASSED 2026-07-29
+status: GATE W1 PASSED 2026-07-29
 created: 2026-07-29
 updated: 2026-07-29
 owner: Vignette Request Adapter and Demand Observatory
@@ -254,3 +254,22 @@ Wave 2 receives:
 - green production walk/game/combat baselines.
 
 Only then does the first bounded candidate/score/repair compiler begin.
+
+## 9. Gate W1 close — PASS (2026-07-29)
+
+Wave 1 closed with 12,718 validated deterministic rows: 12,000 natural-frequency
+requests and 718 separate stratified cases. The stable corpus fingerprint is
+`vgo1-edf8cc39`; all 2,212,402 natural source leaf facts have explicit treatments,
+63,471 required semantic roles are countable through truthful proxy-only demands,
+and all six dispositions occur in the stratified corpus.
+
+The natural checkpoint leaves 218 combined `Prison / Asylum` dungeon requests
+explicitly unresolved as `AMBIGUOUS_DISPOSITION`. It does not invent a custody,
+institutional, or generic-building answer. Production walk sources, renderer, combat,
+tables, and world state are unchanged.
+
+Evidence and exact regression results:
+`intel/golden-vignette-wave1-verification.md`. Generated reports:
+`intel/golden-vignette-wave1-report.md` and
+`intel/golden-vignette-wave1-report.json`. Machine rows:
+`intel/golden-vignette-wave1-corpus.jsonl.gz`.

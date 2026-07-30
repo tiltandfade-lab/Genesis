@@ -31,16 +31,18 @@ and visual review now advance through the same Waves 0–8 gates.
    negative-control contracts.
 2. ☑ Preserve the private-scratchpad 1,050-walk census as a repository-owned,
    verified **unseeded before-state** and specify its deterministic,
-   world-context-aware successor. Wave 1 now builds the natural-frequency and
+   world-context-aware successor. Wave 1 delivered the natural-frequency and
    stratified/exhaustive observatory.
 3. ☑ Capture the current walk, combat, automated-playtest, save/load, manifest,
    terrain, Clayroom, and visual baselines before product changes.
 4. ☑ Select the exact retained live receipts for `VENUE-TAVERN-01` and Site 1
    `GP-SHAPE-01`; write the Wave-1 observatory/read-only-adapter implementation brief.
-5. ◐ **Execute Wave 1 from `GOLDEN-SITE-WAVE-1-OBSERVATORY-BRIEF.md`.** Build the
-   isolated deterministic audit harness, read-only adapters, disposition classifier,
-   unresolved-demand ledger, and proxy-only asset-demand report. Do not change walk
-   content to improve coverage; adapter, provenance, and typed metadata come first.
+5. ☑ **Close Gate W1 from `GOLDEN-SITE-WAVE-1-OBSERVATORY-BRIEF.md`.** The isolated
+   deterministic audit harness, eight read-only adapters, disposition classifier,
+   unresolved-demand ledger, proxy-only asset-demand report, 12,000 natural requests,
+   718 stratified cases, and retained production regressions pass under corpus
+   fingerprint `vgo1-edf8cc39`. Evidence:
+   `intel/golden-vignette-wave1-verification.md`.
 6. ☐ Enter Wave 2 with proxy-first composition: Tavern proves semantic/identity
    continuity and Guard Post proves the first compact visible/tactical vignette. Add
    only demand-backed assets after clay, route, camera, and battle gates pass.

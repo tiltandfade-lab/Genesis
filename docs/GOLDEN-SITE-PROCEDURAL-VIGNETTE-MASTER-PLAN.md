@@ -1,7 +1,7 @@
 ---
 type: orchestration-plan
 project: Genesis
-status: FOUNDER-AUTHORIZED PROGRAM — Wave 0 passed; Wave 1 is next; later waves are gate-locked
+status: FOUNDER-AUTHORIZED PROGRAM — Waves 0–1 passed; Wave 2 is next; later waves are gate-locked
 created: 2026-07-29
 updated: 2026-07-29
 owner: the unified Procedural Vignette Synthesizer program
@@ -527,6 +527,16 @@ Deliver:
 a disposition; unresolved demand is counted; no renderer or walk content was changed
 to improve the numbers.
 
+**Wave-1 close — PASS, 2026-07-29.** The read-only observatory retains 12,718
+validated rows under stable fingerprint `vgo1-edf8cc39`: 12,000 natural-frequency
+requests and 718 separate stratified cases. Every observed source leaf has an explicit
+treatment; required semantic roles remain countable through proxy-only demand; all
+adapters, dispositions, negative controls, selectors, and retained production
+walk/game/combat/save/terrain gates pass. The 218 natural combined
+`Prison / Asylum` requests remain honestly unresolved rather than defaulting to a
+host. Evidence: `intel/golden-vignette-wave1-verification.md`. Wave 2 is now the next
+authorized product cut.
+
 ### Wave 2 — First end-to-end compact vignette
 
 **Goal:** prove one shared compiler with the smallest useful visible target.
@@ -777,19 +787,18 @@ Pause the current build wave when:
 - camera rotation changes world truth; or
 - documentation cannot name the single owner of a new fact.
 
-## 12. Immediate Wave-1 queue
+## 12. Immediate Wave-2 entry queue
 
-1. Implement the isolated deterministic audit PRNG and corpus namespace without
-   changing production roller APIs.
-2. Validate the frozen v1 records and build read-only urban/dungeon/wilderness,
-   travel, job, capture, return, venue, and persisted-site adapters.
-3. Classify every request into one disposition and retain unresolved reason codes.
-4. Run the 12,000-request natural-frequency checkpoint separately from the stratified
-   corpus.
-5. Produce the proxy-only semantic asset-demand ledger and before-state distribution
-   comparison.
-6. Rerun the retained walk/game/combat/save/terrain baselines and load the Tavern/Guard
-   selectors by source hash.
+1. Keep the Wave-1 request, provenance, disposition, and proxy-demand surface
+   read-only; do not turn the observatory into a second generator.
+2. Freeze the bounded candidate/score/repair compiler cut around the retained Tavern
+   identity microfixture and Guard Post shoulder-overlook visual/tactical fixture.
+3. Admit only the minimum demand-backed proxy assets needed to prove macro topology,
+   natural/constructed joins, route continuity, tactical reservations, camera
+   bearings, and SceneTray-to-BattleMap identity.
+4. Preserve the 218 combined `Prison / Asylum` requests as unresolved until their
+   source semantics receive an explicit owner decision.
+5. Rerun the Wave-1 corpus plus intermittent playable arrival/exit/return and
+   PC-versus-enemy battle sentinels at each Wave-2 checkpoint.
 
-Wave 2 begins only after the ten gates in
-`GOLDEN-SITE-WAVE-1-OBSERVATORY-BRIEF.md` pass.
+Wave 2 is the current authorized product cut. Waves 3–8 remain gate-locked.

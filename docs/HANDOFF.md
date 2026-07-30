@@ -6,6 +6,50 @@ updated: 2026-07-29
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-29, GOLDEN VIGNETTE WAVE 1 PASSED) [Codex]
+
+Gate W1 is closed. The new read-only `src/engine/vignette-observatory.js` validates
+and fingerprints `VignetteRequestV1`, adapts urban/dungeon/wilderness frontier,
+travel, job, capture, return, venue, and persisted-site paths, assigns exactly one of
+six dispositions, and produces truthful proxy-only semantic asset demand. It does not
+generate terrain/buildings, mutate state, select assets, or alter production rollers.
+
+The deterministic audit corpus retains **12,718 rows** under fingerprint
+`vgo1-edf8cc39`: 12,000 natural requests plus 718 separate stratified cases. All
+2,212,402 natural source leaf facts receive explicit treatment; 63,471 required roles
+are countable as proxy demands. The natural curve is 67.075% new materialization,
+31.1083% local decoration, and 1.8167% unresolved. The 218
+unresolved cases are the live combined `Prison / Asylum` dungeon row; no generic host
+was invented.
+
+Focused observatory checks pass 72/72. Retained walk, travel, job, census, combat,
+exact-room promotion, capture, state/storage/migration/durability, terrain,
+Clayroom, manifest, Tavern/Guard selector, and exact leave/return game-flow sentinels
+are green. The older non-baseline G6 persistence gauntlet remains independently stale
+against the current additive `sheet.hitDice` migration and missing scratch
+`fake-indexeddb`; this is recorded as inherited harness debt, not hidden as a Wave-1
+pass or regression.
+
+Evidence: `intel/golden-vignette-wave1-verification.md`; generated human report:
+`intel/golden-vignette-wave1-report.md`; machine report and compressed JSONL corpus
+sit beside it. Replay a retained row with
+`node dev/golden-vignette-observatory.mjs --replay <caseId>`.
+
+The generated report retains eight structured founder-review packets with exact
+counts, current behavior, options, downstream implications, and Codex's starting
+recommendation. They cover Prison/Asylum, claimed versus unclaimed caverns, ruin
+versus operating state, three urban institution families sharing one umbrella,
+missing scale/window/mode licenses, wilderness feature-to-site promotion,
+materialization cadence, and missing identity/surface roles. Clear substring and
+sensory-classification bugs were fixed before the final corpus rather than being
+presented as design choices.
+
+**Do next:** enter Wave 2 through
+`GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md`: preserve the observatory as a
+read-only boundary, then build the bounded proxy-first candidate/score/repair compiler
+around Tavern identity continuity and the Guard Post shoulder-overlook
+visual/tactical fixture. Waves 3–8 remain gate-locked.
+
 ## ⭐ Latest (2026-07-29, GOLDEN SITE PROCEDURAL-VIGNETTE MASTER PROGRAM) [Codex]
 
 Adam designated the Golden Site engine as the next several-week program. The new

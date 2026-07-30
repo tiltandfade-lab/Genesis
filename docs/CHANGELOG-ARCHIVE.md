@@ -14,6 +14,42 @@ to load every session (the live file keeps the newest entries; see the script fo
 Newest-first, same as the live file — the two files read as one continuous history, live file
 first. Read-only record: never hand-edit, never add entries here directly.
 
+## 2026-07-14 (later) — STAGE D STATEFUL NOUNS + AgX LIVE + the door package + PLAY-LENS [Claude Opus 4.8, orchestrated]
+
+The evening block: the whole Stage D spine, AgX as the production look, the door package driven by
+Adam's live taste rulings, and PLAY-LENS — the bot-play visual audit that now ORDERS the waves.
+Master tip `67566b6a`, all pushed. Every unit orchestrator-re-gated (own harness runs, frames READ).
+
+**Added**
+- **STAGE D — STATEFUL NOUNS, complete (D0–D4)**: `state_transition` at the contract boundary (D0,
+  fuzz 0/530) · `data/interactables.js` registry `slug@state` + extrudeDepth/location/renderStrategy
+  authoring (D1) · `plan.interactables[]` walk binding, raw segment byte-canon (D2, 89/0) ·
+  ROOM-GRAMMAR placement ALIGN/PAIR/FOCAL/RHYTHM/CLEAR-last (D3, 38/0) · the DOORS-FIRST keystone
+  (D4, 61/0 + 102/0): trayFrom wiring (WIRING LAW closed), persisted state in the prep node (a door
+  opened last turn STAYS open), shaped-aperture stateful door on the BW4 tween + MF-2 crossfade.
+  D0+D1 integration cross-check caught a real fixture red (lexical-const shadowing) — fixed red-first.
+- **The door package (Adam's rulings)**: D4b hinge-edge axis (jamb pivot, deterministic side; broken
+  grounded) + the PRODUCTION apron fix (dpPlaceRoom dressing could legally squat in doorways — the
+  vine-arch bug, harness-locked) · D4c broken-variant family {flopped, hanging, shattered} — seeded
+  visual flavor inside ONE contract state (202/0) · D4d doorframes are FRAMES (2 slim jambs + header;
+  old geometry proven a light-proof column via stash A/B; bw2-5 fixtures synced honestly, 110/0).
+- **P3-3a AgX filmic tone-curve**: verbatim three r166 GLSL in makeGradePass behind GRADE_TONEMAP;
+  none≡master proven byte-identical; A/B set shot on the eyeball fixtures; **Adam ruled "agx looks
+  awesome" → default FLIPPED live** (baseline pinned to 074cf05d so the proofs hold forever).
+- **PLAY-LENS (Adam's direction)**: `dev/play-lens.mjs` — the bot plays a REAL 14-leg session
+  (TIYL → settlement → 7-leg travel → 7-room dungeon + combat + live state_transition → shop →
+  rest), 26 shots; PL-2 audit (3 vision auditors + synthesis) → **`dev/play-lens/ledger.md`** ranked
+  BROKEN/UGLY/MISSING/WORKING. Standing law: the lens re-runs after every visual wave.
+
+**Ledger verdict (the new wave order):** 1) QUICK-FIX (rat-as-humanoid casting bug, PC token vanishes
+in combat rounds 2–3, door leaves unanchored in real rooms, wireframe fallback, degenerate arrival
+frame, tray head-clip) → 2) ENV/EXTERIOR (all 6 travel legs are an empty plane; daylit≡moonlit≡
+overcast pixel-identical — light profiles unwired outside interiors; no town tray) → 3) Stage E
+exposure/bloom → 4) combat-in-room + staging beats → 5) P3-2 (auto-fires when sprite-QA lands).
+
+**Changed** — loop-gate evidence refreshed on today's stack (5/5 clean, AgX + open dioramas).
+**Deferred** — shattered shards have no prop-avoidance (2/3 occluded in the card — taste-pass item);
+PL-1b rig improvements (bot should fight; transition captures focus the right room; shop-panel check).
 ## 2026-07-14 — PHASE-3 WAVE-1: no-spend visual wave + diorama cutaway restore + repo migration [Claude Opus 4.8, orchestrated]
 
 Phase-3 Wave-1 executed as background worktree-isolated Sonnet executors, each personally re-gated

@@ -38,6 +38,8 @@ does not replace its owners:
 - `TERRAIN-PROGRAM.md` owns terrain features and terrain synthesis.
 - `MATERIAL-LANE.md`, `GROUND-MATERIALS-PROGRAM.md`, and
   `TRIM-SHEET-PIPELINE.md` own material production.
+- `ASSETFORGE.md` owns the primary factory envelope: typed manifests, quarantine,
+  specialist-tool orchestration, proofs, receipts, and explicit admission.
 - `GOLDEN-SITE-WORLD-CONTEXT-PROJECTION.md` owns the world beyond the active window.
 - `ART-DEPARTMENT.md` owns the pixel-figure register.
 
@@ -347,6 +349,10 @@ event or instance. Particle abundance is not material richness.
 
 Route by physical and gameplay need:
 
+- **Assetforge:** the primary production front door around every generated or compiled
+  visual candidate; it owns manifests, exact lineage, quarantine, deterministic
+  assembly, negative controls, proof packets, receipts, and admission—not taste,
+  mechanics, or duplicate specialist algorithms;
 - **engine geometry:** terrain fields, structure, openings, sockets, thickness,
   supports, collision, cover, sight, access, and tactical envelopes;
 - **admitted existing assets:** the first choice when they satisfy the semantic demand;
@@ -359,6 +365,14 @@ Route by physical and gameplay need:
 - **trim/decal tools:** seams, caps, joints, edges, markings, repair, wear, evidence,
   and instance-bound consequence; and
 - **truthful proxy:** the minimum honest expression when production art is unavailable.
+
+The Golden-specific Assetforge application plan lives in
+`intel/golden-vignette-assetforge-applications-v1.json`. Its first material-critical
+path is `surface-demand -> material-family -> surface-project`: bind semantic
+reservations to real faces, assemble a coherent role family from canonical material
+owners, then prove world-locked projection over actual connected terrain. Identity
+faces and the governed proof packet complete the Wave-2 loop; causal state, join kits,
+and context enter only with their owning Golden waves.
 
 `MATERIALIZE_NEW` means that activation would require committing a new persistent site
 or window; it does not mean “generate a map immediately.” `DECORATE_LOCAL` means realize

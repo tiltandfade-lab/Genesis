@@ -43,13 +43,20 @@ and visual review now advance through the same Waves 0–8 gates.
    718 stratified cases, and retained production regressions pass under corpus
    fingerprint `vgo1-edf8cc39`. Evidence:
    `intel/golden-vignette-wave1-verification.md`.
-6. ☐ Enter Wave 2 with proxy-first composition: Tavern proves semantic/identity
+6. ☑ **Close the visual/material marriage prerequisite:** retain the complete FFT ×
+   Triangle Strategy evidence packet; route supported findings into
+   `GOLDEN-VIGNETTE-VISUAL-GUIDE.md`; preserve hard/soft/provisional distinctions in
+   a verified machine rubric; merge the Assetforge candidate factory; freeze
+   semantic-reservation → real-face → exact-material-demand timing; and specify the
+   eight Golden Assetforge applications without claiming they are built.
+7. ☐ Enter Wave 2 with proxy-first composition: Tavern proves semantic/identity
    continuity and Guard Post proves the first compact visible/tactical vignette. Add
-   only demand-backed assets after clay, route, camera, and battle gates pass.
-7. ☐ Run multi-session work only when a current wave has frozen its shared contract
+   only demand-backed assets after clay, route, camera, and battle gates pass. Build
+   only the minimum AF-GV-1/2/3/8 slices required by those fixtures.
+8. ☐ Run multi-session work only when a current wave has frozen its shared contract
    and each lane names a bounded gate, owned files, verifier, evidence, merge order,
    and stop condition.
-8. ☐ Run intermittent game flows and PC-versus-enemy battle simulations throughout,
+9. ☐ Run intermittent game flows and PC-versus-enemy battle simulations throughout,
    escalating from current zone combat to exact-cell assertions only after that
    separate replacement-proof cutover is ready.
 

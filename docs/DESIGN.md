@@ -1953,3 +1953,20 @@ infrastructure, and regression detection reports change without deciding whether
 
 Owning contract: `ASSETFORGE.md`. Executable surface: `build/assetforge.py`. Retained evidence:
 `dev/model-qa/emote-factory/` and `dev/model-qa/assetforge-suite/`.
+
+## Locked decisions (2026-07-29 — Wave-1 founder dispositions and visual/material marriage)
+
+| Decision | Ruling |
+|---|---|
+| `MATERIALIZE_NEW` | This disposition says activation requires a new persistent site/window commitment. Classification is not an instruction to generate it immediately. |
+| `DECORATE_LOCAL` | This disposition realizes a licensed local feature, trace, fixture, encounter, or evidence inside the current window. “Decorate” is not limited to cosmetic or mechanically irrelevant clutter. |
+| Prison / Asylum | **Accepted recommendation:** the combined source requires an explicit purpose discriminator before materialization. Custody/confinement and care/treatment route to their own owners; absent that evidence, remain `UNRESOLVED`. |
+| Cavern / lair | A pure cavern does not imply a lair. An explicit creature lair is legal and should express creature-caused shaping, access, abrasion, nesting, waste/food, ecology, and claim appropriate to its occupant. |
+| Ruin | Ruin is physical condition, not operating state. Occupancy, dormancy, service, maintenance, control, and claim remain independent. |
+| Urban breadth | **Accepted recommendation:** district and typed-venue demand uses the existing Urban/Service or typed host and linked materialization windows rather than inventing a Golden Site or one giant board. |
+| Scale/window fallback | **Accepted recommendation:** every requested scale receives an explicit smallest-honest envelope and owner-backed linked-window fallback; unsupported scale stays countable rather than expanding the board silently. |
+| Wilderness promotion | **Accepted recommendation:** a wilderness feature promotes from `DECORATE_LOCAL` to a persistent site/window only when a functional circuit, objective, claimant, return-state obligation, or equivalent persistent relationship earns it. |
+| Demand vs materialization | **Accepted recommendation:** observatory demand counts and actual runtime materialization frequency remain separate measures. Common source demand does not require every occurrence to instantiate a board. |
+| Identity/material timing | **Accepted recommendation:** reserve identity faces/communication obligations during semantic planning; emit exact material, trim, decal, projection, and shallow-extrusion demands only after geometry has produced actual stable faces. |
+| Visual guide authority | `GOLDEN-VIGNETTE-VISUAL-GUIDE.md` routes the founder law and retained FFT/TS evidence into execution. Machine companions preserve hard rejection versus soft target versus provisional calibration. |
+| Assetforge Golden applications | Eight additions are **SPECCED / UNBUILT** under `ASSETFORGE.md`: surface-demand, material-family, surface-project, identity-face, causal-surface-state, join-kit, context-band, and vignette-proof. They do not alter the thirteen current candidate-ready/not-proved tools or duplicate canonical specialist algorithms. |

@@ -15,6 +15,15 @@ not wholesale production promotion: exact body/trim routing, repeat-safe slot sa
 geometry-owned relief, all-top grid projection, and the stair/platform layout invariant are live;
 the composed visual verdict remains open.
 
+**2026-07-29 Golden Vignette marriage note.** The retained FFT/Triangle Strategy study and Adam's
+direction are promoted through `GOLDEN-VIGNETTE-VISUAL-GUIDE.md`, its machine rubric, and the
+Assetforge application ledger. Material demand is now explicitly two-stage:
+`SEMANTIC_IDENTITY_RESERVATION` before topology and `SURFACE_MATERIAL_DEMAND` only after a stable
+face exists. Assetforge is the primary factory envelope around this lane; it may route, compile,
+quarantine, prove, receipt, and admit this lane's outputs, but it may not replace Material Maker,
+the material workbench, ground-material, trim, palette, projection, or persistence authorities
+with slightly different parallel algorithms. See §10.
+
 Provenance: authored 2026-07-23 from the Material Maker crash investigation + Adam's design
 consult (this session). All rulings quoted below with dates are Adam's.
 
@@ -346,3 +355,101 @@ scale, stable UV frames, family-vs-role separation, and missing-channel fallback
 proves the selected combination, road/ground relation, repair story, and cultural selection
 ([GOLDEN-SITES-CATALOG.md](GOLDEN-SITES-CATALOG.md)). Taste cards (§2) still gate engine wiring; this
 roster does not bypass them.
+
+## 10. Golden Vignette face/material integration
+
+### 10.1 Early semantic reservation
+
+Before topology, a semantic plan may reserve a face-level communication obligation:
+
+- purpose or controlled-threshold recognition;
+- claimant, public sign, crest, or banner;
+- service/work trace or creature shaping;
+- condition or operating-state evidence;
+- objective emphasis; or
+- persistent consequence.
+
+This is not yet a texture request. A `SemanticIdentityReservation` records source facts, semantic
+role, priority, visibility/interaction needs, and fallback obligation. It cannot invent a wall,
+pick a material id, choose Meshy/ImageGen/Material Maker, or claim a face exists.
+
+The distinction matters. Ruin may reserve physical-condition evidence without licensing dormancy,
+vacancy, ownership, or operating state. A pure cavern receives substrate and exposure demands but
+not claimant/lair treatment unless a real ecological or creature claim exists.
+
+### 10.2 Post-geometry face demand
+
+`SurfaceAssemblyPlan` supplies stable face references and local frames. Only then does the
+material lane accept a `SurfaceMaterialDemand`:
+
+```text
+demandId / planRef / surfaceRef / faceRef / role
+localFrame { origin, normal, tangent, bitangent, boundary, mask }
+sourceFactRefs[] / mechanicTruthRefs[]
+realm / culture / construction / materialFamily
+conditionChannels { age, moisture, damage, repair, use, maintenance, magic, occupation, claim }
+texelScale / projectionPolicy
+trimReservations[] / decalReservations[] / shallowReliefReservations[]
+causeRefs[] / candidateLanes[] / fallbackPolicy
+```
+
+The face-role baseline is `WALKABLE_TOP`, `NATURAL_SLOPE`, `CUT_FACE`,
+`RETAINING_FACE`, `WALL_FIELD`, `CROWN_COPING`, `JAMB_REVEAL`, `ROOF_DECK`,
+`WATERLINE_EDGE`, `UNDERSIDE_SUPPORT`, `MOUNT_FACE`, and `SCENERY_FACE`.
+Specialized roles may refine this set while preserving their family.
+
+Geometry remains authority for shape, support, collision, cover, sight, walkability, interaction
+reach, and openings. Material may clarify those truths; it cannot create them.
+
+### 10.3 Family composition, not texture assignment
+
+The production unit is a coherent family across the active window, not an unrelated texture per
+face. The research-supported soft working budget is three to six broad families, with role
+variants for ground/floor, structure, retaining/cut, roof/deck, trim/edge, support, and decals as
+needed. Families share:
+
+- construction and realm/culture logic;
+- texel register and world-projection policy;
+- value, saturation, roughness, and normal-response hierarchy;
+- light behavior and one controlled accent/emissive family where licensed;
+- compatible trim, joint, edge, and state channels; and
+- a procedural fallback for every required face.
+
+The study's daylight highlight and texel-variance numbers are provisional A/B measurements.
+They do not override dark/night/interior/snow/metal/emissive evidence or Adam's taste verdict.
+The SUBTLE-TEXTURE principle remains: the scene must read at gameplay scale and the standee must
+remain the star. “Quiet” permits deliberate highlight, value separation, and material response; it
+does not require every surface to live in the same muddy middle band.
+
+### 10.4 Causal condition and instance mutation
+
+Age, moisture, wear, soot, moss, impact, scorch, repair, repaint, occupation, claimant marks,
+creature abrasion, and magic require cause references. Their masks derive from event, route use,
+exposure, grade/drainage, load, maintenance, ecology, authority, and time. Uniform random grunge
+is not an authored history.
+
+A persistent mutation belongs to a surface/object instance and carries a receipt. It may layer a
+decal, attachment, or override over an admitted parent; it may not edit the shared parent or
+unrelated siblings. A separate mechanics event owns any collision, support, or traversal change.
+
+### 10.5 Assetforge application boundary
+
+`ASSETFORGE.md` specifies the Golden additions. The material-critical path is:
+
+```text
+AF-GV-1 surface-demand
+  -> AF-GV-2 material-family
+  -> AF-GV-3 surface-project
+  -> AF-GV-4 identity-face
+  -> AF-GV-8 vignette-proof
+```
+
+AF-GV-1 binds reservations to real faces. AF-GV-2 composes this lane's admitted parents and
+specialist outputs into a coherent role family. AF-GV-3 proves world-locked mapping across real
+hills, cuts, retaining work, and quarter turns. AF-GV-4 mounts identity treatments through
+existing trim/decal/extrusion authorities. AF-GV-8 packages the exact composed evidence. Later,
+AF-GV-5 owns causal-state orchestration and AF-GV-6 owns join-treatment kits; neither becomes a
+second material author.
+
+No family or application advances because a compiler receipt is green. It still requires the
+Material Lane taste gate, governed scene proof, founder visual verdict, and explicit admission.

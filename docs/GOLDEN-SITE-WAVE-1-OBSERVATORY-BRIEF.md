@@ -273,3 +273,35 @@ Evidence and exact regression results:
 `intel/golden-vignette-wave1-report.md` and
 `intel/golden-vignette-wave1-report.json`. Machine rows:
 `intel/golden-vignette-wave1-corpus.jsonl.gz`.
+
+## 10. Post-gate founder dispositions (2026-07-29)
+
+The Wave 1 corpus, fingerprint, and PASS remain unchanged. Founder review resolved the
+eight questionable-pattern flags as policy for Wave 2 and later compilers:
+
+1. `MATERIALIZE_NEW` classifies a request as requiring a new persistent site/window
+   when activated; it does not command immediate generation.
+2. `DECORATE_LOCAL` realizes a licensed local feature, trace, fixture, encounter, or
+   evidence in the current window; it is not restricted to cosmetic clutter.
+3. Combined `Prison / Asylum` demand requires an upstream purpose discriminator.
+   Custody/confinement and care/treatment route separately; missing evidence remains
+   `UNRESOLVED`.
+4. A pure cavern does not imply a lair. An explicit creature lair may and should
+   express occupant-caused shaping, access, abrasion, nesting, food/waste ecology,
+   and claim.
+5. `RUIN` records physical condition only; occupancy, operation, dormancy, and claim
+   remain independent state.
+6. Urban breadth routes through typed hosts and linked materialization windows rather
+   than a new Golden Site or a single sprawling board.
+7. Requested scale receives the smallest honest envelope plus an owner-backed
+   linked-window fallback; unsupported scale remains countable.
+8. A wilderness local feature promotes to a persistent site/window only when a
+   functional circuit, objective, claimant, return-state obligation, or equivalent
+   continuing relationship earns it.
+9. Observatory demand frequency and actual runtime materialization frequency remain
+   separate measures.
+
+The binding contract language lives in `GOLDEN-SITE-VIGNETTE-CONTRACTS.md`; the
+decision ledger lives in `DESIGN.md`. Surface identity, face, material, and Assetforge
+adoption are governed by `GOLDEN-VIGNETTE-VISUAL-GUIDE.md` and begin at Wave 2, not
+retroactively inside this read-only observatory.

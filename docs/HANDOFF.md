@@ -6,6 +6,36 @@ updated: 2026-07-29
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-29, GOLDEN VISUAL / MATERIAL / ASSETFORGE MARRIAGE) [Codex]
+
+The visual foundation required before Wave 2 is now explicit. The complete retained
+`Reference/FFT-Triangle-Strategy-World-Study/` packet remains research evidence.
+`GOLDEN-VIGNETTE-VISUAL-GUIDE.md` promotes the supported direction into one routed
+standard: FFT composition economy, Triangle Strategy material/presentation discipline,
+and Genesis persistent consequence. Its verified JSON companion separates fifteen hard
+rejections, six soft targets, two provisional A/B calibrations, twelve face roles,
+four material stages, the four quarter turns, and the required capture packet.
+
+Material demand is two-stage: reserve semantic identity before topology, then bind
+exact material/trim/decal/projection/shallow-relief work only after stable faces exist.
+The boundary is folded through the Golden contracts, composition plan, Material Lane,
+ground and trim programs, context projection, master program, canonical ownership, and
+decision routing. Prison/Asylum, cavern/lair, ruin/operation, urban/window, scale,
+wilderness promotion, and demand/materialization founder dispositions are recorded.
+
+The previously unmerged Assetforge work is retained: thirteen current factories remain
+`CANDIDATE-READY / NOT PROVED`; the ground-field material bench and the terrain-feature
+bench both survive the Clayroom merge. Eight Golden applications are now
+`SPECCED / UNBUILT`: surface-demand, material-family, surface-project, identity-face,
+causal-surface-state, join-kit, context-band, and vignette-proof. They wrap canonical
+specialists and cannot become duplicate material engines.
+
+**Do next:** Wave 2 remains the first product cut. Prove Tavern identity continuity
+and the Guard Post composition in proxy/clay, then build only the smallest
+AF-GV-1/2/3/8 slices demanded by their real faces and review packet. Do not start broad
+material production, causal mutation, join, or context factories ahead of their
+owning wave.
+
 ## ⭐ Latest (2026-07-29, GOLDEN VIGNETTE WAVE 1 PASSED) [Codex]
 
 Gate W1 is closed. The new read-only `src/engine/vignette-observatory.js` validates

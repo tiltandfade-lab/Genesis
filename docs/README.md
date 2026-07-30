@@ -32,10 +32,11 @@ Adam) can jump straight to the right doc instead of grepping/reading its way the
 | Creature stats, names, per-realm rosters | `data/bestiary.js` (SRD/global) · `dev/model-qa/realm-bestiary-draft.json` (per-realm, compiled from `REALM-BESTIARY-DRAFT.md`) |
 | 3D model / render style rules (silhouette, value, pose) | `MODEL-FOUNDRY.md` (the 6 laws) |
 | **The next several weeks: unified Golden Site procedural-vignette engine** | **`GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md`** — one terrain/construction compiler, asset router, walk census, game/battle cadence, wave gates, and multi-session law |
+| **Golden Vignette visual and material standard** | **`GOLDEN-VIGNETTE-VISUAL-GUIDE.md`** — compact composition, connected terrain/chunky construction, face/material pipeline, value/light, four bearings, context, persistence, hard/soft/provisional review |
 | Frozen vignette request/plan/asset/receipt boundary | `GOLDEN-SITE-VIGNETTE-CONTRACTS.md` — Wave-0 v1 integration fields, terrain/structure join law, negative controls, versioning |
 | Latest passed Golden engine gate | `GOLDEN-SITE-WAVE-1-OBSERVATORY-BRIEF.md` — Gate W1 passed; deterministic audit harness, read-only adapters, disposition/unresolved ledgers, 12,000-request checkpoint |
 | Next Golden engine implementation cut | `GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md` § Wave 2 — proxy-first Tavern identity and Guard Post visual/tactical compiler proof |
-| Generated-asset compilers, sprite emotes, and boundary auto-tiles | `ASSETFORGE.md` — shared quarantine/proof/admission protocol, built sprite-emote vertical slice, and boundary compiler specification |
+| Generated-asset compilers and Golden material/face applications | `ASSETFORGE.md` — primary factory envelope; thirteen candidate-ready/not-proved tools; eight Golden applications specified/unbuilt |
 | Shared procedural battlefield and town-tray composition | `BATTLEMAP-TOWNTRAY-COMPOSITION.md` (high-priority accepted direction; implementation unauthorized) |
 | Table architecture (markdown source → compiled JSON) | `Two tracks run in parallel` section below + `compile-tables.py` |
 | Module list / what owns what symbol | `manifest.json` (repo root) |
@@ -54,6 +55,13 @@ canon-and-scope pass). Small index-and-law files, never spec duplicates: `canon/
 
 - `CLAYROOM-RESET-LADDER.md` — **the Clayroom reset/proof ladder (CL-R0…CL-R6)**: the Clayroom is a deterministic procedural acceptance fixture, and this is the renderer/fixture-trust gate that must pass before C1H, C1I, or Guard Post 1 may consume it. Also owns the diagnostic-clay surface contract, the clay capture/receipt law, Lighting Lab 2.0's recipe contract, the bounded Sprite Editor crosshair delta, and the Clayroom Workbench boundary. CL-R0 BUILT 2026-07-23. (2026-07-23)
 - `GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md` — founder-authorized orchestration owner for the next several weeks: one procedural engine whose terrain and construction stages share a macro plan; the complete twelve-case/ordinary-venue coverage matrix; in-engine/Meshy/sprite-extrusion/material/context asset router; deterministic walk-demand observatory; recurring synthesis, full-game, PC-versus-enemy battle, and visual review loops; Waves 0–8; and the rule that multi-session work exists only to close a named Golden engine gate. (2026-07-29)
+- `GOLDEN-VIGNETTE-VISUAL-GUIDE.md` — founder-authorized visual execution front door:
+  FFT composition economy + Triangle Strategy material/presentation discipline +
+  Genesis persistent consequence; compact composition, connected natural/chunky
+  constructed form, two-stage identity/face-material demand, coherent material
+  families, governed quarter turns, context, and machine-checkable hard/soft/
+  provisional review. Evidence remains under
+  `../Reference/FFT-Triangle-Strategy-World-Study/`. (2026-07-29)
 - `GOLDEN-SITE-VIGNETTE-CONTRACTS.md` — Wave-0-frozen v1 design boundary for
   `VignetteRequest`, `VignettePlan`, `SemanticAssetDemand`, `SynthesisReceipt`, the
   adopted tactical composition fields, and the natural-terrain/constructed-join
@@ -81,9 +89,10 @@ canon-and-scope pass). Small index-and-law files, never spec duplicates: `canon/
 
 - `ASSETFORGE.md` (`type: production-machinery-spec`) — the shared generated-asset compiler
   protocol: manifest, exact prompt packet, quarantined ingest, deterministic assembly, adversarial
-  proof, receipt, and explicit admission. The sprite-emote factory is the first built vertical
-  slice; the boundary auto-tile compiler and ten other reusable visual factories are specified as
-  expansions. (2026-07-27)
+  proof, receipt, and explicit admission. Thirteen current tools are candidate-ready/not-proved.
+  Eight Golden Vignette additions are specified/unbuilt for surface-demand routing, coherent
+  material families, world projection, identity faces, causal state, join kits, context bands,
+  and governed proof packaging. (2026-07-29)
 - `NEW-GAME-FLOW.md` — the bardo / guided new-game passage.
 - `CHAR-CREATION.md` — the two-layer character creation system.
 - `SPATIAL-MODEL.md` — the lazy hex/node world-geometry model.

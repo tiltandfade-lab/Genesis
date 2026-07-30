@@ -8,6 +8,10 @@ import { fileURLToPath } from "node:url";
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, "..");
 const rubricPath = path.join(root, "docs/intel/golden-vignette-visual-rubric-v1.json");
+const assetforgeLedgerPath = path.join(
+  root,
+  "docs/intel/golden-vignette-assetforge-applications-v1.json"
+);
 const guidePath = path.join(root, "docs/GOLDEN-VIGNETTE-VISUAL-GUIDE.md");
 
 const failures = [];
@@ -16,14 +20,21 @@ const check = (condition, message) => {
 };
 
 const rubric = JSON.parse(fs.readFileSync(rubricPath, "utf8"));
+const assetforgeLedger = JSON.parse(fs.readFileSync(assetforgeLedgerPath, "utf8"));
 const guide = fs.readFileSync(guidePath, "utf8");
 
 check(rubric.schemaVersion === 1, "rubric schemaVersion must be 1");
 check(rubric.rubricId === "golden-vignette-visual-rubric-v1", "unexpected rubricId");
+check(assetforgeLedger.schemaVersion === 1, "Assetforge ledger schemaVersion must be 1");
+check(
+  assetforgeLedger.ledgerId === "golden-vignette-assetforge-applications-v1",
+  "unexpected Assetforge ledgerId"
+);
 
 for (const relativePath of [
   ...Object.values(rubric.authority),
-  ...rubric.evidence
+  ...rubric.evidence,
+  ...Object.values(assetforgeLedger.authority)
 ]) {
   check(fs.existsSync(path.join(root, relativePath)), `missing routed source: ${relativePath}`);
 }
@@ -97,6 +108,33 @@ check(
   "world truth must remain immutable across bearings"
 );
 
+const assetforgeIds = assetforgeLedger.applications.map((entry) => entry.id);
+const assetforgeSlugs = assetforgeLedger.applications.map((entry) => entry.slug);
+check(assetforgeLedger.applications.length === 8, "expected eight Golden Assetforge applications");
+check(unique(assetforgeIds), "Golden Assetforge application ids must be unique");
+check(unique(assetforgeSlugs), "Golden Assetforge application slugs must be unique");
+check(
+  assetforgeLedger.applications.every((entry) => entry.status === "SPECCED_UNBUILT"),
+  "Golden Assetforge applications must remain explicitly SPECCED_UNBUILT"
+);
+check(
+  JSON.stringify(assetforgeLedger.deliveryOrder) === JSON.stringify([
+    "AF-GV-1",
+    "AF-GV-2",
+    "AF-GV-3",
+    "AF-GV-4",
+    "AF-GV-8",
+    "AF-GV-6",
+    "AF-GV-5",
+    "AF-GV-7"
+  ]),
+  "Golden Assetforge delivery order drifted"
+);
+check(
+  assetforgeLedger.policy.duplicateCanonicalAlgorithmsForbidden === true,
+  "Assetforge applications must forbid duplicate canonical algorithms"
+);
+
 for (const phrase of [
   "FFT's composition economy + Triangle Strategy's material and presentation",
   "The two-stage demand",
@@ -125,6 +163,7 @@ console.log(
     `soft targets: ${rubric.softTargets.length}`,
     `surface roles: ${surfaceRoles.length}`,
     `material stages: ${stages.join(" -> ")}`,
-    `camera bearings: ${rubric.camera.bearingsDegrees.join(", ")}`
+    `camera bearings: ${rubric.camera.bearingsDegrees.join(", ")}`,
+    `Golden Assetforge applications: ${assetforgeIds.join(", ")}`
   ].join("\n")
 );

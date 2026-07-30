@@ -108,6 +108,14 @@ VignetteRequestV1
 - `NARRATIVE_ONLY`
 - `UNRESOLVED`
 
+The disposition classifies the obligation; it does not itself execute it:
+
+- `MATERIALIZE_NEW` means that activation requires committing a new persistent site
+  or window. It does not mean “generate a map immediately.”
+- `DECORATE_LOCAL` means that a licensed local feature, trace, fixture, encounter, or
+  evidence belongs inside the current window. “Decorate” does not mean cosmetic or
+  mechanically irrelevant.
+
 The `camera` budget names permitted bearings, pitch/distance envelope, protected
 approach silhouettes, and occlusion limits. It does not dictate terrain height.
 
@@ -257,6 +265,64 @@ Whole sites, exact connective architecture, ordinary boxes/furniture, and random
 condition variants are not Meshy demands. Geometry that changes collision, cover,
 sight, support, mounted practical light, or interaction reach cannot be discharged by
 texture alone.
+
+### 4.1 Wave-2 identity and face/material staging
+
+The frozen `SemanticAssetDemandV1` remains the public role demand. Wave 2 derives two
+narrow records without changing the four frozen top-level records.
+
+First, before topology, the semantic plan may create a
+`SemanticIdentityReservation`:
+
+```text
+reservationId / planRef / sourceFactRefs[]
+semanticRole / communicationObligation
+visibilityPriority / interactionPriority
+eligibleProjectionKinds[]
+fallbackRequirement
+```
+
+It reserves recognition—not a face, material, vendor, asset id, or geometry. Purpose,
+claim, service/work trace, creature shaping, condition evidence, operating-state
+evidence, objective emphasis, and persistent consequence are legitimate reservation
+roles.
+
+Second, after `SurfaceAssemblyPlan` has emitted stable faces, the asset plan may derive
+a `SurfaceMaterialDemandCandidateV1`:
+
+```text
+demandId / planRef / surfaceRef / faceRef / role
+localFrame { origin, normal, tangent, bitangent, boundary, mask }
+sourceFactRefs[] / mechanicTruthRefs[]
+realm / culture / construction / materialFamily
+conditionChannels / texelScale / projectionPolicy
+trimReservations[] / decalReservations[] / shallowReliefReservations[]
+causeRefs[] / candidateLanes[] / fallbackPolicy
+```
+
+The initial shared roles are `WALKABLE_TOP`, `NATURAL_SLOPE`, `CUT_FACE`,
+`RETAINING_FACE`, `WALL_FIELD`, `CROWN_COPING`, `JAMB_REVEAL`, `ROOF_DECK`,
+`WATERLINE_EDGE`, `UNDERSIDE_SUPPORT`, `MOUNT_FACE`, and `SCENERY_FACE`.
+
+The derived record belongs to `surfaceAssemblyPlan` plus `assetResolutionPlan`; it is
+not a fifth public contract and is not yet a saved runtime schema. If it later needs
+cross-version persistence, that promotion requires an explicit version and migration.
+
+Required semantic boundaries:
+
+- the live combined `Prison / Asylum` source remains unresolved until an upstream
+  purpose discriminator selects custody/confinement or care/treatment (or another
+  explicit owner); visual treatment may not guess;
+- a pure cavern may receive substrate, exposure, wetness, or geological treatment but
+  cannot imply a lair without a claimant/ecology fact;
+- an explicit creature lair may reserve creature shaping, abrasion, access, nesting,
+  food/waste, and claimant evidence appropriate to the creature; and
+- `RUIN` is physical condition only. Occupancy, dormancy, operation, claim, and
+  maintenance remain independent source facts.
+
+Assetforge routes the derived demands through its shared quarantine/proof/receipt
+envelope. It may wrap Material Maker, ground, palette, trim, decal, atlas, sprite
+extrusion, and other canonical specialists. It may not create parallel authorities.
 
 ## 5. `SynthesisReceiptV1`
 

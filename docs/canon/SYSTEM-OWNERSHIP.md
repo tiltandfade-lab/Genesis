@@ -41,6 +41,9 @@ Two columns of truth run through this file and must never be conflated:
 | Fact family | Accepted owner | Ruled in |
 |---|---|---|
 | Procedural vignette orchestration and synthesis order | one `ProceduralVignetteSynthesizer` compiling `VignetteRequest` through semantic/window/spatial/tactical/surface/asset plans; terrain and construction are stages, never separate engines | `GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md` |
+| Semantic identity versus exact face/material demand | semantic plan owns `SemanticIdentityReservation`; `SurfaceAssemblyPlan` owns real faces/local frames; asset plan derives `SurfaceMaterialDemand` only after the face exists | `GOLDEN-SITE-VIGNETTE-CONTRACTS.md` §4.1; `GOLDEN-VIGNETTE-VISUAL-GUIDE.md` §4 |
+| Visual review standard | founder law in `ART-DIRECTION-CANON.md`, routed through `GOLDEN-VIGNETTE-VISUAL-GUIDE.md`; hard/soft/provisional machine rubric is a verifier input, not taste authority | founder ruling 2026-07-29 |
+| Visual asset factory envelope | Assetforge owns typed manifests, quarantine, specialist-tool orchestration, proofs, receipts, and explicit admission; specialist material/palette/trim/registry/persistence engines retain their algorithms | `ASSETFORGE.md`; Golden application ledger |
 | Site identity, host semantics, transforms, and active extent | persistent `SiteIdentity` + host `RoomProgram`/operating-model obligations + ordered `TransformStack` + bounded `MaterializationWindow` | Waves 1-2; `GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md` reconciliation |
 | Spatial legality (cells, volumes, elevation, boundaries, zones, provenance) | `SpatialPlanV2` via the staged pipeline SpatialIntent → legality → `TacticalCompositionPlan` → `SurfaceAssemblyPlan` | Wave 3 P3.5 |
 | Connections, portals, secrets, vertical traversal, circulation | canonical `Connection` objects + traversal transactions + Secret Networks | Wave 4 (single subject authority) |
@@ -107,6 +110,11 @@ Two columns of truth run through this file and must never be conflated:
     field, tactical reservations, asset resolver, receipt, and projection pipeline.
     They may be separate compiler stages or modules, never rival generators.
     (`docs/GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md`)
+13. **A second visual/material algorithm hidden inside Assetforge.** Assetforge is the
+    primary production envelope, not a replacement author for Material Maker, ground
+    materials, palette harmonization, trim/decal, sprite registry/citizenship,
+    projection, persistence, or the synthesizer. It wraps the canonical specialist,
+    binds exact inputs/outputs, proves, and receipts. (`docs/ASSETFORGE.md`)
 
 ## 5. Cutover law
 

@@ -2,6 +2,7 @@
 type: production-machinery-spec
 status: PRIMARY-ASSET-FACTORY-CANDIDATE-SUITE
 created: 2026-07-27
+updated: 2026-07-29
 owner: art-pipeline
 first_implementation: build/assetforge.py
 ---
@@ -363,6 +364,231 @@ production terrain renderer with the governed camera, standees, elevation/contac
 - **Visual regression foundry:** compares fixed baseline/current captures, emits ordinary and
   amplified diffs, records both hashes and a normalized difference score, and applies a declared
   threshold without making a taste decision.
+
+## Golden Vignette expansion applications — specified, not built
+
+Adam authorized a marriage pass between the retained FFT/Triangle Strategy findings, Golden
+Vignette visual direction, the surface/material pipeline, and Assetforge. The complete
+machine-readable application ledger is
+`docs/intel/golden-vignette-assetforge-applications-v1.json`; the visual contract is
+`docs/GOLDEN-VIGNETTE-VISUAL-GUIDE.md`.
+
+These applications are `SPECCED / UNBUILT`. They are not part of the thirteen candidate-ready
+factories above, and this section does not inflate that count. Each application is an orchestrator
+or a narrowly new compiler over canonical owners. It must reuse the shared Assetforge manifest,
+quarantine, source hashes, negative controls, proof boards, receipts, visual review, and explicit
+admission boundary.
+
+### AF-GV-1 — Surface-demand router
+
+**Problem.** `SemanticAssetDemand` can reserve an identity obligation before geometry, but exact
+material, trim, decal, and shallow-relief work cannot be requested until a real face exists.
+
+**Contract.**
+
+```text
+SemanticIdentityReservation[]
+  + SurfaceAssemblyPlan faces[] with stable local frames
+  + mechanic/source facts
+  -> SurfaceMaterialDemand[]
+  -> typed Assetforge child jobs or explicit truthful fallback
+```
+
+The router binds every realized treatment to `surfaceRef`/`faceRef`, records face role, local
+frame, mask, texel scale, mechanic truths, realm/culture/construction, condition channels,
+cause refs, candidate lanes, and fallback. It may leave a demand unresolved. It may not invent a
+face, choose a vendor before routing, convert a reservation into cosmetic clutter, or let a
+material create an opening, route, support, cover edge, or interaction.
+
+**Required proof.** One Guard Post and one Tavern request must retain every identity reservation
+through geometry, produce no orphan face demand, send every demand to exactly one admitted
+candidate/fallback/unresolved result, and preserve plan/mechanics fingerprints.
+
+**Negative controls.** Request treatment before the face exists; delete the controlled-threshold
+reservation; bind a sign to an underside; allow paint to create a doorway; change collision while
+resolving a material; send one demand to two competing child jobs.
+
+### AF-GV-2 — Material-family composer
+
+**Problem.** Individual good textures do not make a coherent battlefield. Each active window needs
+a small family whose ground, wall, retaining, roof, trim, support, and decal roles share material
+DNA, texel register, value logic, palette, roughness, and light response without becoming a
+same-color wash.
+
+**Contract.** The composer wraps—not replaces—Material Maker parents, the ground-field compiler,
+the canonical palette engine, trim/decal/atlas tools, and the Material Lane taste-card harness. It
+consumes a family manifest with:
+
+- role coverage and allowed omissions;
+- exact parent/output hashes and parameter hashes;
+- realm, culture, construction, and maintenance doctrine;
+- approved texel register and per-role projection policy;
+- value, saturation, roughness, metalness, and normal-intensity envelopes;
+- one controlled accent/emissive family where licensed;
+- condition/mutation hooks that remain instance-bound; and
+- procedural fallback for every required role.
+
+It emits a versioned family manifest, resolved role maps, missing-role debt, a grayscale/value
+strip, full PBR slabs, a three-to-six-family composed scene card, a standee-context strip, and
+light-recipe/four-bearing captures. The soft three-to-six family target and provisional highlight
+and texel A/Bs remain labeled calibration, never disguised as hard technical gates.
+
+**Required proof.** The same Guard Post geometry must compare clay, current fallback, and composed
+family under identical camera/light/actors. The family must improve face separation and world
+citizenship at gameplay and 50% contact-sheet scale without increasing prop count or changing
+geometry.
+
+**Negative controls.** One texture per face; mixed texel registers; nearest-filtered normal map;
+palette harmonization that destroys a protected sign/crest color; every role at the same value and
+roughness; a material family that reads better alone but fights the standee; a missing fallback.
+
+### AF-GV-3 — World-surface projection compiler
+
+**Problem.** The flat ground-field candidate does not prove a material over connected hills,
+convex/concave transitions, cut faces, retaining faces, curved paths, switchbacks, corners, or
+quarter-turn views. Restarting UV phase per tile would recreate the same zipper and Minecraft
+rhythm in texture space even when geometry is continuous.
+
+**Contract.** Consume stable face frames, adjacency, material family, texel register, grain or
+gravity direction, and seam policy. Emit world-locked UV/projection data, chart adjacency,
+directional exceptions, trim sockets, and a projection receipt. Natural joined surfaces share
+phase across tactical cells; intentional cliffs and constructed seams may split charts. Writing,
+heraldry, waterlines, grain, courses, soot, and drainage remain world-oriented and cannot flip to
+face the camera.
+
+This compiler changes mapping only. It never moves vertices, closes a crack in source geometry,
+adds a riser, or smooths a mechanics-owned edge.
+
+**Required proof.** Use the retained hillside/switchback, ravine, bluff, and earthwork fields.
+Capture all four bearings with a UV diagnostic and dressed family; report shared-edge phase error,
+texel-density distribution, directional-face correctness, and unchanged terrain/tactical
+fingerprints.
+
+**Negative controls.** Reset phase at each cell; mirror lettering on opposite bearings; project a
+top role onto a cut face; stretch a switchback landing beyond budget; cross an intentional
+cliff-chart split; use texture continuity to hide a geometric crack.
+
+### AF-GV-4 — Identity-face treatment assembler
+
+**Problem.** Purpose, claim, service, creature shaping, evidence, and objective emphasis need a
+reliable home on actual visible faces. Random prop scatter and generic wall materials cannot carry
+those semantic obligations.
+
+**Contract.** Consume a `SemanticIdentityReservation`, eligible realized faces, visibility and
+interaction priority, plus the admitted material family. Resolve the obligation through one or
+more of: body material role, trim, joint, sign, crest/banner, decal, shallow extrusion/faced
+component, fixture mount, or truthful proxy. Use existing trim, decal, atlas, prop-kit, and sprite
+extrusion authorities; do not duplicate them.
+
+The assembler records world orientation, mount/support, occlusion envelope, four-bearing
+visibility, reading distance, condition/state relationship, and fallback. A ruined wall may carry
+collapse and repair evidence without implying dormancy. A pure cavern cannot receive claimant
+marks unless a real lair/claim fact exists.
+
+**Required proof.** Tavern purpose survives social/combat projections; Guard Post control reads
+without a label overlay; Prison and Asylum identity reservations choose different treatments on a
+shared legal chassis; cavern and creature-made lair remain visually distinct.
+
+**Negative controls.** Drop the reservation; mount a sign on a hidden/invalid face; camera-face a
+world-oriented crest; infer operating state from ruin; decorate a pure cavern as a lair; place a
+shallow extrusion whose implied depth changes collision.
+
+### AF-GV-5 — Causal surface-state compiler
+
+**Problem.** Existing condition tooling registers and verifies authored states, but the Golden
+engine needs surface changes derived from event, route use, exposure, water, drainage, load,
+maintenance, ecology, magic, claim, and time.
+
+**Contract.** Consume source facts and geometry-derived fields; emit cause-labeled masks,
+attachments, overrides, state-layer ordering, coalescence rules, and per-instance mutation
+receipts. It orchestrates Material Maker/state parents, condition validation, decals, ground
+overlays, and the persistent object/surface owner. It never rolls undirected “age” or grunge.
+
+Channels include foot wear, wheel ruts, waterline/wetness, drainage stain, soot, impact, scorch,
+moss/vegetation, repair/patch, repaint, salvage, claimant mark, creature abrasion, magic
+alteration, and accumulated residue. Every mark answers what caused it, when, where, and which
+instance owns it.
+
+**Required proof.** One threshold scorch and one repaired/repainted object survive
+unmount/remount; sibling instances and parent materials remain byte-identical; removing the cause
+removes the proposed mutation; before/after captures remain tactically identical unless a separate
+mechanics event owns the change.
+
+**Negative controls.** Uniform random grunge; wetness uphill from drainage; soot without fire;
+traffic wear outside routes; shared-parent bleed; ruin state inventing vacancy; receipt omitted.
+
+### AF-GV-6 — Natural/constructed join-treatment kit
+
+**Problem.** The synthesizer owns `CUT_INTO`, `RESTS_ON`, `RETAINS`, `BRIDGES`, `PINS`, `ABUTS`,
+and `BURIES`, but those relationships need reusable visual families for footings, toes, cuts,
+coping, spill, drainage, supports, and accumulated debris.
+
+**Contract.** Consume an engine-owned join and exact boundary frame. Compile eligible trim,
+material, decal, shallow-relief, and prop/kit attachments for the relation, culture,
+construction, substrate, exposure, and condition. Geometry, support, collision, grade, and
+traversability remain engine-owned; Assetforge may only package/mount the visual members and
+validate their fit.
+
+**Required proof.** Each relation receives at least one generic proxy kit and one
+material-family treatment across straight, convex, concave, height-changing, and terminal joins.
+The dressed join must read from four bearings without hiding the legal connector or opening a
+crack.
+
+**Negative controls.** Foundation floats above ground; retaining toe blocks route; drainage runs
+uphill; trim bridges an unsupported gap; kit changes join relation; sedimentary face bands recur
+across unrelated natural cuts.
+
+### AF-GV-7 — Context-band compiler
+
+**Problem.** Compact windows need near support and far premise without FFT's black void or
+decorative false exits.
+
+**Contract.** Consume the context card, source facts, active-window boundary/frontiers, knowledge
+policy, camera family, palette/light handshakes, and occlusion budget. Compile near apron/support
+pieces, masks, far plates/cards, atmosphere layers, four-bearing eligibility, and a context
+receipt. Reuse the existing plate/card and projection owners; Assetforge supplies the production
+envelope and proofs.
+
+**Required proof.** Context-off/on has identical active ids, geometry, mechanics, and knowledge.
+Every visible portal continuation is true, the active floor remains sharpest, and all four
+bearings avoid false reachable surfaces or leaked secrets.
+
+**Negative controls.** False door/path/roof; hidden-site leak; horizon rotates inconsistently;
+foreground obscures deployment; far plate owns collision; context mutates with combat promotion.
+
+### AF-GV-8 — Governed vignette proof packager
+
+**Problem.** Individual technical proof boards can hide a failure that appears only in the
+composed scene, another bearing, gameplay scale, grayscale, context, or persistence.
+
+**Contract.** Extend the existing visual regression foundry rather than creating a second diff
+engine. Given one committed `VignettePlan`, assemble the required Golden review packet:
+mechanics/clay overlay, starting beauty view, three quarter turns, gameplay and 50% scales,
+grayscale/value, material-family/identity overlays, context off/on, state before/after, and
+changed-seed siblings. Bind every image to plan, geometry, material, camera, light, context, state,
+and source fingerprints.
+
+It reports hard-rejection results and separate soft measures. It cannot average them into a
+single score, promote taste, or let an aggregate green hide an individual failed frame.
+
+**Negative controls.** Missing bearing; mixed plan fingerprint; unlabeled expression rung;
+baseline captured under different light; grayscale not derived from the exact beauty frame;
+context/state comparison changes mechanics; changed-seed image mislabeled as the same plan.
+
+### Golden application delivery order
+
+1. Build **AF-GV-1 Surface-demand router** as the Wave-2 semantic-to-face bridge.
+2. Build **AF-GV-2 Material-family composer** for the smallest Tavern/Guard family A/B.
+3. Build **AF-GV-3 World-surface projection** on the retained hills/switchback before calling the
+   family terrain-capable.
+4. Add **AF-GV-4 Identity-face treatment** and **AF-GV-8 proof packaging** to close the Wave-2
+   visual receipt.
+5. Build **AF-GV-6 join treatment** with institutional construction in Wave 4.
+6. Build **AF-GV-5 causal surface state** with the Wave-5 history/condition gate.
+7. Build **AF-GV-7 context bands** when the world-context projection gate opens.
+
+No application advances merely because it is listed. A current Golden wave must name the demand,
+fixtures, specialist authorities, negative controls, owner files, and stop condition.
 
 # Sprite-emote factory
 

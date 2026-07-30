@@ -7,7 +7,9 @@
     "founderLaw": "docs/ART-DIRECTION-CANON.md",
     "visualGuide": "docs/GOLDEN-VIGNETTE-VISUAL-GUIDE.md",
     "programOwner": "docs/GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md",
-    "contractOwner": "docs/GOLDEN-SITE-VIGNETTE-CONTRACTS.md"
+    "contractOwner": "docs/GOLDEN-SITE-VIGNETTE-CONTRACTS.md",
+    "assetforgeOwner": "docs/ASSETFORGE.md",
+    "assetforgeApplications": "docs/intel/golden-vignette-assetforge-applications-v1.json"
   },
   "evidence": [
     "Reference/FFT-Triangle-Strategy-World-Study/synthesis.md",

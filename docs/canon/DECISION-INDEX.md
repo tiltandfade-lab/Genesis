@@ -110,11 +110,13 @@ noted). Implementation states of wave rulings are UNAUDITED by default (ledger b
 | GEN-VIS-3 | Graphics Convergence Charter governs all graphics work; protected walk/table core; measured convergence to approved mocks | GRAPHICS-CONVERGENCE-CHARTER.md | BINDING | |
 | GEN-VIS-4 | Walk-native boundary: graphics PROJECT the walk (walkSceneFrom); dioramas are provenanced projections | WALK-NATIVE-A.md; WALK-CARD-DEALING.md | BUILT (boundary) | |
 | GEN-VIS-5 | Release-direction candidate: PreAlpha BattleMat + EngagementLens; hybrid 3D substrate + pixel citizens; theater = feature-flagged laboratory | Wave 10 P10.1/F10.1c | ACCEPTED | supersedes TABLETOP-VISION sequence + DESIGN-GUIDE T6 as destination; final release selection reserved for Adam (P10.12) |
-| GEN-VIS-6 | One fixed production camera family (~20°/35°/45° provisional); no player rotation; governed focus/cutaway | Wave 3 §12.13 | ACCEPTED | supersedes W10 F10.6g rotation clause |
+| GEN-VIS-6 | Four governed production bearings separated by 90° over one immutable place; authored starting bearing plus three player quarter turns; no free orbit; governed focus/cutaway | ART-DIRECTION-CANON.md 2026-07-29; GOLDEN-VIGNETTE-VISUAL-GUIDE.md | BINDING / BUILD-GATED | supersedes Wave 3's no-player-rotation clause while retaining governed pitch/distance/focus |
 | GEN-VIS-7 | Beauty floor is invariant; visual downgrade reduces generator complexity, never lighting/materials/sprites/beauty; 3D engine not deleted | Wave 10 P10.5; QUESTIONNAIRE §promotion | ACCEPTED | |
 | GEN-VIS-8 | No-clone law: procedural culture constitutions + material variation; never one sprite per modification | Wave 3 §12.2/§12.8 | ACCEPTED | |
 | GEN-VIS-9 | Reversible asset lifecycle: semantic slots, deterministic fallbacks, offline-total, provenance/rights quarantine | Wave 10 P10.11 | ACCEPTED | |
 | GEN-VIS-10 | Brightness law + 9 visual-campaign laws; PS1 retired game-wide | visual-campaign rulings 2026-07-10/11 | BUILT | |
+| GEN-VIS-11 | Golden visual standard = FFT composition economy + TS material/presentation discipline + Genesis persistent consequence; materials reserve identity before topology, bind exact demands after faces exist, and are judged through hard/soft/provisional evidence | ART-DIRECTION-CANON.md 2026-07-29; GOLDEN-VIGNETTE-VISUAL-GUIDE.md; MATERIAL-LANE.md §10 | FOUNDER-AUTHORIZED / WAVE-GATED | research measurements remain evidence, not automatic law |
+| GEN-VIS-12 | Assetforge is the primary factory envelope; its eight Golden surface/material/context/proof applications are specified/unbuilt and must wrap rather than duplicate canonical specialists | ASSETFORGE.md; intel/golden-vignette-assetforge-applications-v1.json | ACCEPTED SPEC / UNBUILT | current thirteen tools remain candidate-ready/not-proved |
 
 ## G. The procedural-dungeon program (route)
 
@@ -137,6 +139,7 @@ The program's decisions live in the wave records; this index routes rather than 
 | GEN-PDG-13 | Waves 1–2 integrate through versioned `VignetteRequest`, `VignettePlan`, `SemanticAssetDemand`, and `SynthesisReceipt` boundaries; natural terrain is a connected responsive field, constructed form records its join, and random tile slopes/zipper seams/global height caps are rejection controls | GOLDEN-SITE-VIGNETTE-CONTRACTS.md; DESIGN.md 2026-07-29 | WAVE-0 FROZEN / BINDING |
 | GEN-PDG-14 | Gate W0 passed with open-work ownership, retained Tavern/Guard selectors, checked-in unseeded census before-state, Wave-1 observatory brief, and green pre-change walk/game/combat/save/terrain/Clayroom baselines; Wave 1 is authorized next | GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md; intel/golden-vignette-wave0-baseline.md | PASS / WAVE 1 NEXT |
 | GEN-PDG-15 | Gate W1 passed with a deterministic 12,718-row read-only corpus, eight adapters, six-way dispositions, complete source treatment, proxy-only role demand, stable Tavern/Guard selectors, and green retained production gates; combined `Prison / Asylum` demand remains explicitly unresolved; Wave 2 is authorized next | GOLDEN-SITE-WAVE-1-OBSERVATORY-BRIEF.md; intel/golden-vignette-wave1-verification.md | PASS / WAVE 2 NEXT |
+| GEN-PDG-16 | Wave-1 founder dispositions: Prison/Asylum needs a purpose discriminator; pure cavern ≠ lair; ruin ≠ operating state; urban breadth uses typed hosts/linked windows; wilderness promotes only when persistent function earns it; observed demand ≠ actual materialization frequency | DESIGN.md 2026-07-29; GOLDEN-SITE-VIGNETTE-CONTRACTS.md §4.1 | ACCEPTED / WAVE-2 INPUT |
 
 ## H. Operations and infrastructure
 

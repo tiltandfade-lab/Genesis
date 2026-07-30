@@ -2296,3 +2296,32 @@ Binding consequences:
   terrain language and may not be documented as “terrain solved.”
 - Improvement debt is tracked per tool and weighted by severity. Rejected correctness or renderer
   behavior receives priority over breadth, polish, or high-volume asset production.
+
+## FFT/TS FINDINGS INTO ART DIRECTION, MATERIALS, AND ASSETFORGE (Adam, 2026-07-29 — binding; verbatim)
+
+> "a lot of those observations sounds like they should become art direction guides"
+
+> "please go ahead and lets harness what weve learned, especially about materials!"
+
+> "during this marriage pass you can you also spec any additional assetforge applications that could help us achieve this standard?"
+
+Binding consequences:
+
+- `GOLDEN-VIGNETTE-VISUAL-GUIDE.md` becomes the concise execution-facing visual guide beneath this
+  verbatim canon. The retained FFT/Triangle Strategy study remains evidence; estimates and proposed
+  thresholds do not silently become founder law.
+- The target combination is FFT composition economy, Triangle Strategy material/presentation
+  discipline, and Genesis persistent roll-authored consequence. Grammar may transfer; protected
+  layouts, meshes, textures, palettes, or content may not.
+- Material planning is two-stage. Semantic identity and recognition obligations are reserved
+  before topology; exact material, trim, decal, projection, and shallow-relief demands bind only
+  after real faces and stable local frames exist.
+- Materials carry surface identity, construction, culture, exposure, maintenance, use, causal
+  condition, focus, and persistent history. They may clarify geometry and mechanics but may not
+  invent either.
+- Assetforge is the primary factory envelope for these demands. The new Golden applications are
+  specified in `ASSETFORGE.md`; they orchestrate the canonical material, ground, palette, trim,
+  decal, extrusion, context, camera, and regression owners rather than duplicating them.
+- All Golden visual thresholds distinguish hard rejection, soft target, and provisional A/B
+  calibration. A tool receipt cannot promote taste or hide an individual failed frame behind an
+  aggregate score.

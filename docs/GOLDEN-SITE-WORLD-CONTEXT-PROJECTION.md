@@ -1,7 +1,7 @@
 ---
 type: system-spec
 created: 2026-07-25
-updated: 2026-07-25
+updated: 2026-07-29
 status: ACCEPTED DIRECTION — real-roll context and background contract; implementation unauthorized
 owner: Golden Site non-playfield context, background images, and context-style projection
 authority:
@@ -78,7 +78,7 @@ Genesis already has several useful seams:
 | `scene.background`, renderer clear color, and fog in `src/ui/theater-boot.js` | A flat color/fog field around the board | Layered context, silhouettes, horizon, supports, or background images |
 | exterior daylit/overcast/moonlit profiles and celestial arc | Time-sensitive outdoor key direction, color, intensity, shadow, and sky/void tint | A rolled landscape or settlement for that light to illuminate |
 | interior tile-kit grade and fog whisper | Realm-aware interior backdrop tint and depth softening | The physical world beyond an opening, cutaway, balcony, or cavern mouth |
-| fixed production camera and `ShotPlan` | Stable composition, framing, focus, and occlusion treatment | A context product describing what belongs outside the playfield |
+| governed four-bearing production camera and `ShotPlan` | Stable starting composition plus three 90-degree tactical reads, framing, focus, and occlusion treatment | A context product describing what belongs outside the playfield |
 | world, place, walk, and site lineage | The facts required to derive context | A renderer-facing context plan |
 
 The missing shared product is a **`WorldContextProjectionPlan`** between committed
@@ -215,7 +215,8 @@ The plan consumes retained facts in this order:
    light, atmosphere, dressing, and visible background event.
 6. **Current state:** time, weather, occupancy, damage, fire, flood, siege, breach,
    repair, alert, abandonment, or other committed event.
-7. **Presentation:** fixed camera, framing, contrast budget, fog, LOD, and fallback.
+7. **Presentation:** governed quarter-turn camera family, authored starting bearing,
+   four-bearing eligibility, framing, contrast budget, fog, LOD, and fallback.
 
 Later sources may refine an earlier source but cannot contradict it. A site-local
 landslide may change the visible regional slope; a generic wilderness plate may not
@@ -293,7 +294,7 @@ A background image asset must declare:
 id and version
 context family and compatible tags
 source recipe / prompt hash / provenance
-fixed camera family and horizon anchor
+governed quarter-turn camera family, bearing eligibility, and horizon anchor
 safe crop and pan/zoom overscan
 depth band and intended mount plane
 alpha/depth/sky/emissive masks where present

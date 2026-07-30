@@ -1,0 +1,309 @@
+{
+  "schemaVersion": 1,
+  "ledgerId": "golden-vignette-assetforge-applications-v1",
+  "status": "SPECCED_UNBUILT",
+  "updated": "2026-07-29",
+  "authority": {
+    "factory": "docs/ASSETFORGE.md",
+    "visualGuide": "docs/GOLDEN-VIGNETTE-VISUAL-GUIDE.md",
+    "visualRubric": "docs/intel/golden-vignette-visual-rubric-v1.json",
+    "program": "docs/GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md",
+    "contracts": "docs/GOLDEN-SITE-VIGNETTE-CONTRACTS.md"
+  },
+  "policy": {
+    "countsAsCurrentCandidateFactory": false,
+    "sharedEnvelopeRequired": true,
+    "quarantineRequired": true,
+    "negativeControlRequired": true,
+    "founderVisualReviewRequired": true,
+    "explicitAdmissionRequired": true,
+    "duplicateCanonicalAlgorithmsForbidden": true
+  },
+  "applications": [
+    {
+      "id": "AF-GV-1",
+      "slug": "surface-demand",
+      "name": "Surface-demand router",
+      "status": "SPECCED_UNBUILT",
+      "priority": "P0",
+      "earliestWave": 2,
+      "consumes": [
+        "SemanticIdentityReservation",
+        "SurfaceAssemblyPlan.faces",
+        "mechanicTruthRefs",
+        "sourceFactRefs"
+      ],
+      "emits": [
+        "SurfaceMaterialDemand",
+        "typedChildJobs",
+        "truthfulFallbacks",
+        "unresolvedDebt",
+        "routingReceipt"
+      ],
+      "wraps": [
+        "semantic asset resolver"
+      ],
+      "forbids": [
+        "inventGeometry",
+        "inventMechanics",
+        "preselectVendor",
+        "dropIdentityReservation",
+        "duplicateResolution"
+      ]
+    },
+    {
+      "id": "AF-GV-2",
+      "slug": "material-family",
+      "name": "Material-family composer",
+      "status": "SPECCED_UNBUILT",
+      "priority": "P0",
+      "earliestWave": 2,
+      "consumes": [
+        "SurfaceMaterialDemand",
+        "admittedMaterialParents",
+        "realmCultureConstruction",
+        "texelRegister",
+        "valuePaletteRoughnessEnvelopes"
+      ],
+      "emits": [
+        "versionedMaterialFamily",
+        "resolvedRoleMaps",
+        "missingRoleDebt",
+        "composedSceneCards",
+        "standeeContextCards",
+        "familyReceipt"
+      ],
+      "wraps": [
+        "Material Maker",
+        "ground-field",
+        "palette",
+        "trim",
+        "decal",
+        "atlas",
+        "material taste cards"
+      ],
+      "forbids": [
+        "oneTexturePerFace",
+        "parallelMaterialAuthority",
+        "unlabeledProvisionalThreshold",
+        "missingFallback",
+        "standeeCompetition"
+      ]
+    },
+    {
+      "id": "AF-GV-3",
+      "slug": "surface-project",
+      "name": "World-surface projection compiler",
+      "status": "SPECCED_UNBUILT",
+      "priority": "P0",
+      "earliestWave": 2,
+      "consumes": [
+        "stableFaceFrames",
+        "faceAdjacency",
+        "materialFamily",
+        "texelRegister",
+        "directionAndSeamPolicy"
+      ],
+      "emits": [
+        "worldLockedProjection",
+        "chartAdjacency",
+        "directionalExceptions",
+        "trimSockets",
+        "projectionReceipt"
+      ],
+      "wraps": [
+        "runtime surface-frame owner",
+        "material-family"
+      ],
+      "forbids": [
+        "moveVertices",
+        "hideGeometryCrack",
+        "perCellPhaseReset",
+        "cameraFacingWorldMarks",
+        "topRoleOnCutFace"
+      ]
+    },
+    {
+      "id": "AF-GV-4",
+      "slug": "identity-face",
+      "name": "Identity-face treatment assembler",
+      "status": "SPECCED_UNBUILT",
+      "priority": "P1",
+      "earliestWave": 2,
+      "consumes": [
+        "SemanticIdentityReservation",
+        "eligibleRealizedFaces",
+        "visibilityInteractionPriority",
+        "materialFamily"
+      ],
+      "emits": [
+        "faceTreatmentAssembly",
+        "mountAndOcclusionContract",
+        "fourBearingVisibility",
+        "identityFallback",
+        "assemblyReceipt"
+      ],
+      "wraps": [
+        "trim",
+        "decal",
+        "atlas",
+        "prop-kit",
+        "sprite extrusion"
+      ],
+      "forbids": [
+        "inferLairFromCavern",
+        "inferOperationFromRuin",
+        "cameraFaceWorldMark",
+        "changeCollisionByRelief",
+        "dropReservation"
+      ]
+    },
+    {
+      "id": "AF-GV-5",
+      "slug": "causal-surface-state",
+      "name": "Causal surface-state compiler",
+      "status": "SPECCED_UNBUILT",
+      "priority": "P1",
+      "earliestWave": 5,
+      "consumes": [
+        "eventAndWorldFacts",
+        "routeUse",
+        "exposureDrainageLoadMaintenance",
+        "surfaceAndObjectInstances"
+      ],
+      "emits": [
+        "causeLabeledMasks",
+        "instanceAttachments",
+        "instanceOverrides",
+        "stateLayerOrder",
+        "mutationReceipt"
+      ],
+      "wraps": [
+        "condition",
+        "decal",
+        "ground overlays",
+        "Material Maker state parents",
+        "persistent state owner"
+      ],
+      "forbids": [
+        "randomGrunge",
+        "causeFreeWear",
+        "sharedParentMutation",
+        "ruinImpliesVacancy",
+        "missingReceipt"
+      ]
+    },
+    {
+      "id": "AF-GV-6",
+      "slug": "join-kit",
+      "name": "Natural/constructed join-treatment kit",
+      "status": "SPECCED_UNBUILT",
+      "priority": "P1",
+      "earliestWave": 4,
+      "consumes": [
+        "engineOwnedJoin",
+        "joinBoundaryFrame",
+        "constructionAndSubstrate",
+        "materialFamily"
+      ],
+      "emits": [
+        "eligibleVisualMembers",
+        "mountRules",
+        "joinTreatmentFallback",
+        "fourBearingJoinProof",
+        "joinTreatmentReceipt"
+      ],
+      "wraps": [
+        "trim",
+        "decal",
+        "prop-kit",
+        "shallow extrusion"
+      ],
+      "forbids": [
+        "changeJoinRelation",
+        "changeSupport",
+        "blockConnector",
+        "floatFoundation",
+        "repeatSedimentaryBands"
+      ]
+    },
+    {
+      "id": "AF-GV-7",
+      "slug": "context-band",
+      "name": "Context-band compiler",
+      "status": "SPECCED_UNBUILT",
+      "priority": "P2",
+      "earliestWave": 3,
+      "consumes": [
+        "contextCard",
+        "activeBoundaryAndFrontiers",
+        "knowledgePolicy",
+        "cameraFamily",
+        "paletteLightHandshake"
+      ],
+      "emits": [
+        "nearApronAndSupport",
+        "farPlatesAndCards",
+        "atmosphereLayers",
+        "fourBearingEligibility",
+        "contextReceipt"
+      ],
+      "wraps": [
+        "world context projection",
+        "plate and card production",
+        "palette",
+        "visual regression"
+      ],
+      "forbids": [
+        "falseAffordance",
+        "hiddenCanonLeak",
+        "activeFloorObscured",
+        "contextOwnsCollision",
+        "combatMutatesContextTruth"
+      ]
+    },
+    {
+      "id": "AF-GV-8",
+      "slug": "vignette-proof",
+      "name": "Governed vignette proof packager",
+      "status": "SPECCED_UNBUILT",
+      "priority": "P1",
+      "earliestWave": 2,
+      "consumes": [
+        "committedVignettePlan",
+        "captureSet",
+        "visualRubric",
+        "allRelevantFingerprints"
+      ],
+      "emits": [
+        "governedReviewPacket",
+        "hardRejectionResults",
+        "separateSoftMeasures",
+        "captureFingerprintLedger",
+        "proofReceipt"
+      ],
+      "wraps": [
+        "visual regression",
+        "governed camera capture",
+        "material overlays"
+      ],
+      "forbids": [
+        "singleOpaqueQualityScore",
+        "aggregateHidesFailedFrame",
+        "mixedPlanFingerprints",
+        "missingBearing",
+        "tasteAutoPromotion"
+      ]
+    }
+  ],
+  "deliveryOrder": [
+    "AF-GV-1",
+    "AF-GV-2",
+    "AF-GV-3",
+    "AF-GV-4",
+    "AF-GV-8",
+    "AF-GV-6",
+    "AF-GV-5",
+    "AF-GV-7"
+  ]
+}

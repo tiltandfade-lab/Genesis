@@ -4,6 +4,15 @@ Executed 2026-07-29 by Fable against `docs/FFT-TRIANGLE-STRATEGY-WORLD-STUDY-BRI
 **Research only.** Nothing here is canon, a map cap, an art-direction change, or build
 authorization. Every recommendation is `PROPOSED` until Adam rules it.
 
+**Post-study adoption notice, 2026-07-29.** Adam subsequently authorized supported
+findings to feed `docs/GOLDEN-VIGNETTE-VISUAL-GUIDE.md`, with special emphasis on
+materials, and requested Golden-specific Assetforge applications. That guide and
+`docs/ART-DIRECTION-CANON.md` now own the adopted direction. The packet remains
+unaltered research evidence. In particular, its fixed/no-player-rotation recommendation
+is superseded by Adam's later four-governed-quarter-turn ruling; free orbit remains
+rejected. Its map, family-count, highlight, and texel measurements remain evidence,
+soft targets, or provisional A/B calibration exactly as labeled by the guide.
+
 ## The assignment in one line
 
 Determine with terrain-dominant visual evidence what FFT and Triangle Strategy each actually

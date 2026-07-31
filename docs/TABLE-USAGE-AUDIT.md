@@ -4,9 +4,9 @@
 
 **What this maps:** every compiled table (`tables.json`) → source file → what *triggers* it. The Oracle tab rolls **any** table manually, so "trigger" means an **automatic** call: a generator **procedure**, a **roll-chain**, or **wired code**. Tables with none are **Oracle-only** — authored but not in any flow (wire-up or retire candidates). *Caveat: two unwired tables that cross-link each other read as ⛓ chained.*
 
-**Totals:** 386 tables / 306 files.  
-By table — ▶ procedure: **0** · ⛓ chained: **1** · 🔗 wired: **355** · ⚠️ Oracle-only: **30**.  
-⚠️ Oracle-only source files: **19** of 306.
+**Totals:** 390 tables / 307 files.  
+By table — ▶ procedure: **0** · ⛓ chained: **1** · 🔗 wired: **359** · ⚠️ Oracle-only: **30**.  
+⚠️ Oracle-only source files: **19** of 307.
 
 ---
 
@@ -70,7 +70,7 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 - [[Walk Breach - Wilderness]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
 - [[Walk Skin - Dungeon]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[Walk Skin - Urban]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
-- [[Walk Skin - Wilderness]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
+- [[Walk Skin - Wilderness]] — 🔗 **wired in code** — table-atlas.js  *(d101, 101 rows)*
 - [[Walk Breach - Dungeon]] — ⛓ chained from Walk Breach - Urban.md, Walk Breach - Wilderness.md  *(d20, 20 rows)*
 - [[Walk Nightmare - Dungeon]] — ⚠️ **Oracle-only — no auto trigger**  *(d20, 20 rows)*
 - [[Walk Nightmare - Urban]] — ⚠️ **Oracle-only — no auto trigger**  *(d20, 20 rows)*
@@ -82,7 +82,7 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 - [[Watcher Effect Pool]] — 🔗 **wired in code** — table-atlas.js  *(d8, 8 rows)*
 
 ### Session Mechanics / Dungeons
-- [[Dungeon Area Type]] — 🔗 **wired in code** — dungeon-walk.js, place-spatialize.js, table-atlas.js  *(d200, 200 rows)*
+- [[Dungeon Area Type]] — 🔗 **wired in code** — dungeon-walk.js, place-spatialize.js, table-atlas.js  *(d215, 215 rows)*
 - [[Dungeon Art Motif]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
 - [[Dungeon Art Motif Modifier]] — 🔗 **wired in code** — table-atlas.js  *(d6, 6 rows)*
 - [[Dungeon Boss]] — 🔗 **wired in code** — combat.js, table-atlas.js  *(d100, 100 rows)*
@@ -100,7 +100,7 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 - [[Dungeon Environment Skin]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[Dungeon Exit Destination Type]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[Dungeon Exit State]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
-- [[Dungeon Feature]] — 🔗 **wired in code** — table-atlas.js, walk-interactables.js  *(d153, 153 rows)*
+- [[Dungeon Feature]] — 🔗 **wired in code** — table-atlas.js, walk-interactables.js  *(d169, 169 rows)*
 - [[Dungeon Finale Type]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[Dungeon Hazard]] — 🔗 **wired in code** — table-atlas.js  *(d50, 50 rows)*
 - [[Dungeon Interactable Object]] — 🔗 **wired in code** — table-atlas.js, walk-interactables.js  *(d100, 100 rows)*
@@ -135,11 +135,11 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 - [[Dungeon Set Dressing]] — 🔗 **wired in code** — dungeon-walk.js, table-atlas.js  *(d108, 108 rows)*
 - [[Dungeon Set Dressing Condition]] — 🔗 **wired in code** — dungeon-walk.js, table-atlas.js  *(d20, 20 rows)*
 - [[Dungeon Tactical Terrain]] — 🔗 **wired in code** — table-atlas.js  *(d10, 10 rows)*
-- [[Dungeon Threat Identity T1]] — 🔗 **wired in code** — table-atlas.js  *(d30, 30 rows)*
-- [[Dungeon Threat Identity T2]] — 🔗 **wired in code** — table-atlas.js  *(d45, 45 rows)*
+- [[Dungeon Threat Identity T1]] — 🔗 **wired in code** — table-atlas.js  *(d33, 33 rows)*
+- [[Dungeon Threat Identity T2]] — 🔗 **wired in code** — table-atlas.js  *(d48, 48 rows)*
 - [[Dungeon Threat Profile]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[Dungeon Topology]] — 🔗 **wired in code** — table-atlas.js  *(d12, 12 rows)*
-- [[Dungeon Type]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
+- [[Dungeon Type]] — 🔗 **wired in code** — table-atlas.js  *(d112, 112 rows)*
 - [[Puzzle Failsafe]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
 - [[Puzzle Mechanism]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
 - [[Puzzle Solution Path]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
@@ -166,7 +166,7 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 - [[Urban Footing]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[Urban Foreground Event]] — 🔗 **wired in code** — table-atlas.js  *(d300, 300 rows)*
 - [[Urban Hazard]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
-- [[Urban Interactable Object]] — 🔗 **wired in code** — table-atlas.js  *(d300, 300 rows)*
+- [[Urban Interactable Object]] — 🔗 **wired in code** — table-atlas.js  *(d301, 301 rows)*
 - [[Urban Lighting]] — 🔗 **wired in code** — table-atlas.js  *(d50, 9 rows)*
 - [[Urban Magic Effect Lv 1-5]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[Urban Magic Effect Lv 6-10]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
@@ -206,25 +206,25 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 - [[Urban Segment Warm Scene]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
 - [[Urban Segment Waypoint]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
 - [[Urban Sensory]] — 🔗 **wired in code** — table-atlas.js  *(d50, 50 rows)*
-- [[Urban Set Dressing]] — 🔗 **wired in code** — table-atlas.js, walk.js  *(d105, 105 rows)*
+- [[Urban Set Dressing]] — 🔗 **wired in code** — table-atlas.js, walk.js  *(d106, 106 rows)*
 - [[Urban Set Dressing Condition]] — 🔗 **wired in code** — table-atlas.js, walk.js  *(d20, 20 rows)*
 - [[Urban Spectacle]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[Urban Street Distortion]] — 🔗 **wired in code** — table-atlas.js  *(d12, 12 rows)*
 - [[Urban Tactical Setup]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
-- [[Urban Threat Identity T1]] — 🔗 **wired in code** — table-atlas.js  *(d30, 30 rows)*
-- [[Urban Threat Identity T2]] — 🔗 **wired in code** — table-atlas.js  *(d50, 50 rows)*
+- [[Urban Threat Identity T1]] — 🔗 **wired in code** — table-atlas.js  *(d32, 32 rows)*
+- [[Urban Threat Identity T2]] — 🔗 **wired in code** — table-atlas.js  *(d52, 52 rows)*
 - [[Urban Threat Profile]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
-- [[Urban Type]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
-- [[Wilderness Area Type]] — 🔗 **wired in code** — table-atlas.js  *(d300, 300 rows)*
+- [[Urban Type]] — 🔗 **wired in code** — table-atlas.js  *(d110, 110 rows)*
+- [[Wilderness Area Type]] — 🔗 **wired in code** — table-atlas.js  *(d312, 312 rows)*
 - [[Wilderness Art]] — 🔗 **wired in code** — table-atlas.js, wiring-b.js  *(3 sub-tables)*
 - [[Wilderness Background Event]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
-- [[Wilderness Biome Type]] — 🔗 **wired in code** — table-atlas.js, theater-data.js  *(d10, 10 rows)*
+- [[Wilderness Biome Type]] — 🔗 **wired in code** — table-atlas.js, theater-data.js  *(d11, 11 rows)*
 - [[Wilderness Contact]] — 🔗 **wired in code** — table-atlas.js  *(d500, 500 rows)*
 - [[Wilderness Empty Result]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
-- [[Wilderness Encounter Type]] — 🔗 **wired in code** — table-atlas.js, wild-walk.js  *(d20, 20 rows)*
+- [[Wilderness Encounter Type]] — 🔗 **wired in code** — table-atlas.js, wild-walk.js  *(d24, 24 rows)*
 - [[Wilderness Enemy Category]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
 - [[Wilderness Enemy Composition]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
-- [[Wilderness Feature]] — 🔗 **wired in code** — table-atlas.js  *(d303, 303 rows)*
+- [[Wilderness Feature]] — 🔗 **wired in code** — table-atlas.js  *(d317, 317 rows)*
 - [[Wilderness Footing]] — 🔗 **wired in code** — table-atlas.js  *(d200, 200 rows)*
 - [[Wilderness Hazard]] — 🔗 **wired in code** — table-atlas.js  *(d50, 50 rows)*
 - [[Wilderness Interactable Object]] — 🔗 **wired in code** — table-atlas.js  *(d300, 300 rows)*
@@ -232,7 +232,7 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 - [[Wilderness Magic Effect Lv 1-5]] — 🔗 **wired in code** — table-atlas.js  *(d200, 200 rows)*
 - [[Wilderness Problem]] — 🔗 **wired in code** — table-atlas.js  *(d50, 50 rows)*
 - [[Wilderness Sensory]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
-- [[Wilderness Set Dressing]] — 🔗 **wired in code** — table-atlas.js, theater-data.js  *(d305, 305 rows)*
+- [[Wilderness Set Dressing]] — 🔗 **wired in code** — table-atlas.js, theater-data.js  *(d307, 307 rows)*
 - [[Wilderness Set Dressing Condition]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
 - [[Wilderness Sign of Passage]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[Wilderness Survival Constraint]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
@@ -379,7 +379,7 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 - [[Witness Distortion Table]] — 🔗 **wired in code** — table-atlas.js  *(1d10, 10 rows)*
 
 ### World Building / Place Generation
-- [[Building Interior]] — 🔗 **wired in code** — table-atlas.js  *(d300, 300 rows)*
+- [[Building Interior]] — 🔗 **wired in code** — table-atlas.js  *(d301, 301 rows)*
 - [[Master Setting]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[Place History]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[Place Mythology]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
@@ -393,6 +393,7 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 - [[World Name Patterns]] — 🔗 **wired in code** — table-atlas.js, world-name.js  *(d20, 20 rows)*
 
 ### World Building / Starting State
+- [[Opening Register]] — 🔗 **wired in code** — handoff.js, render.js, starting-state.js, world-gen.js  *(4 sub-tables)*
 - [[Starting State - Entry]] — 🔗 **wired in code** — table-atlas.js  *(3 sub-tables)*
 - [[Starting State - Factions]] — 🔗 **wired in code** — table-atlas.js  *(5 sub-tables)*
 - [[Starting State - Opening Bundle]] — 🔗 **wired in code** — starting-state.js, table-atlas.js  *(5 sub-tables)*

@@ -69,6 +69,17 @@ const WALK_ARCHETYPES = {
   "Shadow Breach":         { types:["undead","fiend"], habitatPref:"planar" },
   "Elder Deep-Thing's Reach": { types:["aberration"], habitatPref:"underdark" },
   "Devil Pact":            { types:["fiend"], habitatPref:"planar" },
+  /* SPAWN-AUDIT 2026-07-27 (docs/TABLE-SEEDING-REVIEW-0727.md, occupancy SEEDS 1-2) — the five new
+     dungeon-threat-identity-t1/t2 identities. Non-blocking by this file's own contract (an
+     unregistered identity falls back to the row's authored CR pools), but registered in the same
+     change so the bestiary-substitution floor isn't narrower for the new rows than the old ones.
+     "Custody Institution" appears in BOTH T1 (row 31) and T2 (row 46) — one key covers both, since
+     this registry is keyed by the identity string, not the tier. */
+  "Custody Institution":   { types:["humanoid"], habitatPref:"urban" },
+  "Broken Custody":        { types:["humanoid"], habitatPref:"urban" },
+  "Militant Cloister":     { types:["humanoid"], habitatPref:"urban" },
+  "Warded Exceptional Containment": { types:["construct"] },
+  "Contested Claim":       { types:["humanoid"] },
 
   // ─── urban-threat-identity-t1/t2 (col 1) — humanoid-heavy by nature of the environment ───────────
   "Street Gang":           { types:["humanoid"], habitatPref:"urban" },

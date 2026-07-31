@@ -100,6 +100,24 @@ const BUILDING_KITS = {
     delegatesToShop: null,
     tavern: false,
   },
+  /* SPAWN-AUDIT 2026-07-27 (docs/TABLE-SEEDING-REVIEW-0727.md, urban SEED 4): Theater had no kit
+     entry at all — not even the minimal registration bathhouse/gambling-den carry — so the three
+     usable theatre rows already in `building-interior` (#18/#253/#291) were reachable ONLY through
+     the untyped walk-in path, never by asking rollBuilding for type:"theater". This registers the
+     type at that same minimal level. It is NOT a claim that SETTLED-LIFE-SITES-PROGRAM §3.3's
+     VENUE-ASSEMBLY-01 (tiered seating, back-of-house, sightlines) exists — that fixture is still
+     unbuilt. */
+  theater: {
+    label: "Theater",
+    functionLine: "footlights, backstage nerves, a story sold nightly to whoever paid for a seat",
+    proprietorRoleHint: "theater-manager",
+    patronsLane: "audience-and-performers",
+    economyTie: "none",
+    hookLane: "gossip",
+    namePattern: null,
+    delegatesToShop: null,
+    tavern: false,
+  },
   warehouse: {
     label: "Warehouse",
     functionLine: "crates stacked to the rafters; whatever's inside is somebody's whole margin",
@@ -196,6 +214,7 @@ const BUILDING_KIT_REALM_LABELS = {
     court: "Arbitration Floor",
     bathhouse: "Steam Den",
     "gambling-den": "Basement Fight Pit",
+    theater: "Vid-Palace",
     warehouse: "Container Stack",
     "dock-house": "Loading Dock",
     smithy: "Machine Shop",
@@ -212,6 +231,7 @@ const BUILDING_KIT_REALM_LABELS = {
     court: "County Courtroom",
     bathhouse: "Public Bathhouse",
     "gambling-den": "The Roadhouse",
+    theater: "The Picture House",
     warehouse: "Self-Storage Lot",
     "dock-house": "Boathouse",
     smithy: "The Repair Shop",

@@ -8751,8 +8751,8 @@ null,
 ]
 },
 "building-interior": {
-"dice": "d300",
-"die": 300,
+"dice": "d301",
+"die": 301,
 "bell": false,
 "class": "Commitment",
 "player_facing": "reveal",
@@ -12657,6 +12657,19 @@ null,
 "Beyond the threshold is a space the size of a cathedral nave, floored with soil, roofed with the underside of the night sky -- stars visible, but wrong stars in the wrong season.",
 "A tree grows from the floor to the ceiling, old past any natural reckoning, and one door is set into its trunk.",
 "In the roots, something that was once a person, woven into the wood, speaking in a voice like growth rings, answering any question put to it with absolute truth -- about things that haven't happened yet."
+]
+],
+[
+301,
+301,
+"Mythic",
+"The warren has no oldest street. Walk it end to end and every resident points to a different lane as the first one ever built — and every lane has proof: a cornerstone dated in an old hand, a grandmother buried under the threshold, a door that has always, always been that color. — The town's own founding charter, consulted on the spot, agrees with whichever lane you asked about last. — An old woman resetting a single loose cobblestone that she has reset, she says without any doubt at all, every day of her life and her mother's life before her — and the stone is always the first stone.",
+null,
+[
+"Mythic",
+"The warren has no oldest street. Walk it end to end and every resident points to a different lane as the first one ever built — and every lane has proof: a cornerstone dated in an old hand, a grandmother buried under the threshold, a door that has always, always been that color.",
+"The town's own founding charter, consulted on the spot, agrees with whichever lane you asked about last.",
+"An old woman resetting a single loose cobblestone that she has reset, she says without any doubt at all, every day of her life and her mother's life before her — and the stone is always the first stone."
 ]
 ]
 ]
@@ -88398,10 +88411,10 @@ null,
 ]
 },
 "dungeon-area-type": {
-"dice": "d200",
-"die": 200,
+"dice": "d215",
+"die": 215,
 "bell": false,
-"class": "Fork",
+"class": "Commitment",
 "player_facing": "reveal",
 "voice_critical": false,
 "domain": "Session Mechanics / Dungeons",
@@ -90804,6 +90817,186 @@ null,
 "Planar Gate Room",
 "40' x 40' octagon",
 "Inlaid binding circle (25' diameter) at the center; 10' x 20' elevated viewing gallery at one face; the air hums faintly regardless of what has occurred here."
+]
+],
+[
+201,
+201,
+"",
+"Cistern Chamber — 25' x 25' square, 8' ceiling — Sunken basin fills the center (4' deep, still water); 10' x 10' raised inspection walk along one wall, iron rail missing two sections.",
+null,
+[
+"Cistern Chamber",
+"25' x 25' square, 8' ceiling",
+"Sunken basin fills the center (4' deep, still water); 10' x 10' raised inspection walk along one wall, iron rail missing two sections."
+]
+],
+[
+202,
+202,
+"",
+"Aqueduct Channel — 10' x 50' straight, open channel down the center — 3' wide flowing channel runs the full length (2' deep, moving water); 5' x 5' maintenance landing where the channel passes under a low arch.",
+null,
+[
+"Aqueduct Channel",
+"10' x 50' straight, open channel down the center",
+"3' wide flowing channel runs the full length (2' deep, moving water); 5' x 5' maintenance landing where the channel passes under a low arch."
+]
+],
+[
+203,
+203,
+"",
+"Pump / Valve Room — 15' x 15' square — 10' x 10' array of iron valve-wheels and pipe junctions along one wall; sump pit in the floor (3' deep) feeds a seized pump mechanism.",
+null,
+[
+"Pump / Valve Room",
+"15' x 15' square",
+"10' x 10' array of iron valve-wheels and pipe junctions along one wall; sump pit in the floor (3' deep) feeds a seized pump mechanism."
+]
+],
+[
+204,
+204,
+"",
+"Culvert Junction — 5' diameter, three converging pipes — Each culvert mouth is a 3' circle at a different height; center floor is a grated drain over a 10' drop to a lower channel.",
+null,
+[
+"Culvert Junction",
+"5' diameter, three converging pipes",
+"Each culvert mouth is a 3' circle at a different height; center floor is a grated drain over a 10' drop to a lower channel."
+]
+],
+[
+205,
+205,
+"",
+"Well Shaft — 6' diameter vertical shaft — Iron rungs descend the shaft wall; 5' x 5' landing halfway down where a side culvert breaks into the shaft.",
+null,
+[
+"Well Shaft",
+"6' diameter vertical shaft",
+"Iron rungs descend the shaft wall; 5' x 5' landing halfway down where a side culvert breaks into the shaft."
+]
+],
+[
+206,
+206,
+"",
+"Ore Face / Work Gallery — 15' x 25' irregular, angled ceiling — The working face is a 10' wide seam of exposed ore; tool marks and a scatter of broken picks lie at its base.",
+null,
+[
+"Ore Face / Work Gallery",
+"15' x 25' irregular, angled ceiling",
+"The working face is a 10' wide seam of exposed ore; tool marks and a scatter of broken picks lie at its base."
+]
+],
+[
+207,
+207,
+"",
+"Haul Ramp Landing — 15' x 20' graded landing — Cart rails converge here from two directions; 10' x 10' loading apron where carts are tipped and reloaded.",
+null,
+[
+"Haul Ramp Landing",
+"15' x 20' graded landing",
+"Cart rails converge here from two directions; 10' x 10' loading apron where carts are tipped and reloaded."
+]
+],
+[
+208,
+208,
+"",
+"Sorting & Repair Yard — 20' x 25' rectangle — Sorting troughs and waste bins line one wall; 10' x 10' repair bench alcove with spare timber stacked against it.",
+null,
+[
+"Sorting & Repair Yard",
+"20' x 25' rectangle",
+"Sorting troughs and waste bins line one wall; 10' x 10' repair bench alcove with spare timber stacked against it."
+]
+],
+[
+209,
+209,
+"",
+"Pump Sump / Flooded Branch — 20' x 20' square, floor slopes down 5' — Standing water fills the lower half (2'-4' deep); a chained pump mechanism sits at the boundary, working or not.",
+null,
+[
+"Pump Sump / Flooded Branch",
+"20' x 20' square, floor slopes down 5'",
+"Standing water fills the lower half (2'-4' deep); a chained pump mechanism sits at the boundary, working or not."
+]
+],
+[
+210,
+210,
+"",
+"Keeper's Control Landing — 10' x 15' raised platform (6' up) — Overlooks the cell fronts below; iron stair or ladder access; desk and key-ring pegs bolted to the rail.",
+null,
+[
+"Keeper's Control Landing",
+"10' x 15' raised platform (6' up)",
+"Overlooks the cell fronts below; iron stair or ladder access; desk and key-ring pegs bolted to the rail."
+]
+],
+[
+211,
+211,
+"",
+"Sally-Port / Interlock — 8' x 10' between two barred doors — Only one door can be unlocked at a time (mechanism visible); no cover inside, deliberately.",
+null,
+[
+"Sally-Port / Interlock",
+"8' x 10' between two barred doors",
+"Only one door can be unlocked at a time (mechanism visible); no cover inside, deliberately."
+]
+],
+[
+212,
+212,
+"",
+"Intake & Property Room — 15' x 15' square — Search table at the center; 10' x 10' locked property cabinet recessed into the far wall, tags and ledger nearby.",
+null,
+[
+"Intake & Property Room",
+"15' x 15' square",
+"Search table at the center; 10' x 10' locked property cabinet recessed into the far wall, tags and ledger nearby."
+]
+],
+[
+213,
+213,
+"",
+"War Room / Strategy Hall — 20' x 25' rectangle — A large tilted map table dominates the center; 10' x 10' alcove holds racked dispatch tubes and a cold brazier.",
+null,
+[
+"War Room / Strategy Hall",
+"20' x 25' rectangle",
+"A large tilted map table dominates the center; 10' x 10' alcove holds racked dispatch tubes and a cold brazier."
+]
+],
+[
+214,
+214,
+"",
+"Battlement / Siege Deck — 10' x 60' open-topped walkway — Crenellations line the outer edge (half cover); 10' x 10' engine mount at one end, ballista or trebuchet anchor bolts still in the stone.",
+null,
+[
+"Battlement / Siege Deck",
+"10' x 60' open-topped walkway",
+"Crenellations line the outer edge (half cover); 10' x 10' engine mount at one end, ballista or trebuchet anchor bolts still in the stone."
+]
+],
+[
+215,
+215,
+"",
+"Suspended Prison Ward — 30' x 30' void with a hanging cell cluster — Living-wood cell cages hang from thick roots or chains over a black drop; a single winch gangway is the only fixed crossing.",
+null,
+[
+"Suspended Prison Ward",
+"30' x 30' void with a hanging cell cluster",
+"Living-wood cell cages hang from thick roots or chains over a black drop; a single winch gangway is the only fixed crossing."
 ]
 ]
 ]
@@ -109463,10 +109656,10 @@ null,
 ]
 },
 "dungeon-feature": {
-"dice": "d153",
-"die": 153,
+"dice": "d169",
+"die": 169,
 "bell": false,
-"class": "Fork",
+"class": "Commitment",
 "player_facing": "reveal",
 "voice_critical": false,
 "domain": "Session Mechanics / Dungeons",
@@ -111305,6 +111498,198 @@ null,
 "Funeral Bier",
 "A draped stone bier stands at the room's heart, its cloth grey with dust.",
 "7'×3' footprint, 3' high — Half cover; Investigation DC 12 finds what was left with the departed"
+]
+],
+[
+154,
+154,
+"",
+"Aqueduct Trough — An open stone channel of moving water cuts across the floor. — 3' wide, 2' deep, spans room — Difficult Terrain to cross; DC 10 Athletics or wade (loud)",
+null,
+[
+"Aqueduct Trough",
+"An open stone channel of moving water cuts across the floor.",
+"3' wide, 2' deep, spans room — Difficult Terrain to cross; DC 10 Athletics or wade (loud)"
+]
+],
+[
+155,
+155,
+"",
+"Aqueduct Trough — Waist-high stone trough carries water along one wall, overflow dripping steadily. — 2' wide, 3' high, 20' long — Half cover; current strong enough to sweep a dropped object away",
+null,
+[
+"Aqueduct Trough",
+"Waist-high stone trough carries water along one wall, overflow dripping steadily.",
+"2' wide, 3' high, 20' long — Half cover; current strong enough to sweep a dropped object away"
+]
+],
+[
+156,
+156,
+"",
+"Sluice Gate Mechanism — A heavy iron gate spans the channel, worked by a corroded rack-and-pinion wheel. — 5' wide gate, 4' high — DC 14 Str to raise; opening floods or drains an adjacent area within 1 minute",
+null,
+[
+"Sluice Gate Mechanism",
+"A heavy iron gate spans the channel, worked by a corroded rack-and-pinion wheel.",
+"5' wide gate, 4' high — DC 14 Str to raise; opening floods or drains an adjacent area within 1 minute"
+]
+],
+[
+157,
+157,
+"",
+"Cistern Overflow Grate — A sunken grate vents excess water with a steady rushing echo from below. — 5' x 5' opening, 1' deep frame — Pry open DC 12 Str; sound carries 60' through the channel system",
+null,
+[
+"Cistern Overflow Grate",
+"A sunken grate vents excess water with a steady rushing echo from below.",
+"5' x 5' opening, 1' deep frame — Pry open DC 12 Str; sound carries 60' through the channel system"
+]
+],
+[
+158,
+158,
+"",
+"Shoring Frame — A timber support frame braces the passage, joints pinned and sound. — 5' wide, 8' high — Total cover per post; marks the last-safe boundary before unsupported ground",
+null,
+[
+"Shoring Frame",
+"A timber support frame braces the passage, joints pinned and sound.",
+"5' wide, 8' high — Total cover per post; marks the last-safe boundary before unsupported ground"
+]
+],
+[
+159,
+159,
+"",
+"Shoring Frame — A support frame has split along one post, timber creaking under load. — 5' wide, 8' high, visibly strained — Total cover; collapses on 12+ damage (2d6 Bludgeoning, DC 13 Dex half)",
+null,
+[
+"Shoring Frame",
+"A support frame has split along one post, timber creaking under load.",
+"5' wide, 8' high, visibly strained — Total cover; collapses on 12+ damage (2d6 Bludgeoning, DC 13 Dex half)"
+]
+],
+[
+160,
+160,
+"",
+"Ore Cart & Rail Track — A length of iron rail runs through the room, one loaded ore cart parked on it. — Rail 2' wide, cart 4'x3'x3' — Cart is Half cover, can be pushed (DC 10 Str) to block or ram a 5' space",
+null,
+[
+"Ore Cart & Rail Track",
+"A length of iron rail runs through the room, one loaded ore cart parked on it.",
+"Rail 2' wide, cart 4'x3'x3' — Cart is Half cover, can be pushed (DC 10 Str) to block or ram a 5' space"
+]
+],
+[
+161,
+161,
+"",
+"Windlass / Winch Mechanism — A hand-cranked hoist stands over a vertical shaft, cable taut. — 4'x4' footprint, 6' high — Str DC 12 to crank; can raise/lower 300 lbs at half speed",
+null,
+[
+"Windlass / Winch Mechanism",
+"A hand-cranked hoist stands over a vertical shaft, cable taut.",
+"4'x4' footprint, 6' high — Str DC 12 to crank; can raise/lower 300 lbs at half speed"
+]
+],
+[
+162,
+162,
+"",
+"Cell Grille Door — A barred door, man-height, set into a partition wall. — 3' wide, 7' high — Str DC 15 to bend bars; lock DC 13 Thieves' Tools",
+null,
+[
+"Cell Grille Door",
+"A barred door, man-height, set into a partition wall.",
+"3' wide, 7' high — Str DC 15 to bend bars; lock DC 13 Thieves' Tools"
+]
+],
+[
+163,
+163,
+"",
+"Property Lockbox — An iron-strapped chest sits bolted to the floor, tagged with a wax seal. — 3'x2'x2' footprint — Half cover; DC 15 Str or DC 13 Thieves' Tools to open; contents tagged and cataloged",
+null,
+[
+"Property Lockbox",
+"An iron-strapped chest sits bolted to the floor, tagged with a wax seal.",
+"3'x2'x2' footprint — Half cover; DC 15 Str or DC 13 Thieves' Tools to open; contents tagged and cataloged"
+]
+],
+[
+164,
+164,
+"",
+"Keeper's Watch Desk — A raised desk faces the room, a ledger and key-ring pegs within reach. — 4'x3' footprint, 3' high — Half cover; Investigation DC 12 reads recent entries",
+null,
+[
+"Keeper's Watch Desk",
+"A raised desk faces the room, a ledger and key-ring pegs within reach.",
+"4'x3' footprint, 3' high — Half cover; Investigation DC 12 reads recent entries"
+]
+],
+[
+165,
+165,
+"",
+"War Table — A large tilted map table dominates the space, pins and painted terrain still in place. — 6'x8' footprint, 3' high — Half cover; History or Investigation DC 12 reads the plotted campaign",
+null,
+[
+"War Table",
+"A large tilted map table dominates the space, pins and painted terrain still in place.",
+"6'x8' footprint, 3' high — Half cover; History or Investigation DC 12 reads the plotted campaign"
+]
+],
+[
+166,
+166,
+"",
+"Siege Engine Mount — A fixed cradle and anchor bolts mark where a heavy engine was once, or is still, seated. — 8'x8' footprint — Total cover if occupied; DC 14 Athletics to re-arm a stripped mount in 1 minute",
+null,
+[
+"Siege Engine Mount",
+"A fixed cradle and anchor bolts mark where a heavy engine was once, or is still, seated.",
+"8'x8' footprint — Total cover if occupied; DC 14 Athletics to re-arm a stripped mount in 1 minute"
+]
+],
+[
+167,
+167,
+"",
+"The Weeping Cistern — A vast reservoir fills the chamber, its surface moving faintly against no draft, no current, no reason. — 40'x40'x10' deep — every channel in the level runs toward it; Insight DC 16 or the room feels watched",
+null,
+[
+"The Weeping Cistern",
+"A vast reservoir fills the chamber, its surface moving faintly against no draft, no current, no reason.",
+"40'x40'x10' deep — every channel in the level runs toward it; Insight DC 16 or the room feels watched"
+]
+],
+[
+168,
+168,
+"",
+"Suspended Growing Cell — A cage of living hardwood hangs from thick roots over a black drop, new shoots still sealing its seams. — 5'x5'x6' cell, 15'-40' up — DC 14 Athletics to reach; bars are AC 16, 30 HP, regrow 5 HP/day if not burned",
+null,
+[
+"Suspended Growing Cell",
+"A cage of living hardwood hangs from thick roots over a black drop, new shoots still sealing its seams.",
+"5'x5'x6' cell, 15'-40' up — DC 14 Athletics to reach; bars are AC 16, 30 HP, regrow 5 HP/day if not burned"
+]
+],
+[
+169,
+169,
+"",
+"Hooded Work Lamp Post — A worker's hooded oil lamp still hangs from an iron post, its shutter half-closed. — 1' diameter post, 5' high — Dim Light 10' radius when lit; Half cover from the post itself.",
+null,
+[
+"Hooded Work Lamp Post",
+"A worker's hooded oil lamp still hangs from an iron post, its shutter half-closed.",
+"1' diameter post, 5' high — Dim Light 10' radius when lit; Half cover from the post itself."
 ]
 ]
 ]
@@ -138092,8 +138477,8 @@ null,
 ]
 },
 "dungeon-threat-identity-t1": {
-"dice": "d30",
-"die": 30,
+"dice": "d33",
+"die": 33,
 "bell": false,
 "class": "Fork",
 "player_facing": "reveal",
@@ -138579,12 +138964,60 @@ null,
 "1d2 per room; 1 Mid per 2 rooms; 1 Boss at finale",
 "Pickled remains in jars on every shelf; caged animals with offer-tags attached; contract terms cut into stone"
 ]
+],
+[
+31,
+31,
+"",
+"Custody Institution — Professional Watch — Guard / Commoner (trusty) — Veteran / Spy (record-keeper) — Warlord / Knight (the Keeper) — 1d4 per block; 1 Mid per 2 blocks; 1 Boss at finale (plus 2d6 prisoners, noncombatant unless armed) — Ledger of names chalked by the door; one set of keys on one belt; a household routine bleeding into the cell block",
+null,
+[
+"Custody Institution",
+"Professional Watch",
+"Guard / Commoner (trusty)",
+"Veteran / Spy (record-keeper)",
+"Warlord / Knight (the Keeper)",
+"1d4 per block; 1 Mid per 2 blocks; 1 Boss at finale (plus 2d6 prisoners, noncombatant unless armed)",
+"Ledger of names chalked by the door; one set of keys on one belt; a household routine bleeding into the cell block"
+]
+],
+[
+32,
+32,
+"",
+"Broken Custody — Displaced Wanderers — Commoner (former prisoner) / Thug — Bandit Captain / Veteran (turned guard) — Warlord (self-declared warden) / Assassin — 1d4 per room; 1 Mid per 3 rooms; 1 Boss at finale (former inmates now hold the keys) — Cell doors forced open and left hanging; guard uniforms repurposed and ill-fitting; old tally marks beside fresh ones scratched by the newly caged",
+null,
+[
+"Broken Custody",
+"Displaced Wanderers",
+"Commoner (former prisoner) / Thug",
+"Bandit Captain / Veteran (turned guard)",
+"Warlord (self-declared warden) / Assassin",
+"1d4 per room; 1 Mid per 3 rooms; 1 Boss at finale (former inmates now hold the keys)",
+"Cell doors forced open and left hanging; guard uniforms repurposed and ill-fitting; old tally marks beside fresh ones scratched by the newly caged"
+]
+],
+[
+33,
+33,
+"",
+"Militant Cloister — Professional Watch — Acolyte / Guard — Cult Fanatic / Veteran — Gladiator (Sworn Champion) / Knight (Prior-Militant) — 1d4 per room; 1 Mid per 2 rooms; 1 Boss at finale — A communal routine still posted on the wall, now enforced at spear-point; devotional marks defaced or doubled; novices drilling where they used to pray",
+null,
+[
+"Militant Cloister",
+"Professional Watch",
+"Acolyte / Guard",
+"Cult Fanatic / Veteran",
+"Gladiator (Sworn Champion) / Knight (Prior-Militant)",
+"1d4 per room; 1 Mid per 2 rooms; 1 Boss at finale",
+"A communal routine still posted on the wall, now enforced at spear-point; devotional marks defaced or doubled; novices drilling where they used to pray"
+]
 ]
 ]
 },
 "dungeon-threat-identity-t2": {
-"dice": "d45",
-"die": 45,
+"dice": "d48",
+"die": 48,
 "bell": false,
 "class": "Fork",
 "player_facing": "reveal",
@@ -139309,6 +139742,54 @@ null,
 "Horned Devil / Bone Devil",
 "1d2 per room; 1 Mid per 2 rooms; 1 Boss at finale",
 "Contract language covering every surface; souls sealed in gems visible in alcoves; hellfire scorch circles at ritual sites"
+]
+],
+[
+46,
+46,
+"",
+"Custody Institution — Professional Watch — Veteran / Spy — Gladiator / Berserker Pack — Warlord / Assassin (the Keeper) — 1d4 per block; 1 Mid per 2 blocks; 1 Boss at finale (Keeper-House doctrine: one named keeper's authority binds the whole roster) — Keys and reputation both hang from one belt; kin sleep in the gatehouse; the boundary between household and holding block is a single unlocked door",
+null,
+[
+"Custody Institution",
+"Professional Watch",
+"Veteran / Spy",
+"Gladiator / Berserker Pack",
+"Warlord / Assassin (the Keeper)",
+"1d4 per block; 1 Mid per 2 blocks; 1 Boss at finale (Keeper-House doctrine: one named keeper's authority binds the whole roster)",
+"Keys and reputation both hang from one belt; kin sleep in the gatehouse; the boundary between household and holding block is a single unlocked door"
+]
+],
+[
+47,
+47,
+"",
+"Warded Exceptional Containment — Latent Mechanisms — Animated Armor / Flying Sword — Shield Guardian / Stone Golem — Iron Golem + Mage (Warden-Adept) — 1 per cell-ward; 1 Mid per 2 wards; 1 Boss at finale (the containment holds something worse than its guards) — Ward-seals renewed daily in fresh chalk; every corridor's attention bends toward one door; the entire routine schedule exists to keep that door closed",
+null,
+[
+"Warded Exceptional Containment",
+"Latent Mechanisms",
+"Animated Armor / Flying Sword",
+"Shield Guardian / Stone Golem",
+"Iron Golem + Mage (Warden-Adept)",
+"1 per cell-ward; 1 Mid per 2 wards; 1 Boss at finale (the containment holds something worse than its guards)",
+"Ward-seals renewed daily in fresh chalk; every corridor's attention bends toward one door; the entire routine schedule exists to keep that door closed"
+]
+],
+[
+48,
+48,
+"",
+"Contested Claim — Specialist Task-Force — Scout / Thug — Bandit Captain / Veteran — Warlord / Assassin (rival claimant) — 1d2 per work-face; 1 Mid per 2 work-faces; 1 Boss at finale (two rosters, one seam — roll twice on Category for the second crew) — Claim-stakes driven in duplicate, one set older; ore carts marked with two different guild brands; a support timber freshly sabotaged, not yet reported",
+null,
+[
+"Contested Claim",
+"Specialist Task-Force",
+"Scout / Thug",
+"Bandit Captain / Veteran",
+"Warlord / Assassin (rival claimant)",
+"1d2 per work-face; 1 Mid per 2 work-faces; 1 Boss at finale (two rosters, one seam — roll twice on Category for the second crew)",
+"Claim-stakes driven in duplicate, one set older; ore carts marked with two different guild brands; a support timber freshly sabotaged, not yet reported"
 ]
 ]
 ]
@@ -140668,10 +141149,10 @@ null,
 ]
 },
 "dungeon-type": {
-"dice": "d100",
-"die": 100,
+"dice": "d112",
+"die": 112,
 "bell": false,
-"class": "Fork",
+"class": "Commitment",
 "player_facing": "reveal",
 "voice_critical": false,
 "domain": "Session Mechanics / Dungeons",
@@ -141874,6 +142355,150 @@ null,
 "The Living Hive",
 "Biological growth / Nest",
 "Pulsing walls breathe in warm, claustrophobic rhythm."
+]
+],
+[
+101,
+101,
+"",
+"Mine / Extraction Works — Extraction / Ore working — Timber-braced tunnels smell of turned earth and cold iron.",
+null,
+[
+"Mine / Extraction Works",
+"Extraction / Ore working",
+"Timber-braced tunnels smell of turned earth and cold iron."
+]
+],
+[
+102,
+102,
+"",
+"Mine / Extraction Works — Extraction / Ore working — Ore carts sit cold on rails worn bright by use.",
+null,
+[
+"Mine / Extraction Works",
+"Extraction / Ore working",
+"Ore carts sit cold on rails worn bright by use."
+]
+],
+[
+103,
+103,
+"",
+"Mine / Extraction Works — Extraction / Ore working — Deep drill-scars spiral against the grain of the rock, following no vein a miner would recognize.",
+null,
+[
+"Mine / Extraction Works",
+"Extraction / Ore working",
+"Deep drill-scars spiral against the grain of the rock, following no vein a miner would recognize."
+]
+],
+[
+104,
+104,
+"",
+"Mine / Extraction Works — Extraction / Ore working — The seam gave way to something that pulses, faintly, in time with every miner's heartbeat still down there.",
+null,
+[
+"Mine / Extraction Works",
+"Extraction / Ore working",
+"The seam gave way to something that pulses, faintly, in time with every miner's heartbeat still down there."
+]
+],
+[
+105,
+105,
+"",
+"Prison / Asylum — Containment / Isolation — A ledger of names covers one wall, each entry crossed through in a different hand.",
+null,
+[
+"Prison / Asylum",
+"Containment / Isolation",
+"A ledger of names covers one wall, each entry crossed through in a different hand."
+]
+],
+[
+106,
+106,
+"",
+"Prison / Asylum — Containment / Isolation — The cell doors are numbered in a sequence that skips every number a prisoner has ever spoken aloud.",
+null,
+[
+"Prison / Asylum",
+"Containment / Isolation",
+"The cell doors are numbered in a sequence that skips every number a prisoner has ever spoken aloud."
+]
+],
+[
+107,
+107,
+"",
+"Prison / Asylum — Containment / Isolation — The bars are grown, not built — hardwood knit shut around old prisoners, and new shoots are still sealing the seams.",
+null,
+[
+"Prison / Asylum",
+"Containment / Isolation",
+"The bars are grown, not built — hardwood knit shut around old prisoners, and new shoots are still sealing the seams."
+]
+],
+[
+108,
+108,
+"",
+"Military Fortification — Defensive bunker / Outpost — Chain-of-command plaques still hang in order, though the names have all been scratched to nothing.",
+null,
+[
+"Military Fortification",
+"Defensive bunker / Outpost",
+"Chain-of-command plaques still hang in order, though the names have all been scratched to nothing."
+]
+],
+[
+109,
+109,
+"",
+"Military Fortification — Defensive bunker / Outpost — The fortifications keep going long after any reasonable siege would have ended — walls behind walls behind walls.",
+null,
+[
+"Military Fortification",
+"Defensive bunker / Outpost",
+"The fortifications keep going long after any reasonable siege would have ended — walls behind walls behind walls."
+]
+],
+[
+110,
+110,
+"",
+"Military Fortification — Defensive bunker / Outpost — This was never one keep. Three garrisons built over three centuries, each certain it was the first, each wall arguing with the one before it.",
+null,
+[
+"Military Fortification",
+"Defensive bunker / Outpost",
+"This was never one keep. Three garrisons built over three centuries, each certain it was the first, each wall arguing with the one before it."
+]
+],
+[
+111,
+111,
+"",
+"Infrastructure Hub — Sewers / Aqueducts / Mines — Cistern locks are stamped with a ward crest nobody currently in charge recognizes.",
+null,
+[
+"Infrastructure Hub",
+"Sewers / Aqueducts / Mines",
+"Cistern locks are stamped with a ward crest nobody currently in charge recognizes."
+]
+],
+[
+112,
+112,
+"",
+"Infrastructure Hub — Sewers / Aqueducts / Mines — Every channel in the system flows toward one cistern, uphill, against any grade a mason would have cut on purpose.",
+null,
+[
+"Infrastructure Hub",
+"Sewers / Aqueducts / Mines",
+"Every channel in the system flows toward one cistern, uphill, against any grade a mason would have cut on purpose."
 ]
 ]
 ]
@@ -167548,8 +168173,8 @@ null,
 ]
 },
 "urban-interactable-object": {
-"dice": "d300",
-"die": 300,
+"dice": "d301",
+"die": 301,
 "bell": false,
 "class": "Fork",
 "player_facing": "reveal",
@@ -172054,6 +172679,21 @@ null,
 "Quiet",
 "Obvious",
 "Weird"
+]
+],
+[
+301,
+301,
+"",
+"Shutter-Counter Storefront — Access — Resource — Quiet — Obvious — Mundane",
+null,
+[
+"Shutter-Counter Storefront",
+"Access",
+"Resource",
+"Quiet",
+"Obvious",
+"Mundane"
 ]
 ]
 ]
@@ -199652,8 +200292,8 @@ null,
 ]
 },
 "urban-set-dressing": {
-"dice": "d105",
-"die": 105,
+"dice": "d106",
+"die": 106,
 "bell": false,
 "class": "Spark",
 "player_facing": "reveal",
@@ -200708,6 +201348,16 @@ null,
 null,
 [
 "A leaning headstone set into a churchyard nook, the name furred over with lichen."
+]
+],
+[
+106,
+106,
+"",
+"A collapsible market stall, awning rolled and lashed, counter locked for the night.",
+null,
+[
+"A collapsible market stall, awning rolled and lashed, counter locked for the night."
 ]
 ]
 ]
@@ -202090,8 +202740,8 @@ null,
 ]
 },
 "urban-threat-identity-t1": {
-"dice": "d30",
-"die": 30,
+"dice": "d32",
+"die": 32,
 "bell": false,
 "class": "Fork",
 "player_facing": "reveal",
@@ -202487,12 +203137,38 @@ null,
 "Cult Fanatic / Assassin",
 "Assassin / High Priest"
 ]
+],
+[
+31,
+31,
+"",
+"Debtor-Ledger Custody House — Guard / Commoner (bonded laborer) — Veteran / Spy (record-keeper) — Warlord / Knight (magistrate-enforcer)",
+null,
+[
+"Debtor-Ledger Custody House",
+"Guard / Commoner (bonded laborer)",
+"Veteran / Spy (record-keeper)",
+"Warlord / Knight (magistrate-enforcer)"
+]
+],
+[
+32,
+32,
+"",
+"Shanty-Quarter Guest Camp — Commoner / Bandit — Bandit Captain / Veteran — Warlord / Gladiator",
+null,
+[
+"Shanty-Quarter Guest Camp",
+"Commoner / Bandit",
+"Bandit Captain / Veteran",
+"Warlord / Gladiator"
+]
 ]
 ]
 },
 "urban-threat-identity-t2": {
-"dice": "d50",
-"die": 50,
+"dice": "d52",
+"die": 52,
 "bell": false,
 "class": "Fork",
 "player_facing": "reveal",
@@ -203147,6 +203823,32 @@ null,
 "Zombie / Skeleton",
 "Wight / Ghast",
 "Lich / Mummy Lord"
+]
+],
+[
+51,
+51,
+"",
+"City Prison Uprising — Guard / Thug — Veteran / Berserker Pack — Warlord / Champion (self-declared Warden)",
+null,
+[
+"City Prison Uprising",
+"Guard / Thug",
+"Veteran / Berserker Pack",
+"Warlord / Champion (self-declared Warden)"
+]
+],
+[
+52,
+52,
+"",
+"Quarantine Authority — Guard / Commoner (quarantined) — War Priest / Poisoner — Evil High Priest / Mummy Lord (the quarantine's true cause)",
+null,
+[
+"Quarantine Authority",
+"Guard / Commoner (quarantined)",
+"War Priest / Poisoner",
+"Evil High Priest / Mummy Lord (the quarantine's true cause)"
 ]
 ]
 ]
@@ -204363,8 +205065,8 @@ null,
 ]
 },
 "urban-type": {
-"dice": "d100",
-"die": 100,
+"dice": "d110",
+"die": 110,
 "bell": false,
 "class": "Fork",
 "player_facing": "reveal",
@@ -205570,12 +206272,132 @@ null,
 "Disaster / abandonment",
 "A quiet block suddenly isn’t: a signal whistle, then movement everywhere."
 ]
+],
+[
+101,
+101,
+"",
+"Residential Ward — Ordinary housing / domestic life — Laundry lines cross overhead; a woman calls a child in for supper.",
+null,
+[
+"Residential Ward",
+"Ordinary housing / domestic life",
+"Laundry lines cross overhead; a woman calls a child in for supper."
+]
+],
+[
+102,
+102,
+"",
+"Residential Ward — Ordinary housing / domestic life — Doorstep gossip in low voices; someone's cooking draws a small crowd of noses.",
+null,
+[
+"Residential Ward",
+"Ordinary housing / domestic life",
+"Doorstep gossip in low voices; someone's cooking draws a small crowd of noses."
+]
+],
+[
+103,
+103,
+"",
+"Residential Ward — Ordinary housing / domestic life — Repair work half-finished on a roof; a dog barks at nothing, then everything.",
+null,
+[
+"Residential Ward",
+"Ordinary housing / domestic life",
+"Repair work half-finished on a roof; a dog barks at nothing, then everything."
+]
+],
+[
+104,
+104,
+"",
+"Residential Ward — Ordinary housing / domestic life — Shared well in a courtyard; buckets and elbows and an old argument about turns.",
+null,
+[
+"Residential Ward",
+"Ordinary housing / domestic life",
+"Shared well in a courtyard; buckets and elbows and an old argument about turns."
+]
+],
+[
+105,
+105,
+"",
+"Residential Ward — Ordinary housing / domestic life — A funeral procession turns the corner; every door along the street closes at once.",
+null,
+[
+"Residential Ward",
+"Ordinary housing / domestic life",
+"A funeral procession turns the corner; every door along the street closes at once."
+]
+],
+[
+106,
+106,
+"",
+"Residential Ward — Ordinary housing / domestic life — Children's chalk games drawn over yesterday's, and the day before's.",
+null,
+[
+"Residential Ward",
+"Ordinary housing / domestic life",
+"Children's chalk games drawn over yesterday's, and the day before's."
+]
+],
+[
+107,
+107,
+"",
+"Residential Ward — Ordinary housing / domestic life — A landlord's agent checks names against a list; someone ducks down a side path.",
+null,
+[
+"Residential Ward",
+"Ordinary housing / domestic life",
+"A landlord's agent checks names against a list; someone ducks down a side path."
+]
+],
+[
+108,
+108,
+"",
+"Residential Ward — Ordinary housing / domestic life — Window boxes and drying herbs; a neighbor borrows salt through a cracked door.",
+null,
+[
+"Residential Ward",
+"Ordinary housing / domestic life",
+"Window boxes and drying herbs; a neighbor borrows salt through a cracked door."
+]
+],
+[
+109,
+109,
+"",
+"Residential Ward — Ordinary housing / domestic life — A newlywed couple's door garlanded; an older door two houses down left bare on purpose.",
+null,
+[
+"Residential Ward",
+"Ordinary housing / domestic life",
+"A newlywed couple's door garlanded; an older door two houses down left bare on purpose."
+]
+],
+[
+110,
+110,
+"",
+"Residential Ward — Ordinary housing / domestic life — Quiet past the curfew bell; one window still lit, and everyone pretends not to notice.",
+null,
+[
+"Residential Ward",
+"Ordinary housing / domestic life",
+"Quiet past the curfew bell; one window still lit, and everyone pretends not to notice."
+]
 ]
 ]
 },
 "wilderness-area-type": {
-"dice": "d300",
-"die": 300,
+"dice": "d312",
+"die": 312,
 "bell": false,
 "class": "Fork",
 "player_facing": "reveal",
@@ -209180,6 +210002,150 @@ null,
 "40' x 100' S-Curve (20' wide)",
 "Thick, choking fog / spore clouds.",
 "20' wide path with two sharp turns; lightly obscured; difficult terrain."
+]
+],
+[
+301,
+301,
+"",
+"20' x 20' Square Clearing — Broken chasm rim / unseen drop into dark below. — A 5' wide natural ledge rings the near edge; the far rim is unreachable without a climb or a jump.",
+null,
+[
+"20' x 20' Square Clearing",
+"Broken chasm rim / unseen drop into dark below.",
+"A 5' wide natural ledge rings the near edge; the far rim is unreachable without a climb or a jump."
+]
+],
+[
+302,
+302,
+"",
+"30' x 30' Square Clearing — Broken chasm rim / unseen drop into dark below. — 10' wide entrance path; a broken shelf 10' down the near wall offers a landing before the true bottom.",
+null,
+[
+"30' x 30' Square Clearing",
+"Broken chasm rim / unseen drop into dark below.",
+"10' wide entrance path; a broken shelf 10' down the near wall offers a landing before the true bottom."
+]
+],
+[
+303,
+303,
+"",
+"50' x 80' Large Valley — Broken chasm rim / unseen drop into dark below. — 20' wide main path hugs the rim; a rubble-crowned ledge juts out over the drop, wide enough to stand and fight from.",
+null,
+[
+"50' x 80' Large Valley",
+"Broken chasm rim / unseen drop into dark below.",
+"20' wide main path hugs the rim; a rubble-crowned ledge juts out over the drop, wide enough to stand and fight from."
+]
+],
+[
+304,
+304,
+"",
+"30' Diameter Circle — Broken chasm rim / unseen drop into dark below. — 10' wide entrance; the center third of the circle has given way entirely — a true void, not difficult terrain.",
+null,
+[
+"30' Diameter Circle",
+"Broken chasm rim / unseen drop into dark below.",
+"10' wide entrance; the center third of the circle has given way entirely — a true void, not difficult terrain."
+]
+],
+[
+305,
+305,
+"",
+"60' x 60' Octagon — Broken chasm rim / unseen drop into dark below. — 20' wide path in; a terraced shelf at each cardinal point offers cover and elevation over the central drop.",
+null,
+[
+"60' x 60' Octagon",
+"Broken chasm rim / unseen drop into dark below.",
+"20' wide path in; a terraced shelf at each cardinal point offers cover and elevation over the central drop."
+]
+],
+[
+306,
+306,
+"",
+"20' x 60' Narrow Gorge — Broken chasm rim / unseen drop into dark below. — The gorge floor has partly collapsed; a 5' wide ledge continues along one wall where the true floor does not.",
+null,
+[
+"20' x 60' Narrow Gorge",
+"Broken chasm rim / unseen drop into dark below.",
+"The gorge floor has partly collapsed; a 5' wide ledge continues along one wall where the true floor does not."
+]
+],
+[
+307,
+307,
+"",
+"40' x 60' Trapezoid — Broken chasm rim / unseen drop into dark below. — 20' wide entrance at the wide end narrows toward a sheer unrailed drop at the point.",
+null,
+[
+"40' x 60' Trapezoid",
+"Broken chasm rim / unseen drop into dark below.",
+"20' wide entrance at the wide end narrows toward a sheer unrailed drop at the point."
+]
+],
+[
+308,
+308,
+"",
+"60' x 80' Oval Valley — Broken chasm rim / unseen drop into dark below. — 20' wide paths on opposite ends; a broken shelf runs the long axis, 10' above a floor that never fully resolves in the dark.",
+null,
+[
+"60' x 80' Oval Valley",
+"Broken chasm rim / unseen drop into dark below.",
+"20' wide paths on opposite ends; a broken shelf runs the long axis, 10' above a floor that never fully resolves in the dark."
+]
+],
+[
+309,
+309,
+"",
+"50' x 50' T-Junction (20' wide) — Broken chasm rim / unseen drop into dark below. — 10' wide paths at all three ends; the stem overlooks the drop from a natural balcony rather than crossing it.",
+null,
+[
+"50' x 50' T-Junction (20' wide)",
+"Broken chasm rim / unseen drop into dark below.",
+"10' wide paths at all three ends; the stem overlooks the drop from a natural balcony rather than crossing it."
+]
+],
+[
+310,
+310,
+"",
+"40' x 40' Diamond — Broken chasm rim / unseen drop into dark below. — 10' wide paths at opposite points; the center has fallen away, leaving two facing ledges rather than a floor.",
+null,
+[
+"40' x 40' Diamond",
+"Broken chasm rim / unseen drop into dark below.",
+"10' wide paths at opposite points; the center has fallen away, leaving two facing ledges rather than a floor."
+]
+],
+[
+311,
+311,
+"",
+"30' x 50' Crescent Moon — Broken chasm rim / unseen drop into dark below. — 10' wide paths at both tips; the inner curve is a continuous broken shelf overlooking the void at its center.",
+null,
+[
+"30' x 50' Crescent Moon",
+"Broken chasm rim / unseen drop into dark below.",
+"10' wide paths at both tips; the inner curve is a continuous broken shelf overlooking the void at its center."
+]
+],
+[
+312,
+312,
+"",
+"60' x 80' Kidney Shape — Broken chasm rim / unseen drop into dark below. — 20' wide paths at both ends; a wide natural deck occupies the shape's waist, the only solid ground over the drop below.",
+null,
+[
+"60' x 80' Kidney Shape",
+"Broken chasm rim / unseen drop into dark below.",
+"20' wide paths at both ends; a wide natural deck occupies the shape's waist, the only solid ground over the drop below."
 ]
 ]
 ]
@@ -213929,8 +214895,8 @@ null,
 ]
 },
 "wilderness-biome-type": {
-"dice": "d10",
-"die": 10,
+"dice": "d11",
+"die": 11,
 "bell": false,
 "class": "Fork",
 "player_facing": "reveal",
@@ -214045,6 +215011,17 @@ null,
 [
 "Underwater",
 "Ocean depths, vibrant coral reefs, and kelp forests."
+]
+],
+[
+11,
+11,
+"",
+"Fey-Bent Hollow — A pocket of forest where the season, gravity, or light no longer quite agrees with the land around it.",
+null,
+[
+"Fey-Bent Hollow",
+"A pocket of forest where the season, gravity, or light no longer quite agrees with the land around it."
 ]
 ]
 ]
@@ -225914,8 +226891,8 @@ null,
 ]
 },
 "wilderness-encounter-type": {
-"dice": "d20",
-"die": 20,
+"dice": "d24",
+"die": 24,
 "bell": false,
 "class": "Fork",
 "player_facing": "reveal",
@@ -226140,6 +227117,50 @@ null,
 [
 "Enemy / Combat",
 "Hostile action. Direct confrontation. Roll on Tactical Terrain to define the battlefield, then populate with hostile creatures. Check for Surprise based on terrain and Stealth."
+]
+],
+[
+21,
+21,
+"",
+"Discovery / Occupied Lair — A claimed den, not empty ground. The party finds a mouth, burrow, or hollow with fresh occupant sign. Roll on the Landmark / Feature table for the specific mouth and claim. Investigation and reading the sign, not automatic combat.",
+null,
+[
+"Discovery / Occupied Lair",
+"A claimed den, not empty ground. The party finds a mouth, burrow, or hollow with fresh occupant sign. Roll on the Landmark / Feature table for the specific mouth and claim. Investigation and reading the sign, not automatic combat."
+]
+],
+[
+22,
+22,
+"",
+"Discovery / Occupied Lair — A claimed den, not empty ground. The party finds a mouth, burrow, or hollow with fresh occupant sign. Roll on the Landmark / Feature table for the specific mouth and claim. Investigation and reading the sign, not automatic combat.",
+null,
+[
+"Discovery / Occupied Lair",
+"A claimed den, not empty ground. The party finds a mouth, burrow, or hollow with fresh occupant sign. Roll on the Landmark / Feature table for the specific mouth and claim. Investigation and reading the sign, not automatic combat."
+]
+],
+[
+23,
+23,
+"",
+"Discovery / Occupied Lair — A claimed den, not empty ground. The party finds a mouth, burrow, or hollow with fresh occupant sign. Roll on the Landmark / Feature table for the specific mouth and claim. Investigation and reading the sign, not automatic combat.",
+null,
+[
+"Discovery / Occupied Lair",
+"A claimed den, not empty ground. The party finds a mouth, burrow, or hollow with fresh occupant sign. Roll on the Landmark / Feature table for the specific mouth and claim. Investigation and reading the sign, not automatic combat."
+]
+],
+[
+24,
+24,
+"",
+"Discovery / Occupied Lair — A claimed den, not empty ground. The party finds a mouth, burrow, or hollow with fresh occupant sign. Roll on the Landmark / Feature table for the specific mouth and claim. Investigation and reading the sign, not automatic combat.",
+null,
+[
+"Discovery / Occupied Lair",
+"A claimed den, not empty ground. The party finds a mouth, burrow, or hollow with fresh occupant sign. Roll on the Landmark / Feature table for the specific mouth and claim. Investigation and reading the sign, not automatic combat."
 ]
 ]
 ]
@@ -226647,8 +227668,8 @@ null,
 ]
 },
 "wilderness-feature": {
-"dice": "d303",
-"die": 303,
+"dice": "d317",
+"die": 317,
 "bell": false,
 "class": "Fork",
 "player_facing": "reveal",
@@ -230289,6 +231310,174 @@ null,
 "Great Fallen Log: A vast fallen trunk furred with moss, blocking the way.",
 "4' diameter, 20' long",
 "Half cover along its length; DC 10 Athletics to vault, Difficult Terrain to climb."
+]
+],
+[
+304,
+304,
+"",
+"Weeping Den Mouth: A low limestone slit exhaling cold, wet-earth air; clawed grooves flank the opening. — 5' wide, 4' high mouth, 15' interior depth — Choke point. DC 12 Perception at the threshold reveals fresh bedding and gnawed bone inside.",
+null,
+[
+"Weeping Den Mouth: A low limestone slit exhaling cold, wet-earth air; clawed grooves flank the opening.",
+"5' wide, 4' high mouth, 15' interior depth",
+"Choke point. DC 12 Perception at the threshold reveals fresh bedding and gnawed bone inside."
+]
+],
+[
+305,
+305,
+"",
+"Burrower's Warren: A raw earthen shaft, walls smoothed by claw and belly, a spoil-mound heaped at the lip. — 4' diameter shaft, 6' high spoil mound — Difficult terrain climbing the mound. The shaft narrows — Medium creatures must squeeze past the first bend.",
+null,
+[
+"Burrower's Warren: A raw earthen shaft, walls smoothed by claw and belly, a spoil-mound heaped at the lip.",
+"4' diameter shaft, 6' high spoil mound",
+"Difficult terrain climbing the mound. The shaft narrows — Medium creatures must squeeze past the first bend."
+]
+],
+[
+306,
+306,
+"",
+"Root-Hollow Maw: A living tree's roots have grown around and swallowed a cavity, bark scarred smooth at the entrance from repeated passage. — 8'x8' root-frame mouth, 10' high — Total cover at the frame. The hollow beyond breathes faint warm air — something denned here recently.",
+null,
+[
+"Root-Hollow Maw: A living tree's roots have grown around and swallowed a cavity, bark scarred smooth at the entrance from repeated passage.",
+"8'x8' root-frame mouth, 10' high",
+"Total cover at the frame. The hollow beyond breathes faint warm air — something denned here recently."
+]
+],
+[
+307,
+307,
+"",
+"Drowned Sink: A dark pool feeds down into a submerged throat; ripples move against the current every few minutes. — 15' diameter pool, unknown depth — Hazard: DC 13 Strength save to resist the pull toward the siphon. Something surfaces and submerges on its own schedule.",
+null,
+[
+"Drowned Sink: A dark pool feeds down into a submerged throat; ripples move against the current every few minutes.",
+"15' diameter pool, unknown depth",
+"Hazard: DC 13 Strength save to resist the pull toward the siphon. Something surfaces and submerges on its own schedule."
+]
+],
+[
+308,
+308,
+"",
+"Feral Adit: An old mine's timber-shored entrance, props rotted and reset crookedly with fresh branches — something has moved back in. — 6' wide, 7' high, 20' visible interior — Total cover. Old rail ties are Difficult Terrain; fresh territorial marks overlay the worked stone.",
+null,
+[
+"Feral Adit: An old mine's timber-shored entrance, props rotted and reset crookedly with fresh branches — something has moved back in.",
+"6' wide, 7' high, 20' visible interior",
+"Total cover. Old rail ties are Difficult Terrain; fresh territorial marks overlay the worked stone."
+]
+],
+[
+309,
+309,
+"",
+"Twin-Throat Hollow: Two mouths in the same outcrop, one wide and trampled, one narrow and clean — the den has more than one door. — Two mouths, 8' and 3' wide, 12' apart — Choke point at the narrow throat. The wide mouth offers no cover; the narrow one grants Half cover to a squeezing creature.",
+null,
+[
+"Twin-Throat Hollow: Two mouths in the same outcrop, one wide and trampled, one narrow and clean — the den has more than one door.",
+"Two mouths, 8' and 3' wide, 12' apart",
+"Choke point at the narrow throat. The wide mouth offers no cover; the narrow one grants Half cover to a squeezing creature."
+]
+],
+[
+310,
+310,
+"",
+"Overlook Den: A broken shelf of rock juts above a shadowed mouth below, littered with cracked long-bones dragged up for the view. — 10'x10' shelf, 8' above the mouth — Grants elevation. DC 10 Athletics or a rough-climb route reaches the shelf; the mouth below is Total cover from it.",
+null,
+[
+"Overlook Den: A broken shelf of rock juts above a shadowed mouth below, littered with cracked long-bones dragged up for the view.",
+"10'x10' shelf, 8' above the mouth",
+"Grants elevation. DC 10 Athletics or a rough-climb route reaches the shelf; the mouth below is Total cover from it."
+]
+],
+[
+311,
+311,
+"",
+"Sagging Warren Roof: A burrow's ceiling has slumped, roots and soil hanging low over a half-collapsed den mouth. — 10'x10' footprint, 4' clearance — Difficult terrain (stooping). Hazard: DC 12 Dexterity save or the roof sheds another fall of soil (loud) when forced.",
+null,
+[
+"Sagging Warren Roof: A burrow's ceiling has slumped, roots and soil hanging low over a half-collapsed den mouth.",
+"10'x10' footprint, 4' clearance",
+"Difficult terrain (stooping). Hazard: DC 12 Dexterity save or the roof sheds another fall of soil (loud) when forced."
+]
+],
+[
+312,
+312,
+"",
+"Abandoned Nest-Ring: A ring of flattened bracken and old down feathers, the mouth behind it cold and undefended. — 15' diameter nest ring, mouth 6' beyond — Half cover from the ring's berm. No current occupant sign — tracks lead away, not in.",
+null,
+[
+"Abandoned Nest-Ring: A ring of flattened bracken and old down feathers, the mouth behind it cold and undefended.",
+"15' diameter nest ring, mouth 6' beyond",
+"Half cover from the ring's berm. No current occupant sign — tracks lead away, not in."
+]
+],
+[
+313,
+313,
+"",
+"Bone-Marked Threshold: Sun-bleached ribs and skulls staked upright flank a dark opening, spaced with deliberate care. — 10' wide marked approach, mouth 4'x4' — Half cover behind each stake. The marking pattern suggests territory, not decoration — DC 13 Nature identifies the species by bite-spacing.",
+null,
+[
+"Bone-Marked Threshold: Sun-bleached ribs and skulls staked upright flank a dark opening, spaced with deliberate care.",
+"10' wide marked approach, mouth 4'x4'",
+"Half cover behind each stake. The marking pattern suggests territory, not decoration — DC 13 Nature identifies the species by bite-spacing."
+]
+],
+[
+314,
+314,
+"",
+"Steam-Throat Vent: A fissure breathes warm sulfurous air in slow tides, matching something's breathing rhythm deeper in. — 5' wide vent, depth unknown — Heavily obscures 10' radius on the exhale. The rhythm is too regular to be geology alone.",
+null,
+[
+"Steam-Throat Vent: A fissure breathes warm sulfurous air in slow tides, matching something's breathing rhythm deeper in.",
+"5' wide vent, depth unknown",
+"Heavily obscures 10' radius on the exhale. The rhythm is too regular to be geology alone."
+]
+],
+[
+315,
+315,
+"",
+"Torn-Wide Maw: A den mouth ripped far larger than any natural process explains, claw-gouges scoring both sides shoulder-high and higher. — 15' wide, 12' high mouth — Total cover. The gouge height alone rules out anything Medium-sized.",
+null,
+[
+"Torn-Wide Maw: A den mouth ripped far larger than any natural process explains, claw-gouges scoring both sides shoulder-high and higher.",
+"15' wide, 12' high mouth",
+"Total cover. The gouge height alone rules out anything Medium-sized."
+]
+],
+[
+316,
+316,
+"",
+"Chevaux-de-Frise Barrier: A portable X-framed timber barrier bristling with iron-tipped spikes, staged across the trail. — 8' wide, 4' high — Half cover; costs 10 extra feet of movement to cross. DC 12 Dexterity (Acrobatics) crossing at speed or take 1d4 Piercing.",
+null,
+[
+"Chevaux-de-Frise Barrier: A portable X-framed timber barrier bristling with iron-tipped spikes, staged across the trail.",
+"8' wide, 4' high",
+"Half cover; costs 10 extra feet of movement to cross. DC 12 Dexterity (Acrobatics) crossing at speed or take 1d4 Piercing."
+]
+],
+[
+317,
+317,
+"",
+"Gabion Revetment: A run of stone-packed wicker baskets shoring a bank, wall foot, or breach. — 10' long, 3' high — Half cover. A basket cut open (10 slashing damage) spills its stone and opens a gap.",
+null,
+[
+"Gabion Revetment: A run of stone-packed wicker baskets shoring a bank, wall foot, or breach.",
+"10' long, 3' high",
+"Half cover. A basket cut open (10 slashing damage) spills its stone and opens a gap."
 ]
 ]
 ]
@@ -241822,8 +243011,8 @@ null,
 ]
 },
 "wilderness-set-dressing": {
-"dice": "d305",
-"die": 305,
+"dice": "d307",
+"die": 307,
 "bell": false,
 "class": "Spark",
 "player_facing": "reveal",
@@ -244878,6 +246067,26 @@ null,
 null,
 [
 "A cluster of lichen-crusted boulders, one balanced in a way that shouldn't hold."
+]
+],
+[
+306,
+306,
+"",
+"A camp wash-stand of lashed poles and a hide basin, grey water pooling beneath the drain-hole.",
+null,
+[
+"A camp wash-stand of lashed poles and a hide basin, grey water pooling beneath the drain-hole."
+]
+],
+[
+307,
+307,
+"",
+"A field-kitchen lean-to, cook-fire cold, a suspended pot still swinging on its hook.",
+null,
+[
+"A field-kitchen lean-to, cook-fire cold, a suspended pot still swinging on its hook."
 ]
 ]
 ]
@@ -265719,8 +266928,8 @@ null,
 ]
 },
 "walk-skin-wilderness": {
-"dice": "d100",
-"die": 100,
+"dice": "d101",
+"die": 101,
 "bell": false,
 "class": "Commitment",
 "player_facing": "reveal",
@@ -267326,6 +268535,22 @@ null,
 "",
 "relic",
 "flood"
+],
+[
+101,
+101,
+"Mythic",
+"Something denned here before the world had a name for it. — The claimed floor beneath the broken ledge is scaled to a body no living species matches — bones set in the walls like reinforcement, still faintly warm, and every animal that enters gives it the same wide, permanent berth the forest itself seems to have agreed on generations ago.",
+null,
+[
+"Mythic",
+"Something denned here before the world had a name for it.",
+"The claimed floor beneath the broken ledge is scaled to a body no living species matches — bones set in the walls like reinforcement, still faintly warm, and every animal that enters gives it the same wide, permanent berth the forest itself seems to have agreed on generations ago."
+],
+"",
+"",
+"relic",
+"bone"
 ]
 ]
 },

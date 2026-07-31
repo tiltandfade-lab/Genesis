@@ -12,7 +12,7 @@ voice_critical: false
 
 Threat identities for Tier 1 (levels 1–4) urban play. Each row provides a faction or creature type with pools at three power levels: Low CR (mooks and minions), Mid CR (specialists and lieutenants), and Boss CR (the encounter leader).
 
-| d30 | Threat Identity | Low CR (0–1) | Mid CR (2–3) | Boss CR (4–5) |
+| d32 | Threat Identity | Low CR (0–1) | Mid CR (2–3) | Boss CR (4–5) |
 | ---: | --- | --- | --- | --- |
 | 1 | **Street Gang** | Bandit / Thug | Bandit Captain / Spy | Gladiator / Assassin |
 | 2 | **Thieves' Guild** | Commoner / Spy | Veteran / Assassin | Gladiator / Knight |
@@ -44,5 +44,7 @@ Threat identities for Tier 1 (levels 1–4) urban play. Each row provides a fact
 | 28 | **Fey Incursion** | Sprite / Pixie | Dryad / Satyr | Dryad / Archfey (minor) |
 | 29 | **Shadow Creature Lair** | Shadow / Wraith | Shadow / Wraith | Wraith / Shadow Demon |
 | 30 | **Cloaked Cult of the Old God** | Cultist / Commoner | Cult Fanatic / Assassin | Assassin / High Priest |
+| 31 | **Debtor-Ledger Custody House** | Guard / Commoner (bonded laborer) | Veteran / Spy (record-keeper) | Warlord / Knight (magistrate-enforcer) |
+| 32 | **Shanty-Quarter Guest Camp** | Commoner / Bandit | Bandit Captain / Veteran | Warlord / Gladiator |
 
 ^urban-threat-identity-t1

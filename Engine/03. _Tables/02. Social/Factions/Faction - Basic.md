@@ -3,11 +3,12 @@ id: faction-basic
 type: faction
 domain: Social / Factions
 status: source
+table_class: Commitment
 ---
 
 #faction-basic
 
-|**d100**|**Category**|**Result**|
+|**d105**|**Category**|**Result**|
 |---|---|---|
 |1-4|Grounded|**The Iron-Strap Guild:** A powerful collective of blacksmiths and engineers who control the region's bridge and gate maintenance.|
 |5-8|Grounded|**The Tithe-Keepers:** A secular group of tax collectors and record-keepers for the local Lord, known for their clinical efficiency.|
@@ -37,4 +38,9 @@ status: source
 |96-97|Strange|**The Echo-Chamber Council:** Entities that exist only as voices in certain ruins, directing local politics through whispers.|
 |98-99|Strange|**The Gravity-Movers:** A group capable of manipulating magnetic black stones to hover architecture or build impossible towers.|
 |100|Strange|**The Weaver-Kings:** Beings who "weave" reality from sentient silk thread, treating the world as a project they can unmake at any time.|
+|101|Volatile|**The Keeper-House Compact:** A confederation of named jailers and wardens who have quietly agreed that no prisoner crosses a border without their sealed word — and who now hold half the region's disputed captives hostage to enforce it.|
+|102|Volatile|**The Ledger-and-Shift Assembly:** A faceless bureaucracy of clerks, guards, and record-keepers that has outlived six governments by controlling who is legally a person — and who has just been struck from the rolls entirely.|
+|103|Volatile|**The Strike-Line Compact:** A cross-mine alliance of laborers and foremen who shut down three claims at once and are only now learning, together, how much of the region's wealth actually runs through their hands.|
+|104|Volatile|**The Guest-Fire Council:** An alliance of displaced camps, shanty quarters, and borrowed ground who have started keeping their own ledger of every host who took them in — and every one who didn't.|
+|105|Mythic|**The Sentence That Walks:** No one founded it; a single verdict, spoken three centuries ago against a name history no longer remembers, was never lifted — and the punishment kept convicting whoever stood nearest to enforce it, generation after generation, until the office of "warden" and the crime of "guilty" became the same hereditary post. Today it holds no fixed prison, no fixed judge, and no fixed criminal — only a rotating population of the accused, the accusers, and the accidentally adjacent — and it has just, for the first time anyone living remembers, found someone to declare innocent.|
 ^faction-basic

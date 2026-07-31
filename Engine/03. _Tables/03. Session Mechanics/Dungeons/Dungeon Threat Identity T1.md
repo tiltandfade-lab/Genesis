@@ -8,7 +8,7 @@ player_facing: reveal
 voice_critical: false
 ---
 
-| **d30** | **Identity** | **Behavioral Role** | **Low CR** | **Mid CR** | **Boss** | **Composition Scale** | **Environmental Signature** |
+| **d33** | **Identity** | **Behavioral Role** | **Low CR** | **Mid CR** | **Boss** | **Composition Scale** | **Environmental Signature** |
 | :------ | :----------- | :------------------ | :--------- | :--------- | :------- | :-------------------- | :-------------------------- |
 | **1** | Risen Dead | Lurking Predator | Skeleton / Zombie | Ghoul / Specter | Ghast / Vampire Spawn | 1d4 per room; 1 Mid per 2 rooms; 1 Boss at finale | Bone fragments underfoot; torch scorch marks on walls; grave dirt smell throughout |
 | **2** | Risen Dead | Professional Watch | Skeleton / Zombie | Shadow / Ghoul | Revenant / Vampire Spawn | 1d4 per room; 1d2 Mid per 2 rooms; 1 Boss at finale | Organized skeleton guard posts; patrol-worn floor paths; intact armor on door guards |
@@ -40,4 +40,7 @@ voice_critical: false
 | **28** | Dragon Lair | Core Presence | Kobold / Kobold Scale Sorcerer | Kobold Dragonshield / Dragon Wyrmling | Dragon Wyrmling (Boss-Grade) / Kobold War Leader | 1d4 per room; 1 Mid per 2 rooms; 1 Boss at finale | Claw-scored ceiling at dragon height; hoard fragment trails leading toward finale; overpowering draconic musk |
 | **29** | Thieves' Guild | Specialist Task-Force | Spy / Bandit | Bandit Captain / Master Spy | Veteran (Guildmaster) / Berserker (Enforcer) | 1 per room; 1 Mid per 2 rooms; 1 Boss at finale | Evidence of professional cleaning; coded ledgers in locked drawers; escape routes chalked in hidden corners |
 | **30** | Hag Domain | Core Presence | Dominated Humanoid / Swarm of Insects | Sea Hag / Green Hag | Green Hag (Coven Leader) / Night Hag | 1d2 per room; 1 Mid per 2 rooms; 1 Boss at finale | Pickled remains in jars on every shelf; caged animals with offer-tags attached; contract terms cut into stone |
+| **31** | Custody Institution | Professional Watch | Guard / Commoner (trusty) | Veteran / Spy (record-keeper) | Warlord / Knight (the Keeper) | 1d4 per block; 1 Mid per 2 blocks; 1 Boss at finale (plus 2d6 prisoners, noncombatant unless armed) | Ledger of names chalked by the door; one set of keys on one belt; a household routine bleeding into the cell block |
+| **32** | Broken Custody | Displaced Wanderers | Commoner (former prisoner) / Thug | Bandit Captain / Veteran (turned guard) | Warlord (self-declared warden) / Assassin | 1d4 per room; 1 Mid per 3 rooms; 1 Boss at finale (former inmates now hold the keys) | Cell doors forced open and left hanging; guard uniforms repurposed and ill-fitting; old tally marks beside fresh ones scratched by the newly caged |
+| **33** | Militant Cloister | Professional Watch | Acolyte / Guard | Cult Fanatic / Veteran | Gladiator (Sworn Champion) / Knight (Prior-Militant) | 1d4 per room; 1 Mid per 2 rooms; 1 Boss at finale | A communal routine still posted on the wall, now enforced at spear-point; devotional marks defaced or doubled; novices drilling where they used to pray |
 ^dungeon-threat-identity-t1

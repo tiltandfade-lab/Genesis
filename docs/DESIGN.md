@@ -2592,3 +2592,57 @@ triad visualization, illegal-pairing capture and morph sheet — is not built he
 countable back-end half. The donor normalizer still stamps position-only (deriving real measured
 normals at build time is a `normalize-donors.py` change and a pack re-bake, deliberately out of
 scope). `mountSlots`, the structure specs and the figure anchors are projected, not re-stored.
+## Dungeon `table_class` promotion — Fork → Commitment (2026-07-27)
+
+**PROPOSED (Fable default under the TABLE-ROW-CONTRACT §7 precedent; Adam's ruling pending):**
+`Dungeon Type.md`, `Dungeon Area Type.md`, and `Dungeon Feature.md` (all in
+`Engine/03. _Tables/03. Session Mechanics/Dungeons/`) are promoted `table_class: Fork` →
+`Commitment`. Frontmatter only — no row was added, edited, renumbered, or deleted.
+
+**Why:** the spawn-audit dungeon-family sidecar (2026-07-27, folded into
+`docs/TABLE-SEEDING-REVIEW-0727.md` §8-D) flagged that all three tables already carry pre-existing
+rows that read Volatile/Mythic — *The Living Hive*, *The Megastructure* (Dungeon Type),
+*Reality Fracture*, *Planar Gate Room* (Dungeon Area Type), plus several of the same pass's own
+seeded rows — under a `Fork` label whose `docs/SPICE-CURVE.md` §4 ceiling is Strange. Lint's
+`class-mismatch` check (CHECK 10a, `build/lint-tables.py`) can't see the gap because it requires a
+parseable `Band` column and none of these three tables has one — so the mismatch has stood
+invisible rather than absent. Per `docs/TABLE-ROW-CONTRACT.md` §7 ("let the hot rows live," Adam
+2026-07-06): the fix for any class-mismatch is always to promote `table_class` to match the body,
+never to delete or narrate the hot rows down. This is the identical mechanical fix §7 already
+applied to Chase Complications / Dungeon Loot - Valuables / In-Building Complications — same
+one-line-per-file frontmatter edit, same precedent, now extended to the three dungeon tables it
+named but did not apply to.
+
+**Runtime-neutrality, checked before applying (per this unit's own gate):** `grep -rn
+"table_class\|tableClass" src/` returns zero matches — no runtime code reads the field. The
+apparent "class ceiling" a table honors in play (`rollTableAtBand`, `src/engine/compiled.js`) is
+realized entirely by which spice bands have populated rows in the *compiled* table, stepping down
+the ladder when a band is empty — it never reads `class`/`table_class` from the compiled object.
+`docs/TABLE-ROW-CONTRACT.md` §7 independently verified the same conclusion for its own three
+promotions ("no `src/` code branches on the compiled `class` field today"). So this promotion does
+not change gating, spice-raise eligibility, or how any of the three tables roll in play — it is a
+classification/reporting-only fix, matching what the table's body already does today.
+
+**Still open:** `docs/TABLE-SEEDING-REVIEW-0727.md` §8-D calls this "a taste ruling about what
+those tables are allowed to be" and lists it as founder question §11-4 ("promote... or narrate the
+hot rows down?"). That question is not resolved by this entry — labeling honesty and Adam's taste
+call are separate axes, and this entry only closes the former. If Adam instead rules for
+narrate-down, this promotion reverts along with that ruling.
+
+**Gates (this unit, 2026-07-27):**
+```
+python3 "Engine/00. _System/compile-tables.py" --emit
+  → EMIT — dice tables: 406 | clean: 389 | REAL bugs: 0 | emitted tables.json + tables.js: 390 tables
+python3 dev/verify-table-lint.py            → 37 passed, 0 failed (exit 0)
+python3 build/lint-tables.py                → errors: 3 (new: 0, baselined: 3, all pre-existing/
+                                               unrelated); 0 findings of any kind on the three files
+JSDOM_HOME="$HOME/.genesis-jsdom" node dev/verify-dungeon-dressing.mjs        → 694 passed, exit 0
+  …verify-dungeon-interior.mjs        → 291 passed, exit 0     …verify-dungeon-semantics.mjs  → 26 passed, exit 0
+  …verify-dungeon-spatialize.mjs      →   9 passed, exit 0     …verify-dungeon-walkbind.mjs   → 20 passed, exit 0
+  …verify-job-walks.mjs               →  41 passed, exit 0     …verify-spice-raise.mjs        → 14 passed, exit 0
+  …verify-travel-walks.mjs            →  28 passed, exit 0     …verify-walk-binding.mjs       →100 passed, exit 0
+  …verify-walk-card-projection.mjs    →  29 passed, exit 0     …verify-walk-consumption.mjs   → 37 passed, exit 0
+  …verify-walk-refresh.mjs            →  19 passed, exit 0     …verify-walk-scene.mjs         → 32 passed, exit 0
+  …verify-walk-stamped-provenance.mjs →  34 passed, exit 0     …verify-walk.mjs               →2801 passed, exit 0
+```
+All 15 dungeon/walk/spice harnesses green, 0 failed, 0 regressions.

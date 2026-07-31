@@ -11,12 +11,12 @@ voice_critical: true
 #walk-skin-wilderness
 > **PROVISIONAL — Adam spot-check pending.** One rolled lens per wilderness walk (`rollWalkSkin`,
 > `[[WALK-REFRESH]]` §3) — a single wide-angle mood that colors every segment without dictating
-> specific encounters. Spice-graded d100, Commitment ceiling (66 Grounded · 20 Textured · 9
-> Strange · 4 Volatile · 1 Mythic). The Stage-2 synthesis reskin must honor the rolled lens rather
+> specific encounters. Spice-graded d101, Commitment ceiling (66 Grounded · 20 Textured · 9
+> Strange · 4 Volatile · 2 Mythic). The Stage-2 synthesis reskin must honor the rolled lens rather
 > than inventing its own (`[[SYNTHESIS-CONTRACT]]`). Five band-anchor rows (marked ★) are Adam's
 > approved samples from `WALK-REFRESH.md` §5, included verbatim; the rest extend their register.
 
-| d100 | Band | Skin | What it touches | Grants | Motif |
+| d101 | Band | Skin | What it touches | Grants | Motif |
 |---|---|---|---|---|---|
 | 1 | Grounded | **Late-season rot.** ★ | Every deadfall is soft, every ford swollen; the trail knows it's October. (Footing rolls where there was footing; smells of wet bark and mushroom.) |  | none |
 | 2 | Grounded | **The ground remembers the drought.** | Cracked mud plates ring like pottery underfoot; the streambeds are pale, dry throats; deer tracks all lead to the two ponds that still hold water. |  | ash |
@@ -118,4 +118,5 @@ voice_critical: true
 | 98 | Volatile | **A predator hierarchy has collapsed.** | Every apex species is behaving like prey, fleeing the same unseen direction, and the smaller animals have grown bold in the vacuum left behind. | hazard-suffuse,threat-bias:beast | none |
 | 99 | Volatile | **The ground is subsiding.** | Whole clearings are sinking inches by the week, trees leaning inward toward a center that hums faintly if you put an ear to the soil. | clock,hazard-suffuse | void |
 | 100 | Mythic | **The forest remembers being an ocean.** ★ | Fish-shadows school between the trunks at dusk; drowned bells toll from under the roots; things surface. | relic | flood |
+| 101 | Mythic | **Something denned here before the world had a name for it.** | The claimed floor beneath the broken ledge is scaled to a body no living species matches — bones set in the walls like reinforcement, still faintly warm, and every animal that enters gives it the same wide, permanent berth the forest itself seems to have agreed on generations ago. | relic | bone |
 ^walk-skin-wilderness

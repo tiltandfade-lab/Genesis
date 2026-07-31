@@ -8,7 +8,7 @@ player_facing: reveal
 voice_critical: false
 ---
 
-|d20|Encounter Type|Core Challenge & GM Action|
+|d24|Encounter Type|Core Challenge & GM Action|
 |:--|:--|:--|
 |**1**|**Empty / Atmospheric Break**|**No immediate threat.** The party enters a uniquely atmospheric zone. Roll on the **Sensory** and **Sign of Passage** tables. Used to build tension or foreshadow future threats without draining resources.|
 |**2**|**Trap / Barrier (Lock)**|**Hidden peril.** A poacher’s snare, magical ward, or physical barricade blocking the path. Roll on the **Interactables** table for the mechanism. Requires tools or ability checks to bypass.|
@@ -30,5 +30,9 @@ voice_critical: false
 |**18**|**Enemy / Combat**|**Hostile action.** Direct confrontation. Roll on **Tactical Terrain** to define the battlefield, then populate with hostile creatures. Check for Surprise based on terrain and Stealth.|
 |**19**|**Enemy / Combat**|**Hostile action.** Direct confrontation. Roll on **Tactical Terrain** to define the battlefield, then populate with hostile creatures. Check for Surprise based on terrain and Stealth.|
 |**20**|**Enemy / Combat**|**Hostile action.** Direct confrontation. Roll on **Tactical Terrain** to define the battlefield, then populate with hostile creatures. Check for Surprise based on terrain and Stealth.|
+|**21**|**Discovery / Occupied Lair**|**A claimed den, not empty ground.** The party finds a mouth, burrow, or hollow with fresh occupant sign. Roll on the **Landmark / Feature** table for the specific mouth and claim. Investigation and reading the sign, not automatic combat.|
+|**22**|**Discovery / Occupied Lair**|**A claimed den, not empty ground.** The party finds a mouth, burrow, or hollow with fresh occupant sign. Roll on the **Landmark / Feature** table for the specific mouth and claim. Investigation and reading the sign, not automatic combat.|
+|**23**|**Discovery / Occupied Lair**|**A claimed den, not empty ground.** The party finds a mouth, burrow, or hollow with fresh occupant sign. Roll on the **Landmark / Feature** table for the specific mouth and claim. Investigation and reading the sign, not automatic combat.|
+|**24**|**Discovery / Occupied Lair**|**A claimed den, not empty ground.** The party finds a mouth, burrow, or hollow with fresh occupant sign. Roll on the **Landmark / Feature** table for the specific mouth and claim. Investigation and reading the sign, not automatic combat.|
 
 ^wilderness-encounter-type

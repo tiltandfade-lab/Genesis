@@ -8,9 +8,9 @@ player_facing: reveal
 voice_critical: true
 ---
 
-### The d305 Wilderness Set Dressing Generator
+### The d307 Wilderness Set Dressing Generator
 
-|d305|Set Dressing Description|
+|d307|Set Dressing Description|
 |:--|:--|
 |**001**|A large rock shaped uncannily like a grinning face.|
 |**002**|A circle of polished river stones arranged deliberately on the ground.|
@@ -317,5 +317,7 @@ voice_critical: true
 |**303**|A cold fire pit ringed with blackened stones, one boot-print pressed in the ash.|
 |**304**|A clump of tall reeds and cattails leaning where something recently pushed through.|
 |**305**|A cluster of lichen-crusted boulders, one balanced in a way that shouldn't hold.|
+|**306**|A camp wash-stand of lashed poles and a hide basin, grey water pooling beneath the drain-hole.|
+|**307**|A field-kitchen lean-to, cook-fire cold, a suspended pot still swinging on its hook.|
 
 ^wilderness-set-dressing

@@ -8,9 +8,9 @@ player_facing: reveal
 voice_critical: true
 ---
 
-## Urban Set Dressing (object/feature) — d105
+## Urban Set Dressing (object/feature) — d106
 
-| d105 | Set Dressing (object/feature) |
+| d106 | Set Dressing (object/feature) |
 |---:|--------------------------------|
 | 1 | Stack of crates, one board loosened. |
 | 2 | Pile of sacks, twine cut and retied. |
@@ -117,4 +117,5 @@ voice_critical: true
 | 103 | A tattered awning over a shuttered stall, one strut snapped so it sags to the cobbles. |
 | 104 | A clothesline strung between windows, greyed washing left out through too many rains. |
 | 105 | A leaning headstone set into a churchyard nook, the name furred over with lichen. |
+| 106 | A collapsible market stall, awning rolled and lashed, counter locked for the night. |
 ^urban-set-dressing

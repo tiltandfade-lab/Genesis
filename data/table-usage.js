@@ -3012,6 +3012,54 @@ const TABLE_USAGE = {
     "domain": "World Building / Starting State",
     "file": "Engine/03. _Tables/01. World Building/Starting State/Starting State - Opening Bundle.md"
   },
+  "opening-register-medias": {
+    "base": "Opening Register",
+    "cls": "WIRED",
+    "consumers": {
+      "chain": [],
+      "code": [
+        "handoff.js",
+        "render.js",
+        "starting-state.js",
+        "world-gen.js"
+      ],
+      "procedure": []
+    },
+    "domain": "World Building / Starting State",
+    "file": "Engine/03. _Tables/01. World Building/Starting State/Opening Register.md"
+  },
+  "opening-register-mythic": {
+    "base": "Opening Register",
+    "cls": "WIRED",
+    "consumers": {
+      "chain": [],
+      "code": [
+        "handoff.js",
+        "render.js",
+        "starting-state.js",
+        "world-gen.js"
+      ],
+      "procedure": []
+    },
+    "domain": "World Building / Starting State",
+    "file": "Engine/03. _Tables/01. World Building/Starting State/Opening Register.md"
+  },
+  "opening-register-wrong": {
+    "base": "Opening Register",
+    "cls": "WIRED",
+    "consumers": {
+      "chain": [],
+      "code": [
+        "handoff.js",
+        "render.js",
+        "starting-state.js",
+        "world-gen.js"
+      ],
+      "procedure": []
+    },
+    "domain": "World Building / Starting State",
+    "file": "Engine/03. _Tables/01. World Building/Starting State/Opening Register.md"
+  },
   "over-the-horizon-threats-the-distant-looming-commitment-grounded-mythic": {
     "base": "Starting State - World Depth",
     "cls": "WIRED",
@@ -3661,6 +3709,22 @@ const TABLE_USAGE = {
     },
     "domain": "World Building / Starting State",
     "file": "Engine/03. _Tables/01. World Building/Starting State/Starting State - Entry.md"
+  },
+  "starting-state-opening-register": {
+    "base": "Opening Register",
+    "cls": "WIRED",
+    "consumers": {
+      "chain": [],
+      "code": [
+        "handoff.js",
+        "render.js",
+        "starting-state.js",
+        "world-gen.js"
+      ],
+      "procedure": []
+    },
+    "domain": "World Building / Starting State",
+    "file": "Engine/03. _Tables/01. World Building/Starting State/Opening Register.md"
   },
   "starting-state-pressur": {
     "base": "Starting State Pressure",

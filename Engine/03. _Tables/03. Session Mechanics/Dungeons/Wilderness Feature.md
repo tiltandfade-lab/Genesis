@@ -8,7 +8,7 @@ player_facing: reveal
 voice_critical: false
 ---
 
-|d303|The Landmark (Flavor)|Dimensions (Footprint & Height)|Tactical Effect|
+|d317|The Landmark (Flavor)|Dimensions (Footprint & Height)|Tactical Effect|
 |:--|:--|:--|:--|
 |**001**|**Eroded Obelisk:** Stone pillar with faded icons.|5'x5' base, 20' high|Total cover. DC 15 Athletics to scale.|
 |**002**|**Shattered Obelisk:** Snapped in half, top missing.|5'x5' base, 10' high|Total cover. Flat top grants elevation.|
@@ -313,5 +313,19 @@ voice_critical: false
 |**301**|**Ford Mooring Post:** A weathered mooring post at a river crossing, rope still knotted to it.|1' diameter, 5' high|Half cover. Anchor point for a rope line across the ford.|
 |**302**|**Trail Cairn:** A shoulder-high cairn of stacked stones marking the path.|3'x3' base, 4' high|Half cover. Toppling it (DC 12 Athletics) scatters Difficult Terrain.|
 |**303**|**Great Fallen Log:** A vast fallen trunk furred with moss, blocking the way.|4' diameter, 20' long|Half cover along its length; DC 10 Athletics to vault, Difficult Terrain to climb.|
+|**304**|**Weeping Den Mouth:** A low limestone slit exhaling cold, wet-earth air; clawed grooves flank the opening.|5' wide, 4' high mouth, 15' interior depth|Choke point. DC 12 Perception at the threshold reveals fresh bedding and gnawed bone inside.|
+|**305**|**Burrower's Warren:** A raw earthen shaft, walls smoothed by claw and belly, a spoil-mound heaped at the lip.|4' diameter shaft, 6' high spoil mound|Difficult terrain climbing the mound. The shaft narrows — Medium creatures must squeeze past the first bend.|
+|**306**|**Root-Hollow Maw:** A living tree's roots have grown around and swallowed a cavity, bark scarred smooth at the entrance from repeated passage.|8'x8' root-frame mouth, 10' high|Total cover at the frame. The hollow beyond breathes faint warm air — something denned here recently.|
+|**307**|**Drowned Sink:** A dark pool feeds down into a submerged throat; ripples move against the current every few minutes.|15' diameter pool, unknown depth|Hazard: DC 13 Strength save to resist the pull toward the siphon. Something surfaces and submerges on its own schedule.|
+|**308**|**Feral Adit:** An old mine's timber-shored entrance, props rotted and reset crookedly with fresh branches — something has moved back in.|6' wide, 7' high, 20' visible interior|Total cover. Old rail ties are Difficult Terrain; fresh territorial marks overlay the worked stone.|
+|**309**|**Twin-Throat Hollow:** Two mouths in the same outcrop, one wide and trampled, one narrow and clean — the den has more than one door.|Two mouths, 8' and 3' wide, 12' apart|Choke point at the narrow throat. The wide mouth offers no cover; the narrow one grants Half cover to a squeezing creature.|
+|**310**|**Overlook Den:** A broken shelf of rock juts above a shadowed mouth below, littered with cracked long-bones dragged up for the view.|10'x10' shelf, 8' above the mouth|Grants elevation. DC 10 Athletics or a rough-climb route reaches the shelf; the mouth below is Total cover from it.|
+|**311**|**Sagging Warren Roof:** A burrow's ceiling has slumped, roots and soil hanging low over a half-collapsed den mouth.|10'x10' footprint, 4' clearance|Difficult terrain (stooping). Hazard: DC 12 Dexterity save or the roof sheds another fall of soil (loud) when forced.|
+|**312**|**Abandoned Nest-Ring:** A ring of flattened bracken and old down feathers, the mouth behind it cold and undefended.|15' diameter nest ring, mouth 6' beyond|Half cover from the ring's berm. No current occupant sign — tracks lead away, not in.|
+|**313**|**Bone-Marked Threshold:** Sun-bleached ribs and skulls staked upright flank a dark opening, spaced with deliberate care.|10' wide marked approach, mouth 4'x4'|Half cover behind each stake. The marking pattern suggests territory, not decoration — DC 13 Nature identifies the species by bite-spacing.|
+|**314**|**Steam-Throat Vent:** A fissure breathes warm sulfurous air in slow tides, matching something's breathing rhythm deeper in.|5' wide vent, depth unknown|Heavily obscures 10' radius on the exhale. The rhythm is too regular to be geology alone.|
+|**315**|**Torn-Wide Maw:** A den mouth ripped far larger than any natural process explains, claw-gouges scoring both sides shoulder-high and higher.|15' wide, 12' high mouth|Total cover. The gouge height alone rules out anything Medium-sized.|
+|**316**|**Chevaux-de-Frise Barrier:** A portable X-framed timber barrier bristling with iron-tipped spikes, staged across the trail.|8' wide, 4' high|Half cover; costs 10 extra feet of movement to cross. DC 12 Dexterity (Acrobatics) crossing at speed or take 1d4 Piercing.|
+|**317**|**Gabion Revetment:** A run of stone-packed wicker baskets shoring a bank, wall foot, or breach.|10' long, 3' high|Half cover. A basket cut open (10 slashing damage) spills its stone and opens a gap.|
 
 ^wilderness-feature

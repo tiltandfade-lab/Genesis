@@ -8,7 +8,7 @@ player_facing: reveal
 voice_critical: false
 ---
 
-|d10|Biome Type|Descriptive Flavor|
+|d11|Biome Type|Descriptive Flavor|
 |:--|:--|:--|
 |**1**|**Arctic**|Frozen wastes, sweeping glaciers, and bitter tundra.|
 |**2**|**Coastal**|Salt-sprayed beaches, rugged sea cliffs, and tidal pools.|
@@ -20,5 +20,6 @@ voice_critical: false
 |**8**|**Swamp**|Fetid bogs, flooded marshes, and weeping willow mires.|
 |**9**|**Deeplands**|Subterranean caverns, sunless seas, and echoing tunnels.|
 |**10**|**Underwater**|Ocean depths, vibrant coral reefs, and kelp forests.|
+|**11**|**Fey-Bent Hollow**|A pocket of forest where the season, gravity, or light no longer quite agrees with the land around it.|
 
 ^wilderness-biome-type

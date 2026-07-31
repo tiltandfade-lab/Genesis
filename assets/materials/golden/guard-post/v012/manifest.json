@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "packId": "guard-post-ground-contact-grime-v012",
+  "status": "TECHNICAL_CANDIDATE_NOT_APPROVED",
+  "output": "assets/materials/golden/guard-post/v012/lower-wall-ground-contact-grime-albedo-alpha.png",
+  "outputSha256": "b5e2e64873af1063630edd1f56ad49ab0299239e4d0d5660dc59f2a15e1b176d",
+  "size": [
+    512,
+    128
+  ],
+  "method": "periodic low-resolution trim mask enlarged 4x with nearest-neighbor",
+  "receiverIndependence": {
+    "containsConstructionPattern": false,
+    "containsMortarShadow": false,
+    "containsBakedReceiverLighting": false,
+    "owns": [
+      "generic-discoloration-rgb",
+      "coverage-alpha"
+    ],
+    "parentOwns": [
+      "construction-rhythm",
+      "normal",
+      "ORM",
+      "lighting-response"
+    ]
+  },
+  "contactChecks": {
+    "bottomRowMinimumAlpha": 199,
+    "bottomRowOccupiedShare": 1.0,
+    "leftRightEdgeMeanAbsoluteDifference": 0.0
+  },
+  "projection": {
+    "mode": "receiver-local-trim",
+    "wrap": "repeat-x-clamp-y",
+    "verticalRule": "image-bottom-is-true-support-contact; irregular fade rises upward"
+  }
+}

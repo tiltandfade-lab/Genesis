@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "created": "2026-07-30",
+  "status": "retained-visual-evidence",
+  "law": "Projection-scoped rejection does not delete reusable form vocabulary.",
+  "engineRoleRegistry": "ARCHITECTURE_FORM_PROJECTION_ROLES",
+  "negativeControlRegistry": "ARCHITECTURE_REJECTED_MACHINERY_REGISTRY",
+  "files": [
+    {
+      "path": "af21-stair-seam-before-after-labeled.png",
+      "sha256": "c87a3e9312cf98feda48d9391c29c2ebbca27d00d5c295e231faf9e20cf15e35"
+    },
+    {
+      "path": "architecture-form-ladder-round-01-labeled.png",
+      "sha256": "5a3e60bf9e7725be2729f73fb47d0a435d438c5b0b82a67479d424901ac4fbd1"
+    },
+    {
+      "path": "architecture-form-ladder-round-02-labeled.png",
+      "sha256": "57b0cae8626fc53c9347e05471836e267eeca34440314c380c0c3b65ff05f098"
+    },
+    {
+      "path": "architecture-form-ladder-round-03-labeled.png",
+      "sha256": "be71f1a1ee4a40794666545948fc0d5cbb9b69aaedd128c67cab8bfa76a77d00"
+    },
+    {
+      "path": "architecture-form-ladder-round-04-variants-labeled.png",
+      "sha256": "0b547f5483c5aea0141c0ba2cca4239b9b381d854507a22f498144e0adf046fa"
+    },
+    {
+      "path": "architecture-form-ladder-round-05-suite-02-labeled.png",
+      "sha256": "809ac65b1eba3add075331203808bd44f41d32145e679a6c974f349e61ce2aaf"
+    },
+    {
+      "path": "architecture-form-ladder-round-06-growth-labeled.png",
+      "sha256": "c3c40c29f74dbef7c34593ee2942428afb537420ccd1e992fcee2d8e611b4164"
+    },
+    {
+      "path": "architecture-form-ladder-round-07-monumental-labeled.png",
+      "sha256": "8dd9d929510a0dfa0939275b2a1019a38857d073b08b4f46c8dd6f72309c8096"
+    },
+    {
+      "path": "architecture-growth-before-after-round-06-labeled.png",
+      "sha256": "ccf7c67fcde10536842f23a710ff332cea6dc1da4954c5ad74600bdb7d1ea18e"
+    },
+    {
+      "path": "watchtower-four-bearings-round-03-labeled.png",
+      "sha256": "8c455fd091ce9d4ca99b8063b0bdf65306aacd3f1b290415db8fa2b055b76b8a"
+    }
+  ]
+}

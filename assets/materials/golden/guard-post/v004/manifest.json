@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "packId": "guard-post-material-candidates-v004",
+  "status": "TECHNICAL_CANDIDATE_NOT_APPROVED",
+  "parentPack": "assets/materials/golden/guard-post/v003/manifest.json",
+  "materialMakerReceipt": "dev/material-lane/receipts/guard-post-ground-mm-v004-export-receipt.json",
+  "workflow": "preserved seam-locked v003 albedo + semantic low-frequency MM 1.3 height/normal/AO/ORM",
+  "materials": {
+    "turf": {
+      "albedo": {
+        "path": "assets/materials/golden/guard-post/v004/ground-upland-turf-albedo.png",
+        "sha256": "b1bac7fe6b73399214945925e2145d53b722d5e02571faaf04579f2b20affebc"
+      },
+      "height": {
+        "path": "assets/materials/golden/guard-post/v004/ground-upland-turf-height.png",
+        "sha256": "e793884b89cd05901589f8d83f2657622c8f5e34de4722daf0fb7a51b67faf06"
+      },
+      "normal": {
+        "path": "assets/materials/golden/guard-post/v004/ground-upland-turf-normal.png",
+        "sha256": "ba2f842b7712c04b3ecc677b157409ae7d459672b7f16cf40165bef65d1bb5a3"
+      },
+      "orm": {
+        "path": "assets/materials/golden/guard-post/v004/ground-upland-turf-orm.png",
+        "sha256": "391890820dcffeac866ef4a853136d2ebe705d02030d7eccb0aff33ec2b11fc5"
+      }
+    },
+    "road": {
+      "albedo": {
+        "path": "assets/materials/golden/guard-post/v004/ground-upland-road-albedo.png",
+        "sha256": "06f1746bccf66225e780feb9eac2641050a2eca7dab6135e055176dfe7b57d69"
+      },
+      "height": {
+        "path": "assets/materials/golden/guard-post/v004/ground-upland-road-height.png",
+        "sha256": "5a02b5c8d852ceb70f9d7a3dd8fa0348102a8c06bba74b3dc1e8934c7e94b180"
+      },
+      "normal": {
+        "path": "assets/materials/golden/guard-post/v004/ground-upland-road-normal.png",
+        "sha256": "ec1f43ba68dd8ffcc87c51ef3056bd1b5d3ae2ecbee12b57d0f90f06c1294c8d"
+      },
+      "orm": {
+        "path": "assets/materials/golden/guard-post/v004/ground-upland-road-orm.png",
+        "sha256": "6f51c84ec9e6f56c307e35052c24a9ada4da6f90f5063f2dcd5c88d9b058f447"
+      }
+    }
+  }
+}

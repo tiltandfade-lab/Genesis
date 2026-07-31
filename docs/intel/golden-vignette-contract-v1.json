@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "status": "wave-0-frozen-design-boundary",
-  "updated": "2026-07-29",
+  "updated": "2026-07-30",
   "authority": "docs/GOLDEN-SITE-VIGNETTE-CONTRACTS.md",
   "note": "This is a machine-readable design inventory, not a runtime JSON Schema.",
   "records": {
@@ -105,6 +105,24 @@
       ]
     }
   },
+  "optionalExtensions": {
+    "materializationIntent.architecture": [
+      "battleSpaceMode",
+      "institutionalScaleClass",
+      "luxuryObligations",
+      "wonderObligations",
+      "materializationWindowPolicy",
+      "civilizationScaleRegime",
+      "bodyPlanProfiles"
+    ],
+    "surfaceAssemblyPlan.architecture": [
+      "roofJunctions",
+      "stairSupportModes",
+      "stairSeams",
+      "assemblyClearanceAudit",
+      "presentationCutaway"
+    ]
+  },
   "enums": {
     "materializationDisposition": [
       "MATERIALIZE_NEW",
@@ -145,6 +163,25 @@
       "TRUTHFUL_PROXY",
       "OMITTED",
       "UNRESOLVED"
+    ],
+    "architectureBattleSpaceMode": [
+      "DEDICATED_INTERIOR",
+      "EXTERIOR_ARCHITECTURAL_PRECINCT",
+      "CAUSALLY_JUSTIFIED_HYBRID"
+    ],
+    "institutionalScaleClass": [
+      "FRONTIER",
+      "DOMESTIC",
+      "CIVIC",
+      "ELITE",
+      "MONUMENTAL",
+      "MEGAINTERIOR",
+      "GIANT_LEGACY"
+    ],
+    "stairSupportMode": [
+      "GROUNDED_SOLID",
+      "BEARING_ON_LOWER_STRUCTURE",
+      "SUSPENDED_OR_BRIDGED"
     ]
   },
   "invariants": [
@@ -154,6 +191,9 @@
     "terrain and construction share one datum, support graph, route graph and reservation set",
     "combat and camera projections cannot change committed topology",
     "all semantic asset demands receive a resolution disposition",
-    "all fallbacks and repairs are named and receipted"
+    "all fallbacks and repairs are named and receipted",
+    "architecture chooses interior, exterior precinct, or causally justified hybrid before massing",
+    "institutional and civilization scale are not satisfied by uniform human-building scale",
+    "new modular assemblies reject occupied clearance, disconnected stair seams and undeclared support"
   ]
 }

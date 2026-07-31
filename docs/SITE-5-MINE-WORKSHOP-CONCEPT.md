@@ -726,3 +726,14 @@ The original packet supports this working spec; its declared gaps kept `RESEARCH
 review rejected that promotion and retained `PARTIAL`. This document still cannot advance
 `CLAY-PROVED` without the retained fixture, and `FOUNDER-RULED`/`BRIEF-CONGRUENT` remain
 `PARTIAL` until the open card selections are founder-ruled.
+
+## Architecture integration ruling — 2026-07-30
+
+Underground workings are `DEDICATED_INTERIOR`; shaft-head yards, spoil fields, and
+surface processing are `EXTERIOR_ARCHITECTURAL_PRECINCTS`. A portal, cave-in, breached
+adit, or opened roof may be hybrid only when that exposing cause is source-backed.
+
+Haul equipment, workers, carriers, pumps, rescue routes, roof supports, platforms, and
+stairs share one clearance/support audit. A nonhuman labor or builder scale is legal
+only when the request identifies that body or history; large workings alone do not
+imply `GIANT_LEGACY`.

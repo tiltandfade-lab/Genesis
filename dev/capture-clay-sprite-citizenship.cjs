@@ -381,9 +381,12 @@ async function waitForLineup(page, mode) {
       rendererUsesPerceptualReadabilityFloor: settled.renderContract
         && settled.renderContract.readabilityFloor === 0.12
         && settled.renderContract.realmTintStrength === 0.15,
-      everyLoadedSpriteUsesMipmappedMinification: settled.renderContract
+      everyLoadedSpriteUsesCrispNoMipmapSampling: settled.renderContract
         && settled.renderContract.textures.length >= 7
-        && settled.renderContract.textures.every((row) => row.generateMipmaps),
+        && settled.renderContract.textures.every((row) => (
+          row.generateMipmaps === false
+          && row.samplingAuditMode === "nearest-mag-linear-min-no-mipmap"
+        )),
       everyStandeeUsesAlphaToCoverage: settled.renderContract
         && settled.renderContract.materials.length >= 7
         && settled.renderContract.materials.every((row) => row.alphaToCoverage),

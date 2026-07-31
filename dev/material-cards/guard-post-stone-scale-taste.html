@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link rel="icon" href="data:,">
+  <title>Guard Post Stone Scale Taste Card</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: #0d0e0d; color: #ece5d5; }
+    body { font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+    #sheet { width: 1800px; padding: 44px; background: #10110f; }
+    header { display: flex; justify-content: space-between; align-items: end;
+      padding-bottom: 22px; border-bottom: 1px solid #494236; }
+    .eyebrow { color: #d1a455; font-size: 15px; font-weight: 800;
+      letter-spacing: .14em; text-transform: uppercase; }
+    h1 { margin: 5px 0 0; font: 500 43px/1.05 Georgia, serif; }
+    .contract { color: #a49a89; font: 14px/1.5 ui-monospace, monospace; text-align: right; }
+    .note { margin: 20px 0 24px; padding: 13px 17px; border-left: 4px solid #d1a455;
+      color: #d8cfbd; background: #17160f; font: 17px/1.4 Georgia, serif; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    article { padding: 18px; border: 1px solid #494236;
+      background: linear-gradient(180deg, #1b1b17, #141511); }
+    .head { display: flex; justify-content: space-between; align-items: baseline;
+      gap: 18px; margin-bottom: 12px; }
+    h2 { margin: 0; color: #f1e8d5; font: 500 27px/1 Georgia, serif; }
+    .scale { color: #d1a455; font: 750 14px/1 ui-monospace, monospace; }
+    .frame { width: 100%; aspect-ratio: 2.15; overflow: hidden; border: 1px solid #565044;
+      background: #171a1c; }
+    canvas { width: 100%; height: 100%; display: block; }
+    .meta { display: flex; justify-content: space-between; gap: 18px; margin-top: 9px;
+      color: #aaa08f; font: 12px/1.35 ui-monospace, monospace; }
+    .current { border-color: #8e6b31; box-shadow: inset 0 0 0 1px #8e6b31; }
+    .current .scale::after { content: " · CURRENT"; color: #dfc184; }
+    footer { display: flex; justify-content: space-between; margin-top: 22px; color: #837a6c;
+      font: 12px/1.4 ui-monospace, monospace; }
+  </style>
+</head>
+<body>
+<main id="sheet">
+  <header>
+    <div><div class="eyebrow">Golden Site 1 · Physical Material Calibration</div>
+      <h1>Primary Stone Block Scale</h1></div>
+    <div class="contract">same parent maps · same wall · same camera · same light<br>
+      sprite-derived albedo · nearest sampling · no condition overlays</div>
+  </header>
+  <p class="note">Only physical repeat scale changes. Larger metre values make the same authored
+    blocks larger in world space. The standee and 1.65 m combat-cell ruler remain fixed.</p>
+  <section class="grid" id="grid"></section>
+  <footer><span>Parent: guard-post v010 masonry-rough albedo + v001 normal/ORM</span>
+    <span>Review intent: readability at gameplay distance, plausible masonry, TS/FFT-style graphic rhythm</span></footer>
+</main>
+<script type="module">
+  import * as THREE from "../../vendor/three/three.module.js";
+  const options = [
+    { id: "A", repeat: 1.65, relative: "1.00×", note: "current · densest courses" },
+    { id: "B", repeat: 2.20, relative: "1.33×", note: "moderate enlargement" },
+    { id: "C", repeat: 2.75, relative: "1.67×", note: "large defensive masonry" },
+    { id: "D", repeat: 3.30, relative: "2.00×", note: "heroic / monumental blocks" }
+  ];
+  const grid = document.querySelector("#grid");
+  grid.innerHTML = options.map((option) => `
+    <article class="${option.repeat === 1.65 ? "current" : ""}" data-id="${option.id}">
+      <div class="head"><h2>${option.id} · ${option.note}</h2>
+        <div class="scale">${option.repeat.toFixed(2)} m / repeat · ${option.relative}</div></div>
+      <div class="frame"></div>
+      <div class="meta"><span>wall 7.2 × 4.2 m · ruler ticks 1.65 m</span>
+        <span>albedo nearest · normal/ORM trilinear</span></div>
+    </article>`).join("");
+
+  const loader = new THREE.TextureLoader();
+  const load = (url) => new Promise((resolve, reject) => loader.load(url, resolve, undefined, reject));
+  const [baseAlbedo, baseNormal, baseOrm, standeeMap] = await Promise.all([
+    load("../../assets/materials/golden/guard-post/v010/masonry-rough-albedo.png"),
+    load("../../assets/materials/golden/guard-post/v001/masonry-rough-normal.png"),
+    load("../../assets/materials/golden/guard-post/v001/masonry-rough-orm.png"),
+    load("../../assets/sprites/spr-pc-human-fighter-female.png")
+  ]);
+  baseAlbedo.colorSpace = THREE.SRGBColorSpace;
+  baseNormal.colorSpace = baseOrm.colorSpace = THREE.NoColorSpace;
+  standeeMap.colorSpace = THREE.SRGBColorSpace;
+  standeeMap.magFilter = standeeMap.minFilter = THREE.NearestFilter;
+
+  function texture(source, repeat, kind) {
+    const result = source.clone();
+    result.needsUpdate = true;
+    result.wrapS = result.wrapT = THREE.RepeatWrapping;
+    result.repeat.set(7.2 / repeat, 4.2 / repeat);
+    if (kind === "albedo") {
+      result.magFilter = THREE.NearestFilter;
+      result.minFilter = THREE.NearestFilter;
+      result.generateMipmaps = false;
+    } else {
+      result.magFilter = THREE.LinearFilter;
+      result.minFilter = THREE.LinearMipmapLinearFilter;
+    }
+    return result;
+  }
+  function render(option, frame) {
+    const width = frame.clientWidth, height = frame.clientHeight;
+    const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+    renderer.setSize(width, height, false);
+    renderer.setPixelRatio(1);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.AgXToneMapping;
+    renderer.toneMappingExposure = 1.04;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    frame.append(renderer.domElement);
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x171a1c);
+    scene.add(new THREE.HemisphereLight(0xf2ead8, 0x2b3035, 1.3));
+    const sun = new THREE.DirectionalLight(0xffddb0, 3.2);
+    sun.position.set(-5, 7, 6);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(1024, 1024);
+    scene.add(sun);
+    const wallMat = new THREE.MeshStandardMaterial({
+      map: texture(baseAlbedo, option.repeat, "albedo"),
+      normalMap: texture(baseNormal, option.repeat, "normal"),
+      aoMap: texture(baseOrm, option.repeat, "orm"),
+      roughnessMap: texture(baseOrm, option.repeat, "orm"),
+      metalnessMap: texture(baseOrm, option.repeat, "orm"),
+      roughness: 1, metalness: 1, aoMapIntensity: 0.28
+    });
+    wallMat.normalScale.set(0.24, 0.24);
+    const wallGeo = new THREE.BoxGeometry(7.2, 4.2, 0.48);
+    wallGeo.setAttribute("uv1", wallGeo.attributes.uv.clone());
+    const wall = new THREE.Mesh(wallGeo, wallMat);
+    wall.position.set(0, 2.1, 0);
+    wall.castShadow = wall.receiveShadow = true;
+    scene.add(wall);
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(15, 10),
+      new THREE.MeshStandardMaterial({ color: 0x4b493f, roughness: 1 }));
+    floor.rotation.x = -Math.PI / 2;
+    floor.receiveShadow = true;
+    scene.add(floor);
+    const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: standeeMap, transparent: true, alphaTest: 0.42, toneMapped: false
+    }));
+    sprite.center.set(0.5, 0);
+    sprite.position.set(2.2, 0.03, 1.0);
+    sprite.scale.set(1.12, 1.08, 1);
+    scene.add(sprite);
+    for (let i = -2; i <= 2; i++) {
+      const tick = new THREE.Mesh(new THREE.BoxGeometry(0.035, 0.035, 0.52),
+        new THREE.MeshBasicMaterial({ color: i === 0 ? 0xd8ad58 : 0xd7d0c0 }));
+      tick.position.set(i * 1.65, 0.04, 0.72);
+      scene.add(tick);
+    }
+    const camera = new THREE.PerspectiveCamera(24, width / height, 0.1, 100);
+    camera.position.set(7.8, 5.1, 9.8);
+    camera.lookAt(0, 1.85, 0);
+    renderer.render(scene, camera);
+    return { id: option.id, metersPerRepeat: option.repeat, relative: option.relative };
+  }
+  const report = options.map((option) =>
+    render(option, document.querySelector(`[data-id="${option.id}"] .frame`)));
+  await document.fonts.ready;
+  await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  window.__renderReport = {
+    schema: "GuardPostStoneScaleTasteV1",
+    invariant: "same-maps-same-geometry-same-camera-same-light",
+    options: report
+  };
+  window.__ready = true;
+</script>
+</body>
+</html>

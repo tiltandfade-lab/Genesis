@@ -400,12 +400,38 @@ function syncStandeeContactBlob(fig){
   if(Number.isFinite(fig.userData.claySupportSurfaceY)){
     blob.position.y = fig.userData.claySupportSurfaceY + INTERIOR_POOL_Y_OFFSET;
   }
-  blob.rotation.order = "YXZ";
-  blob.rotation.x = -Math.PI / 2;
-  blob.rotation.y = yaw;
+  if(fig.userData.clayStandeePlaneTilt && fig.userData.standeeBaseMesh
+      && blob.parent && typeof fig.userData.standeeBaseMesh.getWorldQuaternion === "function"){
+    // GOLDEN SITE 1 grounding resumption (2026-07-30): terrain witnesses previously had no contact
+    // pool at all. Once mounted, leaving the pool as a flat XZ quad on a graded cell would recreate
+    // the original floating/penetrating defect at a larger radius. Reuse the BASE'S LIVE solved
+    // orientation—the same object updateSpriteBillboardYaw has already conformed to the stand
+    // plane—then rotate PlaneGeometry's +Z normal onto that base's +Y. Converting through the
+    // blob parent's world quaternion keeps this correct even when the terrain proof group itself
+    // is transformed. No second slope/yaw derivation is allowed here.
+    fig.userData.standeeBaseMesh.getWorldQuaternion(STANDEE_CONTACT_BASE_WORLD_QUAT);
+    blob.parent.getWorldQuaternion(STANDEE_CONTACT_PARENT_WORLD_QUAT);
+    STANDEE_CONTACT_PARENT_WORLD_QUAT.invert();
+    blob.quaternion.copy(STANDEE_CONTACT_PARENT_WORLD_QUAT)
+      .multiply(STANDEE_CONTACT_BASE_WORLD_QUAT)
+      .multiply(STANDEE_CONTACT_PLANE_QUAT);
+    blob.userData.contactConformsToTerrain = true;
+  } else {
+    blob.rotation.order = "YXZ";
+    blob.rotation.x = -Math.PI / 2;
+    blob.rotation.y = yaw;
+    blob.userData.contactConformsToTerrain = false;
+  }
   blob.userData.contactOffset = offset;
   blob.userData.linkedSceneObjectId = fig.userData.sceneObjectId || fig.userData.unitId || null;
 }
+
+// Reused by the per-render contact sync above. PlaneGeometry faces +Z; -90° about X points that
+// normal along the base's +Y before the base's own world orientation is applied.
+const STANDEE_CONTACT_BASE_WORLD_QUAT = new THREE.Quaternion();
+const STANDEE_CONTACT_PARENT_WORLD_QUAT = new THREE.Quaternion();
+const STANDEE_CONTACT_PLANE_QUAT = new THREE.Quaternion()
+  .setFromAxisAngle(new THREE.Vector3(1, 0, 0), -Math.PI / 2);
 
 // BW2-2 ADDENDUM (Adam, mid-flight review — "the contact shadow... really sells the illusion"): the
 // contact pool is a SOFT RADIAL MULTIPLY quad, replacing VP7's flat hard-edged disc. The texture is

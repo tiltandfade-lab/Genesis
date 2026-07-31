@@ -1,9 +1,9 @@
 ---
 type: orchestration-plan
 project: Genesis
-status: FOUNDER-AUTHORIZED PROGRAM — Waves 0–1 passed; Wave 2 is next; later waves are gate-locked
+status: FOUNDER-AUTHORIZED PROGRAM — Waves 0–1 passed; Wave 2 implementation/proofs active; later waves are gate-locked
 created: 2026-07-29
-updated: 2026-07-29
+updated: 2026-07-30
 owner: the unified Procedural Vignette Synthesizer program
 authority:
   - ART-DIRECTION-CANON.md
@@ -91,6 +91,12 @@ identity. It does not mean a sprawling board. The active `MaterializationWindow`
 compact; the larger place continues through precommitted frontiers, linked windows,
 world context, memory, and prose.
 
+Architecture adds one important refinement: a compact active window does not imply a small
+building. The window may be a hillside exterior precinct, a dedicated room graph, one corner of a
+Grand Central-scale interior, or one surviving slice of a giant-built ruin whose full exterior and
+footprint never materialize. Scale is spent inside the window through height, galleries, columns,
+walls, light, and continuation.
+
 ## 2. How the Golden Site documents feed the program
 
 The corpus is organized by job. No one document should absorb the others.
@@ -174,6 +180,22 @@ connections, and tactical reservations. A foundation cuts or bridges the terrain
 road grades through it; a wall follows, resists, or deliberately contradicts it. The
 building stage may request terrain edits, and the terrain stage may expose construction
 opportunities, but neither owns a second map.
+
+Architecture-bearing requests insert one pre-massing decision:
+
+```text
+host + active purpose
+  -> dedicated interior | exterior architectural precinct | causally justified hybrid
+  -> institutional scale and civilization scale regime
+  -> materialization window and continuations
+  -> room/precinct topology, terrain, structure, circulation, surfaces, light
+```
+
+Frontier/domestic forms remain valid outcomes. Elite, monumental, megainterior, and giant-legacy
+demands require their own proportion, luxury, wonder, color/light, and historical-causality
+obligations. The engine may not satisfy them by scaling a cottage or filling a dollhouse with props.
+All new modular assemblies pass roof-closure, support, stair-seam, route/headroom clearance, and
+camera-occlusion gates before material or asset resolution.
 
 ### 3.3 Output contract
 
@@ -546,6 +568,17 @@ walk/game/combat/save/terrain gates pass. The 218 natural combined
 host. Evidence: `intel/golden-vignette-wave1-verification.md`. Wave 2 is now the next
 authorized product cut.
 
+**Post-ruling read-only audit — 2026-07-30.** The frozen corpus remains byte-identical.
+`intel/golden-vignette-architecture-ruling-audit.{json,md}` adds a one-to-one diagnostic
+overlay for the new battle-space, institutional-scale, civilization/body-scale, and
+modular-clearance rulings. It changes zero dispositions and zero rollers. It finds
+7,505 architecture-bearing requests, 3,895 exterior-precinct demands, 3,597 dedicated
+interior demands, 763 scale/body-relative demands, and 627 scale-coded requests that
+correctly remain `DECORATE_LOCAL`. It also preserves 219 Prison / Asylum rows as
+unresolved, 810 pure cavern rows without lair implication, and zero inferred hybrids
+or `GIANT_LEGACY` claims. The overlay is evidence for adapter design and proof order,
+not a second production classifier.
+
 ### Wave 2 — First end-to-end compact vignette
 
 **Goal:** prove one shared compiler with the smallest useful visible target.
@@ -575,6 +608,33 @@ Deliver:
 **Gate W2:** no seed/site-id patch; legal changed seeds; connected natural ground and
 constructed threshold read as one composition; social and tactical plans both work;
 four bearings remain legible; asset fallback preserves every required role.
+
+#### Spatial compiler correction — 2026-07-31
+
+The first changed-seed Guard Post family sheet proved that bounded dimension and position shifts
+inside one shoulder/road/post template do not satisfy W2's required family diversity. Before further
+broad beauty work, Wave 2 now routes through
+[`GOLDEN-SITE-SPATIAL-COMPILER-PLAN.md`](GOLDEN-SITE-SPATIAL-COMPILER-PLAN.md): landform skeleton,
+typed parcels, build plots, negotiated cut/fill/retain/embed earthworks, hierarchical construction
+assembly/WFC, bounded completion, and a categorical diversity gate. This is an internal compiler
+extension under the frozen request/plan/receipt boundary, not a second engine or a new Golden-site
+runtime type.
+
+#### Architecture proof bridge — 2026-07-30
+
+The architectural clay-room ladder is admitted as shared form vocabulary but does not
+promote a Golden Site or bypass a wave gate. Before broad form expansion continues,
+the program takes two cross-cutting, real-request proofs that the new rulings made
+necessary:
+
+1. a Site-10-like urban exterior precinct—hillside alley/public frontage, responsive
+   terrain, retaining construction, stairs, multiple routes, and four bearings; then
+2. a human monumental dedicated interior—no exterior visibility, explicit
+   continuations, material/luxury hierarchy, local light, and quiet scale.
+
+The first is the current proof. These are bounded compiler/architecture evidence inside
+the active Wave-2 product cut, not Wave-4 site completion. Wave 3 remains the next
+generalization gate after the bridge and Wave-2 close.
 
 ### Wave 3 — Natural ground and transient occupation
 

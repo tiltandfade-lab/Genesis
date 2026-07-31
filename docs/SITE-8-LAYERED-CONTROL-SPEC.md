@@ -1065,3 +1065,15 @@ the adversarial case where the obligations do not fit and the system **demotes r
 
 If those four panels read clearly at the fixed production camera, the transform is worth building.
 If they do not, no amount of prose in this document will save it.
+
+## 16. Architecture integration ruling — 2026-07-30
+
+Layered control inherits the host's battle-space mode, institutional/civilization
+scale, body profiles, support graph, and committed geometry. It may change recognition,
+permission, attribution, schedule, service, property, information, barriers, and route
+desirability. It may not manufacture a new room, exterior, ruin, cutaway, or hybrid to
+make the conflict legible.
+
+Any physical control delta must use an admitted placement slot and rerun the host's
+collision, support, stair, headroom, and camera gates. Failure demotes the physical
+expression; it does not expand the materialization window.

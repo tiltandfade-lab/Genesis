@@ -997,3 +997,16 @@ Gargantuan/titanic band under a new `PRODUCTION-FORMAT.md` ratio — which is ex
 decision `ART-DEPARTMENT.md` already says is pending.
 **Needs to judge it:** one production-camera frame with a Gargantuan and a Medium standee side
 by side at true footprint ratio, at the zoom range the site will actually be played at.
+
+## Architecture integration ruling — 2026-07-30
+
+Scale is relational, not a uniform multiplier and not a site selector. Site 11 inherits
+its host's battle-space mode, then compiles explicit body-relative apertures, routes,
+cover, support, interaction, service, wear, and camera composition. At least two unlike
+body profiles are mandatory.
+
+`MEGAINTERIOR` describes the active spatial experience; `GIANT_LEGACY` additionally
+requires explicit original-builder or original-occupant evidence. A colossal object,
+dragon trace, or “megastructure” label alone is insufficient. The proof receipt names
+original builder, original occupant, current occupant, each body envelope, and which
+members are inherited, repaired, repurposed, or newly built at current scale.

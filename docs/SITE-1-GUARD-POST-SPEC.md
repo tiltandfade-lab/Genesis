@@ -559,3 +559,15 @@ own proof.
 - prove culture silhouette/construction without labels or furnishings;
 - confirm lean research packet licensing remains clean; and
 - build and retain the fixture in `GOLDEN-SITES-PROOF-QUEUE.md`.
+
+## Architecture integration ruling — 2026-07-30
+
+The default battle space is an `EXTERIOR_ARCHITECTURAL_PRECINCT`: route, terrain,
+foundation, barrier, wall, guardroom frontage, stair, and observation deck share one
+datum and support graph. A hybrid is legal only when a sourced gate/wall/terrain breach
+actually exposes an interior. Frontier or civic scale does not license a tiny isolated
+building; the active window may show only the controlling slice of a larger work.
+
+Every new assembly must pass roof/wall closure, foundation/support, direct stair seams,
+route/headroom clearance, and all four camera bearings. Witnesses include a six-foot
+human and every admitted defender/attacker body envelope.

@@ -2,7 +2,7 @@
 
 type: execution-queue
 created: 2026-07-25
-updated: 2026-07-29
+updated: 2026-07-30
 authority: `GOLDEN-SITES-CATALOG.md` status gates
 founder choices: `GOLDEN-SITES-FOUNDER-QUEUE.md`
 master_plan: `GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md`
@@ -44,12 +44,62 @@ Every Golden Site proof must:
 10. include a context-disabled capture and a real-roll context-enabled capture over
     identical mechanics, ids, portals, and knowledge;
 11. preserve mechanics, routes, provenance, and ids when dressing/context is applied;
-    and
 12. retain failures as diagnostic evidence rather than silently hand-authoring them
-   away.
+   away;
+13. choose `DEDICATED_INTERIOR`, `EXTERIOR_ARCHITECTURAL_PRECINCT`, or a
+    `CAUSALLY_JUSTIFIED_HYBRID` before massing; a hybrid names the source-backed breach,
+    collapse, missing roof, or other exposing cause;
+14. name the institutional scale class and, where relevant, distinguish original
+    builder, original occupant, current occupant, and current body envelopes rather
+    than uniformly scaling a human building;
+15. pass roof/wall closure, support/foundation datum, direct stair-seam,
+    route/headroom clearance, and fixed-camera occlusion gates for every new modular
+    assembly; and
+16. treat the compact active window as a view into a place rather than as a cap on the
+    place's building size, height, depth, or continuation.
 
 A site earns `CLAY-PROVED: PASS` only when the canonical hero, changed-seed sheet, and
 adversarial sheet all pass. One flattering image is insufficient.
+
+## 2026-07-30 architecture-ruling preflight
+
+The retained Wave-1 corpus is a frozen before-state. The read-only overlay and report in
+`intel/golden-vignette-architecture-ruling-audit.{json,md}` classify all 12,718 requests
+without changing a roller, a request disposition, or a Golden Site runtime branch.
+
+Measured demand:
+
+- 7,505 requests are architecture-bearing;
+- 3,895 require an exterior architectural precinct;
+- 3,597 require a dedicated interior;
+- 2,187 carry elite or monumental luxury/wonder obligations;
+- 763 require body-relative scale and clearance;
+- 627 of those scale-coded requests remain `DECORATE_LOCAL`;
+- 219 Prison / Asylum rows remain correctly `UNRESOLVED`;
+- 810 pure caverns remain caverns rather than implied lairs; and
+- zero hybrids or `GIANT_LEGACY` regimes can be safely inferred from the retained
+  evidence.
+
+This changes the immediate proof order:
+
+1. **Site 10 exterior precinct:** a real-roll hillside alley/public-frontage slice that
+   combines responsive terrain, constructed retaining/frontage geometry, stairs, a
+   route decision, and four-bearing camera proof. This is the next proof.
+2. **Human monumental dedicated interior:** one corner of a grand sanctuary or civic
+   hall, with no exterior visibility, explicit upward/lateral continuations, luxury,
+   material hierarchy, local lights, and quiet scale.
+3. **Site 11 megainterior/body relation:** a current Medium-scale circulation window
+   inside a much older nonhuman-scale place, but only from a request that explicitly
+   identifies builder/occupant history and at least two body profiles.
+4. **Site 9 linked fortress windows:** exterior approach/gate/wall-walk and a separate
+   dedicated interior; no connector-platform stair shortcut and no unjustified hybrid.
+5. **Scale-coded local feature:** an oversized object or creature trace that remains
+   `DECORATE_LOCAL` while terrain contact, clearance, cover, interaction, and camera
+   composition respond to its scale.
+
+The architectural clay-room ladder is now admitted as form vocabulary, not as proof of
+any numbered site. Every item above must still originate in a retained walk request and
+pass the full common contract.
 
 ## Shared ontology / host-transform proof
 

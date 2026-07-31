@@ -596,3 +596,15 @@ non-Christian communal examples; guest institutions after their own evidence/pro
   treating it as an out-of-scope host;
 - clay-prove court size, stair width, arcade fit, roofs, camera, plans, and lighting; and
 - build and retain the fixture in `GOLDEN-SITES-PROOF-QUEUE.md`.
+
+## Architecture integration ruling — 2026-07-30
+
+The court/campus is an `EXTERIOR_ARCHITECTURAL_PRECINCT`; a sanctuary, refectory, great
+hall, library, or other escalated room graph is a `DEDICATED_INTERIOR`. They are linked
+materialization windows of one institution, not a default dollhouse hybrid. A breach or
+open construction may expose them only when the source names that cause.
+
+Site 4 spans civic, elite, and monumental institutions. Monumental proofs owe
+processional proportion, material hierarchy, luxury/wonder obligations, local light,
+quiet scale, and continuations beyond the compact window. The building may be much
+larger than the board.

@@ -46,8 +46,9 @@ const runtime = vm.runInContext(`({
   torch:lightRecipeFor("torchlit"),
   legacy:CLAY_C1A_LIGHT_PROFILE
 })`, context);
-check("2. runtime registry has 10 world recipes and 2 diagnostics",
-  runtime.keys.length === 12 && runtime.rolled.length === 10, runtime);
+check("2. runtime registry has 11 world recipes and 2 diagnostics",
+  runtime.keys.length === 13 && runtime.rolled.length === 11
+    && runtime.rolled.includes("golden-site-daylit"), runtime);
 check("3. neutral, warm/cool, and fantasy torch modes are explicitly distinct",
   runtime.neutral.mode === "diagnostic-neutral"
     && runtime.pair.mode === "diagnostic-studio"

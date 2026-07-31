@@ -1,0 +1,125 @@
+{
+  "schema": "GenesisGuardPostMaterialCandidatePackV1",
+  "version": 1,
+  "status": "BEST_STARTING_PARENTS_REQUIRING_GUARD_POST_CONTEXT_REVIEW",
+  "materialPolicy": {
+    "albedoAuthority": "sprite-derived source",
+    "depthPolicy": "separate semantic depth guide; albedo may not be embossed wholesale",
+    "approvalPolicy": "prior approval and technical PASS establish lineage only; every Guard Post profile and mutation requires an in-context verdict",
+    "metersPerCombatTile": 1.65
+  },
+  "materials": {
+    "masonry-rough": {
+      "role": "old load-bearing masonry",
+      "contextStatus": "best-starting-parent",
+      "source": "dev/material-lane/source-sprites/b04-masonry-interior-v001/wall-rough-hewn-block-selected-v001.png",
+      "workflow": "sprite albedo -> dark-seam depth guide -> Material Maker 1.3",
+      "maps": {
+        "albedo": {
+          "file": "masonry-rough-albedo.png",
+          "sha256": "6f2af30d9bfb911d4d3b6b55b820a198902421d2360da99a57ef9b6c4d8807fe"
+        },
+        "normal": {
+          "file": "masonry-rough-normal.png",
+          "sha256": "e07640ed75b83b9b00070020976455641dd62ce2e071c8eaf5d0054feeb03d69"
+        },
+        "orm": {
+          "file": "masonry-rough-orm.png",
+          "sha256": "a92f9b0da981ae9e516e97976259721fb5e1f10bba5e43d2e8dfca4ef1292460"
+        }
+      }
+    },
+    "masonry-ashlar": {
+      "role": "dressed edge and causal repair",
+      "contextStatus": "best-starting-parent",
+      "source": "dev/material-lane/source-sprites/b04-masonry-interior-v001/wall-ashlar-dressed-selected-v001.png",
+      "workflow": "sprite albedo -> dark-seam depth guide -> Material Maker 1.3",
+      "maps": {
+        "albedo": {
+          "file": "masonry-ashlar-albedo.png",
+          "sha256": "362948a3d1e97fa9b3bc600a4aa1371e11edac15cbe5a78492afeed382b15ff8"
+        },
+        "normal": {
+          "file": "masonry-ashlar-normal.png",
+          "sha256": "6276d07a557e0c31d4b27aa230a2ba73d8986cb42b6923bdb1414d945a8d08d3"
+        },
+        "orm": {
+          "file": "masonry-ashlar-orm.png",
+          "sha256": "de2893203d364f0b5c0748a61a7b79a4e934b74a0b3e1774cae078e409c76c2b"
+        }
+      }
+    },
+    "roof-slate": {
+      "role": "institutional weather roof",
+      "contextStatus": "candidate",
+      "source": "dev/material-lane/proofs/b01-autonomous-v006/b01-autonomous-v006-slate.png",
+      "workflow": "ImageGen component sprites -> deterministic toroidal assembly",
+      "maps": {
+        "albedo": {
+          "file": "roof-slate-albedo.png",
+          "sha256": "3a2e4a7dc4bd83693c5040e709c5fd738e67465b6f4229e5d6f9e66c55f3fa3f"
+        }
+      }
+    },
+    "roof-timber-shingle": {
+      "role": "upland weather roof",
+      "contextStatus": "candidate",
+      "source": "dev/material-lane/proofs/b01-autonomous-p2-v003/b01-autonomous-p2-v003-timber-shingle.png",
+      "workflow": "ImageGen component sprites -> deterministic toroidal course assembly",
+      "maps": {
+        "albedo": {
+          "file": "roof-timber-shingle-albedo.png",
+          "sha256": "40a549ed758a7996f100cfa35b318b5a3d94e6540578d7354bcf5c6e3bb21033"
+        }
+      }
+    },
+    "timber-structural": {
+      "role": "post, beam, shutter, barrier, and deck",
+      "contextStatus": "candidate",
+      "source": "dev/material-lane/source-sprites/b01-fast-lane-v001/timber-structural-grain-seamlocked-v001.png",
+      "workflow": "direct sprite field -> continuous-field seam lock",
+      "maps": {
+        "albedo": {
+          "file": "timber-structural-albedo.png",
+          "sha256": "d42fd6042d3a77aa2cb1bfa6038a4fc6db0913023c9df578740c96e4d84bb2b4"
+        }
+      }
+    },
+    "ground-meadow": {
+      "role": "quiet upland ground",
+      "contextStatus": "candidate",
+      "source": "dev/material-lane/source-sprites/b03-exterior-ground-v001/grass-meadow-selected-v001.png",
+      "workflow": "direct top-down sprite field -> narrow continuous-field seam lock",
+      "maps": {
+        "albedo": {
+          "file": "ground-meadow-albedo.png",
+          "sha256": "11a1668cb3d0858c476eb44ead141109b9edb3656f34b952f2df4c2304d63387"
+        }
+      }
+    },
+    "ground-road": {
+      "role": "compacted traffic surface",
+      "contextStatus": "candidate",
+      "source": "dev/material-lane/source-sprites/b03-exterior-ground-v001/worn-path-selected-v001.png",
+      "workflow": "direct top-down sprite field",
+      "maps": {
+        "albedo": {
+          "file": "ground-road-albedo.png",
+          "sha256": "3c6014aec5e7c87905d17b69f17fae53d5d0cc0a4f9388709adfdf5730e2c39e"
+        }
+      }
+    },
+    "ground-scree": {
+      "role": "cut face and exposed stony substrate",
+      "contextStatus": "candidate",
+      "source": "dev/material-lane/source-sprites/b03-exterior-ground-v001/gravel-scree-selected-v001.png",
+      "workflow": "direct top-down sprite field -> narrow continuous-field seam lock",
+      "maps": {
+        "albedo": {
+          "file": "ground-scree-albedo.png",
+          "sha256": "1edb247bbcb59be7174b449b54393f28c6f531ca12ea7cce43df6a6cc8892e83"
+        }
+      }
+    }
+  }
+}

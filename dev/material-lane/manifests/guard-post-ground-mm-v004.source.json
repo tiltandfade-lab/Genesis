@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "checkpoint": "Golden-Site-1-guard-ground-MM-v004",
+  "workflow": "v003 seam-locked sprite albedo -> semantic low-frequency height guide -> Material Maker 1.3 height/normal/AO/ORM",
+  "controlledRule": "Albedo pixels retain identity; only broad substrate structure becomes lighting relief.",
+  "parentManifest": "assets/materials/golden/guard-post/v003/manifest.json",
+  "materials": [
+    {
+      "id": "guard-ground-turf-v004",
+      "label": "Guard Post upland turf",
+      "parent": "assets/materials/golden/guard-post/v003/ground-upland-turf-albedo.png",
+      "guide_mode": "broad_luminance",
+      "guide_radius": 9,
+      "guide_contrast": 0.3,
+      "graph_blur": 3,
+      "normal": 0.12,
+      "ao": 0.07,
+      "roughness": 0.9,
+      "depth_scale": 0.006,
+      "intent": "Only broad turf cushions become relief; painted grass blades, color clusters, and dithering remain albedo identity.",
+      "parentSha256": "b1bac7fe6b73399214945925e2145d53b722d5e02571faaf04579f2b20affebc",
+      "source": "dev/material-lane/source-sprites/guard-post-ground-v004/guard-ground-turf-v004-albedo.png",
+      "sourceSha256": "b1bac7fe6b73399214945925e2145d53b722d5e02571faaf04579f2b20affebc",
+      "heightGuide": "dev/material-lane/depth-guides/guard-post-ground-mm-v004/guard-ground-turf-v004-height-guide.png",
+      "heightGuideSha256": "e9580e301717181345beba0d29c3403e83f4ac09e20c18d081f405fb29e61be0",
+      "graph": "dev/material-lane/graphs/guard-post-ground-mm-v004/guard-ground-turf-v004.ptex",
+      "graphSha256": "e7c8dc6bdcc5ff4a1695b6b929bb3ddbf3237c19d08842fd7371a4c3fe9ba17f"
+    },
+    {
+      "id": "guard-ground-road-v004",
+      "label": "Guard Post compacted road",
+      "parent": "assets/materials/golden/guard-post/v003/ground-upland-road-albedo.png",
+      "guide_mode": "broad_luminance",
+      "guide_radius": 13,
+      "guide_contrast": 0.24,
+      "graph_blur": 3,
+      "normal": 0.1,
+      "ao": 0.05,
+      "roughness": 0.86,
+      "depth_scale": 0.004,
+      "intent": "Only broad compaction undulation becomes relief; grit, straw, and painted wear remain flat so the traffic ribbon stays quiet.",
+      "parentSha256": "06f1746bccf66225e780feb9eac2641050a2eca7dab6135e055176dfe7b57d69",
+      "source": "dev/material-lane/source-sprites/guard-post-ground-v004/guard-ground-road-v004-albedo.png",
+      "sourceSha256": "06f1746bccf66225e780feb9eac2641050a2eca7dab6135e055176dfe7b57d69",
+      "heightGuide": "dev/material-lane/depth-guides/guard-post-ground-mm-v004/guard-ground-road-v004-height-guide.png",
+      "heightGuideSha256": "98a1963c0dfc053db13f07b11054f65f21e64bbc086f078c9b83854a0440c014",
+      "graph": "dev/material-lane/graphs/guard-post-ground-mm-v004/guard-ground-road-v004.ptex",
+      "graphSha256": "d170b31b3a4b03912f38f3456837e1c9458a8ee313c279e9cd34cc042474c444"
+    }
+  ]
+}

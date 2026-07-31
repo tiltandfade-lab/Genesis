@@ -512,12 +512,23 @@ guard("17. frame hygiene", () => {
       && /increments\.every\(\(deg\) => Math\.abs\(deg - 90\)/.test(capture));
   check("17l. authored terrain defaults to the responsive surface while CL-F07 keeps its naked control",
     /function clayRoomTerrainDefaultRung/.test(src)
-      && /CLAY_TERRAIN_FEATURE_SCENE_IDS\.indexOf\(sceneId\) >= 0 \? "all" : "naked"/.test(src)
+      && /CLAY_TERRAIN_FEATURE_SCENE_IDS\.indexOf\(sceneId\) >= 0/.test(src)
+      && /CLAY_GOLDEN_VIGNETTE_SCENE_IDS\.indexOf\(sceneId\) >= 0/.test(src)
+      && /CLAY_ARCHITECTURE_FORM_SCENE_IDS\.indexOf\(sceneId\) >= 0/.test(src)
+      && /\? "all" : "naked"/.test(src)
       && /function rungForScene/.test(capture)
       && /FEATURE_SCENE_IDS\.has\(sceneId\) \? "all" : "naked"/.test(capture)
       && /RUNG_OVERRIDE \? "&terrainrung=" \+ sceneRung : ""/.test(capture)
       && /resolvedRung === sceneRung/.test(capture)
       && /expectedRung: sceneRung/.test(capture));
+  const expression = read("src/engine/terrain-expression.js");
+  check("17m. the diorama perimeter closes high ground to one common flat tray datum without changing mechanics",
+    /TERRAIN_DIORAMA_TRAY_CLOSURE/.test(expression)
+      && /edge-to-common-tray-datum-v1/.test(expression)
+      && /mechanicalEffect: "none"/.test(expression)
+      && /if\(trayLaw && trayLaw\.enabled && isPerimeterCell\(c\)\) return floorH/.test(region)
+      && /terrainDioramaTrayClosure/.test(region)
+      && /shaftFaceRole === "tray-wall"/.test(region));
 });
 
 // ============================================================================

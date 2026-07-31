@@ -1,0 +1,25 @@
+{
+  "schema": "GenesisGuardPostGroundCandidatePackV2",
+  "version": 2,
+  "status": "IMAGEGEN_CANDIDATES_AWAITING_SEAM_LOCK_AND_CONTEXT_PROOF",
+  "generator": {
+    "mode": "built-in image_gen",
+    "date": "2026-07-30",
+    "promptRecord": "PROMPTS.md"
+  },
+  "approvalPolicy": "Generated output is candidate evidence only. Seam repair, deterministic repeat proof, governed scene review, and founder judgment are still required.",
+  "candidates": {
+    "ground-upland-turf": {
+      "file": "ground-upland-turf-imagegen-candidate-v001.png",
+      "sha256": "8a7fd97495eccbafe807081924afb140c8313279c3f87d79ed830547892cdf4e",
+      "derivedFrom": "../v001/ground-meadow-albedo.png",
+      "contextStatus": "technical-candidate-unverified"
+    },
+    "ground-upland-road": {
+      "file": "ground-upland-road-imagegen-candidate-v001.png",
+      "sha256": "6c9bbbb2a1c7fd861258acbaf4ca24b6ad05e89abf74735617a6ce47463750f3",
+      "derivedFrom": "../v001/ground-road-albedo.png",
+      "contextStatus": "technical-candidate-unverified"
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "checkpoint": "Golden-Site-1-guard-ground-MM-v004",
+  "generatedAt": "2026-07-30T16:14:22.054Z",
+  "materialMaker": {
+    "version": "1.3",
+    "binary": "/Applications/Material Maker 1.3.app/Contents/MacOS/material_maker",
+    "binarySha256": "597b199fae597c4f7af27c894018e444e1ba5c1ccb399f1e738e2552ebbe5feb",
+    "target": "Godot/Godot 4 ORM",
+    "resolution": 512
+  },
+  "sourceGraphs": {
+    "dev/material-lane/graphs/guard-post-ground-mm-v004/guard-ground-road-v004.ptex": "d170b31b3a4b03912f38f3456837e1c9458a8ee313c279e9cd34cc042474c444",
+    "dev/material-lane/graphs/guard-post-ground-mm-v004/guard-ground-turf-v004.ptex": "e7c8dc6bdcc5ff4a1695b6b929bb3ddbf3237c19d08842fd7371a4c3fe9ba17f"
+  },
+  "outputHashes": {
+    "guard-ground-road-v004_albedo.png": "ffe31c6876a7d53af111f5dd9430bec2216474ca512aeaea85b8f1f6ebbd780d",
+    "guard-ground-road-v004_heightmap.png": "79863358a64fe82b629e6c416e4e4b880439bcdb95842dcd87fbabe18e8f3cce",
+    "guard-ground-road-v004_normal.png": "dc20725c92332acbd3ec2424d45c3a39b8e87981a5d542b91bd6ba9564f7cf8b",
+    "guard-ground-road-v004_orm.png": "9b9d90d1df41a07f5cb9a5da4713462fc7107d065034988fcdf9715a93a91469",
+    "guard-ground-turf-v004_albedo.png": "f34923f5b615660e5e86a4bf1117e45664f614ab1e5646f7677845af381826f6",
+    "guard-ground-turf-v004_heightmap.png": "aaf07d89cb2b9ce62bda8967802673a50478f10c6034d3f965ef52b392b17544",
+    "guard-ground-turf-v004_normal.png": "db207c04322bda2d2216fe9aa594fc57558864925d5e0eede81449e941ef07ad",
+    "guard-ground-turf-v004_orm.png": "f3c06367c921939a5a50e637184cd8a522cbfff0c44ecbfc9f4f63a3a82da886"
+  },
+  "determinism": {
+    "runs": [
+      "run-a",
+      "run-b"
+    ],
+    "byteIdentical": true,
+    "comparedFileCount": 8,
+    "requiredChannels": [
+      "albedo",
+      "height",
+      "normal",
+      "orm"
+    ],
+    "timeoutRecoveries": {
+      "runA": false,
+      "runB": false
+    }
+  },
+  "reviewOutputRoot": "dev/material-lane/exports/guard-post-ground-mm-v004/run-a",
+  "comparisonOutputRoot": "dev/material-lane/exports/guard-post-ground-mm-v004/run-b",
+  "logs": [
+    "run-a-material-maker.log",
+    "run-b-material-maker.log"
+  ]
+}

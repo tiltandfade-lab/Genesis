@@ -68,7 +68,7 @@ var CLAY_DIAGNOSTIC_SURFACE_RECIPE = Object.freeze({
   // (measured: the shadow lands; the albedo hides it). In a diagnostic clay studio the base is a
   // physical surface under test like any other — it now routes to clay so cast shadows and AO
   // read on it. The sprite ART stays passthrough, untouched.
-  version: 5,
+  version: 6,
   modes: Object.freeze(["clay", "role-id"]),
   defaultMode: "clay",
   clayColor: "#8a8a8a",       // D7's own flat clay-grey, unchanged
@@ -119,6 +119,11 @@ var CLAY_DIAGNOSTIC_SURFACE_RECIPE = Object.freeze({
     // sprite-first parents and compiled PBR maps, so the diagnostic clay sweep must leave them
     // intact. This dev-only route does not promote the candidate into production selection.
     "material-proof": Object.freeze({ route: "passthrough", roleColor: "#d4b86a" }),
+    // Golden Site profiles are candidate presentation projected over an immutable clay-proved plan.
+    // The explicit tag exists only while a visual profile is active; neutral-clay emits no tag and
+    // continues through the ordinary diagnostic routes. Passing candidate art through here is not
+    // approval—it preserves the exact material question the governed site capture is asking.
+    "guard-visual-candidate": Object.freeze({ route: "passthrough", roleColor: "#b39b70" }),
     // CL-F06 is the real Assetforge ground-field candidate mounted through the production
     // interior/Clayroom realizer. Its compiled albedo + roughness are the subject under test, so
     // repainting it diagnostic grey would erase the question the fixture exists to answer.

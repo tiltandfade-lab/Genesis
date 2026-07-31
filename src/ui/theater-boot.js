@@ -815,7 +815,9 @@ const ITR_GLOOM_AMBIENT_LIFT = 0.05;
 // brighter named constants — never a new HemisphereLight construction (verify-dungeon-interior.mjs
 // group 16 pins exactly one HemisphereLight built in mount(); this only re-drives that SAME shared
 // S.hemiLight's intensity higher for these three profiles, same mechanism ITR_SCENE_HEMI already uses).
-const ITR_BRIGHT_PROFILES = new Set(["daylit", "overcast", "moonlit"]);
+const ITR_BRIGHT_PROFILES = new Set([
+  "daylit", "golden-site-daylit", "overcast", "moonlit"
+]);
 // docs/LIGHT-SIGHT-POLISH.md P-1 problem 1 (Adam's re-shoot: suburb daylit "nuclear bomb") — PER-REALM
 // BRIGHT FILL. The single global ITR_BRIGHT_SCENE_* block above (now ITR_BRIGHT_REALM_FILL_DEFAULT,
 // below) was tuned so lost-world's DARK jungle-shadow albedo (floorColor #3d4a2e/wallColor #2a3320,
@@ -6146,19 +6148,66 @@ window.Theater._setStandeeDepthBiasForTest = function(units){
   return spritesGetDepthBiasUnits(); // split B7: read through theater-sprites.js's accessor
 };
 window.Theater._setSpriteSamplingForTest = function(mode){
-  const linearMutation = mode === "linear";
+  // GOLDEN SITE 1 renderer-resumption audit (2026-07-30): the Assetforge citizenship pass changed
+  // the production sprite path from BW2-0's nearest-mag / one-level-linear-min / no-mipmap contract
+  // to trilinear mipmapped minification. That change coincides with the reported loss of authored
+  // pixel sharpness. Keep this as a bounded DIAGNOSTIC seam: four named contracts, same loaded
+  // textures, same camera, same lighting. The winning contract is promoted in spriteTextureFor;
+  // product logic never calls this setter.
+  const modes = {
+    "nearest": {
+      label: "nearest-mag-nearest-min-no-mipmap",
+      magFilter: THREE.NearestFilter,
+      minFilter: THREE.NearestFilter,
+      generateMipmaps: false
+    },
+    "bw2-linear": {
+      label: "nearest-mag-linear-min-no-mipmap",
+      magFilter: THREE.NearestFilter,
+      minFilter: THREE.LinearFilter,
+      generateMipmaps: false
+    },
+    "nearest-mipmap": {
+      label: "nearest-mag-nearest-mipmap-nearest-min",
+      magFilter: THREE.NearestFilter,
+      minFilter: THREE.NearestMipmapNearestFilter,
+      generateMipmaps: true
+    },
+    "trilinear": {
+      label: "nearest-mag-trilinear-min",
+      magFilter: THREE.NearestFilter,
+      minFilter: THREE.LinearMipmapLinearFilter,
+      generateMipmaps: true
+    },
+    // Preserve the two existing harness spellings while making their meaning explicit. "linear"
+    // remains the old all-linear mutation used by CL-R1; "production" is today's pre-verdict path.
+    "linear": {
+      label: "linear-mag-linear-min-no-mipmap-mutation",
+      magFilter: THREE.LinearFilter,
+      minFilter: THREE.LinearFilter,
+      generateMipmaps: false
+    },
+    "production": {
+      label: "nearest-mag-linear-min-no-mipmap",
+      magFilter: THREE.NearestFilter,
+      minFilter: THREE.LinearFilter,
+      generateMipmaps: false
+    }
+  };
+  const selected = modes[mode] || modes.production;
   let changed = 0;
   Object.keys(SPRITE_TEXTURE_CACHE).forEach((key) => {
     const tex = SPRITE_TEXTURE_CACHE[key];
     if(!tex || tex === "pending" || tex === "failed") return;
-    tex.magFilter = linearMutation ? THREE.LinearFilter : THREE.NearestFilter;
-    tex.minFilter = linearMutation ? THREE.LinearFilter : THREE.LinearMipmapLinearFilter;
-    tex.generateMipmaps = !linearMutation;
+    tex.magFilter = selected.magFilter;
+    tex.minFilter = selected.minFilter;
+    tex.generateMipmaps = selected.generateMipmaps;
+    tex.userData.spriteSamplingAuditMode = selected.label;
     tex.needsUpdate = true;
     changed++;
   });
   markDirty();
-  return { mode: linearMutation ? "linear-no-mipmap-mutation" : "production-nearest-mag-trilinear-min", changed };
+  return { mode: selected.label, requestedMode: mode, changed };
 };
 window.Theater.__spriteScreenRects = function(){
   const out = [];
@@ -6172,24 +6221,71 @@ window.Theater.__spriteScreenRects = function(){
   };
   S.interiorGroup.traverse((obj) => {
     if(!(obj.userData && obj.userData.sprite && obj.userData.spriteBillboardMesh)) return;
-    const wp = new THREE.Vector3();
-    obj.getWorldPosition(wp);
-    const height = obj.userData.interiorHeight || 1.1;
-    const width = obj.userData.interiorWidth || height;
-    const foot = project(wp.x, wp.y, wp.z);
-    const head = project(wp.x, wp.y + height, wp.z);
-    const side = project(wp.x + width * 0.5, wp.y + height * 0.5, wp.z);
-    const mid = project(wp.x, wp.y + height * 0.5, wp.z);
-    const pxH = Math.abs(foot.y - head.y);
-    const pxW = Math.abs(side.x - mid.x) * 2;
+    /* Project the actual transformed billboard bounds. The old height/width estimate assumed the
+       card was world-upright and centred on its group; terrain standees lean with camera pitch,
+       carry authored foot anchors, and may sit on a graded support. That estimate could call a
+       frame safe while the real alpha plane crossed an edge. The eight corners of the billboard's
+       world AABB are conservative and remain valid for every quarter-turn bearing. */
+    const box = new THREE.Box3().setFromObject(obj.userData.spriteBillboardMesh);
+    if(!isFinite(box.min.x) || !isFinite(box.max.x)) return;
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    [box.min.x, box.max.x].forEach((x) => {
+      [box.min.y, box.max.y].forEach((y) => {
+        [box.min.z, box.max.z].forEach((z) => {
+          const p = project(x, y, z);
+          minX = Math.min(minX, p.x); minY = Math.min(minY, p.y);
+          maxX = Math.max(maxX, p.x); maxY = Math.max(maxY, p.y);
+        });
+      });
+    });
     out.push({
       slug: obj.userData.spriteSlug || obj.userData.dressingSlug || null,
-      cx: mid.x, cy: (foot.y + head.y) / 2,
-      w: pxW, h: pxH,
+      cx: (minX + maxX) / 2, cy: (minY + maxY) / 2,
+      w: maxX - minX, h: maxY - minY,
+      bounds: { left: minX, top: minY, right: maxX, bottom: maxY },
       unlit: !!(obj.userData.spriteBillboardMesh.material && obj.userData.spriteBillboardMesh.material.isMeshBasicMaterial)
     });
   });
   return out;
+};
+
+/* Golden Site evidence framing uses real architecture bounds for the same reason sprite framing
+   uses real billboard bounds: a tall finial, chimney, citizen, or wide eave can cross the canvas
+   even when every member origin is comfortably inside it. Read-only harness seam. */
+window.Theater.__architectureScreenRect = function(){
+  if(!S.interiorGroup || !S.camera || !S.renderer) return null;
+  const world = new THREE.Box3();
+  let count = 0;
+  S.interiorGroup.traverse((obj) => {
+    const data = obj.userData || {};
+    if(!data.clayArchitectureMember && !data.clayArchitectureAsset) return;
+    const box = new THREE.Box3().setFromObject(obj);
+    if(!isFinite(box.min.x) || !isFinite(box.max.x)) return;
+    world.union(box);
+    count++;
+  });
+  if(!count || world.isEmpty()) return null;
+  const canvas = S.renderer.domElement;
+  const W = canvas.width, H = canvas.height;
+  const v = new THREE.Vector3();
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  [world.min.x, world.max.x].forEach((x) => {
+    [world.min.y, world.max.y].forEach((y) => {
+      [world.min.z, world.max.z].forEach((z) => {
+        v.set(x, y, z).project(S.camera);
+        const px = (v.x * 0.5 + 0.5) * W;
+        const py = (-v.y * 0.5 + 0.5) * H;
+        minX = Math.min(minX, px); minY = Math.min(minY, py);
+        maxX = Math.max(maxX, px); maxY = Math.max(maxY, py);
+      });
+    });
+  });
+  return {
+    memberCount: count,
+    bounds: { left: minX, top: minY, right: maxX, bottom: maxY },
+    w: maxX - minX,
+    h: maxY - minY
+  };
 };
 
 // VP0/GRAPHICS-ENGINE law 2/2b (docs/BEAUTY-WAVE.md) — harness-facing read-only diagnostics for the
@@ -6394,6 +6490,13 @@ window.Theater._spriteShadowStateForTest = function(){
         depthMaterialAlphaTest: child.customDepthMaterial ? child.customDepthMaterial.alphaTest : null,
         depthMaterialVisible: child.customDepthMaterial ? child.customDepthMaterial.visible !== false : null,
         geometryType: child.geometry ? child.geometry.type : null,
+        silhouetteExtrusion: !!(child.userData && child.userData.spriteSilhouetteExtrusion),
+        extrusionDepth: child.userData && child.userData.spriteSilhouetteExtrusion
+          ? child.userData.extrusionDepth : null,
+        boundarySegments: child.userData && child.userData.spriteSilhouetteExtrusion
+          ? child.userData.boundarySegments : null,
+        triangles: child.userData && child.userData.spriteSilhouetteExtrusion
+          ? child.userData.triangles : null,
         worldScale: (function(){ const s = new THREE.Vector3(); child.getWorldScale(s); return { x: +s.x.toFixed(3), y: +s.y.toFixed(3), z: +s.z.toFixed(3) }; })(),
         parentChain: chain.join(" > "),
         worldPos: { x: +p.x.toFixed(2), y: +p.y.toFixed(2), z: +p.z.toFixed(2) },
@@ -6445,17 +6548,22 @@ window.Theater._spriteShadowProbeForTest = function(){
   counts.foundReference = !!reference;
   return counts;
 };
-// Bounded A/B toggle for the sprite-card shadow caster (diagnosis only — the production contract
-// keeps it ON): flips castShadow on every mounted sprite-card mesh that carries the alpha depth
-// materials, so a capture pair can prove whether a missing standee shadow was never rendered or
-// merely hidden from the fixed camera by the caster itself.
+// Bounded A/B toggle for every sprite shadow caster (diagnosis only — the production contract keeps
+// them ON). The canonical alpha card always carries custom depth/distance materials; the optional
+// silhouette extrusion casts with its real contour geometry and therefore needs neither. Treating
+// only the former as "the sprite caster" made the extrusion proof's SHADOW OFF control dishonest:
+// the contour shell continued to cast. This seam owns both explicitly and nothing else.
 window.Theater._setSpriteCastShadowForTest = function(on){
   let flipped = 0;
   if(!S.interiorGroup) return flipped;
   S.interiorGroup.traverse(function(node){
     if(!node || !node.userData || !node.userData.sprite) return;
     node.traverse(function(child){
-      if(child && child.isMesh && child.customDepthMaterial){ child.castShadow = !!on; flipped++; }
+      if(child && child.isMesh && (child.customDepthMaterial
+        || (child.userData && child.userData.spriteSilhouetteExtrusion))){
+        child.castShadow = !!on;
+        flipped++;
+      }
     });
   });
   markDirty();
@@ -6674,7 +6782,18 @@ window.Theater.canvasBufferInfo = function(){
   };
 };
 window.Theater.spriteFilterAudit = function(){
-  const audit = { checked: 0, magNearestCount: 0, minLinearCount: 0, minNearestCount: 0 };
+  const audit = {
+    checked: 0,
+    magNearestCount: 0,
+    magLinearCount: 0,
+    minLinearCount: 0,
+    minNearestCount: 0,
+    minNearestMipmapNearestCount: 0,
+    minTrilinearCount: 0,
+    mipmappedCount: 0,
+    namedModes: []
+  };
+  const namedModes = new Set();
   const scanGroup = (group) => {
     if(!group) return;
     group.traverse((obj) => {
@@ -6684,13 +6803,21 @@ window.Theater.spriteFilterAudit = function(){
         if(!tex) return;
         audit.checked++;
         if(tex.magFilter === THREE.NearestFilter) audit.magNearestCount++;
+        if(tex.magFilter === THREE.LinearFilter) audit.magLinearCount++;
         if(tex.minFilter === THREE.LinearFilter) audit.minLinearCount++;
         if(tex.minFilter === THREE.NearestFilter) audit.minNearestCount++;
+        if(tex.minFilter === THREE.NearestMipmapNearestFilter) audit.minNearestMipmapNearestCount++;
+        if(tex.minFilter === THREE.LinearMipmapLinearFilter) audit.minTrilinearCount++;
+        if(tex.generateMipmaps) audit.mipmappedCount++;
+        if(tex.userData && tex.userData.spriteSamplingAuditMode){
+          namedModes.add(tex.userData.spriteSamplingAuditMode);
+        }
       }
     });
   };
   scanGroup(S.unitGroup);
   scanGroup(S.interiorGroup);
+  audit.namedModes = Array.from(namedModes).sort();
   return audit;
 };
 
@@ -6894,7 +7021,9 @@ window.Theater._spriteCitizenshipRenderContractForTest = function(){
       magFilter: tex.magFilter,
       minFilter: tex.minFilter,
       generateMipmaps: !!tex.generateMipmaps,
-      colorSpace: tex.colorSpace
+      colorSpace: tex.colorSpace,
+      samplingAuditMode: tex.userData && tex.userData.spriteSamplingAuditMode
+        ? tex.userData.spriteSamplingAuditMode : null
     });
   });
   const materials = SPRITE_DEPTH_BIAS_MATERIALS.filter(function(mat){

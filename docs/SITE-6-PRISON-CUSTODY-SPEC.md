@@ -1207,3 +1207,16 @@ packet's `synthesis.md` §7.
 - no typed prison building kit or Golden Site adapter exists;
 - no prison clay fixture exists; and
 - the exact playthrough save for `RC-PRISON-01` is unavailable.
+
+## Architecture integration ruling — 2026-07-30
+
+Custody rooms compile as `DEDICATED_INTERIOR`; an intake court, yard, transport edge,
+or enclosing street compiles as a separate `EXTERIOR_ARCHITECTURAL_PRECINCT`. A cutaway
+is a projection of the interior, not evidence that the place is physically roofless.
+
+The retained `Prison / Asylum` roll is still unresolved upstream. Prison custody and an
+asylum/care institution may share enclosure pieces, but they do not share operating
+models, responsible roles, circulation, services, permissions, or visual storytelling.
+The adapter must receive an explicit program discriminator before either host
+materializes. Detainee, keeper, visitor, transfer, accessibility, and source-backed
+containment profiles all enter clearance and route validation.

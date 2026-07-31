@@ -1,0 +1,80 @@
+{
+  "schema": "GenesisGuardPostGroundCandidatePackV3",
+  "version": 3,
+  "status": "TECHNICAL_CANDIDATES_AWAITING_GUARD_POST_CONTEXT_REVIEW",
+  "sourcePack": "assets/materials/golden/guard-post/v002/manifest.json",
+  "policy": {
+    "albedoAuthority": "v002 ImageGen source sprite; no redraw",
+    "repairScope": "narrow continuous-field seam lock on turf only",
+    "normalization": "512x512 Lanczos",
+    "approval": "technical evidence is not in-context art approval"
+  },
+  "records": [
+    {
+      "id": "ground-upland-turf",
+      "source": "assets/materials/golden/guard-post/v002/ground-upland-turf-imagegen-candidate-v001.png",
+      "sourceSha256": "8a7fd97495eccbafe807081924afb140c8313279c3f87d79ed830547892cdf4e",
+      "sourceDimensions": [
+        1254,
+        1254
+      ],
+      "output": "assets/materials/golden/guard-post/v003/ground-upland-turf-albedo.png",
+      "outputSha256": "b1bac7fe6b73399214945925e2145d53b722d5e02571faaf04579f2b20affebc",
+      "outputDimensions": [
+        512,
+        512
+      ],
+      "repeatProof": "dev/material-lane/proofs/guard-post-ground-v003/ground-upland-turf-repeat-3x3.png",
+      "method": "opposite-edge pair average with inward cosine feather; square-preserving Lanczos normalization",
+      "repairBandPixels": 48,
+      "before": {
+        "xBoundaryRms": 13.715,
+        "yBoundaryRms": 13.333,
+        "xBoundaryToInternalP95": 1.283,
+        "yBoundaryToInternalP95": 1.226,
+        "boundaryJumpGate": false
+      },
+      "after": {
+        "xBoundaryRms": 0.552,
+        "yBoundaryRms": 0.549,
+        "xBoundaryToInternalP95": 0.039,
+        "yBoundaryToInternalP95": 0.039,
+        "boundaryJumpGate": true
+      },
+      "contextStatus": "technical-candidate-awaiting-governed-scene-review"
+    },
+    {
+      "id": "ground-upland-road",
+      "source": "assets/materials/golden/guard-post/v002/ground-upland-road-imagegen-candidate-v001.png",
+      "sourceSha256": "6c9bbbb2a1c7fd861258acbaf4ca24b6ad05e89abf74735617a6ce47463750f3",
+      "sourceDimensions": [
+        1254,
+        1254
+      ],
+      "output": "assets/materials/golden/guard-post/v003/ground-upland-road-albedo.png",
+      "outputSha256": "06f1746bccf66225e780feb9eac2641050a2eca7dab6135e055176dfe7b57d69",
+      "outputDimensions": [
+        512,
+        512
+      ],
+      "repeatProof": "dev/material-lane/proofs/guard-post-ground-v003/ground-upland-road-repeat-3x3.png",
+      "method": "untouched albedo; square-preserving Lanczos normalization",
+      "repairBandPixels": 0,
+      "before": {
+        "xBoundaryRms": 5.972,
+        "yBoundaryRms": 7.603,
+        "xBoundaryToInternalP95": 0.8,
+        "yBoundaryToInternalP95": 0.896,
+        "boundaryJumpGate": true
+      },
+      "after": {
+        "xBoundaryRms": 5.921,
+        "yBoundaryRms": 7.567,
+        "xBoundaryToInternalP95": 0.625,
+        "yBoundaryToInternalP95": 0.685,
+        "boundaryJumpGate": true
+      },
+      "contextStatus": "technical-candidate-awaiting-governed-scene-review"
+    }
+  ]
+}

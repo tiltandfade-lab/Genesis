@@ -39,7 +39,8 @@
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "trilinear-mipmap",
+          "minificationFilter": "linear",
+          "generateMipmaps": false,
           "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       }
@@ -417,6 +418,54 @@
         {
           "id": "sun-key",
           "label": "sun key",
+          "enabled": true,
+          "type": "directional",
+          "temperatureK": 5500,
+          "color": "0xfff2d8",
+          "intensity": 9,
+          "physicalIntensity": 1.1,
+          "pos": {
+            "x": 0.4,
+            "y": 3,
+            "z": -0.4
+          },
+          "heightM": 4.572,
+          "rangeM": 15.24,
+          "falloff": 1,
+          "flicker": {
+            "amplitude": 0,
+            "cadenceMs": 480
+          },
+          "shadow": {
+            "cast": true,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": 2048,
+            "budgetPriority": 1
+          },
+          "azimuthDeg": 0
+        }
+      ]
+    },
+    "golden-site-daylit": {
+      "id": "golden-site-daylit",
+      "label": "Golden site daylight",
+      "rolled": true,
+      "mode": "production-environment",
+      "source": {
+        "class": "celestial",
+        "label": "open-air sun and broad skylight over a tactical diorama",
+        "loreNative": true,
+        "visibleEmitterRequired": false
+      },
+      "ambient": {
+        "color": "0xdfe5e8",
+        "intensity": 0.72
+      },
+      "lights": [
+        {
+          "id": "golden-site-sun-key",
+          "label": "open-air sun key",
           "enabled": true,
           "type": "directional",
           "temperatureK": 5500,

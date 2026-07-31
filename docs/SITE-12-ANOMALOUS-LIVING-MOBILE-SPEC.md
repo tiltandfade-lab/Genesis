@@ -1192,3 +1192,15 @@ study.
 
 The packet supports this working spec. Its declared gaps keep `RESEARCHED` at `PARTIAL`,
 and nothing in this document can advance `CLAY-PROVED` without a retained fixture.
+
+## Architecture integration ruling — 2026-07-30
+
+Substrate, enclosure, agency, mobility, support mode, and transformation phase choose
+the battle-space posture. A bog, raft quarter, or dorsal market is normally an
+`EXTERIOR_ARCHITECTURAL_PRECINCT`; an enclosing living volume may be a
+`DEDICATED_INTERIOR`. Anomaly or motion alone does not license a hybrid.
+
+Carrier/substrate, resident, visitor, load, moving datum, aperture, and evacuation
+profiles are explicit. A megainterior may hide its exterior and continue beyond the
+window, but its scale, agency, support, and current use must remain separately
+receipted.

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "packId": "guard-post-foundation-top-growth-v014",
+  "status": "TECHNICAL_CANDIDATE_NOT_APPROVED",
+  "outputs": [
+    {
+      "path": "assets/materials/golden/guard-post/v014/foundation-top-algae-authored-alpha-512.png",
+      "sha256": "98aeb4c5e6e6ddbd68461c65dc0965dda82bdf8c33d24c01698c41282409b968",
+      "size": [
+        512,
+        512
+      ],
+      "channels": "RGBA"
+    }
+  ],
+  "source": {
+    "path": "assets/materials/golden/guard-post/v014/source/foundation-top-algae-magenta-source.png",
+    "sha256": "42558bc60729247b5c29eb89093ee54cd542e72e897cb7c1d9eac7c72d209581",
+    "method": "built-in image generation on removable magenta field",
+    "promptIntent": "sparse organic top-surface algae, damp moss, and grime clusters with visible authored pixels"
+  },
+  "processing": [
+    "remove sampled magenta chroma key with soft matte and despill",
+    "resize to 512x512 with nearest-neighbor",
+    "hard-quantize alpha for crisp sprite edges",
+    "fold reddish-purple source contamination into the damp-umber palette",
+    "clear one-pixel outer boundary against chroma remnants"
+  ],
+  "validation": {
+    "partiallyTransparentPixels": 0,
+    "magentaFamilyPixels": 0
+  },
+  "receiverIndependence": {
+    "containsConstructionPattern": false,
+    "containsMortarShadow": false,
+    "containsBakedReceiverLighting": false,
+    "owns": [
+      "top-surface-growth-color",
+      "organic-island-coverage-alpha"
+    ],
+    "parentOwns": [
+      "gravel-or-stone-albedo",
+      "construction-rhythm",
+      "normal",
+      "ORM",
+      "lighting-response"
+    ]
+  },
+  "projection": {
+    "mode": "parent-fragment-upward-support-field",
+    "coordinateDomain": "world-xz",
+    "wrap": "repeat-xy",
+    "purpose": "avoid fixed-v stripe sampling on upward foundation surfaces"
+  },
+  "artDirection": {
+    "target": "visible-pixel authored 2.5D between FFT, Triangle Strategy, and Genesis",
+    "avoid": [
+      "photorealism",
+      "soft scaling",
+      "straight parallel bands",
+      "baked parent-surface shadows"
+    ]
+  }
+}

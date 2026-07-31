@@ -1139,3 +1139,16 @@ dropping to a single access; it promotes to stacked decks by adding a second fir
 **Easy to revise?** Moderately — the width and cover-state hypotheses are clay-calibrated
 anyway, but "the walk is a route" is load-bearing for three of the four route promises in §5,
 so reversing it re-opens the strategic contract.
+
+## Architecture integration ruling — 2026-07-30
+
+The approach, switchback, gate, wall face, tower exterior, and wall-walk form an
+`EXTERIOR_ARCHITECTURAL_PRECINCT`. Barracks, stores, command rooms, gate mechanisms,
+and other escalated enclosures form linked `DEDICATED_INTERIOR` windows. The fortress
+does not default to a dollhouse hybrid.
+
+Monumental scale is required; `GIANT_LEGACY` is optional and requires explicit
+original-builder or original-occupant evidence plus current body relations. Wall-walk
+stairs must use direct zero-gap seams and declared support datums: no generic platform
+insert between two flights, no unsupported higher flight, and no clipped modular
+members. The full fortress may continue far beyond the compact active window.

@@ -732,3 +732,14 @@ history card breadth; host-safe population/development caps.
 - settle hosted caps after host proofs;
 - rule the proposed tent implementation order; and
 - build and retain the fixture in `GOLDEN-SITES-PROOF-QUEUE.md`.
+
+## Architecture integration ruling — 2026-07-30
+
+Camp remains an `EXTERIOR_ARCHITECTURAL_PRECINCT`. Tents, wagons, screens, fires,
+service rigs, and earthworks are supported exterior assemblies; a shelter does not
+silently create an enterable interior. A separately licensed host may later supply a
+dedicated interior, but Site 2 does not invent it.
+
+Shelter, carrier, service, waste, fire, route, and occupant envelopes participate in
+the same clearance audit. Frontier describes operating breadth and construction
+logic, not mandatory poverty, crudeness, or low visual ambition.

@@ -288,6 +288,7 @@ function applyLightProfile(key){
 // is re-tunable from this one table.
 const TABLETOP_EXTERIOR_LOOK = {
   daylit:   { ambient: 0.80, ambientColor: 0xbdd7f0, pointScale: 1.2,  void: 0xaed4f2 }, // sky-blue ambient + warm key + bright sky wash
+  "golden-site-daylit": { ambient: 0.84, ambientColor: 0xc8dce8, pointScale: 1.2, void: 0xb8d4e4 },
   overcast: { ambient: 0.55, ambientColor: 0xa8adb5, pointScale: 1.0,  void: 0x8c94a0 }, // flat muted grey-cool (authored hue kept)
   moonlit:  { ambient: 0.44, ambientColor: 0x8fa0c8, pointScale: 0.35, void: 0x141c30 }  // dim cool blue, near-dark (authored hue kept)
 };
@@ -387,7 +388,9 @@ const CELESTIAL_MIN_KEY_HEIGHT = 1.5;   // never lets the key's Y drop to/throug
 const CELESTIAL_AMBIENT_FLOOR_SCALE = 0.6; // ambient intensity never drops below 60% of ENV-1's own authored value — the readability floor's own "never unreadably dark" law, extended to the arc
 // the exact 3-profile exterior set TABLETOP_EXTERIOR_LOOK already carves out — reused here so the
 // celestial layer's own protection-set discipline never drifts from ENV-1's.
-const CELESTIAL_PROFILE_SET = { daylit: true, overcast: true, moonlit: true };
+const CELESTIAL_PROFILE_SET = {
+  daylit: true, "golden-site-daylit": true, overcast: true, moonlit: true
+};
 
 // split B5: the LIGHT_TUNABLES declaration itself (plus LIGHT_LAB_AUTHORED_BASELINE, the frozen
 // authored clone the lab resets to) sat here in the monolith; both stayed in theater-boot.js per B2's

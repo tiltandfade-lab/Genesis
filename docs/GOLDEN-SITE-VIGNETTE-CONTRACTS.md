@@ -3,7 +3,7 @@ type: system-contract
 project: Genesis
 status: WAVE-0 FROZEN FOR WAVE-1 — design boundary, not runtime implementation
 created: 2026-07-29
-updated: 2026-07-29
+updated: 2026-07-30
 owner: Procedural Vignette Synthesizer
 authority:
   - GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md
@@ -53,6 +53,13 @@ change its owner, or hide an unresolved value behind prose. A semantic change re
 - Every required semantic role is materialized, truthfully proxied, explicitly omitted,
   or retained as unresolved demand.
 - Combat promotes the committed plan. It cannot regenerate a more convenient arena.
+- Architecture-bearing requests choose a dedicated interior, exterior architectural precinct, or
+  causally justified hybrid before massing. Hybrid exposure is not a default presentation trick.
+- Institutional scale is a licensed semantic demand, not a global size multiplier. Frontier,
+  domestic, civic, elite, monumental, megainterior, and giant-legacy regimes carry different
+  program, proportion, circulation, material, light, and wonder obligations.
+- New modular assembly candidates fail on occupied stair/route clearance, disconnected stair seams,
+  floating support, or an undeclared elevated/suspended support mode.
 
 ## 2. `VignetteRequestV1`
 
@@ -119,6 +126,28 @@ The disposition classifies the obligation; it does not itself execute it:
 The `camera` budget names permitted bearings, pitch/distance envelope, protected
 approach silhouettes, and occlusion limits. It does not dictate terrain height.
 
+### 2.2.1 Architecture-bearing materialization extension
+
+`VignetteRequestV1` remains the frozen public record. When a request materializes architecture,
+`materializationIntent` may carry this optional Wave-1 extension:
+
+```text
+architecture
+  battleSpaceMode
+  institutionalScaleClass
+  luxuryObligations[]
+  wonderObligations[]
+  materializationWindowPolicy
+  civilizationScaleRegime?
+  bodyPlanProfiles[]
+```
+
+`battleSpaceMode` is `DEDICATED_INTERIOR`, `EXTERIOR_ARCHITECTURAL_PRECINCT`, or
+`CAUSALLY_JUSTIFIED_HYBRID`. The hybrid case also names its exposing cause. A megainterior window
+may prohibit exterior visibility and commit lateral/upward continuations. A civilization scale
+regime distinguishes the original builders/occupants from current actors; it may not be discharged
+by uniformly scaling a human building.
+
 ### 2.2 Adapter obligations
 
 An adapter must:
@@ -165,6 +194,11 @@ VignettePlanV1
 | `assetResolutionPlan` | every demand id mapped to admitted asset, recipe, proxy, omission, or unresolved debt |
 | `projections[]` | `{ projectionId, kind, planRef, precision, visibilityPolicy, cameraRef }` for SceneTray, TownTray, BattleMap, text, or DM digest |
 | `diagnostics` | transparent measures; no single opaque “quality” score |
+
+For architecture-bearing plans, `surfaceAssemblyPlan` additionally records roof/wall junction
+closures, stair support modes/foundation datums, direct stair seams, and the modular
+assembly-clearance audit. A presentation cutaway lists hidden projected members while preserving
+the physical plan. A ruin instead changes physical members and causal state.
 
 ### 3.2 Frozen tactical composition fields
 

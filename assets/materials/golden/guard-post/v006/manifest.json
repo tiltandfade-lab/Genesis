@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "packId": "guard-post-material-candidates-v006",
+  "status": "TECHNICAL_CANDIDATE_NOT_APPROVED",
+  "parentPack": "assets/materials/golden/guard-post/v004/manifest.json",
+  "rejectedPredecessor": {
+    "path": "assets/materials/golden/guard-post/v005/manifest.json",
+    "reason": "condition RGB baked masonry bond/shadows and was not parent-independent"
+  },
+  "workflow": "deterministic sprite-derived generic RGBA condition overlay",
+  "sources": [
+    {
+      "path": "assets/materials/golden/guard-post/v004/ground-upland-turf-albedo.png",
+      "sha256": "b1bac7fe6b73399214945925e2145d53b722d5e02571faaf04579f2b20affebc",
+      "role": "algae palette clustering and transparent-edge breakup only"
+    }
+  ],
+  "materials": {
+    "generic-algae-overlay": {
+      "albedoAlpha": {
+        "path": "assets/materials/golden/guard-post/v006/generic-algae-causal-overlay-albedo-alpha.png",
+        "sha256": "623618dd7a8da41a36e40b3957a28348e136be8c01345a002d046f1235f9bfe5"
+      },
+      "blendContract": {
+        "mode": "source-over-parent",
+        "parentOwns": [
+          "albedo rhythm",
+          "normal",
+          "ORM",
+          "lighting response"
+        ],
+        "overlayOwns": [
+          "algae color",
+          "coverage alpha"
+        ],
+        "maximumAlpha": 158
+      },
+      "alphaLaw": "gravity tongue widens into lower damp collection; world geometry supplies the outfall source and direction",
+      "mechanicalEffect": "none"
+    }
+  }
+}

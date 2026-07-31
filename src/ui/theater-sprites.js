@@ -249,13 +249,18 @@ function spriteTextureFor(entry){
   textureLoader.load(
     path,
     function(tex){
-      // Citizenship v2: keep authored texels crisp while magnified, but use a real mip pyramid when
-      // minified. The old one-level Linear filter still sampled a high-frequency sprite directly at
-      // play scale; combined with alphaTest it broke small/dark figures into crusty, dusty fragments.
-      // WebGL2 supports NPOT mipmaps, so trilinear minification is valid for the live sprite corpus.
+      // GOLDEN SITE 1 renderer resumption (2026-07-30): RESTORE BW2-0 after an identical-frame,
+      // four-filter audit (`dev/capture-sprite-filter-audit.cjs`). Assetforge citizenship v2 changed
+      // minification to a trilinear mip pyramid; at the real tactical read that visibly dissolved
+      // authored face, limb, weapon, shield-rim, and color-cluster edges into soft interpolated
+      // patches. Nearest magnification is the pixel-art law. One-level Linear minification remains
+      // the proven anti-shimmer compromise for a receding/rotating billboard; unlike trilinear mips,
+      // it does not pre-blur the character register. This is intentionally SPRITE-ONLY: world
+      // materials keep their own governed sampling contracts.
       tex.magFilter = THREE.NearestFilter;
-      tex.minFilter = THREE.LinearMipmapLinearFilter;
-      tex.generateMipmaps = true;
+      tex.minFilter = THREE.LinearFilter;
+      tex.generateMipmaps = false;
+      tex.userData.spriteSamplingAuditMode = "nearest-mag-linear-min-no-mipmap";
       // CL-R1 CAUSAL A/B SEAM (docs/CLAYROOM-RESET-LADDER.md §CL-R1) — Adam, 2026-07-23: "the sprite
       // is back to an overexposed undersaturated crappy looking piece of paper". THE CANDIDATE CAUSE:
       // this loader never tagged the PNG's colour space, while every other authored colour texture in
@@ -326,6 +331,8 @@ const SPRITE_DEPTH_BIAS_MATERIALS = [];
 // spritesCtxEmissiveTint) and ITR_SPRITE_TINT_STRENGTH stay in theater-boot.js. ----
 
 const STANDEE_SIDE_SHELL_THICKNESS = 0.035;
+const STANDEE_SILHOUETTE_EXTRUSION_DEPTH = 0.12;
+const SPRITE_SILHOUETTE_GEOMETRY_CACHE = new Map();
 let STANDEE_SIDE_SHELL_MATERIALS = null;
 function standeeSideShellMaterials(){
   if(STANDEE_SIDE_SHELL_MATERIALS) return STANDEE_SIDE_SHELL_MATERIALS;
@@ -345,6 +352,189 @@ function standeeSideShellMaterials(){
   STANDEE_SIDE_SHELL_MATERIALS = [side, side, side, side, hiddenFace, hiddenFace];
   return STANDEE_SIDE_SHELL_MATERIALS;
 }
+
+/* GOLDEN SITE 1 — TRUE SPRITE STANDEE CANDIDATE (2026-07-30).
+
+   The canonical standee's old "physical edge" is a full rectangular BoxGeometry with invisible
+   front/back materials. That looks acceptable from the face, but it is not the sprite's body:
+   an override-material AO/depth prepass can still see the rectangle, and the only real shadow
+   caster remains a zero-thickness billboard whose sun projection collapses to a line whenever the
+   camera-facing plane turns near edge-on to the world light.
+
+   This bounded candidate traces the SOURCE ALPHA—not a generated hull, not a bounding box—and
+   builds the shallow side wall of that exact pixel silhouette. Consecutive collinear pixel edges
+   are merged, so runtime cost follows contour complexity rather than opaque-pixel count. The
+   canonical textured plane remains the front identity; this mesh supplies thickness, side light,
+   depth/AO participation, and a volumetric shadow. Tactical footprint, foot anchor, scale, camera
+   facing, and source art remain unchanged.
+
+   GOLDEN SITE 1 VERDICT: admitted as the production default after a fixed-frame Guard Post A/B.
+   The legacy rectangle drew a visible bar through the human sprite's head and changed only 27
+   shadow pixels; this contour removed the bar and produced a 361-pixel silhouette response under
+   the identical camera/light—roughly 13x the useful cast footprint. Four governed camera bearings
+   then preserved the same source art, foot anchor, topology, and tactical placement.
+
+   `entry.standeeExtrusion=false` or `?spriteextrusion=0` is the bounded legacy negative control.
+   Explicit true values remain accepted for old proof URLs. If canvas alpha cannot be read, the
+   builder still degrades to the old shell rather than dropping the figure. */
+function spriteSilhouetteExtrusionRequested(entry){
+  if(entry && entry.standeeExtrusion === false) return false;
+  if(entry && entry.standeeExtrusion === true) return true;
+  if(typeof window === "undefined" || !window.location) return true;
+  try {
+    const value = new URLSearchParams(window.location.search).get("spriteextrusion");
+    if(value === "0" || value === "false" || value === "box" || value === "legacy") return false;
+    return true;
+  } catch(e){ return true; }
+}
+
+function spriteSilhouetteMask(tex, alphaCutoff){
+  const img = tex && tex.image;
+  const width = img && Number(img.naturalWidth || img.videoWidth || img.width);
+  const height = img && Number(img.naturalHeight || img.videoHeight || img.height);
+  if(!(width > 0 && height > 0) || typeof document === "undefined") return null;
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext && canvas.getContext("2d", { willReadFrequently: true });
+  if(!ctx || typeof ctx.getImageData !== "function") return null;
+  try {
+    ctx.clearRect(0, 0, width, height);
+    ctx.drawImage(img, 0, 0, width, height);
+    const rgba = ctx.getImageData(0, 0, width, height).data;
+    const threshold = Math.round(Math.max(0, Math.min(1, alphaCutoff)) * 255);
+    const mask = new Uint8Array(width * height);
+    let opaque = 0;
+    for(let i = 0; i < mask.length; i++){
+      const on = rgba[i * 4 + 3] >= threshold;
+      mask[i] = on ? 1 : 0;
+      if(on) opaque++;
+    }
+    return opaque ? { width, height, mask, opaque } : null;
+  } catch(e){
+    // Cross-origin or no-canvas harnesses degrade to the canonical shell, never to missing figures.
+    return null;
+  }
+}
+
+function spriteSilhouetteGeometryCacheKey(tex, entry, alphaCutoff, footX, footY){
+  const img = tex && tex.image;
+  const width = img && Number(img.naturalWidth || img.videoWidth || img.width) || 0;
+  const height = img && Number(img.naturalHeight || img.videoHeight || img.height) || 0;
+  const spriteSlug = entry && entry.slug || "anonymous";
+  const sourcePath = SPRITE_TEXTURE_SRC[spriteSlug] || "";
+  return [spriteSlug, sourcePath, width + "x" + height, alphaCutoff, footX, footY].join("|");
+}
+
+function spriteSilhouetteExtrusionGeometry(tex, entry, alphaCutoff, footX, footY){
+  const cacheKey = spriteSilhouetteGeometryCacheKey(tex, entry, alphaCutoff, footX, footY);
+  const cached = SPRITE_SILHOUETTE_GEOMETRY_CACHE.get(cacheKey);
+  if(cached) return cached;
+  const source = spriteSilhouetteMask(tex, alphaCutoff);
+  if(!source || !THREE.BufferGeometry || !THREE.Float32BufferAttribute) return null;
+  const width = source.width, height = source.height, mask = source.mask;
+  const positions = [];
+  let segments = 0;
+  const pushQuad = function(a, b, outwardPositive){
+    const af = [a[0], a[1], 0.5], ab = [a[0], a[1], -0.5];
+    const bf = [b[0], b[1], 0.5], bb = [b[0], b[1], -0.5];
+    const order = outwardPositive
+      ? [af, ab, bb, af, bb, bf]
+      : [af, bb, ab, af, bf, bb];
+    order.forEach(function(p){ positions.push(p[0], p[1], p[2]); });
+    segments++;
+  };
+  const on = function(x, y){
+    return x >= 0 && x < width && y >= 0 && y < height
+      ? mask[y * width + x] === 1 : false;
+  };
+
+  // Vertical grid lines. Merge adjacent rows while the opaque side (and therefore normal) agrees.
+  for(let x = 0; x <= width; x++){
+    let start = -1, sign = 0;
+    for(let y = 0; y <= height; y++){
+      const left = y < height ? on(x - 1, y) : false;
+      const right = y < height ? on(x, y) : false;
+      const nextSign = left === right ? 0 : (left ? 1 : -1);
+      if(nextSign !== sign){
+        if(sign && start >= 0){
+          const nx = x / width - footX;
+          pushQuad(
+            [nx, footY - start / height],
+            [nx, footY - y / height],
+            sign > 0
+          );
+        }
+        start = nextSign ? y : -1;
+        sign = nextSign;
+      }
+    }
+  }
+
+  // Horizontal grid lines. Image +Y points down while world +Y points up, so outward sign flips.
+  for(let y = 0; y <= height; y++){
+    let start = -1, sign = 0;
+    for(let x = 0; x <= width; x++){
+      const above = x < width ? on(x, y - 1) : false;
+      const below = x < width ? on(x, y) : false;
+      const nextSign = above === below ? 0 : (above ? -1 : 1);
+      if(nextSign !== sign){
+        if(sign && start >= 0){
+          const ny = footY - y / height;
+          pushQuad(
+            [start / width - footX, ny],
+            [x / width - footX, ny],
+            sign > 0
+          );
+        }
+        start = nextSign ? x : -1;
+        sign = nextSign;
+      }
+    }
+  }
+
+  if(!segments) return null;
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  geometry.computeVertexNormals();
+  geometry.userData = {
+    shared: true,
+    spriteSilhouetteExtrusion: true,
+    cacheKey: cacheKey,
+    sourceWidth: width,
+    sourceHeight: height,
+    opaquePixels: source.opaque,
+    boundarySegments: segments,
+    triangles: positions.length / 9
+  };
+  // Normalized contour geometry is independent of the eventual creature dimensions. Reusing it
+  // across every occurrence of the same sprite avoids re-reading canvas pixels and rebuilding
+  // hundreds of side quads per unit. `shared:true` participates in theater-dispose's existing
+  // shared-resource law, so clearing one standee cannot dispose geometry another still uses.
+  SPRITE_SILHOUETTE_GEOMETRY_CACHE.set(cacheKey, geometry);
+  return geometry;
+}
+
+function buildSpriteSilhouetteExtrusion(tex, w, h, entry, alphaCutoff, footX, footY){
+  const geometry = spriteSilhouetteExtrusionGeometry(tex, entry, alphaCutoff, footX, footY);
+  if(!geometry) return null;
+  const material = new THREE.MeshLambertMaterial({
+    color: entry && entry.standeeSideColor != null ? entry.standeeSideColor : 0x3d342b,
+    side: THREE.DoubleSide
+  });
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.scale.set(w, h, STANDEE_SILHOUETTE_EXTRUSION_DEPTH);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  mesh.userData.standeeSideShell = true;
+  mesh.userData.spriteSilhouetteExtrusion = true;
+  mesh.userData.spriteSlug = entry && entry.slug || null;
+  mesh.userData.extrusionDepth = STANDEE_SILHOUETTE_EXTRUSION_DEPTH;
+  mesh.userData.boundarySegments = geometry.userData.boundarySegments;
+  mesh.userData.triangles = geometry.userData.triangles;
+  return mesh;
+}
+
 function buildSpriteBillboardMesh(tex, w, h, entry){
   entry = entry || {};
   const spriteSlug = entry.slug || null;
@@ -447,16 +637,21 @@ function buildSpriteBillboardMesh(tex, w, h, entry){
   // COMPOSITION CONTRACT header for the other half of this split (verb-tilt, e.g. fall-death, now
   // writes `g.rotation.x` directly instead, freed by camera-tilt vacating that field).
   const wrap = new THREE.Group();
-  const shell = new THREE.Mesh(
-    new THREE.BoxGeometry(w, h, STANDEE_SIDE_SHELL_THICKNESS),
-    standeeSideShellMaterials()
-  );
-  shell.position.set((0.5 - footX) * w, (footY - 0.5) * h, 0);
-  // The shell gives the standee a visible physical edge, but it is still a full rectangular box.
-  // If it enters a shadow map it projects that hidden card shape behind the alpha-cut sprite. The
-  // cutout plane above is the sole shadow caster; removing this redundant caster is also cheaper.
-  shell.castShadow = false;
-  shell.receiveShadow = false;
+  const extrusionRequested = spriteSilhouetteExtrusionRequested(entry);
+  let shell = extrusionRequested
+    ? buildSpriteSilhouetteExtrusion(tex, w, h, entry, alphaCutoff, footX, footY)
+    : null;
+  if(!shell){
+    shell = new THREE.Mesh(
+      new THREE.BoxGeometry(w, h, STANDEE_SIDE_SHELL_THICKNESS),
+      standeeSideShellMaterials()
+    );
+    shell.position.set((0.5 - footX) * w, (footY - 0.5) * h, 0);
+    // The canonical shell gives the standee a visible physical edge, but it remains a full
+    // rectangular box. It never casts; the alpha-cut plane is the canonical sole shadow caster.
+    shell.castShadow = false;
+    shell.receiveShadow = false;
+  }
   shell.userData.standeeSideShell = true;
   shell.userData.spriteSlug = spriteSlug;
   wrap.add(shell);
@@ -467,6 +662,9 @@ function buildSpriteBillboardMesh(tex, w, h, entry){
   g.userData.spriteBillboardMesh = mesh; // updateSpriteBillboardYaw's per-frame Y-facing target
   g.userData.standeeWrap = wrap;
   g.userData.standeeSideShell = shell;
+  g.userData.spriteSilhouetteExtrusion = !!shell.userData.spriteSilhouetteExtrusion;
+  g.userData.spriteExtrusionDepth = shell.userData.spriteSilhouetteExtrusion
+    ? STANDEE_SILHOUETTE_EXTRUSION_DEPTH : 0;
   g.userData.footX = footX;
   g.userData.footY = footY;
   g.userData.alphaCutoff = alphaCutoff;
@@ -764,6 +962,7 @@ export {
   SPRITE_SIZE_SCALE, spriteSizeScaleFor,
   spriteSrgbTaggingOn, spriteTextureFor,
   SPRITE_DEPTH_BIAS_MATERIALS,
+  SPRITE_SILHOUETTE_GEOMETRY_CACHE,
   STANDEE_SIDE_SHELL_THICKNESS, standeeSideShellMaterials,
   buildSpriteBillboardMesh, buildSpriteBillboard, interiorSpriteBillboard,
   updateSpriteBillboardYaw

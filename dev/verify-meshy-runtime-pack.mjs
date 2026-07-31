@@ -6,7 +6,7 @@ const root = path.resolve(import.meta.dirname, "..");
 const pack = path.join(root, "assets/models-normalized/meshy-genesis");
 const index = JSON.parse(fs.readFileSync(path.join(pack, "index.json"), "utf8"));
 const errors = [];
-if (Object.keys(index).length !== 15) errors.push(`expected 15 assets, got ${Object.keys(index).length}`);
+if (Object.keys(index).length !== 18) errors.push(`expected 18 assets, got ${Object.keys(index).length}`);
 for (const [slug, entry] of Object.entries(index)) {
   for (const field of ["file","recipeHash","category","semanticParts","materialFamilies","sockets","footprint","collision","scaleAxes","lods"]) {
     if (entry[field] == null) errors.push(`${slug}: missing ${field}`);
@@ -24,4 +24,4 @@ if (errors.length) {
   console.error(errors.join("\n"));
   process.exit(1);
 }
-console.log(`PASS: ${Object.keys(index).length} Meshy runtime assets, 45 GLBs, complete citizenship metadata.`);
+console.log(`PASS: ${Object.keys(index).length} Meshy runtime assets, 54 GLBs, complete citizenship metadata.`);

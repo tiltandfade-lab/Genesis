@@ -1,0 +1,90 @@
+{
+  "schema": "GuardPostFamilyVisualRubricAuditV1",
+  "status": "CURRENT_FAILS_CONTEXT_ADMISSION",
+  "date": "2026-07-31",
+  "family": {
+    "seeds": [19, 101, 202],
+    "bearings": [0, 1, 2, 3],
+    "profile": "institutional-frontier",
+    "groundParent": "v018",
+    "masonryCandidate": "v015",
+    "conditionCandidate": "v015"
+  },
+  "evidence": {
+    "familySheet": "artifacts/golden-site-1-family-v018-v5/00-three-seed-four-bearing-family-labeled.png",
+    "captureRoot": "artifacts/golden-site-1-family-v018-v5",
+    "partyGuardSheet": "artifacts/golden-site-1-party-guard-v003/00-party-guards-four-bearings.png",
+    "captureCount": 12,
+    "allBuilt": true,
+    "consoleErrors": 0,
+    "failedResponses": 0,
+    "mechanicsEvidence": "dev/verify-golden-vignette-wave2.mjs: 118/118"
+  },
+  "hardRejectAudit": {
+    "mechanicsOrPlanChangedByDressing": false,
+    "independentPerTileMaterialChoice": false,
+    "uvSeamsOrDiagonalZipper": false,
+    "oneTileTextureCadence": false,
+    "conditionWithoutCause": false,
+    "unownedHardFace": false,
+    "lostQuietGround": false,
+    "materialSpriteScaleConflict": false,
+    "bearingHidesProgramOrBreaksMaterial": false,
+    "missingFallbackReceipt": false,
+    "falseContextRoute": false
+  },
+  "softScores": {
+    "tacticalReadability": {
+      "score": 3,
+      "finding": "road, barrier, guardroom, retaining shoulder, flank and lookout remain separable in every mutation and bearing"
+    },
+    "rankedMassComposition": {
+      "score": 3,
+      "finding": "guardroom, lookout deck and compact signal yoke form a usable primary-secondary-tertiary stack, but rear views are still roof-dominant"
+    },
+    "terrainBuildingSeparation": {
+      "score": 3,
+      "finding": "continuous faceted land and planar modular construction remain visibly distinct without reverting to voxel terrain"
+    },
+    "materialFamilyCoherence": {
+      "score": 3,
+      "finding": "the exact-course masonry, timber, slate, road and natural field belong together; sparse defensive citizens no longer read as random clutter"
+    },
+    "pixelDnaCoherence": {
+      "score": 3,
+      "finding": "32 px/ft nearest-filtered ground, masonry and extruded cast share a coherent authored-pixel scale, although donor props remain less strongly authored"
+    },
+    "valueHierarchy": {
+      "score": 2,
+      "finding": "yellow-green terrain remains bright and high-frequency enough to compete with the pale guardroom and controlled road across most of the frame"
+    },
+    "spritePriority": {
+      "score": 3,
+      "finding": "the separate four-bearing cast proof places four PCs and four guards on legal cells with real extruded bounds and zero clipped silhouettes"
+    },
+    "causalCondition": {
+      "score": 3,
+      "finding": "lower-wall grime, foundation contact, two-face ivy and drainage moisture now originate from real support, corner and water-history facts at gameplay scale"
+    },
+    "cultureLegibility": {
+      "score": 2,
+      "finding": "institutional quoins, cornice, opening hoods and authored banner are visible, but still do not create a strong enough whole-building cultural silhouette"
+    },
+    "beautyAtFourBearings": {
+      "score": 2,
+      "finding": "all bearings are coherent, but rear bearings flatten into roof-plus-box compositions and the three mutations remain too similar at contact-sheet scale"
+    }
+  },
+  "score": 27,
+  "requiredScore": 32,
+  "minimumCategoryScore": 2,
+  "requiredMinimumCategoryScore": 2,
+  "admittedForContext": false,
+  "nextHighestLeverageChanges": [
+    "lower and organize the natural-field value/chroma without replacing the selected v018 authored source",
+    "make mutation laws change guardroom-to-lookout relationships and roofline silhouette, not only footprint depth",
+    "add culture-owned corner and skyline expression through existing noncanonical signifier sockets",
+    "improve rear-bearing composition through procedural secondary mass placement rather than camera-specific dressing",
+    "repeat the full family, culture and light proofs after the environment reaches 32/40"
+  ]
+}

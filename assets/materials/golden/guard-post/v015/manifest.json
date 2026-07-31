@@ -1,0 +1,391 @@
+{
+  "schema": "GuardPostReusableSourceKitV015Receipt",
+  "status": "SOURCE_CANDIDATE_NOT_RUNTIME_ADMITTED",
+  "specificityLaw": "specific forms are retained; production volume and default procedural eligibility decrease as specificity increases",
+  "maskSheets": [
+    {
+      "source": "assets/materials/golden/guard-post/v015/reusable-ivy-kit-albedo-alpha.png",
+      "output": "assets/materials/golden/guard-post/v015/reusable-ivy-kit-neutral-mask-hard-alpha.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "visiblePixels": 167867,
+      "transparentPixels": 1404997,
+      "partialAlphaPixels": 0,
+      "visibleMagentaFamilyPixels": 0,
+      "rgbMode": "neutral-luma-24-step",
+      "alphaMode": "binary-threshold-128",
+      "utilityTier": "mixed-universal-and-family-variant",
+      "productionBudget": "high-for-roots-runners-connectors; bounded-for-distinctive-curls",
+      "id": "reusable-ivy-kit",
+      "status": "SOURCE_CANDIDATE_NOT_RUNTIME_ADMITTED"
+    },
+    {
+      "source": "assets/materials/golden/guard-post/v015/contact-grime-kit-albedo-alpha.png",
+      "output": "assets/materials/golden/guard-post/v015/contact-grime-kit-neutral-mask-hard-alpha.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "visiblePixels": 325526,
+      "transparentPixels": 1247338,
+      "partialAlphaPixels": 0,
+      "visibleMagentaFamilyPixels": 0,
+      "rgbMode": "neutral-luma-24-step",
+      "alphaMode": "binary-threshold-128",
+      "utilityTier": "universal-primitive",
+      "productionBudget": "high",
+      "id": "contact-grime-kit",
+      "status": "SOURCE_CANDIDATE_NOT_RUNTIME_ADMITTED"
+    },
+    {
+      "source": "assets/materials/golden/guard-post/v015/wet-edge-growth-kit-albedo-alpha.png",
+      "output": "assets/materials/golden/guard-post/v015/wet-edge-growth-kit-neutral-mask-hard-alpha.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "visiblePixels": 116157,
+      "transparentPixels": 1456707,
+      "partialAlphaPixels": 0,
+      "visibleMagentaFamilyPixels": 0,
+      "rgbMode": "neutral-luma-24-step",
+      "alphaMode": "binary-threshold-128",
+      "utilityTier": "mixed-universal-and-family-variant",
+      "productionBudget": "high-for-runners-corners; bounded-for-outfall-fans",
+      "id": "wet-edge-growth-kit",
+      "status": "SOURCE_CANDIDATE_NOT_RUNTIME_ADMITTED"
+    },
+    {
+      "source": "assets/materials/golden/guard-post/v015/camera-neutral-tuft-kit-albedo-alpha.png",
+      "output": "assets/materials/golden/guard-post/v015/camera-neutral-tuft-kit-neutral-mask-hard-alpha.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "visiblePixels": 151121,
+      "transparentPixels": 1421743,
+      "partialAlphaPixels": 0,
+      "visibleMagentaFamilyPixels": 0,
+      "rgbMode": "neutral-luma-24-step",
+      "alphaMode": "binary-threshold-128",
+      "utilityTier": "mixed-universal-and-family-variant",
+      "productionBudget": "high-for-radial-tufts; bounded-for-flower-and-reed-accents",
+      "id": "camera-neutral-tuft-kit",
+      "status": "SOURCE_CANDIDATE_NOT_RUNTIME_ADMITTED"
+    },
+    {
+      "source": "assets/materials/golden/guard-post/v015/recolorable-signifier-cloth-kit-albedo-alpha.png",
+      "output": "assets/materials/golden/guard-post/v015/recolorable-signifier-cloth-kit-neutral-mask-hard-alpha.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "visiblePixels": 448064,
+      "transparentPixels": 1124800,
+      "partialAlphaPixels": 0,
+      "visibleMagentaFamilyPixels": 0,
+      "rgbMode": "neutral-luma-24-step",
+      "alphaMode": "binary-threshold-128",
+      "utilityTier": "universal-attachment-primitive",
+      "productionBudget": "high-shape-reuse; world-truth-controls-color-and-marking",
+      "id": "recolorable-signifier-cloth-kit",
+      "status": "SOURCE_CANDIDATE_NOT_RUNTIME_ADMITTED"
+    },
+    {
+      "source": "assets/materials/golden/guard-post/v015/architectural-relief-kit-albedo-alpha.png",
+      "output": "assets/materials/golden/guard-post/v015/architectural-relief-kit-neutral-mask-hard-alpha.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "visiblePixels": 415217,
+      "transparentPixels": 1157647,
+      "partialAlphaPixels": 0,
+      "visibleMagentaFamilyPixels": 0,
+      "rgbMode": "neutral-luma-24-step",
+      "alphaMode": "binary-threshold-128",
+      "utilityTier": "mixed-universal-family-and-specific-accent",
+      "productionBudget": "high-for-bands-caps-surrounds; bounded-for-ornament",
+      "id": "architectural-relief-kit",
+      "status": "SOURCE_CANDIDATE_NOT_RUNTIME_ADMITTED"
+    }
+  ],
+  "masonry": [
+    {
+      "source": "assets/materials/golden/guard-post/v015/source/defensive-masonry-five-course-source.png",
+      "output": "assets/materials/golden/guard-post/v015/defensive-masonry-W5H5-albedo-160.png",
+      "size": [
+        160,
+        160
+      ],
+      "pixelsPerFoot": 32,
+      "physicalEnvelope": "W5H5",
+      "courseCount": 5,
+      "pixelsPerCourse": 32,
+      "sampling": "nearest-no-mipmap",
+      "status": "TECHNICAL_CANDIDATE_NOT_APPROVED"
+    },
+    {
+      "output": "assets/materials/golden/guard-post/v015/defensive-masonry-W5H5-normal-160.png",
+      "size": [
+        160,
+        160
+      ],
+      "derivation": "restrained-luma-gradient-review-companion",
+      "status": "TECHNICAL_CANDIDATE_NOT_APPROVED"
+    },
+    {
+      "output": "assets/materials/golden/guard-post/v015/defensive-masonry-W5H5-orm-160.png",
+      "size": [
+        160,
+        160
+      ],
+      "channels": {
+        "r": "ao",
+        "g": "roughness",
+        "b": "metalness"
+      },
+      "derivation": "restrained-luma-review-companion",
+      "status": "TECHNICAL_CANDIDATE_NOT_APPROVED"
+    },
+    {
+      "output": "assets/materials/golden/guard-post/v015/defensive-masonry-W5H5-bond-a-160-albedo.png",
+      "normal": "assets/materials/golden/guard-post/v015/defensive-masonry-W5H5-bond-a-160-normal.png",
+      "orm": "assets/materials/golden/guard-post/v015/defensive-masonry-W5H5-bond-a-160-orm.png",
+      "size": [
+        160,
+        160
+      ],
+      "physicalEnvelope": "W5H5",
+      "pixelsPerFoot": 32,
+      "courseCount": 5,
+      "pixelsPerCourse": 32,
+      "bondSocket": "shared-course-edge-socket-v1",
+      "variant": "a",
+      "status": "TECHNICAL_CANDIDATE_NOT_APPROVED"
+    },
+    {
+      "output": "assets/materials/golden/guard-post/v015/defensive-masonry-W5H5-bond-b-160-albedo.png",
+      "normal": "assets/materials/golden/guard-post/v015/defensive-masonry-W5H5-bond-b-160-normal.png",
+      "orm": "assets/materials/golden/guard-post/v015/defensive-masonry-W5H5-bond-b-160-orm.png",
+      "size": [
+        160,
+        160
+      ],
+      "physicalEnvelope": "W5H5",
+      "pixelsPerFoot": 32,
+      "courseCount": 5,
+      "pixelsPerCourse": 32,
+      "bondSocket": "shared-course-edge-socket-v1",
+      "variant": "b",
+      "status": "TECHNICAL_CANDIDATE_NOT_APPROVED"
+    },
+    {
+      "output": "assets/materials/golden/guard-post/v015/defensive-masonry-W5H5-bond-c-160-albedo.png",
+      "normal": "assets/materials/golden/guard-post/v015/defensive-masonry-W5H5-bond-c-160-normal.png",
+      "orm": "assets/materials/golden/guard-post/v015/defensive-masonry-W5H5-bond-c-160-orm.png",
+      "size": [
+        160,
+        160
+      ],
+      "physicalEnvelope": "W5H5",
+      "pixelsPerFoot": 32,
+      "courseCount": 5,
+      "pixelsPerCourse": 32,
+      "bondSocket": "shared-course-edge-socket-v1",
+      "variant": "c",
+      "status": "TECHNICAL_CANDIDATE_NOT_APPROVED"
+    },
+    {
+      "output": "assets/materials/golden/guard-post/v015/defensive-masonry-W5H10-bond-proof-160x320-albedo.png",
+      "normal": "assets/materials/golden/guard-post/v015/defensive-masonry-W5H10-bond-proof-160x320-normal.png",
+      "orm": "assets/materials/golden/guard-post/v015/defensive-masonry-W5H10-bond-proof-160x320-orm.png",
+      "size": [
+        160,
+        320
+      ],
+      "physicalEnvelope": "W5H10",
+      "pixelsPerFoot": 32,
+      "courseCount": 10,
+      "pixelsPerCourse": 32,
+      "bondSocket": "shared-course-edge-socket-v1",
+      "composition": [
+        "bond-a",
+        "bond-c"
+      ],
+      "status": "TECHNICAL_CANDIDATE_NOT_APPROVED"
+    },
+    {
+      "output": "assets/materials/golden/guard-post/v015/defensive-masonry-W10H10-bond-proof-320-albedo.png",
+      "normal": "assets/materials/golden/guard-post/v015/defensive-masonry-W10H10-bond-proof-320-normal.png",
+      "orm": "assets/materials/golden/guard-post/v015/defensive-masonry-W10H10-bond-proof-320-orm.png",
+      "size": [
+        320,
+        320
+      ],
+      "physicalEnvelope": "W10H10",
+      "pixelsPerFoot": 32,
+      "courseCount": 10,
+      "pixelsPerCourse": 32,
+      "bondSocket": "shared-course-edge-socket-v1",
+      "composition": [
+        "bond-c",
+        "bond-a",
+        "bond-a",
+        "bond-b"
+      ],
+      "status": "TECHNICAL_CANDIDATE_NOT_APPROVED"
+    }
+  ],
+  "runtimePrimitives": [
+    {
+      "id": "contact-grime-apron-tileable-mask-512x128",
+      "source": "assets/materials/golden/guard-post/v015/contact-grime-kit-neutral-mask-hard-alpha.png",
+      "output": "assets/materials/golden/guard-post/v015/runtime/contact-grime-apron-tileable-mask-512x128.png",
+      "size": [
+        512,
+        128
+      ],
+      "utilityTier": "universal-primitive",
+      "productionBudget": "high",
+      "placementSocket": "wall-ground-contact-repeat-x",
+      "partialAlphaPixels": 0,
+      "visibleMagentaFamilyPixels": 0,
+      "status": "RUNTIME_CANDIDATE_NOT_APPROVED"
+    },
+    {
+      "id": "contact-grime-apron-low-profile-neutral-albedo-alpha-512x128",
+      "source": "assets/materials/golden/guard-post/v015/contact-grime-kit-neutral-mask-hard-alpha.png",
+      "output": "assets/materials/golden/guard-post/v015/runtime/contact-grime-apron-low-profile-neutral-albedo-alpha-512x128.png",
+      "size": [
+        512,
+        128
+      ],
+      "utilityTier": "universal-primitive",
+      "productionBudget": "high",
+      "placementSocket": "wall-ground-contact-repeat-x",
+      "partialAlphaPixels": 0,
+      "visibleMagentaFamilyPixels": 0,
+      "status": "RUNTIME_CANDIDATE_NOT_APPROVED"
+    },
+    {
+      "id": "ivy-corner-face-a-shared-left-mask-256",
+      "source": "assets/materials/golden/guard-post/v015/reusable-ivy-kit-neutral-mask-hard-alpha.png",
+      "output": "assets/materials/golden/guard-post/v015/runtime/ivy-corner-face-a-shared-left-mask-256.png",
+      "size": [
+        256,
+        256
+      ],
+      "utilityTier": "universal-primitive",
+      "productionBudget": "high-for-corner-connectors",
+      "placementSocket": "two-face-corner-shared-left-ground-root",
+      "partialAlphaPixels": 0,
+      "visibleMagentaFamilyPixels": 0,
+      "status": "RUNTIME_CANDIDATE_NOT_APPROVED"
+    },
+    {
+      "id": "ivy-corner-face-b-shared-right-mask-256",
+      "source": "assets/materials/golden/guard-post/v015/reusable-ivy-kit-neutral-mask-hard-alpha.png",
+      "output": "assets/materials/golden/guard-post/v015/runtime/ivy-corner-face-b-shared-right-mask-256.png",
+      "size": [
+        256,
+        256
+      ],
+      "utilityTier": "universal-primitive",
+      "productionBudget": "high-for-corner-connectors",
+      "placementSocket": "two-face-corner-shared-right-ground-root",
+      "partialAlphaPixels": 0,
+      "visibleMagentaFamilyPixels": 0,
+      "status": "RUNTIME_CANDIDATE_NOT_APPROVED"
+    },
+    {
+      "id": "ivy-horizontal-runner-mask-512x128",
+      "source": "assets/materials/golden/guard-post/v015/reusable-ivy-kit-neutral-mask-hard-alpha.png",
+      "output": "assets/materials/golden/guard-post/v015/runtime/ivy-horizontal-runner-mask-512x128.png",
+      "size": [
+        512,
+        128
+      ],
+      "utilityTier": "family-variant",
+      "productionBudget": "moderate",
+      "placementSocket": "horizontal-seam-repeat-x",
+      "partialAlphaPixels": 0,
+      "visibleMagentaFamilyPixels": 0,
+      "status": "RUNTIME_CANDIDATE_NOT_APPROVED"
+    },
+    {
+      "id": "wet-edge-runner-mask-512x128",
+      "source": "assets/materials/golden/guard-post/v015/wet-edge-growth-kit-neutral-mask-hard-alpha.png",
+      "output": "assets/materials/golden/guard-post/v015/runtime/wet-edge-runner-mask-512x128.png",
+      "size": [
+        512,
+        128
+      ],
+      "utilityTier": "universal-primitive",
+      "productionBudget": "high-for-causal-wet-edges",
+      "placementSocket": "wet-edge-repeat-x",
+      "partialAlphaPixels": 0,
+      "visibleMagentaFamilyPixels": 0,
+      "status": "RUNTIME_CANDIDATE_NOT_APPROVED"
+    },
+    {
+      "id": "radial-grass-tuft-mask-160",
+      "source": "assets/materials/golden/guard-post/v015/camera-neutral-tuft-kit-neutral-mask-hard-alpha.png",
+      "output": "assets/materials/golden/guard-post/v015/runtime/radial-grass-tuft-mask-160.png",
+      "size": [
+        160,
+        160
+      ],
+      "utilityTier": "universal-primitive",
+      "productionBudget": "high",
+      "placementSocket": "ground-point-cross-card-or-extrusion",
+      "partialAlphaPixels": 0,
+      "visibleMagentaFamilyPixels": 0,
+      "status": "RUNTIME_CANDIDATE_NOT_APPROVED"
+    },
+    {
+      "id": "signifier-banner-long-mask-160x320",
+      "source": "assets/materials/golden/guard-post/v015/recolorable-signifier-cloth-kit-neutral-mask-hard-alpha.png",
+      "output": "assets/materials/golden/guard-post/v015/runtime/signifier-banner-long-mask-160x320.png",
+      "size": [
+        160,
+        320
+      ],
+      "utilityTier": "universal-attachment-primitive",
+      "productionBudget": "high-shape-reuse",
+      "placementSocket": "wall-or-pole-hang-world-truth-color",
+      "partialAlphaPixels": 0,
+      "visibleMagentaFamilyPixels": 0,
+      "status": "RUNTIME_CANDIDATE_NOT_APPROVED"
+    },
+    {
+      "id": "architectural-relief-band-mask-320x96",
+      "source": "assets/materials/golden/guard-post/v015/architectural-relief-kit-neutral-mask-hard-alpha.png",
+      "output": "assets/materials/golden/guard-post/v015/runtime/architectural-relief-band-mask-320x96.png",
+      "size": [
+        320,
+        96
+      ],
+      "utilityTier": "universal-join-primitive",
+      "productionBudget": "high",
+      "placementSocket": "wall-course-band-W10",
+      "partialAlphaPixels": 0,
+      "visibleMagentaFamilyPixels": 0,
+      "status": "RUNTIME_CANDIDATE_NOT_APPROVED"
+    }
+  ],
+  "contactSheet": "artifacts/golden-site-1-material-sources-v015/reusable-source-kit-v015-contact-sheet.png",
+  "hardChecks": {
+    "allMasksBinaryAlpha": true,
+    "allMasksVisibleMagentaFree": true,
+    "masonryW5H5Exact160": true,
+    "masonryFiveExact32pxCourses": true,
+    "masonryHasThreeSharedSocketBondVariants": true,
+    "masonryHasLinkedW5H10AndW10H10Proofs": true,
+    "runtimePrimitivesBinaryAlpha": true,
+    "runtimePrimitivesVisibleMagentaFree": true,
+    "runtimePrimitivesHavePlacementSockets": true
+  }
+}

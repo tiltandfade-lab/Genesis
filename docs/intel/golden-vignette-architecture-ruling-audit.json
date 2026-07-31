@@ -1,0 +1,907 @@
+{
+  "schemaVersion": 1,
+  "auditVersion": "golden-vignette-architecture-ruling-audit/1",
+  "generated": "2026-07-30",
+  "status": "read-only-post-ruling-overlay",
+  "source": {
+    "path": "docs/intel/golden-vignette-wave1-corpus.jsonl.gz",
+    "compressedSha256": "539476547e65f56c7d506effc1b292502843d0162b28f93139fc5ac7fc32ce9e",
+    "uncompressedSha256": "dec0427b8e4d84804d4a28ef550e3e2335b89593f3d4e15c15e3d7c8b4ce5f66",
+    "rowCount": 12718
+  },
+  "overlay": {
+    "path": "docs/intel/golden-vignette-architecture-ruling-overlay.jsonl.gz",
+    "rowCount": 12718,
+    "uncompressedSha256": "5a9b4713d54eac26327db09ef7d4beaf571386b7de478264d3f0bb1e11d6fce6"
+  },
+  "invariants": {
+    "oneToOneCaseIds": true,
+    "dispositionMutations": 0,
+    "goldenSiteIdsInOverlay": 0,
+    "naturalCavernLairLeak": 0,
+    "hybridWithoutExplicitCause": 0,
+    "giantLegacyClaims": 0
+  },
+  "census": {
+    "totalRows": 12718,
+    "architectureBearing": 7505,
+    "localConstructionDemand": 1247,
+    "scaleDemand": 763,
+    "scaleCodedLocal": 627,
+    "prisonAsylum": 219,
+    "naturalCavern": 810,
+    "megastructureDiscriminator": 64,
+    "causallyJustifiedHybrid": 0,
+    "byFamily": [
+      {
+        "key": "wilderness",
+        "count": 4627,
+        "pct": 36.382
+      },
+      {
+        "key": "dungeon",
+        "count": 4017,
+        "pct": 31.585
+      },
+      {
+        "key": "urban",
+        "count": 4017,
+        "pct": 31.585
+      },
+      {
+        "key": "owner",
+        "count": 26,
+        "pct": 0.204
+      },
+      {
+        "key": "persistence",
+        "count": 17,
+        "pct": 0.134
+      },
+      {
+        "key": "fixture",
+        "count": 6,
+        "pct": 0.047
+      },
+      {
+        "key": "failure",
+        "count": 5,
+        "pct": 0.039
+      },
+      {
+        "key": "capture",
+        "count": 1,
+        "pct": 0.008
+      },
+      {
+        "key": "persisted",
+        "count": 1,
+        "pct": 0.008
+      },
+      {
+        "key": "return",
+        "count": 1,
+        "pct": 0.008
+      }
+    ],
+    "byDisposition": [
+      {
+        "key": "MATERIALIZE_NEW",
+        "count": 8130,
+        "pct": 63.925
+      },
+      {
+        "key": "DECORATE_LOCAL",
+        "count": 4342,
+        "pct": 34.141
+      },
+      {
+        "key": "UNRESOLVED",
+        "count": 231,
+        "pct": 1.816
+      },
+      {
+        "key": "CONTINUE_EXISTING",
+        "count": 12,
+        "pct": 0.094
+      },
+      {
+        "key": "TRANSFORM_EXISTING",
+        "count": 2,
+        "pct": 0.016
+      },
+      {
+        "key": "NARRATIVE_ONLY",
+        "count": 1,
+        "pct": 0.008
+      }
+    ],
+    "byBattleSpace": [
+      {
+        "key": "NOT_ARCHITECTURE_BEARING",
+        "count": 5213,
+        "pct": 40.989
+      },
+      {
+        "key": "EXTERIOR_ARCHITECTURAL_PRECINCT",
+        "count": 3895,
+        "pct": 30.626
+      },
+      {
+        "key": "DEDICATED_INTERIOR",
+        "count": 3597,
+        "pct": 28.283
+      },
+      {
+        "key": "UNRESOLVED_MODE",
+        "count": 13,
+        "pct": 0.102
+      }
+    ],
+    "byInstitutionalScale": [
+      {
+        "key": "NONE",
+        "count": 5213,
+        "pct": 40.989
+      },
+      {
+        "key": "CIVIC",
+        "count": 4242,
+        "pct": 33.354
+      },
+      {
+        "key": "MONUMENTAL",
+        "count": 1386,
+        "pct": 10.898
+      },
+      {
+        "key": "ELITE",
+        "count": 801,
+        "pct": 6.298
+      },
+      {
+        "key": "DOMESTIC",
+        "count": 772,
+        "pct": 6.07
+      },
+      {
+        "key": "FRONTIER",
+        "count": 202,
+        "pct": 1.588
+      },
+      {
+        "key": "MEGAINTERIOR",
+        "count": 102,
+        "pct": 0.802
+      }
+    ],
+    "byHostOwner": [
+      {
+        "key": "UrbanFabric",
+        "count": 4027,
+        "pct": 31.664
+      },
+      {
+        "key": "LocalFeature",
+        "count": 3641,
+        "pct": 28.629
+      },
+      {
+        "key": "UrbanInstitutionHost",
+        "count": 1219,
+        "pct": 9.585
+      },
+      {
+        "key": "InfrastructureWorksHost",
+        "count": 1012,
+        "pct": 7.957
+      },
+      {
+        "key": "FuneraryMortuaryHost",
+        "count": 842,
+        "pct": 6.621
+      },
+      {
+        "key": "NaturalCavernHost",
+        "count": 810,
+        "pct": 6.369
+      },
+      {
+        "key": "HeroFeature",
+        "count": 703,
+        "pct": 5.528
+      },
+      {
+        "key": "DefenseFortificationHost",
+        "count": 615,
+        "pct": 4.836
+      },
+      {
+        "key": "ServiceInfrastructureHost",
+        "count": 533,
+        "pct": 4.191
+      },
+      {
+        "key": "WorkshopProductionHost",
+        "count": 522,
+        "pct": 4.104
+      },
+      {
+        "key": "HospitalityEntertainmentVenue",
+        "count": 415,
+        "pct": 3.263
+      },
+      {
+        "key": "MarketExchangeHost",
+        "count": 394,
+        "pct": 3.098
+      },
+      {
+        "key": "ResidentialEstateHost",
+        "count": 384,
+        "pct": 3.019
+      },
+      {
+        "key": "ReligiousSanctuaryHost",
+        "count": 326,
+        "pct": 2.563
+      },
+      {
+        "key": "MegastructureHost",
+        "count": 64,
+        "pct": 0.503
+      },
+      {
+        "key": "DefenseRouteControlHost",
+        "count": 50,
+        "pct": 0.393
+      },
+      {
+        "key": "LivingSubstrateHost",
+        "count": 38,
+        "pct": 0.299
+      },
+      {
+        "key": "EcologyClaimHost",
+        "count": 34,
+        "pct": 0.267
+      },
+      {
+        "key": "CommunalInstitutionHost",
+        "count": 32,
+        "pct": 0.252
+      },
+      {
+        "key": "ExtractionWorkHost",
+        "count": 25,
+        "pct": 0.197
+      },
+      {
+        "key": "TransientServiceHost",
+        "count": 25,
+        "pct": 0.197
+      },
+      {
+        "key": "CustodyHost",
+        "count": 3,
+        "pct": 0.024
+      },
+      {
+        "key": "HospitalityVenue",
+        "count": 3,
+        "pct": 0.024
+      },
+      {
+        "key": "NarrativeOnly",
+        "count": 1,
+        "pct": 0.008
+      }
+    ],
+    "byProofDemand": [
+      {
+        "key": "STRICT_MODULAR_ASSEMBLY_CLEARANCE",
+        "count": 7505,
+        "pct": 59.011
+      },
+      {
+        "key": "EXTERIOR_PRECINCT_COMPOSITION",
+        "count": 3895,
+        "pct": 30.626
+      },
+      {
+        "key": "DEDICATED_INTERIOR_COMPOSITION",
+        "count": 3597,
+        "pct": 28.283
+      },
+      {
+        "key": "LUXURY_AND_WONDER_AT_SCALE",
+        "count": 2187,
+        "pct": 17.196
+      },
+      {
+        "key": "LOCAL_CONSTRUCTION_WITHOUT_SITE_PROMOTION",
+        "count": 1247,
+        "pct": 9.805
+      },
+      {
+        "key": "PURE_CAVERN_WITHOUT_LAIR_IMPLICATION",
+        "count": 810,
+        "pct": 6.369
+      },
+      {
+        "key": "BODY_RELATIVE_SCALE_AND_CLEARANCE",
+        "count": 763,
+        "pct": 5.999
+      },
+      {
+        "key": "PRISON_ASYLUM_PROGRAM_DISCRIMINATOR",
+        "count": 219,
+        "pct": 1.722
+      },
+      {
+        "key": "MEGAINTERIOR_WITHOUT_EXTERIOR_VISIBILITY",
+        "count": 102,
+        "pct": 0.802
+      }
+    ],
+    "scaleByDisposition": [
+      {
+        "key": "DECORATE_LOCAL",
+        "count": 627,
+        "pct": 82.176
+      },
+      {
+        "key": "MATERIALIZE_NEW",
+        "count": 136,
+        "pct": 17.824
+      }
+    ],
+    "scaleByRelation": [
+      {
+        "key": "OVERSIZED_FEATURE_RELATION",
+        "count": 585,
+        "pct": 76.671
+      },
+      {
+        "key": "CREATURE_BODY_RELATION",
+        "count": 76,
+        "pct": 9.961
+      },
+      {
+        "key": "MEGASTRUCTURE_SCALE_RELATION",
+        "count": 64,
+        "pct": 8.388
+      },
+      {
+        "key": "ANOMALOUS_BODY_RELATION",
+        "count": 38,
+        "pct": 4.98
+      }
+    ]
+  },
+  "decisions": [
+    "Wave-1 corpus is immutable before-state; this audit changes no roller or request.",
+    "Battle-space mode is selected before massing; ruin alone never licenses a hybrid.",
+    "Pure NaturalCavernHost rows do not imply a lair, architecture, or EcologyClaimHost.",
+    "Institutional scale is a proof demand, not a uniform geometry multiplier.",
+    "Megastructure and oversized-feature evidence require a builder, occupant, or body discriminator; they do not imply GIANT_LEGACY.",
+    "Scale-coded DECORATE_LOCAL rows remain local while demanding body-relative clearance and terrain response.",
+    "Every new architecture candidate owes roof closure, support datum, direct stair seams, route/headroom clearance, and fixed-camera occlusion checks."
+  ],
+  "samples": {
+    "prisonAsylum": [
+      {
+        "caseId": "natural:dungeon:0000",
+        "family": "dungeon",
+        "disposition": "UNRESOLVED",
+        "primaryType": "Prison / Asylum",
+        "primaryFeature": "Magical Font",
+        "owners": [],
+        "mode": "DEDICATED_INTERIOR",
+        "scaleClass": "CIVIC",
+        "scaleRelation": null
+      },
+      {
+        "caseId": "natural:dungeon:0002",
+        "family": "dungeon",
+        "disposition": "UNRESOLVED",
+        "primaryType": "Prison / Asylum",
+        "primaryFeature": "Refuse Pile",
+        "owners": [],
+        "mode": "DEDICATED_INTERIOR",
+        "scaleClass": "CIVIC",
+        "scaleRelation": null
+      },
+      {
+        "caseId": "natural:dungeon:0039",
+        "family": "dungeon",
+        "disposition": "UNRESOLVED",
+        "primaryType": "Prison / Asylum",
+        "primaryFeature": "Reality Fracture",
+        "owners": [],
+        "mode": "DEDICATED_INTERIOR",
+        "scaleClass": "CIVIC",
+        "scaleRelation": null
+      },
+      {
+        "caseId": "natural:dungeon:0048",
+        "family": "dungeon",
+        "disposition": "UNRESOLVED",
+        "primaryType": "Prison / Asylum",
+        "primaryFeature": "Eldritch Circle",
+        "owners": [],
+        "mode": "DEDICATED_INTERIOR",
+        "scaleClass": "CIVIC",
+        "scaleRelation": null
+      },
+      {
+        "caseId": "natural:dungeon:0088",
+        "family": "dungeon",
+        "disposition": "UNRESOLVED",
+        "primaryType": "Prison / Asylum",
+        "primaryFeature": "Bone Wall",
+        "owners": [],
+        "mode": "DEDICATED_INTERIOR",
+        "scaleClass": "CIVIC",
+        "scaleRelation": null
+      },
+      {
+        "caseId": "natural:dungeon:0105",
+        "family": "dungeon",
+        "disposition": "UNRESOLVED",
+        "primaryType": "Prison / Asylum",
+        "primaryFeature": "Candelabra",
+        "owners": [],
+        "mode": "DEDICATED_INTERIOR",
+        "scaleClass": "CIVIC",
+        "scaleRelation": null
+      },
+      {
+        "caseId": "natural:dungeon:0139",
+        "family": "dungeon",
+        "disposition": "UNRESOLVED",
+        "primaryType": "Prison / Asylum",
+        "primaryFeature": "Stagnant Pool",
+        "owners": [],
+        "mode": "DEDICATED_INTERIOR",
+        "scaleClass": "CIVIC",
+        "scaleRelation": null
+      },
+      {
+        "caseId": "natural:dungeon:0146",
+        "family": "dungeon",
+        "disposition": "UNRESOLVED",
+        "primaryType": "Prison / Asylum",
+        "primaryFeature": "Barricade",
+        "owners": [],
+        "mode": "DEDICATED_INTERIOR",
+        "scaleClass": "CIVIC",
+        "scaleRelation": null
+      }
+    ],
+    "localConstruction": [
+      {
+        "caseId": "natural:dungeon:0008",
+        "family": "dungeon",
+        "disposition": "MATERIALIZE_NEW",
+        "primaryType": "Natural Cavern",
+        "primaryFeature": "Bone Wall",
+        "owners": [
+          "NaturalCavernHost"
+        ],
+        "mode": null,
+        "scaleClass": null,
+        "scaleRelation": null
+      },
+      {
+        "caseId": "natural:dungeon:0019",
+        "family": "dungeon",
+        "disposition": "MATERIALIZE_NEW",
+        "primaryType": "Natural Cavern",
+        "primaryFeature": "Barricade",
+        "owners": [
+          "NaturalCavernHost"
+        ],
+        "mode": null,
+        "scaleClass": null,
+        "scaleRelation": null
+      },
+      {
+        "caseId": "natural:dungeon:0040",
+        "family": "dungeon",
+        "disposition": "MATERIALIZE_NEW",
+        "primaryType": "Natural Cavern",
+        "primaryFeature": "Inscribed Obelisk",
+        "owners": [
+          "NaturalCavernHost"
+        ],
+        "mode": null,
+        "scaleClass": null,
+        "scaleRelation": null
+      },
+      {
+        "caseId": "natural:dungeon:0054",
+        "family": "dungeon",
+        "disposition": "MATERIALIZE_NEW",
+        "primaryType": "Natural Cavern",
+        "primaryFeature": "Heroic Statue",
+        "owners": [
+          "NaturalCavernHost"
+        ],
+        "mode": null,
+        "scaleClass": null,
+        "scaleRelation": null
+      },
+      {
+        "caseId": "natural:dungeon:0089",
+        "family": "dungeon",
+        "disposition": "MATERIALIZE_NEW",
+        "primaryType": "Natural Cavern",
+        "primaryFeature": "Collapsed Bridge",
+        "owners": [
+          "NaturalCavernHost"
+        ],
+        "mode": null,
+        "scaleClass": null,
+        "scaleRelation": null
+      },
+      {
+        "caseId": "natural:dungeon:0100",
+        "family": "dungeon",
+        "disposition": "MATERIALIZE_NEW",
+        "primaryType": "Natural Cavern",
+        "primaryFeature": "Barricade",
+        "owners": [
+          "NaturalCavernHost"
+        ],
+        "mode": null,
+        "scaleClass": null,
+        "scaleRelation": null
+      },
+      {
+        "caseId": "natural:dungeon:0112",
+        "family": "dungeon",
+        "disposition": "MATERIALIZE_NEW",
+        "primaryType": "Natural Cavern",
+        "primaryFeature": "Barricade",
+        "owners": [
+          "NaturalCavernHost"
+        ],
+        "mode": null,
+        "scaleClass": null,
+        "scaleRelation": null
+      },
+      {
+        "caseId": "natural:dungeon:0153",
+        "family": "dungeon",
+        "disposition": "MATERIALIZE_NEW",
+        "primaryType": "Natural Cavern",
+        "primaryFeature": "Wall Manacles",
+        "owners": [
+          "NaturalCavernHost"
+        ],
+        "mode": null,
+        "scaleClass": null,
+        "scaleRelation": null
+      }
+    ],
+    "scaleDemand": [
+      {
+        "caseId": "natural:dungeon:0021",
+        "family": "dungeon",
+        "disposition": "MATERIALIZE_NEW",
+        "primaryType": "The Megastructure",
+        "primaryFeature": "Mosaic Floor",
+        "owners": [
+          "MegastructureHost"
+        ],
+        "mode": "DEDICATED_INTERIOR",
+        "scaleClass": "MEGAINTERIOR",
+        "scaleRelation": "MEGASTRUCTURE_SCALE_RELATION"
+      },
+      {
+        "caseId": "natural:dungeon:0134",
+        "family": "dungeon",
+        "disposition": "MATERIALIZE_NEW",
+        "primaryType": "The Living Hive",
+        "primaryFeature": "Collapsed Bridge",
+        "owners": [
+          "LivingSubstrateHost"
+        ],
+        "mode": "DEDICATED_INTERIOR",
+        "scaleClass": "MEGAINTERIOR",
+        "scaleRelation": "ANOMALOUS_BODY_RELATION"
+      },
+      {
+        "caseId": "natural:dungeon:0150",
+        "family": "dungeon",
+        "disposition": "MATERIALIZE_NEW",
+        "primaryType": "The Megastructure",
+        "primaryFeature": "Hanging Cage",
+        "owners": [
+          "MegastructureHost"
+        ],
+        "mode": "DEDICATED_INTERIOR",
+        "scaleClass": "MEGAINTERIOR",
+        "scaleRelation": "MEGASTRUCTURE_SCALE_RELATION"
+      },
+      {
+        "caseId": "natural:dungeon:0155",
+        "family": "dungeon",
+        "disposition": "MATERIALIZE_NEW",
+        "primaryType": "The Megastructure",
+        "primaryFeature": "Drainage Grate",
+        "owners": [
+          "MegastructureHost"
+        ],
+        "mode": "DEDICATED_INTERIOR",
+        "scaleClass": "MEGAINTERIOR",
+        "scaleRelation": "MEGASTRUCTURE_SCALE_RELATION"
+      },
+      {
+        "caseId": "natural:dungeon:0161",
+        "family": "dungeon",
+        "disposition": "MATERIALIZE_NEW",
+        "primaryType": "The Megastructure",
+        "primaryFeature": "Hanging Cage",
+        "owners": [
+          "MegastructureHost"
+        ],
+        "mode": "DEDICATED_INTERIOR",
+        "scaleClass": "MEGAINTERIOR",
+        "scaleRelation": "MEGASTRUCTURE_SCALE_RELATION"
+      },
+      {
+        "caseId": "natural:dungeon:0185",
+        "family": "dungeon",
+        "disposition": "MATERIALIZE_NEW",
+        "primaryType": "The Megastructure",
+        "primaryFeature": "Drainage Grate",
+        "owners": [
+          "MegastructureHost"
+        ],
+        "mode": "DEDICATED_INTERIOR",
+        "scaleClass": "MEGAINTERIOR",
+        "scaleRelation": "MEGASTRUCTURE_SCALE_RELATION"
+      },
+      {
+        "caseId": "natural:dungeon:0326",
+        "family": "dungeon",
+        "disposition": "MATERIALIZE_NEW",
+        "primaryType": "The Megastructure",
+        "primaryFeature": "Inscribed Obelisk",
+        "owners": [
+          "MegastructureHost"
+        ],
+        "mode": "DEDICATED_INTERIOR",
+        "scaleClass": "MEGAINTERIOR",
+        "scaleRelation": "MEGASTRUCTURE_SCALE_RELATION"
+      },
+      {
+        "caseId": "natural:dungeon:0333",
+        "family": "dungeon",
+        "disposition": "MATERIALIZE_NEW",
+        "primaryType": "The Megastructure",
+        "primaryFeature": "Stagnant Pool",
+        "owners": [
+          "MegastructureHost"
+        ],
+        "mode": "DEDICATED_INTERIOR",
+        "scaleClass": "MEGAINTERIOR",
+        "scaleRelation": "MEGASTRUCTURE_SCALE_RELATION"
+      }
+    ],
+    "megastructure": [
+      {
+        "caseId": "natural:dungeon:0021",
+        "family": "dungeon",
+        "disposition": "MATERIALIZE_NEW",
+        "primaryType": "The Megastructure",
+        "primaryFeature": "Mosaic Floor",
+        "owners": [
+          "MegastructureHost"
+        ],
+        "mode": "DEDICATED_INTERIOR",
+        "scaleClass": "MEGAINTERIOR",
+        "scaleRelation": "MEGASTRUCTURE_SCALE_RELATION"
+      },
+      {
+        "caseId": "natural:dungeon:0150",
+        "family": "dungeon",
+        "disposition": "MATERIALIZE_NEW",
+        "primaryType": "The Megastructure",
+        "primaryFeature": "Hanging Cage",
+        "owners": [
+          "MegastructureHost"
+        ],
+        "mode": "DEDICATED_INTERIOR",
+        "scaleClass": "MEGAINTERIOR",
+        "scaleRelation": "MEGASTRUCTURE_SCALE_RELATION"
+      },
+      {
+        "caseId": "natural:dungeon:0155",
+        "family": "dungeon",
+        "disposition": "MATERIALIZE_NEW",
+        "primaryType": "The Megastructure",
+        "primaryFeature": "Drainage Grate",
+        "owners": [
+          "MegastructureHost"
+        ],
+        "mode": "DEDICATED_INTERIOR",
+        "scaleClass": "MEGAINTERIOR",
+        "scaleRelation": "MEGASTRUCTURE_SCALE_RELATION"
+      },
+      {
+        "caseId": "natural:dungeon:0161",
+        "family": "dungeon",
+        "disposition": "MATERIALIZE_NEW",
+        "primaryType": "The Megastructure",
+        "primaryFeature": "Hanging Cage",
+        "owners": [
+          "MegastructureHost"
+        ],
+        "mode": "DEDICATED_INTERIOR",
+        "scaleClass": "MEGAINTERIOR",
+        "scaleRelation": "MEGASTRUCTURE_SCALE_RELATION"
+      },
+      {
+        "caseId": "natural:dungeon:0185",
+        "family": "dungeon",
+        "disposition": "MATERIALIZE_NEW",
+        "primaryType": "The Megastructure",
+        "primaryFeature": "Drainage Grate",
+        "owners": [
+          "MegastructureHost"
+        ],
+        "mode": "DEDICATED_INTERIOR",
+        "scaleClass": "MEGAINTERIOR",
+        "scaleRelation": "MEGASTRUCTURE_SCALE_RELATION"
+      },
+      {
+        "caseId": "natural:dungeon:0326",
+        "family": "dungeon",
+        "disposition": "MATERIALIZE_NEW",
+        "primaryType": "The Megastructure",
+        "primaryFeature": "Inscribed Obelisk",
+        "owners": [
+          "MegastructureHost"
+        ],
+        "mode": "DEDICATED_INTERIOR",
+        "scaleClass": "MEGAINTERIOR",
+        "scaleRelation": "MEGASTRUCTURE_SCALE_RELATION"
+      },
+      {
+        "caseId": "natural:dungeon:0333",
+        "family": "dungeon",
+        "disposition": "MATERIALIZE_NEW",
+        "primaryType": "The Megastructure",
+        "primaryFeature": "Stagnant Pool",
+        "owners": [
+          "MegastructureHost"
+        ],
+        "mode": "DEDICATED_INTERIOR",
+        "scaleClass": "MEGAINTERIOR",
+        "scaleRelation": "MEGASTRUCTURE_SCALE_RELATION"
+      },
+      {
+        "caseId": "natural:dungeon:0369",
+        "family": "dungeon",
+        "disposition": "MATERIALIZE_NEW",
+        "primaryType": "The Megastructure",
+        "primaryFeature": "Flooded Trench",
+        "owners": [
+          "MegastructureHost"
+        ],
+        "mode": "DEDICATED_INTERIOR",
+        "scaleClass": "MEGAINTERIOR",
+        "scaleRelation": "MEGASTRUCTURE_SCALE_RELATION"
+      }
+    ],
+    "scaleCodedLocal": [
+      {
+        "caseId": "natural:wilderness:0008",
+        "family": "wilderness",
+        "disposition": "DECORATE_LOCAL",
+        "primaryType": "40' x 60' Figure-Eight",
+        "primaryFeature": "Colossal Statue (Head): Half-buried giant face.",
+        "owners": [
+          "HeroFeature"
+        ],
+        "mode": null,
+        "scaleClass": null,
+        "scaleRelation": "OVERSIZED_FEATURE_RELATION"
+      },
+      {
+        "caseId": "natural:wilderness:0013",
+        "family": "wilderness",
+        "disposition": "DECORATE_LOCAL",
+        "primaryType": "40' x 100' S-Curve (20' wide)",
+        "primaryFeature": "Gargantuan Eggshells: Leathery shards the size of carts.",
+        "owners": [
+          "LocalFeature"
+        ],
+        "mode": null,
+        "scaleClass": null,
+        "scaleRelation": "OVERSIZED_FEATURE_RELATION"
+      },
+      {
+        "caseId": "natural:wilderness:0014",
+        "family": "wilderness",
+        "disposition": "DECORATE_LOCAL",
+        "primaryType": "30' x 50' Crescent Moon",
+        "primaryFeature": "Giant Anchor: Rusted iron hook the size of a house.",
+        "owners": [
+          "HeroFeature"
+        ],
+        "mode": null,
+        "scaleClass": null,
+        "scaleRelation": "OVERSIZED_FEATURE_RELATION"
+      },
+      {
+        "caseId": "natural:wilderness:0015",
+        "family": "wilderness",
+        "disposition": "DECORATE_LOCAL",
+        "primaryType": "20' x 50' Parallel Tunnels",
+        "primaryFeature": "Fossilized Tree: Giant tree turned entirely to stone.",
+        "owners": [
+          "HeroFeature"
+        ],
+        "mode": null,
+        "scaleClass": null,
+        "scaleRelation": "OVERSIZED_FEATURE_RELATION"
+      },
+      {
+        "caseId": "natural:wilderness:0026",
+        "family": "wilderness",
+        "disposition": "DECORATE_LOCAL",
+        "primaryType": "60' x 90' Figure-Eight",
+        "primaryFeature": "Mushroom Ring: A perfect circle of giant toadstools.",
+        "owners": [
+          "HeroFeature"
+        ],
+        "mode": null,
+        "scaleClass": null,
+        "scaleRelation": "OVERSIZED_FEATURE_RELATION"
+      },
+      {
+        "caseId": "natural:wilderness:0039",
+        "family": "wilderness",
+        "disposition": "DECORATE_LOCAL",
+        "primaryType": "50' Diameter Circle",
+        "primaryFeature": "Colossal Statue (Head): Half-buried giant face.",
+        "owners": [
+          "HeroFeature"
+        ],
+        "mode": null,
+        "scaleClass": null,
+        "scaleRelation": "OVERSIZED_FEATURE_RELATION"
+      },
+      {
+        "caseId": "natural:wilderness:0041",
+        "family": "wilderness",
+        "disposition": "DECORATE_LOCAL",
+        "primaryType": "80' x 80' Cross-Junction (30' wide)",
+        "primaryFeature": "Beast Statue: Massive stone lion, hound, or dragon.",
+        "owners": [
+          "LocalFeature"
+        ],
+        "mode": null,
+        "scaleClass": null,
+        "scaleRelation": "CREATURE_BODY_RELATION"
+      },
+      {
+        "caseId": "natural:wilderness:0042",
+        "family": "wilderness",
+        "disposition": "DECORATE_LOCAL",
+        "primaryType": "20' x 50' Parallel Tunnels",
+        "primaryFeature": "Giant Spear: A 30-foot long iron weapon impaled in the dirt.",
+        "owners": [
+          "HeroFeature"
+        ],
+        "mode": null,
+        "scaleClass": null,
+        "scaleRelation": "OVERSIZED_FEATURE_RELATION"
+      }
+    ]
+  }
+}

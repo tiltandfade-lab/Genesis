@@ -1878,6 +1878,16 @@ Binding consequences:
   inside inner wall bounds, rises remain equal, adjacent solids overlap at contact, the top tread
   meets its landing, a retaining curb yields the stair opening, and a doorway cannot intersect the
   raised platform. Illegal compositions reject loudly instead of rendering a curated exception.
+- Corners have two owners. The neutral construction system owns closed support and weather
+  topology; culture owns the visible junction profile and ornament. Square, rounded, swept,
+  corbelled, gargoyled, finialed, painted, and monolithic junctions are valid cultural families,
+  but none may reopen the base envelope or alter mechanics.
+- Every concentric architectural course closes independently: wall, foundation, cornice, roof
+  flashing, fascia, parapet, coping, and condition receiver. Procedurally mutating visible courses
+  use WFC-compatible run modules whose ends share exact miter planes. An intentional open end gets
+  one four-vertex cap. Manifold loops remain valid for non-mutating hidden courses. Overlapping
+  perpendicular boxes that are technically solid but produce false black AO seams remain a visual
+  failure.
 
 ## TERRAIN CONTINUITY OVER CELLWISE DISRUPTION (Adam, 2026-07-28 — binding; verbatim)
 
@@ -2272,6 +2282,21 @@ negative control, machine-verifiable edge and cadence gates, and retained produc
 captures over a large field with the governed camera, lighting, shadows, props, and standees.
 Technical success establishes a prototype candidate only; visual admission remains Adam's.
 
+### Orientation-neutral ground parents and separate tuft dressing (Adam, 2026-07-30 — binding)
+
+The v010 upland turf establishes the desired base palette, soil breakup, low groundcover, and
+pixel-scale texture, but its baked fan-shaped grass tufts are rejected. A tileable ground albedo
+must remain truthful under every governed quarter-turn bearing: it may contain orientation-neutral
+short blades, moss, mottling, stones, and soil, but may not bake camera-facing tuft silhouettes or
+their cast shadows into the horizontal surface.
+
+Readable tufts are a separate sparse semantic-overlay family. They are placed by the ground-field
+compiler as crossed sprites, shallow extrusions, or another reviewed multi-bearing representation;
+their density, scale, species, condition, and clustering come from site truth. Removing baked tufts
+does not license flattening or replacing the accepted v010 parent character. A tuftless successor
+must preserve that parent's palette and local breakup, pass four-edge seam and cadence checks, and
+prove its dressing separately across all four bearings.
+
 ## ASSETFORGE PRIMARY-FACTORY AND CANDIDACY RULING (Adam, 2026-07-28 — binding; verbatim)
 
 > "ok, that is a marked improvement but not exactly where we want to be with terrain but that's ok
@@ -2325,3 +2350,409 @@ Binding consequences:
 - All Golden visual thresholds distinguish hard rejection, soft target, and provisional A/B
   calibration. A tool receipt cannot promote taste or hide an individual failed frame behind an
   aggregate score.
+
+## ARCHITECTURE CLOSURE, GROWTH, CUTAWAY, AND CREATURE SCALE (Adam, 2026-07-30 — binding; verbatim)
+
+> "ov3rall the forms are decent to good, my biggest complaint is that any structure with an inclined roof as a gap between the walls and the roof, you'll have to build some partials that fit those gaps
+>
+> go ahead and give all of these creations a harsh critical pass, i'll also need to see proof of the procedural mutations of these buildings. How do they change, how do the grow, what do they look like with multiple rooms, multiple stories, how do they look with dollhouse cutaway walls?
+>
+> what about creatures that are medium size? do any buildings or architecture fit them? we'll definitely need some of the buildings to have that flexibility for more interesting visual storytelling."
+
+Binding consequences:
+
+- An enclosed inclined roof requires engine-authored gable, shed-edge, or crown partials that seal
+  every declared wall/roof junction. A dark gap is a failed assembly, not atmospheric depth.
+- Mutation proof operates on whole reviewed relationships: complete rooms, wings, storeys,
+  circulation, enclosure, and support. Independent member scatter is not growth.
+- Dollhouse exposure is a presentation projection over a physically complete state. It does not
+  silently turn an intact building into a ruin.
+- `Medium` is not one human silhouette. Portals, routes, turns, stairs/ramps, and service spaces
+  must be validated against upright, broad, and long body plans where the site calls for them.
+
+## DEDICATED INTERIORS, EXTERIOR PRECINCTS, AND CAUSAL HYBRIDS (Adam, 2026-07-30 — binding; verbatim)
+
+> "also another major consideration, i don't know how triangle strategy handles it, but generally in FFT interiors are strictly that, interiors. There's the one battle where you fight through ruins, and there a re a lot of external architectural features that become battlegrounds, but the interiors generally remain just that. They still somehow make all of the interiors interesting
+>
+> so that's something we should consider, you do have a decent construction language started, and i do like the idea of hybrid interior/exteriors, but it has to be done correctly and I do think in most cases we can do dedicated interiors and dedicated exterior vignettes.
+>
+> what do you think? what problems does this solve? what problems does this create? this does allow us to do partial exterior constructions as boundaries for the battle map. Think of that battle in FFT in the alleyway when you first get Agrias and Gafgarion in your squad again. it's a little hillside alleyway where some mercenaries try to capture you
+>
+> this might affect the golden sites across the board"
+
+Binding consequences:
+
+- Every architecture-bearing vignette chooses `dedicated-interior`,
+  `exterior-architectural-precinct`, or `causally-justified-hybrid` before massing.
+- Dedicated interiors spend the active window on room topology, internal height, light, material,
+  and circulation. They do not pay to materialize an exterior that cannot be seen or played.
+- Exterior precincts may use complete façades and inaccessible building depth as battlefield
+  boundaries, including hillside alleys, courts, roofs, walls, and civic works.
+- Hybrid exposure is never the default. It requires a named ruin, breach, courtyard, open hall, or
+  threshold transition and materializes only the program slice that cause exposes.
+- Golden Sites must retain portal/continuation identity across separately materialized interior and
+  exterior windows.
+
+## FANTASY INSTITUTIONAL SCALE, LUXURY, AND HISTORICAL WONDER (Adam, 2026-07-30 — binding; verbatim)
+
+> "so this is a fantasy world, i think one of the ways we sell that is through scale. These small little buildings are cool for SOME frontier and small fantasy towns and even like residential quarters for some cities, but when it comes to the actual nobility or successful cities, we need to think of scale and architectural luxury, sure they are bound by resources but they also all exist in a world where occassionally a level 20 wizard comes around and can break the rules of that plane of reality, there needs to be architectural tells of that history, i think doing the dedicated interior/exterior split in most cases will help us sell that reality. Having one massive wall with beautiful stained glass windows in a massive sanctuary with beautiful wall features and floor features will do so much more for us than a million regular little dollhouse models, she shame to the buildings you have made, we can find a use for most of them, we just need to think bigger and more fantastical "
+
+Binding consequences:
+
+- The small form ladder remains useful frontier, domestic, service, and grammar coverage. It is not
+  the scale target for nobility, major institutions, or successful cities.
+- Elite sites require authored luxury in proportion, surface hierarchy, glazing, floor/wall
+  features, color, and light—not merely more props or a uniformly enlarged cottage.
+- A wonder tell must imply a causal history of magic altering construction, infrastructure, repair,
+  or use. Generic glowing decoration does not establish a fantasy civilization.
+- Dedicated interior windows may materialize one extraordinary wall, corner, gallery, or chamber
+  whose unseen continuation is larger than the battle map.
+
+## MEGAINTERIOR MATERIALIZATION WINDOWS (Adam, 2026-07-30 — binding; verbatim)
+
+> "I am actually very impressed with the work so far
+>
+> however even these large cutaway structures you are building are still incredibly small compared to my imagination, what I am imagining you wouldn't see the exterior of at all because the inside os grand. Think about a map that is just one corner of grand central station, with it's multiple floors, it's massive walls columns, color scheme and lighting"
+
+Binding consequences:
+
+- A grand-interior battle map may be one cropped materialization window inside a building whose
+  exterior silhouette is absent and whose full footprint must not be generated.
+- The active window must imply continuation laterally and upward through cropped walls, galleries,
+  vaults, circulation, and light—not read as a complete dollhouse object.
+- Multiple floors, massive walls/columns, controlled color, and local light are primary spatial
+  construction. They are not deferred dressing.
+
+## MODULAR ASSEMBLY CLEARANCE (Adam, 2026-07-30 — binding; verbatim)
+
+> "also watch out for the clipping when you combine these modular parts, some of the stairs were clipping through the other models, we'll have to figure out a solution where that isnt happening"
+
+Binding consequences:
+
+- A modular stair owns a swept clearance volume across its full tread width and required headroom.
+  It may meet its named supports and landings; it may not tunnel through another wall, pier, roof
+  support, tower, prop, or module.
+- A stair may cross a wall only through a real opening that clears its whole width and headroom.
+- New procedural candidates use strict assembly-clearance validation. Legacy proofs retain an
+  explicit collision census until repaired; intersections may not be hidden to obtain a green gate.
+
+## GIANT-BUILT ANCIENT RUINS (Adam, 2026-07-30 — binding; verbatim)
+
+> "yes, and just imagine, Grand Central station is still HUMAN in scale, now imagine grand central station built by giants 10,000 years ago and left in ruins"
+
+Binding consequences:
+
+- Grand Central-scale human architecture is a lower bound for the largest fantasy interiors, not a
+  maximum.
+- Giant-built construction is a civilization-scale regime, not a uniform scale transform. Original
+  stairs, galleries, portals, piers, and ornament follow giant bodies and can become tactical
+  landforms for present-day Medium actors.
+- Ten-thousand-year ruin state requires real loss, fall, weathering, and later occupation. Human
+  stairs, bridges, scaffolds, camps, and repairs remain visibly distinct in scale, material, and
+  construction logic from the surviving giant work.
+
+## STAIR-TO-STAIR CONTINUITY AND GROUNDING (Adam, 2026-07-30 — binding; verbatim)
+
+> "you are back to the same weird platform to connect two sets of stairs behavior. Two staircases should be able to connect seamlessly, and in most cases the base of the higher sets of stairs needs to still connect to the ground for support, that isn't always the case depending on the stairs, but in the case of your test that is the case"
+
+Binding consequences:
+
+- Consecutive stair flights may share one exact three-dimensional seam. An arbitrary platform may
+  not hide mismatched endpoints or disconnected rise datums.
+- Every stair declares a support mode: `grounded-solid`, `bearing-on-lower-structure`, or
+  `suspended-or-bridged`.
+- A grounded higher flight carries its structural body down to a declared foundation datum even
+  when its walking surface begins at an upper stair seam. Elevated and suspended exceptions require
+  their own visible support logic.
+
+## REJECTED-MACHINERY RETENTION AND MINIATURE ARCHITECTURE (Adam, 2026-07-30 — binding; verbatim)
+
+> "what are we doing with rejected machinery? are we keeping that somewhere? the little miniatures house/architectural stuff is kind of great in its own way and could still serve a purpose in something like an overworld map or a map of a neighborhood in a city etc...so don't throw it away or wholesale overwrite that stuff"
+
+Binding consequences:
+
+- Rejection is scoped to a projection, scale, operating role, or production default. It is not
+  automatic deletion of the form, machinery, source, capture, or reproducible seed.
+- Small/dollhouse architectural forms may be admitted for overworld, district, neighborhood,
+  estate, fortress-overview, or other miniature projections even when they fail as a battle-scale
+  interior or exterior precinct.
+- Every preserved form or mechanism receives one or more explicit roles:
+  `battle-window-capable`, `miniature-overview-capable`, or `diagnostic-negative-control`.
+- Diagnostic negative controls remain reproducible but cannot enter production candidate pools.
+  Their failure identity—such as independent tile relief, sedimentary contour bands, zipper
+  diagonals, height caps, arbitrary stair connector platforms, unsupported stairs, or modular
+  clipping—must remain named.
+- New proofs and generators extend the vocabulary additively. They may supersede a default or
+  production route, but they do not wholesale overwrite the earlier curated forms or their evidence.
+
+## GOLDEN SITE 1 TS/FFT FAMILY-QUALITY GOAL (Adam, 2026-07-30 — binding; verbatim)
+
+> "ok maybe this is premature but I want you to operate with a /goal let's take this golden site and let's work the materials and run them against the rubric of the TS FFT study and let's get this golden site looking like a TS or FFT map. if you need to generate sprites to complete this goal that is absolutely allowed and encouraged, just make sure if you need to develop any systems to reliably accomplish this goal across procedural mutation that you develop specs for those systems because this isn't just one site ultimately, this is every permutation of every guard post
+>
+> does this make sense?"
+
+Binding consequences:
+
+- Golden Site 1 is the active visual-quality goal. The target applies to the procedural Guard Post
+  family across meaningful mutations, not only its reviewed hero seed.
+- Material, trim, decal, prop, sprite, lighting, atmosphere, and other visual work is admitted when
+  it serves the TS/FFT-study rubric while preserving canonical mechanics and the shared procedural
+  engine.
+- New sprite generation is explicitly allowed and encouraged when an unmet semantic role requires
+  it; generated candidates still pass the canonical art, provenance, contact, camera, and
+  admission contracts.
+- Any new capability needed to retain the target across procedural mutation receives a reusable
+  system specification, deterministic inputs, fallbacks, receipts, and mutation proof rather than
+  remaining an unrecorded hero-map patch.
+
+## MATERIAL PARENT APPROVAL DOES NOT PROPAGATE (Adam, 2026-07-30 — binding; verbatim)
+
+> "yeah even our best candidates don't automatically inherit approval at this stage, but it's the best starting point"
+
+Binding consequences:
+
+- A technically verified, founder-approved, or currently best material parent is a starting
+  lineage, not blanket approval for another site, culture, face role, scale, condition, or lighting
+  case.
+- Every derived or reused material must pass the governed scene in its actual context. Provenance
+  and prior verdicts remain visible, but neither substitutes for the new in-context visual verdict.
+- Procedural selection records `candidate`, `best-starting-parent`, and `admitted-for-context` as
+  distinct states; no generator may silently promote one into another.
+
+## GOLDEN SITE 1 BEAUTY-RENDER RESUMPTION (Adam, 2026-07-30 — binding; verbatim)
+
+> "i need to pause briefly so i can go home, some notes on the resumption, i think one of the assetforge tools broke the renderer slightly. I think the sprite citizenship crushed the sharpness we had operating before, now the sprites are soft and everything is soft, we were running nearest neighbor as our scaling method, so we need to lump that in with our goal. also for our test NPC, the shadows are wrong the AO is wrong, we should try the sprite extrusion on the standee to get a true 3d sprite standee in the environment as well. If we can get an beauty render from this goal then we are doing pretty well.
+>
+> for now pause and prepare to resume when i give you the word"
+
+Binding consequences:
+
+- The active Golden Site 1 goal now includes restoring the governed nearest-neighbor sharpness
+  contract and locating any Assetforge/citizenship path that softened sprites or the frame.
+- The test NPC cannot serve as positive beauty evidence until its cast shadow and AO/contact
+  behavior are visually correct.
+- Sprite extrusion must be tested as a true three-dimensional standee candidate in the same
+  environment, while preserving tactical footprint, sprite identity, camera rotation, and the
+  canonical source image.
+- A governed beauty render is the visual completion target. Mechanical legality and successful
+  asset loads do not substitute for that image.
+- Implementation pauses after banking the current candidates and resumes only on Adam's word.
+
+## GOLDEN SITE DIRECTION-DEFINING AUTHORITY (Adam, 2026-07-30 — binding; verbatim)
+
+> "you do have authorization to edit almost any art directives at this point to achieve this goal so don't feel overly constrained, obviously try to work within the rulings, but we are still early enough in production that this is a diretion defining excersize and we can re-direct every aspect of production to achieve the goal"
+
+Binding reading:
+
+- Existing art rulings remain strong defaults and accumulated evidence, not immovable constraints.
+- Art, material, composition, lighting, asset-generation, citizenship, and procedural-expression
+  directives may be revised when necessary to achieve the Golden Site TS/FFT-family quality goal.
+- Any redirection must be named, justified by visual evidence, and implemented as a reusable
+  production rule where it affects procedural mutation.
+- This authority does not silently alter committed mechanics, tactical legality, determinism, or
+  engine ownership.
+
+## DIORAMA EDGES CLOSE TO A COMMON TRAY DATUM (Adam, 2026-07-30 — binding; verbatim)
+
+> "oh, just one general styling rule i was wanting is the edges of the diorama, instead of just floating and being a single plan of ground with nothing underneath it, i was hoping that the highest elevation would have an edge plan that renders down to the ground plane, making the entire diorama look like it could fit into a flat tray. does that make sense?"
+
+Binding reading:
+
+- The tactical diorama is a solid cutaway mass, not a floating height sheet or a uniformly shallow
+  skirt.
+- Every live outer-perimeter silhouette closes vertically to one shared flat tray datum below the
+  field minimum. High boundary terrain therefore produces a deep sidewall.
+- Interior cliffs and constructed retaining faces keep their own causal geometry and materials;
+  the full-depth closure belongs only to the outer diorama boundary.
+- The closure is presentation-only. It may not alter cell heights, stand planes, paths,
+  walkability, cover, collision, or tactical fingerprints.
+- The cut face stays visually subordinate to the playable top and may use a dedicated
+  sprite-derived presentation material.
+
+## CONDITIONS MODIFY PARENTS; THEY DO NOT REPLACE THEM (Adam, 2026-07-30 — binding)
+
+Adam's correction:
+
+> "you built brick shadows into the algae sprite, but that makes the algae sprite less useful,
+> wouldn't it be more useful to find a better way to blend a generic algae sprite into it's parent
+> surface?"
+
+Binding reading:
+
+- Algae, damp, soot, salt, moss, and similar condition sprites are generic RGBA overlays.
+- The parent surface retains its construction pattern, albedo rhythm, normal, ORM, texel scale,
+  and lighting response.
+- A condition overlay owns only its condition color and partial coverage alpha unless a separately
+  proved shallow-relief channel is required.
+- No condition sprite may contain brick joints, board seams, ashlar layout, or shadows copied from
+  one possible parent.
+- On planar construction, broad lower-wall grime modulates the receiving parent's fragment. A
+  freestanding grime prism, duplicate wall skin, or decal that casts or receives an independent
+  shadow is rejected: condition must not invent a second surface in front of the wall.
+- Condition placement remains causal: water begins at an outfall or collection edge, follows
+  gravity/runoff, and respects cleaner new coping, cover, sun, maintenance, and drainage.
+- Rejected coupled overlays are retained as evidence and never silently promoted.
+
+### CONDITION OVERLAYS ACCUMULATE AT POLYGON JUNCTIONS (Adam, 2026-07-30 — binding)
+
+> "yeah but the application of that sprite looks awful
+>
+> if you look at the TS screens, you see that the algae mostly appears at the corner/edge of the
+> polygon"
+
+Binding reading:
+
+- Causal source is necessary but does not determine a broad paint footprint.
+- Algae and related damp growth default to edge-biased placement: wall/ground seams, inside
+  corners, opening feet, drain lips, curb returns, stair/wall junctions, and shaded polygon
+  junctions.
+- Short unequal pockets may turn a corner and feather onto adjoining faces. A centered broad-face
+  patch requires explicit source evidence and is not the default.
+- Generic condition art uses edge-local projection when its alpha contains an accumulation edge;
+  the sprite's bottom/side band must align with the receiving polygon junction rather than an
+  arbitrary world-UV phase.
+- Repeated receivers derive a deterministic horizontal phase from stable member identity while
+  retaining the same junction edge. This breaks clone cadence without introducing randomness.
+- Parent geometry, parent albedo, parent normal/ORM, and tactical truth remain unchanged.
+
+### GROUND TEXEL SCALE IS A PHYSICAL CALIBRATION, NOT AN IMAGE DEFAULT
+
+A seamless terrain source does not inherit one repeat per tactical cell merely because it is
+512×512. The material profile declares metres per repeat and proves that scale beside the combat
+tile and character register under the same governed camera. Golden Site 1's v011 turf comparison
+tested 4.95, 6.60, 8.25, and 9.90 metres per repeat over the identical seed and selected 6.60
+metres before Adam's governed visual review selected 9.90 metres—six 1.65-metre combat cells—as
+the production starting scale. The six-cell version carries the strongest broad moss/soil masses
+and the least wallpaper-like activity across the complete field. This is a material-family
+calibration, not a universal six-cell law.
+
+Readable grass tufts are not baked into that bearing-neutral repeat. They are separately placed
+crossed sprites, shallow extrusions, or another reviewed four-bearing representation so their
+silhouette can respond to camera rotation without rotating the ground image.
+
+### CONDITION GROWTH IS EDGE-ORIGIN, NOT EDGE-CONFINED (Adam, 2026-07-30 — binding clarification)
+
+Adam's Whiteholm reference correction:
+
+> "if you look at this image you can see that ivy is grown where walls meet corners, wether its
+> floor or column, and towards the bottom of walls the wall looks like it has a collection of
+> grime...this is what i am talking about, whatever you ruled as correct algae application i
+> couldn't even see it"
+
+This clarification supersedes any reading of the prior junction rule as “hairline and nearly
+invisible.” A receiving edge chooses the origin; it does not impose the maximum footprint.
+
+- Condition history has three independently readable scales: a broad low-frequency lower-wall
+  grime/damp band, mid-scale moss or algae islands spreading from seams, and large
+  silhouette-bearing ivy/vegetation masses rooted at wall-floor, wall-wall, or wall-column
+  contacts.
+- At least one relevant condition cluster must read in the governed gameplay beauty frame. A
+  macro close-up grades blend and edge quality; it cannot rescue an invisible production view.
+- New repair, maintained thresholds, active circulation, sun, cover, and drainage may interrupt
+  or suppress a layer. Suppression must follow site facts rather than a global cleanliness bias.
+- A centered unrelated face sticker remains rejected. A broad lower-wall band is legal because it
+  grows upward from continuous ground contact and fades irregularly rather than floating at the
+  face center.
+- Ivy and other large growth use shallow extrusion, crossed planes, or other silhouette-capable
+  geometry when a flat alpha layer cannot carry their scale.
+- “Ground contact” means the actual committed terrain-contact line sampled along the receiver, not
+  the bottom of an elevated wall module, a platform seam, or one flat proxy datum. The condition
+  root follows responsive slopes and may rise or fall across one continuous wall run.
+
+### STRUCTURAL CONTACT PRECEDES CONDITION (Adam, 2026-07-30 — binding)
+
+Grime, ivy, shadow, and AO may describe a valid contact; they may never conceal an air gap. A
+constructed retaining wall meeting responsive terrain must either extend below the adjacent
+terrain envelope or bear on a continuous terrain-embedded footing. The support overlaps the wall
+in section, reaches below the locally sampled ground, uses a causally compatible foundation
+material, and remains continuous beneath joined wall members. Terrain-contact conditions originate
+at the resulting real wall/footing/ground junction. A dark strip placed beneath a visibly floating
+wall is a rejected repair.
+
+### PLANAR CONSTRUCTION DECALS AND ANGLED-TERRAIN CONDITIONS USE DIFFERENT PROJECTION PATHS
+
+Adam's terrain reconciliation question:
+
+> "ok so in triangle strategy i've noticed they do keep the minecraft blocks in their game, that
+> gives them allowance for flat plane application of sprites to corners and bottoms like this, but
+> we have angles...how is that going to be reconciled? because the algae would react to the shape
+> of the hill"
+
+Binding answer:
+
+- Planar construction may use face-attached local decals.
+- Angled natural terrain may not receive a floating flat decal or one independent decal per tile.
+  The engine authors a continuous condition scalar field over the committed terrain topology from
+  source, downhill flow, concavity, exposure, substrate, and maintenance facts.
+- The renderer interpolates that same field at shared terrain vertices/fragments and blends the
+  condition into the parent on the real triangles. Growth therefore bends with hills, crosses
+  responsive tile boundaries continuously, and does not change terrain shape.
+- Pixel art supplies the condition's color/coverage vocabulary. Terrain shape and the continuous
+  condition field decide where it appears; camera bearing and renderer heuristics do not.
+- Large ivy remains contact-rooted geometry rather than being smeared through a terrain shader.
+- Every terrain-condition receipt records source facts, field/topology identity, path or
+  distribution law, weight fingerprint, parent/condition ownership, and `mechanicalEffect:none`.
+
+## ARCHITECTURAL TEXTURES USE THE 5-FT / 10-FT PHYSICAL MODULE GRID
+
+Adam's binding direction (2026-07-30):
+
+> "this should be our rule from now on, we actually should spec our textures so that they
+> intentionally fit 5ft and 10 ft walls right? we can build wall features and more interesting
+> textures this way right? i think that's how TS has such rich pixel style textures in their game,
+> they came up with standard units and designed around those"
+
+Adam's dimensional clarification:
+
+> "we are talking about 5x10 and 5x5 sprite tiles right? we don't currently have the technology
+> to easily take an existing sprite tile and integrate a set of windows or a little designed wall
+> feature into them as an alternate tile that adds beauty to a place right? we have been solely
+> relying on 3d for that, which i think is great sometimes, but we can get away with a lot with
+> sprites if we use them more wisely and in an authored fashion. the grid squares should also be
+> 5ft x 5ft that's the SRD standard"
+
+Binding reading:
+
+- Architectural pixels are designed against declared physical units, never against image
+  resolution or an arbitrary one-image-per-face convention.
+- Every horizontal grid square is 5 ft × 5 ft. `W5H5` wall sprites are 5 ft wide × 5 ft tall;
+  `W5H10` wall sprites are 5 ft wide × 10 ft tall. They align with the combat grid and common
+  architectural storey.
+- Coursed Guard Post stone uses exact one-foot courses: five rows per 5-ft wall and ten per 10-ft
+  wall.
+- Seamless parents provide continuous material identity. Separate `W5H5` and `W5H10` feature tiles
+  provide richer arches, surrounds, trims, repairs, stains, ornament, culture, and condition
+  compositions without stretching the parent.
+- Split members belonging to one wall share a construction datum and course phase. Corners,
+  openings, ends, repairs, and remainders use explicit compatible sockets.
+- This is the Genesis production translation supported by the TS/FFT study's observed consistent
+  unit rhythm and pixel-authored face detail; it is not a claim about Triangle Strategy's
+  unpublished internal toolchain.
+- `PHYSICAL-TEXTURE-MODULE-STANDARD.md` is the executable specification.
+
+## AUTHORED PIXELATED 2.5D — BETWEEN FFT, TRIANGLE STRATEGY, AND GENESIS
+
+Adam's binding direction (2026-07-30):
+
+> "now we are talking! this should give you the power to re-author the textures to really get that
+> TS look. remember we do want some visible pixels, we aren't going for realism, we are going for a
+> rich authored pixelated 2.5 look. somewhere between FFT and TS and our own thing"
+
+Binding reading:
+
+- Visible pixel clusters are an intentional style carrier, not a resolution defect to be filtered
+  away.
+- The target is authored pixelated 2.5D: low-poly physical structure plus sprite-authored surface
+  composition, shallow relief only where it helps, and full 3D only where silhouette, contact,
+  aperture, traversal, collision, or tactical reading requires it.
+- Albedo carries designed value blocks, construction rhythm, controlled color variation, and
+  illustrative detail. Normal, AO, and roughness remain subordinate and may not turn the surface
+  into noisy realism or erase the pixel read.
+- Albedo uses governed nearest-neighbour sampling and no unintended mip softening. Data channels
+  may filter independently when their job requires it.
+- Five-foot and ten-foot sprite modules are re-authorable canvases, not merely crops of one generic
+  repeat. Alternate tiles may carry windows, surrounds, repairs, panels, stains, culture, and
+  history while respecting parent continuity and real geometry sockets.
+- Genesis takes FFT's graphic economy and TS's richer authored face treatment as references, then
+  develops its own material, culture, terrain, and condition language. The goal is not realism and
+  not literal imitation.

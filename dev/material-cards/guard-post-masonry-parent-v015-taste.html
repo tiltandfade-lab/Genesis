@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link rel="icon" href="data:,">
+  <title>Guard Post Masonry Parent v015 Taste</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: #0e0f0d; color: #ece4d4; }
+    body { font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+    #sheet { width: 1800px; padding: 42px; background: #11120f; }
+    header { display: flex; justify-content: space-between; align-items: end;
+      border-bottom: 1px solid #50493c; padding-bottom: 20px; }
+    .eyebrow { color: #d0a450; font-size: 14px; font-weight: 800;
+      letter-spacing: .14em; text-transform: uppercase; }
+    h1 { margin: 5px 0 0; font: 500 40px/1.05 Georgia, serif; }
+    .contract { color: #aaa08e; text-align: right; font: 13px/1.5 ui-monospace, monospace; }
+    .note { margin: 18px 0 22px; padding: 12px 16px; border-left: 4px solid #d0a450;
+      background: #1a190f; color: #d9d0bd; font: 16px/1.4 Georgia, serif; }
+    #grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    article { padding: 17px; border: 1px solid #50493c;
+      background: linear-gradient(180deg, #1c1d18, #151610); }
+    article.full { grid-column: 1 / -1; }
+    .head { display: flex; justify-content: space-between; gap: 18px; align-items: baseline;
+      margin-bottom: 12px; }
+    h2 { margin: 0; font: 500 25px/1 Georgia, serif; }
+    .badge { color: #d0a450; font: 750 12px/1 ui-monospace, monospace; }
+    .frame { height: 510px; border: 1px solid #514e46; overflow: hidden; background: #171a1b; }
+    canvas { width: 100%; height: 100%; display: block; image-rendering: pixelated; }
+    .meta { display: flex; justify-content: space-between; gap: 16px; margin-top: 10px;
+      color: #aaa08e; font: 12px/1.45 ui-monospace, monospace; }
+    .meta span:last-child { text-align: right; }
+    .maps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .map { padding: 10px; background: #171a1b; border: 1px solid #514e46; }
+    .map img { width: 100%; max-height: 280px; object-fit: contain; display: block;
+      image-rendering: pixelated; background: #292b26; }
+    .map b { display: block; margin-bottom: 8px; color: #d0a450;
+      font: 12px/1 ui-monospace, monospace; }
+    footer { display: flex; justify-content: space-between; margin-top: 20px;
+      color: #837b6d; font: 12px/1.4 ui-monospace, monospace; }
+  </style>
+</head>
+<body>
+<main id="sheet">
+  <header>
+    <div><div class="eyebrow">Golden Site 1 · Parent Material Review</div>
+      <h1>Defensive Masonry at 32 Pixels per Foot</h1></div>
+    <div class="contract">same 10 × 10 ft wall · same camera · same light<br>
+      nearest albedo · one-foot ruler · no condition overlays</div>
+  </header>
+  <p class="note">The new candidate is physically exact, but this card is looking for the visual
+    failure that exact numbers cannot catch: an obvious vertical or horizontal seam every five feet
+    when one W5H5 parent repeats into a W10H10 face.</p>
+  <section id="grid">
+    <article data-id="current">
+      <div class="head"><h2>Current sprite-derived parent</h2>
+        <span class="badge">v010 + v001 companions</span></div>
+      <div class="frame"></div>
+      <div class="meta"><span>physical repeat 8.33 × 12 ft</span>
+        <span>large defensive scale<br>not natively W5H5</span></div>
+    </article>
+    <article data-id="v015">
+      <div class="head"><h2>New five-course parent</h2>
+        <span class="badge">v015 · TECHNICAL CANDIDATE</span></div>
+      <div class="frame"></div>
+      <div class="meta"><span>linked W10H10 · four socketed W5H5 variants</span>
+        <span>320 × 320 · 32 px/ft<br>ten exact 32px courses</span></div>
+    </article>
+    <article class="full">
+      <div class="head"><h2>v015 review companions</h2>
+        <span class="badge">derived · not independently authored or approved</span></div>
+      <div class="maps">
+        <div class="map"><b>ALBEDO · NEAREST</b>
+          <img src="../../assets/materials/golden/guard-post/v015/defensive-masonry-W5H5-albedo-160.png"></div>
+        <div class="map"><b>NORMAL · DERIVED</b>
+          <img src="../../assets/materials/golden/guard-post/v015/defensive-masonry-W5H5-normal-160.png"></div>
+        <div class="map"><b>ORM · R=AO G=ROUGH B=METAL</b>
+          <img src="../../assets/materials/golden/guard-post/v015/defensive-masonry-W5H5-orm-160.png"></div>
+      </div>
+    </article>
+  </section>
+  <footer><span>Review target: richer TS/FFT-authored pixels without photoreal noise</span>
+    <span>Admission still requires bond variants, seam proof, conditions, mutations, four bearings</span></footer>
+</main>
+<script type="module">
+  import * as THREE from "../../vendor/three/three.module.js";
+  const loader = new THREE.TextureLoader();
+  const load = (url) => new Promise((resolve, reject) =>
+    loader.load(url, resolve, undefined, reject));
+  const [currentAlbedo, currentNormal, currentOrm, candidateAlbedo, candidateNormal,
+    candidateOrm, standeeMap] = await Promise.all([
+    load("../../assets/materials/golden/guard-post/v010/masonry-ashlar-albedo.png"),
+    load("../../assets/materials/golden/guard-post/v001/masonry-ashlar-normal.png"),
+    load("../../assets/materials/golden/guard-post/v001/masonry-ashlar-orm.png"),
+    load("../../assets/materials/golden/guard-post/v015/defensive-masonry-W10H10-bond-proof-320-albedo.png"),
+    load("../../assets/materials/golden/guard-post/v015/defensive-masonry-W10H10-bond-proof-320-normal.png"),
+    load("../../assets/materials/golden/guard-post/v015/defensive-masonry-W10H10-bond-proof-320-orm.png"),
+    load("../../assets/sprites/spr-pc-human-fighter-female.png")
+  ]);
+  currentAlbedo.colorSpace = candidateAlbedo.colorSpace = standeeMap.colorSpace =
+    THREE.SRGBColorSpace;
+  currentNormal.colorSpace = currentOrm.colorSpace = candidateNormal.colorSpace =
+    candidateOrm.colorSpace = THREE.NoColorSpace;
+  standeeMap.magFilter = standeeMap.minFilter = THREE.NearestFilter;
+
+  function map(source, repeats, albedo) {
+    const result = source.clone();
+    result.needsUpdate = true;
+    result.wrapS = result.wrapT = THREE.RepeatWrapping;
+    result.repeat.copy(repeats);
+    if (albedo) {
+      result.magFilter = result.minFilter = THREE.NearestFilter;
+      result.generateMipmaps = false;
+    } else {
+      result.magFilter = THREE.LinearFilter;
+      result.minFilter = THREE.LinearMipmapLinearFilter;
+    }
+    return result;
+  }
+
+  function render(kind, frame) {
+    const width = frame.clientWidth;
+    const height = frame.clientHeight;
+    const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+    renderer.setSize(width, height, false);
+    renderer.setPixelRatio(1);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.AgXToneMapping;
+    renderer.toneMappingExposure = 1.06;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    frame.append(renderer.domElement);
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x171a1b);
+    scene.add(new THREE.HemisphereLight(0xeee6d7, 0x30343a, 1.45));
+    const sun = new THREE.DirectionalLight(0xffd9a8, 3.1);
+    sun.position.set(-5, 7, 6);
+    sun.castShadow = true;
+    scene.add(sun);
+
+    const current = kind === "current";
+    const repeat = current ? new THREE.Vector2(3.048 / 2.75, 3.048 / 3.96)
+      : new THREE.Vector2(1, 1);
+    const albedo = current ? currentAlbedo : candidateAlbedo;
+    const normal = current ? currentNormal : candidateNormal;
+    const orm = current ? currentOrm : candidateOrm;
+    const material = new THREE.MeshStandardMaterial({
+      map: map(albedo, repeat, true),
+      normalMap: map(normal, repeat, false),
+      aoMap: map(orm, repeat, false),
+      roughnessMap: map(orm, repeat, false),
+      metalnessMap: map(orm, repeat, false),
+      roughness: 1,
+      metalness: 1,
+      aoMapIntensity: current ? 0.32 : 0.42
+    });
+    material.normalScale.set(current ? 0.38 : 0.32, current ? 0.38 : 0.32);
+    const geometry = new THREE.BoxGeometry(3.048, 3.048, 0.34);
+    geometry.setAttribute("uv1", geometry.attributes.uv.clone());
+    const wall = new THREE.Mesh(geometry, material);
+    wall.position.y = 1.524;
+    wall.castShadow = wall.receiveShadow = true;
+    scene.add(wall);
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(8, 6),
+      new THREE.MeshStandardMaterial({ color: 0x4a493f, roughness: 1 }));
+    floor.rotation.x = -Math.PI / 2;
+    floor.receiveShadow = true;
+    scene.add(floor);
+    const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: standeeMap, transparent: true, alphaTest: 0.42, toneMapped: false
+    }));
+    sprite.center.set(0.5, 0);
+    sprite.position.set(1.04, 0.03, 0.58);
+    sprite.scale.set(1.0, 1.05, 1);
+    scene.add(sprite);
+    for (let foot = 0; foot <= 10; foot++) {
+      const tick = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.018, 0.018),
+        new THREE.MeshBasicMaterial({ color: foot % 5 === 0 ? 0xe0ad4f : 0xc9c2b4 }));
+      tick.position.set(-1.72, foot * 0.3048, 0.2);
+      scene.add(tick);
+    }
+    const camera = new THREE.PerspectiveCamera(25, width / height, 0.1, 100);
+    camera.position.set(4.9, 3.7, 7.6);
+    camera.lookAt(0, 1.48, 0);
+    renderer.render(scene, camera);
+    return {
+      id: kind,
+      wallFeet: [10, 10],
+      repeat: repeat.toArray(),
+      albedoSampling: "nearest-no-mipmap"
+    };
+  }
+  const report = ["current", "v015"].map((id) =>
+    render(id, document.querySelector(`[data-id="${id}"] .frame`)));
+  await document.fonts.ready;
+  await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  window.__renderReport = {
+    schema: "GuardPostMasonryParentV015TasteV1",
+    invariant: "same-wall-camera-light-no-condition",
+    candidates: report
+  };
+  window.__ready = true;
+</script>
+</body>
+</html>

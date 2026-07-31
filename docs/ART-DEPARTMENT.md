@@ -724,3 +724,67 @@ source, paired with one shadowless additive spill shaped to the support's own ro
 footprint and seated immediately beneath it. The opaque base hides the spill's center, leaving only
 a soft cyan feather outside the blue material; selection handoff hides the previous spill before the
 new base emits.
+
+---
+
+## 14. Golden Site 1 sharpness, shadow/AO, and extrusion resumption (verbatim, Adam, 2026-07-30)
+
+> "i need to pause briefly so i can go home, some notes on the resumption, i think one of the assetforge tools broke the renderer slightly. I think the sprite citizenship crushed the sharpness we had operating before, now the sprites are soft and everything is soft, we were running nearest neighbor as our scaling method, so we need to lump that in with our goal. also for our test NPC, the shadows are wrong the AO is wrong, we should try the sprite extrusion on the standee to get a true 3d sprite standee in the environment as well. If we can get an beauty render from this goal then we are doing pretty well.
+>
+> for now pause and prepare to resume when i give you the word"
+
+Resume contract: audit the Assetforge/citizenship texture path against the former nearest-neighbor
+renderer contract; restore play-scale sprite and frame sharpness without manufacturing detail;
+correct the test NPC's cast-shadow and AO/contact read; and run a governed sprite-extrusion proof
+as a true 3D standee before calling the Golden Site beauty render successful.
+
+---
+
+## 15. Golden Site direction-defining authority (verbatim, Adam, 2026-07-30)
+
+> "you do have authorization to edit almost any art directives at this point to achieve this goal so don't feel overly constrained, obviously try to work within the rulings, but we are still early enough in production that this is a diretion defining excersize and we can re-direct every aspect of production to achieve the goal"
+
+Department reading: the current rulings are the best known production defaults, not a ceiling on
+the Golden Site experiment. Material families, asset routes, lighting, composition, rendering,
+citizenship, and procedural art rules may be redirected when the governed frame demonstrates that
+the change advances the TS/FFT-family target. Preserve the old evidence and name the superseded
+default; build successful changes into reusable systems. Mechanics, tactical legality,
+determinism, and ownership boundaries remain protected unless separately ruled.
+
+---
+
+## 16. Diorama tray-edge closure (verbatim, Adam, 2026-07-30)
+
+> "oh, just one general styling rule i was wanting is the edges of the diorama, instead of just floating and being a single plan of ground with nothing underneath it, i was hoping that the highest elevation would have an edge plan that renders down to the ground plane, making the entire diorama look like it could fit into a flat tray. does that make sense?"
+
+Implemented reading: the perimeter is a vertical cut from the actual rendered boundary silhouette
+to one common flat datum below the field minimum. The highest edge therefore owns the deepest
+visible sidewall, and the diorama reads as a solid mass that could sit inside a physical tray.
+Interior relief is unchanged. The closure changes no tactical height, contact, path, collision, or
+fingerprint and receives its own subordinate sprite-derived cut-face material role.
+
+---
+
+## 17. Generic condition-overlay contract (verbatim correction, Adam, 2026-07-30)
+
+> "you built brick shadows into the algae sprite, but that makes the algae sprite less useful,
+> wouldn't it be more useful to find a better way to blend a generic algae sprite into it's parent
+> surface?"
+
+Department reading: yes. A condition asset supplies color and coverage alpha; the receiving parent
+keeps construction pattern, normals, ORM, scale, and lighting. Never bake one wall's bond or shadows
+into reusable algae. Placement is still semantic and causal—the Guard Post's overlay derives from
+the drain outfall, downhill channel, polygon junctions, age, maintenance, and cleaner repaired
+coping.
+
+The later Whiteholm correction makes the required scale hierarchy explicit. “Edge-biased” means
+edge-origin, not edge-confined: lower-wall grime may form a broad irregular band, seam moss must
+form readable unequal islands, and ivy may become a large silhouette-bearing corner mass. One
+relevant cluster must be visible in the gameplay frame without relying on a macro crop.
+
+Projection follows the receiver. Planar architecture uses receiver-local decals. Responsive
+terrain uses one engine-authored mesh-conformal condition field, sampled continuously across shared
+terrain vertices and driven by downhill flow, concavity, exposure, substrate, and maintenance.
+Large ivy uses shallow/crossed extrusion or equivalent contact-rooted geometry. Keep centered
+unrelated face stickers, one-decal-per-tile terrain, coupled overlays, and repetitive failures in
+the rejection lineage rather than overwriting them.

@@ -33,6 +33,8 @@ Adam) can jump straight to the right doc instead of grepping/reading its way the
 | 3D model / render style rules (silhouette, value, pose) | `MODEL-FOUNDRY.md` (the 6 laws) |
 | **The next several weeks: unified Golden Site procedural-vignette engine** | **`GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md`** — one terrain/construction compiler, asset router, walk census, game/battle cadence, wave gates, and multi-session law |
 | **Golden Vignette visual and material standard** | **`GOLDEN-VIGNETTE-VISUAL-GUIDE.md`** — compact composition, connected terrain/chunky construction, face/material pipeline, value/light, four bearings, context, persistence, hard/soft/provisional review |
+| **Golden Site 1 tangible visual target** | **`GOLDEN-SITE-1-VISUAL-TARGET.md`** — noncanonical FFT/TS/Genesis Guard Post concept, binding takeaways, inspirational-only details, and measured distance from the runtime |
+| **Guard Post reusable sprite/mask sources** | **`GUARD-POST-REUSABLE-SPRITE-SOURCE-KIT.md`** — v015 universal/family/specific source census, specificity budget, cleanup contract, and 32 px/ft masonry candidate |
 | Frozen vignette request/plan/asset/receipt boundary | `GOLDEN-SITE-VIGNETTE-CONTRACTS.md` — Wave-0 v1 integration fields, terrain/structure join law, negative controls, versioning |
 | Latest passed Golden engine gate | `GOLDEN-SITE-WAVE-1-OBSERVATORY-BRIEF.md` — Gate W1 passed; deterministic audit harness, read-only adapters, disposition/unresolved ledgers, 12,000-request checkpoint |
 | Next Golden engine implementation cut | `GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md` § Wave 2 — proxy-first Tavern identity and Guard Post visual/tactical compiler proof |
@@ -62,6 +64,10 @@ canon-and-scope pass). Small index-and-law files, never spec duplicates: `canon/
   families, governed quarter turns, context, and machine-checkable hard/soft/
   provisional review. Evidence remains under
   `../Reference/FFT-Triangle-Strategy-World-Study/`. (2026-07-29)
+- `GOLDEN-SITE-1-VISUAL-TARGET.md` — noncanonical ImageGen art-direction target for the Guard Post
+  family: a tangible FFT/TS/Genesis blend, explicit binding versus inspirational readings, and an
+  honest gap list against the current engine. Source image lives under
+  `../Reference/Golden-Site-1-Visual-Target/`. (2026-07-30)
 - `GOLDEN-SITE-VIGNETTE-CONTRACTS.md` — Wave-0-frozen v1 design boundary for
   `VignetteRequest`, `VignettePlan`, `SemanticAssetDemand`, `SynthesisReceipt`, the
   adopted tactical composition fields, and the natural-terrain/constructed-join
@@ -73,8 +79,12 @@ canon-and-scope pass). Small index-and-law files, never spec duplicates: `canon/
   718-case stratified corpus, proxy-only asset demand, and green game/battle
   sentinels. Evidence and generated report live in
   `intel/golden-vignette-wave1-verification.md` and
-  `intel/golden-vignette-wave1-report.md`. Wave 2 is the next implementation cut.
-  (2026-07-29)
+  `intel/golden-vignette-wave1-report.md`. The frozen corpus now also has a one-to-one
+  read-only post-ruling architecture overlay and census in
+  `intel/golden-vignette-architecture-ruling-audit.{json,md}`; it measures
+  interior/exterior, institutional scale, body-relative scale, and assembly-clearance
+  demand without changing dispositions or production rollers. Wave 2 is the active
+  implementation/proof cut. (2026-07-30)
 - `GOLDEN-SITES-CATALOG.md` — living Golden Site authority: four honest status gates and portfolio briefs. `GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md` defines the story→walk→site identity→host program→transform→materialization→semantic plan→composition→projection contract and classifies the twelve as host, transform, scale/relationship, or substrate proof roles rather than runtime site types. The Mine-standard generator-grade suite is `SITE-1-GUARD-POST-SPEC.md`, `SITE-2-CAMP-SERVICE-SPEC.md`, `SITE-4-MONASTERY-COMMUNE-SPEC.md`, `SITE-5-MINE-WORKSHOP-CONCEPT.md`, `SITE-6-PRISON-CUSTODY-SPEC.md`, `SITE-7-NATURAL-LAIR-SPEC.md`, and `SITE-10-URBAN-INSTITUTION-SPEC.md`; each defines its five-expression family, culture/circumstance, learning-first build, zones, circuits, plans, generation, rejection/fallback, runtime facts, proof receipt, and first visual demonstration without overstating its gates. `TAVERN-VENUE-ROUTING-BRIEF.md` records the live tavern audit and routes `VENUE-TAVERN-01` as a shared Golden Venue fixture rather than Site 13. `BUILDING-PROGRAM-TABLE-FAMILIES.md` records the superseding 42-roll ruling: typed buildings use seven coherent chassis families plus program operation/current-scene/Spice and realm-doctrine layers; Prison/Custody owns a dedicated family governed by Site 6, and the d300 remains for untyped discovery and explicit adaptive reuse. The Tavern and all-building receipt packets live under `../Reference/Tavern-Study/` and `../Reference/Building-Type-Roll-Study/`. `GOLDEN-SITE-ROLLER-PRESERVATION-LEDGER.md` classifies live, composed, authored-but-unwired, interpretive, and proposed-adapter sources; preserves current rolled compositions; and supplies the required `rollerLineage` / `sourceRollRefs` contract. `GOLDEN-SITE-WORLD-CONTEXT-PROJECTION.md` makes real-roll portal/support aprons, context cards, reusable background images, far fields, atmosphere, knowledge safety, and context-off/on receipts part of the shared Golden Site proof. `SITE-3-DORMANT-CONCEPT.md` preserves the accepted dormant-site foundation for its deliberately late/last pass. Site 6's returned initial depth/doctrine evidence lives in `../Reference/Prison-Custody-Study/`. Future concepting follows `GOLDEN-SITE-CONCEPTING-GUIDELINES.md`; choices route to `GOLDEN-SITES-FOUNDER-QUEUE.md`, evidence/render work to `GOLDEN-SITES-PROOF-QUEUE.md`, and implementation is admitted only by the current wave of the master plan. (program routing updated 2026-07-29)
 - `GRAPHICS-CONVERGENCE-CHARTER.md` — governing graphics authority: protect the walk/table engine while deliberately converging generated scenes on the approved mockups; visual-compiler boundaries, C0-C8 ladder, no-human production contract, and Claude session protocol. (2026-07-12)
 - `ART-DEPARTMENT.md` (`type: style-canon`, sibling of `ART-DIRECTION-CANON.md`) — the pixel sprite register's canonical home: live-corpus state, the per-realm style law index (quoted verbatim), and the two regeneration runbooks (regen an in-style sheet / fold a staged realm live). Start here for pixel style; then use `../dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md` for the preferred explicit batch-packet grammar, dynamic subject-based cell aspect, QA, and receipts. (2026-07-24)

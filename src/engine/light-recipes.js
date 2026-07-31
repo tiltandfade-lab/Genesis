@@ -65,7 +65,8 @@ function lightRecipeValidate(profile) {
   var invariants = profile.spriteResponse && profile.spriteResponse.invariants;
   if (!invariants || invariants.colorSpace !== "srgb"
     || invariants.magnificationFilter !== "nearest"
-    || invariants.minificationFilter !== "trilinear-mipmap"
+    || invariants.minificationFilter !== "linear"
+    || invariants.generateMipmaps !== false
     || invariants.alphaMode !== "registry-cutoff+alpha-to-coverage") errors.push("profile.spriteResponse.invariants are invalid");
   if (!Array.isArray(profile.lights)) errors.push("profile.lights must be an array");
   if (Array.isArray(profile.lights) && profile.lights.length > LIGHT_RECIPE_MAX_LIGHTS) {

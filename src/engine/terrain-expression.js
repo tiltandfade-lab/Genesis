@@ -1204,6 +1204,29 @@ var TERRAIN_BASE_SKIRT = Object.freeze({
   defaultOn: "terrain witnesses only — the flat tabletop and interior boards are unchanged"
 });
 
+/* ─── DIORAMA TRAY CLOSURE ────────────────────────────────────────────────────────────────────
+   Adam, 2026-07-30: *"the edges of the diorama, instead of just floating and being a single plan
+   of ground with nothing underneath it, i was hoping that the highest elevation would have an edge
+   plan that renders down to the ground plane, making the entire diorama look like it could fit into
+   a flat tray."*
+
+   This is presentation closure, never terrain mechanics. Every live perimeter cell carries its
+   rendered silhouette down to ONE common datum below the field minimum. A high boundary therefore
+   exposes a proportionally deep cut face instead of the old one-quantum floating skirt. Interior
+   relief, void walls, height samples, stand planes, walk edges, and tactical fingerprints do not
+   change. */
+var TERRAIN_DIORAMA_TRAY_CLOSURE = Object.freeze({
+  id: "edge-to-common-tray-datum-v1",
+  enabled: true,
+  scope: "live-field-perimeter-only",
+  baseOffsetH: 1,
+  baseDatum: "field.metrics.minH - baseOffsetH",
+  surfaceRole: "diorama-cut-face",
+  geometryOwner: "renderer-projects-engine-law",
+  mechanicalEffect: "none",
+  statement: "every live perimeter silhouette closes vertically to one shared flat tray datum"
+});
+
 /* ─── F1 / F2 / F3 / F5 · THE STANDEE CONTACT PROBE ───────────────────────────────────────────
    The gate `WITNESS_MAX_GAP` measures the ORIGIN gap, which is 0.096 by construction and cannot
    move — it reads green on a plinth whose uphill corner is 0.217 wu buried and whose downhill

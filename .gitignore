@@ -98,3 +98,6 @@ Reference/FFT-Guard-Post-Study/study-archive/
 # and findings only.
 Reference/FFT-Triangle-Strategy-World-Study/local-captures/
 Reference/FFT-Triangle-Strategy-World-Study/local-analysis-plates/
+
+# Golden-vignette session render outputs (regenerable review artifacts, 5+ GB — never committed)
+artifacts/

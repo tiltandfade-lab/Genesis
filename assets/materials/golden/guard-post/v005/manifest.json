@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "packId": "guard-post-material-candidates-v005",
+  "status": "TECHNICAL_CANDIDATE_NOT_APPROVED",
+  "parentPack": "assets/materials/golden/guard-post/v004/manifest.json",
+  "workflow": "deterministic sprite-derived RGBA causal-condition decal",
+  "sources": [
+    {
+      "path": "assets/materials/golden/guard-post/v001/masonry-rough-albedo.png",
+      "sha256": "6f2af30d9bfb911d4d3b6b55b820a198902421d2360da99a57ef9b6c4d8807fe",
+      "role": "construction rhythm and value parent"
+    },
+    {
+      "path": "assets/materials/golden/guard-post/v004/ground-upland-turf-albedo.png",
+      "sha256": "b1bac7fe6b73399214945925e2145d53b722d5e02571faaf04579f2b20affebc",
+      "role": "moss color clusters and alpha-edge perturbation parent"
+    }
+  ],
+  "materials": {
+    "runoff-algae": {
+      "albedoAlpha": {
+        "path": "assets/materials/golden/guard-post/v005/runoff-algae-causal-decal-albedo.png",
+        "sha256": "3448a670a47f03179ce109643ccb50f3d0b8161b843f76b23073a85bbed273c1"
+      },
+      "alphaLaw": "outfall tongue widens downhill into a damp collection band; transparent texels preserve clean stone",
+      "mechanicalEffect": "none"
+    }
+  }
+}

@@ -1,10 +1,42 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "status": "planning-inventory",
-  "updated": "2026-07-29",
+  "updated": "2026-07-30",
   "authority": "docs/GOLDEN-SITES-CATALOG.md",
   "masterPlan": "docs/GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md",
+  "architectureRulingAudit": "docs/intel/golden-vignette-architecture-ruling-audit.json",
   "law": "Golden ids label acceptance cases, never runtime generator branches.",
+  "architecturePolicy": {
+    "battleSpaceModes": [
+      "DEDICATED_INTERIOR",
+      "EXTERIOR_ARCHITECTURAL_PRECINCT",
+      "CAUSALLY_JUSTIFIED_HYBRID"
+    ],
+    "institutionalScaleClasses": [
+      "FRONTIER",
+      "DOMESTIC",
+      "CIVIC",
+      "ELITE",
+      "MONUMENTAL",
+      "MEGAINTERIOR",
+      "GIANT_LEGACY"
+    ],
+    "newCandidateAssemblyGate": [
+      "ROOF_WALL_JUNCTION_CLOSURE",
+      "SUPPORT_AND_FOUNDATION_DATUM",
+      "DIRECT_STAIR_SEAM",
+      "ROUTE_AND_HEADROOM_CLEARANCE",
+      "FIXED_CAMERA_OCCLUSION"
+    ],
+    "invariants": [
+      "ruin is physical condition and does not select operating state or battle-space mode",
+      "pure cavern does not imply a lair",
+      "hybrid requires a sourced exposing cause",
+      "compact active window does not imply a small building",
+      "GIANT_LEGACY requires explicit original-builder or original-occupant evidence",
+      "scale demand does not promote DECORATE_LOCAL into a persistent site"
+    ]
+  },
   "sites": [
     {
       "id": 1,
@@ -13,6 +45,13 @@
       "runtimeOwners": ["DefenseRouteControlHost"],
       "firstProof": "GP-SHAPE-01 shoulder-overlook through-road",
       "wave": 2,
+      "architectureProfile": {
+        "battleSpaceModes": ["EXTERIOR_ARCHITECTURAL_PRECINCT", "CAUSALLY_JUSTIFIED_HYBRID"],
+        "defaultBattleSpaceMode": "EXTERIOR_ARCHITECTURAL_PRECINCT",
+        "institutionalScaleClasses": ["FRONTIER", "CIVIC"],
+        "modeRule": "Hybrid is legal only when a sourced wall, gate, or terrain breach exposes an interior.",
+        "bodyRelation": "Human witness plus every admitted defender and attacker envelope."
+      },
       "spec": "docs/SITE-1-GUARD-POST-SPEC.md",
       "obligations": ["route", "threshold", "observation", "support-room", "deck", "flank", "retreat"],
       "assetDemand": {
@@ -29,6 +68,13 @@
       "runtimeOwners": ["TransientServiceHost"],
       "firstProof": "route-adjacent camp with center, shelter, service, water, waste and watch",
       "wave": 3,
+      "architectureProfile": {
+        "battleSpaceModes": ["EXTERIOR_ARCHITECTURAL_PRECINCT"],
+        "defaultBattleSpaceMode": "EXTERIOR_ARCHITECTURAL_PRECINCT",
+        "institutionalScaleClasses": ["FRONTIER"],
+        "modeRule": "Shelters remain exterior assemblies unless a separately licensed host supplies an interior.",
+        "bodyRelation": "Shelter, carrier, service, and route clearances follow the admitted occupants."
+      },
       "spec": "docs/SITE-2-CAMP-SERVICE-SPEC.md",
       "obligations": ["route-edge", "center", "shelter", "service", "water", "waste", "watch", "departure"],
       "assetDemand": {
@@ -45,6 +91,13 @@
       "runtimeOwners": ["DormantTransform", "CausalCondition"],
       "firstProof": "aperture-first dormant delta on at least three unlike hosts",
       "wave": 5,
+      "architectureProfile": {
+        "battleSpaceModes": ["INHERIT_HOST"],
+        "defaultBattleSpaceMode": "INHERIT_HOST",
+        "institutionalScaleClasses": ["INHERIT_HOST"],
+        "modeRule": "Dormancy, abandonment, ruin, and collapse do not create a hybrid or change scale without a causal host delta.",
+        "bodyRelation": "Preserve host body profiles and add only source-backed reoccupation profiles."
+      },
       "spec": "docs/SITE-3-DORMANT-CONCEPT.md",
       "obligations": ["failed-function", "absence", "residue", "load-history", "water-history", "maintenance-history", "event-history"],
       "assetDemand": {
@@ -61,6 +114,13 @@
       "runtimeOwners": ["CommunalInstitutionHost"],
       "firstProof": "level wrapped court with grand stair and head position",
       "wave": 4,
+      "architectureProfile": {
+        "battleSpaceModes": ["DEDICATED_INTERIOR", "EXTERIOR_ARCHITECTURAL_PRECINCT"],
+        "defaultBattleSpaceMode": "SEPARATE_LINKED_WINDOWS",
+        "institutionalScaleClasses": ["CIVIC", "ELITE", "MONUMENTAL"],
+        "modeRule": "Grand interior and court/campus exterior are separate linked windows unless a sourced breach exposes one to the other.",
+        "bodyRelation": "Human institutional circulation plus source-backed guest, procession, and resident profiles."
+      },
       "spec": "docs/SITE-4-MONASTERY-COMMUNE-SPEC.md",
       "obligations": ["court", "repeated-bays", "shared-space", "service", "ritual-head", "processional-route", "secondary-access"],
       "assetDemand": {
@@ -77,6 +137,13 @@
       "runtimeOwners": ["ExtractionWorkHost"],
       "firstProof": "active upper works over strained or flooding lower workings",
       "wave": 4,
+      "architectureProfile": {
+        "battleSpaceModes": ["DEDICATED_INTERIOR", "EXTERIOR_ARCHITECTURAL_PRECINCT", "CAUSALLY_JUSTIFIED_HYBRID"],
+        "defaultBattleSpaceMode": "DEDICATED_INTERIOR",
+        "institutionalScaleClasses": ["FRONTIER", "CIVIC"],
+        "modeRule": "Underground works are dedicated interiors; shaft-head works are exterior; only the portal or an explicit collapse may be hybrid.",
+        "bodyRelation": "Workers, carriers, haul equipment, rescue clearances, and any source-backed nonhuman labor profile."
+      },
       "spec": "docs/SITE-5-MINE-WORKSHOP-CONCEPT.md",
       "obligations": ["source", "haul", "process", "store", "service", "failure", "recovery"],
       "assetDemand": {
@@ -93,6 +160,13 @@
       "runtimeOwners": ["CustodyHost"],
       "firstProof": "four-cell civic jail with raised keeper landing",
       "wave": 4,
+      "architectureProfile": {
+        "battleSpaceModes": ["DEDICATED_INTERIOR", "EXTERIOR_ARCHITECTURAL_PRECINCT"],
+        "defaultBattleSpaceMode": "DEDICATED_INTERIOR",
+        "institutionalScaleClasses": ["CIVIC", "ELITE"],
+        "modeRule": "Custody interior and intake/yard exterior are separate windows; Prison / Asylum must be discriminated before host compilation.",
+        "bodyRelation": "Detainee, keeper, visitor, transfer, accessibility, and any source-backed containment profiles."
+      },
       "spec": "docs/SITE-6-PRISON-CUSTODY-SPEC.md",
       "obligations": ["intake", "holding", "keeper-oversight", "property", "evidence", "service", "release", "transfer", "escape"],
       "assetDemand": {
@@ -109,6 +183,13 @@
       "runtimeOwners": ["EcologyClaimHost"],
       "firstProof": "walk-in karst chamber with floor and ledge route",
       "wave": 3,
+      "architectureProfile": {
+        "battleSpaceModes": ["NOT_ARCHITECTURE_BEARING", "CAUSALLY_JUSTIFIED_HYBRID"],
+        "defaultBattleSpaceMode": "NOT_ARCHITECTURE_BEARING",
+        "institutionalScaleClasses": [],
+        "modeRule": "Pure cavern is terrain, not a lair; a hybrid requires explicit occupant-built, occupant-dug, or adopted construction.",
+        "bodyRelation": "Original excavator, current occupant, intruder, mouth, route, ledge, nest, and bolt-hole profiles remain distinct."
+      },
       "spec": "docs/SITE-7-NATURAL-LAIR-SPEC.md",
       "obligations": ["origin", "body-scaled-mouth", "claim", "nest", "floor-route", "ledge-route", "bolt-hole", "short-exit", "causal-light"],
       "assetDemand": {
@@ -125,6 +206,13 @@
       "runtimeOwners": ["LayeredControlTransform"],
       "firstProof": "compact hospitality threshold plus two unlike hosts",
       "wave": 5,
+      "architectureProfile": {
+        "battleSpaceModes": ["INHERIT_HOST"],
+        "defaultBattleSpaceMode": "INHERIT_HOST",
+        "institutionalScaleClasses": ["INHERIT_HOST"],
+        "modeRule": "Control changes permissions, attribution, schedule, service, and route desirability; it cannot invent geometry or a hybrid.",
+        "bodyRelation": "Preserve host profiles and add claimant-specific access only when source-backed."
+      },
       "spec": "docs/SITE-8-LAYERED-CONTROL-SPEC.md",
       "obligations": ["claimants", "recognition", "permissions", "service-delta", "property-delta", "information-delta", "schedule", "front"],
       "assetDemand": {
@@ -141,6 +229,13 @@
       "runtimeOwners": ["DefenseFortificationHost", "LayeredControlTransform", "MaterializationWindow"],
       "firstProof": "rising gate window linked to a contested wall segment",
       "wave": 6,
+      "architectureProfile": {
+        "battleSpaceModes": ["EXTERIOR_ARCHITECTURAL_PRECINCT", "DEDICATED_INTERIOR"],
+        "defaultBattleSpaceMode": "SEPARATE_LINKED_WINDOWS",
+        "institutionalScaleClasses": ["MONUMENTAL", "GIANT_LEGACY"],
+        "modeRule": "Approach, gate, wall, and wall-walk form an exterior window; barracks, stores, and command interiors are linked dedicated windows.",
+        "bodyRelation": "Original builder, current occupier, attacker, wall-route, gate, stair, and siege/service profiles; GIANT_LEGACY only when sourced."
+      },
       "spec": "docs/SITE-9-CONTESTED-FORTRESS-SPEC.md",
       "obligations": ["gate", "wall", "store", "barracks", "command", "wall-route", "service", "attributed-ground", "linked-windows"],
       "assetDemand": {
@@ -157,6 +252,13 @@
       "runtimeOwners": ["UrbanInstitutionHost", "UrbanFabric"],
       "firstProof": "open-flank market hall or public frontage slice",
       "wave": 4,
+      "architectureProfile": {
+        "battleSpaceModes": ["EXTERIOR_ARCHITECTURAL_PRECINCT", "DEDICATED_INTERIOR"],
+        "defaultBattleSpaceMode": "EXTERIOR_ARCHITECTURAL_PRECINCT",
+        "institutionalScaleClasses": ["DOMESTIC", "CIVIC", "ELITE", "MONUMENTAL"],
+        "modeRule": "Street, hillside alley, frontage, court, and exterior works are precincts; a venue or institution escalation opens a separate dedicated interior.",
+        "bodyRelation": "Residents, workers, visitors, carts/service, crowds, and source-backed nonhuman residents."
+      },
       "spec": "docs/SITE-10-URBAN-INSTITUTION-SPEC.md",
       "obligations": ["frontage", "public-circuit", "service-circuit", "street-continuity", "cold-population", "aggregation", "cutaway"],
       "assetDemand": {
@@ -173,6 +275,13 @@
       "runtimeOwners": ["ScaleContract"],
       "firstProof": "unlike-body aperture and route proof on two unlike hosts",
       "wave": 6,
+      "architectureProfile": {
+        "battleSpaceModes": ["INHERIT_HOST"],
+        "defaultBattleSpaceMode": "INHERIT_HOST",
+        "institutionalScaleClasses": ["CIVIC", "ELITE", "MONUMENTAL", "MEGAINTERIOR", "GIANT_LEGACY"],
+        "modeRule": "Scale is relational; it changes apertures, routes, cover, support, interaction, and camera composition without selecting a site or mode.",
+        "bodyRelation": "At least two unlike body profiles plus explicit original-builder, original-occupant, and current-occupant relations where civilization scale is claimed."
+      },
       "spec": "docs/SITE-11-MIXED-SCALE-SPEC.md",
       "obligations": ["body-relative-aperture", "body-relative-route", "body-relative-cover", "body-relative-interaction", "domain-continuity"],
       "assetDemand": {
@@ -189,6 +298,13 @@
       "runtimeOwners": ["SubstratePlan", "TerminalSubstrateTransform"],
       "firstProof": "bog crossing, raft quarter and living dorsal market windows",
       "wave": 6,
+      "architectureProfile": {
+        "battleSpaceModes": ["EXTERIOR_ARCHITECTURAL_PRECINCT", "DEDICATED_INTERIOR", "CAUSALLY_JUSTIFIED_HYBRID"],
+        "defaultBattleSpaceMode": "SUBSTRATE_AND_HOST_SELECTED",
+        "institutionalScaleClasses": ["FRONTIER", "CIVIC", "MEGAINTERIOR"],
+        "modeRule": "Support substrate, enclosure, agency, mobility, and transformation phase choose the mode; anomaly alone does not license a hybrid.",
+        "bodyRelation": "Carrier/substrate, resident, visitor, load, moving datum, aperture, and evacuation profiles."
+      },
       "spec": "docs/SITE-12-ANOMALOUS-LIVING-MOBILE-SPEC.md",
       "obligations": ["support-mode", "load", "mobility", "cyclic-datum", "agency", "tenure", "transformation-phase"],
       "assetDemand": {

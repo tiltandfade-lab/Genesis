@@ -41,7 +41,8 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "trilinear-mipmap",
+          "minificationFilter": "linear",
+          "generateMipmaps": false,
           "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       }
@@ -98,7 +99,8 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "trilinear-mipmap",
+          "minificationFilter": "linear",
+          "generateMipmaps": false,
           "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       },
@@ -183,7 +185,8 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "trilinear-mipmap",
+          "minificationFilter": "linear",
+          "generateMipmaps": false,
           "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       },
@@ -271,7 +274,8 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "trilinear-mipmap",
+          "minificationFilter": "linear",
+          "generateMipmaps": false,
           "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       },
@@ -356,7 +360,8 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "trilinear-mipmap",
+          "minificationFilter": "linear",
+          "generateMipmaps": false,
           "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       },
@@ -441,7 +446,8 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "trilinear-mipmap",
+          "minificationFilter": "linear",
+          "generateMipmaps": false,
           "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       },
@@ -526,7 +532,8 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "trilinear-mipmap",
+          "minificationFilter": "linear",
+          "generateMipmaps": false,
           "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       },
@@ -611,7 +618,8 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "trilinear-mipmap",
+          "minificationFilter": "linear",
+          "generateMipmaps": false,
           "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       },
@@ -696,7 +704,8 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "trilinear-mipmap",
+          "minificationFilter": "linear",
+          "generateMipmaps": false,
           "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       },
@@ -764,6 +773,92 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
         }
       ]
     },
+    "golden-site-daylit": {
+      "exposureFloor": 0.006,
+      "toneMap": {
+        "profile": "agx",
+        "strength": 1
+      },
+      "bloom": {
+        "threshold": 0.68,
+        "strength": 1.15
+      },
+      "atmosphereFact": null,
+      "spriteResponse": {
+        "emissiveFloor": 0.12,
+        "materialRecipe": "lit-standee-v2",
+        "invariants": {
+          "colorSpace": "srgb",
+          "magnificationFilter": "nearest",
+          "minificationFilter": "linear",
+          "generateMipmaps": false,
+          "alphaMode": "registry-cutoff+alpha-to-coverage"
+        }
+      },
+      "id": "golden-site-daylit",
+      "label": "Golden site daylight",
+      "rolled": true,
+      "mode": "production-environment",
+      "source": {
+        "class": "celestial",
+        "label": "open-air sun and broad skylight over a tactical diorama",
+        "loreNative": true,
+        "visibleEmitterRequired": false
+      },
+      "ambient": {
+        "color": "0xdfe5e8",
+        "intensity": 0.72
+      },
+      "lights": [
+        {
+          "type": "directional",
+          "temperatureK": 5500,
+          "colorOverride": true,
+          "intensityUnit": "tabletop-profile-unit",
+          "physicalIntensityUnit": "renderer-intensity",
+          "positionStrategy": "board-relative",
+          "azimuthDeg": 0,
+          "elevationDeg": 45,
+          "spot": {
+            "coneDeg": 45,
+            "penumbra": 0
+          },
+          "shadow": {
+            "cast": true,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": 2048,
+            "budgetPriority": 1
+          },
+          "fixtureId": "",
+          "mount": "none",
+          "emitterLocal": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "flicker": {
+            "recipeId": "steady",
+            "amplitude": 0,
+            "cadenceMs": 480
+          },
+          "id": "golden-site-sun-key",
+          "label": "open-air sun key",
+          "enabled": true,
+          "color": "0xfff2d8",
+          "intensity": 9,
+          "physicalIntensity": 1.1,
+          "pos": {
+            "x": 0.4,
+            "y": 3,
+            "z": -0.4
+          },
+          "heightM": 4.572,
+          "rangeM": 15.24,
+          "falloff": 1
+        }
+      ]
+    },
     "overcast": {
       "exposureFloor": 0.006,
       "toneMap": {
@@ -781,7 +876,8 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "trilinear-mipmap",
+          "minificationFilter": "linear",
+          "generateMipmaps": false,
           "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       },
@@ -818,7 +914,8 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "trilinear-mipmap",
+          "minificationFilter": "linear",
+          "generateMipmaps": false,
           "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       },
@@ -903,7 +1000,8 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "trilinear-mipmap",
+          "minificationFilter": "linear",
+          "generateMipmaps": false,
           "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       },
@@ -988,7 +1086,8 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
         "invariants": {
           "colorSpace": "srgb",
           "magnificationFilter": "nearest",
-          "minificationFilter": "trilinear-mipmap",
+          "minificationFilter": "linear",
+          "generateMipmaps": false,
           "alphaMode": "registry-cutoff+alpha-to-coverage"
         }
       },

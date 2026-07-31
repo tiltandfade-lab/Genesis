@@ -142,6 +142,75 @@
     ],
     "stateOwner": "site-runtime"
   },
+  "beacon-signal-fire-basket": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 1.45283757,
+    "category": "signal",
+    "collision": "half-cover",
+    "companionLeaf": null,
+    "file": "beacon-signal-fire-basket.glb",
+    "footprint": [
+      1,
+      1
+    ],
+    "lods": [
+      {
+        "bytes": 71988,
+        "file": "beacon-signal-fire-basket.glb",
+        "level": 0,
+        "ratio": 1.0
+      },
+      {
+        "bytes": 44868,
+        "file": "beacon-signal-fire-basket-lod1.glb",
+        "level": 1,
+        "ratio": 0.62
+      },
+      {
+        "bytes": 26432,
+        "file": "beacon-signal-fire-basket-lod2.glb",
+        "level": 2,
+        "ratio": 0.36
+      }
+    ],
+    "materialFamilies": [
+      "iron"
+    ],
+    "recipeHash": "1beb3804b1015ea2f85643366d371c411e70cc3255d7c9da7e85be527e6d8778",
+    "scaleAxes": [
+      "uniform"
+    ],
+    "semanticParts": [
+      "beacon-frame"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0,
+          0.35,
+          0
+        ],
+        "type": "fire-origin"
+      },
+      {
+        "position": [
+          0,
+          0.36,
+          0
+        ],
+        "type": "signal-origin"
+      }
+    ],
+    "stateOwner": "site-runtime"
+  },
   "camp-kitchen-stores": {
     "admissionClass": "DIRECT_MODULATED",
     "canonicalScale": 1.44855449,
@@ -440,6 +509,67 @@
     ],
     "stateOwner": "site-runtime"
   },
+  "hand-windlass": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 1.55,
+    "category": "mechanism",
+    "collision": "half-cover",
+    "companionLeaf": null,
+    "file": "hand-windlass.glb",
+    "footprint": [
+      2,
+      1
+    ],
+    "lods": [
+      {
+        "bytes": 77220,
+        "file": "hand-windlass.glb",
+        "level": 0,
+        "ratio": 1.0
+      },
+      {
+        "bytes": 49044,
+        "file": "hand-windlass-lod1.glb",
+        "level": 1,
+        "ratio": 0.62
+      },
+      {
+        "bytes": 28920,
+        "file": "hand-windlass-lod2.glb",
+        "level": 2,
+        "ratio": 0.36
+      }
+    ],
+    "materialFamilies": [
+      "wood"
+    ],
+    "recipeHash": "050ddebab322b557813f50cffa28c1456ba8842c70766a8d115bedb4ed16564a",
+    "scaleAxes": [
+      "uniform"
+    ],
+    "semanticParts": [
+      "windlass-frame"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.5,
+          0.13271,
+          0
+        ],
+        "type": "interaction"
+      }
+    ],
+    "stateOwner": "site-runtime"
+  },
   "low-cover-boulder-cluster": {
     "admissionClass": "DIRECT_MODULATED",
     "canonicalScale": 1.15,
@@ -497,6 +627,75 @@
           0
         ],
         "type": "top-surface"
+      }
+    ],
+    "stateOwner": "site-runtime"
+  },
+  "market-stall-chassis": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 1.7,
+    "category": "exchange-fixture",
+    "collision": "half-cover",
+    "companionLeaf": null,
+    "file": "market-stall-chassis.glb",
+    "footprint": [
+      2,
+      1
+    ],
+    "lods": [
+      {
+        "bytes": 149884,
+        "file": "market-stall-chassis.glb",
+        "level": 0,
+        "ratio": 1.0
+      },
+      {
+        "bytes": 96972,
+        "file": "market-stall-chassis-lod1.glb",
+        "level": 1,
+        "ratio": 0.62
+      },
+      {
+        "bytes": 58452,
+        "file": "market-stall-chassis-lod2.glb",
+        "level": 2,
+        "ratio": 0.36
+      }
+    ],
+    "materialFamilies": [
+      "wood"
+    ],
+    "recipeHash": "f953d0ba6fd8844978109b1a244e3f5362ee6fa68d197938a3ac22e7f720d171",
+    "scaleAxes": [
+      "uniform"
+    ],
+    "semanticParts": [
+      "stall-frame"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0,
+          0.31,
+          0.27344
+        ],
+        "type": "display-face"
+      },
+      {
+        "position": [
+          0.44922,
+          0.225,
+          0
+        ],
+        "type": "interaction"
       }
     ],
     "stateOwner": "site-runtime"

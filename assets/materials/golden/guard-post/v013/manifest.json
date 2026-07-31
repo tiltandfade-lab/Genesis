@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "packId": "guard-post-readable-ground-contact-grime-v013",
+  "status": "TECHNICAL_CANDIDATE_NOT_APPROVED",
+  "output": "assets/materials/golden/guard-post/v013/lower-wall-readable-ground-contact-grime-albedo-alpha.png",
+  "outputSha256": "bcce9ddf27fc1673a0e63558974d4adf1121210bce9a6f78d457b1df6f9c47b1",
+  "size": [
+    512,
+    128
+  ],
+  "method": "periodic 128x32 pixel trim enlarged 4x with nearest-neighbor",
+  "supersedesForProof": "guard-post-ground-contact-grime-v012",
+  "receiverIndependence": {
+    "containsConstructionPattern": false,
+    "containsMortarShadow": false,
+    "containsBakedReceiverLighting": false,
+    "owns": [
+      "brown-olive-discoloration",
+      "coverage-alpha"
+    ],
+    "parentOwns": [
+      "construction-rhythm",
+      "normal",
+      "ORM",
+      "lighting-response"
+    ]
+  },
+  "contactChecks": {
+    "bottomRowMinimumAlpha": 208,
+    "bottomRowOccupiedShare": 1.0,
+    "leftRightEdgeMeanAbsoluteDifference": 0.0
+  },
+  "projection": {
+    "mode": "parent-fragment-receiver-band",
+    "wrap": "repeat-x-clamp-y",
+    "verticalRule": "texture-bottom-is-actual-committed-terrain-contact"
+  }
+}

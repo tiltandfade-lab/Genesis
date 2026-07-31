@@ -1,0 +1,527 @@
+{
+  "schema": "GuardPostWorldPixelDensityPartyProofV1",
+  "status": "GOLDEN_SITE_DENSITY_PROOF_CANDIDATE",
+  "targetPixelsPerFoot": 32,
+  "physicalLaw": "head-to-feet subject axis owns density; equipment expands canvas without shrinking actor",
+  "promptProvenance": "assets/sprites-golden/guard-post-v001/PROMPTS.md",
+  "mechanicalEffect": "none",
+  "members": [
+    {
+      "id": "pc-vanguard",
+      "label": "PC Vanguard",
+      "role": "pc-frontline",
+      "asset": "assets/sprites-golden/guard-post-v001/pc-vanguard-32ppf.png",
+      "worldHeightFeet": 6.0,
+      "pixelsPerFoot": 32,
+      "bodySubjectHeightPixels": 192,
+      "bodyAxis": "authored-head-to-feet-excluding-equipment",
+      "sourceBodyHeightPixels": 626,
+      "sourceCrop": [
+        32,
+        133,
+        468,
+        771
+      ],
+      "componentIsolation": {
+        "sourceConnectedComponents": 6,
+        "primaryComponent": 3,
+        "retainedComponents": [
+          3
+        ],
+        "selectedPixels": 121630,
+        "selectedComponentPixels": 121630,
+        "componentPreservedBeforeCrop": true,
+        "primaryBounds": [
+          38,
+          139,
+          462,
+          765
+        ]
+      },
+      "sourceScale": 0.306709,
+      "canvasSize": [
+        192,
+        224
+      ],
+      "contentBoundsPixels": [
+        22,
+        22,
+        152,
+        214
+      ],
+      "contentPaddingPixels": {
+        "left": 22,
+        "top": 22,
+        "right": 40,
+        "bottom": 10
+      },
+      "minimumTransparentPaddingPixels": 10,
+      "unintendedCanvasEdgeContact": false,
+      "declaredEquipmentPreserved": true,
+      "footX": 0.5,
+      "footY": 0.955357,
+      "alphaCutoff": 0.5,
+      "partialAlphaPixels": 0,
+      "visibleMagentaFamilyPixels": 0,
+      "paletteMaximumColors": 64,
+      "sampling": "nearest-mag-no-mipmap-source-contract",
+      "standeeExtrusion": true,
+      "status": "GOLDEN_SITE_DENSITY_PROOF_CANDIDATE",
+      "sheetId": "pc-party"
+    },
+    {
+      "id": "pc-caster",
+      "label": "PC Caster",
+      "role": "pc-control",
+      "asset": "assets/sprites-golden/guard-post-v001/pc-caster-32ppf.png",
+      "worldHeightFeet": 5.7,
+      "pixelsPerFoot": 32,
+      "bodySubjectHeightPixels": 182,
+      "bodyAxis": "authored-head-to-feet-excluding-equipment",
+      "sourceBodyHeightPixels": 626,
+      "sourceCrop": [
+        517,
+        108,
+        887,
+        771
+      ],
+      "componentIsolation": {
+        "sourceConnectedComponents": 6,
+        "primaryComponent": 1,
+        "retainedComponents": [
+          1,
+          5
+        ],
+        "selectedPixels": 129732,
+        "selectedComponentPixels": 129732,
+        "componentPreservedBeforeCrop": true,
+        "primaryBounds": [
+          523,
+          114,
+          881,
+          765
+        ]
+      },
+      "sourceScale": 0.290735,
+      "canvasSize": [
+        128,
+        224
+      ],
+      "contentBoundsPixels": [
+        13,
+        25,
+        117,
+        214
+      ],
+      "contentPaddingPixels": {
+        "left": 13,
+        "top": 25,
+        "right": 11,
+        "bottom": 10
+      },
+      "minimumTransparentPaddingPixels": 10,
+      "unintendedCanvasEdgeContact": false,
+      "declaredEquipmentPreserved": true,
+      "footX": 0.5,
+      "footY": 0.955357,
+      "alphaCutoff": 0.5,
+      "partialAlphaPixels": 0,
+      "visibleMagentaFamilyPixels": 0,
+      "paletteMaximumColors": 64,
+      "sampling": "nearest-mag-no-mipmap-source-contract",
+      "standeeExtrusion": true,
+      "status": "GOLDEN_SITE_DENSITY_PROOF_CANDIDATE",
+      "sheetId": "pc-party"
+    },
+    {
+      "id": "pc-scout",
+      "label": "PC Scout",
+      "role": "pc-ranged",
+      "asset": "assets/sprites-golden/guard-post-v001/pc-scout-32ppf.png",
+      "worldHeightFeet": 5.8,
+      "pixelsPerFoot": 32,
+      "bodySubjectHeightPixels": 186,
+      "bodyAxis": "authored-head-to-feet-excluding-equipment",
+      "sourceBodyHeightPixels": 622,
+      "sourceCrop": [
+        923,
+        137,
+        1332,
+        771
+      ],
+      "componentIsolation": {
+        "sourceConnectedComponents": 6,
+        "primaryComponent": 4,
+        "retainedComponents": [
+          4,
+          6
+        ],
+        "selectedPixels": 96394,
+        "selectedComponentPixels": 96394,
+        "componentPreservedBeforeCrop": true,
+        "primaryBounds": [
+          929,
+          143,
+          1326,
+          765
+        ]
+      },
+      "sourceScale": 0.299035,
+      "canvasSize": [
+        160,
+        224
+      ],
+      "contentBoundsPixels": [
+        29,
+        28,
+        147,
+        214
+      ],
+      "contentPaddingPixels": {
+        "left": 29,
+        "top": 28,
+        "right": 13,
+        "bottom": 10
+      },
+      "minimumTransparentPaddingPixels": 10,
+      "unintendedCanvasEdgeContact": false,
+      "declaredEquipmentPreserved": true,
+      "footX": 0.5,
+      "footY": 0.955357,
+      "alphaCutoff": 0.5,
+      "partialAlphaPixels": 0,
+      "visibleMagentaFamilyPixels": 0,
+      "paletteMaximumColors": 64,
+      "sampling": "nearest-mag-no-mipmap-source-contract",
+      "standeeExtrusion": true,
+      "status": "GOLDEN_SITE_DENSITY_PROOF_CANDIDATE",
+      "sheetId": "pc-party"
+    },
+    {
+      "id": "pc-support",
+      "label": "PC Support",
+      "role": "pc-support",
+      "asset": "assets/sprites-golden/guard-post-v001/pc-support-32ppf.png",
+      "worldHeightFeet": 5.9,
+      "pixelsPerFoot": 32,
+      "bodySubjectHeightPixels": 189,
+      "bodyAxis": "authored-head-to-feet-excluding-equipment",
+      "sourceBodyHeightPixels": 629,
+      "sourceCrop": [
+        1272,
+        130,
+        1655,
+        771
+      ],
+      "componentIsolation": {
+        "sourceConnectedComponents": 6,
+        "primaryComponent": 2,
+        "retainedComponents": [
+          2
+        ],
+        "selectedPixels": 121461,
+        "selectedComponentPixels": 121461,
+        "componentPreservedBeforeCrop": true,
+        "primaryBounds": [
+          1278,
+          136,
+          1649,
+          765
+        ]
+      },
+      "sourceScale": 0.300477,
+      "canvasSize": [
+        160,
+        224
+      ],
+      "contentBoundsPixels": [
+        20,
+        25,
+        131,
+        214
+      ],
+      "contentPaddingPixels": {
+        "left": 20,
+        "top": 25,
+        "right": 29,
+        "bottom": 10
+      },
+      "minimumTransparentPaddingPixels": 10,
+      "unintendedCanvasEdgeContact": false,
+      "declaredEquipmentPreserved": true,
+      "footX": 0.5,
+      "footY": 0.955357,
+      "alphaCutoff": 0.5,
+      "partialAlphaPixels": 0,
+      "visibleMagentaFamilyPixels": 0,
+      "paletteMaximumColors": 64,
+      "sampling": "nearest-mag-no-mipmap-source-contract",
+      "standeeExtrusion": true,
+      "status": "GOLDEN_SITE_DENSITY_PROOF_CANDIDATE",
+      "sheetId": "pc-party"
+    },
+    {
+      "id": "guard-captain",
+      "label": "Guard Captain",
+      "role": "guard-threshold",
+      "asset": "assets/sprites-golden/guard-post-v001/guard-captain-32ppf.png",
+      "worldHeightFeet": 6.1,
+      "pixelsPerFoot": 32,
+      "bodySubjectHeightPixels": 195,
+      "bodyAxis": "authored-head-to-feet-excluding-equipment",
+      "sourceBodyHeightPixels": 595,
+      "sourceCrop": [
+        67,
+        162,
+        401,
+        831
+      ],
+      "componentIsolation": {
+        "sourceConnectedComponents": 4,
+        "primaryComponent": 2,
+        "retainedComponents": [
+          2
+        ],
+        "selectedPixels": 117400,
+        "selectedComponentPixels": 117400,
+        "componentPreservedBeforeCrop": true,
+        "primaryBounds": [
+          73,
+          168,
+          395,
+          825
+        ]
+      },
+      "sourceScale": 0.327731,
+      "canvasSize": [
+        160,
+        256
+      ],
+      "contentBoundsPixels": [
+        22,
+        31,
+        127,
+        246
+      ],
+      "contentPaddingPixels": {
+        "left": 22,
+        "top": 31,
+        "right": 33,
+        "bottom": 10
+      },
+      "minimumTransparentPaddingPixels": 10,
+      "unintendedCanvasEdgeContact": false,
+      "declaredEquipmentPreserved": true,
+      "footX": 0.5,
+      "footY": 0.960938,
+      "alphaCutoff": 0.5,
+      "partialAlphaPixels": 0,
+      "visibleMagentaFamilyPixels": 0,
+      "paletteMaximumColors": 64,
+      "sampling": "nearest-mag-no-mipmap-source-contract",
+      "standeeExtrusion": true,
+      "status": "GOLDEN_SITE_DENSITY_PROOF_CANDIDATE",
+      "sheetId": "guard-detachment"
+    },
+    {
+      "id": "guard-crossbow",
+      "label": "Guard Crossbow",
+      "role": "guard-lookout",
+      "asset": "assets/sprites-golden/guard-post-v001/guard-crossbow-32ppf.png",
+      "worldHeightFeet": 5.8,
+      "pixelsPerFoot": 32,
+      "bodySubjectHeightPixels": 186,
+      "bodyAxis": "authored-head-to-feet-excluding-equipment",
+      "sourceBodyHeightPixels": 599,
+      "sourceCrop": [
+        459,
+        217,
+        775,
+        828
+      ],
+      "componentIsolation": {
+        "sourceConnectedComponents": 4,
+        "primaryComponent": 3,
+        "retainedComponents": [
+          3
+        ],
+        "selectedPixels": 90567,
+        "selectedComponentPixels": 90567,
+        "componentPreservedBeforeCrop": true,
+        "primaryBounds": [
+          465,
+          223,
+          769,
+          822
+        ]
+      },
+      "sourceScale": 0.310518,
+      "canvasSize": [
+        128,
+        224
+      ],
+      "contentBoundsPixels": [
+        18,
+        28,
+        112,
+        214
+      ],
+      "contentPaddingPixels": {
+        "left": 18,
+        "top": 28,
+        "right": 16,
+        "bottom": 10
+      },
+      "minimumTransparentPaddingPixels": 10,
+      "unintendedCanvasEdgeContact": false,
+      "declaredEquipmentPreserved": true,
+      "footX": 0.5,
+      "footY": 0.955357,
+      "alphaCutoff": 0.5,
+      "partialAlphaPixels": 0,
+      "visibleMagentaFamilyPixels": 0,
+      "paletteMaximumColors": 64,
+      "sampling": "nearest-mag-no-mipmap-source-contract",
+      "standeeExtrusion": true,
+      "status": "GOLDEN_SITE_DENSITY_PROOF_CANDIDATE",
+      "sheetId": "guard-detachment"
+    },
+    {
+      "id": "guard-heavy",
+      "label": "Guard Heavy",
+      "role": "guard-barrier",
+      "asset": "assets/sprites-golden/guard-post-v001/guard-heavy-32ppf.png",
+      "worldHeightFeet": 6.25,
+      "pixelsPerFoot": 32,
+      "bodySubjectHeightPixels": 200,
+      "bodyAxis": "authored-head-to-feet-excluding-equipment",
+      "sourceBodyHeightPixels": 598,
+      "sourceCrop": [
+        850,
+        19,
+        1172,
+        835
+      ],
+      "componentIsolation": {
+        "sourceConnectedComponents": 4,
+        "primaryComponent": 1,
+        "retainedComponents": [
+          1
+        ],
+        "selectedPixels": 136569,
+        "selectedComponentPixels": 136569,
+        "componentPreservedBeforeCrop": true,
+        "primaryBounds": [
+          856,
+          25,
+          1166,
+          829
+        ]
+      },
+      "sourceScale": 0.334448,
+      "canvasSize": [
+        160,
+        320
+      ],
+      "contentBoundsPixels": [
+        32,
+        41,
+        136,
+        310
+      ],
+      "contentPaddingPixels": {
+        "left": 32,
+        "top": 41,
+        "right": 24,
+        "bottom": 10
+      },
+      "minimumTransparentPaddingPixels": 10,
+      "unintendedCanvasEdgeContact": false,
+      "declaredEquipmentPreserved": true,
+      "footX": 0.5,
+      "footY": 0.96875,
+      "alphaCutoff": 0.5,
+      "partialAlphaPixels": 0,
+      "visibleMagentaFamilyPixels": 0,
+      "paletteMaximumColors": 64,
+      "sampling": "nearest-mag-no-mipmap-source-contract",
+      "standeeExtrusion": true,
+      "status": "GOLDEN_SITE_DENSITY_PROOF_CANDIDATE",
+      "sheetId": "guard-detachment"
+    },
+    {
+      "id": "guard-runner",
+      "label": "Guard Runner",
+      "role": "guard-signal",
+      "asset": "assets/sprites-golden/guard-post-v001/guard-runner-32ppf.png",
+      "worldHeightFeet": 5.7,
+      "pixelsPerFoot": 32,
+      "bodySubjectHeightPixels": 182,
+      "bodyAxis": "authored-head-to-feet-excluding-equipment",
+      "sourceBodyHeightPixels": 595,
+      "sourceCrop": [
+        1269,
+        225,
+        1531,
+        832
+      ],
+      "componentIsolation": {
+        "sourceConnectedComponents": 4,
+        "primaryComponent": 4,
+        "retainedComponents": [
+          4
+        ],
+        "selectedPixels": 86855,
+        "selectedComponentPixels": 86855,
+        "componentPreservedBeforeCrop": true,
+        "primaryBounds": [
+          1275,
+          231,
+          1525,
+          826
+        ]
+      },
+      "sourceScale": 0.305882,
+      "canvasSize": [
+        96,
+        224
+      ],
+      "contentBoundsPixels": [
+        10,
+        32,
+        86,
+        214
+      ],
+      "contentPaddingPixels": {
+        "left": 10,
+        "top": 32,
+        "right": 10,
+        "bottom": 10
+      },
+      "minimumTransparentPaddingPixels": 10,
+      "unintendedCanvasEdgeContact": false,
+      "declaredEquipmentPreserved": true,
+      "footX": 0.5,
+      "footY": 0.955357,
+      "alphaCutoff": 0.5,
+      "partialAlphaPixels": 0,
+      "visibleMagentaFamilyPixels": 0,
+      "paletteMaximumColors": 64,
+      "sampling": "nearest-mag-no-mipmap-source-contract",
+      "standeeExtrusion": true,
+      "status": "GOLDEN_SITE_DENSITY_PROOF_CANDIDATE",
+      "sheetId": "guard-detachment"
+    }
+  ],
+  "contactSheet": "artifacts/golden-site-1-sprites-v001/party-guard-32ppf-contact-sheet.png",
+  "hardChecks": {
+    "eightMembers": true,
+    "allExact32PixelsPerFoot": true,
+    "allBinaryAlpha": true,
+    "allVisibleMagentaFree": true,
+    "allExtrusionReady": true,
+    "allSilhouettesIsolated": true,
+    "allCanvasEdgesPadded": true,
+    "allDeclaredEquipmentPreserved": true
+  }
+}

@@ -190,8 +190,10 @@ def validate_lock(lock: object) -> dict:
                 f"{label}: sprite colorSpace is invariant srgb")
         require(invariants.get("magnificationFilter") == "nearest",
                 f"{label}: sprite magnificationFilter is invariant nearest")
-        require(invariants.get("minificationFilter") == "trilinear-mipmap",
-                f"{label}: sprite minificationFilter is invariant trilinear-mipmap")
+        require(invariants.get("minificationFilter") == "linear",
+                f"{label}: sprite minificationFilter is invariant linear")
+        require(invariants.get("generateMipmaps") is False,
+                f"{label}: sprite generateMipmaps is invariant false")
         require(invariants.get("alphaMode") == "registry-cutoff+alpha-to-coverage",
                 f"{label}: sprite alphaMode is invariant registry-cutoff+alpha-to-coverage")
 
@@ -275,7 +277,7 @@ def validate_lock(lock: object) -> dict:
                     require(light.get("positionStrategy") == "socket-relative",
                             f"{llabel}: visible-emitter sources must be socket-relative")
 
-    require(rolled_count == 10, f"expected 10 rolled production profiles, found {rolled_count}")
+    require(rolled_count == 11, f"expected 11 rolled production profiles, found {rolled_count}")
     require("clay-neutral-truth" in profiles, "missing clay-neutral-truth diagnostic recipe")
     require("clay-opposing-pair" in profiles, "missing clay-opposing-pair diagnostic recipe")
     require(len(profiles["clay-opposing-pair"]["lights"]) == 2,

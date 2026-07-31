@@ -887,6 +887,175 @@
         }
       ],
       "recipeHash": "d7e2f2699b82598a1304fd3457c96cc54cb423a721efbf21ce46e3b3cb86f3e3"
+    },
+    {
+      "sourceSha256": "83bc304b32ea04b9be0c3f1bb8b5f6c1cf810b5e4295640427e2459f6644c957",
+      "source": "Reference/Meshy-Premium-Month-1/processed/M025-A-hand-windlass-and-winch-clean-v1.glb",
+      "canonicalScale": 1.55,
+      "dimensions": [
+        1.0,
+        0.58984,
+        0.62891
+      ],
+      "sockets": [
+        {
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "type": "interaction",
+          "position": [
+            0.5,
+            0.13271,
+            0
+          ]
+        }
+      ],
+      "jobId": "M025-A",
+      "slug": "hand-windlass",
+      "outputs": [
+        {
+          "level": 0,
+          "file": "hand-windlass.glb",
+          "ratio": 1.0,
+          "bytes": 77220
+        },
+        {
+          "level": 1,
+          "file": "hand-windlass-lod1.glb",
+          "ratio": 0.62,
+          "bytes": 49044
+        },
+        {
+          "level": 2,
+          "file": "hand-windlass-lod2.glb",
+          "ratio": 0.36,
+          "bytes": 28920
+        }
+      ],
+      "recipeHash": "050ddebab322b557813f50cffa28c1456ba8842c70766a8d115bedb4ed16564a"
+    },
+    {
+      "sourceSha256": "308601f650223f6ac0ddf47a3bba792808f441464c22e2aeb605e25f13549ef3",
+      "source": "Reference/Meshy-Premium-Month-1/processed/M047-A-market-stall-chassis-clean-v1.glb",
+      "canonicalScale": 1.7,
+      "dimensions": [
+        0.89648,
+        1.0,
+        0.54492
+      ],
+      "sockets": [
+        {
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "type": "display-face",
+          "position": [
+            0,
+            0.31,
+            0.27344
+          ]
+        },
+        {
+          "type": "interaction",
+          "position": [
+            0.44922,
+            0.225,
+            0
+          ]
+        }
+      ],
+      "jobId": "M047-A",
+      "slug": "market-stall-chassis",
+      "outputs": [
+        {
+          "level": 0,
+          "file": "market-stall-chassis.glb",
+          "ratio": 1.0,
+          "bytes": 149884
+        },
+        {
+          "level": 1,
+          "file": "market-stall-chassis-lod1.glb",
+          "ratio": 0.62,
+          "bytes": 96972
+        },
+        {
+          "level": 2,
+          "file": "market-stall-chassis-lod2.glb",
+          "ratio": 0.36,
+          "bytes": 58452
+        }
+      ],
+      "recipeHash": "f953d0ba6fd8844978109b1a244e3f5362ee6fa68d197938a3ac22e7f720d171"
+    },
+    {
+      "sourceSha256": "7585fc4e75061c065fe75ea397560b1d60536e005a2857206b074f6551a541ae",
+      "source": "Reference/Meshy-Premium-Month-1/processed/M075-A-beacon-and-signal-fire-basket-clean-v1.glb",
+      "canonicalScale": 1.4528375733855186,
+      "dimensions": [
+        0.64453,
+        0.99805,
+        0.57422
+      ],
+      "sockets": [
+        {
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "type": "fire-origin",
+          "position": [
+            0,
+            0.35,
+            0
+          ]
+        },
+        {
+          "type": "signal-origin",
+          "position": [
+            0,
+            0.36,
+            0
+          ]
+        }
+      ],
+      "jobId": "M075-A",
+      "slug": "beacon-signal-fire-basket",
+      "outputs": [
+        {
+          "level": 0,
+          "file": "beacon-signal-fire-basket.glb",
+          "ratio": 1.0,
+          "bytes": 71988
+        },
+        {
+          "level": 1,
+          "file": "beacon-signal-fire-basket-lod1.glb",
+          "ratio": 0.62,
+          "bytes": 44868
+        },
+        {
+          "level": 2,
+          "file": "beacon-signal-fire-basket-lod2.glb",
+          "ratio": 0.36,
+          "bytes": 26432
+        }
+      ],
+      "recipeHash": "1beb3804b1015ea2f85643366d371c411e70cc3255d7c9da7e85be527e6d8778"
     }
   ]
 }

@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "packId": "guard-post-material-candidates-v008",
+  "status": "TECHNICAL_CANDIDATE_NOT_APPROVED",
+  "parentPack": "assets/materials/golden/guard-post/v007/manifest.json",
+  "supersedesConditionReading": {
+    "path": "assets/materials/golden/guard-post/v007/manifest.json",
+    "reason": "v007 proved parent-independent blending but its receiver geometry made growth unreadable at gameplay scale"
+  },
+  "workflow": "image-generated pixel-art chroma sources, locally keyed to parent-independent RGBA, nearest-neighbor runtime reduction",
+  "referenceIntent": "Triangle Strategy condition hierarchy: broad lower-wall grime, mid-scale seam moss, and silhouette-bearing corner ivy",
+  "materials": {
+    "lower-wall-grime": {
+      "albedoAlpha": {
+        "path": "assets/materials/golden/guard-post/v008/lower-wall-grime-moss-runtime-albedo-alpha.png",
+        "sha256": "10384a428850b9a064acc240f29651a48c7f9e5ed53997090e994cfa162aed43"
+      },
+      "blendContract": {
+        "mode": "source-over-parent",
+        "parentOwns": [
+          "construction rhythm",
+          "normal",
+          "ORM",
+          "lighting response"
+        ],
+        "overlayOwns": [
+          "lower-wall grime color",
+          "damp discoloration",
+          "coverage alpha"
+        ]
+      },
+      "placementLaw": "wall-ground contact origin with a broad irregular upward fade; edge-origin does not mean edge-confined",
+      "mechanicalEffect": "none"
+    },
+    "seam-moss": {
+      "albedoAlpha": {
+        "path": "assets/materials/golden/guard-post/v008/seam-moss-runtime-albedo-alpha.png",
+        "sha256": "b9e9d961bbf3721286dfa81c28e01a26bd7594b40ed55fc4907c2a09ddf04487"
+      },
+      "blendContract": {
+        "mode": "source-over-parent",
+        "parentOwns": [
+          "construction rhythm",
+          "normal",
+          "ORM",
+          "lighting response"
+        ],
+        "overlayOwns": [
+          "moss color",
+          "organic silhouette",
+          "coverage alpha"
+        ]
+      },
+      "placementLaw": "readable unequal islands spread outward from damp seams, drains, steps, and column bases",
+      "mechanicalEffect": "none"
+    },
+    "corner-ivy": {
+      "albedoAlpha": {
+        "path": "assets/materials/golden/guard-post/v008/corner-ivy-runtime-albedo-alpha.png",
+        "sha256": "4e47acefaa246af9c3a5417fab24a377b302f3d9d92e14acefbb83a665e43109"
+      },
+      "blendContract": {
+        "mode": "source-over-parent",
+        "parentOwns": [
+          "construction rhythm",
+          "normal",
+          "ORM",
+          "lighting response"
+        ],
+        "overlayOwns": [
+          "leaf color",
+          "vine silhouette",
+          "coverage alpha"
+        ]
+      },
+      "placementLaw": "large two-face cluster rooted at wall-floor plus wall-wall or wall-column contact",
+      "mechanicalEffect": "none"
+    }
+  },
+  "generationSources": [
+    {
+      "path": "assets/materials/golden/guard-post/v008/source/lower-wall-grime-magenta-source.png",
+      "role": "lower-wall grime chroma source"
+    },
+    {
+      "path": "assets/materials/golden/guard-post/v008/source/seam-moss-magenta-source.png",
+      "role": "seam-moss chroma source"
+    },
+    {
+      "path": "assets/materials/golden/guard-post/v008/source/corner-ivy-magenta-source.png",
+      "role": "corner-ivy chroma source"
+    }
+  ]
+}

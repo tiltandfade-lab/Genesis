@@ -1007,3 +1007,14 @@ that maximises coverage rather than assuming any earlier recommendation still ho
 
 The amendment: **the transform proof does not wait.** It has two spec-grade hosts available
 today, and its cheapest fixture is also its most informative one.
+
+## 18. Architecture integration ruling — 2026-07-30
+
+Dormant/abandoned/ruined is a physical and operating-state transform over a host. It
+inherits the host's battle-space mode, institutional scale, civilization scale, body
+profiles, and continuations. Ruin alone does not imply abandonment, nonoperation, a
+cutaway, an exposed interior, or a `CAUSALLY_JUSTIFIED_HYBRID`.
+
+A hybrid delta must name the physical cause that exposes interior and exterior space.
+Collapse, breach, reoccupation, repair, and failed support each preserve their own
+causal and clearance receipts rather than becoming a generic ruin mesh.

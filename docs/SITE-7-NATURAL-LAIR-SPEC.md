@@ -528,3 +528,15 @@ montage exit; broad ecology, condition, inhabitation, and realm coverage.
 - verify licensed bolt-holes across changed excavators;
 - demonstrate honest silhouette/contact shadows and readable darkness; and
 - build and retain the fixture in `GOLDEN-SITES-PROOF-QUEUE.md`.
+
+## Architecture integration ruling — 2026-07-30
+
+A pure cavern is terrain and does not imply a lair. Site 7 begins only when the request
+supplies an explicit ecology claim: occupant, origin, shaping, claim/nest evidence,
+body-scaled mouth, route/ledge use, bolt-hole, short exit, and causal light.
+
+Most lairs remain natural terrain windows rather than architecture. A
+`CAUSALLY_JUSTIFIED_HYBRID` is legal only when a creature adopted, built into, or dug
+through sourced construction. Original excavator, current occupant, intruder, and
+future claimant body profiles remain separate; none may be replaced by a generic
+“monster scale.”

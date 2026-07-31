@@ -1,0 +1,191 @@
+{
+  "schemaVersion": 1,
+  "schema": "genesis.condition-trim.h4-v1",
+  "packId": "guard-post-condition-trim-v009",
+  "status": "TECHNICAL_CANDIDATE_NOT_APPROVED",
+  "parentPack": "assets/materials/golden/guard-post/v008/manifest.json",
+  "workflow": "ImageGen cutouts -> keyed RGBA -> deterministic condition trim packing",
+  "ownership": {
+    "sheet": [
+      "condition color",
+      "coverage alpha",
+      "repeat/end/corner visual vocabulary"
+    ],
+    "engine": [
+      "contact topology",
+      "placement",
+      "flow",
+      "maintenance",
+      "mutation"
+    ],
+    "materialMakerOptional": [
+      "restrained roughness",
+      "optional shallow normal",
+      "affinity mutation"
+    ],
+    "parent": [
+      "construction rhythm",
+      "base normal",
+      "base ORM",
+      "lighting response"
+    ]
+  },
+  "atlas": {
+    "master": "assets/materials/golden/guard-post/v009/guard-post-condition-trim-h4-v1-albedo-alpha-1024.png",
+    "masterSha256": "766aafdee2736be14e75965a56e1c2cdf725c3bc924388ff0c04e2a9bf75f63b",
+    "runtime": "assets/materials/golden/guard-post/v009/guard-post-condition-trim-h4-v1-albedo-alpha-512.png",
+    "runtimeSha256": "30c4533127ab7a4de651c11c0bd46ab5dcff06e78874a956c619b7457258de29",
+    "size": [
+      512,
+      512
+    ]
+  },
+  "uvOrigin": "bottom-left",
+  "slots": [
+    {
+      "id": "lower-wall-grime-repeat",
+      "rectPx": [
+        0,
+        0,
+        1024,
+        256
+      ],
+      "uv": [
+        0,
+        0.75,
+        1,
+        0.25
+      ],
+      "sampleInsetPx": 0.5,
+      "wrap": "repeat-x-clamp-y",
+      "repeatWorldLength": 3.3,
+      "semantic": "continuous wall-ground accumulation"
+    },
+    {
+      "id": "seam-moss-pocket",
+      "rectPx": [
+        128,
+        256,
+        768,
+        256
+      ],
+      "uv": [
+        0.125,
+        0.5,
+        0.75,
+        0.25
+      ],
+      "gutterPx": 6,
+      "sampleInsetPx": 0.5,
+      "wrap": "clamp",
+      "semantic": "unequal seam/drain/step moss island"
+    },
+    {
+      "id": "corner-ivy-face-a",
+      "pairRef": "corner-ivy-wrap-01",
+      "rectPx": [
+        128,
+        512,
+        256,
+        256
+      ],
+      "uv": [
+        0.125,
+        0.25,
+        0.25,
+        0.25
+      ],
+      "sharedEdge": "left",
+      "freeEdgeGutterPx": 8,
+      "topGutterPx": 6,
+      "bottomAligned": true,
+      "sampleInsetPx": 0.5,
+      "wrap": "clamp",
+      "semantic": "first face of wall-wall plus wall-floor growth"
+    },
+    {
+      "id": "corner-ivy-face-b",
+      "pairRef": "corner-ivy-wrap-01",
+      "rectPx": [
+        640,
+        512,
+        256,
+        256
+      ],
+      "uv": [
+        0.625,
+        0.25,
+        0.25,
+        0.25
+      ],
+      "sharedEdge": "right",
+      "freeEdgeGutterPx": 8,
+      "topGutterPx": 6,
+      "bottomAligned": true,
+      "sampleInsetPx": 0.5,
+      "wrap": "clamp",
+      "semantic": "second face of wall-wall plus wall-floor growth"
+    },
+    {
+      "id": "lower-wall-grime-left-end",
+      "rectPx": [
+        0,
+        768,
+        256,
+        256
+      ],
+      "uv": [
+        0,
+        0,
+        0.25,
+        0.25
+      ],
+      "sampleInsetPx": 0.5,
+      "wrap": "clamp",
+      "semantic": "free-edge fade"
+    },
+    {
+      "id": "lower-wall-grime-right-end",
+      "rectPx": [
+        256,
+        768,
+        256,
+        256
+      ],
+      "uv": [
+        0.25,
+        0,
+        0.25,
+        0.25
+      ],
+      "sampleInsetPx": 0.5,
+      "wrap": "clamp",
+      "semantic": "free-edge fade"
+    },
+    {
+      "id": "column-drain-junction-moss",
+      "rectPx": [
+        640,
+        768,
+        256,
+        256
+      ],
+      "uv": [
+        0.625,
+        0,
+        0.25,
+        0.25
+      ],
+      "gutterPx": 6,
+      "sampleInsetPx": 0.5,
+      "wrap": "clamp",
+      "semantic": "column base, outfall foot, stair return, or curb junction"
+    }
+  ],
+  "negativeControls": [
+    "one stretched wall decal",
+    "one independent decal per terrain tile",
+    "Material Maker deciding corner topology",
+    "condition sprite containing parent masonry shadows"
+  ]
+}

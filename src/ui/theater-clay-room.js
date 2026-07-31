@@ -892,6 +892,7 @@ function clayRoomSurfaceMode(){
 function clayRoomSurfaceRoleFor(node, ancestorRole){
   if(!node) return ancestorRole || null;
   const ud = node.userData || {};
+  if(ud.clayGuardVisualMaterial) return "guard-visual-candidate";      // Golden Site governed material
   if(ud.groundField) return "ground-field-proof";                       // CL-F06 compiled field
   if(ud.clayMaterialBenchSurface) return "material-proof";            // CL-F04 candidate material
   const byKind = clayDiagnosticRoleForKind(ud.interiorKind);           // interiorBuildInstancedMesh / room-shell / kit-shell
@@ -3878,10 +3879,17 @@ const CLAY_ROOM_TERRAIN_BENCH_ID = "cl-f07-terrain-bench";
 const CLAY_TERRAIN_FEATURE_SCENE_IDS = Object.freeze(
   typeof CL_F08_TERRAIN_FEATURE_BOOK === "object"
     ? CL_F08_TERRAIN_FEATURE_BOOK.scenes.map(function(scene){ return scene.id; }) : []);
+const CLAY_GOLDEN_VIGNETTE_SCENE_IDS = Object.freeze(
+  typeof GOLDEN_VIGNETTE_WAVE2_SCENE_IDS !== "undefined"
+    ? GOLDEN_VIGNETTE_WAVE2_SCENE_IDS.slice() : []);
+const CLAY_ARCHITECTURE_FORM_SCENE_IDS = Object.freeze(
+  typeof ARCHITECTURE_FORM_SCENE_IDS !== "undefined"
+    ? ARCHITECTURE_FORM_SCENE_IDS.slice() : []);
 const CLAY_TERRAIN_SCENE_IDS = Object.freeze([
   "thirteen-piece-sheet", "one-clamp-proof", "boundary-sheet", "route-proof",
   "walk-down-16", "support-graph", "dark"
-].concat(CLAY_TERRAIN_FEATURE_SCENE_IDS));
+].concat(CLAY_TERRAIN_FEATURE_SCENE_IDS, CLAY_GOLDEN_VIGNETTE_SCENE_IDS,
+  CLAY_ARCHITECTURE_FORM_SCENE_IDS));
 /* Diagnostic colours, deliberately NOT art: the clay register stays neutral so Adam is ruling on
    FORM, and every non-clay colour here is an overlay that a capture can turn off. */
 const CLAY_TERRAIN_COLORS = Object.freeze({
@@ -3947,6 +3955,82 @@ function clayRoomTerrainSeedFromLocation(){
   return null;
 }
 
+/* Canonical CL-F09 forms remain the reviewed source library. `bounded` asks for a complete-form
+   affine sibling; `growth` asks for reviewed rooms/storeys/routes/cutaways. The renderer still
+   receives only compiled members plus an exact presentation-hidden set and cannot invent either. */
+function clayRoomArchitectureVariantFromLocation(){
+  try {
+    const raw = window.location && window.location.search
+      ? new URLSearchParams(window.location.search).get("architecturevariant") : null;
+    if(raw === "bounded" || raw === "growth") return raw;
+  } catch(e){}
+  return null;
+}
+
+/* A VISUAL PROFILE IS PRESENTATION INPUT, never a terrain seed or architecture variant. Keeping it
+   in its own URL seam lets the exact same committed Guard Post be compared as neutral clay,
+   institutional frontier work, and upland vernacular construction without rebuilding the plan. */
+function clayRoomGuardVisualProfileFromLocation(){
+  try {
+    const raw = window.location && window.location.search
+      ? new URLSearchParams(window.location.search).get("guardprofile") : null;
+    if(raw === "institutional-frontier" || raw === "upland-vernacular"
+        || raw === "neutral-clay") return raw;
+  } catch(e){}
+  return "institutional-frontier";
+}
+
+/* Ground calibration is presentation-only. It can swap one reviewed albedo candidate and one
+   declared physical repeat scale, but it never enters the vignette request or terrain mechanics. */
+function clayRoomGuardGroundCalibrationFromLocation(){
+  const result = { candidate: "v018", metersPerRepeat: null };
+  try {
+    const params = window.location && window.location.search
+      ? new URLSearchParams(window.location.search) : null;
+    const candidate = params ? params.get("guardgroundcandidate") : null;
+    if(candidate === "v010" || candidate === "v011"
+        || candidate === "v016" || candidate === "v017" || candidate === "v018"){
+      result.candidate = candidate;
+    }
+    const rawRepeat = params ? params.get("guardgroundrepeat") : null;
+    const repeat = rawRepeat == null || rawRepeat === "" ? NaN : Number(rawRepeat);
+    if([4.95, 6.6, 8.25, 9.9].indexOf(repeat) >= 0) result.metersPerRepeat = repeat;
+  } catch(e){}
+  return result;
+}
+
+/* Masonry candidates are presentation-only. A candidate can be rendered against the committed
+   Guard Post without receiving approval, changing construction, or entering default selection. */
+function clayRoomGuardMasonryCandidateFromLocation(){
+  try {
+    const raw = window.location && window.location.search
+      ? new URLSearchParams(window.location.search).get("guardmasonrycandidate") : null;
+    if(raw === "v015") return "v015";
+  } catch(e){}
+  return "v010";
+}
+
+/* Condition candidates share the same presentation-only gate as masonry candidates. */
+function clayRoomGuardConditionCandidateFromLocation(){
+  try {
+    const raw = window.location && window.location.search
+      ? new URLSearchParams(window.location.search).get("guardconditioncandidate") : null;
+    if(raw === "v015") return "v015";
+  } catch(e){}
+  return "v013";
+}
+
+/* The 32 px/ft party-vs-guards cast is an opt-in visual-density experiment. It consumes the
+   committed Guard Post zones but owns no movement, hostility, initiative, or battle state. */
+function clayRoomGuardWorldPixelDensityProofFromLocation(){
+  try {
+    const raw = window.location && window.location.search
+      ? new URLSearchParams(window.location.search).get("guardpartyproof") : null;
+    if(raw === "32ppf" || raw === "party-guards") return "party-guards";
+  } catch(e){}
+  return null;
+}
+
 /* WHICH RUNG OF THE EXPRESSION LADDER this mount carries (docs/TERRAIN-EXPRESSION-BUILD.md §5).
    The rung is a RENDER-TIME device mask over an otherwise identical field: same seed, same camera,
    same layout throughout, which is precisely what makes the six captures a bin-isolation ladder and
@@ -3968,7 +4052,9 @@ function clayRoomTerrainRungFromLocation(){
    workbench explicitly asks for another rung. This prevents a feature URL from silently replacing
    natural grades with the legacy one-box-per-cell renderer. */
 function clayRoomTerrainDefaultRung(sceneId){
-  return CLAY_TERRAIN_FEATURE_SCENE_IDS.indexOf(sceneId) >= 0 ? "all" : "naked";
+  return (CLAY_TERRAIN_FEATURE_SCENE_IDS.indexOf(sceneId) >= 0
+    || CLAY_GOLDEN_VIGNETTE_SCENE_IDS.indexOf(sceneId) >= 0
+    || CLAY_ARCHITECTURE_FORM_SCENE_IDS.indexOf(sceneId) >= 0) ? "all" : "naked";
 }
 
 /* WHICH PROOF PROBE this mount carries. `standee-contract` adds the §3 B3 matrix — three envelopes
@@ -4280,6 +4366,7 @@ function clayTerrainClimbBits(field, c, sides, topY, faceBottomY, colour, eased,
    nothing, which is what makes a chasm a hole rather than a dark texture. */
 function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
   const h = TERRAIN_GRID_LAW.verticalQuantumWorldUnits;
+  const visualContext = opts && opts.visualContext;
   const group = new THREE.Group();
   group.name = "terrain-field-" + field.id;
   group.userData.terrainFieldId = field.id;
@@ -4297,18 +4384,34 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
     "bluff-ascent": 0xb99a6a,
     "bluff-scramble": 0x89776b,
     "earthwork-entry": 0xad9064,
-    "earthwork-sally": 0x786b61
+    "earthwork-sally": 0x786b61,
+    "guard-through-road": 0xb59a72,
+    "guard-terrain-flank": 0x7d8069,
+    "guard-retained-shelf": 0x999189
   };
   function markedSurfaceColour(surface){
     return Object.prototype.hasOwnProperty.call(markedSurfaceColours, surface)
       ? markedSurfaceColours[surface] : null;
   }
-  /* A cell's column reaches down to its LOWEST ORTHOGONAL NEIGHBOUR, not to the deepest point of
+  const trayLaw = (typeof TERRAIN_DIORAMA_TRAY_CLOSURE === "object")
+    ? TERRAIN_DIORAMA_TRAY_CLOSURE : null;
+  const floorH = field.metrics.minH
+    - (trayLaw && trayLaw.enabled ? trayLaw.baseOffsetH : 1);
+  function isPerimeterCell(c){
+    return c.x === 0 || c.y === 0
+      || c.x === field.extent.x - 1 || c.y === field.extent.y - 1;
+  }
+  /* An INTERIOR cell's column reaches down to its LOWEST ORTHOGONAL NEIGHBOUR, not to the deepest point of
      the whole field. Ground is a continuous mass and its exposed face is only as tall as the drop
      beside it — running every column to the field minimum turns a 1h berm into a 22-ft monolith
      and hides the very faces this bench exists to show. A void neighbour drops the full depth,
-     because that is exactly what a chasm wall is. */
+     because that is exactly what a chasm wall is.
+
+     The DIORAMA PERIMETER is intentionally different: every live boundary silhouette closes to
+     the one shared tray datum. That produces a solid cut face under high ground instead of the old
+     constant shallow skirt, while no interior height or tactical fact changes. */
   function baseHFor(c){
+    if(trayLaw && trayLaw.enabled && isPerimeterCell(c)) return floorH;
     let low = c.h;
     [[c.x - 1, c.y], [c.x + 1, c.y], [c.x, c.y - 1], [c.x, c.y + 1]].forEach(function(nb){
       if(nb[0] < 0 || nb[1] < 0 || nb[0] >= field.extent.x || nb[1] >= field.extent.y){
@@ -4320,7 +4423,26 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
     });
     return low - 1;
   }
-  const floorH = field.metrics.minH - 1;
+  const trayBoundaryCells = field.cells.filter(function(c){
+    return c.kind !== "void" && isPerimeterCell(c);
+  });
+  const trayBoundaryMaxH = trayBoundaryCells.reduce(function(maxH, c){
+    const top = (typeof terrainSurfaceCellDatumH === "function")
+      ? terrainSurfaceCellDatumH(field, c.index) : c.h;
+    return Math.max(maxH, top);
+  }, floorH);
+  const trayClosureReport = {
+    id: trayLaw ? trayLaw.id : "legacy-shallow-boundary",
+    enabled: !!(trayLaw && trayLaw.enabled),
+    scope: trayLaw ? trayLaw.scope : "none",
+    baseDatumH: floorH,
+    boundaryCellCount: trayBoundaryCells.length,
+    highestBoundaryH: trayBoundaryMaxH,
+    maximumCutDepthWU: Number(((trayBoundaryMaxH - floorH) * h).toFixed(4)),
+    surfaceRole: trayLaw ? trayLaw.surfaceRole : null,
+    mechanicalEffect: trayLaw ? trayLaw.mechanicalEffect : null
+  };
+  group.userData.terrainDioramaTrayClosure = trayClosureReport;
   /* THE RUNG. `naked` takes the byte-identical legacy path below — one BoxGeometry per cell,
      nothing added — so the A0 control frame is genuinely the control and not a re-implementation
      that happens to look similar. Every device only ever runs on the expressed branch. */
@@ -4369,9 +4491,27 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
     const cx = originCell.x + c.x - origin.cx + 0.5;
     const cz = originCell.z + c.y - origin.cz + 0.5;
     if(!flags.anyDevice){
-      const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, columnH, 1),
-        clayStructureMaterial(c.inPlayfield ? kindColor : kindColor));
+      const geometry = new THREE.BoxGeometry(1, columnH, 1);
+      const materialId = clayGuardTerrainMaterialId(visualContext, c, "natural-top");
+      const materialDefinition = materialId
+        ? visualContext.profile.materialDefinitions[materialId] : null;
+      const material = materialId
+        ? clayGuardVisualMaterial(visualContext, materialId, "terrain:naked-column") : null;
+      const mesh = new THREE.Mesh(geometry,
+        material || clayStructureMaterial(c.inPlayfield ? kindColor : kindColor));
       mesh.position.set(cx, baseY + cellBaseH * h + columnH / 2, cz);
+      if(materialDefinition){
+        const uvBounds = clayGuardVisualUvProject(geometry,
+          clayGuardVisualComposeMatrix(mesh.position, null), materialDefinition);
+        const surfaceAttributes = clayGuardVisualSurfaceAttributes(
+          geometry, field, c, cx, cz, visualContext, materialDefinition);
+        mesh.userData.clayGuardVisualMaterial = {
+          materialId: materialId, state: materialDefinition.state,
+          contextVerdict: materialDefinition.contextVerdict,
+          projection: materialDefinition.projection, uvBounds: uvBounds,
+          surfaceAttributes: surfaceAttributes
+        };
+      }
       clayStructureTag(mesh, "cl-f07:" + field.id + ":cell", c.kind === "guarded-slope" ? "riser" : "floor");
       mesh.castShadow = true;
       mesh.userData.terrainCell = { x: c.x, y: c.y, h: c.h, kind: c.kind,
@@ -4412,10 +4552,34 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
     const iw = (sides.w > 0 && licence.w) ? inset : 0, ie = (sides.e > 0 && licence.e) ? inset : 0;
     const inn = (sides.n > 0 && licence.n) ? inset : 0, is = (sides.s > 0 && licence.s) ? inset : 0;
     const shaftH = Math.max(0.02, capBottomY - (baseY + cellBaseH * h));
+    const shaftGeometry = new THREE.BoxGeometry(
+      Math.max(0.05, 1 - iw - ie), shaftH, Math.max(0.05, 1 - inn - is));
+    const shaftFaceRole = trayLaw && trayLaw.enabled && isPerimeterCell(c)
+      ? "tray-wall" : "exposed-face";
+    const shaftMaterialId = clayGuardTerrainMaterialId(visualContext, c, shaftFaceRole);
+    const shaftMaterialDefinition = shaftMaterialId
+      ? visualContext.profile.materialDefinitions[shaftMaterialId] : null;
+    const shaftMaterial = shaftMaterialId
+      ? clayGuardVisualMaterial(visualContext, shaftMaterialId,
+        shaftFaceRole === "tray-wall" ? "terrain:tray-wall" : "terrain:exposed-face") : null;
     const shaft = new THREE.Mesh(
-      new THREE.BoxGeometry(Math.max(0.05, 1 - iw - ie), shaftH, Math.max(0.05, 1 - inn - is)),
-      clayStructureMaterial(clayTerrainScaleHex(cellColour, 0.94)));
+      shaftGeometry,
+      shaftMaterial || clayStructureMaterial(clayTerrainScaleHex(cellColour, 0.94)));
     shaft.position.set((iw - ie) / 2, capBottomY - shaftH / 2, (inn - is) / 2);
+    if(shaftMaterialDefinition){
+      const shaftWorldPosition = new THREE.Vector3(
+        cx + shaft.position.x, shaft.position.y, cz + shaft.position.z);
+      const uvBounds = clayGuardVisualUvProject(shaftGeometry,
+        clayGuardVisualComposeMatrix(shaftWorldPosition, null), shaftMaterialDefinition);
+      const surfaceAttributes = clayGuardVisualSurfaceAttributes(
+        shaftGeometry, field, c, cx, cz, visualContext, shaftMaterialDefinition);
+      shaft.userData.clayGuardVisualMaterial = {
+        materialId: shaftMaterialId, state: shaftMaterialDefinition.state,
+        contextVerdict: shaftMaterialDefinition.contextVerdict,
+        projection: shaftMaterialDefinition.projection, uvBounds: uvBounds,
+        surfaceAttributes: surfaceAttributes
+      };
+    }
     clayStructureTag(shaft, "cl-f07:" + field.id + ":cell",
       c.kind === "guarded-slope" ? "riser" : "floor");
     shaft.castShadow = true;
@@ -4510,7 +4674,25 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
     capGeo.setAttribute("position", new THREE.Float32BufferAttribute(capPos, 3));
     capGeo.setIndex(capIndex);
     capGeo.computeVertexNormals();
-    const cap = new THREE.Mesh(capGeo, clayStructureMaterial(cellColour));
+    const capMaterialId = clayGuardTerrainMaterialId(visualContext, c, "natural-top");
+    const capMaterialDefinition = capMaterialId
+      ? visualContext.profile.materialDefinitions[capMaterialId] : null;
+    const capMaterial = capMaterialId
+      ? clayGuardVisualMaterial(visualContext, capMaterialId,
+        c.surface === "guard-through-road" ? "terrain:traffic-top" : "terrain:natural-top") : null;
+    const cap = new THREE.Mesh(capGeo, capMaterial || clayStructureMaterial(cellColour));
+    if(capMaterialDefinition){
+      const uvBounds = clayGuardVisualUvProject(capGeo,
+        clayGuardVisualComposeMatrix(new THREE.Vector3(cx, 0, cz), null), capMaterialDefinition);
+      const surfaceAttributes = clayGuardVisualSurfaceAttributes(
+        capGeo, field, c, cx, cz, visualContext, capMaterialDefinition);
+      cap.userData.clayGuardVisualMaterial = {
+        materialId: capMaterialId, state: capMaterialDefinition.state,
+        contextVerdict: capMaterialDefinition.contextVerdict,
+        projection: capMaterialDefinition.projection, uvBounds: uvBounds,
+        surfaceAttributes: surfaceAttributes
+      };
+    }
     clayStructureTag(cap, "cl-f07:" + field.id + ":cell",
       c.kind === "guarded-slope" ? "riser" : "floor");
     cap.castShadow = true;
@@ -4563,7 +4745,15 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
      and half on the other and its centre is 0.5 wu from either stand point — outside the 0.466
      protected radius of the worst Medium, which is the whole ring the standee contract leaves. */
   if(flags.occluders && typeof terrainOccluderSites === "function"){
-    const sites = terrainOccluderSites(field, flags);
+    const authoredOccluder = visualContext && visualContext.profile
+      ? visualContext.profile.terrainOccluderPresentation : null;
+    const authoredOccluderBudget = authoredOccluder
+      && authoredOccluder.selectionBudget;
+    const sites = terrainOccluderSites(field, flags, authoredOccluderBudget ? {
+      everyNthEdge: authoredOccluderBudget.everyNthEdge,
+      maxSites: authoredOccluderBudget.maximumSites
+    } : null);
+    const occluderRows = [];
     sites.forEach(function(site){
       const j = flags.jitter && typeof terrainExpressionJitter === "function"
         ? terrainExpressionJitter(field.seed, site.key)
@@ -4585,8 +4775,94 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
       mesh.userData.terrainOccluder = { kind: site.kind, straddles: site.straddles,
         deltaH: site.deltaH, key: site.key };
       group.add(mesh);
+      const row = {
+        siteKey: site.key,
+        kind: site.kind,
+        declaredSizeCells: Number(size.toFixed(4)),
+        placementAuthority: authoredOccluder
+          ? authoredOccluder.placementAuthority : "terrainOccluderSites",
+        collisionAuthority: authoredOccluder
+          ? authoredOccluder.collisionAuthority : "terrain-expression-site-no-battle-collision",
+        fallback: authoredOccluder ? authoredOccluder.fallback : "renderer-icosahedron",
+        requestedSlug: null,
+        status: "fallback-active"
+      };
+      occluderRows.push(row);
+      /* Golden profiles may present the SAME engine-owned occluder site with an admitted donor.
+         The donor cannot choose placement, scale, collision, or mechanics: it inherits the exact
+         site position/jitter and is scaled back to the site's declared visual diameter. The
+         icosahedron remains a truthful fallback until the donor settles, then becomes invisible.
+         This is presentation substitution, not a second scatter system. */
+      const slug = authoredOccluder && authoredOccluder.allowedSlugs
+        && authoredOccluder.allowedSlugs[0];
+      if(!slug) return;
+      row.requestedSlug = slug;
+      if(!window.TheaterDonor || typeof window.TheaterDonor.loadDonorPiece !== "function"){
+        row.status = "loader-unavailable:fallback";
+        return;
+      }
+      row.status = "loading:fallback-active";
+      window.TheaterDonor.loadDonorPiece(authoredOccluder.catalog, slug, {
+        seedKey: field.id + ":" + site.key,
+        materialContext: authoredOccluder.materialContext || null
+      }).then(function(donor){
+        if(!group.parent || group.parent !== S.clayRoomTerrainBenchGroup) return;
+        donor.name = "terrain-occluder-asset:" + site.key + ":" + slug;
+        donor.position.set(
+          originCell.x + site.u - origin.cx,
+          baseY + site.seatH * h - j.sinkH * h - 0.02,
+          originCell.z + site.v - origin.cz
+        );
+        donor.rotation.order = "YXZ";
+        donor.rotation.y = j.yawDeg * Math.PI / 180;
+        donor.rotation.x = j.tiltXDeg * Math.PI / 180;
+        donor.rotation.z = j.tiltZDeg * Math.PI / 180;
+        donor.scale.setScalar(size / Math.max(
+          0.001, Number(authoredOccluder.canonicalWorldWidth) || 1.15));
+        donor.userData.terrainOccluderAsset = {
+          siteKey: site.key,
+          slug: slug,
+          placementAuthority: authoredOccluder.placementAuthority,
+          transformAuthority: authoredOccluder.transformAuthority,
+          collisionAuthority: authoredOccluder.collisionAuthority,
+          mechanicalEffect: authoredOccluder.mechanicalEffect
+        };
+        donor.traverse(function(node){
+          if(node.isMesh){ node.castShadow = true; node.receiveShadow = true; }
+        });
+        let donorMeshCount = 0;
+        donor.traverse(function(node){ if(node.isMesh) donorMeshCount++; });
+        group.add(donor);
+        mesh.visible = false;
+        row.status = "loaded-citizen:fallback-hidden";
+        row.loadedSlug = slug;
+        row.appliedScale = Number(donor.scale.x.toFixed(6));
+        row.meshCount = donorMeshCount;
+        /* The mount census is built before asynchronous donor settlement. Mutate only the live
+           report belonging to this still-mounted field so the banked receipt counts what the
+           screenshot actually contains: one hidden fallback replaced by one authored group. */
+        const liveReport = S.clayRoomTerrainReport;
+        const liveCensus = liveReport && liveReport.frameCensus;
+        if(liveCensus){
+          liveCensus.terrainOccluderAssets =
+            (liveCensus.terrainOccluderAssets || 0) + 1;
+          liveCensus.terrainOccluderAssetParts =
+            (liveCensus.terrainOccluderAssetParts || 0) + donorMeshCount;
+          liveCensus.occluders = Math.max(0, (liveCensus.occluders || 0) - 1);
+        }
+        markDirty(); scheduleRender();
+      }).catch(function(error){
+        row.status = "load-failed:fallback-active";
+        row.error = String(error && error.message || error);
+        markDirty(); scheduleRender();
+      });
     });
     group.userData.terrainOccluderCount = sites.length;
+    group.userData.terrainOccluderPresentation = {
+      schema: authoredOccluder ? authoredOccluder.schema : null,
+      rows: occluderRows,
+      mechanicalEffect: authoredOccluder ? authoredOccluder.mechanicalEffect : null
+    };
   }
 
   /* Volume boundaries (thicket, trunk field, fog) are OCCUPANCY, not ground: they stand ON the
@@ -4667,7 +4943,8 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
       group.add(loop);
     });
   }
-  return { group: group, floorH: floorH, cellMeshes: cellMeshes };
+  return { group: group, floorH: floorH, cellMeshes: cellMeshes,
+    trayClosure: trayClosureReport };
 }
 
 /* THE FRAME'S OWN PROJECTION, read off the live camera and the live canvas. Everything a capture
@@ -4756,9 +5033,11 @@ function clayTerrainSupportedWitnessCell(field, piece){
   return best == null ? authored : best;
 }
 
-function clayTerrainPlaceWitness(group, slug, position, label, failures, contact, contactSupport, plane){
+function clayTerrainPlaceWitness(group, slug, position, label, failures, contact, contactSupport, plane,
+  entryOverride){
   const note = function(why){ if(failures) failures.push({ slug: slug, label: label, why: why }); return null; };
-  const entry = (typeof spriteEntryFor === "function") ? spriteEntryFor(slug) : null;
+  const entry = entryOverride
+    || ((typeof spriteEntryFor === "function") ? spriteEntryFor(slug) : null);
   if(!entry) return note("no sprite registry entry for " + slug);
   let built = null;
   try { built = interiorSpriteBillboard(entry, null); }
@@ -4767,6 +5046,12 @@ function clayTerrainPlaceWitness(group, slug, position, label, failures, contact
   const figure = built.group;
   figure.position.set(position.x, interiorStandeeContactY(position.y), position.z);
   const support = interiorStandeeSupportMetrics(built.width, entry.size, 1);
+  const supportVisualScale = entryOverride && entryOverride.supportVisualScale
+    ? entryOverride.supportVisualScale : { x: 1, z: 1 };
+  const visualSupportWidth = support.width
+    * (Number(supportVisualScale.x) > 0 ? Number(supportVisualScale.x) : 1);
+  const visualSupportDepth = support.depth
+    * (Number(supportVisualScale.z) > 0 ? Number(supportVisualScale.z) : 1);
   const skirtDepth = clayRoomTerrainSkirtDepth(plane);
   /* R2 — THE BASE SKIRT (Adam 2026-07-28): *"we might need to extend the base down through the
      floor, so even on hills the base appears to make contact with the full ground, rather than just
@@ -4774,8 +5059,11 @@ function clayTerrainPlaceWitness(group, slug, position, label, failures, contact
      the flat tabletop and the interior boards stand on slabs whose thickness this build has not
      measured, and a skirt that pokes out of a thin tile would be a new defect in service of fixing
      an old one. Terrain is where hills are, so terrain is where the skirt is. */
-  const base = buildInteriorBase(support.width, support.depth,
-    S.lastBoard && S.lastBoard.tileKit && S.lastBoard.tileKit.trimColor,
+  const ordinaryBaseTrim = S.lastBoard && S.lastBoard.tileKit
+    && S.lastBoard.tileKit.trimColor;
+  const baseTrim = entryOverride && entryOverride.baseTrimHex
+    ? entryOverride.baseTrimHex : ordinaryBaseTrim;
+  const base = buildInteriorBase(visualSupportWidth, visualSupportDepth, baseTrim,
     { skirtDepth: skirtDepth });
   figure.add(base);
   figure.userData.standeeBaseMesh = base;
@@ -4787,6 +5075,11 @@ function clayTerrainPlaceWitness(group, slug, position, label, failures, contact
      0.67 overhang that is not a defect but a category error. */
   figure.userData.clayStandeeSpanCells = support.tacticalSpanCells;
   figure.userData.interiorHeight = built.height;
+  /* Keep the real source-aspect width beside the height. __spriteScreenRects consumes both when
+     deciding whether a governed party-proof frame contains complete silhouettes; omitting width
+     made every terrain witness audit as a square even though these authored canvases range from
+     96×224 to 192×224. */
+  figure.userData.interiorWidth = built.width;
   figure.userData.clayTerrainWitness = { slug: slug, label: label || null,
     surfaceClass: (plane && plane.surfaceClass) || null,
     envelope: (plane && plane.envelope) || null };
@@ -4835,6 +5128,21 @@ function clayTerrainPlaceWitness(group, slug, position, label, failures, contact
     }
     return { w: support.width, d: support.depth, yMin: -INTERIOR_BASE_HEIGHT, yMax: 0 };
   })();
+  /* GOLDEN SITE 1 grounding resumption (2026-07-30): terrain witnesses bypass the ordinary
+     interiorBuildPieces mount, so they also bypassed its addInteriorContactBlob call. The result
+     was a sharp but visibly floating Guard NPC: base present, zero local contact occlusion. Mount
+     the SAME governed standee pool here, as a sibling of the figure exactly like the production
+     interior path. syncStandeeContactBlob owns its continuing position and slope conformance. */
+  const contactBlob = addInteriorContactBlob(
+    group, figure.position.x, figure.position.z,
+    visualSupportWidth, position.y, visualSupportDepth
+  );
+  if(contactBlob){
+    figure.userData.contactBlobMesh = contactBlob;
+    contactBlob.userData.linkedSceneObjectId = figure.userData.sceneObjectId
+      || "terrain-witness-" + (label || slug);
+    contactBlob.userData.terrainWitnessContact = true;
+  }
   /* Record the ground this witness was placed ON and the gap it ended at, so "0 refusals" can be
      checked against "0 levitations" rather than assumed. */
   if(contact){
@@ -4842,11 +5150,34 @@ function clayTerrainPlaceWitness(group, slug, position, label, failures, contact
       sameHeightNeighbours: contactSupport == null ? null : contactSupport,
       groundY: Number(position.y.toFixed(4)),
       standeeY: Number(figure.position.y.toFixed(4)),
-      gap: Number((figure.position.y - position.y).toFixed(4)) });
+      gap: Number((figure.position.y - position.y).toFixed(4)),
+      contactPool: contactBlob ? {
+        linked: true,
+        diameter: Number(contactBlob.userData.contactPoolDiameter.toFixed(4)),
+        blendMode: contactBlob.userData.contactBlendMode,
+        terrainConformanceRequired: tilted
+      } : null });
   }
   figure.userData.sceneObjectId = "terrain-witness-" + (label || slug);
   group.add(figure);
+  const baseMaterialColors = (Array.isArray(base.material)
+    ? base.material : [base.material]).map(function(material){
+      return material && material.color && typeof material.color.getHex === "function"
+        ? material.color.getHex() : null;
+    });
   return { slug: slug, label: label || null, height: built.height,
+    sourceAsset: entryOverride ? entryOverride.legacyAsset : null,
+    worldHeightFeet: entryOverride ? entryOverride.worldHeight : null,
+    pixelsPerFoot: entryOverride ? entryOverride.pixelsPerFoot : null,
+    bodySubjectHeightPixels: entryOverride ? entryOverride.bodySubjectHeightPixels : null,
+    standeeExtrusion: entryOverride ? entryOverride.standeeExtrusion === true : null,
+    baseStyle: entryOverride ? entryOverride.baseStyle || null : null,
+    baseTrimHex: entryOverride ? entryOverride.baseTrimHex || null : null,
+    baseVisualSize: {
+      width: Number(visualSupportWidth.toFixed(4)),
+      depth: Number(visualSupportDepth.toFixed(4))
+    },
+    baseMaterialColors: baseMaterialColors,
     at: { x: position.x, y: position.y, z: position.z } };
 }
 
@@ -5233,6 +5564,1800 @@ function clayTerrainRestoreForeignLights(){
   return restored;
 }
 
+/* GOLDEN SITE 1 MATERIAL PROJECTION. The profile is pure engine data; this block only interprets
+   its channel and projection declarations through THREE. All maps stay candidates until an
+   in-context ruling. Texture load success is recorded separately from visual admission. */
+const CLAY_GUARD_VISUAL_TEXTURE_CACHE = new Map();
+function clayGuardVisualTexture(url, colorSpace, wrapMode){
+  const resolvedWrapMode = wrapMode === "clamp" || wrapMode === "repeat-x-clamp-y"
+    ? wrapMode : "repeat";
+  const key = url + "|" + colorSpace + "|" + resolvedWrapMode;
+  if(CLAY_GUARD_VISUAL_TEXTURE_CACHE.has(key)) return CLAY_GUARD_VISUAL_TEXTURE_CACHE.get(key);
+  const pending = new Promise(function(resolve, reject){
+    new THREE.TextureLoader().load(url, function(texture){
+      texture.colorSpace = colorSpace === "sRGB"
+        ? THREE.SRGBColorSpace : THREE.NoColorSpace;
+      texture.wrapS = resolvedWrapMode === "clamp"
+        ? THREE.ClampToEdgeWrapping : THREE.RepeatWrapping;
+      texture.wrapT = resolvedWrapMode === "repeat"
+        ? THREE.RepeatWrapping : THREE.ClampToEdgeWrapping;
+      /* Sprite-derived ALBEDO keeps the visible pixel clusters that give the TS/FFT material
+         language its character. Trilinear albedo mips averaged those clusters into the same soft
+         procedural surface the source-sprite workflow exists to avoid. Data maps remain linearly
+         mip-filtered: interpolating a normal/ORM signal is correct, while interpolating painted
+         albedo identity is not. Quarter-turn cameras are discrete, so the albedo path does not need
+         a continuously-orbiting shimmer compromise. */
+      const spriteAlbedo = colorSpace === "sRGB";
+      texture.magFilter = spriteAlbedo ? THREE.NearestFilter : THREE.LinearFilter;
+      texture.minFilter = spriteAlbedo ? THREE.NearestFilter : THREE.LinearMipmapLinearFilter;
+      texture.generateMipmaps = !spriteAlbedo;
+      texture.userData.guardSampling = spriteAlbedo
+        ? "sprite-albedo-nearest-no-mipmap"
+        : "linear-data-trilinear-mipmap";
+      texture.needsUpdate = true;
+      resolve(texture);
+    }, undefined, function(error){
+      reject(error || new Error("Guard visual texture failed: " + url));
+    });
+  });
+  CLAY_GUARD_VISUAL_TEXTURE_CACHE.set(key, pending);
+  return pending;
+}
+
+function clayGuardVisualContext(profile){
+  if(!profile) return null;
+  const materials = new Map();
+  const loadRows = {};
+  const uses = {};
+  const context = {
+    profile: profile,
+    materials: materials,
+    loadRows: loadRows,
+    uses: uses,
+    report: {
+      schema: profile.schema,
+      version: profile.version,
+      profileId: profile.profileId,
+      cultureId: profile.cultureId,
+      planRef: profile.planRef,
+      mechanicsRef: profile.mechanicsRef,
+      materialPackRef: profile.materialPackRef,
+      materialSourcePacks: (profile.materialSourcePacks || [profile.materialPackRef]).slice(),
+      fingerprint: profile.fingerprint,
+      verdict: "PENDING_GUARD_POST_REVIEW",
+      worldSignifierDemonstration: profile.worldSignifierDemonstration
+        ? Object.assign({}, profile.worldSignifierDemonstration, {
+            supportedMedia: (profile.worldSignifierDemonstration.supportedMedia || []).slice()
+          }) : null,
+      terrainDressing: profile.terrainDressing ? {
+        schema: profile.terrainDressing.schema,
+        id: profile.terrainDressing.id,
+        status: profile.terrainDressing.status,
+        sourceAsset: profile.terrainDressing.sourceAsset,
+        pixelsPerFoot: profile.terrainDressing.pixelsPerFoot,
+        sourceEnvelope: profile.terrainDressing.sourceEnvelope,
+        projection: profile.terrainDressing.projection,
+        placementRule: profile.terrainDressing.placementRule,
+        placementCount: (profile.terrainDressing.placements || []).length,
+        fingerprint: profile.terrainDressing.fingerprint,
+        mechanicalEffect: profile.terrainDressing.mechanicalEffect
+      } : null,
+      conditionLayers: (profile.conditionLayers || []).map(function(layer){
+        return Object.assign({}, layer);
+      }),
+      terrainConditionFields: (profile.terrainConditionFields || []).map(function(field){
+        return {
+          schema: field.schema,
+          id: field.id,
+          fieldRef: field.fieldRef,
+          sourceFactRefs: (field.sourceFactRefs || []).slice(),
+          sourceLocal: Object.assign({}, field.sourceLocal),
+          pathCells: (field.pathCells || []).map(function(cell){ return Object.assign({}, cell); }),
+          projection: field.projection,
+          coordinateDomain: field.coordinateDomain,
+          distributionRule: field.distributionRule,
+          maximumWeight: field.maximumWeight,
+          weightFingerprint: field.weightFingerprint,
+          mechanicalEffect: field.mechanicalEffect
+        };
+      }),
+      materialBlendContracts: Object.keys(profile.materialDefinitions || {}).reduce(
+        function(contracts, materialId){
+          const definition = profile.materialDefinitions[materialId];
+          if(definition && definition.parentBlend){
+            contracts[materialId] = Object.assign({}, definition.parentBlend);
+          }
+          return contracts;
+        }, {}),
+      materialProjectionContracts: Object.keys(profile.materialDefinitions || {}).reduce(
+        function(contracts, materialId){
+          const definition = profile.materialDefinitions[materialId];
+          if(!definition) return contracts;
+          contracts[materialId] = {
+            mode: definition.projection || "world-dominant-planar",
+            metersPerRepeat: definition.metersPerRepeat || 1.65,
+            metersPerRepeatX: definition.metersPerRepeatX
+              || definition.metersPerRepeat || 1.65,
+            metersPerRepeatY: definition.metersPerRepeatY
+              || definition.metersPerRepeat || 1.65,
+            worldUnitsPerRepeatX: definition.worldUnitsPerRepeatX,
+            worldUnitsPerRepeatY: definition.worldUnitsPerRepeatY,
+            feetPerWorldUnit: definition.feetPerWorldUnit || 5,
+            wrapMode: definition.wrapMode || "repeat"
+          };
+          if(definition.faceLocalModuleFeet != null){
+            contracts[materialId].faceLocalModuleFeet = definition.faceLocalModuleFeet;
+          }
+          if(definition.masonryCourse){
+            contracts[materialId].masonryCourse =
+              Object.assign({}, definition.masonryCourse);
+          }
+          if(definition.atlasSlot){
+            contracts[materialId].atlasSlot = Object.assign({}, definition.atlasSlot);
+          }
+          if(definition.repeatWorldLength != null){
+            contracts[materialId].repeatWorldLength = definition.repeatWorldLength;
+          }
+          if(definition.projection === "edge-local-planar"){
+            contracts[materialId].edgeAnchor = "receiver-local-min-boundary";
+            contracts[materialId].horizontalPhaseSource = "stable-projection-identity";
+          } else if(definition.projection === "receiver-local-decal"){
+            contracts[materialId].edgeAnchor = "receiver-local-min-boundary";
+            contracts[materialId].horizontalPhaseSource = "none:single-authored-cutout";
+          } else if(definition.projection === "receiver-local-trim"){
+            contracts[materialId].edgeAnchor = "receiver-local-min-boundary";
+            contracts[materialId].horizontalPhaseSource = "continuous-distance-along-receiver";
+          }
+          return contracts;
+        }, {}),
+      materialLoads: loadRows,
+      materialUses: uses
+    }
+  };
+  return context;
+}
+
+function clayGuardVisualMaterial(context, materialId, usage){
+  if(!context || !materialId) return null;
+  const definition = context.profile.materialDefinitions[materialId];
+  if(!definition) return null;
+  const usageKey = usage || "unspecified";
+  if(!context.uses[materialId]) context.uses[materialId] = {};
+  context.uses[materialId][usageKey] = (context.uses[materialId][usageKey] || 0) + 1;
+  if(context.materials.has(materialId)) return context.materials.get(materialId);
+
+  const material = new THREE.MeshStandardMaterial({
+    color: definition.tint || "#ffffff",
+    roughness: definition.roughness == null ? 0.92 : definition.roughness,
+    metalness: definition.metalness == null ? 0 : definition.metalness,
+    alphaTest: definition.alphaTest || 0,
+    opacity: definition.opacity == null ? 1 : definition.opacity,
+    transparent: !!definition.transparent,
+    depthWrite: definition.depthWrite !== false,
+    alphaToCoverage: !!definition.alphaToCoverage
+  });
+  /* This renderer has no image-based environmental light. A restrained material-declared indirect
+     floor keeps vertical cut faces and deeply shadowed masonry in the authored palette rather than
+     collapsing to black. It is deliberately per-material and tiny; it does not move the sun,
+     flatten cast shadows, or add a second scene light. */
+  if(definition.shadowLift > 0){
+    material.emissive = new THREE.Color(definition.tint || "#ffffff");
+    material.emissiveIntensity = definition.shadowLift;
+  }
+  if(definition.surfaceBlend){
+    /* GOLDEN SITE 1 GROUND FIELD v1. One PBR material samples the turf parent and the traffic
+       parent through a continuous geometry attribute. The shader consumes committed surface facts;
+       it does not decide where the road is. A second low-frequency attribute modulates value over
+       several cells, breaking repeated-tile cadence without inventing footing, color families, or
+       per-cell random materials. */
+    material.userData.guardSurfaceBlend = Object.assign({}, definition.surfaceBlend, {
+      secondarySurfaces: (definition.surfaceBlend.secondarySurfaces || []).slice()
+    });
+    material.onBeforeCompile = function(shader){
+      shader.uniforms.guardSecondaryMap = {
+        value: material.userData.guardSecondaryAlbedo || material.map
+      };
+      shader.uniforms.guardSecondaryNormalMap = {
+        value: material.userData.guardSecondaryNormal || material.normalMap
+      };
+      shader.uniforms.guardSecondaryOrmMap = {
+        value: material.userData.guardSecondaryOrm || material.roughnessMap
+      };
+      shader.uniforms.guardConditionMap = {
+        value: material.userData.guardConditionAlbedo || material.map
+      };
+      shader.uniforms.guardFoundationConditionMap = {
+        value: material.userData.guardFoundationConditionAlbedo || material.map
+      };
+      shader.uniforms.guardFoundationConditionTint = {
+        value: new THREE.Color("#403725")
+      };
+      material.userData.guardSurfaceBlendUniform = shader.uniforms.guardSecondaryMap;
+      material.userData.guardSurfaceBlendNormalUniform = shader.uniforms.guardSecondaryNormalMap;
+      material.userData.guardSurfaceBlendOrmUniform = shader.uniforms.guardSecondaryOrmMap;
+      material.userData.guardConditionUniform = shader.uniforms.guardConditionMap;
+      material.userData.guardFoundationConditionUniform =
+        shader.uniforms.guardFoundationConditionMap;
+      shader.vertexShader = shader.vertexShader
+        .replace(
+          "#include <uv_pars_vertex>",
+          [
+            "#include <uv_pars_vertex>",
+            "attribute float guardSurfaceMix;",
+            "attribute float guardMacroValue;",
+            "attribute float guardConditionWeight;",
+            "attribute float guardFoundationConditionWeight;",
+            "varying float vGuardSurfaceMix;",
+            "varying float vGuardMacroValue;",
+            "varying float vGuardConditionWeight;",
+            "varying float vGuardFoundationConditionWeight;"
+          ].join("\n")
+        )
+        .replace(
+          "#include <uv_vertex>",
+          [
+            "#include <uv_vertex>",
+            "vGuardSurfaceMix = guardSurfaceMix;",
+            "vGuardMacroValue = guardMacroValue;",
+            "vGuardConditionWeight = guardConditionWeight;"
+            ,"vGuardFoundationConditionWeight = guardFoundationConditionWeight;"
+          ].join("\n")
+        );
+      shader.fragmentShader = shader.fragmentShader
+        .replace(
+          "#include <map_pars_fragment>",
+          [
+            "#include <map_pars_fragment>",
+            "uniform sampler2D guardSecondaryMap;",
+            "uniform sampler2D guardSecondaryNormalMap;",
+            "uniform sampler2D guardSecondaryOrmMap;",
+            "uniform sampler2D guardConditionMap;",
+            "uniform sampler2D guardFoundationConditionMap;",
+            "uniform vec3 guardFoundationConditionTint;",
+            "varying float vGuardSurfaceMix;",
+            "varying float vGuardMacroValue;",
+            "varying float vGuardConditionWeight;",
+            "varying float vGuardFoundationConditionWeight;"
+          ].join("\n")
+        )
+        .replace(
+          "#include <map_fragment>",
+          [
+            "#ifdef USE_MAP",
+            "  vec4 guardNatural = texture2D( map, vMapUv );",
+            "  vec4 guardTraffic = texture2D( guardSecondaryMap, vMapUv );",
+            "  float guardBlend = smoothstep( 0.08, 0.92, clamp( vGuardSurfaceMix, 0.0, 1.0 ) );",
+            "  diffuseColor *= mix( guardNatural, guardTraffic, guardBlend );",
+            "  diffuseColor.rgb *= clamp( vGuardMacroValue, 0.82, 1.12 );",
+            "  vec4 guardCondition = texture2D( guardConditionMap, vMapUv * 2.35 );",
+            "  float guardConditionMix = clamp( vGuardConditionWeight, 0.0, 1.0 )",
+            "    * guardCondition.a;",
+            "  diffuseColor.rgb = mix( diffuseColor.rgb, guardCondition.rgb, guardConditionMix );",
+            "  vec4 guardFoundationCondition = texture2D(",
+            "    guardFoundationConditionMap, vMapUv * 2.35 );",
+            "  float guardFoundationBreakup = max(",
+            "    guardFoundationCondition.a, 0.34 );",
+            "  float guardFoundationConditionMix = clamp(",
+            "    vGuardFoundationConditionWeight, 0.0, 1.0 )",
+            "    * guardFoundationBreakup * 0.82;",
+            "  diffuseColor.rgb = mix(",
+            "    diffuseColor.rgb, guardFoundationConditionTint,",
+            "    guardFoundationConditionMix );",
+            "  float guardFoundationGrowthMix = clamp(",
+            "    vGuardFoundationConditionWeight, 0.0, 1.0 )",
+            "    * guardCondition.a * 0.74;",
+            "  diffuseColor.rgb = mix(",
+            "    diffuseColor.rgb, guardCondition.rgb,",
+            "    guardFoundationGrowthMix );",
+            "#endif"
+          ].join("\n")
+        )
+        .replace(
+          "#include <roughnessmap_fragment>",
+          [
+            "float roughnessFactor = roughness;",
+            "#ifdef USE_ROUGHNESSMAP",
+            "  vec4 guardNaturalOrmR = texture2D( roughnessMap, vRoughnessMapUv );",
+            "  vec4 guardTrafficOrmR = texture2D( guardSecondaryOrmMap, vRoughnessMapUv );",
+            "  roughnessFactor *= mix( guardNaturalOrmR, guardTrafficOrmR, guardBlend ).g;",
+            "#endif"
+          ].join("\n")
+        )
+        .replace(
+          "#include <normal_fragment_maps>",
+          [
+            "#if defined( USE_NORMALMAP_TANGENTSPACE )",
+            "  vec3 guardNaturalN = texture2D( normalMap, vNormalMapUv ).xyz * 2.0 - 1.0;",
+            "  vec3 guardTrafficN = texture2D( guardSecondaryNormalMap, vNormalMapUv ).xyz * 2.0 - 1.0;",
+            "  vec3 mapN = normalize( mix( guardNaturalN, guardTrafficN, guardBlend ) );",
+            "  mapN.xy *= normalScale;",
+            "  normal = normalize( tbn * mapN );",
+            "#else",
+            "  #include <normal_fragment_maps>",
+            "#endif"
+          ].join("\n")
+        )
+        .replace(
+          "#include <aomap_fragment>",
+          [
+            "#ifdef USE_AOMAP",
+            "  vec4 guardNaturalOrmA = texture2D( aoMap, vAoMapUv );",
+            "  vec4 guardTrafficOrmA = texture2D( guardSecondaryOrmMap, vAoMapUv );",
+            "  float ambientOcclusion = ( mix( guardNaturalOrmA, guardTrafficOrmA, guardBlend ).r - 1.0 ) * aoMapIntensity + 1.0;",
+            "  reflectedLight.indirectDiffuse *= ambientOcclusion;",
+            "  #if defined( USE_CLEARCOAT )",
+            "    clearcoatSpecularIndirect *= ambientOcclusion;",
+            "  #endif",
+            "  #if defined( USE_SHEEN )",
+            "    sheenSpecularIndirect *= ambientOcclusion;",
+            "  #endif",
+            "  #if defined( USE_ENVMAP ) && defined( STANDARD )",
+            "    float dotNV = saturate( dot( geometryNormal, geometryViewDir ) );",
+            "    reflectedLight.indirectSpecular *= computeSpecularOcclusion( dotNV, ambientOcclusion, material.roughness );",
+            "  #endif",
+            "#endif"
+          ].join("\n")
+        );
+    };
+    material.customProgramCacheKey = function(){ return "guard-ground-field-pbr-condition-blend-v5"; };
+  }
+  if(definition.conditionBlend && !definition.surfaceBlend){
+    /* Architecture condition belongs in the parent fragment, not on a second shadow-casting
+       polygon. Engine-authored receiver-band attributes say where the causal history exists;
+       this shader only samples the generic trim and modulates the already-lit parent albedo. */
+    material.userData.guardArchitectureConditionBlend =
+      Object.assign({}, definition.conditionBlend);
+    material.onBeforeCompile = function(shader){
+      shader.uniforms.guardArchitectureConditionMap = {
+        value: material.userData.guardConditionAlbedo || material.map
+      };
+      shader.uniforms.guardArchitectureConditionStrength = {
+        value: Number.isFinite(Number(definition.conditionBlend.strength))
+          ? Number(definition.conditionBlend.strength) : 0.5
+      };
+      shader.uniforms.guardArchitectureConditionTint = {
+        value: new THREE.Color(definition.conditionBlend.tint || "#4b3825")
+      };
+      shader.uniforms.guardArchitectureGrowthMap = {
+        value: material.userData.guardGrowthConditionAlbedo || material.map
+      };
+      shader.uniforms.guardArchitectureGrowthTopMap = {
+        value: material.userData.guardGrowthTopConditionAlbedo
+          || material.userData.guardGrowthConditionAlbedo || material.map
+      };
+      shader.uniforms.guardArchitectureGrowthStrength = {
+        value: Number.isFinite(Number(definition.conditionBlend.growthStrength))
+          ? Number(definition.conditionBlend.growthStrength) : 0
+      };
+      shader.uniforms.guardArchitectureGrowthTopStrength = {
+        value: Number.isFinite(Number(definition.conditionBlend.growthTopStrength))
+          ? Number(definition.conditionBlend.growthTopStrength)
+          : Number.isFinite(Number(definition.conditionBlend.growthStrength))
+            ? Number(definition.conditionBlend.growthStrength) : 0
+      };
+      shader.uniforms.guardArchitectureGrowthContactApron = {
+        value: Number.isFinite(Number(definition.conditionBlend.growthContactApron))
+          ? Number(definition.conditionBlend.growthContactApron) : 0
+      };
+      shader.uniforms.guardArchitectureConditionMinimumHeight = {
+        value: Number.isFinite(Number(definition.conditionBlend.minimumNormalizedHeight))
+          ? Number(definition.conditionBlend.minimumNormalizedHeight) : -0.32
+      };
+      material.userData.guardArchitectureConditionUniform =
+        shader.uniforms.guardArchitectureConditionMap;
+      material.userData.guardArchitectureGrowthUniform =
+        shader.uniforms.guardArchitectureGrowthMap;
+      material.userData.guardArchitectureGrowthTopUniform =
+        shader.uniforms.guardArchitectureGrowthTopMap;
+      shader.vertexShader = shader.vertexShader
+        .replace(
+          "#include <uv_pars_vertex>",
+          [
+            "#include <uv_pars_vertex>",
+            "attribute vec2 guardConditionUv;",
+            "attribute vec2 guardConditionTopUv;",
+            "attribute float guardConditionWeight;",
+            "attribute float guardConditionUpward;",
+            "varying vec2 vGuardConditionUv;",
+            "varying vec2 vGuardConditionTopUv;",
+            "varying float vGuardConditionWeight;",
+            "varying float vGuardConditionUpward;"
+          ].join("\n")
+        )
+        .replace(
+          "#include <uv_vertex>",
+          [
+            "#include <uv_vertex>",
+            "vGuardConditionUv = guardConditionUv;",
+            "vGuardConditionTopUv = guardConditionTopUv;",
+            "vGuardConditionWeight = guardConditionWeight;",
+            "vGuardConditionUpward = guardConditionUpward;"
+          ].join("\n")
+        );
+      shader.fragmentShader = shader.fragmentShader
+        .replace(
+          "#include <map_pars_fragment>",
+          [
+            "#include <map_pars_fragment>",
+            "uniform sampler2D guardArchitectureConditionMap;",
+            "uniform float guardArchitectureConditionStrength;",
+            "uniform vec3 guardArchitectureConditionTint;",
+            "uniform sampler2D guardArchitectureGrowthMap;",
+            "uniform sampler2D guardArchitectureGrowthTopMap;",
+            "uniform float guardArchitectureGrowthStrength;",
+            "uniform float guardArchitectureGrowthTopStrength;",
+            "uniform float guardArchitectureGrowthContactApron;",
+            "uniform float guardArchitectureConditionMinimumHeight;",
+            "varying vec2 vGuardConditionUv;",
+            "varying vec2 vGuardConditionTopUv;",
+            "varying float vGuardConditionWeight;",
+            "varying float vGuardConditionUpward;"
+          ].join("\n")
+        )
+        .replace(
+          "#include <map_fragment>",
+          [
+            "#include <map_fragment>",
+            "vec4 guardArchitectureCondition = texture2D(",
+            "  guardArchitectureConditionMap,",
+            "  vec2(fract(vGuardConditionUv.x), clamp(vGuardConditionUv.y, 0.0, 1.0))",
+            ");",
+            "float guardArchitectureContactApron = 1.0 - smoothstep(",
+            "  guardArchitectureConditionMinimumHeight, 0.22,",
+            "  clamp(vGuardConditionUv.y, guardArchitectureConditionMinimumHeight, 1.0)",
+            ");",
+            "float guardArchitectureConditionCoverage = max(",
+            "  guardArchitectureCondition.a, guardArchitectureContactApron * 0.92",
+            ");",
+            "float guardArchitectureConditionMix = guardArchitectureConditionStrength",
+            "  * clamp(vGuardConditionWeight, 0.0, 1.0)",
+            "  * guardArchitectureConditionCoverage",
+            "  * step(guardArchitectureConditionMinimumHeight, vGuardConditionUv.y)",
+            "  * step(vGuardConditionUv.y, 1.0);",
+            "diffuseColor.rgb = mix(",
+            "  diffuseColor.rgb, guardArchitectureConditionTint,",
+            "  clamp(guardArchitectureConditionMix, 0.0, 1.0)",
+            ");"
+            ,"vec4 guardArchitectureVerticalGrowth = texture2D(",
+            "  guardArchitectureGrowthMap,",
+            "  vec2(fract(vGuardConditionUv.x), clamp(vGuardConditionUv.y, 0.0, 1.0))",
+            ");",
+            "vec4 guardArchitectureTopGrowth = texture2D(",
+            "  guardArchitectureGrowthTopMap, fract(vGuardConditionTopUv)",
+            ");",
+            "float guardArchitectureUpward = clamp(vGuardConditionUpward, 0.0, 1.0);",
+            "vec4 guardArchitectureGrowth = mix(",
+            "  guardArchitectureVerticalGrowth, guardArchitectureTopGrowth,",
+            "  guardArchitectureUpward",
+            ");",
+            "float guardArchitectureGrowthApron = 1.0 - smoothstep(",
+            "  guardArchitectureConditionMinimumHeight, 0.18,",
+            "  clamp(vGuardConditionUv.y, guardArchitectureConditionMinimumHeight, 1.0)",
+            ");",
+            "float guardArchitectureGrowthCoverage = max(",
+            "  guardArchitectureGrowth.a,",
+            "  guardArchitectureGrowthApron * guardArchitectureGrowthContactApron",
+            "    * (0.42 + guardArchitectureGrowth.a * 0.58)",
+            ");",
+            "float guardArchitectureResolvedGrowthStrength = mix(",
+            "  guardArchitectureGrowthStrength, guardArchitectureGrowthTopStrength,",
+            "  guardArchitectureUpward",
+            ");",
+            "float guardArchitectureGrowthMix = guardArchitectureResolvedGrowthStrength",
+            "  * clamp(vGuardConditionWeight, 0.0, 1.0)",
+            "  * guardArchitectureGrowthCoverage",
+            "  * step(guardArchitectureConditionMinimumHeight, vGuardConditionUv.y)",
+            "  * step(vGuardConditionUv.y, 1.0);",
+            "diffuseColor.rgb = mix(",
+            "  diffuseColor.rgb, guardArchitectureGrowth.rgb,",
+            "  clamp(guardArchitectureGrowthMix, 0.0, 1.0)",
+            ");"
+          ].join("\n")
+        );
+    };
+    material.customProgramCacheKey = function(){
+      return "guard-architecture-parent-condition-blend-v12";
+    };
+  }
+  material.name = "guard-candidate:" + materialId;
+  const maps = definition.maps || {};
+  const requested = Object.keys(maps).filter(function(channel){
+    return channel === "albedo" || channel === "secondaryAlbedo"
+      || channel === "normal" || channel === "secondaryNormal"
+      || channel === "orm" || channel === "secondaryOrm"
+      || channel === "conditionAlbedo"
+      || channel === "foundationConditionAlbedo"
+      || channel === "growthConditionAlbedo"
+      || channel === "growthTopConditionAlbedo";
+  });
+  const row = {
+    materialId: materialId,
+    state: definition.state,
+    contextVerdict: definition.contextVerdict,
+    requestedChannels: requested.slice(),
+    loadedChannels: [],
+    failedChannels: [],
+    status: requested.length ? "loading" : "scalar-proxy"
+  };
+  context.loadRows[materialId] = row;
+  context.materials.set(materialId, material);
+
+  if(requested.length){
+    Promise.allSettled(requested.map(function(channel){
+      return clayGuardVisualTexture(maps[channel],
+        channel === "albedo" || channel === "secondaryAlbedo"
+          || channel === "conditionAlbedo"
+          || channel === "foundationConditionAlbedo"
+          || channel === "growthConditionAlbedo"
+          || channel === "growthTopConditionAlbedo" ? "sRGB" : "linear",
+        channel === "conditionAlbedo" && definition.conditionBlend
+          ? "repeat-x-clamp-y" : definition.wrapMode)
+        .then(function(texture){ return { channel: channel, texture: texture }; });
+    })).then(function(results){
+      results.forEach(function(result, index){
+        const channel = requested[index];
+        if(result.status === "rejected"){
+          row.failedChannels.push(channel);
+          return;
+        }
+        const texture = result.value.texture;
+        row.loadedChannels.push(channel);
+        if(channel === "albedo") material.map = texture;
+        if(channel === "secondaryAlbedo"){
+          material.userData.guardSecondaryAlbedo = texture;
+          if(material.userData.guardSurfaceBlendUniform){
+            material.userData.guardSurfaceBlendUniform.value = texture;
+          }
+        }
+        if(channel === "conditionAlbedo"){
+          material.userData.guardConditionAlbedo = texture;
+          if(material.userData.guardConditionUniform){
+            material.userData.guardConditionUniform.value = texture;
+          }
+          if(material.userData.guardArchitectureConditionUniform){
+            material.userData.guardArchitectureConditionUniform.value = texture;
+          }
+        }
+        if(channel === "foundationConditionAlbedo"){
+          material.userData.guardFoundationConditionAlbedo = texture;
+          if(material.userData.guardFoundationConditionUniform){
+            material.userData.guardFoundationConditionUniform.value = texture;
+          }
+        }
+        if(channel === "growthConditionAlbedo"){
+          material.userData.guardGrowthConditionAlbedo = texture;
+          if(material.userData.guardArchitectureGrowthUniform){
+            material.userData.guardArchitectureGrowthUniform.value = texture;
+          }
+        }
+        if(channel === "growthTopConditionAlbedo"){
+          material.userData.guardGrowthTopConditionAlbedo = texture;
+          if(material.userData.guardArchitectureGrowthTopUniform){
+            material.userData.guardArchitectureGrowthTopUniform.value = texture;
+          }
+        }
+        if(channel === "secondaryNormal"){
+          material.userData.guardSecondaryNormal = texture;
+          if(material.userData.guardSurfaceBlendNormalUniform){
+            material.userData.guardSurfaceBlendNormalUniform.value = texture;
+          }
+        }
+        if(channel === "secondaryOrm"){
+          material.userData.guardSecondaryOrm = texture;
+          if(material.userData.guardSurfaceBlendOrmUniform){
+            material.userData.guardSurfaceBlendOrmUniform.value = texture;
+          }
+        }
+        if(channel === "normal"){
+          material.normalMap = texture;
+          const scale = definition.normalScale == null ? 1 : definition.normalScale;
+          material.normalScale = new THREE.Vector2(scale, scale);
+        }
+        if(channel === "orm"){
+          material.aoMap = texture;
+          material.aoMapIntensity = definition.aoIntensity == null ? 1 : definition.aoIntensity;
+          material.roughnessMap = texture;
+          material.metalnessMap = texture;
+          /* ORM's blue channel owns whether a texel is metal; scalar 1 lets that authored channel
+             pass. A stone ORM remains non-metal because its blue channel is black. */
+          material.metalness = 1;
+        }
+        /* Wall-face module materials are per-face clones because each wall has its own authored
+           compositor output. Texture loads are asynchronous, so propagate parent PBR channels to
+           clones instead of letting an early compile freeze them as scalar-only materials. */
+        (material.userData.guardWallModuleDerivatives || []).forEach(function(derived){
+          if(channel === "albedo") derived.map = texture;
+          if(channel === "normal"){
+            derived.normalMap = texture;
+            derived.normalScale.copy(material.normalScale);
+          }
+          if(channel === "orm"){
+            derived.aoMap = texture;
+            derived.aoMapIntensity = material.aoMapIntensity;
+            derived.roughnessMap = texture;
+            derived.metalnessMap = texture;
+            derived.metalness = material.metalness;
+          }
+          derived.needsUpdate = true;
+        });
+      });
+      row.status = row.failedChannels.indexOf("albedo") >= 0
+        ? "albedo-failed:truthful-scalar-proxy"
+        : (row.failedChannels.length ? "partial-channel-fallback" : "loaded-candidate");
+      material.needsUpdate = true;
+      markDirty(); scheduleRender();
+    });
+  }
+  return material;
+}
+
+/* WALL FACE MODULE COMPOSITOR · renderer half of WallFaceModuleCompilerV1.
+   The engine supplies physical wall extents, a construction datum, deterministic W5H5 choices,
+   and real aperture coordinates. This compositor is intentionally blind to guardrooms and combat:
+   it only paints the declared visual layers into one nearest-sampled albedo overlay. */
+const CLAY_GUARD_WALL_MODULE_TEXTURE_CACHE = new Map();
+const CLAY_GUARD_WALL_MODULE_MATERIAL_CACHE = new Map();
+const CLAY_GUARD_WALL_RELIEF_IMAGE_CACHE = new Map();
+
+function clayGuardWallReliefImage(source, callback){
+  if(!source || typeof callback !== "function") return;
+  const cached = CLAY_GUARD_WALL_RELIEF_IMAGE_CACHE.get(source);
+  if(cached && cached.status === "loaded"){
+    callback(cached.image);
+    return;
+  }
+  if(cached){
+    cached.callbacks.push(callback);
+    return;
+  }
+  const row = { status: "loading", image: new Image(), callbacks: [callback] };
+  CLAY_GUARD_WALL_RELIEF_IMAGE_CACHE.set(source, row);
+  row.image.onload = function(){
+    row.status = "loaded";
+    row.callbacks.splice(0).forEach(function(fn){ fn(row.image); });
+  };
+  row.image.onerror = function(){
+    row.status = "failed";
+    row.callbacks.length = 0;
+  };
+  row.image.src = source;
+}
+
+function clayGuardWallModuleTexture(facePlan, cultureId){
+  if(!facePlan || !facePlan.moduleGrid) return null;
+  const expressionProfile =
+    facePlan.authoredExpressionProfile || "authored-pixel-standard";
+  const boldExpression = expressionProfile === "authored-pixel-bold";
+  const key = facePlan.fingerprint + "|" + (cultureId || "neutral")
+    + "|" + expressionProfile;
+  if(CLAY_GUARD_WALL_MODULE_TEXTURE_CACHE.has(key)){
+    return CLAY_GUARD_WALL_MODULE_TEXTURE_CACHE.get(key);
+  }
+  const ppf = Math.max(8, Number(facePlan.moduleGrid.pixelsPerFoot) || 32);
+  const width = Math.max(1,
+    Math.round(Number(facePlan.physicalExtent.lengthFeet) * ppf));
+  const height = Math.max(1,
+    Math.round(Number(facePlan.physicalExtent.heightFeet) * ppf));
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const context = canvas.getContext("2d", { alpha: true });
+  context.imageSmoothingEnabled = false;
+  context.clearRect(0, 0, width, height);
+  const px = function(feet){ return Math.round(feet * ppf); };
+  const canvasY = function(feet){ return height - px(feet); };
+  const fillRectFeet = function(x, y, w, h, color){
+    context.fillStyle = color;
+    context.fillRect(px(x), canvasY(y + h), Math.max(1, px(w)), Math.max(1, px(h)));
+  };
+
+  /* Quiet modules are authored rhythm, not random dirt. The bold profile makes the same governed
+     pixel clusters survive the gameplay camera through stronger value separation and a slightly
+     broader silhouette; it does not change their location, module envelope, or mechanics. */
+  (facePlan.slots || []).forEach(function(slot){
+    if(slot.variant !== "quiet-W5H5"
+        && slot.variant.indexOf("quiet-W5H10:") !== 0) return;
+    const x = slot.column * 5;
+    const y = slot.row * 5;
+    fillRectFeet(x + 0.42, y + 0.86,
+      boldExpression ? 0.82 : 0.56, boldExpression ? 0.15625 : 0.09375,
+      boldExpression ? "rgba(49,42,37,0.82)" : "rgba(58,50,44,0.58)");
+    fillRectFeet(x + 1.78, y + 2.78,
+      boldExpression ? 1.12 : 0.82, boldExpression ? 0.15625 : 0.09375,
+      boldExpression ? "rgba(247,224,183,0.72)" : "rgba(241,221,188,0.46)");
+    fillRectFeet(x + 3.46, y + 3.88,
+      boldExpression ? 0.68 : 0.42, boldExpression ? 0.1875 : 0.125,
+      boldExpression ? "rgba(55,47,41,0.76)" : "rgba(67,57,49,0.52)");
+    if(boldExpression){
+      fillRectFeet(x + 0.62, y + 1.02, 0.21875, 0.21875, "rgba(38,34,31,0.72)");
+      fillRectFeet(x + 2.42, y + 2.58, 0.3125, 0.15625, "rgba(255,231,190,0.58)");
+      fillRectFeet(x + 3.72, y + 4.06, 0.21875, 0.25, "rgba(42,37,34,0.68)");
+    }
+  });
+
+  /* Aperture surrounds follow exact engine openings, including non-grid-aligned widths. The
+     continuous trim is assembled from a fixed pixel palette at the governed pixels-per-foot
+     density; it never fills the aperture and therefore cannot contradict geometry truth. */
+  (facePlan.apertures || []).forEach(function(aperture){
+    const left = aperture.stationFeet - aperture.widthFeet / 2;
+    const bottom = aperture.bottomFeet;
+    const trim = (aperture.kind === "controlled-door" ? 0.46 : 0.56)
+      * (boldExpression ? 1.12 : 1);
+    const outerLeft = left - trim;
+    const outerBottom = Math.max(0, bottom - trim);
+    const outerWidth = aperture.widthFeet + trim * 2;
+    const outerHeight = aperture.heightFeet + trim + (bottom > 0 ? trim : 0);
+    const dark = "rgba(49,42,37,0.88)";
+    const mid = "rgba(166,143,112,0.98)";
+    const light = "rgba(242,218,176,1)";
+    const shadow = boldExpression ? 0.22 : 0.16;
+    fillRectFeet(outerLeft - shadow, outerBottom,
+      trim + shadow, outerHeight, dark);
+    fillRectFeet(left + aperture.widthFeet, outerBottom,
+      trim + shadow, outerHeight, dark);
+    fillRectFeet(outerLeft - shadow, bottom + aperture.heightFeet,
+      outerWidth + shadow * 2, trim + shadow, dark);
+    if(bottom > 0){
+      fillRectFeet(outerLeft - shadow, outerBottom,
+        outerWidth + shadow * 2, trim + shadow, dark);
+    }
+    fillRectFeet(outerLeft, outerBottom, trim, outerHeight, mid);
+    fillRectFeet(left + aperture.widthFeet, outerBottom, trim, outerHeight, mid);
+    fillRectFeet(outerLeft, bottom + aperture.heightFeet,
+      outerWidth, trim, mid);
+    if(bottom > 0) fillRectFeet(outerLeft, outerBottom, outerWidth, trim, mid);
+    fillRectFeet(outerLeft + 0.08, outerBottom, 0.125, outerHeight, light);
+    fillRectFeet(left + aperture.widthFeet + 0.08, outerBottom,
+      0.125, outerHeight, light);
+    fillRectFeet(outerLeft, bottom + aperture.heightFeet + trim - 0.14,
+      outerWidth, 0.14, light);
+  });
+
+  /* Endpoint treatments come from shared wall-run topology. They are therefore allowed to close a
+     real isolated end, turn a real miter, or mark a real junction—but never invent one. These are
+     surface transitions over architecture-owned closed geometry, not duplicate corner prisms. */
+  const faceLength = Number(facePlan.physicalExtent.lengthFeet);
+  const faceHeight = Number(facePlan.physicalExtent.heightFeet);
+  (facePlan.topologyEdges || []).forEach(function(edge){
+    if(edge.socketKind === "seamless-continuation") return;
+    const upland = cultureId === "upland-vernacular";
+    const atLeft = edge.side === "left";
+    const baseWidth = edge.socketKind === "multi-run-junction" ? 0.72
+      : edge.socketKind === "matched-miter-corner" ? 0.46 : 0.3;
+    const edgeX = atLeft ? 0 : faceLength - baseWidth;
+    const dark = upland ? "rgba(79,48,29,0.9)" : "rgba(55,49,44,0.88)";
+    const mid = upland ? "rgba(165,105,43,0.92)" : "rgba(190,169,132,0.9)";
+    const light = upland ? "rgba(222,158,63,0.74)" : "rgba(242,221,181,0.78)";
+    fillRectFeet(edgeX, 0, baseWidth, faceHeight, dark);
+    for(let course = 0; course < Math.ceil(faceHeight); course++){
+      const courseHeight = Math.min(0.82, faceHeight - course);
+      if(courseHeight <= 0) continue;
+      const inset = course % 2 === 0 ? 0.07 : 0.14;
+      const blockWidth = Math.max(0.12, baseWidth - inset);
+      fillRectFeet(atLeft ? edgeX + inset : edgeX,
+        course + 0.08, blockWidth, courseHeight, mid);
+      fillRectFeet(atLeft ? edgeX + inset : edgeX + blockWidth - 0.08,
+        course + 0.12, 0.08, Math.max(0.1, courseHeight - 0.16), light);
+    }
+  });
+
+  /* Partial modules preserve parent bond and physical texel density. Only their true exterior
+     boundary receives a cropped closure accent; there is deliberately no line at the internal
+     5-ft solver boundary, which would expose implementation rather than construction. */
+  if(facePlan.remainder && facePlan.remainder.widthFeet > 0){
+    const rightEdge = Math.max(0, faceLength - 0.18);
+    fillRectFeet(rightEdge, 0, 0.18, faceHeight, "rgba(54,48,43,0.66)");
+    for(let course = 0; course < Math.ceil(faceHeight); course += 2){
+      fillRectFeet(rightEdge - 0.18, course + 0.14, 0.18,
+        Math.min(0.58, faceHeight - course - 0.14), "rgba(232,210,173,0.62)");
+    }
+  }
+  if(facePlan.remainder && facePlan.remainder.heightFeet > 0){
+    const topEdge = Math.max(0, faceHeight - 0.18);
+    fillRectFeet(0, topEdge, faceLength, 0.18, "rgba(57,50,44,0.62)");
+  }
+
+  /* Construction-history modules require an explicit fact reference from the caller. A repair
+     infill and a storey band are authored visual readings of those facts, never random ageing. */
+  (facePlan.authoredFeatures || []).forEach(function(feature){
+    const left = Math.max(0, feature.stationFeet - feature.widthFeet / 2);
+    const bottom = Math.max(0, feature.bottomFeet);
+    const featureWidth = Math.min(feature.widthFeet, faceLength - left);
+    const featureHeight = Math.min(feature.heightFeet, faceHeight - bottom);
+    if(featureWidth <= 0 || featureHeight <= 0) return;
+    if(feature.kind === "repair-infill"){
+      fillRectFeet(left, bottom, featureWidth, featureHeight, "rgba(59,50,42,0.88)");
+      fillRectFeet(left + 0.12, bottom + 0.12,
+        Math.max(0.1, featureWidth - 0.24), Math.max(0.1, featureHeight - 0.24),
+        "rgba(177,137,88,0.94)");
+      for(let y = bottom + 0.34; y < bottom + featureHeight - 0.12; y += 0.72){
+        fillRectFeet(left + 0.12, y, Math.max(0.1, featureWidth - 0.24), 0.1,
+          "rgba(83,62,45,0.78)");
+      }
+      fillRectFeet(left + 0.22, bottom + 0.22, 0.12,
+        Math.max(0.1, featureHeight - 0.44), "rgba(231,190,125,0.62)");
+    } else if(feature.kind === "storey-band"){
+      fillRectFeet(left, bottom, featureWidth, featureHeight, "rgba(54,47,42,0.9)");
+      fillRectFeet(left, bottom + featureHeight * 0.24,
+        featureWidth, featureHeight * 0.54, "rgba(183,156,116,0.94)");
+      fillRectFeet(left, bottom + featureHeight * 0.68,
+        featureWidth, Math.max(0.08, featureHeight * 0.16), "rgba(243,218,177,0.86)");
+    }
+  });
+
+  /* Culture supplies attachment practice; fixture world truth supplies placeholder content.
+     This first surface feature is deliberately noncanonical and nonmechanical. */
+  if(facePlan.cultureFeature){
+    const door = (facePlan.apertures || []).find(function(aperture){
+      return aperture.kind === "controlled-door";
+    });
+    const center = door ? door.stationFeet
+      : Number(facePlan.physicalExtent.lengthFeet) * 0.5;
+    const top = Math.min(Number(facePlan.physicalExtent.heightFeet) - 0.45,
+      door ? door.bottomFeet + door.heightFeet + 2.35 : 8.8);
+    if(facePlan.cultureFeature.medium === "dressed-stone-heraldic-inset"){
+      fillRectFeet(center - 0.92, top - 1.72, 1.84, 1.5, "rgba(55,46,42,0.92)");
+      fillRectFeet(center - 0.76, top - 1.56, 1.52, 1.18, "rgba(205,178,132,0.98)");
+      fillRectFeet(center - 0.14, top - 1.42, 0.28, 0.16, "rgba(139,38,49,1)");
+      fillRectFeet(center - 0.34, top - 1.26, 0.68, 0.18, "rgba(139,38,49,1)");
+      fillRectFeet(center - 0.54, top - 1.08, 1.08, 0.22, "rgba(139,38,49,1)");
+      fillRectFeet(center - 0.34, top - 0.86, 0.68, 0.18, "rgba(139,38,49,1)");
+      fillRectFeet(center - 0.14, top - 0.68, 0.28, 0.16, "rgba(139,38,49,1)");
+    } else {
+      fillRectFeet(center - 1.02, top - 1.58, 0.24, 1.3, "rgba(139,78,27,0.96)");
+      fillRectFeet(center + 0.78, top - 1.58, 0.24, 1.3, "rgba(139,78,27,0.96)");
+      fillRectFeet(center - 0.78, top - 1.42, 1.56, 0.22, "rgba(191,128,35,0.94)");
+      fillRectFeet(center - 0.56, top - 1.06, 1.12, 0.3, "rgba(115,38,31,0.94)");
+    }
+  }
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.wrapS = THREE.ClampToEdgeWrapping;
+  texture.wrapT = THREE.ClampToEdgeWrapping;
+  texture.magFilter = THREE.NearestFilter;
+  texture.minFilter = THREE.NearestFilter;
+  texture.generateMipmaps = false;
+  texture.flipY = true;
+  texture.needsUpdate = true;
+  texture.userData.guardWallFaceModule = {
+    compiler: "WallFaceModuleCompilerV1",
+    facePlanFingerprint: facePlan.fingerprint,
+    pixelsPerFoot: ppf,
+    pixelSize: [width, height],
+    authoredExpressionProfile: expressionProfile,
+    layers: (facePlan.layers || []).slice(),
+    mechanicalEffect: "none"
+  };
+  if(facePlan.cultureRelief && facePlan.cultureRelief.source){
+    clayGuardWallReliefImage(facePlan.cultureRelief.source, function(image){
+      const relief = facePlan.cultureRelief;
+      const crop = relief.sourceCropPx;
+      const envelope = relief.physicalEnvelopeFeet;
+      if(!crop || !envelope) return;
+      const panelWidth = Math.min(Number(envelope.width) || 5,
+        Number(facePlan.physicalExtent.lengthFeet));
+      const panelHeight = Math.min(Number(envelope.height) || 3,
+        Number(facePlan.physicalExtent.heightFeet));
+      const panelBottom = Math.max(0.5,
+        Number(facePlan.physicalExtent.heightFeet) - panelHeight - 1.25);
+      context.save();
+      context.imageSmoothingEnabled = false;
+      const panelCount = Math.min(
+        Math.max(0, Number(relief.maximumPerFace) || 0),
+        Math.floor(Number(facePlan.physicalExtent.lengthFeet) / panelWidth));
+      const runWidth = panelCount * panelWidth;
+      const panelStart = Math.max(0,
+        (Number(facePlan.physicalExtent.lengthFeet) - runWidth) / 2);
+      for(let panelIndex = 0; panelIndex < panelCount; panelIndex++){
+        context.drawImage(image,
+          crop.x, crop.y, crop.width, crop.height,
+          px(panelStart + panelIndex * panelWidth),
+          canvasY(panelBottom + panelHeight),
+          Math.max(1, px(panelWidth)), Math.max(1, px(panelHeight)));
+      }
+      context.restore();
+      texture.needsUpdate = true;
+      texture.userData.guardWallFaceModule.authoredReliefSource = relief.source;
+      markDirty();
+      scheduleRender();
+    });
+  }
+  CLAY_GUARD_WALL_MODULE_TEXTURE_CACHE.set(key, texture);
+  return texture;
+}
+
+function clayGuardWallModuleMaterial(baseMaterial, facePlan, cultureId){
+  if(!baseMaterial || !facePlan) return baseMaterial;
+  const key = baseMaterial.uuid + "|" + facePlan.fingerprint + "|" + (cultureId || "neutral");
+  if(CLAY_GUARD_WALL_MODULE_MATERIAL_CACHE.has(key)){
+    return CLAY_GUARD_WALL_MODULE_MATERIAL_CACHE.get(key);
+  }
+  const overlay = clayGuardWallModuleTexture(facePlan, cultureId);
+  const material = baseMaterial.clone();
+  const parentCompile = baseMaterial.onBeforeCompile;
+  const compileState = {
+    called: false,
+    hadUvVertexChunk: false,
+    hadAlphaMapChunk: false,
+    injectedVertex: false,
+    injectedFragment: false,
+    injectedFeatureNormal: false,
+    injectedFeatureRoughness: false
+  };
+  material.onBeforeCompile = function(shader, renderer){
+    compileState.called = true;
+    if(parentCompile) parentCompile.call(material, shader, renderer);
+    compileState.hadUvVertexChunk =
+      shader.vertexShader.indexOf("#include <uv_vertex>") >= 0;
+    compileState.hadAlphaMapChunk =
+      shader.fragmentShader.indexOf("#include <alphamap_fragment>") >= 0;
+    shader.uniforms.guardWallModuleMap = { value: overlay };
+    shader.uniforms.guardWallModuleTexelSize = {
+      value: new THREE.Vector2(
+        1 / Math.max(1, overlay.image.width),
+        1 / Math.max(1, overlay.image.height))
+    };
+    shader.vertexShader = shader.vertexShader
+      .replace(
+        "#include <uv_pars_vertex>",
+        [
+          "#include <uv_pars_vertex>",
+          "attribute vec2 guardWallModuleUv;",
+          "attribute float guardWallModuleWeight;",
+          "varying vec2 vGuardWallModuleUv;",
+          "varying float vGuardWallModuleWeight;"
+        ].join("\n")
+      )
+      .replace(
+        "#include <uv_vertex>",
+        [
+          "#include <uv_vertex>",
+          "vGuardWallModuleUv = guardWallModuleUv;",
+          "vGuardWallModuleWeight = guardWallModuleWeight;"
+        ].join("\n")
+      );
+    shader.fragmentShader = shader.fragmentShader
+      .replace(
+        "#include <map_pars_fragment>",
+        [
+          "#include <map_pars_fragment>",
+          "uniform sampler2D guardWallModuleMap;",
+          "uniform vec2 guardWallModuleTexelSize;",
+          "varying vec2 vGuardWallModuleUv;",
+          "varying float vGuardWallModuleWeight;"
+        ].join("\n")
+      )
+      .replace(
+        "#include <alphamap_fragment>",
+        [
+          "vec4 guardWallModule = texture2D(",
+          "  guardWallModuleMap, clamp(vGuardWallModuleUv, 0.0, 1.0));",
+          "float guardWallModuleMix = guardWallModule.a",
+          "  * clamp(vGuardWallModuleWeight, 0.0, 1.0);",
+          "diffuseColor.rgb = mix(",
+          "  diffuseColor.rgb, guardWallModule.rgb, guardWallModuleMix);",
+          "#include <alphamap_fragment>"
+        ].join("\n")
+      )
+      .replace(
+        "#include <roughnessmap_fragment>",
+        [
+          "#include <roughnessmap_fragment>",
+          "float guardWallFeaturePbrWeight = guardWallModule.a",
+          "  * clamp(vGuardWallModuleWeight, 0.0, 1.0);",
+          "roughnessFactor = mix(",
+          "  roughnessFactor, 0.76, guardWallFeaturePbrWeight * 0.34);"
+        ].join("\n")
+      )
+      .replace(
+        "#include <normal_fragment_maps>",
+        [
+          "#include <normal_fragment_maps>",
+          "#if defined( USE_NORMALMAP_TANGENTSPACE )",
+          "  vec2 guardWallUv = clamp(vGuardWallModuleUv, 0.0, 1.0);",
+          "  float guardWallAlphaL = texture2D(guardWallModuleMap,",
+          "    clamp(guardWallUv - vec2(guardWallModuleTexelSize.x, 0.0), 0.0, 1.0)).a;",
+          "  float guardWallAlphaR = texture2D(guardWallModuleMap,",
+          "    clamp(guardWallUv + vec2(guardWallModuleTexelSize.x, 0.0), 0.0, 1.0)).a;",
+          "  float guardWallAlphaD = texture2D(guardWallModuleMap,",
+          "    clamp(guardWallUv - vec2(0.0, guardWallModuleTexelSize.y), 0.0, 1.0)).a;",
+          "  float guardWallAlphaU = texture2D(guardWallModuleMap,",
+          "    clamp(guardWallUv + vec2(0.0, guardWallModuleTexelSize.y), 0.0, 1.0)).a;",
+          "  vec3 guardWallFeatureNormal = normalize(vec3(",
+          "    (guardWallAlphaL - guardWallAlphaR) * 2.1,",
+          "    (guardWallAlphaD - guardWallAlphaU) * 2.1, 1.0));",
+          "  vec3 guardWallFeatureWorldNormal = normalize(tbn * guardWallFeatureNormal);",
+          "  normal = normalize(mix(normal, guardWallFeatureWorldNormal,",
+          "    guardWallFeaturePbrWeight * 0.42));",
+          "#endif"
+        ].join("\n")
+      );
+    compileState.injectedVertex =
+      shader.vertexShader.indexOf("vGuardWallModuleUv = guardWallModuleUv") >= 0;
+    compileState.injectedFragment =
+      shader.fragmentShader.indexOf("guardWallModuleMix") >= 0;
+    compileState.injectedFeatureNormal =
+      shader.fragmentShader.indexOf("guardWallFeatureNormal") >= 0;
+    compileState.injectedFeatureRoughness =
+      shader.fragmentShader.indexOf("guardWallFeaturePbrWeight") >= 0;
+  };
+  material.customProgramCacheKey = function(){
+    return "guard-wall-face-modules-v1|" + facePlan.fingerprint;
+  };
+  material.name = baseMaterial.name + ":wall-modules:" + facePlan.wallRunId;
+  material.userData.guardWallFaceModule = Object.assign(
+    {}, overlay.userData.guardWallFaceModule, {
+      wallRunId: facePlan.wallRunId,
+      normalOrmStatus:
+        "feature-alpha-derived-tangent-normal-and-roughness-over-parent-normal-orm"
+    });
+  material.userData.guardWallModuleCompileState = compileState;
+  if(!baseMaterial.userData.guardWallModuleDerivatives){
+    baseMaterial.userData.guardWallModuleDerivatives = [];
+  }
+  baseMaterial.userData.guardWallModuleDerivatives.push(material);
+  CLAY_GUARD_WALL_MODULE_MATERIAL_CACHE.set(key, material);
+  return material;
+}
+
+function clayGuardWallModuleAttributes(
+  geometry, matrix, facePlan, worldCenter, sceneBaseY, materialDefinition
+){
+  if(!geometry || !facePlan || !facePlan.constructionDatum) return null;
+  if(!geometry.attributes.normal) geometry.computeVertexNormals();
+  const position = geometry.attributes.position;
+  const normal = geometry.attributes.normal;
+  const uvValues = new Float32Array(position.count * 2);
+  const weights = new Float32Array(position.count);
+  const point = new THREE.Vector3();
+  const faceNormal = new THREE.Vector3();
+  const normalMatrix = new THREE.Matrix3().getNormalMatrix(matrix);
+  const datum = facePlan.constructionDatum;
+  const startX = worldCenter.x + datum.start.x;
+  const startZ = worldCenter.z + datum.start.z;
+  const base = sceneBaseY + datum.baseY;
+  const axisX = datum.axis.x;
+  const axisZ = datum.axis.z;
+  const length = Math.max(0.001, facePlan.physicalExtent.lengthWorldUnits);
+  const height = Math.max(0.001, facePlan.physicalExtent.heightWorldUnits);
+  const faceLocalModuleFeet = materialDefinition
+    && Number(materialDefinition.faceLocalModuleFeet) > 0
+    ? Number(materialDefinition.faceLocalModuleFeet) : null;
+  const faceLocalRepeatWorldUnits = faceLocalModuleFeet
+    ? faceLocalModuleFeet / 5 : null;
+  const parentUv = geometry.attributes.uv;
+  let activeVertices = 0;
+  for(let i = 0; i < position.count; i++){
+    point.fromBufferAttribute(position, i).applyMatrix4(matrix);
+    faceNormal.fromBufferAttribute(normal, i).applyNormalMatrix(normalMatrix).normalize();
+    const station = (point.x - startX) * axisX + (point.z - startZ) * axisZ;
+    const vertical = point.y - base;
+    uvValues[i * 2] = station / length;
+    uvValues[i * 2 + 1] = vertical / height;
+    const axisDot = Math.abs(faceNormal.x * axisX + faceNormal.z * axisZ);
+    const active = Math.abs(faceNormal.y) < 0.5 && axisDot < 0.5;
+    weights[i] = active ? 1 : 0;
+    if(active){
+      activeVertices++;
+      if(parentUv && faceLocalRepeatWorldUnits){
+        parentUv.setXY(
+          i,
+          station / faceLocalRepeatWorldUnits,
+          vertical / faceLocalRepeatWorldUnits
+        );
+      }
+    }
+  }
+  if(parentUv && faceLocalRepeatWorldUnits){
+    parentUv.needsUpdate = true;
+    geometry.setAttribute("uv1", parentUv.clone());
+  }
+  geometry.setAttribute("guardWallModuleUv",
+    new THREE.Float32BufferAttribute(uvValues, 2));
+  geometry.setAttribute("guardWallModuleWeight",
+    new THREE.Float32BufferAttribute(weights, 1));
+  return {
+    wallRunId: facePlan.wallRunId,
+    facePlanFingerprint: facePlan.fingerprint,
+    activeVertices: activeVertices,
+    vertexCount: position.count,
+    parentUvMode: faceLocalRepeatWorldUnits
+      ? "face-local-construction-datum" : "existing-parent-projection",
+    parentModuleFeet: faceLocalModuleFeet,
+    constructionDatum: Object.assign({}, facePlan.constructionDatum),
+    mechanicalEffect: "none"
+  };
+}
+
+/* Dominant-planar, world-locked UVs retain the sprite tile's authored pixels while adjacent
+   fragments share phase. The supplied matrix is the mesh's immutable authored transform, not a
+   camera matrix, so quarter turns cannot alter selection, scale, or orientation. */
+function clayGuardVisualUvProject(geometry, matrix, definition, projectionIdentity){
+  if(!geometry || !geometry.attributes || !geometry.attributes.position || !definition) return null;
+  if(!geometry.attributes.normal) geometry.computeVertexNormals();
+  const position = geometry.attributes.position;
+  const normal = geometry.attributes.normal;
+  let uv = geometry.attributes.uv;
+  if(!uv || uv.count !== position.count){
+    uv = new THREE.Float32BufferAttribute(new Float32Array(position.count * 2), 2);
+    geometry.setAttribute("uv", uv);
+  }
+  const metersPerWorldUnit = definition.metersPerWorldUnit || 1.65;
+  const worldUnitsPerRepeatX = Math.max(0.05,
+    definition.worldUnitsPerRepeatX
+      || (definition.metersPerRepeatX || definition.metersPerRepeat || 1.65)
+        / metersPerWorldUnit);
+  const worldUnitsPerRepeatY = Math.max(0.05,
+    definition.worldUnitsPerRepeatY
+      || (definition.metersPerRepeatY || definition.metersPerRepeat || 1.65)
+        / metersPerWorldUnit);
+  const normalMatrix = new THREE.Matrix3().getNormalMatrix(matrix);
+  const point = new THREE.Vector3();
+  const faceNormal = new THREE.Vector3();
+  const edgeLocal = definition.projection === "edge-local-planar";
+  const receiverLocal = definition.projection === "receiver-local-decal";
+  const trimLocal = definition.projection === "receiver-local-trim";
+  const localProjection = edgeLocal || receiverLocal || trimLocal;
+  let edgePhase = 0;
+  let localMin = null;
+  let localExtent = null;
+  if(localProjection){
+    geometry.computeBoundingBox();
+    localMin = geometry.boundingBox.min;
+    localExtent = new THREE.Vector3().subVectors(
+      geometry.boundingBox.max, geometry.boundingBox.min);
+    if(edgeLocal){
+      const identity = String(projectionIdentity || definition.id || "edge-condition");
+      let hash = 2166136261;
+      for(let i = 0; i < identity.length; i++){
+        hash ^= identity.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+      }
+      edgePhase = (hash >>> 0) / 4294967296;
+    }
+  }
+  for(let i = 0; i < position.count; i++){
+    point.fromBufferAttribute(position, i);
+    faceNormal.fromBufferAttribute(normal, i);
+    if(!localProjection){
+      point.applyMatrix4(matrix);
+      faceNormal.applyNormalMatrix(normalMatrix).normalize();
+    }
+    const ax = Math.abs(faceNormal.x), ay = Math.abs(faceNormal.y), az = Math.abs(faceNormal.z);
+    let u, v;
+    if(localProjection){
+      const nx = (point.x - localMin.x) / Math.max(0.0001, localExtent.x);
+      const ny = (point.y - localMin.y) / Math.max(0.0001, localExtent.y);
+      const nz = (point.z - localMin.z) / Math.max(0.0001, localExtent.z);
+      if(ay >= ax && ay >= az){
+        u = trimLocal
+          ? (point.x - localMin.x) / Math.max(0.0001, definition.repeatWorldLength || 1)
+          : nx + edgePhase;
+        v = nz;
+      } else if(ax >= az){
+        u = trimLocal
+          ? (point.z - localMin.z) / Math.max(0.0001, definition.repeatWorldLength || 1)
+          : nz + edgePhase;
+        v = ny;
+      } else {
+        u = trimLocal
+          ? (point.x - localMin.x) / Math.max(0.0001, definition.repeatWorldLength || 1)
+          : nx + edgePhase;
+        v = ny;
+      }
+    } else {
+      if(ay >= ax && ay >= az){
+        u = point.x / worldUnitsPerRepeatX;
+        v = point.z / worldUnitsPerRepeatX;
+      } else if(ax >= az){
+        u = point.z / worldUnitsPerRepeatX;
+        v = point.y / worldUnitsPerRepeatY;
+      } else {
+        u = point.x / worldUnitsPerRepeatX;
+        v = point.y / worldUnitsPerRepeatY;
+      }
+    }
+    if(definition.atlasSlot){
+      const slot = definition.atlasSlot;
+      const textureSizePx = Math.max(1, Number(slot.textureSizePx) || 512);
+      const sampleInset = Math.max(0, Number(slot.sampleInsetPx) || 0) / textureSizePx;
+      /* Atlas coordinates name a closed semantic rectangle, but sampling the exact rectangle
+         boundary is not closed: the GPU may choose the neighbouring texel. That previously let
+         seam moss leak into the bottom row of the grime trim and let adjacent condition cards show
+         at corner seams. Inset clamped axes to texel centres. The grime slot alone spans the full
+         atlas width and repeats in X, so its periodic U seam remains un-inset while V is still
+         protected from the row below. */
+      const repeatFullAtlasX = trimLocal
+        && definition.wrapMode === "repeat-x-clamp-y"
+        && Math.abs(slot.u) < 0.000001
+        && Math.abs(slot.w - 1) < 0.000001;
+      u = repeatFullAtlasX
+        ? slot.u + u * slot.w
+        : slot.u + sampleInset + u * Math.max(0, slot.w - sampleInset * 2);
+      v = slot.v + sampleInset + v * Math.max(0, slot.h - sampleInset * 2);
+    }
+    uv.setXY(i, u, v);
+  }
+  uv.needsUpdate = true;
+  geometry.setAttribute("uv1", uv.clone());
+  return clayRoomMaterialUvBounds(geometry);
+}
+
+function clayGuardArchitectureConditionAttributes(
+  geometry, matrix, band, sceneBaseY, definition, terrainHeightAt
+){
+  const position = geometry && geometry.attributes && geometry.attributes.position;
+  if(!position || !definition || !definition.conditionBlend) return null;
+  if(!geometry.attributes.normal) geometry.computeVertexNormals();
+  const normal = geometry.attributes.normal;
+  const uvValues = new Float32Array(position.count * 2);
+  const topUvValues = new Float32Array(position.count * 2);
+  const weights = new Float32Array(position.count);
+  const upwardWeights = new Float32Array(position.count);
+  const point = new THREE.Vector3();
+  const faceNormal = new THREE.Vector3();
+  const normalMatrix = new THREE.Matrix3().getNormalMatrix(matrix);
+  const rootY = band ? sceneBaseY + Number(band.rootY || 0) : 0;
+  const rise = band ? Math.max(0.04, Number(band.riseWorldHeight) || 0.7) : 1;
+  const repeat = band
+    ? Math.max(0.05, Number(band.horizontalRepeatWorldLength) || 3.3) : 1;
+  let activeVertices = 0;
+  let activeVerticalVertices = 0;
+  let activeUpwardVertices = 0;
+  let minimumLocalHeight = Infinity;
+  let maximumLocalHeight = -Infinity;
+  for(let i = 0; i < position.count; i++){
+    point.fromBufferAttribute(position, i).applyMatrix4(matrix);
+    faceNormal.fromBufferAttribute(normal, i)
+      .applyNormalMatrix(normalMatrix).normalize();
+    const verticalFace = Math.abs(faceNormal.y) < 0.5;
+    const upwardSupportFace = faceNormal.y > 0.5;
+    const terrainRoot = band && band.rootMode === "terrain-contact-line"
+      && terrainHeightAt ? terrainHeightAt(point.x, point.z) : null;
+    const resolvedRootY = Number.isFinite(terrainRoot) ? terrainRoot : rootY;
+    const localHeight = point.y - resolvedRootY;
+    minimumLocalHeight = Math.min(minimumLocalHeight, localHeight);
+    maximumLocalHeight = Math.max(maximumLocalHeight, localHeight);
+    /* Per-vertex band membership fails on an embedded face: buried bottom vertices are disabled
+       while exposed top vertices are enabled, so interpolation weakens or inverts the mask at the
+       actual contact. The complete governed vertical face is a receiver; the fragment shader
+       clips the interpolated local-height coordinate to the authored band. */
+    const includeUpwardSupport = band
+      && band.receiverFaceMode === "vertical-and-upward-support";
+    const active = !!band && (verticalFace
+      || (includeUpwardSupport && upwardSupportFace));
+    const horizontal = Math.abs(faceNormal.x) >= Math.abs(faceNormal.z)
+      ? point.z : point.x;
+    uvValues[i * 2] = horizontal / repeat;
+    uvValues[i * 2 + 1] = localHeight / rise;
+    topUvValues[i * 2] = point.x / repeat;
+    topUvValues[i * 2 + 1] = point.z / repeat;
+    weights[i] = active ? 1 : 0;
+    upwardWeights[i] = includeUpwardSupport && upwardSupportFace ? 1 : 0;
+    if(active){
+      activeVertices++;
+      if(verticalFace) activeVerticalVertices++;
+      if(upwardSupportFace) activeUpwardVertices++;
+    }
+  }
+  geometry.setAttribute("guardConditionUv",
+    new THREE.Float32BufferAttribute(uvValues, 2));
+  geometry.setAttribute("guardConditionTopUv",
+    new THREE.Float32BufferAttribute(topUvValues, 2));
+  geometry.setAttribute("guardConditionWeight",
+    new THREE.Float32BufferAttribute(weights, 1));
+  geometry.setAttribute("guardConditionUpward",
+    new THREE.Float32BufferAttribute(upwardWeights, 1));
+  return {
+    bandId: band ? band.id : null,
+    activeVertices: activeVertices,
+    activeVerticalVertices: activeVerticalVertices,
+    activeUpwardVertices: activeUpwardVertices,
+    vertexCount: position.count,
+    rootY: band ? band.rootY : null,
+    rootMode: band ? band.rootMode || "authored-flat-datum" : null,
+    receiverFaceMode: band ? band.receiverFaceMode || "vertical-only" : null,
+    riseWorldHeight: band ? band.riseWorldHeight : null,
+    horizontalRepeatWorldLength: band ? band.horizontalRepeatWorldLength : null,
+    horizontalPhaseLaw:
+      "world-distance-on-dominant-face-axis; continuous-across-split-members; repeat-not-stretch",
+    minimumLocalHeight: Number.isFinite(minimumLocalHeight) ? minimumLocalHeight : null,
+    maximumLocalHeight: Number.isFinite(maximumLocalHeight) ? maximumLocalHeight : null
+  };
+}
+
+function clayGuardGroundHash(ix, iz, seed){
+  let value = Math.imul((ix | 0) ^ (seed | 0), 0x45d9f3b);
+  value = Math.imul(value ^ (iz | 0), 0x27d4eb2d);
+  value ^= value >>> 15;
+  return (value >>> 0) / 4294967295;
+}
+
+function clayGuardGroundMacroValue(wx, wz, seed, scale, strength){
+  const fieldScale = Math.max(1, scale || 7.5);
+  const fx = wx / fieldScale, fz = wz / fieldScale;
+  const ix = Math.floor(fx), iz = Math.floor(fz);
+  let tx = fx - ix, tz = fz - iz;
+  tx = tx * tx * (3 - 2 * tx);
+  tz = tz * tz * (3 - 2 * tz);
+  const a = clayGuardGroundHash(ix, iz, seed);
+  const b = clayGuardGroundHash(ix + 1, iz, seed);
+  const c = clayGuardGroundHash(ix, iz + 1, seed);
+  const d = clayGuardGroundHash(ix + 1, iz + 1, seed);
+  const top = a + (b - a) * tx;
+  const bottom = c + (d - c) * tx;
+  const noise = top + (bottom - top) * tz;
+  return 1 + (noise - 0.5) * 2 * Math.max(0, strength || 0);
+}
+
+/* The committed surface vocabulary becomes one continuous scalar field at geometry vertices.
+   Cell centres remain exact (road=1, substrate=0); shared edges interpolate to the same value from
+   either side, so the shoulder cannot expose a one-cell zipper or choose a random material per
+   tile. The separate macro channel is also world-continuous and seed-stable. */
+function clayGuardVisualSurfaceAttributes(geometry, field, cell, cx, cz, context, definition){
+  const blend = definition && definition.surfaceBlend;
+  const position = geometry && geometry.attributes && geometry.attributes.position;
+  if(!blend || !position || !field || !cell) return null;
+  const secondary = new Set(blend.secondarySurfaces || []);
+  const width = field.extent.x, height = field.extent.y;
+  const indicator = function(ix, iz){
+    const x = Math.max(0, Math.min(width - 1, ix));
+    const z = Math.max(0, Math.min(height - 1, iz));
+    const sample = field.cells[z * width + x];
+    return sample && secondary.has(sample.surface) ? 1 : 0;
+  };
+  const sampleMix = function(gx, gz){
+    const ix = Math.floor(gx), iz = Math.floor(gz);
+    const tx = gx - ix, tz = gz - iz;
+    const a = indicator(ix, iz), b = indicator(ix + 1, iz);
+    const c = indicator(ix, iz + 1), d = indicator(ix + 1, iz + 1);
+    return (a + (b - a) * tx) + ((c + (d - c) * tx) - (a + (b - a) * tx)) * tz;
+  };
+  const conditionFields = context && context.profile
+    ? (context.profile.terrainConditionFields || []).filter(function(candidate){
+      return !candidate.fieldRef || candidate.fieldRef === field.fingerprint;
+    }) : [];
+  const runoffField = conditionFields.find(function(candidate){
+    return candidate.id === "route-control-outfall-downhill-damp";
+  });
+  const foundationField = conditionFields.find(function(candidate){
+    return candidate.id === "route-control-guard-foundation-contact-damp";
+  });
+  const conditionAt = function(conditionField, ix, iz){
+    const x = Math.max(0, Math.min(width - 1, ix));
+    const z = Math.max(0, Math.min(height - 1, iz));
+    const index = z * width + x;
+    const conditionWeights = conditionField && conditionField.weights;
+    return conditionWeights && conditionWeights[index] != null ? conditionWeights[index] : 0;
+  };
+  /* Cell centres are integer coordinates in this renderer. Sampling the same bilinear scalar at
+     both sides of every separately-built cap boundary makes a moisture trail continuous even while
+     the terrain angles change from triangle to triangle. */
+  const sampleCondition = function(conditionField, gx, gz){
+    const ix = Math.floor(gx), iz = Math.floor(gz);
+    const tx = gx - ix, tz = gz - iz;
+    const a = conditionAt(conditionField, ix, iz);
+    const b = conditionAt(conditionField, ix + 1, iz);
+    const c = conditionAt(conditionField, ix, iz + 1);
+    const d = conditionAt(conditionField, ix + 1, iz + 1);
+    return (a + (b - a) * tx) + ((c + (d - c) * tx) - (a + (b - a) * tx)) * tz;
+  };
+  const mixes = new Float32Array(position.count);
+  const macros = new Float32Array(position.count);
+  const conditions = new Float32Array(position.count);
+  const foundationConditions = new Float32Array(position.count);
+  const seed = context && context.profile ? context.profile.seed >>> 0 : 0;
+  let mixMin = 1, mixMax = 0, macroMin = Infinity, macroMax = -Infinity;
+  let conditionMin = 1, conditionMax = 0;
+  let foundationConditionMin = 1, foundationConditionMax = 0;
+  for(let i = 0; i < position.count; i++){
+    const localX = position.getX(i), localZ = position.getZ(i);
+    const mix = Math.max(0, Math.min(1, sampleMix(cell.x + localX, cell.y + localZ)));
+    const condition = Math.max(0, Math.min(1,
+      sampleCondition(runoffField, cell.x + localX, cell.y + localZ)));
+    const foundationCondition = Math.max(0, Math.min(1,
+      sampleCondition(foundationField, cell.x + localX, cell.y + localZ)));
+    const macro = clayGuardGroundMacroValue(
+      cx + localX, cz + localZ, seed,
+      blend.macroScaleWorldUnits, blend.macroStrength);
+    mixes[i] = mix;
+    macros[i] = macro;
+    conditions[i] = condition;
+    foundationConditions[i] = foundationCondition;
+    mixMin = Math.min(mixMin, mix); mixMax = Math.max(mixMax, mix);
+    macroMin = Math.min(macroMin, macro); macroMax = Math.max(macroMax, macro);
+    conditionMin = Math.min(conditionMin, condition);
+    conditionMax = Math.max(conditionMax, condition);
+    foundationConditionMin = Math.min(foundationConditionMin, foundationCondition);
+    foundationConditionMax = Math.max(foundationConditionMax, foundationCondition);
+  }
+  geometry.setAttribute("guardSurfaceMix", new THREE.Float32BufferAttribute(mixes, 1));
+  geometry.setAttribute("guardMacroValue", new THREE.Float32BufferAttribute(macros, 1));
+  geometry.setAttribute("guardConditionWeight",
+    new THREE.Float32BufferAttribute(conditions, 1));
+  geometry.setAttribute("guardFoundationConditionWeight",
+    new THREE.Float32BufferAttribute(foundationConditions, 1));
+  return {
+    transition: blend.transition,
+    secondarySurfaces: Array.from(secondary),
+    mixRange: [+mixMin.toFixed(4), +mixMax.toFixed(4)],
+    macroRange: [+macroMin.toFixed(4), +macroMax.toFixed(4)],
+    conditionFieldIds: conditionFields.map(function(conditionField){
+      return conditionField.id;
+    }),
+    conditionCombinationLaw: "independent-causal-fields-source-over-parent-in-declared-order",
+    conditionProjection: conditionFields.length ? conditionFields[0].projection : null,
+    conditionRange: [+conditionMin.toFixed(4), +conditionMax.toFixed(4)],
+    foundationConditionRange: [
+      +foundationConditionMin.toFixed(4), +foundationConditionMax.toFixed(4)
+    ],
+    macroScaleWorldUnits: blend.macroScaleWorldUnits,
+    macroStrength: blend.macroStrength
+  };
+}
+
+function clayGuardVisualComposeMatrix(position, rotation){
+  const quaternion = new THREE.Quaternion();
+  if(rotation){
+    quaternion.setFromEuler(new THREE.Euler(rotation.x || 0, rotation.y || 0, rotation.z || 0, "XYZ"));
+  }
+  return new THREE.Matrix4().compose(position, quaternion, new THREE.Vector3(1, 1, 1));
+}
+
+function clayGuardTerrainMaterialId(context, cell, faceRole){
+  if(!context) return null;
+  const bindings = context.profile.materialBindings || {};
+  const terrain = bindings.terrain || {};
+  if(faceRole === "tray-wall") return terrain["tray-wall"] || terrain["exposed-face"] || null;
+  if(faceRole === "exposed-face") return terrain["exposed-face"] || null;
+  if(cell.kind === "boulder") return terrain.boulder || terrain["exposed-face"] || null;
+  const bySurface = bindings.terrainSurface || {};
+  return bySurface[cell.surface]
+    || (cell.surface === "guard-through-road" ? terrain["traffic-top"] : null)
+    || terrain["natural-top"] || null;
+}
+
+/* CL-F09 architecture is deliberately a DUMB projector. Every visible box, roof plane, stair
+   tread, wall fragment, opening lintel and threshold beam was compiled by architecture-forms.js.
+   Keeping this function role-agnostic is the gate: adding a `guardroom` or `tower` branch here would
+   recreate the Wave 2 failure under a new name. */
+const CLAY_ARCHITECTURE_ROLE_COLORS = Object.freeze({
+  "site-road": 0x8d7962,
+  "site-earthwork": 0x817b70,
+  "site-water": 0x556f79,
+  "foundation": 0x686663,
+  "masonry-wall": 0x79746f,
+  "masonry-edge": 0x918a82,
+  "timber-structure": 0x665343,
+  "timber-surface": 0x786451,
+  "roof-field": 0x71665f,
+  "metal-mechanism": 0x4e5152,
+  "repair": 0x755b45,
+  "cutaway-cap": 0x9b9388,
+  "ornamental-stone": 0xaaa096,
+  "stained-glass": 0x547887,
+  "luxury-floor": 0x8b7d70,
+  "arcane-residue": 0x7c668b,
+  "gilded-metal": 0x9b7f48,
+  "signifier-support": 0x3f4547,
+  "signifier-cloth-primary": 0x8f3044,
+  "signifier-cloth-secondary": 0xd3ad58,
+  "signifier-surface-mark": 0x59242d,
+  "practical-housing": 0x302a24,
+  "practical-emitter": 0xffb35f
+});
+
+function clayArchitectureMaterialFor(member, visualContext){
+  if(member.role === "practical-emitter"){
+    return new THREE.MeshStandardMaterial({
+      color: 0xffc47a,
+      emissive: 0xff9b45,
+      emissiveIntensity: 2.25,
+      roughness: 0.78,
+      metalness: 0,
+      side: THREE.DoubleSide
+    });
+  }
+  const bindings = visualContext && visualContext.profile.materialBindings
+    ? visualContext.profile.materialBindings.architecture : null;
+  const materialId = bindings && bindings[member.role];
+  const projected = materialId
+    ? clayGuardVisualMaterial(visualContext, materialId, "architecture:" + member.role) : null;
+  if(projected) return projected;
+  let color = CLAY_ARCHITECTURE_ROLE_COLORS[member.role]
+    || CLAY_DIAGNOSTIC_SURFACE_RECIPE.clayColor;
+  if(member.condition === "ruined") color = clayTerrainScaleHex(color, 0.91);
+  return clayStructureMaterial(color);
+}
+
+function clayArchitectureMountPlan(parent, plan, firstBuild, baseY, boardOrigin, visualContext){
+  const architectureGroup = new THREE.Group();
+  architectureGroup.name = "architecture-form:" + plan.formId;
+  architectureGroup.userData.clayArchitectureForm = {
+    sceneId: plan.sceneId, formId: plan.formId, label: plan.label
+  };
+  const worldCenter = {
+    x: firstBuild.originCell.x + firstBuild.field.extent.x / 2 - boardOrigin.cx,
+    z: firstBuild.originCell.z + firstBuild.field.extent.y / 2 - boardOrigin.cz
+  };
+  const terrainHeightAt = function(worldX, worldZ){
+    const field = firstBuild.field;
+    if(!field || typeof terrainCellTopH !== "function") return null;
+    const minX = firstBuild.originCell.x - boardOrigin.cx;
+    const minZ = firstBuild.originCell.z - boardOrigin.cz;
+    const localX = Math.max(0.0001,
+      Math.min(field.extent.x - 0.0001, worldX - minX));
+    const localZ = Math.max(0.0001,
+      Math.min(field.extent.y - 0.0001, worldZ - minZ));
+    const cellX = Math.floor(localX), cellZ = Math.floor(localZ);
+    const index = cellZ * field.extent.x + cellX;
+    const cell = field.cells[index];
+    if(!cell || cell.kind === "void") return null;
+    const u = localX - cellX - 0.5;
+    const v = localZ - cellZ - 0.5;
+    return baseY + terrainCellTopH(
+      field, index, u, v, firstBuild.flags || clayRoomTerrainFlags()
+    ) * TERRAIN_GRID_LAW.verticalQuantumWorldUnits;
+  };
+  const materialRoles = {};
+  const presentationHidden = new Set(plan.presentation && plan.presentation.hiddenMemberIds || []);
+  const lowerWallConditionProjection = (plan.conditionProjection || []).find(function(row){
+    return row.id === "route-control-lower-wall-history";
+  });
+  const architectureConditionBands = lowerWallConditionProjection
+    && lowerWallConditionProjection.receiverBands || [];
+  const conditionBandForMember = function(memberId){
+    return architectureConditionBands.find(function(band){
+      return (band.memberPrefixes || []).some(function(prefix){
+        return memberId === prefix || memberId.indexOf(prefix + ":") === 0;
+      });
+    }) || null;
+  };
+  const wallFacePlans = plan.wallFaceModulePlans || [];
+  const wallFacePlanByRun = new Map(wallFacePlans.map(function(facePlan){
+    return [facePlan.wallRunId, facePlan];
+  }));
+  const wallFacePlanForMember = function(member){
+    return wallFacePlans.find(function(facePlan){
+      return member.id.indexOf(facePlan.memberPrefix) === 0;
+    }) || null;
+  };
+  let visibleMemberCount = 0;
+  let shaderConditionMemberCount = 0;
+  let wallModuleMemberCount = 0;
+  let suppressedConditionReceiverCount = 0;
+  const conditionProjectionRows = [];
+  const wallModuleProjectionRows = [];
+  plan.compiledMembers.forEach(function(member){
+    if(presentationHidden.has(member.id)) return;
+    /* Lower-wall grime is now folded into the physical receiver's fragment. The compiled
+       presentation members remain deterministic engine evidence and WFC closure receipts, but
+       rendering them as extra prisms would recreate the false gap, shadow, and floating strip. */
+    if(member.role === "condition-lower-wall-grime"){
+      suppressedConditionReceiverCount++;
+      return;
+    }
+    visibleMemberCount++;
+    let geometry;
+    if(member.shape === "polyhedron" && member.vertices && member.triangles){
+      const positions = [];
+      member.triangles.forEach(function(triangle){
+        triangle.forEach(function(index){
+          const vertex = member.vertices[index];
+          positions.push(vertex.x, vertex.y, vertex.z);
+        });
+      });
+      geometry = new THREE.BufferGeometry();
+      geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+      geometry.computeVertexNormals();
+    } else {
+      geometry = new THREE.BoxGeometry(member.size.x, member.size.y, member.size.z);
+    }
+    const baseMaterial = clayArchitectureMaterialFor(member, visualContext);
+    const mesh = new THREE.Mesh(geometry, baseMaterial);
+    if(member.shape === "polyhedron"){
+      mesh.position.set(worldCenter.x, baseY, worldCenter.z);
+    } else {
+      mesh.position.set(worldCenter.x + member.center.x, baseY + member.center.y,
+        worldCenter.z + member.center.z);
+      mesh.rotation.set(member.rotation.x, member.rotation.y, member.rotation.z, "XYZ");
+    }
+    const architectureBindings = visualContext && visualContext.profile.materialBindings
+      ? visualContext.profile.materialBindings.architecture : null;
+    const materialId = architectureBindings && architectureBindings[member.role];
+    const materialDefinition = materialId && visualContext.profile.materialDefinitions[materialId];
+    if(materialDefinition){
+      const matrix = clayGuardVisualComposeMatrix(mesh.position, mesh.rotation);
+      const uvBounds = clayGuardVisualUvProject(
+        geometry, matrix, materialDefinition, member.id);
+      const conditionBand = conditionBandForMember(member.id);
+      const conditionProjection = clayGuardArchitectureConditionAttributes(
+        geometry, matrix, conditionBand, baseY, materialDefinition, terrainHeightAt);
+      if(conditionProjection){
+        conditionProjectionRows.push({
+          memberId: member.id,
+          role: member.role,
+          materialId: materialId,
+          bandId: conditionProjection.bandId,
+          activeVertices: conditionProjection.activeVertices,
+          activeVerticalVertices: conditionProjection.activeVerticalVertices,
+          activeUpwardVertices: conditionProjection.activeUpwardVertices,
+          vertexCount: conditionProjection.vertexCount,
+          rootMode: conditionProjection.rootMode,
+          receiverFaceMode: conditionProjection.receiverFaceMode,
+          riseWorldHeight: conditionProjection.riseWorldHeight,
+          horizontalRepeatWorldLength: conditionProjection.horizontalRepeatWorldLength,
+          horizontalPhaseLaw: conditionProjection.horizontalPhaseLaw,
+          minimumLocalHeight: conditionProjection.minimumLocalHeight,
+          maximumLocalHeight: conditionProjection.maximumLocalHeight
+        });
+      }
+      if(conditionProjection && conditionProjection.activeVertices > 0){
+        shaderConditionMemberCount++;
+      }
+      const wallFacePlan = wallFacePlanForMember(member);
+      const wallModuleProjection = wallFacePlan
+        ? clayGuardWallModuleAttributes(
+            geometry, matrix, wallFacePlan, worldCenter, baseY, materialDefinition)
+        : null;
+      if(wallModuleProjection && wallModuleProjection.activeVertices > 0){
+        mesh.material = clayGuardWallModuleMaterial(
+          baseMaterial, wallFacePlan, plan.cultureProfileId);
+        wallModuleMemberCount++;
+        wallModuleProjectionRows.push(Object.assign({
+          memberId: member.id,
+          role: member.role,
+          materialId: materialId,
+          materialName: mesh.material.name,
+          compileState: mesh.material.userData.guardWallModuleCompileState
+        }, wallModuleProjection));
+      }
+      mesh.userData.clayGuardVisualMaterial = {
+        materialId: materialId,
+        state: materialDefinition.state,
+        contextVerdict: materialDefinition.contextVerdict,
+        projection: materialDefinition.projection,
+        uvBounds: uvBounds,
+        conditionProjection: conditionProjection,
+        wallFaceModuleProjection: wallModuleProjection
+      };
+    }
+    /* Paper-thin condition receivers are color/alpha projections, not physical ledges. Letting
+       them cast a second shadow against the parent created the false black "grime gap" at the
+       exact contact line and made transparent ivy cards read as solid fins. Until condition is
+       folded into the parent fragment shader, presentation-only/nonmechanical receivers inherit
+       scene lighting but neither cast nor receive an independent shadow. */
+    const nonPhysicalPresentation = !!member.presentationOnly
+      && member.mechanicalEffect === "none";
+    mesh.castShadow = member.role !== "site-road" && !nonPhysicalPresentation;
+    mesh.receiveShadow = !nonPhysicalPresentation;
+    mesh.userData.interiorKind = "clay-architecture-member";
+    mesh.userData.clayArchitectureMember = {
+      id: member.id, ownerId: member.ownerId, role: member.role,
+      supportedBy: member.supportedBy.slice(), cutawayGroup: member.cutawayGroup,
+      access: member.access, cover: member.cover, condition: member.condition,
+      presentationOnly: !!member.presentationOnly,
+      mechanicalEffect: member.mechanicalEffect || null,
+      shadowPolicy: nonPhysicalPresentation
+        ? "condition-receiver-no-independent-shadow"
+        : "physical-member-cast-and-receive",
+      cultureRef: member.cultureRef || null,
+      variantRef: member.variantRef || null,
+      worldTruthRef: member.worldTruthRef || null,
+      signifierRef: member.signifierRef || null,
+      placeholderState: member.placeholderState || null
+    };
+    architectureGroup.add(mesh);
+    materialRoles[member.role] = (materialRoles[member.role] || 0) + 1;
+  });
+
+  const lightRows = [];
+  (plan.lightSockets || []).forEach(function(socket){
+    const light = new THREE.PointLight(socket.color, socket.intensity,
+      socket.distance, socket.decay);
+    light.name = "architecture-light:" + socket.id;
+    light.position.set(worldCenter.x + socket.at.x, baseY + socket.at.y,
+      worldCenter.z + socket.at.z);
+    light.castShadow = false;
+    light.userData.clayArchitectureLight = {
+      id: socket.id, purpose: socket.purpose, supportId: socket.supportId,
+      intensity: socket.intensity, distance: socket.distance
+    };
+    architectureGroup.add(light);
+    lightRows.push(Object.assign({}, light.userData.clayArchitectureLight, {
+      color: socket.color, at: Object.assign({}, socket.at)
+    }));
+  });
+
+  const assetRows = [];
+  plan.assetSockets.forEach(function(socket){
+    const promotionCandidates = (socket.promotionCandidates || []).map(function(candidate){
+      return Object.assign({}, candidate);
+    });
+    const row = {
+      id: socket.id,
+      purpose: socket.purpose,
+      runtimeCandidates: socket.allowedSlugs.slice(),
+      promotionCandidates: promotionCandidates,
+      plannedCandidates: (socket.plannedCandidates || []).map(function(candidate){
+        return Object.assign({}, candidate);
+      }),
+      materialContext: socket.materialContext
+        ? Object.assign({}, socket.materialContext) : null,
+      fallback: socket.fallback,
+      status: null,
+      loadedSlug: null,
+      appliedMaterialContext: null,
+      materialFamiliesApplied: []
+    };
+    assetRows.push(row);
+    if(!socket.allowedSlugs.length){
+      row.status = promotionCandidates.length ? "promotion-pending:fallback" : "planned-only:fallback";
+      return;
+    }
+    if(!window.TheaterDonor || typeof window.TheaterDonor.loadDonorPiece !== "function"){
+      row.status = "loader-unavailable:fallback";
+      return;
+    }
+    row.status = "loading";
+    const socketRuntimeSlug = socket.allowedSlugs[0];
+    window.TheaterDonor.loadDonorPiece(socket.catalog, socketRuntimeSlug, {
+      seedKey: plan.sceneId + ":" + socket.id,
+      materialContext: socket.materialContext || null
+    }).then(function(donor){
+      /* A load may finish after the user has changed scenes. Never resurrect an asset into a
+         detached proof; the next mount will issue its own request. */
+      if(!architectureGroup.parent || S.clayRoomTerrainBenchGroup !== parent) return;
+      donor.name = "architecture-asset:" + socket.id + ":" + socketRuntimeSlug;
+      donor.position.set(worldCenter.x + socket.at.x, baseY + socket.at.y,
+        worldCenter.z + socket.at.z);
+      donor.rotation.y = socket.yaw;
+      donor.scale.setScalar(socket.scale);
+      donor.userData.clayArchitectureAsset = {
+        socketId: socket.id, slug: socketRuntimeSlug, purpose: socket.purpose,
+        collisionAuthority: socket.collisionAuthority, stateOwner: socket.stateOwner
+      };
+      donor.traverse(function(node){
+        if(node.isMesh){ node.castShadow = true; node.receiveShadow = true; }
+      });
+      architectureGroup.add(donor);
+      row.status = promotionCandidates.length ? "loaded-citizen:promotion-alternative" : "loaded-citizen";
+      row.loadedSlug = socketRuntimeSlug;
+      const donorReceipt = donor.userData && donor.userData.genesisDonorPiece;
+      row.appliedMaterialContext = donorReceipt && donorReceipt.materialContext
+        ? Object.assign({}, donorReceipt.materialContext) : null;
+      row.materialFamiliesApplied = donorReceipt
+        && Array.isArray(donorReceipt.materialFamiliesApplied)
+        ? donorReceipt.materialFamiliesApplied.slice().sort() : [];
+      markDirty(); scheduleRender();
+    }).catch(function(error){
+      row.status = "load-failed:fallback";
+      row.error = String(error && error.message || error);
+      markDirty(); scheduleRender();
+    });
+  });
+  parent.add(architectureGroup);
+  return {
+    group: architectureGroup,
+    worldCenter: worldCenter,
+    memberCount: visibleMemberCount,
+    physicalMemberCount: plan.compiledMembers.length,
+    presentationHiddenCount: presentationHidden.size,
+    suppressedConditionReceiverCount: suppressedConditionReceiverCount,
+    shaderConditionMemberCount: shaderConditionMemberCount,
+    wallModuleMemberCount: wallModuleMemberCount,
+    wallModuleProjectionRows: wallModuleProjectionRows,
+    wallFaceModuleCompilerReceipt: plan.wallFaceModuleCompilerReceipt || null,
+    conditionProjectionRows: conditionProjectionRows,
+    conditionProjectionPolicy: "engine-receiver-band-modulates-parent-fragment",
+    materialRoles: materialRoles,
+    visualProfile: visualContext ? visualContext.report : null,
+    lightRows: lightRows,
+    assetRows: assetRows
+  };
+}
+
 function clayRoomMountTerrainBench(){
   S.clayRoomTerrainBenchGroup = null;
   S.clayRoomTerrainReport = null;
@@ -5262,9 +7387,34 @@ function clayRoomMountTerrainBench(){
   const seed = S.clayRoomTerrainSeed != null ? S.clayRoomTerrainSeed : clayRoomTerrainSeedFromLocation();
   const frameIndex = S.clayRoomTerrainFrame != null
     ? S.clayRoomTerrainFrame : clayRoomTerrainFrameFromLocation();
+  const architectureScene = CLAY_ARCHITECTURE_FORM_SCENE_IDS.indexOf(sceneId) >= 0;
+  const architectureVariant = architectureScene ? clayRoomArchitectureVariantFromLocation() : null;
+  const goldenScene = CLAY_GOLDEN_VIGNETTE_SCENE_IDS.indexOf(sceneId) >= 0;
+  const guardVisualProfileId = goldenScene
+    ? clayRoomGuardVisualProfileFromLocation() : null;
+  const guardGroundCalibration = goldenScene
+    ? clayRoomGuardGroundCalibrationFromLocation() : null;
+  const guardMasonryCandidate = goldenScene
+    ? clayRoomGuardMasonryCandidateFromLocation() : null;
+  const guardConditionCandidate = goldenScene
+    ? clayRoomGuardConditionCandidateFromLocation() : null;
+  const guardWorldPixelDensityProof = goldenScene
+    ? clayRoomGuardWorldPixelDensityProofFromLocation() : null;
   let scene;
   try {
-    scene = terrainBenchSceneBuild(sceneId, seed, { frameIndex: frameIndex });
+    scene = architectureScene
+      ? architectureFormSceneBuild(sceneId, seed, { variant: architectureVariant })
+      : (goldenScene
+        ? goldenVignetteWave2SceneBuild(sceneId, seed, {
+            frameIndex: frameIndex,
+            visualProfileId: guardVisualProfileId,
+            groundCandidate: guardGroundCalibration.candidate,
+            groundMetersPerRepeat: guardGroundCalibration.metersPerRepeat,
+            masonryCandidate: guardMasonryCandidate,
+            conditionCandidate: guardConditionCandidate,
+            worldPixelDensityProof: guardWorldPixelDensityProof
+          })
+        : terrainBenchSceneBuild(sceneId, seed, { frameIndex: frameIndex }));
   } catch(error){
     S.clayRoomTerrainReport = { error: String(error && error.message || error), sceneId: sceneId };
     return null;
@@ -5275,7 +7425,11 @@ function clayRoomMountTerrainBench(){
   /* THE SCENE'S OWN LIGHT CASE. Declared in the fixture data and asserted here, so every rebuild
      reasserts it — a one-shot call from a capture rig is silently lost to the next board replay,
      and "requested dark" then ships as a receipt field with a pale frame beside it. */
-  const requestedLightRecipe = terrainBenchSceneLightRecipe(sceneId);
+  const requestedLightRecipe = architectureScene
+    ? architectureFormSceneLightRecipe(sceneId)
+    : (goldenScene
+      ? goldenVignetteWave2SceneLightRecipe(sceneId)
+      : terrainBenchSceneLightRecipe(sceneId));
   if(S.clayRoomLightRecipeId !== requestedLightRecipe){
     clayRoomSetLightingRecipe(requestedLightRecipe, "cl-f07-scene-light-case");
   }
@@ -5283,7 +7437,11 @@ function clayRoomMountTerrainBench(){
      conflated them: "neutralise iff the scene declares a recipe" meant the production scenes —
      which declared nothing — kept a neutralised rig with no substitute and went black. Only a scene
      whose whole point is the absence of light may take the rig down; every other scene keeps it. */
-  const neutralizeRig = terrainBenchSceneNeutralizesRig(sceneId);
+  const neutralizeRig = architectureScene
+    ? architectureFormSceneNeutralizesRig(sceneId)
+    : (goldenScene
+      ? goldenVignetteWave2SceneNeutralizesRig(sceneId)
+      : terrainBenchSceneNeutralizesRig(sceneId));
   const foreignLights = neutralizeRig
     ? clayTerrainNeutralizeForeignLights()
     : (clayTerrainRestoreForeignLights(), []);
@@ -5349,12 +7507,19 @@ function clayRoomMountTerrainBench(){
   const contractProbe = clayRoomTerrainProbeFromLocation() === "standee-contract";
   const contractPicks = {};
   const defenseStructures = [];
+  const terrainDressingRows = [];
+  let architectureProjection = null;
+  const guardVisualContext = goldenScene && scene.visualProfile
+    ? clayGuardVisualContext(scene.visualProfile) : null;
+  const worldPixelDensityProof = goldenScene && scene.visualProfile
+    ? scene.visualProfile.worldPixelDensityDemonstration : null;
   fields.forEach(function(field, index){
     const originCell = { x: cursorX, z: room.y + 7 - field.extent.y / 2 };
     const fieldBuild = clayTerrainBuildFieldGroup(field, originCell, baseY, origin, {
       supportOverlay: sceneId === "support-graph",
       flags: expressionFlags,
-      overhangMode: overhangMode
+      overhangMode: overhangMode,
+      visualContext: guardVisualContext
     });
     fieldBuild.group.userData.terrainFieldIndex = index;
     group.add(fieldBuild.group);
@@ -5371,17 +7536,53 @@ function clayRoomMountTerrainBench(){
       declaredTops.push([c.x, c.y, +p.x.toFixed(4), +p.y.toFixed(4), +p.z.toFixed(4),
         c.inPlayfield ? 1 : 0]);
     });
-    built.push({ field: field, originCell: originCell, floorH: fieldBuild.floorH,
+    built.push({ field: field, group: fieldBuild.group,
+      originCell: originCell, floorH: fieldBuild.floorH,
       cellMeshes: fieldBuild.cellMeshes.length, declaredTops: declaredTops,
+      flags: expressionFlags,
+      trayClosure: fieldBuild.trayClosure,
       /* R3 — the licence the builder actually decided for THIS field, carried forward so the
          receipt reports the rule beside what was built rather than re-deriving it (and rather than
          reporting null, which is what reaching for a `group` key this record never had produced). */
-      overhangCensus: fieldBuild.group.userData.terrainOverhangCensus || null });
+      overhangCensus: fieldBuild.group.userData.terrainOverhangCensus || null,
+      terrainOccluderPresentation:
+        fieldBuild.group.userData.terrainOccluderPresentation || null });
 
     /* THE SIX-FOOT HUMAN WITNESS ON EVERY RELIEF DATUM IN THE SAME FRAME (§4.2 condition 2). On
        the sheet that is one per piece; elsewhere it is the extremes of the field's own relief. */
     const spec = scene.spec && scene.spec.pieces ? scene.spec : null;
-    if(sceneId === "thirteen-piece-sheet" || sceneId === "dark"){
+    if(worldPixelDensityProof && index === 0){
+      (worldPixelDensityProof.actors || []).forEach(function(actor){
+        const cell = field.cells[actor.cell.index];
+        if(!cell || !cell.standable) return;
+        const proofEntry = {
+          slug: actor.id,
+          legacyAsset: actor.asset,
+          runtimeAdmitted: "legacy",
+          size: "Medium",
+          worldHeight: actor.worldHeightFeet,
+          pixelsPerFoot: actor.pixelsPerFoot,
+          bodySubjectHeightPixels: actor.bodySubjectHeightPixels,
+          alphaCutoff: actor.alphaCutoff,
+          standeeExtrusion: actor.standeeExtrusion,
+          baseStyle: actor.supportStyle,
+          baseTrimHex: actor.supportTrimHex,
+          supportVisualScale: actor.supportVisualScale
+        };
+        const placed = clayTerrainPlaceWitness(fieldBuild.group, actor.id,
+          clayTerrainCellWorld(field, originCell, baseY, origin, cell.index),
+          "density-proof:" + actor.side + ":" + actor.id,
+          witnessFailures, witnessContact,
+          clayTerrainSameHeightNeighbours(field, cell.index),
+          standPlaneFor(field, cell.index, originCell), proofEntry);
+        if(placed) witnesses.push(Object.assign({
+          densityProof: true,
+          side: actor.side,
+          role: actor.role,
+          cell: Object.assign({}, actor.cell)
+        }, placed));
+      });
+    } else if(sceneId === "thirteen-piece-sheet" || sceneId === "dark"){
       (spec ? spec.pieces : []).forEach(function(piece){
         if(!piece.witnessCell) return;
         /* A WITNESS MUST STAND ON FOOTING THAT READS AS FOOTING. The authored cell is a fixed bay
@@ -5402,7 +7603,16 @@ function clayRoomMountTerrainBench(){
           standPlaneFor(field, wIdx, originCell));
         if(placed) witnesses.push(Object.assign({ piece: piece.id }, placed));
       });
-    } else {
+    } else if(!goldenScene) {
+      /* The lowest/highest pair is a TERRAIN-DIAGNOSTIC instrument, not population dressing.
+         Mounting it in a Golden Site beauty/material frame caused two false failures:
+           - the rear datum could be buried by a crest from the governed camera;
+           - distant world cells could collapse onto the same screen-space silhouette and read as
+             a single clipped/spliced character.
+         Golden Sites therefore carry no implicit legacy witnesses. Characters appear only through
+         an explicit governed population proof (currently `party-guards` above), whose allocator
+         owns architecture clearance, four-bearing sightlines, and inter-actor silhouette spacing.
+         Ordinary terrain benches retain the datum pair because it is still useful there. */
       const standables = field.cells.filter(function(c){ return c.standable; });
       if(standables.length){
         const lowest = standables.reduce(function(a, b){ return b.h < a.h ? b : a; });
@@ -5557,6 +7767,94 @@ function clayRoomMountTerrainBench(){
     cursorX += field.extent.x + gap;
   });
 
+  if(scene.architecturePlan && built.length){
+    architectureProjection = clayArchitectureMountPlan(group, scene.architecturePlan,
+      built[0], baseY, origin, guardVisualContext);
+  }
+
+  /* Golden Site 1's quiet turf parent intentionally contains no camera-facing fan tufts. Sparse
+     readable growth returns as engine-authored semantic placements using two crossed, fixed
+     world planes. Each plane roots both lower corners against the actual rendered terrain surface,
+     so responsive slopes bend the root line without billboarding, floating, or flattening the
+     hill. The profile owns source, density, cells, scale, and yaw; this renderer only projects. */
+  const terrainDressing = goldenScene && scene.visualProfile
+    ? scene.visualProfile.terrainDressing : null;
+  if(terrainDressing && built.length && guardVisualContext){
+    const first = built[0];
+    const material = clayGuardVisualMaterial(
+      guardVisualContext, terrainDressing.materialId, "terrain-dressing");
+    if(material){
+      material.side = THREE.DoubleSide;
+      const dressingGroup = new THREE.Group();
+      dressingGroup.name = "guard-terrain-dressing:" + terrainDressing.id;
+      dressingGroup.userData.terrainDressingGroup = {
+        id: terrainDressing.id,
+        projection: terrainDressing.projection,
+        mechanicalEffect: terrainDressing.mechanicalEffect
+      };
+      (terrainDressing.placements || []).forEach(function(placement){
+        const cell = first.field.cells[placement.cell.index];
+        if(!cell || !cell.standable) return;
+        const center = clayTerrainCellWorld(
+          first.field, first.originCell, baseY, origin, cell.index);
+        const supportPlane = standPlaneFor(first.field, cell.index, first.originCell);
+        const scale = Math.max(0.2, Math.min(0.8, placement.scaleWorldUnits || 0.5));
+        const cluster = new THREE.Group();
+        cluster.name = "guard-terrain-dressing-cluster:" + placement.id;
+        cluster.position.set(center.x, center.y, center.z);
+        const baseYaw = (placement.yawDegrees || 0) * Math.PI / 180;
+        [0, Math.PI / 2].forEach(function(angle, planeIndex){
+          const yaw = baseYaw + angle;
+          const dx = Math.cos(yaw) * scale * 0.5;
+          const dz = Math.sin(yaw) * scale * 0.5;
+          const x0 = center.x - dx, z0 = center.z - dz;
+          const x1 = center.x + dx, z1 = center.z + dz;
+          const y0 = supportPlane && supportPlane.renderedTopAt
+            ? supportPlane.renderedTopAt(x0, z0) - center.y - 0.012 : -0.012;
+          const y1 = supportPlane && supportPlane.renderedTopAt
+            ? supportPlane.renderedTopAt(x1, z1) - center.y - 0.012 : -0.012;
+          const positions = new Float32Array([
+            -dx, y0, -dz, dx, y1, dz, dx, y1 + scale, dz,
+            -dx, y0, -dz, dx, y1 + scale, dz, -dx, y0 + scale, -dz
+          ]);
+          const geometry = new THREE.BufferGeometry();
+          geometry.setAttribute("position",
+            new THREE.Float32BufferAttribute(positions, 3));
+          geometry.setAttribute("uv", new THREE.Float32BufferAttribute(
+            new Float32Array([0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1]), 2));
+          geometry.computeVertexNormals();
+          const mesh = new THREE.Mesh(geometry, material);
+          mesh.castShadow = false;
+          mesh.receiveShadow = false;
+          mesh.userData.terrainDressing = {
+            id: placement.id,
+            role: placement.role,
+            sourceZoneId: placement.sourceZoneId,
+            cellIndex: placement.cell.index,
+            planeIndex: planeIndex,
+            projection: terrainDressing.projection,
+            slopeRooted: !!(supportPlane && supportPlane.renderedTopAt),
+            mechanicalEffect: "none"
+          };
+          cluster.add(mesh);
+        });
+        dressingGroup.add(cluster);
+        terrainDressingRows.push({
+          id: placement.id,
+          role: placement.role,
+          sourceZoneId: placement.sourceZoneId,
+          cell: Object.assign({}, placement.cell),
+          scaleWorldUnits: scale,
+          yawDegrees: placement.yawDegrees || 0,
+          planes: 2,
+          slopeRooted: true,
+          mechanicalEffect: "none"
+        });
+      });
+      first.group.add(dressingGroup);
+    }
+  }
+
   /* CL-F08a'S DEFENSIVE ANCHORS. These are exact engine-authored footprints, base datums, and
      storey counts from terrain-features.js. The renderer projects the diagnostic masses but does
      not decide where they stand or silently cap them at the Clayroom's usual two storeys.
@@ -5564,7 +7862,10 @@ function clayRoomMountTerrainBench(){
      A gatehouse is projected as two piers plus an upper bridge, leaving a true passage void. That
      is still one declared mass and it keeps the terrain proof honest: the climbing causeway
      arrives THROUGH the gate rather than into a painted rectangle. */
-  const declaredDefenseStructures = scene.structures || [];
+  /* A compiled ArchitectureAssemblyPlan supersedes the old role-specific diagnostic proxy.
+     Keeping both would double every wall and let the renderer's historical Guard branches
+     overwrite the engine-owned assembly we are trying to prove. */
+  const declaredDefenseStructures = scene.architecturePlan ? [] : (scene.structures || []);
   if(declaredDefenseStructures.length && built.length){
     const first = built[0];
     const q = TERRAIN_GRID_LAW.verticalQuantumWorldUnits;
@@ -5632,6 +7933,88 @@ function clayRoomMountTerrainBench(){
           centerX, centerZ, passageW + 0.18, fp.d - 0.12,
           bottomY + openingH + Math.min(storeyH * 1.35, height - openingH),
           0.16, 0x918a82);
+      } else if(structure.role === "guardroom"){
+        /* Wave 2's post is a room embedded in a working shelf, not a solid two-storey cube. The
+           diagnostic proxy therefore exposes the playable/open front, keeps a full uphill wall,
+           shortens the two returns unequally, and carries a shallow roof/deck slab. */
+        const wall = Math.min(0.52, Math.max(0.34, Math.min(fp.w, fp.d) * 0.11));
+        const roomH = Math.max(storeyH * 1.55, height * 0.78);
+        mountDefenseBox(structureGroup, structure, "floor-plinth",
+          centerX, centerZ, fp.w, fp.d, bottomY, 0.22, 0x625e59);
+        mountDefenseBox(structureGroup, structure, "uphill-back-wall",
+          centerX, centerZ - (fp.d - wall) / 2, fp.w, wall,
+          bottomY + 0.22, roomH, 0x77716a);
+        mountDefenseBox(structureGroup, structure, "west-return-wall",
+          centerX - (fp.w - wall) / 2, centerZ - fp.d * 0.08,
+          wall, fp.d * 0.84, bottomY + 0.22, roomH * 0.84, 0x716c66);
+        mountDefenseBox(structureGroup, structure, "east-return-wall",
+          centerX + (fp.w - wall) / 2, centerZ - fp.d * 0.18,
+          wall, fp.d * 0.64, bottomY + 0.22, roomH * 0.68, 0x746f69);
+        mountDefenseBox(structureGroup, structure, "front-west-pier",
+          centerX - fp.w * 0.34, centerZ + (fp.d - wall) / 2,
+          wall * 1.25, wall, bottomY + 0.22, roomH * 0.52, 0x716c66);
+        mountDefenseBox(structureGroup, structure, "front-east-pier",
+          centerX + fp.w * 0.34, centerZ + (fp.d - wall) / 2,
+          wall * 1.25, wall, bottomY + 0.22, roomH * 0.72, 0x716c66);
+        mountDefenseBox(structureGroup, structure, "working-roof-slab",
+          centerX - fp.w * 0.05, centerZ - fp.d * 0.07,
+          fp.w * 0.9, fp.d * 0.84, bottomY + roomH * 0.72,
+          0.24, 0x625e59);
+        mountDefenseBox(structureGroup, structure, "observation-lintel",
+          centerX, centerZ - (fp.d - wall) / 2 - 0.02,
+          fp.w * 0.54, wall + 0.08, bottomY + roomH * 0.55,
+          0.28, 0x8b8175);
+      } else if(structure.role === "observation-deck"){
+        /* A thin playable crown with a defensive edge and posts, not another building block. */
+        const slabY = bottomY + 0.12;
+        const parapetH = Math.min(storeyH * 0.48, 0.86);
+        const rail = 0.32;
+        mountDefenseBox(structureGroup, structure, "deck-slab",
+          centerX, centerZ, fp.w, fp.d, bottomY, 0.24, 0x655e56);
+        mountDefenseBox(structureGroup, structure, "far-parapet",
+          centerX, centerZ - (fp.d - rail) / 2, fp.w, rail,
+          slabY + 0.12, parapetH, 0x77716a);
+        mountDefenseBox(structureGroup, structure, "west-parapet",
+          centerX - (fp.w - rail) / 2, centerZ - fp.d * 0.08,
+          rail, fp.d * 0.84, slabY + 0.12, parapetH * 0.8, 0x716c66);
+        mountDefenseBox(structureGroup, structure, "east-broken-parapet",
+          centerX + (fp.w - rail) / 2, centerZ - fp.d * 0.24,
+          rail, fp.d * 0.46, slabY + 0.12, parapetH * 0.62, 0x746f69);
+        [-1, 1].forEach(function(side){
+          mountDefenseBox(structureGroup, structure, "watch-post-" + (side < 0 ? "west" : "east"),
+            centerX + side * (fp.w * 0.5 - 0.28), centerZ - fp.d * 0.42,
+            0.34, 0.34, slabY + 0.12, storeyH * 0.82, 0x62584d);
+        });
+      } else if(structure.role === "retaining-wall"){
+        /* Localized masonry follows the working shelf in three unequal runs. This is construction
+           negotiating one face, never a repeated contour band around the hill. */
+        const runD = fp.d / 3;
+        [0, 1, 2].forEach(function(run){
+          const runH = storeyH * [0.72, 0.94, 0.61][run];
+          mountDefenseBox(structureGroup, structure, "retaining-run-" + run,
+            centerX + (run === 1 ? 0.08 : -0.04),
+            centerZ - fp.d / 2 + runD * (run + 0.5),
+            Math.max(0.42, fp.w), Math.max(0.5, runD - 0.1),
+            bottomY, runH, run === 1 ? 0x77716a : 0x716c66);
+          mountDefenseBox(structureGroup, structure, "retaining-coping-" + run,
+            centerX + (run === 1 ? 0.08 : -0.04),
+            centerZ - fp.d / 2 + runD * (run + 0.5),
+            Math.max(0.52, fp.w + 0.12), Math.max(0.48, runD - 0.18),
+            bottomY + runH, 0.14, 0x918a82);
+        });
+      } else if(structure.role === "road-barrier"){
+        /* Two sockets and one operable beam leave the road physically readable beneath it. */
+        const postH = Math.min(storeyH * 0.9, 1.65);
+        const postW = 0.42;
+        const beamH = 0.28;
+        [-1, 1].forEach(function(side){
+          mountDefenseBox(structureGroup, structure, "barrier-post-" + (side < 0 ? "west" : "east"),
+            centerX + side * (fp.w * 0.5 - postW * 0.55), centerZ,
+            postW, Math.max(0.42, fp.d), bottomY, postH, 0x5e5145);
+        });
+        mountDefenseBox(structureGroup, structure, "operable-beam",
+          centerX, centerZ, Math.max(0.5, fp.w - postW * 1.5), 0.24,
+          bottomY + postH * 0.52, beamH, 0x6a4938);
       } else if(structure.role === "ruined-tower"){
         /* A ruin is not a solid tower with a "ruined" label. The far/west corner still carries the
            full three-storey silhouette, while the camera-near corner is physically absent and the
@@ -5702,12 +8085,12 @@ function clayRoomMountTerrainBench(){
 
   /* The receipt. One source of numbers: the same terrainBenchGateReport() the jsdom harness calls,
      plus what this frame actually placed, so a capture can never disagree with the gate. */
-  const receiptFixture = scene.featureBook || CL_F07_TERRAIN_BENCH;
+  const receiptFixture = scene.architectureFixture || scene.featureBook || CL_F07_TERRAIN_BENCH;
   S.clayRoomTerrainReport = {
     fixtureId: receiptFixture.id,
     fixtureVersion: receiptFixture.version,
     status: receiptFixture.status,
-    proof: receiptFixture.proof,
+    proof: receiptFixture.proof || receiptFixture.question,
     sceneId: sceneId,
     frameIndex: frameIndex,
     frameCount: scene.frameCount || 1,
@@ -5722,6 +8105,67 @@ function clayRoomMountTerrainBench(){
       || (S.clayRoomCompiled && S.clayRoomCompiled.lightRecipeId) || null,
     lightRecipeDrift: !!(requestedLightRecipe && S.clayRoomLightRecipeId !== requestedLightRecipe),
     neutralizeHostRig: neutralizeRig,
+    guardVisualProfile: !goldenScene ? null : (scene.visualProfile ? {
+      requestedProfileId: scene.visualProfileRequested,
+      schema: scene.visualProfile.schema,
+      version: scene.visualProfile.version,
+      profileId: scene.visualProfile.profileId,
+      cultureId: scene.visualProfile.cultureId,
+      planRef: scene.visualProfile.planRef,
+      mechanicsRef: scene.visualProfile.mechanicsRef,
+      materialPackRef: scene.visualProfile.materialPackRef,
+      groundCalibration: scene.visualProfile.groundCalibration || null,
+      terrainDressing: scene.visualProfile.terrainDressing ? {
+        schema: scene.visualProfile.terrainDressing.schema,
+        id: scene.visualProfile.terrainDressing.id,
+        projection: scene.visualProfile.terrainDressing.projection,
+        placementRule: scene.visualProfile.terrainDressing.placementRule,
+        placementCount: scene.visualProfile.terrainDressing.placements.length,
+        renderedRows: terrainDressingRows,
+        mechanicalEffect: scene.visualProfile.terrainDressing.mechanicalEffect
+      } : null,
+      terrainOccluderPresentation: scene.visualProfile.terrainOccluderPresentation ? {
+        schema: scene.visualProfile.terrainOccluderPresentation.schema,
+        catalog: scene.visualProfile.terrainOccluderPresentation.catalog,
+        allowedSlugs: scene.visualProfile.terrainOccluderPresentation.allowedSlugs.slice(),
+        placementAuthority: scene.visualProfile.terrainOccluderPresentation.placementAuthority,
+        transformAuthority: scene.visualProfile.terrainOccluderPresentation.transformAuthority,
+        collisionAuthority: scene.visualProfile.terrainOccluderPresentation.collisionAuthority,
+        selectionBudget: Object.assign({},
+          scene.visualProfile.terrainOccluderPresentation.selectionBudget),
+        fallback: scene.visualProfile.terrainOccluderPresentation.fallback,
+        fields: built.map(function(fieldRecord){
+          return {
+            id: fieldRecord.field.id,
+            report: fieldRecord.terrainOccluderPresentation
+          };
+        }),
+        mechanicalEffect: scene.visualProfile.terrainOccluderPresentation.mechanicalEffect
+      } : null,
+      fingerprint: scene.visualProfile.fingerprint,
+      contextVerdict: "PENDING_GUARD_POST_REVIEW",
+      projection: guardVisualContext ? guardVisualContext.report : null
+    } : {
+      requestedProfileId: scene.visualProfileRequested || null,
+      contextVerdict: "NEUTRAL_CLAY_CONTROL",
+      projection: null
+    }),
+    worldPixelDensityProof: worldPixelDensityProof ? {
+      schema: worldPixelDensityProof.schema,
+      id: worldPixelDensityProof.id,
+      targetPixelsPerFoot: worldPixelDensityProof.targetPixelsPerFoot,
+      actorCount: worldPixelDensityProof.actorCount,
+      sourceManifest: worldPixelDensityProof.sourceManifest,
+      placementRule: worldPixelDensityProof.placementRule,
+      planRef: worldPixelDensityProof.planRef,
+      mechanicsRef: worldPixelDensityProof.mechanicsRef,
+      mechanicalEffect: worldPixelDensityProof.mechanicalEffect
+    } : null,
+    witnessPolicy: goldenScene
+      ? (worldPixelDensityProof
+        ? "explicit-governed-population-proof-only"
+        : "no-implicit-terrain-diagnostic-witnesses")
+      : "terrain-diagnostic-witnesses-allowed",
     gridLaw: TERRAIN_GRID_LAW,
     /* WHICH DEVICES DREW THIS FRAME, and the walk-only fingerprint of every field in it. The second
        half is what makes "this is a dressing pass" provable rather than claimed: it folds only the
@@ -5760,6 +8204,14 @@ function clayRoomMountTerrainBench(){
       overhangCensus: built.map(function(b){
         return { id: b.field.id, census: b.overhangCensus || null };
       }),
+      dioramaTrayClosure: (typeof TERRAIN_DIORAMA_TRAY_CLOSURE === "object")
+        ? {
+            law: TERRAIN_DIORAMA_TRAY_CLOSURE,
+            fields: built.map(function(b){
+              return { id: b.field.id, report: b.trayClosure || null };
+            })
+          }
+        : null,
       baseSkirt: (typeof TERRAIN_BASE_SKIRT === "object") ? TERRAIN_BASE_SKIRT : null,
       baseSkirtDepthApplied: clayRoomTerrainSkirtDepth(),
       mediumAccessLaw: (typeof TERRAIN_MEDIUM_ACCESS_LAW === "object")
@@ -5836,8 +8288,11 @@ function clayRoomMountTerrainBench(){
     }),
     frameCensus: (function(){
       const c = { terrainCells: 0, water: 0, volumes: 0, spans: 0, overlays: 0,
-        defenseStructures: 0,
-        witnessFigures: 0, witnessParts: 0, foreignFigures: 0, untagged: 0, untaggedSample: [],
+        defenseStructures: 0, architectureMembers: 0, architectureAssets: 0,
+        architectureAssetParts: 0,
+        terrainOccluderAssets: 0, terrainOccluderAssetParts: 0,
+        terrainDressing: 0, witnessFigures: 0, witnessParts: 0,
+        foreignFigures: 0, untagged: 0, untaggedSample: [],
         expression: 0, occluders: 0,
         spanPositions: [], spansOutsideDeclaringBay: 0, fieldBounds: null };
       if(!S.interiorGroup) return c;
@@ -5849,6 +8304,8 @@ function clayRoomMountTerrainBench(){
       S.interiorGroup.traverse(function(node){
         const ud = node.userData || {};
         if(ud.clayTerrainWitness && visible(node)) c.witnessFigures++;
+        if(ud.clayArchitectureAsset && visible(node)) c.architectureAssets++;
+        if(ud.terrainOccluderAsset && visible(node)) c.terrainOccluderAssets++;
         /* Joint metadata lives on the A4 group rather than one of its line children. Count it
            before the mesh-only census guard so a line law cannot silently disappear from receipts. */
         if(ud.terrainJointPattern && visible(node)){
@@ -5862,12 +8319,24 @@ function clayRoomMountTerrainBench(){
           }
         }
         if(!(node.isMesh || node.isSprite) || !visible(node)) return;
-        let inWitness = false, cur = node;
-        while(cur){ if(cur.userData && cur.userData.clayTerrainWitness){ inWitness = true; break; } cur = cur.parent; }
+        let inWitness = false, inArchitectureAsset = false;
+        let inTerrainOccluderAsset = false, cur = node;
+        while(cur){
+          if(cur.userData && cur.userData.clayTerrainWitness) inWitness = true;
+          if(cur.userData && cur.userData.clayArchitectureAsset) inArchitectureAsset = true;
+          if(cur.userData && cur.userData.terrainOccluderAsset){
+            inTerrainOccluderAsset = true;
+          }
+          cur = cur.parent;
+        }
         if(ud.terrainCell) c.terrainCells++;
+        else if(ud.terrainDressing) c.terrainDressing++;
         else if(ud.terrainWater) c.water++;
         else if(ud.terrainVolume) c.volumes++;
         else if(ud.terrainDefenseStructure) c.defenseStructures++;
+        else if(ud.clayArchitectureMember) c.architectureMembers++;
+        else if(inArchitectureAsset) c.architectureAssetParts++;
+        else if(inTerrainOccluderAsset) c.terrainOccluderAssetParts++;
         else if(ud.terrainSpan){
           c.spans++;
           /* A span must sit over the piece that declared it. Recording each beam's world position
@@ -5937,6 +8406,71 @@ function clayRoomMountTerrainBench(){
       cameraReport: scene.cameraReport || null,
       structures: defenseStructures
     } : null,
+    architecture: scene.architecturePlan ? {
+      fixtureId: scene.architectureFixture.id,
+      fixtureVersion: scene.architectureFixture.version,
+      formId: scene.architecturePlan.formId,
+      label: scene.architecturePlan.label,
+      scale: scene.architecturePlan.scale,
+      primarySpatialSentence: scene.architecturePlan.primarySpatialSentence,
+      constructionProfile: scene.architecturePlan.constructionProfile,
+      physicalState: scene.architecturePlan.physicalState,
+      operatingState: scene.architecturePlan.operatingState,
+      battleSpaceMode: scene.architecturePlan.battleSpaceMode,
+      occupantProfile: scene.architecturePlan.occupantProfile,
+      assemblyClearancePolicy: scene.architecturePlan.assemblyClearancePolicy,
+      materializationWindow: scene.architecturePlan.materializationWindow || null,
+      scaleRegime: scene.architecturePlan.scaleRegime || null,
+      wonderSignature: scene.architecturePlan.wonderSignature || null,
+      variation: scene.architecturePlan.variation || null,
+      growth: scene.architecturePlan.growth || null,
+      cultureProfileId: scene.architecturePlan.cultureProfileId || null,
+      cultureMorphology: scene.architecturePlan.cultureMorphology || null,
+      worldSignifierLayer: scene.architecturePlan.worldSignifierLayer || null,
+      conditionProjection: scene.architecturePlan.conditionProjection || [],
+      wallFaceModulePlans: scene.architecturePlan.wallFaceModulePlans || [],
+      wallFaceModuleCompilerReceipt:
+        scene.architecturePlan.wallFaceModuleCompilerReceipt || null,
+      clearanceEnvelopes: scene.architecturePlan.clearanceEnvelopes || [],
+      presentation: scene.architecturePlan.presentation || null,
+      validation: scene.architecturePlan.validation,
+      memberCount: architectureProjection ? architectureProjection.memberCount : 0,
+      physicalMemberCount: architectureProjection ? architectureProjection.physicalMemberCount : 0,
+      presentationHiddenCount: architectureProjection
+        ? architectureProjection.presentationHiddenCount : 0,
+      suppressedConditionReceiverCount: architectureProjection
+        ? architectureProjection.suppressedConditionReceiverCount : 0,
+      shaderConditionMemberCount: architectureProjection
+        ? architectureProjection.shaderConditionMemberCount : 0,
+      wallModuleMemberCount: architectureProjection
+        ? architectureProjection.wallModuleMemberCount : 0,
+      wallModuleProjectionRows: architectureProjection
+        ? architectureProjection.wallModuleProjectionRows : [],
+      conditionProjectionRows: architectureProjection
+        ? architectureProjection.conditionProjectionRows : [],
+      conditionProjectionPolicy: architectureProjection
+        ? architectureProjection.conditionProjectionPolicy : null,
+      materialRoles: architectureProjection ? architectureProjection.materialRoles : {},
+      lightSockets: architectureProjection ? architectureProjection.lightRows : [],
+      assetSockets: architectureProjection ? architectureProjection.assetRows : [],
+      promotionCensus: (typeof ARCHITECTURE_ASSET_PROMOTION_CENSUS === "object")
+        ? ARCHITECTURE_ASSET_PROMOTION_CENSUS : null,
+      barrierAudit: scene.architecturePlan.barrierAudit,
+      accessGraph: scene.architecturePlan.accessGraph,
+      stairs: scene.architecturePlan.stairs.map(function(stair){
+        return {
+          id: stair.id, start: stair.start, end: stair.end,
+          baseY: stair.baseY, topY: stair.topY, width: stair.width,
+          foundationBaseY: stair.foundationBaseY, supportMode: stair.supportMode,
+          lowerLandingId: stair.lowerLandingId, upperLandingId: stair.upperLandingId
+        };
+      }),
+      openings: scene.architecturePlan.openings.map(function(opening){
+        return { id: opening.id, runId: opening.runId, kind: opening.kind,
+          width: opening.width, height: opening.height, access: opening.access,
+          observation: opening.observation };
+      })
+    } : null,
     oneClamp: scene.proof || null,
     route: scene.route ? {
       sourceRow: scene.route.sourceRow, namedEntries: scene.route.namedEntries,
@@ -5951,9 +8485,27 @@ function clayRoomMountTerrainBench(){
       finalFootprintCells: scene.walkDown.finalFootprintCells,
       trayCells: scene.walkDown.trayCells } : null,
     support: scene.support || null,
-    gate: scene.featureBook && typeof terrainFeatureGateReport === "function"
-      ? terrainFeatureGateReport(seed)
-      : ((typeof terrainBenchGateReport === "function") ? terrainBenchGateReport(seed) : null)
+    synthesis: scene.compilation ? {
+      version: scene.compilation.version,
+      planFingerprint: scene.compilation.plan.planFingerprint,
+      mechanicsFingerprint: scene.compilation.plan.mechanicsFingerprint,
+      receiptFingerprint: scene.compilation.receipt.receiptFingerprint,
+      selectedCandidateId: scene.compilation.receipt.selectedCandidateId,
+      candidates: scene.compilation.receipt.candidates,
+      scoring: scene.compilation.receipt.scoring,
+      repairs: scene.compilation.receipt.repairs,
+      surfaceDemandCount: scene.compilation.surfaceDemands.length,
+      materialFamilyCount: scene.compilation.materialFamilies.families.length,
+      surfaceBindingCount: scene.compilation.surfaceProjection.bindings.length,
+      proofPackage: scene.compilation.proofPackage
+    } : null,
+    gate: architectureScene && typeof architectureFormGateReport === "function"
+      ? architectureFormGateReport(seed)
+      : (scene.compilation && typeof goldenVignetteValidateCompilation === "function"
+      ? goldenVignetteValidateCompilation(scene.compilation)
+      : (scene.featureBook && typeof terrainFeatureGateReport === "function"
+        ? terrainFeatureGateReport(seed)
+        : ((typeof terrainBenchGateReport === "function") ? terrainBenchGateReport(seed) : null)))
   };
   /* Read-only capture seams, in this file's established window.Theater._*ForTest convention.
      The view seam is the ONLY one that mutates, and it mutates exactly one governed camera mode —
@@ -5993,6 +8545,15 @@ function clayRoomMountTerrainBench(){
     window.Theater._clayTerrainSetViewForTest = function(view){ return clayRoomSetTerrainView(view); };
     window.Theater._clayTerrainSetQuarterTurnForTest = function(step){
       return clayRoomSetTerrainQuarterTurn(step);
+    };
+    /* A production plate is evidence of the authored scene, never of the workbench selection
+       state that happened to be active when the terrain fixture mounted. Keep this as an explicit
+       capture seam instead of teaching ordinary selection to disappear: diagnostic captures may
+       still show the BoxHelper, while clean/beauty captures can remove it deterministically. */
+    window.Theater._clayTerrainClearSelectionForTest = function(){
+      clayRoomHighlightSelection(null);
+      S.clayRoomSelectedId = null;
+      return !S.clayRoomSelectionHelper && !S.clayRoomSelectionGlowSprite;
     };
     /* THE GOVERNED POSE, for the resize-survival probe (dev/verify-clay-camera-resize.cjs). Read
        seam reports what the pose actually produced — including the far plane, which is part of it —
@@ -6789,6 +9350,33 @@ async function clayRoomCaptureLightingMatrix(){
   }
 }
 
+/* A screen-space tilt-shift band cannot distinguish playable foreground from scenic foreground.
+   Terrain and Golden Site benches currently materialize no separate context-depth mask, so their
+   entire tactical floor must remain sharp. Preserve the user's prior DoF state and restore it when
+   leaving these benches; a later context-band implementation may replace this conservative policy
+   with an authored mask, but it may never blur the playable floor again. */
+function clayRoomApplyPlayableFloorDofPolicy(){
+  if(!S.postSuite || !S.postSuite.dof) return null;
+  const suppress = S.clayRoomFixtureId === CLAY_ROOM_TERRAIN_BENCH_ID
+    || S.clayRoomFixtureId === CLAY_ROOM_GROUND_FIELD_BENCH_ID;
+  if(suppress){
+    if(!S.clayRoomPlayableFloorDofSuppressed){
+      S.clayRoomPlayableFloorDofPrevious = !!S.postSuite.dof.enabled;
+    }
+    S.postSuite.dof.enabled = false;
+    S.clayRoomPlayableFloorDofSuppressed = true;
+  } else if(S.clayRoomPlayableFloorDofSuppressed){
+    S.postSuite.dof.enabled = S.clayRoomPlayableFloorDofPrevious !== false;
+    S.clayRoomPlayableFloorDofSuppressed = false;
+    S.clayRoomPlayableFloorDofPrevious = null;
+  }
+  return {
+    policy: suppress ? "playable-floor-sharp-until-context-mask-exists" : "interior-authored-dof",
+    suppressed: suppress,
+    dofEnabled: !!S.postSuite.dof.enabled
+  };
+}
+
 /* clayRoomAfterInteriorBoardRebuild() — THE ONE LIFECYCLE HOOK. Called from setInteriorBoard's own
    tail (its single exit point), so it fires on the mount's first build AND on every asynchronous
    replay, without the clay surface having to know that those replay sites exist. A no-op unless the
@@ -6812,6 +9400,10 @@ function clayRoomAfterInteriorBoardRebuild(){
   clayRoomMountMaterialBench();
   clayRoomMountTrimBench();
   clayRoomMountTerrainBench();
+  const playableFloorDofPolicy = clayRoomApplyPlayableFloorDofPolicy();
+  if(S.clayRoomTerrainReport){
+    S.clayRoomTerrainReport.playableFloorDofPolicy = playableFloorDofPolicy;
+  }
   clayRoomSuppressLightingBenchNoise();
   clayRoomApplyDiagnosticSurfaces();
   clayRoomApplyLightProfile(S.clayRoomRecord);
@@ -8382,7 +10974,7 @@ function mountClayRoom(){
         : (S.clayRoomFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID ? 0.65
           : (S.clayRoomFixtureId === CLAY_ROOM_MATERIAL_BENCH_ID ? 0.78
             : (S.clayRoomFixtureId === CLAY_ROOM_TRIM_BENCH_ID ? 0.5
-              : (S.clayRoomFixtureId === CLAY_ROOM_GROUND_FIELD_BENCH_ID ? 0.72 : 1)))));
+              : (S.clayRoomFixtureId === CLAY_ROOM_GROUND_FIELD_BENCH_ID ? 0.72 : 1))))));
     S.clayRoomStructureView = CLAY_STRUCTURE_BENCH_FIXTURE.defaultView;
     S.clayRoomMaterialMode = CLAY_MATERIAL_BENCH_FIXTURE.defaultMode;
     S.clayRoomTrimMode = CLAY_TRIM_BENCH_FIXTURE.defaultMode;
@@ -10821,6 +13413,7 @@ export {
   clayRoomSetTerrainView,
   clayRoomSetTerrainQuarterTurn,
   clayRoomTerrainBenchSnapshot,
+  clayGuardWallModuleTexture,
   CLAY_ROOM_TERRAIN_BENCH_ID,
   CLAY_TERRAIN_SCENE_IDS,
   CLAY_ROOM_LIGHTING_BENCH_ID,

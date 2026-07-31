@@ -1,0 +1,95 @@
+{
+  "schema": "GuardPostFamilyVisualRubricAuditV1",
+  "status": "SUPERSEDED_BASELINE_FAILS_CONTEXT_ADMISSION",
+  "date": "2026-07-31",
+  "supersededBy": {
+    "reason": "family variants now add complete two-cell bays and Institutional culture now uses capped three-sided string-course plus alternating quoin courses",
+    "nextEvidenceRoot": "artifacts/golden-site-1-family-v018-v3",
+    "nextAudit": "docs/intel/guard-post-family-visual-audit-v018-v3.json"
+  },
+  "family": {
+    "seeds": [19, 101, 202],
+    "bearings": [0, 1, 2, 3],
+    "profile": "institutional-frontier",
+    "groundParent": "v018",
+    "masonryCandidate": "v015",
+    "conditionCandidate": "v015"
+  },
+  "evidence": {
+    "familySheet": "artifacts/golden-site-1-family-v018/00-three-seed-four-bearing-family-labeled.png",
+    "groundDensityDecision": "artifacts/golden-site-1-ground-density-v018/01-v011-v018-ground-density-comparison.png",
+    "captureRoot": "artifacts/golden-site-1-family-v018",
+    "captureCount": 12,
+    "allBuilt": true,
+    "consoleErrors": 0,
+    "failedResponses": 0,
+    "mechanicsEvidence": "dev/verify-golden-vignette-wave2.mjs"
+  },
+  "hardRejectAudit": {
+    "mechanicsOrPlanChangedByDressing": false,
+    "independentPerTileMaterialChoice": false,
+    "uvSeamsOrDiagonalZipper": false,
+    "oneTileTextureCadence": false,
+    "conditionWithoutCause": false,
+    "unownedHardFace": false,
+    "lostQuietGround": false,
+    "materialSpriteScaleConflict": false,
+    "bearingHidesProgramOrBreaksMaterial": false,
+    "missingFallbackReceipt": false,
+    "falseContextRoute": false
+  },
+  "softScores": {
+    "tacticalReadability": {
+      "score": 3,
+      "finding": "road, gate, retaining shoulder, guardroom, and lookout remain separable at all bearings"
+    },
+    "rankedMassComposition": {
+      "score": 2,
+      "finding": "far-side guardroom leads, but the rest of the architecture has too little secondary and tertiary hierarchy"
+    },
+    "terrainBuildingSeparation": {
+      "score": 3,
+      "finding": "responsive faceted land and planar modular construction read as different formation systems"
+    },
+    "materialFamilyCoherence": {
+      "score": 3,
+      "finding": "ground, road, defensive masonry, timber, and roof are coherent; some contact and cap transitions remain abrupt"
+    },
+    "pixelDnaCoherence": {
+      "score": 3,
+      "finding": "nearest-filtered 32 px/ft ground and masonry carry authored clusters; rock and small-prop language remains comparatively primitive"
+    },
+    "valueHierarchy": {
+      "score": 2,
+      "finding": "light masonry and light road compete while high-chroma yellow-green terrain occupies most of the frame"
+    },
+    "spritePriority": {
+      "score": 2,
+      "finding": "the separate governed cast proof preserves silhouettes, but the beauty-family proof does not yet demonstrate final encounter priority"
+    },
+    "causalCondition": {
+      "score": 2,
+      "finding": "grime and ivy are topology-rooted and physically causal, but they are too locally weak to carry the intended TS-scale history"
+    },
+    "cultureLegibility": {
+      "score": 1,
+      "finding": "institutional identity still reads primarily as blue roof plus crimson placeholder; quoins, cornice, hood, and attachment practice do not dominate enough"
+    },
+    "beautyAtFourBearings": {
+      "score": 2,
+      "finding": "all bearings remain coherent, but rear bearings lose compositional layering and the three seeds remain too similar in silhouette"
+    }
+  },
+  "score": 23,
+  "requiredScore": 32,
+  "minimumCategoryScore": 1,
+  "requiredMinimumCategoryScore": 2,
+  "admittedForContext": false,
+  "nextHighestLeverageChanges": [
+    "make family mutation change complete architectural relationships and silhouette, not only one footprint cell",
+    "strengthen institutional corner, cornice, opening-hood, and signifier attachment hierarchy without assigning canonical faction content",
+    "increase causal lower-wall and foundation condition readability while keeping masks parent-independent",
+    "improve value separation between natural field, controlled road, primary masonry, and cultural accents",
+    "repeat the three-seed four-bearing proof with explicit encounter cast after environment scores at least 32"
+  ]
+}

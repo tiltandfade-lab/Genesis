@@ -2575,7 +2575,8 @@ def compile_citizenship(manifest_path: Path, output_dir: Path, force: bool = Fal
             "materialRecipe": "lit-standee-v2",
             "colorSpace": "srgb",
             "magnificationFilter": "nearest",
-            "minificationFilter": "trilinear-mipmap",
+            "minificationFilter": "linear",
+            "generateMipmaps": False,
             "alphaMode": "registry-cutoff+alpha-to-coverage",
         },
     }

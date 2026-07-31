@@ -1055,3 +1055,23 @@ runtimeAdmission: CANDIDATE | ADMITTED
 That sequence is now complete for the first four dialects. The current next gate is Adam's
 individual visual review of the real path, road, and cliff boards, followed by a separate runtime
 routing decision if any dialect is accepted.
+
+## Golden Site 1 sprite-citizenship renderer verdict (2026-07-30)
+
+The `lit-standee-v2` citizenship route must emit and preserve this runtime sampling contract:
+
+- sRGB color texture;
+- nearest-neighbor magnification;
+- one-level linear minification;
+- `generateMipmaps: false`;
+- registry alpha cutoff plus alpha-to-coverage.
+
+The later trilinear-mipmap citizenship candidate is visually rejected. In identical settled
+production frames it dissolved authored facial, limb, weapon, rim, and color-cluster edges into
+soft interpolated patches. Assetforge now writes the restored contract into every new citizenship
+receipt; the light-profile lock and runtime loader enforce the same values. Historical receipts
+remain unchanged evidence of the rejected route.
+
+The governed A/B is banked under `artifacts/golden-site-1-sprite-filter-audit/`. This verdict is
+sprite-specific: material albedo, normal, ORM, shadow, and post-process textures keep their own
+declared sampling contracts.

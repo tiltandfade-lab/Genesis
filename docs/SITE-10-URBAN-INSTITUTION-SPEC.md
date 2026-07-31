@@ -784,3 +784,17 @@ The original packets support this working spec; their declared gaps keep `RESEAR
 addendum's reviewed status-gate table for the reasoning). This document still cannot
 advance `CLAY-PROVED` without the retained fixture, and `FOUNDER-RULED`/`BRIEF-CONGRUENT`
 remain `PARTIAL` until the open card selections are founder-ruled.
+
+## Architecture integration ruling — 2026-07-30
+
+Street, hillside alley, stair-street, public frontage, court, market edge, party wall,
+and exterior works compile as an `EXTERIOR_ARCHITECTURAL_PRECINCT`. A venue,
+institution, residence, sanctuary, or service escalation opens a separate
+`DEDICATED_INTERIOR`; its exterior becomes context rather than mandatory dollhouse
+geometry. Hybrid requires a sourced breach or open construction.
+
+Site 10 must express domestic, civic, elite, and monumental scales without equating
+district wealth with one material/style preset. Compact windows may show only a corner
+of a much larger building. The next proof is a real-roll hillside alley/public-frontage
+slice that combines responsive terrain, constructed retaining geometry, stairs,
+multiple routes, and four camera bearings.

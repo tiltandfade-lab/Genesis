@@ -641,7 +641,10 @@ function main() {
     if (!readFileSync(REPORT_MD).equals(Buffer.from(mdText))) {
       throw new Error("architecture ruling Markdown report drift");
     }
-    if (!readFileSync(OVERLAY_GZ).equals(overlayBytes)) {
+    // Compare uncompressed content, not the .gz container: gzip bytes at the same level
+    // differ across zlib versions (Node 20 vs 22 broke CI), while the drift claim is
+    // about the overlay rows themselves.
+    if (!gunzipSync(readFileSync(OVERLAY_GZ)).equals(Buffer.from(overlayText))) {
       throw new Error("architecture ruling overlay drift");
     }
     console.log(`PASS: ${report.census.totalRows} overlays reproduce byte-for-byte`);

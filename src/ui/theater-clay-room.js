@@ -4793,21 +4793,21 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
          site position/jitter and is scaled back to the site's declared visual diameter. The
          icosahedron remains a truthful fallback until the donor settles, then becomes invisible.
          This is presentation substitution, not a second scatter system. */
-      const slug = authoredOccluder && authoredOccluder.allowedSlugs
+      const occluderSlug = authoredOccluder && authoredOccluder.allowedSlugs
         && authoredOccluder.allowedSlugs[0];
-      if(!slug) return;
-      row.requestedSlug = slug;
+      if(!occluderSlug) return;
+      row.requestedSlug = occluderSlug;
       if(!window.TheaterDonor || typeof window.TheaterDonor.loadDonorPiece !== "function"){
         row.status = "loader-unavailable:fallback";
         return;
       }
       row.status = "loading:fallback-active";
-      window.TheaterDonor.loadDonorPiece(authoredOccluder.catalog, slug, {
+      window.TheaterDonor.loadDonorPiece(authoredOccluder.catalog, occluderSlug, {
         seedKey: field.id + ":" + site.key,
         materialContext: authoredOccluder.materialContext || null
       }).then(function(donor){
         if(!group.parent || group.parent !== S.clayRoomTerrainBenchGroup) return;
-        donor.name = "terrain-occluder-asset:" + site.key + ":" + slug;
+        donor.name = "terrain-occluder-asset:" + site.key + ":" + occluderSlug;
         donor.position.set(
           originCell.x + site.u - origin.cx,
           baseY + site.seatH * h - j.sinkH * h - 0.02,
@@ -4821,7 +4821,7 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
           0.001, Number(authoredOccluder.canonicalWorldWidth) || 1.15));
         donor.userData.terrainOccluderAsset = {
           siteKey: site.key,
-          slug: slug,
+          slug: occluderSlug,
           placementAuthority: authoredOccluder.placementAuthority,
           transformAuthority: authoredOccluder.transformAuthority,
           collisionAuthority: authoredOccluder.collisionAuthority,
@@ -4835,7 +4835,7 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
         group.add(donor);
         mesh.visible = false;
         row.status = "loaded-citizen:fallback-hidden";
-        row.loadedSlug = slug;
+        row.loadedSlug = occluderSlug;
         row.appliedScale = Number(donor.scale.x.toFixed(6));
         row.meshCount = donorMeshCount;
         /* The mount census is built before asynchronous donor settlement. Mutate only the live

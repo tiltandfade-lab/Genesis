@@ -464,10 +464,13 @@ if(green.ok && red.ok){
   // (BW2-2 floor-contact law), alphaCutoff (BW2-0 crisp channel), contentBounds (CL-F03 sprite
   // citizenship). Those are feature work, not census leakage — the check's job is that the CENSUS
   // changes nothing, so the known post-L2 feature fields are normalized out of BOTH sides and the
-  // rest of the byte-identical claim still bites.
+  // rest of the byte-identical claim still bites. 2026-07-31: two more legitimate feature fields
+  // grew in the golden-wave2 sprite lane — spriteSilhouetteExtrusion/spriteExtrusionDepth
+  // (silhouette-extrusion work in theater-sprites.js) — normalized on the same basis.
   const stripPostL2 = (shape) => {
     const c = JSON.parse(JSON.stringify(shape));
-    if(c && c.userData) for(const k of ["footX","footY","alphaCutoff","contentBounds"]) delete c.userData[k];
+    if(c && c.userData) for(const k of ["footX","footY","alphaCutoff","contentBounds",
+      "spriteSilhouetteExtrusion","spriteExtrusionDepth"]) delete c.userData[k];
     return c;
   };
   check("c6a. resolved-sprite figure's scene-graph shape is byte-identical pre-L2 vs post-L2 (known post-L2 feature fields normalized)",

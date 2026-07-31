@@ -297,8 +297,17 @@
       }
     },
     "capture": {
-      "fields": null,
+      "fields": [
+        "captorFactionId",
+        "disposition",
+        "holdingSeg",
+        "leverId",
+        "source"
+      ],
       "aliases": {},
+      "num": [
+        "holdingSeg"
+      ],
       "example": {
         "type": "capture",
         "payload": {}

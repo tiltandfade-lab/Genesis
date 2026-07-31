@@ -13239,7 +13239,6 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "white-dragon-wyrmling",
   "scalars": {
-   "bulk": 1.2,
    "headScale": 1.35
   },
   "size": "medium",
@@ -13961,7 +13960,7 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "young-white-dragon",
   "scalars": {
-   "bulk": 1.2,
+   "bulk": 1.08,
    "headScale": 1.35
   },
   "size": "large",

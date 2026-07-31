@@ -1,0 +1,207 @@
+{
+ "_comment": "Vision-annotated HEAD BOUNDING BOXES (x0/y0/x1/y1 normalized 0-1 over full image; whole head incl. ears/horns/hat/mane). Circle fits box * margin (default 1.25). Full 31-sprite SRD TD set annotated by Claude vision review 2026-07-30 (grid-overlay pass). Consumed by build/gen-face-tokens.py --overrides.",
+ "spr-fantasy-knight": {
+  "x0": 0.44,
+  "y0": 0.0,
+  "x1": 0.72,
+  "y1": 0.24
+ },
+ "spr-fantasy-scout": {
+  "x0": 0.52,
+  "y0": 0.02,
+  "x1": 0.76,
+  "y1": 0.28
+ },
+ "spr-fantasy-spy": {
+  "x0": 0.5,
+  "y0": 0.01,
+  "x1": 0.76,
+  "y1": 0.3
+ },
+ "spr-fantasy-priest": {
+  "x0": 0.51,
+  "y0": 0.07,
+  "x1": 0.73,
+  "y1": 0.33
+ },
+ "spr-fantasy-mage": {
+  "x0": 0.3,
+  "y0": 0.01,
+  "x1": 0.66,
+  "y1": 0.42
+ },
+ "spr-fantasy-archdruid": {
+  "x0": 0.28,
+  "y0": 0.04,
+  "x1": 0.73,
+  "y1": 0.48
+ },
+ "spr-fantasy-bandit": {
+  "x0": 0.48,
+  "y0": 0.16,
+  "x1": 0.7,
+  "y1": 0.46
+ },
+ "spr-fantasy-kobold": {
+  "x0": 0.4,
+  "y0": 0.06,
+  "x1": 0.77,
+  "y1": 0.46
+ },
+ "spr-fantasy-skeleton": {
+  "x0": 0.44,
+  "y0": 0.13,
+  "x1": 0.66,
+  "y1": 0.41
+ },
+ "spr-fantasy-zombie": {
+  "x0": 0.17,
+  "y0": 0.0,
+  "x1": 0.41,
+  "y1": 0.26
+ },
+ "spr-fantasy-ghoul": {
+  "x0": 0.5,
+  "y0": 0.02,
+  "x1": 0.77,
+  "y1": 0.32
+ },
+ "spr-fantasy-mummy": {
+  "x0": 0.35,
+  "y0": 0.0,
+  "x1": 0.56,
+  "y1": 0.23
+ },
+ "spr-fantasy-werewolf": {
+  "x0": 0.36,
+  "y0": 0.06,
+  "x1": 0.76,
+  "y1": 0.46
+ },
+ "spr-fantasy-ogre": {
+  "x0": 0.38,
+  "y0": 0.0,
+  "x1": 0.74,
+  "y1": 0.32
+ },
+ "spr-fantasy-wight": {
+  "x0": 0.3,
+  "y0": 0.07,
+  "x1": 0.56,
+  "y1": 0.36
+ },
+ "spr-fantasy-wolf": {
+  "x0": 0.62,
+  "y0": 0.26,
+  "x1": 0.99,
+  "y1": 0.63
+ },
+ "spr-fantasy-dire-wolf": {
+  "x0": 0.56,
+  "y0": 0.22,
+  "x1": 0.97,
+  "y1": 0.6
+ },
+ "spr-fantasy-giant-spider": {
+  "x0": 0.33,
+  "y0": 0.25,
+  "x1": 0.64,
+  "y1": 0.7
+ },
+ "spr-fantasy-giant-rat": {
+  "x0": 0.52,
+  "y0": 0.2,
+  "x1": 0.97,
+  "y1": 0.62
+ },
+ "spr-fantasy-bat": {
+  "x0": 0.42,
+  "y0": 0.58,
+  "x1": 0.75,
+  "y1": 0.97
+ },
+ "spr-fantasy-harpy": {
+  "x0": 0.39,
+  "y0": 0.29,
+  "x1": 0.59,
+  "y1": 0.48
+ },
+ "spr-fantasy-gargoyle": {
+  "x0": 0.42,
+  "y0": 0.24,
+  "x1": 0.64,
+  "y1": 0.49
+ },
+ "spr-fantasy-imp": {
+  "x0": 0.53,
+  "y0": 0.2,
+  "x1": 0.92,
+  "y1": 0.56
+ },
+ "spr-fantasy-stirge": {
+  "x0": 0.42,
+  "y0": 0.44,
+  "x1": 0.7,
+  "y1": 0.72
+ },
+ "spr-fantasy-specter": {
+  "x0": 0.5,
+  "y0": 0.02,
+  "x1": 0.72,
+  "y1": 0.27
+ },
+ "spr-fantasy-shadow": {
+  "x0": 0.36,
+  "y0": 0.1,
+  "x1": 0.64,
+  "y1": 0.38
+ },
+ "spr-fantasy-manticore": {
+  "x0": 0.56,
+  "y0": 0.22,
+  "x1": 1.0,
+  "y1": 0.66
+ },
+ "spr-fantasy-chimera": {
+  "x0": 0.0,
+  "y0": 0.22,
+  "x1": 0.33,
+  "y1": 0.65
+ },
+ "spr-fantasy-adult-red-dragon": {
+  "x0": 0.03,
+  "y0": 0.06,
+  "x1": 0.38,
+  "y1": 0.38
+ },
+ "spr-fantasy-goblin-minion": {
+  "x0": 0.24,
+  "y0": 0.01,
+  "x1": 0.7,
+  "y1": 0.4
+ },
+ "spr-fantasy-goblin-warrior": {
+  "x0": 0.33,
+  "y0": 0.15,
+  "x1": 0.72,
+  "y1": 0.55
+ },
+ "spr-fantasy-goblin-boss": {
+  "x0": 0.26,
+  "y0": 0.02,
+  "x1": 0.6,
+  "y1": 0.36
+ },
+ "spr-fantasy-young-black-dragon": {
+  "x0": 0.6,
+  "y0": 0.18,
+  "x1": 0.99,
+  "y1": 0.54
+ },
+ "spr-fantasy-chain-devil": {
+  "x0": 0.4,
+  "y0": 0.09,
+  "x1": 0.68,
+  "y1": 0.36
+ }
+}

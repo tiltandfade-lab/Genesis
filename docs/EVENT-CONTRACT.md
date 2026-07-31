@@ -133,7 +133,7 @@ does not get to contradict the returned state — that is the anti-drift guarant
 | `walk_advance` | `{toSeg, nodeId?}` | declared (DM, party clears a segment) | WALK-CONSUMPTION (moves the active-walk cursor; `nodeId` defaults to the active walk) |
 | `walk_update` | `{seg, overlay, nodeId?}` | declared (DM, captures a segment's room-die) | ON-DEMAND-GEN §4 — `walkUpdateSegment(w,p.seg,p.overlay,p.nodeId)`; `overlay` carries the rolled `{effectDie, rolledFace}` for that segment |
 | `walk_complete` | `{nodeId?, abandoned?}` | declared (DM, finale resolved / walk left) | WALK-CONSUMPTION (finalize provenance + promote/reskin the next frontier) |
-| `capture` | `{captorFactionId?, disposition?, holdingSeg?, leverId?}` | declared (DM, on subdual) | WALK-CONSUMPTION §6 (re-entry into a holding segment; all fields script-filled if omitted) |
+| `capture` | `{captorFactionId?, disposition?, holdingSeg?, leverId?, source?}` (`holdingSeg` num-coerced) | declared (DM, on subdual) | WALK-CONSUMPTION §6 (re-entry into a holding segment; all fields script-filled if omitted). UNIT W6 (2026-07-27): registered in `DM_EVENT_FIELDS` — every sub-roll (disposition/confiscation/opening/holdingNoun) carries a `rolled:{table,roll,idx}` receipt (`null` for a DM-declared disposition — no dice were rolled) |
 | `open_shop` | `{shopId?, codexId?, tier?, archetype?, nodeId?, name?}` | declared (DM, on entering a shop / talking to a merchant) or the dev "Open test shop" affordance | docs/SHOP-UI.md §2b — reopens a known `w.shops[shopId]` (depleted coin/stock persist) or mints one via `makeShop`, links `codexId` if given, sets `GS.activeShopId`/`GS.gamePanel='shop'` |
 | `bastion_claim` | `{nodeId, name, note?, payGold?}` (alias `id→nodeId`) | player/declared (a player decision; the DM may relay it) | **CROWNING-BASTION.md §7.B1.1-2** — formalizes the emergent stronghold-and-vault with a NAME, a CLAIM, and a VAULT. EITHER-gated claim price (Q5): a closed front on the books (`w.pressures.some(p=>p.closed)`, free) OR a tier-scaled gold price (`bastionPrice(w)`, deducted from `sh.gold`) — deed takes precedence when both are true. ONE per world (Q6: `{ok:false,reason:"bastion-exists"}` on a second claim). Refuses `"no-pc"`, `"need-node-and-name"`, `"unknown-node"` (the node must be `seen`), `"unsafe-combat"` (`GS.combat.active`), `"cannot-afford:<price>"`. Writes `w.bastion={nodeId,name,foundedDay,foundedBy,vault:[],note,claimedBy,pricePaid}` + a codex `location` record (`origin:"bastion"`) |
 | `district_mint` | `{nodeId?, tier?}` | declared (DM, mints this node's districts on first entry) | URBAN-FABRIC.md §2 — `mintDistricts(w, nodeId\|\|w.currentNodeId, {tier})`; idempotent (safe to re-fire on a node already minted) |
@@ -167,7 +167,9 @@ Any key that is neither accepted nor aliased still **applies** (never dropped �
 working handler), but emits a `console.warn` + **one `drift` ledger line** (`kind:"payload-drift"`,
 carrying the event `type` and the unrecognized `keys`) so a DM's vocabulary drift becomes loud instead
 of a silent no-op. Event types NOT in the map (and unknown types) pass through unjudged — the
-whole-payload-pass handlers (hire/capture/downtime/…) and forward-compatible types stay untouched.
+whole-payload-pass handlers (hire/downtime/…) and forward-compatible types stay untouched. (`capture`
+graduated OUT of this group — UNIT W6, 2026-07-27 — once `holdingSeg` needed the same `num:[…]`
+coercion every other numeric field gets; see its own taxonomy row above and docs/DESIGN.md.)
 Every key in the map is a member of `DM_EVENT_TYPES` (the ROOT-B probe enforces the subset). The digest
 teaches the canonical clock key: `powers[].clockId` / `fronts[].clockId` (renamed from `id`), so a DM
 copying the digest's own key into any clock-family event lands it.
@@ -193,8 +195,13 @@ The **walk events** (docs/WALK-CONSUMPTION.md) are forward-compatible no-ops whe
 every turn (the DM owns *when* the beat lands; the script owns the cursor + provenance). `capture` lands a
 subdued PC inside the walk already in motion — captor (most-advanced hostile faction), cell (a holding segment
 of the active walk, reused or minted), and lever (a pre-cast NPC) come from LIVE state; only the disposition /
-confiscation / opening are new dice. The disposition opens a real, **fireable** front-clock — a capture that
-can't go wrong is a free vacation (DM hard/dangerous discipline).
+confiscation / opening / holding-noun (when minted) are new dice. The disposition opens a real, **fireable**
+front-clock — a capture that can't go wrong is a free vacation (DM hard/dangerous discipline). Each of those
+four dice now carries a `rolled:{table,roll,idx}` receipt (`capRoll`, `src/world/capture.js`) — the same
+`{table,roll,idx}` shape `rolledOf()` stamps onto a world-gen gazetteer entry (`src/world/play.js`) — attached
+to the ledger `outcome` beat, `t.c.captured`, and `applyCapture`'s own return value; a DM-declared disposition
+override carries `rolled.disposition:null` (truthful — no die was rolled for a value the DM supplied outright).
+UNIT W6 (2026-07-27, Site-6 blocker #1); teeth in `dev/verify-capture-receipts.mjs`.
 
 The **gap-wiring caller events** (docs/TABLE-GAPS-070126.md §1–5, added 2026-07-03) close BATCH3-PLAN unit 1's
 OPEN tracking line: the five wave-2a tables now fire from real call sites. `chase_start`/`chase_round`/

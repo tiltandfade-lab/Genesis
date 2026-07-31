@@ -107,10 +107,22 @@ function rollAllThree(win, opts = {}){
 
 // strip rollRefs (and the analogous urban finale key) from a rolled walk's segments so the REST of
 // the shape can be diffed against the pre-WDV-2 reference — deep clone, delete-in-place.
-function stripRollRefs(walk){
+// `extraKeys` (WIRING-TEETH-0727, fix/wiring-teeth-0727, 2026-07-27): the SAME additivity problem
+// ELEV-1 hit — a later, legitimate unit adds new segment-level fact fields the frozen BASE_SHA
+// reference predates — but this time the new facts are plain flat fields (areaType/dims/side/
+// footing/footingCoverage/footingImpact), not gated behind a table that can be zeroed to suppress
+// the KEY entirely the way NEUTRALIZE_ELEV1 suppresses `elevation` (an empty-rows table still
+// produces areaType:""/footing:"" — the walkPickStamped(...).values contract always returns
+// same-length strings, never omits the key). So the value-level divergence is neutralized by
+// NEUTRALIZE_WIRING_TEETH_0727 below (stops the new draws from shifting every LATER roll's value),
+// and the key-level divergence is closed here, by name, exactly like `rollRefs` itself already is.
+function stripRollRefs(walk, extraKeys){
   const clone = JSON.parse(JSON.stringify(walk));
   const segs = clone.rooms || clone.segments || [];
-  for (const s of segs) delete s.rollRefs;
+  for (const s of segs) {
+    delete s.rollRefs;
+    if (extraKeys) for (const k of extraKeys) delete s[k];
+  }
   return clone;
 }
 
@@ -138,6 +150,14 @@ check("0. MUTATION setup: scene stamped-pick statement found verbatim in src/eng
 // is touched. This scopes the gate to its real job; it does not weaken it — a rollRefs wiring bug still
 // diverges (proven live by the 1a/1b RED mutation, which runs through this same neutralized path).
 const NEUTRALIZE_ELEV1 = '\n;(function(){ if(typeof walkRows==="function"){ var _wr=walkRows; walkRows=function(id){ return id==="room-elevation-profile" ? [] : _wr(id); }; } })();';
+// WIRING-TEETH-0727 (fix/wiring-teeth-0727, 2026-07-27, docs/DESIGN.md): rollUrbanWalk now rolls
+// urban-area-type (every segment) and urban-footing (every non-finale segment) — two NEW
+// walkRnd(rows) draws per segment that did not exist at BASE_SHA, shifting every later roll's PRNG
+// position for the rest of that walk (same mechanism as ELEV-1's dwalkElevation, same fix: an empty
+// rows array takes walkPickStamped's `if(!rows.length) return {...}` early-return branch BEFORE any
+// Math.random() call — zero draws, byte-identical downstream stream to the reference). Scoped to
+// exactly these two ids so a real regression in either roll still diverges the comparison.
+const NEUTRALIZE_WIRING_TEETH_0727 = '\n;(function(){ if(typeof walkRows==="function"){ var _wr=walkRows; walkRows=function(id){ return (id==="urban-area-type"||id==="urban-footing") ? [] : _wr(id); }; } })();';
 
 console.log("\n=== 1. RED-FIRST byte-compat (contract §3 / spec check 1) ===");
 {
@@ -145,10 +165,10 @@ console.log("\n=== 1. RED-FIRST byte-compat (contract §3 / spec check 1) ===");
   const refWin = freshDom(referenceSrc).win;
   const refWalks = withSeededRandom(refWin, SEED, () => rollAllThree(refWin));
 
-  const mutWin = mutationFound ? freshDom(mutatedSrc + NEUTRALIZE_ELEV1).win : null;
+  const mutWin = mutationFound ? freshDom(mutatedSrc + NEUTRALIZE_ELEV1 + NEUTRALIZE_WIRING_TEETH_0727).win : null;
   const mutWalks = mutationFound ? withSeededRandom(mutWin, SEED, () => rollAllThree(mutWin)) : null;
 
-  const actWin = freshDom(actualSrc + NEUTRALIZE_ELEV1).win;
+  const actWin = freshDom(actualSrc + NEUTRALIZE_ELEV1 + NEUTRALIZE_WIRING_TEETH_0727).win;
   const actWalks = withSeededRandom(actWin, SEED, () => rollAllThree(actWin));
 
   if (mutationFound) {
@@ -161,19 +181,35 @@ console.log("\n=== 1. RED-FIRST byte-compat (contract §3 / spec check 1) ===");
       `mutScene=${JSON.stringify(mutScene)} expected total-string=${JSON.stringify(String(mutWalks.dungeon.segments[0].rollRefs.scene.total))}`);
   }
 
+  // WIRING-TEETH-0727: extraKeys strips exactly the new flat fields THIS unit adds (see stripRollRefs's
+  // own comment) — dungeon is untouched by W1 (no extraKeys), urban gained area+footing fields, and
+  // wilderness gained the two footing columns that were previously discarded (`footing` itself is
+  // BYTE-UNCHANGED — still column 1 — so it is deliberately NOT in wilderness's strip list; only the
+  // two genuinely-new sibling fields are).
   const actDungeonStripped = stripRollRefs(actWalks.dungeon);
-  const actUrbanStripped = stripRollRefs(actWalks.urban);
-  const actWildStripped = stripRollRefs(actWalks.wilderness);
+  const actUrbanStripped = stripRollRefs(actWalks.urban, ["areaType", "dims", "side", "footing", "footingCoverage", "footingImpact"]);
+  const actWildStripped = stripRollRefs(actWalks.wilderness, ["footingCoverage", "footingImpact"]);
+  // UNIT W2 (docs/DESIGN.md, fix/wiring-teeth-0727, 2026-07-27): wwalkEncounter's Enemy branch now
+  // additionally carries `terrainFootprint` (TERRAIN-PROGRAM.md M8 / BATTLEMAP.md §3b — the
+  // wilderness-tactical-terrain Map Footprint column, previously uncompiled) on `segment.encounter`
+  // — a NESTED new field stripRollRefs's flat extraKeys list can't reach (it only deletes TOP-LEVEL
+  // segment keys). Same additivity story as footingCoverage/footingImpact above: zero extra
+  // Math.random() draws (the SAME single walkRnd() pick the pre-existing terrain roll already made —
+  // see walkPickTagged in src/engine/walk.js), so only the KEY needs closing here, not a new
+  // NEUTRALIZE_* entry. Confirmed NOT accidentally masked by SEED=12345 alone: under this exact seed
+  // none of the 5 wilderness legs roll an Enemy branch (verified directly), so leaving this unclosed
+  // would have passed by luck, not by design — closed the same way rollRefs itself already is.
+  for (const s of actWildStripped.segments || []) if (s.encounter) delete s.encounter.terrainFootprint;
   const refDungeon = JSON.stringify(refWalks.dungeon);
   const refUrban = JSON.stringify(refWalks.urban);
   const refWild = JSON.stringify(refWalks.wilderness);
 
   check("1c. GREEN confirmed: actual (unmutated) dungeon walk, rollRefs stripped, is byte-identical to the pre-WDV-2 reference under the identical seed",
     JSON.stringify(actDungeonStripped) === refDungeon, "dungeon walk diverged — rollRefs wiring perturbed an existing field value or roll count");
-  check("1d. GREEN confirmed: actual (unmutated) urban walk, rollRefs stripped, is byte-identical to the pre-WDV-2 reference under the identical seed",
-    JSON.stringify(actUrbanStripped) === refUrban, "urban walk diverged — rollRefs wiring perturbed an existing field value or roll count");
-  check("1e. GREEN confirmed: actual (unmutated) wilderness walk, rollRefs stripped, is byte-identical to the pre-WDV-2 reference under the identical seed",
-    JSON.stringify(actWildStripped) === refWild, "wilderness walk diverged — rollRefs wiring perturbed an existing field value or roll count");
+  check("1d. GREEN confirmed: actual (unmutated) urban walk, rollRefs + WIRING-TEETH-0727's new fields stripped, is byte-identical to the pre-WDV-2 reference under the identical seed",
+    JSON.stringify(actUrbanStripped) === refUrban, "urban walk diverged on a field OTHER than rollRefs/areaType/dims/side/footing/footingCoverage/footingImpact — a real regression, not expected additivity");
+  check("1e. GREEN confirmed: actual (unmutated) wilderness walk, rollRefs + WIRING-TEETH-0727's new footing columns stripped, is byte-identical to the pre-WDV-2 reference under the identical seed",
+    JSON.stringify(actWildStripped) === refWild, "wilderness walk diverged on a field OTHER than rollRefs/footingCoverage/footingImpact — a real regression, not expected additivity");
 }
 
 console.log("\n=== 2. rollRefs present: tableId + integer total per graphics-critical field ===");

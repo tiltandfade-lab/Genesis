@@ -185,7 +185,7 @@ for f in files:
         else: special.append(tid)
         if info['bell'] and st=="clean": bell.append((tid,info['dice']))
         if EMIT:
-            band_col=legs_col=arch_col=grants_col=motif_col=None
+            band_col=legs_col=arch_col=grants_col=motif_col=footprint_col=None
             # SKIN-GRANTS.md §1/§1b: scope Grants/Motif header detection to the three Walk Skin tables
             # ONLY (by tid) — `Motif` alone collides with dungeon-art-motif/urban-art-motif, which
             # legitimately have their own unrelated "Motif" content column (the art motif's NAME, not
@@ -206,6 +206,15 @@ for f in files:
                     elif h.strip()=='pool': arch_col=ci          # `Pool` = effect-pool (archetype) routing
                     elif is_walk_skin and h.strip()=='grants': grants_col=ci   # SKIN-GRANTS.md §1 — DM-only grant tokens
                     elif is_walk_skin and h.strip()=='motif': motif_col=ci     # SKIN-GRANTS.md §1b — DM-only motif kit key
+                    elif h.strip()=='map footprint': footprint_col=ci  # TERRAIN-PROGRAM.md M8 / BATTLEMAP.md
+                        # §3b ("a `Map Footprint` column ... DM-only column, compiler carries it — the
+                        # Legs/Pool precedent"). Unscoped (any table), matching band/legs/pool's own
+                        # style — checked: no OTHER compiled table's header cell is literally "Map
+                        # Footprint" (audited via a read-only header-collision sweep against every
+                        # dice-table block in ROOTS at fix time), and BATTLEMAP.md §3b's own plan
+                        # (dungeon feature/hazard tables, urban scene frames) explicitly reuses this SAME
+                        # header spelling, so leaving it table-id-unscoped is forward-compatible with
+                        # that follow-up rather than a footgun.
             # DM-only Consequence-Ladder tags (CONSEQUENCE-LADDER.md): `Legs` (story-potential) and
             # `Archetype` (effect-pool routing) are excluded from the narration text + structured
             # cols, and emitted as row[6]/row[7] ONLY when the table carries them (untagged tables
@@ -213,9 +222,17 @@ for f in files:
             # SKIN-GRANTS.md §1/§1b: `Grants`/`Motif` are the same kind of DM-only tag column —
             # excluded from narration text + row[5] cols, emitted as row[8]/row[9] ONLY when present
             # (untagged tables — every table except the three Walk Skin ones today — stay byte-identical).
+            # TERRAIN-PROGRAM.md M8: `Map Footprint` is the same kind of DM-only tag column again —
+            # excluded from narration text + row[5] cols, emitted as row[10] ONLY when present (every
+            # table except wilderness-tactical-terrain today stays byte-identical). It is deliberately
+            # NOT slotted into row[6]/row[7] (which would collide with legs/pool on any FUTURE table
+            # that authors both tag families) — instead `foot_col` forces the SAME padding discipline
+            # tag_cols/skin_cols already use, so row[10] means "footprint" on every compiled table,
+            # unconditionally, the same global guarantee row[6]="legs"/row[8]="grants" already carry.
             tag_cols = legs_col is not None or arch_col is not None
             skin_cols = grants_col is not None or motif_col is not None
-            exclude={0,band_col,legs_col,arch_col,grants_col,motif_col}
+            foot_col = footprint_col is not None
+            exclude={0,band_col,legs_col,arch_col,grants_col,motif_col,footprint_col}
             erows=[]
             for lo,hi,cells in parsed:
                 band=cells[band_col] if (band_col is not None and band_col<len(cells)) else ""
@@ -224,16 +241,19 @@ for f in files:
                 # in source order — so a multi-column table (segment walk: Type|Desc|Transition;
                 # encounter: Name|Roster|Tactic) keeps its structure. txt (row[3]) stays the merged
                 # form for back-compat.
-                cols=[c for ci,c in enumerate(cells) if ci!=0 and ci!=legs_col and ci!=arch_col and ci!=grants_col and ci!=motif_col]
+                cols=[c for ci,c in enumerate(cells) if ci!=0 and ci!=legs_col and ci!=arch_col and ci!=grants_col and ci!=motif_col and ci!=footprint_col]
                 row=[lo,hi,band,txt,None,cols]
-                if tag_cols or skin_cols:
+                if tag_cols or skin_cols or foot_col:
                     legs=cells[legs_col] if (legs_col is not None and legs_col<len(cells)) else ""
                     arch=cells[arch_col] if (arch_col is not None and arch_col<len(cells)) else ""
                     row+=[legs,arch]
-                if skin_cols:
+                if skin_cols or foot_col:
                     grants=cells[grants_col] if (grants_col is not None and grants_col<len(cells)) else ""
                     motif=cells[motif_col] if (motif_col is not None and motif_col<len(cells)) else ""
                     row+=[grants,motif]
+                if foot_col:
+                    footprint=cells[footprint_col] if footprint_col<len(cells) else ""
+                    row.append(footprint)
                 erows.append(row)
             out[tid]={"dice":info['dice'],"die":info['die'],"bell":info['bell'],"class":fm.get('table_class',""),
                       "player_facing":fm.get('player_facing',""),"voice_critical":fm.get('voice_critical','')=="true",

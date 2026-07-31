@@ -42,13 +42,17 @@ function wwalkEncounter(tier, region, tarot, opts){
   const [encType,encGuide]=walkPick("wilderness-encounter-type",1,2);
   const has=s=>encType.indexOf(s)>=0;
   if(has("Enemy")||has("Combat")){
-    const [terrain]=walkPick("wilderness-tactical-terrain",1);
+    // TERRAIN-PROGRAM.md M8 / BATTLEMAP.md §3b (UNIT W2, fix/wiring-teeth-0727, 2026-07-27): the
+    // Map Footprint column now compiles (compile-tables.py, the Legs/Pool precedent) — surfaced here
+    // as `terrainFootprint` off the SAME single draw (walkPickTagged, src/engine/walk.js), never a
+    // second roll. `terrain` itself is untouched (still column 1, still a plain string).
+    const [terrain,terrainFootprint]=walkPickTagged("wilderness-tactical-terrain",1,"footprint");
     const [compName,compRoster,compTactic]=walkPick("wilderness-enemy-composition",1,2,3);
     const [catName,creatures,behavior]=walkPick("wilderness-enemy-category",1,2,3);
     const faction=/conflict|clash|interrupt|rival/i.test(compName);
     if(faction){
       const [cat2,creatures2]=walkPick("wilderness-enemy-category",1,2);
-      return { type:"Enemy", subtype:"Faction Clash", composition:compName, tactic:compTactic, terrain,
+      return { type:"Enemy", subtype:"Faction Clash", composition:compName, tactic:compTactic, terrain, terrainFootprint,
                factions:[{name:catName,creatures},{name:cat2,creatures:creatures2}], isEnemy:true,
                text:`Clash: ${catName} vs ${cat2} — ${compTactic}` };
     }
@@ -68,7 +72,7 @@ function wwalkEncounter(tier, region, tarot, opts){
       const rc=(typeof realmEncounterPool==="function") ? realmEncounterPool(realms, "elite") : null;
       // REALM-TRAITS-APPLY §1 — carry rc.traits through (graceful-absent, same law as desc/summary);
       // stampSpawn = the anomaly law's friendly-spawn wrapper (recovery merge keeps both sides).
-      if(rc) return stampSpawn({ type:"Enemy", composition:compName, roster:compRoster, tactic:compTactic, terrain,
+      if(rc) return stampSpawn({ type:"Enemy", composition:compName, roster:compRoster, tactic:compTactic, terrain, terrainFootprint,
                category:catName, creature:rc.name, behavior, isEnemy:true,
                statId:rc.frame, modelKey:rc.model, cr:rc.cr, realm:rc.__realm, realmRole:rc.role||null,
                desc:rc.desc||null, summary:rc.summary||null, traits:rc.traits||null,
@@ -95,7 +99,7 @@ function wwalkEncounter(tier, region, tarot, opts){
         if(monsterHabitatFit(repick, settingW)) creature=repick; else { creature=repick; displaced=true; }
       } else displaced=true;
     }
-    return stampSpawn({ type:"Enemy", composition:compName, roster:compRoster, tactic:compTactic, terrain,
+    return stampSpawn({ type:"Enemy", composition:compName, roster:compRoster, tactic:compTactic, terrain, terrainFootprint,
              category:catName, creature, behavior, isEnemy:true, displaced,
              text:`${compName} — ${catName} (${compRoster}): ${behavior}` });
   }
@@ -179,7 +183,16 @@ function rollWildernessWalk(opts){
     const [sensory]=walkPick("wilderness-sensory",1);
     const featureR=walkPickStamped("wilderness-feature",1,2); const [feature,featFlavor]=featureR.values; legRollRefs.feature=featureR.source;
     const signR=walkPickStamped("wilderness-sign-of-passage",1,2); const [sign,signEffect]=signR.values; legRollRefs.signOfPassage=signR.source;
-    const [footing]=walkPick("wilderness-footing",1);
+    // WIRING-TEETH-0727 §W1b (docs/DESIGN.md, fix/wiring-teeth-0727): wilderness-footing is a 3-column
+    // table (Surface Flavor|Coverage Area|Mechanical Impact & Tracking — docs/TERRAIN-PROGRAM.md
+    // §1.2D) but this roll used to read column 1 only, discarding coverage/impact. Upgraded to
+    // walkPickStamped's full-column form — SAME single walkRnd() pick, zero extra Math.random() draws,
+    // so every OTHER field's rolled value on this and every later leg is untouched. `footing` itself
+    // stays byte-identical (still column 1, still a plain string — skin-grants.js string-concats it,
+    // theater-data.js/walk-scene.js read it as a string; changing its TYPE would be a rendering
+    // change, which this unit forbids). The previously-discarded columns land as new sibling fields.
+    const footingR=walkPickStamped("wilderness-footing",1,2,3);
+    const [footing,footingCoverage,footingImpact]=footingR.values; legRollRefs.footing=footingR.source;
     // DRESSING-WIRING.md §"Behavior" 1/2: one dressing roll per LEG — {text,condition} (the shape
     // theaterSegmentFeatureText/theaterPropForText and activeWalkDigest both key off, matching
     // dungeon-walk.js's/walk.js's own dressing rolls added alongside this one). Previously rolled
@@ -218,7 +231,7 @@ function rollWildernessWalk(opts){
     segments.push({
       num:i, id:`l${i}`, label:i===1?"Departure":"Leg", isFinale:false, biome:cur.biome, biomeDesc:cur.biomeDesc,
       encounter:enc, sensory, feature:{ name:feature, flavor:featFlavor }, light,
-      signOfPassage:{ name:sign, effect:signEffect }, footing, dressing:{ text:d1, condition:c1 }, atmo:legAtmo, survival,
+      signOfPassage:{ name:sign, effect:signEffect }, footing, footingCoverage, footingImpact, dressing:{ text:d1, condition:c1 }, atmo:legAtmo, survival,
       interactable, regionEncounter, activeMagic, artFind,
       loot: wwalkLootFor(lootLane, i, false, enc.isEnemy, tier),
       exits:[{ targetId:`l${i+1}`, num:i+1, label:i+1>legCount?"Arrival":"Leg", isFinale:i+1>legCount }],

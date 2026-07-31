@@ -184,6 +184,22 @@ function walkRollAtmo(env){
   const [text]=walkPick(lanes[lane],1);
   return text ? { lane, text } : null;
 }
+// TERRAIN-PROGRAM.md M8 / BATTLEMAP.md §3b (fix/wiring-teeth-0727, UNIT W2, 2026-07-27): a compiled
+// row's DM-only NAMED tag slots (legs/pool@row[6..7], grants/motif@row[8..9], footprint@row[10] —
+// compile-tables.py's "Legs/Pool precedent") sit OUTSIDE cells (row[5]), so plain walkPick can't
+// reach them without a SECOND draw (forbidden — walkPickStamped's own comment: "never rolls twice
+// for a field"). This sibling makes ONE walkRnd() draw and returns a positional cell (same original-
+// md-column convention as walkPick) alongside a named row tag, off that SAME row. Byte-identical to
+// walkPick(id,col) when tag is omitted or unrecognized (falls back to "").
+const WALK_ROW_TAGS = { legs:6, pool:7, grants:8, motif:9, footprint:10 };
+function walkPickTagged(id, col, tag){
+  const rows=walkRows(id);
+  if(!rows.length) return ["",""];
+  const row=walkRnd(rows);
+  const cells=row[5]||[];
+  const idx=WALK_ROW_TAGS[tag];
+  return [(cells[col-1]||"").trim(), (idx!=null ? (row[idx]||"") : "").trim()];
+}
 function walkPickFromPool(str){
   const opts=(str||"").split(/\s*\/\s*/).map(s=>s.trim()).filter(Boolean);
   return opts.length ? walkRnd(opts) : (str||"[creature?]");
@@ -621,7 +637,16 @@ function rollUrbanWalk(opts){
       const finaleRollRefs={};
       const frame=walkSceneFrame("Enemy", finaleRollRefs); // finales always get a full frame
       const light=walkRollLight("urban", nodeId+":light", "");
+      // WIRING-TEETH-0727 §W1a (docs/DESIGN.md, fix/wiring-teeth-0727): urban-area-type was authored
+      // but never consumed by rollUrbanWalk (flagged as a known gap in docs/SITE-6-PRISON-CUSTODY-
+      // SPEC.md). Wired the same way dungeon-walk.js's dwalkArea carries area onto EVERY room
+      // INCLUDING the finale (dwalkArea is called before dungeon-walk.js's own finale branch) — a
+      // finale segment gets a physical area shape here too. walkPickStamped's {tableId,total,band}
+      // source is byte-identical in shape to dwalkArea's own `_roll` sibling.
+      const areaR=walkPickStamped("urban-area-type",1,2,3); const [areaType,dims,side]=areaR.values;
+      finaleRollRefs.area=areaR.source;
       return { id:nodeId, num, label:node.label, isFinale:true, depth:depth[nodeId], exits, light,
+               areaType, dims, side,
                finale:walkFinale(node,resolved,threat,catalyst,tier,frame,tarot), loot:walkLootFor(num,depth[nodeId],true,false),
                rollRefs:finaleRollRefs };
     }
@@ -632,6 +657,12 @@ function rollUrbanWalk(opts){
     // purpose because walkRollLight is a seeded-hash pick over THEATER_LIGHT_TABLE, not a compiled
     // walk table — no {tableId,total} exists to stamp, per the spec's own "no single table roll" carve-out).
     const rollRefs={};
+    // WIRING-TEETH-0727 §W1a (docs/DESIGN.md, fix/wiring-teeth-0727): urban-area-type, authored but
+    // never consumed by rollUrbanWalk (SITE-6-PRISON-CUSTODY-SPEC.md's own known-gap line) — wired
+    // the same way dungeon-walk.js's dwalkArea carries areaType/dims/side onto every room, plus a
+    // rollRefs.area receipt (byte-identical shape to dwalkArea's own `_roll`).
+    const areaR=walkPickStamped("urban-area-type",1,2,3); const [areaType,dims,side]=areaR.values;
+    rollRefs.area=areaR.source;
     const sceneFrame=walkSceneFrame(encounter.type, rollRefs);
     // WIRING-SWEEP-A §7 (docs/WIRING-MAP.md item 9): urban-interactable-object — the same segment
     // object lane dungeon-walk.js already wires for dungeons. Null-safe (wiring-a.js absent/table
@@ -652,14 +683,24 @@ function rollUrbanWalk(opts){
     // DRESSING-ATMOSPHERE.md: one atmo roll per SEGMENT (air/odor/sound, uniform lane pick),
     // same finale asymmetry as dressing above — finale segments return early and carry neither.
     const atmo=walkRollAtmo("urban");
+    // WIRING-TEETH-0727 §W1c (docs/DESIGN.md, fix/wiring-teeth-0727): urban-footing (d100 Urban
+    // Footing & Surface — Footing Type|Coverage Area|2024 Mechanical Impact) was authored but never
+    // rolled by ANY builder (dungeon has no footing table at all; only wild-walk.js's per-leg roll
+    // touched "wilderness-footing"). Rolled here in the same slot wilderness-footing rolls per-leg —
+    // i.e. every non-finale segment, NEVER the finale (mirrors wilderness: footing is never rolled
+    // for the arrival segment either) — same 3-field shape as wilderness-footing's own §W1b upgrade.
+    const footingR=walkPickStamped("urban-footing",1,2,3);
+    const [footing,footingCoverage,footingImpact]=footingR.values;
+    rollRefs.footing=footingR.source;
     // LIGHTING: seeded off this segment's own node id + "light" (distinct seed namespace from lane
     // placement, which seeds off the segmentId alone) and re-checked against this segment's OWN
     // description text (urban segments carry no `.feature` field the way dungeon rooms do — the sub-
     // table's `description` is the closest free-text pool a keyword override can read here).
     const light=walkRollLight("urban", nodeId+":light", sub?sub.description:"");
     return { id:nodeId, num, label:node.label, isFinale:false, depth:depth[nodeId], exits, light,
+             areaType, dims, side,
              segType:sub?sub.segType:null, description:sub?sub.description:null, transition:sub?sub.transition:null, encounter, sceneFrame,
-             dressing:{ text:dressText, condition:dressCond }, atmo,
+             dressing:{ text:dressText, condition:dressCond }, atmo, footing, footingCoverage, footingImpact,
              interactable, backgroundEvent, loot:walkLootFor(num,depth[nodeId],false,encounter.isEnemy),
              rollRefs };
   }).sort((a,b)=>a.num-b.num);

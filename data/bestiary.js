@@ -52899,7 +52899,9 @@ const BESTIARY={
     "mod": 2
    }
   },
-  "pb": null,
+  "cr": 2.0,
+  "xp": 450,
+  "pb": 2,
   "pp": null,
   "skills": "Perception +4, Stealth +2",
   "senses": "Blindsight 10 ft., Darkvision 60 ft.; Passive Perception 14",
@@ -52973,7 +52975,6 @@ const BESTIARY={
    "none"
   ],
   "src": "Silver Dragon.md",
-  "cr": 2.0,
   "tags": {
    "type": "dragon",
    "size": "medium",
@@ -62709,7 +62710,9 @@ const BESTIARY={
     "mod": 0
    }
   },
-  "pb": null,
+  "cr": 2.0,
+  "xp": 450,
+  "pb": 2,
   "pp": null,
   "skills": "Perception +4, Stealth +2",
   "senses": "Blindsight 10 ft., Darkvision 60 ft.; Passive Perception 14",
@@ -62789,7 +62792,6 @@ const BESTIARY={
    "none"
   ],
   "src": "White Dragon.md",
-  "cr": 13.0,
   "tags": {
    "type": "dragon",
    "size": "medium",
@@ -62833,7 +62835,9 @@ const BESTIARY={
     "mod": 1
    }
   },
-  "pb": null,
+  "cr": 6.0,
+  "xp": 2300,
+  "pb": 3,
   "pp": null,
   "skills": "Perception +6, Stealth +3",
   "senses": "Blindsight 30 ft., Darkvision 120 ft.; Passive Perception 16",
@@ -62913,7 +62917,6 @@ const BESTIARY={
    "none"
   ],
   "src": "White Dragon.md",
-  "cr": 13.0,
   "tags": {
    "type": "dragon",
    "size": "large",
@@ -66927,6 +66930,7 @@ const BESTIARY_BY_CR={
   "swarm-of-venomous-snakes",
   "void-monk-monk",
   "wererat",
+  "white-dragon-wyrmling",
   "will-o-wisp",
   "ogre-zombie"
  ],
@@ -67167,6 +67171,7 @@ const BESTIARY_BY_CR={
   "pirate-captain",
   "satyr-revelmaster",
   "vrock",
+  "young-white-dragon",
   "wyvern"
  ],
  "19": [
@@ -67271,8 +67276,6 @@ const BESTIARY_BY_CR={
   "storm-giant",
   "ultroloth",
   "vampire",
-  "white-dragon-wyrmling",
-  "young-white-dragon",
   "adult-white-dragon"
  ],
  "20": [

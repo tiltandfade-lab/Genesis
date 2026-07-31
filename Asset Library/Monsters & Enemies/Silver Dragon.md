@@ -26,6 +26,7 @@ _Medium Dragon (Metallic), Lawful Good_
 - **Immunities:** Cold
 - **Senses:** Blindsight 10 ft., Darkvision 60 ft.; Passive Perception 14
 - **Languages:** Draconic
+- **Challenge:** 2 (450 XP) | **Proficiency Bonus:** +2
 
 **Actions**
 

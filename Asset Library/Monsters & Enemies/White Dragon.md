@@ -33,6 +33,7 @@ _Medium Dragon (Chromatic), Chaotic Evil_
 - **Immunities:** Cold
 - **Senses:** Blindsight 10 ft., Darkvision 60 ft.; Passive Perception 14
 - **Languages:** Draconic
+- **Challenge:** 2 (450 XP) | **Proficiency Bonus:** +2
 
 **Traits**
 
@@ -60,6 +61,7 @@ _Large Dragon (Chromatic), Chaotic Evil_
 - **Immunities:** Cold
 - **Senses:** Blindsight 30 ft., Darkvision 120 ft.; Passive Perception 16
 - **Languages:** Common, Draconic
+- **Challenge:** 6 (2,300 XP) | **Proficiency Bonus:** +3
 
 **Traits**
 

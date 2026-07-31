@@ -21,6 +21,7 @@ The files cover one realm each: every monster in the bestiary + a themed NPC ros
 batched into 25-per-sheet ChatGPT prompts.
 
 - [`pc-characters.md`](pc-characters.md) — **Player Characters** (not a monster/NPC realm): every combo of 9 species x 12 classes x 2 genders, 216 total / 9 sheets
+- [`jam-defense.md`](jam-defense.md) — **Jam Defense field sprites** (spin-off game, not a realm; formatVersion 1 packet): 32 subjects × 3 animation frames (walk A / walk B / attack — DECLARED frame exception to the static-subject clause), 96 cells / 7 sheets; slugs `jam-*`, output to `assets/sprites-jam/`
 - [`fantasy.md`](fantasy.md) — **Fantasy — Genesis's default, unreskinned world** (not one of the 11 named realms; the base game's own 510-entry Monster Manual bestiary + the raw NPC Role Spine, no genre reskin): 510 monsters / 21 sheets, 75 NPC roles / 3 sheets
 - [`setting-dressing.md`](setting-dressing.md) — **Setting dressing (place-gen lane)** — Part 2 of `docs/PLACE-ASSET-QUEUE.md` translated to batch prompts: signs, banners/flags, paintings/posters/notices, window glows, graffiti tags, FX sprites (flat/pictorial, not creature poses) — 23 Part 2 entries / 4 sheets (signs-frontier 12, signs-chrome 14, signs-gloom 13, fx-cross-realm 8 cells; 8 backfill realms deferred to their skin-file craft pass per the queue's own sheet plan)
 - [`ash.md`](ash.md) — Ash (post-apocalyptic, the world already ended once): 118 monsters / 5 sheets, 75 NPC roles / 3 sheets

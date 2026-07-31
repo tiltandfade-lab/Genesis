@@ -3,7 +3,7 @@ type: design-doc
 branch: Genesis
 status: living
 created: 2026-06-17
-updated: 2026-07-22
+updated: 2026-07-27
 canonical: true
 related:
   - "[[genesis.html]]"
@@ -2466,3 +2466,129 @@ header cites), `dev/verify-realm-wiring.mjs` (78/78), `dev/verify-urban-fabric.m
 sabotaged maps in two different files, reverted clean, run for real; exit 1 on any BLOCK-tier
 coverage gap, informational-only (never blocking) on the two maps that document their own partial
 coverage as intentional.
+## PROPOSED — A1 · One socket algebra (2026-07-27, Fable; Codex revision invited)
+
+**Authority: `CLAYROOM-PROOF-BACKLOG.md` § A1 "One socket algebra"** — Tier 0, root of the
+clayroom architectural backlog, blocking A2, A4, A5, A6, A7, A8 and A12; its decision-log row
+**D1** is what this unit builds. Secondary authorities reconciled: `KENNEY-SOCKET-WAVE.md` KS-1
+(Adam's ruling *"adopt their conventions, don't invent a schema"*), `STRUCTURE-KIT-CATALOG.md` §4
+(*"One merged registry, one authority, owed at C1H validator time"* — owed since 2026-07-24), and
+`ART-DIRECTION-CANON.md`'s protected `SOCKET` production scope, which until now presupposed a
+persisted socket record that existed in no file.
+
+**Status is PROPOSED, not locked.** Adam's ruling for this unit was *proceed with Opus latitude,
+Codex may revise later* — so every decision below carries its grounds, and the paper trail is the
+law until a founder or Codex ruling replaces it. Visual verdicts were never in scope: this is a
+back-end contract plus its validator, with no capture packet.
+
+**The problem, measured.** Seven incompatible representations, three of them fighting over one
+field. `theater-procedural-kit.js` wrote `userData.sockets = {type, position, rotation, …extra}`
+with a *functional* vocabulary (`axle`, `hinge-axis`, `cargo`, `load`); `theater-donor.js` wrote
+the **same key** with an *architectural* one (`floor-mount`, `top-surface`, `butt-join-{n,e,s,w}`)
+and no orientation at all; `theater-boot.js` read both through a bare string match. Nothing
+validated either, so `attachProceduralAtSocket()` would silently "work" on a meaningless type
+match. The census across every live source — the kit's 100 call sites, `normalize-donors.py`, the
+three shipped normalized packs, the CL-F01 structure specimens, the Meshy runtime-citizenship
+pack, the seven frozen figure anchors and the paper prop-library strings — is **103 distinct type
+names**, and no file anywhere held the list.
+
+### What landed
+
+- **`src/ui/theater-socket-algebra.js`** — the one vocabulary. 14 physical **join classes**, a
+  **105-row type registry**, the record schema, the seat laws, and six **projections** that turn
+  A1's seven legacy representations into views of one record. Its doc-block names
+  `CLAYROOM-PROOF-BACKLOG.md § A1` as its authority. It **imports nothing** — no three, no DOM.
+- **`dev/verify-socket-algebra.mjs`** — the teeth `STRUCTURE-KIT-CATALOG.md` §4 owed. Plain node,
+  sub-second, CI-safe (not a 20th puppeteer harness). **RED-FIRST**: written and run against the
+  live three-vocabulary state before any writer was touched, failing on 8 checks — the three
+  writers each still owning a private vocabulary, `theater-donor.js:414` pushing a raw socket
+  literal, and four reader sites still reaching for the flat `.position` / `.rotation` keys.
+- **Migrated:** `theater-procedural-kit.js` (its single `socket()` funnel, `socketsOfProcedural`,
+  `attachProceduralAtSocket`, the occupied-dressing reader), `theater-donor.js` (the
+  `loadDonorPiece` flattening, `socketsByType`), `theater-boot.js` (the donor floor-mount reader
+  and the kit-door hinge reader). Plus `manifest.json` + the `genesis.html` module tag.
+
+### The record
+
+```
+{ id, type, ownerRef,
+  frame: { position:[x,y,z], normal:[x,y,z], tangent:[x,y,z] },
+  accepts: [typeIds], capacity: n, occupiedBy: [refs], envelope: {…}|null,
+  scaleRule: "fixed"|"stretch-u"|"stretch-uv",
+  provenance: { source, version, frameSource } }
+```
+
+`normal` is the direction the **receiver faces**; `tangent` is the in-face reference axis and for a
+pin join it **is the pin axis**; `right = tangent × normal` completes the basis, so the seated
+child's local (+X, +Y, +Z) are (right, tangent, normal). Nothing anywhere assumes a world axis,
+which is what makes a wall mount correct at any yaw including non-axis-aligned faces.
+
+### Decisions, with grounds
+
+1. **A1's field list is honoured verbatim; the seven shapes became projections, not replacements.**
+   `theater-room-mesh.js`'s `mountSlots`, the CL-F01 structure specs, the figure anchors and the
+   Meshy citizenship strings keep their own storage and are projected at the boundary. Grounds: A1
+   says *"make the existing seven projections of it rather than replacing them"*, and rewriting
+   `room-mesh` storage would put a dozen unrelated geometry harnesses at risk for no contract gain.
+2. **`occupiedBy` is an array, not A1's literal `refOrNull`.** Grounds: `capacity: n` is
+   unrepresentable by a single ref once n > 1, and A1's own stated purpose for the pair — *"makes
+   representation 4's one-slot-per-wall limit visible instead of silent"* — requires counting.
+3. **`envelope` is added to A1's field list.** Grounds: (a) A1's *"a rule about what may enter it"*
+   is only half expressible by type — a shaft too fat for a bore is a construction error no type
+   check catches; (b) the kit **already emits** these numbers (`radius`, `span`, `width`, `height`,
+   `pitchRadius`) as loose `extra` keys, so dropping them at migration would be a regression.
+4. **`provenance.frameSource` is added.** The donor normalizer stamps **position only**, so donor
+   records take their orientation from the type's declared default. That is a real weakness; it is
+   now **recorded in the record** (`"type-default"` vs `"authored"` / `"euler"` / `"measured"`)
+   rather than hidden behind a plausible-looking vector. Same reasoning as decision 2 — make the
+   limit visible.
+5. **Not one type name was renamed.** Every one of the 105 rows cites at least one live emitter,
+   and the validator fails any row that cites none. Grounds: KS-1's *"adopt their conventions,
+   don't invent a schema"*, made countable.
+6. **Aliases instead of renames** for the three Meshy names that are the same join as an existing
+   structural one (`join-west`→`butt-join-w`, `join-east`→`butt-join-e`, `join-top`→`top-surface`)
+   and for the kit's `hinge-axis`→`hinge`. `socketsOfKind()` and `canSeat()` resolve them, so a
+   caller asking for `butt-join-w` finds a Meshy piece's `join-west`. Grounds: renaming donor data
+   violates KS-1; leaving them disjoint is the eighth vocabulary A1 forbids.
+7. **`catch` stays ONE row with two readings** — the latch's strike keeper (kit) and the grapple
+   purchase on a wall head (structure §6a). Grounds: physically they are the same join (a prepared
+   feature that arrests a load under tension); forking the name would have meant editing frozen
+   catalog data to suit a validator, which the *"validators preserve the thing's job"* discipline
+   forbids.
+8. **Figure anchors are namespaced `figure:*`.** Three of the seven frozen names (`head`, `base`,
+   `mount`) collide with kit names carrying different joins; merging them flat would produce
+   exactly the *"a joist pocket that accepts a sconce"* error A1 opens on.
+9. **Emission points are not sockets.** `effect-origin`, `flame-origin`, `light-origin`,
+   `signal-origin`, `signal-top`, `loot-origin` — and the declarative `open` / `passage` — are
+   registered with `seating: false`, `capacity: 0`, `accepts: []`. Grounds: A1 defines a socket as
+   *"a named receiver with a position, an orientation, and a rule about what may enter it"*; an
+   origin receives nothing, and pretending otherwise would make `accepts` meaningless.
+10. **Default `capacity` is 1 everywhere it seats.** The honest per-type counts for containers and
+    beds are **A7's** (containers, contents and holding allocation), not this unit's.
+
+### Teeth — what green asserts
+
+Registry sanity (every row carries a physical-join restatement, aliases resolve, non-seating kinds
+seat nothing, accepts symmetry, no invented rows) · **one merged registry** (every type name
+emitted by all seven representations is registered — 103 harvested from 11 live sources) · **the
+funnel** (each writer delegates to `makeSocket()`/the projections; zero raw socket literals under
+`src/`) · **reader migration** (no runtime reader reaches for the flat legacy keys) · **geometry
+unchanged** (all 100 kit Euler triples round-trip through `frame{normal,tangent}` and back, max
+error `0.000e+0` — the proof this moved a contract, not a model) · **yaw-hostile** (four wall faces
+plus a 37° face) · **typed rejection** (`socket-type-mismatch` for a joist pocket asked to take a
+sconce, `capacity-exceeded` for a second thing at a one-slot wall mount, `envelope-exceeded` for an
+over-fat shaft, `non-seating-socket` for an emission origin) · **projections** (141 records across
+reps 1/3/4/5/6/7 plus all 314 shipped donor sockets, all schema-valid).
+
+Gates: `check-manifest.py` **RESULT: OK**; `verify-socket-algebra` OK; the theater/kit/donor/
+procedural/standee harness sweep green except `verify-theater-surface.mjs`, whose 2 failures are
+**pre-existing** — proven by re-running it against the untouched tracked state, where it fails
+identically on the same 15 `_clay*ForTest` keys (clay-room test-seam drift from another lane).
+Also green: `verify-ks2-door-assembly`, `verify-kenney-adapter`, `verify-meshy-runtime-pack`,
+`verify-clay-room`.
+
+**What this does NOT do.** A1's clay proof — the `CL-F07 assembly-bench` fixture with its socket
+triad visualization, illegal-pairing capture and morph sheet — is not built here; this unit is the
+countable back-end half. The donor normalizer still stamps position-only (deriving real measured
+normals at build time is a `normalize-donors.py` change and a pack re-bake, deliberately out of
+scope). `mountSlots`, the structure specs and the figure anchors are projected, not re-stored.

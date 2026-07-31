@@ -11,6 +11,19 @@ import {
   donorMaterialContextFromText,
   donorMaterialForFamily,
 } from "./theater-donor.js";
+// A1 SOCKET ALGEBRA (docs/CLAYROOM-PROOF-BACKLOG.md § A1, decision-log D1). This module used to own
+// its own socket vocabulary — `{type, position, rotation, …extra}` written onto the SAME
+// `userData.sockets` key theater-donor.js writes, with a DISJOINT type list and nothing validating
+// either. It now emits the one canonical record through the shared funnel; the type NAMES are
+// unchanged (Adam's KS-1 ruling: adopt the kits' conventions, don't invent a schema), only the
+// record shape moved. socketEulerXYZ() reproduces the old `rotation` triples exactly, so no
+// geometry moved with it — dev/verify-socket-algebra.mjs proves the round-trip over all 100 sites.
+import {
+  socketFromEulerSpec,
+  socketEulerXYZ,
+  socketPosition,
+  socketsOfKind,
+} from "./theater-socket-algebra.js";
 
 export const PROCEDURAL_PART_KINDS = Object.freeze([
   "wheel", "axle", "handle", "crank", "hinge", "latch", "hook", "bracket", "spike", "foot",
@@ -242,14 +255,22 @@ function segment(group, from, to, radius, channel, options, name, sides) {
   );
   return orientBetween(mesh, from, to);
 }
+// THE FUNNEL for this writer. Every one of this file's ~100 socket emissions goes through here, so
+// routing it at socketFromEulerSpec() makes the whole kit canonical by construction rather than by
+// 100 hand-edits. `rotation` stays the authoring form (a three.js Euler XYZ triple) — the algebra
+// converts it to frame{normal,tangent} losslessly. `extra`'s dimensional keys (radius/width/height/
+// span/pitchRadius) become the record's `envelope`; `extra.slot` is identity and folds into the id.
 function socket(group, type, position, rotation, extra) {
-  group.userData.sockets ||= [];
-  const entry = Object.assign({
-    type,
-    position: vector(position).toArray(),
-    rotation: rotation || [0, 0, 0],
-  }, extra || {});
-  group.userData.sockets.push(entry);
+  const list = (group.userData.sockets ||= []);
+  let ordinal = 0;
+  for (const existing of list) if (existing.type === type) ordinal++;
+  const kind = group.userData.genesisProceduralKit && group.userData.genesisProceduralKit.kind;
+  const entry = socketFromEulerSpec(type, vector(position).toArray(), rotation || [0, 0, 0], extra, {
+    ordinal,
+    ownerRef: kind ? `procedural:${kind}` : null,
+    source: "procedural-kit",
+  });
+  list.push(entry);
   return entry;
 }
 function begin(kind, options, category) {
@@ -1295,18 +1316,19 @@ export function createProceduralBarrier(options) {
   return finish(group);
 }
 
+// Typed reader — socketsOfKind resolves the registry's declared aliases (a `hinge-axis` request
+// finds a `hinge`, a `join-west` finds a `butt-join-w`), which a bare `entry.type ===` never could.
 export function socketsOfProcedural(group, type) {
-  const sockets = group?.userData?.sockets || [];
-  return type ? sockets.filter((entry) => entry.type === type) : sockets.slice();
+  return socketsOfKind(group?.userData?.sockets || [], type);
 }
 export function attachProceduralAtSocket(parent, child, type, index) {
   const matches = socketsOfProcedural(parent, type);
   const target = matches[index || 0];
   if (!target) throw new Error(`No ${type} socket ${index || 0} on ${parent?.name || "group"}`);
-  child.position.fromArray(target.position);
-  child.rotation.set(...target.rotation);
+  child.position.fromArray(socketPosition(target));
+  child.rotation.set(...socketEulerXYZ(target)); // identical to the pre-A1 `target.rotation` triple
   parent.add(child);
-  child.userData.attachedSocket = { type, index: index || 0 };
+  child.userData.attachedSocket = { type, index: index || 0, socketId: target.id };
   return child;
 }
 
@@ -1513,7 +1535,7 @@ function addOccupiedDressing(group, bounds, opts) {
       scale: Math.max(0.48, Math.min(0.82, bounds.size.x / 1.8)),
     }));
     const target = sockets[index];
-    if (target) cargo.position.fromArray(target.position);
+    if (target) cargo.position.fromArray(socketPosition(target));
     else cargo.position.set(
       bounds.center.x + (index ? 1 : -1) * bounds.size.x * 0.26,
       bounds.box.min.y,

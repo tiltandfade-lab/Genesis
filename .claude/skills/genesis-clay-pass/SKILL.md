@@ -63,7 +63,9 @@ Unclear calls surface to Adam BEFORE code: batch them ≤10, plain English, ids 
    of this stuff makes any sense in plain english"). Then the countable checklist: only
    assertions Adam can verify against pixels ("count 6 cells between goblin and door", "HP
    reads 4/11"). If several shots share one scene, say plainly what VARIES between them. No
-   aesthetic claims. Adam rules ON/OFF; his redlines become fixtures (the W11 teaching loop).
+   aesthetic claims. Use `genesis-review-visuals` before packaging to diagnose the frame,
+   make controlled systemic edits, and state `READY FOR ADAM REVIEW` or the next corrective
+   unit. Adam rules ON/OFF; his redlines become fixtures (the W11 teaching loop).
 5. **Mint goldens** — captures Adam approved become regression goldens; from then on, drift
    from a golden is machine-detected (pixel/scene-graph diff), so his re-review is only needed
    when the picture is *supposed* to change.

@@ -1,0 +1,3186 @@
+{
+  "meta": {
+    "spec": "docs/TACTICAL-PROMISE-GATE.md §2 T1",
+    "source": "Reference/FFT-Triangle-Strategy-World-Study/data/MEASUREMENTS.csv",
+    "countingRuleAuthority": "Reference/FFT-Triangle-Strategy-World-Study/lane-1-footprint-topology-pacing.md",
+    "generator": "dev/research/extract-tactical-bands.mjs",
+    "deterministic": "no timestamps; fixed ordering; reruns are byte-identical",
+    "rowCounts": {
+      "csvDataRows": 45,
+      "bandEligible": 24,
+      "excluded": 21,
+      "byGame": {
+        "FFT": 12,
+        "TriangleStrategy": 12,
+        "Genesis": 12,
+        "IvaliceChronicles": 9
+      }
+    },
+    "sizeClassDriver": "traversableCellEstimate",
+    "metrics": [
+      "elevationBandCount",
+      "maxConsequentialElevationDelta",
+      "majorRouteCount",
+      "alternateRouteCount",
+      "shortLoopCount",
+      "chokepointCount",
+      "reachableHighGroundCount",
+      "spawnToFirstDecisionCells"
+    ],
+    "derivedRules": {
+      "midpoint": "a cell's LEADING numeric token is the value: \"3-4\" -> 3.5, \"2-3h\" -> strip unit letters then midpoint -> 2.5, \"120-140 (visual; envelope 156)\" -> leading range only -> 130, \"~200-280 (est)\" -> 240 (leading \"~\" recorded as approximate). Parentheticals are annotation, never value.",
+      "quantile": "p10/median/p90 by linear interpolation between order statistics (type R-7, the numpy/Excel default): q(p) = s[(n-1)p] interpolated; min/max exact.",
+      "terciles": "per grouping over that grouping's own driver values: e1 = ceil(n/3)-th smallest, e2 = ceil(2n/3)-th smallest; small v<=e1, medium e1<v<=e2, large v>e2; equal driver values always share a class. Computed per grouping so every class is non-empty in both groupings (a single pooled edge set would leave fftOnly's large class empty).",
+      "exclusions": {
+        "Genesis": "subject-under-test rows (design intents / engine fixtures), not tactics-corpus evidence; cells are design-intent prose, and the DECLARED GAP row carries em-dash placeholders",
+        "IvaliceChronicles": "alias rows — every tactical cell reads \"as FFT (same board)\" (no independent values); 3 of 9 (Lionel Castle Gate, Riovanes Castle Roof, Sand Rat's Sietch) alias boards that are not among the 12 measured FFT rows, and resolving the other 6 would only double-weight FFT boards in the pooled band"
+      },
+      "specialCases": [
+        {
+          "mapName": "Telliore reservoir dam",
+          "column": "maxConsequentialElevationDelta",
+          "value": 32,
+          "note": "cell is prose, not a range: the study recorded the HUD reading 'Height 32' — TS fine height units, an absolute tile height documented as evidence of a large delta, not a measured delta, and incomparable to FFT h-units. Parsed as 32 so the pooled grouping SHOWS the unit clash instead of hiding the row; the fftOnly grouping is unaffected."
+        }
+      ],
+      "unitCaveat": "maxConsequentialElevationDelta pools two unit systems (FFT h-units vs TS \"units\"/fine HUD units). fftOnly bands are unit-clean; pooled delta bands are shown for the §5 Q1 ruling but are NOT unit-normalized."
+    },
+    "countingRules": [
+      {
+        "metric": "traversableCellEstimate (size-class driver)",
+        "quotes": [
+          "§1.1: \"Measured (28 px/tile top-down renders, cross-checked against FFHacktics data grids; 40/48 exact agreement, 8 cases where the data grid carries 1–2 unrendered edge columns — both figures recorded)\"",
+          "§1.3: \"FFT: measured non-void share of the top-down envelope: 60–95% by map (CSV per-row); the remainder is *composed void*, not world — beyond the edge is black.\"",
+          "§1.2 (TS method): \"No public per-tile data exists (declared measurement limit). From full-map deploy renders with visible grid patches + unit-height scale reference (sprite ≈ 1 tile)\""
+        ]
+      },
+      {
+        "metric": "elevationBandCount",
+        "quotes": [
+          "§1.7: \"FFT cohort: 2–5 bands; every reachable band is contestable (height = attack/defense + range mechanics per the Aerostar BMG, 783K-char local copy); scenery-only verticals are clearly nonwalkable (spires, church towers, tree crowns).\""
+        ]
+      },
+      {
+        "metric": "maxConsequentialElevationDelta",
+        "quotes": [
+          "lane-1 states NO dedicated counting rule for this column (flagged per gate G3 — nothing to inherit beyond §1.7's consequential-vs-decorative frame, quoted above). The CSV cells carry their own unit annotations: FFT \"(FFT h-units, visual est)\", TS \"units\". The two unit systems are NOT comparable — see DERIVED notes."
+        ]
+      },
+      {
+        "metric": "majorRouteCount",
+        "quotes": [
+          "§1.8: \"primary routes 1 (Mandalia's open field = 2–3 broad approaches)\"",
+          "§1.8: \"**The shape is: one spine, one licensed alternate, one constraint**\"",
+          "lane-1 states NO cell-share distinctness rule; the spec §2 T2 \"≤30% shared cells\" rule stays DERIVED (spec-origin), uncontradicted by lane-1."
+        ]
+      },
+      {
+        "metric": "alternateRouteCount",
+        "quotes": [
+          "§1.8: \"alternates 0–2\""
+        ]
+      },
+      {
+        "metric": "shortLoopCount",
+        "quotes": [
+          "§1.8: \"short loops 0–1\""
+        ]
+      },
+      {
+        "metric": "chokepointCount",
+        "quotes": [
+          "§1.8: \"chokepoints 0–2 (gates/bridges)\""
+        ]
+      },
+      {
+        "metric": "reachableHighGroundCount",
+        "quotes": [
+          "§1.8: \"reachable high grounds 1–6; scenery masses 1–8\"",
+          "§1.7 (the reachable-vs-scenery split): \"scenery-only verticals are clearly nonwalkable (spires, church towers, tree crowns)\" — the CSV keeps the scenery side in its own column, sceneryOnlyHighMassCount."
+        ]
+      },
+      {
+        "metric": "spawnToFirstDecisionCells",
+        "quotes": [
+          "§1.4: \"FFT (cohort views + documented starts): party spawns at a board edge; enemies visible immediately; first branch (route/height choice) within **2–4 cells**.\"",
+          "§1.4: \"TS (Wolffort deploy render): deploy tiles abut the contested street; first choice (street vs stair-to-roofs) is **1–3 cells** out.\""
+        ]
+      }
+    ],
+    "t2Flags": [
+      "Spec §3 G2 GREEN-fixture values for Grog Hill MAP081 (\"2-3 bands, 5-6h delta, 1 major + 1 alternate, 2 loops, 4 chokepoints\") disagree with the CSV row, which reads: spawnToFirstDecisionCells 2-3, elevationBandCount 4, delta 5-6h, 1 major + 1 alternate, 1 loop, 2 chokepoints, 4 reachable high grounds. The spec line appears column-shifted; MEASUREMENTS.csv is the row-level authority (lane-1: \"Data: `data/MEASUREMENTS.csv` (row-level)\"). T2 must hand-translate the fixture from the CSV row, not the spec prose.",
+      "lane-1 defines no counting rule for maxConsequentialElevationDelta and no route cell-share distinctness rule; both stay DERIVED in T2 (gate G3 flags, lane-1 wins if it ever states one)."
+    ]
+  },
+  "groupings": {
+    "fftOnly": {
+      "rows": [
+        "Mandalia Plains",
+        "Grog Hill",
+        "Sweegy Woods",
+        "Zirekile Falls",
+        "Fort Zeakden",
+        "Dorter Trade City",
+        "At Main Gate of Igros Castle",
+        "Orbonne Monastery",
+        "Goug Machine City",
+        "Underground Book Storage Fifth Floor",
+        "Bervenia Free City",
+        "Inside of Windmill Shed"
+      ],
+      "n": 12,
+      "tercileEdges": {
+        "e1": 67.5,
+        "e2": 92.5,
+        "min": 47.5,
+        "max": 130
+      },
+      "sizeClassRule": "small: traversable <= 67.5 · medium: <= 92.5 · large: > 92.5 (edges DERIVED from this grouping's own rows; equal values always share a class)",
+      "classes": {
+        "small": {
+          "rows": [
+            "Zirekile Falls",
+            "Dorter Trade City",
+            "Goug Machine City",
+            "Inside of Windmill Shed"
+          ],
+          "n": 4
+        },
+        "medium": {
+          "rows": [
+            "Fort Zeakden",
+            "At Main Gate of Igros Castle",
+            "Orbonne Monastery",
+            "Bervenia Free City"
+          ],
+          "n": 4
+        },
+        "large": {
+          "rows": [
+            "Mandalia Plains",
+            "Grog Hill",
+            "Sweegy Woods",
+            "Underground Book Storage Fifth Floor"
+          ],
+          "n": 4
+        }
+      },
+      "driver": {
+        "all": {
+          "min": 47.5,
+          "p10": 58,
+          "median": 85,
+          "p90": 127.75,
+          "max": 130,
+          "n": 12,
+          "sourceRows": [
+            "Mandalia Plains",
+            "Grog Hill",
+            "Sweegy Woods",
+            "Zirekile Falls",
+            "Fort Zeakden",
+            "Dorter Trade City",
+            "At Main Gate of Igros Castle",
+            "Orbonne Monastery",
+            "Goug Machine City",
+            "Underground Book Storage Fifth Floor",
+            "Bervenia Free City",
+            "Inside of Windmill Shed"
+          ]
+        },
+        "small": {
+          "min": 47.5,
+          "p10": 50.5,
+          "median": 60,
+          "p90": 66,
+          "max": 67.5,
+          "n": 4,
+          "sourceRows": [
+            "Zirekile Falls",
+            "Dorter Trade City",
+            "Goug Machine City",
+            "Inside of Windmill Shed"
+          ]
+        },
+        "medium": {
+          "min": 77.5,
+          "p10": 79,
+          "median": 85,
+          "p90": 91,
+          "max": 92.5,
+          "n": 4,
+          "sourceRows": [
+            "Fort Zeakden",
+            "At Main Gate of Igros Castle",
+            "Orbonne Monastery",
+            "Bervenia Free City"
+          ]
+        },
+        "large": {
+          "min": 102.5,
+          "p10": 104,
+          "median": 118.75,
+          "p90": 130,
+          "max": 130,
+          "n": 4,
+          "sourceRows": [
+            "Mandalia Plains",
+            "Grog Hill",
+            "Sweegy Woods",
+            "Underground Book Storage Fifth Floor"
+          ]
+        }
+      },
+      "bands": {
+        "all": {
+          "elevationBandCount": {
+            "min": 2,
+            "p10": 2,
+            "median": 3,
+            "p90": 4,
+            "max": 5,
+            "n": 12,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Zirekile Falls",
+              "Fort Zeakden",
+              "Dorter Trade City",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Goug Machine City",
+              "Underground Book Storage Fifth Floor",
+              "Bervenia Free City",
+              "Inside of Windmill Shed"
+            ]
+          },
+          "maxConsequentialElevationDelta": {
+            "min": 2,
+            "p10": 2.5,
+            "median": 5,
+            "p90": 7.5,
+            "max": 9.5,
+            "n": 12,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Zirekile Falls",
+              "Fort Zeakden",
+              "Dorter Trade City",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Goug Machine City",
+              "Underground Book Storage Fifth Floor",
+              "Bervenia Free City",
+              "Inside of Windmill Shed"
+            ]
+          },
+          "majorRouteCount": {
+            "min": 1,
+            "p10": 1,
+            "median": 1,
+            "p90": 1.9,
+            "max": 2,
+            "n": 12,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Zirekile Falls",
+              "Fort Zeakden",
+              "Dorter Trade City",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Goug Machine City",
+              "Underground Book Storage Fifth Floor",
+              "Bervenia Free City",
+              "Inside of Windmill Shed"
+            ]
+          },
+          "alternateRouteCount": {
+            "min": 0,
+            "p10": 0,
+            "median": 1,
+            "p90": 1,
+            "max": 2,
+            "n": 12,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Zirekile Falls",
+              "Fort Zeakden",
+              "Dorter Trade City",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Goug Machine City",
+              "Underground Book Storage Fifth Floor",
+              "Bervenia Free City",
+              "Inside of Windmill Shed"
+            ]
+          },
+          "shortLoopCount": {
+            "min": 0,
+            "p10": 0,
+            "median": 1,
+            "p90": 1,
+            "max": 1,
+            "n": 12,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Zirekile Falls",
+              "Fort Zeakden",
+              "Dorter Trade City",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Goug Machine City",
+              "Underground Book Storage Fifth Floor",
+              "Bervenia Free City",
+              "Inside of Windmill Shed"
+            ]
+          },
+          "chokepointCount": {
+            "min": 0,
+            "p10": 1,
+            "median": 1,
+            "p90": 2,
+            "max": 2,
+            "n": 12,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Zirekile Falls",
+              "Fort Zeakden",
+              "Dorter Trade City",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Goug Machine City",
+              "Underground Book Storage Fifth Floor",
+              "Bervenia Free City",
+              "Inside of Windmill Shed"
+            ]
+          },
+          "reachableHighGroundCount": {
+            "min": 1,
+            "p10": 1.1,
+            "median": 3,
+            "p90": 5,
+            "max": 6,
+            "n": 12,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Zirekile Falls",
+              "Fort Zeakden",
+              "Dorter Trade City",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Goug Machine City",
+              "Underground Book Storage Fifth Floor",
+              "Bervenia Free City",
+              "Inside of Windmill Shed"
+            ]
+          },
+          "spawnToFirstDecisionCells": {
+            "min": 2,
+            "p10": 2.5,
+            "median": 2.5,
+            "p90": 3.5,
+            "max": 3.5,
+            "n": 12,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Zirekile Falls",
+              "Fort Zeakden",
+              "Dorter Trade City",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Goug Machine City",
+              "Underground Book Storage Fifth Floor",
+              "Bervenia Free City",
+              "Inside of Windmill Shed"
+            ]
+          }
+        },
+        "small": {
+          "elevationBandCount": {
+            "min": 2,
+            "p10": 2.3,
+            "median": 3.5,
+            "p90": 4,
+            "max": 4,
+            "n": 4,
+            "sourceRows": [
+              "Zirekile Falls",
+              "Dorter Trade City",
+              "Goug Machine City",
+              "Inside of Windmill Shed"
+            ]
+          },
+          "maxConsequentialElevationDelta": {
+            "min": 2,
+            "p10": 2.6,
+            "median": 5.25,
+            "p90": 7.2,
+            "max": 7.5,
+            "n": 4,
+            "sourceRows": [
+              "Zirekile Falls",
+              "Dorter Trade City",
+              "Goug Machine City",
+              "Inside of Windmill Shed"
+            ]
+          },
+          "majorRouteCount": {
+            "min": 1,
+            "p10": 1,
+            "median": 1,
+            "p90": 1,
+            "max": 1,
+            "n": 4,
+            "sourceRows": [
+              "Zirekile Falls",
+              "Dorter Trade City",
+              "Goug Machine City",
+              "Inside of Windmill Shed"
+            ]
+          },
+          "alternateRouteCount": {
+            "min": 0,
+            "p10": 0,
+            "median": 0.5,
+            "p90": 1.7,
+            "max": 2,
+            "n": 4,
+            "sourceRows": [
+              "Zirekile Falls",
+              "Dorter Trade City",
+              "Goug Machine City",
+              "Inside of Windmill Shed"
+            ]
+          },
+          "shortLoopCount": {
+            "min": 0,
+            "p10": 0,
+            "median": 0.5,
+            "p90": 1,
+            "max": 1,
+            "n": 4,
+            "sourceRows": [
+              "Zirekile Falls",
+              "Dorter Trade City",
+              "Goug Machine City",
+              "Inside of Windmill Shed"
+            ]
+          },
+          "chokepointCount": {
+            "min": 1,
+            "p10": 1,
+            "median": 1,
+            "p90": 1,
+            "max": 1,
+            "n": 4,
+            "sourceRows": [
+              "Zirekile Falls",
+              "Dorter Trade City",
+              "Goug Machine City",
+              "Inside of Windmill Shed"
+            ]
+          },
+          "reachableHighGroundCount": {
+            "min": 1,
+            "p10": 1.3,
+            "median": 3.5,
+            "p90": 5,
+            "max": 5,
+            "n": 4,
+            "sourceRows": [
+              "Zirekile Falls",
+              "Dorter Trade City",
+              "Goug Machine City",
+              "Inside of Windmill Shed"
+            ]
+          },
+          "spawnToFirstDecisionCells": {
+            "min": 2,
+            "p10": 2.15,
+            "median": 2.5,
+            "p90": 2.5,
+            "max": 2.5,
+            "n": 4,
+            "sourceRows": [
+              "Zirekile Falls",
+              "Dorter Trade City",
+              "Goug Machine City",
+              "Inside of Windmill Shed"
+            ]
+          }
+        },
+        "medium": {
+          "elevationBandCount": {
+            "min": 3,
+            "p10": 3,
+            "median": 3.5,
+            "p90": 4.7,
+            "max": 5,
+            "n": 4,
+            "sourceRows": [
+              "Fort Zeakden",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Bervenia Free City"
+            ]
+          },
+          "maxConsequentialElevationDelta": {
+            "min": 4.5,
+            "p10": 4.95,
+            "median": 6.75,
+            "p90": 8.9,
+            "max": 9.5,
+            "n": 4,
+            "sourceRows": [
+              "Fort Zeakden",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Bervenia Free City"
+            ]
+          },
+          "majorRouteCount": {
+            "min": 1,
+            "p10": 1,
+            "median": 1,
+            "p90": 1.7,
+            "max": 2,
+            "n": 4,
+            "sourceRows": [
+              "Fort Zeakden",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Bervenia Free City"
+            ]
+          },
+          "alternateRouteCount": {
+            "min": 0,
+            "p10": 0.3,
+            "median": 1,
+            "p90": 1,
+            "max": 1,
+            "n": 4,
+            "sourceRows": [
+              "Fort Zeakden",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Bervenia Free City"
+            ]
+          },
+          "shortLoopCount": {
+            "min": 0,
+            "p10": 0,
+            "median": 0.5,
+            "p90": 1,
+            "max": 1,
+            "n": 4,
+            "sourceRows": [
+              "Fort Zeakden",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Bervenia Free City"
+            ]
+          },
+          "chokepointCount": {
+            "min": 1,
+            "p10": 1,
+            "median": 1.5,
+            "p90": 2,
+            "max": 2,
+            "n": 4,
+            "sourceRows": [
+              "Fort Zeakden",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Bervenia Free City"
+            ]
+          },
+          "reachableHighGroundCount": {
+            "min": 3,
+            "p10": 3,
+            "median": 3.5,
+            "p90": 5.4,
+            "max": 6,
+            "n": 4,
+            "sourceRows": [
+              "Fort Zeakden",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Bervenia Free City"
+            ]
+          },
+          "spawnToFirstDecisionCells": {
+            "min": 2.5,
+            "p10": 2.5,
+            "median": 3,
+            "p90": 3.5,
+            "max": 3.5,
+            "n": 4,
+            "sourceRows": [
+              "Fort Zeakden",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Bervenia Free City"
+            ]
+          }
+        },
+        "large": {
+          "elevationBandCount": {
+            "min": 2,
+            "p10": 2,
+            "median": 2,
+            "p90": 3.4,
+            "max": 4,
+            "n": 4,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Underground Book Storage Fifth Floor"
+            ]
+          },
+          "maxConsequentialElevationDelta": {
+            "min": 2.5,
+            "p10": 2.5,
+            "median": 2.75,
+            "p90": 4.75,
+            "max": 5.5,
+            "n": 4,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Underground Book Storage Fifth Floor"
+            ]
+          },
+          "majorRouteCount": {
+            "min": 1,
+            "p10": 1,
+            "median": 1,
+            "p90": 1.7,
+            "max": 2,
+            "n": 4,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Underground Book Storage Fifth Floor"
+            ]
+          },
+          "alternateRouteCount": {
+            "min": 1,
+            "p10": 1,
+            "median": 1,
+            "p90": 1,
+            "max": 1,
+            "n": 4,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Underground Book Storage Fifth Floor"
+            ]
+          },
+          "shortLoopCount": {
+            "min": 0,
+            "p10": 0.3,
+            "median": 1,
+            "p90": 1,
+            "max": 1,
+            "n": 4,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Underground Book Storage Fifth Floor"
+            ]
+          },
+          "chokepointCount": {
+            "min": 0,
+            "p10": 0.3,
+            "median": 1,
+            "p90": 1.7,
+            "max": 2,
+            "n": 4,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Underground Book Storage Fifth Floor"
+            ]
+          },
+          "reachableHighGroundCount": {
+            "min": 1,
+            "p10": 1.3,
+            "median": 2.5,
+            "p90": 3.7,
+            "max": 4,
+            "n": 4,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Underground Book Storage Fifth Floor"
+            ]
+          },
+          "spawnToFirstDecisionCells": {
+            "min": 2.5,
+            "p10": 2.8,
+            "median": 3.5,
+            "p90": 3.5,
+            "max": 3.5,
+            "n": 4,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Underground Book Storage Fifth Floor"
+            ]
+          }
+        }
+      }
+    },
+    "pooled": {
+      "rows": [
+        "Mandalia Plains",
+        "Grog Hill",
+        "Sweegy Woods",
+        "Zirekile Falls",
+        "Fort Zeakden",
+        "Dorter Trade City",
+        "At Main Gate of Igros Castle",
+        "Orbonne Monastery",
+        "Goug Machine City",
+        "Underground Book Storage Fifth Floor",
+        "Bervenia Free City",
+        "Inside of Windmill Shed",
+        "Norzelia green field",
+        "Falkes wheat terraces",
+        "Roselle village — NON-HOMOLOGOUS forest slot (no dense-forest battle in TS; declared absence)",
+        "Whiteholm bridge gate",
+        "Twinsgate fortress (snow)",
+        "Wolffort Streets (Ch VII town defense)",
+        "Glenbrook capital ramparts",
+        "Hyzante Goddess court",
+        "Grand Norzelia mine",
+        "Wolffort great hall — NON-HOMOLOGOUS interior slot (no roofed-interior battle frame in TS; declared)",
+        "Telliore reservoir dam",
+        "Norzelia dry steppe (sparse control)"
+      ],
+      "n": 24,
+      "tercileEdges": {
+        "e1": 92.5,
+        "e2": 240,
+        "min": 47.5,
+        "max": 425
+      },
+      "sizeClassRule": "small: traversable <= 92.5 · medium: <= 240 · large: > 240 (edges DERIVED from this grouping's own rows; equal values always share a class)",
+      "classes": {
+        "small": {
+          "rows": [
+            "Zirekile Falls",
+            "Fort Zeakden",
+            "Dorter Trade City",
+            "At Main Gate of Igros Castle",
+            "Orbonne Monastery",
+            "Goug Machine City",
+            "Bervenia Free City",
+            "Inside of Windmill Shed"
+          ],
+          "n": 8
+        },
+        "medium": {
+          "rows": [
+            "Mandalia Plains",
+            "Grog Hill",
+            "Sweegy Woods",
+            "Underground Book Storage Fifth Floor",
+            "Norzelia green field",
+            "Whiteholm bridge gate",
+            "Wolffort great hall — NON-HOMOLOGOUS interior slot (no roofed-interior battle frame in TS; declared)",
+            "Telliore reservoir dam",
+            "Norzelia dry steppe (sparse control)"
+          ],
+          "n": 9
+        },
+        "large": {
+          "rows": [
+            "Falkes wheat terraces",
+            "Roselle village — NON-HOMOLOGOUS forest slot (no dense-forest battle in TS; declared absence)",
+            "Twinsgate fortress (snow)",
+            "Wolffort Streets (Ch VII town defense)",
+            "Glenbrook capital ramparts",
+            "Hyzante Goddess court",
+            "Grand Norzelia mine"
+          ],
+          "n": 7
+        }
+      },
+      "driver": {
+        "all": {
+          "min": 47.5,
+          "p10": 64,
+          "median": 157.5,
+          "p90": 270,
+          "max": 425,
+          "n": 24,
+          "sourceRows": [
+            "Mandalia Plains",
+            "Grog Hill",
+            "Sweegy Woods",
+            "Zirekile Falls",
+            "Fort Zeakden",
+            "Dorter Trade City",
+            "At Main Gate of Igros Castle",
+            "Orbonne Monastery",
+            "Goug Machine City",
+            "Underground Book Storage Fifth Floor",
+            "Bervenia Free City",
+            "Inside of Windmill Shed",
+            "Norzelia green field",
+            "Falkes wheat terraces",
+            "Roselle village — NON-HOMOLOGOUS forest slot (no dense-forest battle in TS; declared absence)",
+            "Whiteholm bridge gate",
+            "Twinsgate fortress (snow)",
+            "Wolffort Streets (Ch VII town defense)",
+            "Glenbrook capital ramparts",
+            "Hyzante Goddess court",
+            "Grand Norzelia mine",
+            "Wolffort great hall — NON-HOMOLOGOUS interior slot (no roofed-interior battle frame in TS; declared)",
+            "Telliore reservoir dam",
+            "Norzelia dry steppe (sparse control)"
+          ]
+        },
+        "small": {
+          "min": 47.5,
+          "p10": 54.5,
+          "median": 72.5,
+          "p90": 89,
+          "max": 92.5,
+          "n": 8,
+          "sourceRows": [
+            "Zirekile Falls",
+            "Fort Zeakden",
+            "Dorter Trade City",
+            "At Main Gate of Igros Castle",
+            "Orbonne Monastery",
+            "Goug Machine City",
+            "Bervenia Free City",
+            "Inside of Windmill Shed"
+          ]
+        },
+        "medium": {
+          "min": 102.5,
+          "p10": 106.5,
+          "median": 185,
+          "p90": 240,
+          "max": 240,
+          "n": 9,
+          "sourceRows": [
+            "Mandalia Plains",
+            "Grog Hill",
+            "Sweegy Woods",
+            "Underground Book Storage Fifth Floor",
+            "Norzelia green field",
+            "Whiteholm bridge gate",
+            "Wolffort great hall — NON-HOMOLOGOUS interior slot (no roofed-interior battle frame in TS; declared)",
+            "Telliore reservoir dam",
+            "Norzelia dry steppe (sparse control)"
+          ]
+        },
+        "large": {
+          "min": 250,
+          "p10": 250,
+          "median": 270,
+          "p90": 332,
+          "max": 425,
+          "n": 7,
+          "sourceRows": [
+            "Falkes wheat terraces",
+            "Roselle village — NON-HOMOLOGOUS forest slot (no dense-forest battle in TS; declared absence)",
+            "Twinsgate fortress (snow)",
+            "Wolffort Streets (Ch VII town defense)",
+            "Glenbrook capital ramparts",
+            "Hyzante Goddess court",
+            "Grand Norzelia mine"
+          ]
+        }
+      },
+      "bands": {
+        "all": {
+          "elevationBandCount": {
+            "min": 2,
+            "p10": 2,
+            "median": 3,
+            "p90": 4,
+            "max": 5,
+            "n": 24,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Zirekile Falls",
+              "Fort Zeakden",
+              "Dorter Trade City",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Goug Machine City",
+              "Underground Book Storage Fifth Floor",
+              "Bervenia Free City",
+              "Inside of Windmill Shed",
+              "Norzelia green field",
+              "Falkes wheat terraces",
+              "Roselle village — NON-HOMOLOGOUS forest slot (no dense-forest battle in TS; declared absence)",
+              "Whiteholm bridge gate",
+              "Twinsgate fortress (snow)",
+              "Wolffort Streets (Ch VII town defense)",
+              "Glenbrook capital ramparts",
+              "Hyzante Goddess court",
+              "Grand Norzelia mine",
+              "Wolffort great hall — NON-HOMOLOGOUS interior slot (no roofed-interior battle frame in TS; declared)",
+              "Telliore reservoir dam",
+              "Norzelia dry steppe (sparse control)"
+            ]
+          },
+          "maxConsequentialElevationDelta": {
+            "min": 2,
+            "p10": 2.65,
+            "median": 6,
+            "p90": 10,
+            "max": 32,
+            "n": 24,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Zirekile Falls",
+              "Fort Zeakden",
+              "Dorter Trade City",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Goug Machine City",
+              "Underground Book Storage Fifth Floor",
+              "Bervenia Free City",
+              "Inside of Windmill Shed",
+              "Norzelia green field",
+              "Falkes wheat terraces",
+              "Roselle village — NON-HOMOLOGOUS forest slot (no dense-forest battle in TS; declared absence)",
+              "Whiteholm bridge gate",
+              "Twinsgate fortress (snow)",
+              "Wolffort Streets (Ch VII town defense)",
+              "Glenbrook capital ramparts",
+              "Hyzante Goddess court",
+              "Grand Norzelia mine",
+              "Wolffort great hall — NON-HOMOLOGOUS interior slot (no roofed-interior battle frame in TS; declared)",
+              "Telliore reservoir dam",
+              "Norzelia dry steppe (sparse control)"
+            ]
+          },
+          "majorRouteCount": {
+            "min": 1,
+            "p10": 1,
+            "median": 1,
+            "p90": 1.7,
+            "max": 2,
+            "n": 24,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Zirekile Falls",
+              "Fort Zeakden",
+              "Dorter Trade City",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Goug Machine City",
+              "Underground Book Storage Fifth Floor",
+              "Bervenia Free City",
+              "Inside of Windmill Shed",
+              "Norzelia green field",
+              "Falkes wheat terraces",
+              "Roselle village — NON-HOMOLOGOUS forest slot (no dense-forest battle in TS; declared absence)",
+              "Whiteholm bridge gate",
+              "Twinsgate fortress (snow)",
+              "Wolffort Streets (Ch VII town defense)",
+              "Glenbrook capital ramparts",
+              "Hyzante Goddess court",
+              "Grand Norzelia mine",
+              "Wolffort great hall — NON-HOMOLOGOUS interior slot (no roofed-interior battle frame in TS; declared)",
+              "Telliore reservoir dam",
+              "Norzelia dry steppe (sparse control)"
+            ]
+          },
+          "alternateRouteCount": {
+            "min": 0,
+            "p10": 0.3,
+            "median": 1,
+            "p90": 2,
+            "max": 2,
+            "n": 24,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Zirekile Falls",
+              "Fort Zeakden",
+              "Dorter Trade City",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Goug Machine City",
+              "Underground Book Storage Fifth Floor",
+              "Bervenia Free City",
+              "Inside of Windmill Shed",
+              "Norzelia green field",
+              "Falkes wheat terraces",
+              "Roselle village — NON-HOMOLOGOUS forest slot (no dense-forest battle in TS; declared absence)",
+              "Whiteholm bridge gate",
+              "Twinsgate fortress (snow)",
+              "Wolffort Streets (Ch VII town defense)",
+              "Glenbrook capital ramparts",
+              "Hyzante Goddess court",
+              "Grand Norzelia mine",
+              "Wolffort great hall — NON-HOMOLOGOUS interior slot (no roofed-interior battle frame in TS; declared)",
+              "Telliore reservoir dam",
+              "Norzelia dry steppe (sparse control)"
+            ]
+          },
+          "shortLoopCount": {
+            "min": 0,
+            "p10": 0,
+            "median": 1,
+            "p90": 1,
+            "max": 1,
+            "n": 24,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Zirekile Falls",
+              "Fort Zeakden",
+              "Dorter Trade City",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Goug Machine City",
+              "Underground Book Storage Fifth Floor",
+              "Bervenia Free City",
+              "Inside of Windmill Shed",
+              "Norzelia green field",
+              "Falkes wheat terraces",
+              "Roselle village — NON-HOMOLOGOUS forest slot (no dense-forest battle in TS; declared absence)",
+              "Whiteholm bridge gate",
+              "Twinsgate fortress (snow)",
+              "Wolffort Streets (Ch VII town defense)",
+              "Glenbrook capital ramparts",
+              "Hyzante Goddess court",
+              "Grand Norzelia mine",
+              "Wolffort great hall — NON-HOMOLOGOUS interior slot (no roofed-interior battle frame in TS; declared)",
+              "Telliore reservoir dam",
+              "Norzelia dry steppe (sparse control)"
+            ]
+          },
+          "chokepointCount": {
+            "min": 0,
+            "p10": 0.3,
+            "median": 1,
+            "p90": 2,
+            "max": 2,
+            "n": 24,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Zirekile Falls",
+              "Fort Zeakden",
+              "Dorter Trade City",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Goug Machine City",
+              "Underground Book Storage Fifth Floor",
+              "Bervenia Free City",
+              "Inside of Windmill Shed",
+              "Norzelia green field",
+              "Falkes wheat terraces",
+              "Roselle village — NON-HOMOLOGOUS forest slot (no dense-forest battle in TS; declared absence)",
+              "Whiteholm bridge gate",
+              "Twinsgate fortress (snow)",
+              "Wolffort Streets (Ch VII town defense)",
+              "Glenbrook capital ramparts",
+              "Hyzante Goddess court",
+              "Grand Norzelia mine",
+              "Wolffort great hall — NON-HOMOLOGOUS interior slot (no roofed-interior battle frame in TS; declared)",
+              "Telliore reservoir dam",
+              "Norzelia dry steppe (sparse control)"
+            ]
+          },
+          "reachableHighGroundCount": {
+            "min": 1,
+            "p10": 1.3,
+            "median": 3,
+            "p90": 5,
+            "max": 6,
+            "n": 24,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Zirekile Falls",
+              "Fort Zeakden",
+              "Dorter Trade City",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Goug Machine City",
+              "Underground Book Storage Fifth Floor",
+              "Bervenia Free City",
+              "Inside of Windmill Shed",
+              "Norzelia green field",
+              "Falkes wheat terraces",
+              "Roselle village — NON-HOMOLOGOUS forest slot (no dense-forest battle in TS; declared absence)",
+              "Whiteholm bridge gate",
+              "Twinsgate fortress (snow)",
+              "Wolffort Streets (Ch VII town defense)",
+              "Glenbrook capital ramparts",
+              "Hyzante Goddess court",
+              "Grand Norzelia mine",
+              "Wolffort great hall — NON-HOMOLOGOUS interior slot (no roofed-interior battle frame in TS; declared)",
+              "Telliore reservoir dam",
+              "Norzelia dry steppe (sparse control)"
+            ]
+          },
+          "spawnToFirstDecisionCells": {
+            "min": 2,
+            "p10": 2,
+            "median": 2,
+            "p90": 3.5,
+            "max": 3.5,
+            "n": 24,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Zirekile Falls",
+              "Fort Zeakden",
+              "Dorter Trade City",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Goug Machine City",
+              "Underground Book Storage Fifth Floor",
+              "Bervenia Free City",
+              "Inside of Windmill Shed",
+              "Norzelia green field",
+              "Falkes wheat terraces",
+              "Roselle village — NON-HOMOLOGOUS forest slot (no dense-forest battle in TS; declared absence)",
+              "Whiteholm bridge gate",
+              "Twinsgate fortress (snow)",
+              "Wolffort Streets (Ch VII town defense)",
+              "Glenbrook capital ramparts",
+              "Hyzante Goddess court",
+              "Grand Norzelia mine",
+              "Wolffort great hall — NON-HOMOLOGOUS interior slot (no roofed-interior battle frame in TS; declared)",
+              "Telliore reservoir dam",
+              "Norzelia dry steppe (sparse control)"
+            ]
+          }
+        },
+        "small": {
+          "elevationBandCount": {
+            "min": 2,
+            "p10": 2.7,
+            "median": 3.5,
+            "p90": 4.3,
+            "max": 5,
+            "n": 8,
+            "sourceRows": [
+              "Zirekile Falls",
+              "Fort Zeakden",
+              "Dorter Trade City",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Goug Machine City",
+              "Bervenia Free City",
+              "Inside of Windmill Shed"
+            ]
+          },
+          "maxConsequentialElevationDelta": {
+            "min": 2,
+            "p10": 3.4,
+            "median": 6.25,
+            "p90": 8.1,
+            "max": 9.5,
+            "n": 8,
+            "sourceRows": [
+              "Zirekile Falls",
+              "Fort Zeakden",
+              "Dorter Trade City",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Goug Machine City",
+              "Bervenia Free City",
+              "Inside of Windmill Shed"
+            ]
+          },
+          "majorRouteCount": {
+            "min": 1,
+            "p10": 1,
+            "median": 1,
+            "p90": 1.3,
+            "max": 2,
+            "n": 8,
+            "sourceRows": [
+              "Zirekile Falls",
+              "Fort Zeakden",
+              "Dorter Trade City",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Goug Machine City",
+              "Bervenia Free City",
+              "Inside of Windmill Shed"
+            ]
+          },
+          "alternateRouteCount": {
+            "min": 0,
+            "p10": 0,
+            "median": 1,
+            "p90": 1.3,
+            "max": 2,
+            "n": 8,
+            "sourceRows": [
+              "Zirekile Falls",
+              "Fort Zeakden",
+              "Dorter Trade City",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Goug Machine City",
+              "Bervenia Free City",
+              "Inside of Windmill Shed"
+            ]
+          },
+          "shortLoopCount": {
+            "min": 0,
+            "p10": 0,
+            "median": 0.5,
+            "p90": 1,
+            "max": 1,
+            "n": 8,
+            "sourceRows": [
+              "Zirekile Falls",
+              "Fort Zeakden",
+              "Dorter Trade City",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Goug Machine City",
+              "Bervenia Free City",
+              "Inside of Windmill Shed"
+            ]
+          },
+          "chokepointCount": {
+            "min": 1,
+            "p10": 1,
+            "median": 1,
+            "p90": 2,
+            "max": 2,
+            "n": 8,
+            "sourceRows": [
+              "Zirekile Falls",
+              "Fort Zeakden",
+              "Dorter Trade City",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Goug Machine City",
+              "Bervenia Free City",
+              "Inside of Windmill Shed"
+            ]
+          },
+          "reachableHighGroundCount": {
+            "min": 1,
+            "p10": 1.7,
+            "median": 3.5,
+            "p90": 5.3,
+            "max": 6,
+            "n": 8,
+            "sourceRows": [
+              "Zirekile Falls",
+              "Fort Zeakden",
+              "Dorter Trade City",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Goug Machine City",
+              "Bervenia Free City",
+              "Inside of Windmill Shed"
+            ]
+          },
+          "spawnToFirstDecisionCells": {
+            "min": 2,
+            "p10": 2.35,
+            "median": 2.5,
+            "p90": 3.5,
+            "max": 3.5,
+            "n": 8,
+            "sourceRows": [
+              "Zirekile Falls",
+              "Fort Zeakden",
+              "Dorter Trade City",
+              "At Main Gate of Igros Castle",
+              "Orbonne Monastery",
+              "Goug Machine City",
+              "Bervenia Free City",
+              "Inside of Windmill Shed"
+            ]
+          }
+        },
+        "medium": {
+          "elevationBandCount": {
+            "min": 2,
+            "p10": 2,
+            "median": 2,
+            "p90": 4.2,
+            "max": 5,
+            "n": 9,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Underground Book Storage Fifth Floor",
+              "Norzelia green field",
+              "Whiteholm bridge gate",
+              "Wolffort great hall — NON-HOMOLOGOUS interior slot (no roofed-interior battle frame in TS; declared)",
+              "Telliore reservoir dam",
+              "Norzelia dry steppe (sparse control)"
+            ]
+          },
+          "maxConsequentialElevationDelta": {
+            "min": 2.5,
+            "p10": 2.5,
+            "median": 3,
+            "p90": 11.2,
+            "max": 32,
+            "n": 9,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Underground Book Storage Fifth Floor",
+              "Norzelia green field",
+              "Whiteholm bridge gate",
+              "Wolffort great hall — NON-HOMOLOGOUS interior slot (no roofed-interior battle frame in TS; declared)",
+              "Telliore reservoir dam",
+              "Norzelia dry steppe (sparse control)"
+            ]
+          },
+          "majorRouteCount": {
+            "min": 1,
+            "p10": 1,
+            "median": 1,
+            "p90": 2,
+            "max": 2,
+            "n": 9,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Underground Book Storage Fifth Floor",
+              "Norzelia green field",
+              "Whiteholm bridge gate",
+              "Wolffort great hall — NON-HOMOLOGOUS interior slot (no roofed-interior battle frame in TS; declared)",
+              "Telliore reservoir dam",
+              "Norzelia dry steppe (sparse control)"
+            ]
+          },
+          "alternateRouteCount": {
+            "min": 1,
+            "p10": 1,
+            "median": 1,
+            "p90": 1.2,
+            "max": 2,
+            "n": 9,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Underground Book Storage Fifth Floor",
+              "Norzelia green field",
+              "Whiteholm bridge gate",
+              "Wolffort great hall — NON-HOMOLOGOUS interior slot (no roofed-interior battle frame in TS; declared)",
+              "Telliore reservoir dam",
+              "Norzelia dry steppe (sparse control)"
+            ]
+          },
+          "shortLoopCount": {
+            "min": 0,
+            "p10": 0,
+            "median": 0,
+            "p90": 1,
+            "max": 1,
+            "n": 9,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Underground Book Storage Fifth Floor",
+              "Norzelia green field",
+              "Whiteholm bridge gate",
+              "Wolffort great hall — NON-HOMOLOGOUS interior slot (no roofed-interior battle frame in TS; declared)",
+              "Telliore reservoir dam",
+              "Norzelia dry steppe (sparse control)"
+            ]
+          },
+          "chokepointCount": {
+            "min": 0,
+            "p10": 0,
+            "median": 1,
+            "p90": 2,
+            "max": 2,
+            "n": 9,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Underground Book Storage Fifth Floor",
+              "Norzelia green field",
+              "Whiteholm bridge gate",
+              "Wolffort great hall — NON-HOMOLOGOUS interior slot (no roofed-interior battle frame in TS; declared)",
+              "Telliore reservoir dam",
+              "Norzelia dry steppe (sparse control)"
+            ]
+          },
+          "reachableHighGroundCount": {
+            "min": 1,
+            "p10": 1,
+            "median": 2,
+            "p90": 4.2,
+            "max": 5,
+            "n": 9,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Underground Book Storage Fifth Floor",
+              "Norzelia green field",
+              "Whiteholm bridge gate",
+              "Wolffort great hall — NON-HOMOLOGOUS interior slot (no roofed-interior battle frame in TS; declared)",
+              "Telliore reservoir dam",
+              "Norzelia dry steppe (sparse control)"
+            ]
+          },
+          "spawnToFirstDecisionCells": {
+            "min": 2,
+            "p10": 2,
+            "median": 2,
+            "p90": 3.5,
+            "max": 3.5,
+            "n": 9,
+            "sourceRows": [
+              "Mandalia Plains",
+              "Grog Hill",
+              "Sweegy Woods",
+              "Underground Book Storage Fifth Floor",
+              "Norzelia green field",
+              "Whiteholm bridge gate",
+              "Wolffort great hall — NON-HOMOLOGOUS interior slot (no roofed-interior battle frame in TS; declared)",
+              "Telliore reservoir dam",
+              "Norzelia dry steppe (sparse control)"
+            ]
+          }
+        },
+        "large": {
+          "elevationBandCount": {
+            "min": 3,
+            "p10": 3,
+            "median": 4,
+            "p90": 4,
+            "max": 4,
+            "n": 7,
+            "sourceRows": [
+              "Falkes wheat terraces",
+              "Roselle village — NON-HOMOLOGOUS forest slot (no dense-forest battle in TS; declared absence)",
+              "Twinsgate fortress (snow)",
+              "Wolffort Streets (Ch VII town defense)",
+              "Glenbrook capital ramparts",
+              "Hyzante Goddess court",
+              "Grand Norzelia mine"
+            ]
+          },
+          "maxConsequentialElevationDelta": {
+            "min": 5,
+            "p10": 5.6,
+            "median": 10,
+            "p90": 10,
+            "max": 10,
+            "n": 7,
+            "sourceRows": [
+              "Falkes wheat terraces",
+              "Roselle village — NON-HOMOLOGOUS forest slot (no dense-forest battle in TS; declared absence)",
+              "Twinsgate fortress (snow)",
+              "Wolffort Streets (Ch VII town defense)",
+              "Glenbrook capital ramparts",
+              "Hyzante Goddess court",
+              "Grand Norzelia mine"
+            ]
+          },
+          "majorRouteCount": {
+            "min": 1,
+            "p10": 1,
+            "median": 1,
+            "p90": 1,
+            "max": 1,
+            "n": 7,
+            "sourceRows": [
+              "Falkes wheat terraces",
+              "Roselle village — NON-HOMOLOGOUS forest slot (no dense-forest battle in TS; declared absence)",
+              "Twinsgate fortress (snow)",
+              "Wolffort Streets (Ch VII town defense)",
+              "Glenbrook capital ramparts",
+              "Hyzante Goddess court",
+              "Grand Norzelia mine"
+            ]
+          },
+          "alternateRouteCount": {
+            "min": 1,
+            "p10": 1,
+            "median": 2,
+            "p90": 2,
+            "max": 2,
+            "n": 7,
+            "sourceRows": [
+              "Falkes wheat terraces",
+              "Roselle village — NON-HOMOLOGOUS forest slot (no dense-forest battle in TS; declared absence)",
+              "Twinsgate fortress (snow)",
+              "Wolffort Streets (Ch VII town defense)",
+              "Glenbrook capital ramparts",
+              "Hyzante Goddess court",
+              "Grand Norzelia mine"
+            ]
+          },
+          "shortLoopCount": {
+            "min": 0,
+            "p10": 0,
+            "median": 1,
+            "p90": 1,
+            "max": 1,
+            "n": 7,
+            "sourceRows": [
+              "Falkes wheat terraces",
+              "Roselle village — NON-HOMOLOGOUS forest slot (no dense-forest battle in TS; declared absence)",
+              "Twinsgate fortress (snow)",
+              "Wolffort Streets (Ch VII town defense)",
+              "Glenbrook capital ramparts",
+              "Hyzante Goddess court",
+              "Grand Norzelia mine"
+            ]
+          },
+          "chokepointCount": {
+            "min": 1,
+            "p10": 1,
+            "median": 2,
+            "p90": 2,
+            "max": 2,
+            "n": 7,
+            "sourceRows": [
+              "Falkes wheat terraces",
+              "Roselle village — NON-HOMOLOGOUS forest slot (no dense-forest battle in TS; declared absence)",
+              "Twinsgate fortress (snow)",
+              "Wolffort Streets (Ch VII town defense)",
+              "Glenbrook capital ramparts",
+              "Hyzante Goddess court",
+              "Grand Norzelia mine"
+            ]
+          },
+          "reachableHighGroundCount": {
+            "min": 3,
+            "p10": 3,
+            "median": 4,
+            "p90": 4.4,
+            "max": 5,
+            "n": 7,
+            "sourceRows": [
+              "Falkes wheat terraces",
+              "Roselle village — NON-HOMOLOGOUS forest slot (no dense-forest battle in TS; declared absence)",
+              "Twinsgate fortress (snow)",
+              "Wolffort Streets (Ch VII town defense)",
+              "Glenbrook capital ramparts",
+              "Hyzante Goddess court",
+              "Grand Norzelia mine"
+            ]
+          },
+          "spawnToFirstDecisionCells": {
+            "min": 2,
+            "p10": 2,
+            "median": 2,
+            "p90": 2,
+            "max": 2,
+            "n": 7,
+            "sourceRows": [
+              "Falkes wheat terraces",
+              "Roselle village — NON-HOMOLOGOUS forest slot (no dense-forest battle in TS; declared absence)",
+              "Twinsgate fortress (snow)",
+              "Wolffort Streets (Ch VII town defense)",
+              "Glenbrook capital ramparts",
+              "Hyzante Goddess court",
+              "Grand Norzelia mine"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "rows": [
+    {
+      "game": "FFT",
+      "mapName": "Mandalia Plains",
+      "chapterOrId": "MAP085",
+      "confidence": "high",
+      "included": true,
+      "sizeClassFftOnly": "large",
+      "sizeClassPooled": "medium",
+      "cells": {
+        "traversableCellEstimate": {
+          "raw": "120-140 (visual; envelope 156)",
+          "value": 130,
+          "kind": "midpoint"
+        },
+        "elevationBandCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "maxConsequentialElevationDelta": {
+          "raw": "2-3h (FFT h-units, visual est)",
+          "value": 2.5,
+          "kind": "midpoint",
+          "unit": "h"
+        },
+        "majorRouteCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "alternateRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "shortLoopCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "chokepointCount": {
+          "raw": "0",
+          "value": 0,
+          "kind": "exact"
+        },
+        "reachableHighGroundCount": {
+          "raw": "3",
+          "value": 3,
+          "kind": "exact"
+        },
+        "spawnToFirstDecisionCells": {
+          "raw": "3-4",
+          "value": 3.5,
+          "kind": "midpoint"
+        }
+      }
+    },
+    {
+      "game": "FFT",
+      "mapName": "Grog Hill",
+      "chapterOrId": "MAP081",
+      "confidence": "high",
+      "included": true,
+      "sizeClassFftOnly": "large",
+      "sizeClassPooled": "medium",
+      "cells": {
+        "traversableCellEstimate": {
+          "raw": "95-110 (visual; envelope 143)",
+          "value": 102.5,
+          "kind": "midpoint"
+        },
+        "elevationBandCount": {
+          "raw": "4",
+          "value": 4,
+          "kind": "exact"
+        },
+        "maxConsequentialElevationDelta": {
+          "raw": "5-6h (FFT h-units, visual est)",
+          "value": 5.5,
+          "kind": "midpoint",
+          "unit": "h"
+        },
+        "majorRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "alternateRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "shortLoopCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "chokepointCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "reachableHighGroundCount": {
+          "raw": "4",
+          "value": 4,
+          "kind": "exact"
+        },
+        "spawnToFirstDecisionCells": {
+          "raw": "2-3",
+          "value": 2.5,
+          "kind": "midpoint"
+        }
+      }
+    },
+    {
+      "game": "FFT",
+      "mapName": "Sweegy Woods",
+      "chapterOrId": "MAP074",
+      "confidence": "high",
+      "included": true,
+      "sizeClassFftOnly": "large",
+      "sizeClassPooled": "medium",
+      "cells": {
+        "traversableCellEstimate": {
+          "raw": "100-115 (visual; envelope 132)",
+          "value": 107.5,
+          "kind": "midpoint"
+        },
+        "elevationBandCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "maxConsequentialElevationDelta": {
+          "raw": "3h (FFT h-units, visual est)",
+          "value": 3,
+          "kind": "exact",
+          "unit": "h"
+        },
+        "majorRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "alternateRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "shortLoopCount": {
+          "raw": "0",
+          "value": 0,
+          "kind": "exact"
+        },
+        "chokepointCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "reachableHighGroundCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "spawnToFirstDecisionCells": {
+          "raw": "3-4",
+          "value": 3.5,
+          "kind": "midpoint"
+        }
+      }
+    },
+    {
+      "game": "FFT",
+      "mapName": "Zirekile Falls",
+      "chapterOrId": "MAP083",
+      "confidence": "high",
+      "included": true,
+      "sizeClassFftOnly": "small",
+      "sizeClassPooled": "small",
+      "cells": {
+        "traversableCellEstimate": {
+          "raw": "55-70 (visual; envelope 110)",
+          "value": 62.5,
+          "kind": "midpoint"
+        },
+        "elevationBandCount": {
+          "raw": "3",
+          "value": 3,
+          "kind": "exact"
+        },
+        "maxConsequentialElevationDelta": {
+          "raw": "4h (FFT h-units, visual est)",
+          "value": 4,
+          "kind": "exact",
+          "unit": "h"
+        },
+        "majorRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "alternateRouteCount": {
+          "raw": "0",
+          "value": 0,
+          "kind": "exact"
+        },
+        "shortLoopCount": {
+          "raw": "0",
+          "value": 0,
+          "kind": "exact"
+        },
+        "chokepointCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "reachableHighGroundCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "spawnToFirstDecisionCells": {
+          "raw": "2-3",
+          "value": 2.5,
+          "kind": "midpoint"
+        }
+      }
+    },
+    {
+      "game": "FFT",
+      "mapName": "Fort Zeakden",
+      "chapterOrId": "MAP049",
+      "confidence": "high",
+      "included": true,
+      "sizeClassFftOnly": "medium",
+      "sizeClassPooled": "small",
+      "cells": {
+        "traversableCellEstimate": {
+          "raw": "70-85 (visual; envelope 117)",
+          "value": 77.5,
+          "kind": "midpoint"
+        },
+        "elevationBandCount": {
+          "raw": "4",
+          "value": 4,
+          "kind": "exact"
+        },
+        "maxConsequentialElevationDelta": {
+          "raw": "7-8h (FFT h-units, visual est)",
+          "value": 7.5,
+          "kind": "midpoint",
+          "unit": "h"
+        },
+        "majorRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "alternateRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "shortLoopCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "chokepointCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "reachableHighGroundCount": {
+          "raw": "4",
+          "value": 4,
+          "kind": "exact"
+        },
+        "spawnToFirstDecisionCells": {
+          "raw": "3-4",
+          "value": 3.5,
+          "kind": "midpoint"
+        }
+      }
+    },
+    {
+      "game": "FFT",
+      "mapName": "Dorter Trade City",
+      "chapterOrId": "MAP031",
+      "confidence": "high",
+      "included": true,
+      "sizeClassFftOnly": "small",
+      "sizeClassPooled": "small",
+      "cells": {
+        "traversableCellEstimate": {
+          "raw": "60-75 (visual; envelope 99)",
+          "value": 67.5,
+          "kind": "midpoint"
+        },
+        "elevationBandCount": {
+          "raw": "4",
+          "value": 4,
+          "kind": "exact"
+        },
+        "maxConsequentialElevationDelta": {
+          "raw": "6-7h (FFT h-units, visual est)",
+          "value": 6.5,
+          "kind": "midpoint",
+          "unit": "h"
+        },
+        "majorRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "alternateRouteCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "shortLoopCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "chokepointCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "reachableHighGroundCount": {
+          "raw": "5",
+          "value": 5,
+          "kind": "exact"
+        },
+        "spawnToFirstDecisionCells": {
+          "raw": "2-3",
+          "value": 2.5,
+          "kind": "midpoint"
+        }
+      }
+    },
+    {
+      "game": "FFT",
+      "mapName": "At Main Gate of Igros Castle",
+      "chapterOrId": "MAP001",
+      "confidence": "high",
+      "included": true,
+      "sizeClassFftOnly": "medium",
+      "sizeClassPooled": "small",
+      "cells": {
+        "traversableCellEstimate": {
+          "raw": "80-95 (visual; envelope 130)",
+          "value": 87.5,
+          "kind": "midpoint"
+        },
+        "elevationBandCount": {
+          "raw": "3",
+          "value": 3,
+          "kind": "exact"
+        },
+        "maxConsequentialElevationDelta": {
+          "raw": "6h (FFT h-units, visual est)",
+          "value": 6,
+          "kind": "exact",
+          "unit": "h"
+        },
+        "majorRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "alternateRouteCount": {
+          "raw": "0",
+          "value": 0,
+          "kind": "exact"
+        },
+        "shortLoopCount": {
+          "raw": "0",
+          "value": 0,
+          "kind": "exact"
+        },
+        "chokepointCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "reachableHighGroundCount": {
+          "raw": "3",
+          "value": 3,
+          "kind": "exact"
+        },
+        "spawnToFirstDecisionCells": {
+          "raw": "3-4",
+          "value": 3.5,
+          "kind": "midpoint"
+        }
+      }
+    },
+    {
+      "game": "FFT",
+      "mapName": "Orbonne Monastery",
+      "chapterOrId": "MAP056",
+      "confidence": "high",
+      "included": true,
+      "sizeClassFftOnly": "medium",
+      "sizeClassPooled": "small",
+      "cells": {
+        "traversableCellEstimate": {
+          "raw": "85-100 (visual; envelope 140)",
+          "value": 92.5,
+          "kind": "midpoint"
+        },
+        "elevationBandCount": {
+          "raw": "3",
+          "value": 3,
+          "kind": "exact"
+        },
+        "maxConsequentialElevationDelta": {
+          "raw": "4-5h (FFT h-units, visual est)",
+          "value": 4.5,
+          "kind": "midpoint",
+          "unit": "h"
+        },
+        "majorRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "alternateRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "shortLoopCount": {
+          "raw": "0",
+          "value": 0,
+          "kind": "exact"
+        },
+        "chokepointCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "reachableHighGroundCount": {
+          "raw": "3",
+          "value": 3,
+          "kind": "exact"
+        },
+        "spawnToFirstDecisionCells": {
+          "raw": "2-3",
+          "value": 2.5,
+          "kind": "midpoint"
+        }
+      }
+    },
+    {
+      "game": "FFT",
+      "mapName": "Goug Machine City",
+      "chapterOrId": "MAP038",
+      "confidence": "high",
+      "included": true,
+      "sizeClassFftOnly": "small",
+      "sizeClassPooled": "small",
+      "cells": {
+        "traversableCellEstimate": {
+          "raw": "50-65 (visual; envelope 88)",
+          "value": 57.5,
+          "kind": "midpoint"
+        },
+        "elevationBandCount": {
+          "raw": "4",
+          "value": 4,
+          "kind": "exact"
+        },
+        "maxConsequentialElevationDelta": {
+          "raw": "7-8h (FFT h-units, visual est)",
+          "value": 7.5,
+          "kind": "midpoint",
+          "unit": "h"
+        },
+        "majorRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "alternateRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "shortLoopCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "chokepointCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "reachableHighGroundCount": {
+          "raw": "5",
+          "value": 5,
+          "kind": "exact"
+        },
+        "spawnToFirstDecisionCells": {
+          "raw": "2-3",
+          "value": 2.5,
+          "kind": "midpoint"
+        }
+      }
+    },
+    {
+      "game": "FFT",
+      "mapName": "Underground Book Storage Fifth Floor",
+      "chapterOrId": "MAP061",
+      "confidence": "medium",
+      "included": true,
+      "sizeClassFftOnly": "large",
+      "sizeClassPooled": "medium",
+      "cells": {
+        "traversableCellEstimate": {
+          "raw": "120-140 (visual; envelope 180)",
+          "value": 130,
+          "kind": "midpoint"
+        },
+        "elevationBandCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "maxConsequentialElevationDelta": {
+          "raw": "2-3h (FFT h-units, visual est)",
+          "value": 2.5,
+          "kind": "midpoint",
+          "unit": "h"
+        },
+        "majorRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "alternateRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "shortLoopCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "chokepointCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "reachableHighGroundCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "spawnToFirstDecisionCells": {
+          "raw": "3-4",
+          "value": 3.5,
+          "kind": "midpoint"
+        }
+      }
+    },
+    {
+      "game": "FFT",
+      "mapName": "Bervenia Free City",
+      "chapterOrId": "MAP044",
+      "confidence": "high",
+      "included": true,
+      "sizeClassFftOnly": "medium",
+      "sizeClassPooled": "small",
+      "cells": {
+        "traversableCellEstimate": {
+          "raw": "75-90 (visual; envelope 130)",
+          "value": 82.5,
+          "kind": "midpoint"
+        },
+        "elevationBandCount": {
+          "raw": "5",
+          "value": 5,
+          "kind": "exact"
+        },
+        "maxConsequentialElevationDelta": {
+          "raw": "9-10h (FFT h-units, visual est)",
+          "value": 9.5,
+          "kind": "midpoint",
+          "unit": "h"
+        },
+        "majorRouteCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "alternateRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "shortLoopCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "chokepointCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "reachableHighGroundCount": {
+          "raw": "6",
+          "value": 6,
+          "kind": "exact"
+        },
+        "spawnToFirstDecisionCells": {
+          "raw": "2-3",
+          "value": 2.5,
+          "kind": "midpoint"
+        }
+      }
+    },
+    {
+      "game": "FFT",
+      "mapName": "Inside of Windmill Shed",
+      "chapterOrId": "MAP073",
+      "confidence": "high",
+      "included": true,
+      "sizeClassFftOnly": "small",
+      "sizeClassPooled": "small",
+      "cells": {
+        "traversableCellEstimate": {
+          "raw": "45-50 (visual; envelope 56)",
+          "value": 47.5,
+          "kind": "midpoint"
+        },
+        "elevationBandCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "maxConsequentialElevationDelta": {
+          "raw": "2h (FFT h-units, visual est)",
+          "value": 2,
+          "kind": "exact",
+          "unit": "h"
+        },
+        "majorRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "alternateRouteCount": {
+          "raw": "0",
+          "value": 0,
+          "kind": "exact"
+        },
+        "shortLoopCount": {
+          "raw": "0",
+          "value": 0,
+          "kind": "exact"
+        },
+        "chokepointCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "reachableHighGroundCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "spawnToFirstDecisionCells": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        }
+      }
+    },
+    {
+      "game": "Genesis",
+      "mapName": "scale-pass target: Site-02 Camp small (Roadside Sleep-and-Fire Stop)",
+      "chapterOrId": "p01:site-02/01-small",
+      "confidence": "documented intent (targets) / measured receipt (fixtures)",
+      "included": false,
+      "excludedReason": "subject-under-test rows (design intents / engine fixtures), not tactics-corpus evidence; cells are design-intent prose, and the DECLARED GAP row carries em-dash placeholders",
+      "traversableCellEstimateRaw": "~165 (open camp; documented intent)"
+    },
+    {
+      "game": "Genesis",
+      "mapName": "engine capture: CL-F09 FFT hillside proof",
+      "chapterOrId": "p02:cl-f09",
+      "confidence": "documented intent (targets) / measured receipt (fixtures)",
+      "included": false,
+      "excludedReason": "subject-under-test rows (design intents / engine fixtures), not tactics-corpus evidence; cells are design-intent prose, and the DECLARED GAP row carries em-dash placeholders",
+      "traversableCellEstimateRaw": "~140 (est)"
+    },
+    {
+      "game": "Genesis",
+      "mapName": "scale-pass target: Site-02 Camp medium (Borrowed-Clearing Camp)",
+      "chapterOrId": "p03:site-02/02-medium",
+      "confidence": "documented intent (targets) / measured receipt (fixtures)",
+      "included": false,
+      "excludedReason": "subject-under-test rows (design intents / engine fixtures), not tactics-corpus evidence; cells are design-intent prose, and the DECLARED GAP row carries em-dash placeholders",
+      "traversableCellEstimateRaw": "~450 (documented intent)"
+    },
+    {
+      "game": "Genesis",
+      "mapName": "scale-pass target: Site-12 Substrate small (Bog Crossing)",
+      "chapterOrId": "p04:site-12/01-small",
+      "confidence": "documented intent (targets) / measured receipt (fixtures)",
+      "included": false,
+      "excludedReason": "subject-under-test rows (design intents / engine fixtures), not tactics-corpus evidence; cells are design-intent prose, and the DECLARED GAP row carries em-dash placeholders",
+      "traversableCellEstimateRaw": "~120 (plank spine + banks; est)"
+    },
+    {
+      "game": "Genesis",
+      "mapName": "DECLARED GAP — no Genesis snow/ice target or capture exists yet",
+      "chapterOrId": "p05:—",
+      "confidence": "documented intent (targets) / measured receipt (fixtures)",
+      "included": false,
+      "excludedReason": "subject-under-test rows (design intents / engine fixtures), not tactics-corpus evidence; cells are design-intent prose, and the DECLARED GAP row carries em-dash placeholders",
+      "traversableCellEstimateRaw": "—"
+    },
+    {
+      "game": "Genesis",
+      "mapName": "scale-pass target: Site-10 Urban medium (Market-Hall Slice)",
+      "chapterOrId": "p06:site-10/02-medium",
+      "confidence": "documented intent (targets) / measured receipt (fixtures)",
+      "included": false,
+      "excludedReason": "subject-under-test rows (design intents / engine fixtures), not tactics-corpus evidence; cells are design-intent prose, and the DECLARED GAP row carries em-dash placeholders",
+      "traversableCellEstimateRaw": "~500 (documented intent)"
+    },
+    {
+      "game": "Genesis",
+      "mapName": "scale-pass target: Site-09 Fortress small (Rising Gate Window)",
+      "chapterOrId": "p07:site-09/01-small",
+      "confidence": "documented intent (targets) / measured receipt (fixtures)",
+      "included": false,
+      "excludedReason": "subject-under-test rows (design intents / engine fixtures), not tactics-corpus evidence; cells are design-intent prose, and the DECLARED GAP row carries em-dash placeholders",
+      "traversableCellEstimateRaw": "~250 (documented intent)"
+    },
+    {
+      "game": "Genesis",
+      "mapName": "scale-pass target: Site-04 Monastery medium (Level Wrapped Court)",
+      "chapterOrId": "p08:site-04/02-medium",
+      "confidence": "documented intent (targets) / measured receipt (fixtures)",
+      "included": false,
+      "excludedReason": "subject-under-test rows (design intents / engine fixtures), not tactics-corpus evidence; cells are design-intent prose, and the DECLARED GAP row carries em-dash placeholders",
+      "traversableCellEstimateRaw": "~480 (documented intent)"
+    },
+    {
+      "game": "Genesis",
+      "mapName": "scale-pass target: Site-05 Mine medium (Strained Drift)",
+      "chapterOrId": "p09:site-05/02-medium",
+      "confidence": "documented intent (targets) / measured receipt (fixtures)",
+      "included": false,
+      "excludedReason": "subject-under-test rows (design intents / engine fixtures), not tactics-corpus evidence; cells are design-intent prose, and the DECLARED GAP row carries em-dash placeholders",
+      "traversableCellEstimateRaw": "~500 (documented intent)"
+    },
+    {
+      "game": "Genesis",
+      "mapName": "engine capture: CL-F05 trimmed structures (production renderer)",
+      "chapterOrId": "p10:cl-r5-v005",
+      "confidence": "documented intent (targets) / measured receipt (fixtures)",
+      "included": false,
+      "excludedReason": "subject-under-test rows (design intents / engine fixtures), not tactics-corpus evidence; cells are design-intent prose, and the DECLARED GAP row carries em-dash placeholders",
+      "traversableCellEstimateRaw": "~200 (clayroom fixture; rooms subset)"
+    },
+    {
+      "game": "Genesis",
+      "mapName": "scale-pass target: Site-09 large-site vignette (Contested Wall Stair)",
+      "chapterOrId": "p11:site-09/03-vignette",
+      "confidence": "documented intent (targets) / measured receipt (fixtures)",
+      "included": false,
+      "excludedReason": "subject-under-test rows (design intents / engine fixtures), not tactics-corpus evidence; cells are design-intent prose, and the DECLARED GAP row carries em-dash placeholders",
+      "traversableCellEstimateRaw": "~200 (active-window contract)"
+    },
+    {
+      "game": "Genesis",
+      "mapName": "scale-pass target: Site-03 Dormant small (Stopped Guard Shelter)",
+      "chapterOrId": "p12:site-03/01-small",
+      "confidence": "documented intent (targets) / measured receipt (fixtures)",
+      "included": false,
+      "excludedReason": "subject-under-test rows (design intents / engine fixtures), not tactics-corpus evidence; cells are design-intent prose, and the DECLARED GAP row carries em-dash placeholders",
+      "traversableCellEstimateRaw": "~200 (documented intent)"
+    },
+    {
+      "game": "TriangleStrategy",
+      "mapName": "Norzelia green field",
+      "chapterOrId": "p01:norzelia-green-field",
+      "confidence": "medium",
+      "included": true,
+      "sizeClassPooled": "medium",
+      "cells": {
+        "traversableCellEstimate": {
+          "raw": "~200-280 (est)",
+          "value": 240,
+          "kind": "midpoint(~)"
+        },
+        "elevationBandCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "maxConsequentialElevationDelta": {
+          "raw": "~2-4 units",
+          "value": 3,
+          "kind": "midpoint(~)",
+          "unit": "units"
+        },
+        "majorRouteCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "alternateRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "shortLoopCount": {
+          "raw": "0",
+          "value": 0,
+          "kind": "exact"
+        },
+        "chokepointCount": {
+          "raw": "0",
+          "value": 0,
+          "kind": "exact"
+        },
+        "reachableHighGroundCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "spawnToFirstDecisionCells": {
+          "raw": "1-3",
+          "value": 2,
+          "kind": "midpoint"
+        }
+      }
+    },
+    {
+      "game": "TriangleStrategy",
+      "mapName": "Falkes wheat terraces",
+      "chapterOrId": "p02:falkes-wheat-terraces",
+      "confidence": "medium-high",
+      "included": true,
+      "sizeClassPooled": "large",
+      "cells": {
+        "traversableCellEstimate": {
+          "raw": "~220-320 (est)",
+          "value": 270,
+          "kind": "midpoint(~)"
+        },
+        "elevationBandCount": {
+          "raw": "4",
+          "value": 4,
+          "kind": "exact"
+        },
+        "maxConsequentialElevationDelta": {
+          "raw": "~6-10 units",
+          "value": 8,
+          "kind": "midpoint(~)",
+          "unit": "units"
+        },
+        "majorRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "alternateRouteCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "shortLoopCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "chokepointCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "reachableHighGroundCount": {
+          "raw": "4",
+          "value": 4,
+          "kind": "exact"
+        },
+        "spawnToFirstDecisionCells": {
+          "raw": "1-3",
+          "value": 2,
+          "kind": "midpoint"
+        }
+      }
+    },
+    {
+      "game": "TriangleStrategy",
+      "mapName": "Roselle village — NON-HOMOLOGOUS forest slot (no dense-forest battle in TS; declared absence)",
+      "chapterOrId": "p03:roselle-village",
+      "confidence": "medium",
+      "included": true,
+      "sizeClassPooled": "large",
+      "cells": {
+        "traversableCellEstimate": {
+          "raw": "~250 (est)",
+          "value": 250,
+          "kind": "single(~)"
+        },
+        "elevationBandCount": {
+          "raw": "3",
+          "value": 3,
+          "kind": "exact"
+        },
+        "maxConsequentialElevationDelta": {
+          "raw": "~4-6 units",
+          "value": 5,
+          "kind": "midpoint(~)",
+          "unit": "units"
+        },
+        "majorRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "alternateRouteCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "shortLoopCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "chokepointCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "reachableHighGroundCount": {
+          "raw": "3",
+          "value": 3,
+          "kind": "exact"
+        },
+        "spawnToFirstDecisionCells": {
+          "raw": "1-3",
+          "value": 2,
+          "kind": "midpoint"
+        }
+      }
+    },
+    {
+      "game": "TriangleStrategy",
+      "mapName": "Whiteholm bridge gate",
+      "chapterOrId": "p04:whiteholm-bridge-gate",
+      "confidence": "medium",
+      "included": true,
+      "sizeClassPooled": "medium",
+      "cells": {
+        "traversableCellEstimate": {
+          "raw": "~150-220 (est)",
+          "value": 185,
+          "kind": "midpoint(~)"
+        },
+        "elevationBandCount": {
+          "raw": "3",
+          "value": 3,
+          "kind": "exact"
+        },
+        "maxConsequentialElevationDelta": {
+          "raw": "~4-8 units",
+          "value": 6,
+          "kind": "midpoint(~)",
+          "unit": "units"
+        },
+        "majorRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "alternateRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "shortLoopCount": {
+          "raw": "0",
+          "value": 0,
+          "kind": "exact"
+        },
+        "chokepointCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "reachableHighGroundCount": {
+          "raw": "3",
+          "value": 3,
+          "kind": "exact"
+        },
+        "spawnToFirstDecisionCells": {
+          "raw": "1-3",
+          "value": 2,
+          "kind": "midpoint"
+        }
+      }
+    },
+    {
+      "game": "TriangleStrategy",
+      "mapName": "Twinsgate fortress (snow)",
+      "chapterOrId": "p05:twinsgate-fortress-snow",
+      "confidence": "medium",
+      "included": true,
+      "sizeClassPooled": "large",
+      "cells": {
+        "traversableCellEstimate": {
+          "raw": "~200-300 (est)",
+          "value": 250,
+          "kind": "midpoint(~)"
+        },
+        "elevationBandCount": {
+          "raw": "4",
+          "value": 4,
+          "kind": "exact"
+        },
+        "maxConsequentialElevationDelta": {
+          "raw": "~8-12 units",
+          "value": 10,
+          "kind": "midpoint(~)",
+          "unit": "units"
+        },
+        "majorRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "alternateRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "shortLoopCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "chokepointCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "reachableHighGroundCount": {
+          "raw": "4",
+          "value": 4,
+          "kind": "exact"
+        },
+        "spawnToFirstDecisionCells": {
+          "raw": "1-3",
+          "value": 2,
+          "kind": "midpoint"
+        }
+      }
+    },
+    {
+      "game": "TriangleStrategy",
+      "mapName": "Wolffort Streets (Ch VII town defense)",
+      "chapterOrId": "p06:wolffort-streets",
+      "confidence": "medium-high",
+      "included": true,
+      "sizeClassPooled": "large",
+      "cells": {
+        "traversableCellEstimate": {
+          "raw": "~350-500 (est)",
+          "value": 425,
+          "kind": "midpoint(~)"
+        },
+        "elevationBandCount": {
+          "raw": "4",
+          "value": 4,
+          "kind": "exact"
+        },
+        "maxConsequentialElevationDelta": {
+          "raw": "~8-12 units",
+          "value": 10,
+          "kind": "midpoint(~)",
+          "unit": "units"
+        },
+        "majorRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "alternateRouteCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "shortLoopCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "chokepointCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "reachableHighGroundCount": {
+          "raw": "5",
+          "value": 5,
+          "kind": "exact"
+        },
+        "spawnToFirstDecisionCells": {
+          "raw": "1-3",
+          "value": 2,
+          "kind": "midpoint"
+        }
+      }
+    },
+    {
+      "game": "TriangleStrategy",
+      "mapName": "Glenbrook capital ramparts",
+      "chapterOrId": "p07:glenbrook-capital-ramparts",
+      "confidence": "medium",
+      "included": true,
+      "sizeClassPooled": "large",
+      "cells": {
+        "traversableCellEstimate": {
+          "raw": "~220-320 (est)",
+          "value": 270,
+          "kind": "midpoint(~)"
+        },
+        "elevationBandCount": {
+          "raw": "4",
+          "value": 4,
+          "kind": "exact"
+        },
+        "maxConsequentialElevationDelta": {
+          "raw": "~8-12 units",
+          "value": 10,
+          "kind": "midpoint(~)",
+          "unit": "units"
+        },
+        "majorRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "alternateRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "shortLoopCount": {
+          "raw": "0",
+          "value": 0,
+          "kind": "exact"
+        },
+        "chokepointCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "reachableHighGroundCount": {
+          "raw": "4",
+          "value": 4,
+          "kind": "exact"
+        },
+        "spawnToFirstDecisionCells": {
+          "raw": "1-3",
+          "value": 2,
+          "kind": "midpoint"
+        }
+      }
+    },
+    {
+      "game": "TriangleStrategy",
+      "mapName": "Hyzante Goddess court",
+      "chapterOrId": "p08:hyzante-goddess-court",
+      "confidence": "medium",
+      "included": true,
+      "sizeClassPooled": "large",
+      "cells": {
+        "traversableCellEstimate": {
+          "raw": "~220-300 (est)",
+          "value": 260,
+          "kind": "midpoint(~)"
+        },
+        "elevationBandCount": {
+          "raw": "3",
+          "value": 3,
+          "kind": "exact"
+        },
+        "maxConsequentialElevationDelta": {
+          "raw": "~4-8 units",
+          "value": 6,
+          "kind": "midpoint(~)",
+          "unit": "units"
+        },
+        "majorRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "alternateRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "shortLoopCount": {
+          "raw": "0",
+          "value": 0,
+          "kind": "exact"
+        },
+        "chokepointCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "reachableHighGroundCount": {
+          "raw": "3",
+          "value": 3,
+          "kind": "exact"
+        },
+        "spawnToFirstDecisionCells": {
+          "raw": "1-3",
+          "value": 2,
+          "kind": "midpoint"
+        }
+      }
+    },
+    {
+      "game": "TriangleStrategy",
+      "mapName": "Grand Norzelia mine",
+      "chapterOrId": "p09:grand-norzelia-mine",
+      "confidence": "medium-high",
+      "included": true,
+      "sizeClassPooled": "large",
+      "cells": {
+        "traversableCellEstimate": {
+          "raw": "~220-320 (est)",
+          "value": 270,
+          "kind": "midpoint(~)"
+        },
+        "elevationBandCount": {
+          "raw": "4",
+          "value": 4,
+          "kind": "exact"
+        },
+        "maxConsequentialElevationDelta": {
+          "raw": "~8-12 units",
+          "value": 10,
+          "kind": "midpoint(~)",
+          "unit": "units"
+        },
+        "majorRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "alternateRouteCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "shortLoopCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "chokepointCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "reachableHighGroundCount": {
+          "raw": "4",
+          "value": 4,
+          "kind": "exact"
+        },
+        "spawnToFirstDecisionCells": {
+          "raw": "1-3",
+          "value": 2,
+          "kind": "midpoint"
+        }
+      }
+    },
+    {
+      "game": "TriangleStrategy",
+      "mapName": "Wolffort great hall — NON-HOMOLOGOUS interior slot (no roofed-interior battle frame in TS; declared)",
+      "chapterOrId": "p10:wolffort-great-hall",
+      "confidence": "low-medium",
+      "included": true,
+      "sizeClassPooled": "medium",
+      "cells": {
+        "traversableCellEstimate": {
+          "raw": "~150-220 (est)",
+          "value": 185,
+          "kind": "midpoint(~)"
+        },
+        "elevationBandCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "maxConsequentialElevationDelta": {
+          "raw": "~2-4 units",
+          "value": 3,
+          "kind": "midpoint(~)",
+          "unit": "units"
+        },
+        "majorRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "alternateRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "shortLoopCount": {
+          "raw": "0",
+          "value": 0,
+          "kind": "exact"
+        },
+        "chokepointCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "reachableHighGroundCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "spawnToFirstDecisionCells": {
+          "raw": "1-3",
+          "value": 2,
+          "kind": "midpoint"
+        }
+      }
+    },
+    {
+      "game": "TriangleStrategy",
+      "mapName": "Telliore reservoir dam",
+      "chapterOrId": "p11:telliore-reservoir-dam",
+      "confidence": "medium-high",
+      "included": true,
+      "sizeClassPooled": "medium",
+      "cells": {
+        "traversableCellEstimate": {
+          "raw": "~200-280 (est)",
+          "value": 240,
+          "kind": "midpoint(~)"
+        },
+        "elevationBandCount": {
+          "raw": "5",
+          "value": 5,
+          "kind": "exact"
+        },
+        "maxConsequentialElevationDelta": {
+          "raw": "'Height 32' HUD documented — fine height units, large delta",
+          "value": 32,
+          "kind": "special-case",
+          "unit": "TS fine height units"
+        },
+        "majorRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "alternateRouteCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "shortLoopCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "chokepointCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "reachableHighGroundCount": {
+          "raw": "5",
+          "value": 5,
+          "kind": "exact"
+        },
+        "spawnToFirstDecisionCells": {
+          "raw": "1-3",
+          "value": 2,
+          "kind": "midpoint"
+        }
+      }
+    },
+    {
+      "game": "TriangleStrategy",
+      "mapName": "Norzelia dry steppe (sparse control)",
+      "chapterOrId": "p12:norzelia-dry-steppe",
+      "confidence": "medium",
+      "included": true,
+      "sizeClassPooled": "medium",
+      "cells": {
+        "traversableCellEstimate": {
+          "raw": "~180-250 (est)",
+          "value": 215,
+          "kind": "midpoint(~)"
+        },
+        "elevationBandCount": {
+          "raw": "2",
+          "value": 2,
+          "kind": "exact"
+        },
+        "maxConsequentialElevationDelta": {
+          "raw": "~2-4 units",
+          "value": 3,
+          "kind": "midpoint(~)",
+          "unit": "units"
+        },
+        "majorRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "alternateRouteCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "shortLoopCount": {
+          "raw": "0",
+          "value": 0,
+          "kind": "exact"
+        },
+        "chokepointCount": {
+          "raw": "0",
+          "value": 0,
+          "kind": "exact"
+        },
+        "reachableHighGroundCount": {
+          "raw": "1",
+          "value": 1,
+          "kind": "exact"
+        },
+        "spawnToFirstDecisionCells": {
+          "raw": "1-3",
+          "value": 2,
+          "kind": "midpoint"
+        }
+      }
+    },
+    {
+      "game": "IvaliceChronicles",
+      "mapName": "Mandalia Plain (Enhanced)",
+      "chapterOrId": "p01",
+      "confidence": "high (identity) / medium (readings)",
+      "included": false,
+      "excludedReason": "alias rows — every tactical cell reads \"as FFT (same board)\" (no independent values); 3 of 9 (Lionel Castle Gate, Riovanes Castle Roof, Sand Rat's Sietch) alias boards that are not among the 12 measured FFT rows, and resolving the other 6 would only double-weight FFT boards in the pooled band",
+      "traversableCellEstimateRaw": "as FFT (same board)"
+    },
+    {
+      "game": "IvaliceChronicles",
+      "mapName": "Sweegy Woods / Siedge Weald (Enhanced)",
+      "chapterOrId": "p03",
+      "confidence": "high (identity) / medium (readings)",
+      "included": false,
+      "excludedReason": "alias rows — every tactical cell reads \"as FFT (same board)\" (no independent values); 3 of 9 (Lionel Castle Gate, Riovanes Castle Roof, Sand Rat's Sietch) alias boards that are not among the 12 measured FFT rows, and resolving the other 6 would only double-weight FFT boards in the pooled band",
+      "traversableCellEstimateRaw": "as FFT (same board)"
+    },
+    {
+      "game": "IvaliceChronicles",
+      "mapName": "Zeirchele Falls (Enhanced + Classic PAIR)",
+      "chapterOrId": "p04",
+      "confidence": "high (identity) / medium (readings)",
+      "included": false,
+      "excludedReason": "alias rows — every tactical cell reads \"as FFT (same board)\" (no independent values); 3 of 9 (Lionel Castle Gate, Riovanes Castle Roof, Sand Rat's Sietch) alias boards that are not among the 12 measured FFT rows, and resolving the other 6 would only double-weight FFT boards in the pooled band",
+      "traversableCellEstimateRaw": "as FFT (same board)"
+    },
+    {
+      "game": "IvaliceChronicles",
+      "mapName": "Ziekden Fortress (Enhanced)",
+      "chapterOrId": "p05",
+      "confidence": "high (identity) / medium (readings)",
+      "included": false,
+      "excludedReason": "alias rows — every tactical cell reads \"as FFT (same board)\" (no independent values); 3 of 9 (Lionel Castle Gate, Riovanes Castle Roof, Sand Rat's Sietch) alias boards that are not among the 12 measured FFT rows, and resolving the other 6 would only double-weight FFT boards in the pooled band",
+      "traversableCellEstimateRaw": "as FFT (same board)"
+    },
+    {
+      "game": "IvaliceChronicles",
+      "mapName": "Merchant City of Dorter (Enhanced)",
+      "chapterOrId": "p06",
+      "confidence": "high (identity) / medium (readings)",
+      "included": false,
+      "excludedReason": "alias rows — every tactical cell reads \"as FFT (same board)\" (no independent values); 3 of 9 (Lionel Castle Gate, Riovanes Castle Roof, Sand Rat's Sietch) alias boards that are not among the 12 measured FFT rows, and resolving the other 6 would only double-weight FFT boards in the pooled band",
+      "traversableCellEstimateRaw": "as FFT (same board)"
+    },
+    {
+      "game": "IvaliceChronicles",
+      "mapName": "Lionel Castle Gate (Enhanced)",
+      "chapterOrId": "p07",
+      "confidence": "high (identity) / medium (readings)",
+      "included": false,
+      "excludedReason": "alias rows — every tactical cell reads \"as FFT (same board)\" (no independent values); 3 of 9 (Lionel Castle Gate, Riovanes Castle Roof, Sand Rat's Sietch) alias boards that are not among the 12 measured FFT rows, and resolving the other 6 would only double-weight FFT boards in the pooled band",
+      "traversableCellEstimateRaw": "as FFT (same board)"
+    },
+    {
+      "game": "IvaliceChronicles",
+      "mapName": "Orbonne Monastery (Enhanced + Classic PAIR)",
+      "chapterOrId": "p08",
+      "confidence": "high (identity) / medium (readings)",
+      "included": false,
+      "excludedReason": "alias rows — every tactical cell reads \"as FFT (same board)\" (no independent values); 3 of 9 (Lionel Castle Gate, Riovanes Castle Roof, Sand Rat's Sietch) alias boards that are not among the 12 measured FFT rows, and resolving the other 6 would only double-weight FFT boards in the pooled band",
+      "traversableCellEstimateRaw": "as FFT (same board)"
+    },
+    {
+      "game": "IvaliceChronicles",
+      "mapName": "Riovanes Castle Roof (Enhanced)",
+      "chapterOrId": "p11",
+      "confidence": "high (identity) / medium (readings)",
+      "included": false,
+      "excludedReason": "alias rows — every tactical cell reads \"as FFT (same board)\" (no independent values); 3 of 9 (Lionel Castle Gate, Riovanes Castle Roof, Sand Rat's Sietch) alias boards that are not among the 12 measured FFT rows, and resolving the other 6 would only double-weight FFT boards in the pooled band",
+      "traversableCellEstimateRaw": "as FFT (same board)"
+    },
+    {
+      "game": "IvaliceChronicles",
+      "mapName": "Sand Rat's Sietch (Enhanced; ID medium-high confidence)",
+      "chapterOrId": "p12",
+      "confidence": "high (identity) / medium (readings)",
+      "included": false,
+      "excludedReason": "alias rows — every tactical cell reads \"as FFT (same board)\" (no independent values); 3 of 9 (Lionel Castle Gate, Riovanes Castle Roof, Sand Rat's Sietch) alias boards that are not among the 12 measured FFT rows, and resolving the other 6 would only double-weight FFT boards in the pooled band",
+      "traversableCellEstimateRaw": "as FFT (same board)"
+    }
+  ]
+}

@@ -78,7 +78,9 @@ TacticalSkeletonV1
   chokepoints[] { id, cells[], widthCells }
   highGround[] { id, cells[], reachableBy[] }
   deployments[] / objectives[] / retreats[]
-  interactives[] { id, verb, cells[] }
+  interactives[] { id, noun, verbs[], cells[] }   // noun-centric per Adam 2026-07-31:
+                                                  // one gate (noun) affords open/close/
+                                                  // bar/break (many verbs)
 ```
 
 Metric derivations (each must quote lane-1's counting rule beside its implementation):
@@ -107,8 +109,11 @@ name: `receipt.tacticalPromise = { sizeClass, metrics{...}, verdicts{...} }`.
   template (one major route + flank, no loop) must FAIL at least two named metrics
   (expected: shortLoopCount, alternateRouteCount or spawnToFirstDecision) — this is the
   honest red proving the gate would have caught the wave-2 flatness;
-  (b) GREEN: a fixture hand-translated from one real CSV row (Grog Hill MAP081: 2-3
-  bands, 5-6h delta, 1 major + 1 alternate, 2 loops, 4 chokepoints) must PASS its class.
+  (b) GREEN: a fixture hand-translated from one real CSV row (Grog Hill MAP081 — the
+  CSV row is the authority: 4 bands, 5-6h delta, 1 major + 1 alternate route, 1 loop,
+  2 chokepoints, 4 reachable high grounds, spawn-to-decision 2-3) must PASS its class.
+  (2026-07-31 correction: this spec's first draft column-shifted these numbers; caught
+  by the T1 executor against the CSV. The CSV row wins over any restatement here.)
   Both fixtures live in `dev/research/fixtures/` with their derivations commented.
 - **G3 (parity):** every metric implementation carries a quoted counting rule from
   lane-1; each divergence is listed in the harness header as DERIVED with a one-line
@@ -130,6 +135,7 @@ name: `receipt.tacticalPromise = { sizeClass, metrics{...}, verdicts{...} }`.
    the ruling can be made on visible numbers rather than in the abstract.
 2. WARN policy: does a WARN-carrying skeleton reach candidate scoring with a penalty, or
    only when no all-green candidate exists in the bounded set?
-3. Interactives: the corpus columns are thin here (`dynamicStateEvidence` is mostly
-   per-map notes) — accept a floor of "≥1 interactive verb per skeleton" as an ASSUMED
-   band until a dedicated interactives study prices a real one?
+3. ~~Interactives~~ **RULED (Adam, 2026-07-31):** floor accepted for now, reframed
+   noun-centric — **≥1 interactive NOUN per skeleton** (a gate, a windlass, a brazier:
+   one doer affording many verbs), ASSUMED band until a dedicated interactives study
+   prices a real one. The skeleton contract's `interactives[]` is noun-keyed accordingly.

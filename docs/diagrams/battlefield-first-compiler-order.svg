@@ -1,0 +1,93 @@
+<svg viewBox="0 0 960 520" xmlns="http://www.w3.org/2000/svg" font-family="Menlo, Consolas, monospace">
+  <rect x="0" y="0" width="960" height="520" fill="#f4f1ea"/>
+  <text x="480" y="32" text-anchor="middle" font-size="16" fill="#2b2b2b" font-weight="bold">WHO OWNS THE FUN — the battle graph is the spine, architecture justifies it</text>
+
+  <!-- WRONG ORDER row -->
+  <g>
+    <rect x="30" y="56" width="900" height="130" fill="#f0e4e0" stroke="#b0543f" stroke-width="1.5"/>
+    <text x="48" y="80" font-size="12" fill="#8f3b2a" font-weight="bold">ARCHITECTURE-FIRST (the trap)</text>
+    <rect x="60" y="96" width="180" height="64" fill="#ffffff" stroke="#8a8a8a"/>
+    <text x="150" y="122" text-anchor="middle" font-size="11" fill="#2b2b2b">plausible building</text>
+    <text x="150" y="138" text-anchor="middle" font-size="10" fill="#5a5a5a">grammar solves walls,</text>
+    <text x="150" y="151" text-anchor="middle" font-size="10" fill="#5a5a5a">roofs, bays, style</text>
+    <path d="M 250 128 L 290 128" stroke="#8f3b2a" stroke-width="2" marker-end="url(#arrB)"/>
+    <rect x="295" y="96" width="180" height="64" fill="#ffffff" stroke="#8a8a8a"/>
+    <text x="385" y="122" text-anchor="middle" font-size="11" fill="#2b2b2b">battle hoped for</text>
+    <text x="385" y="138" text-anchor="middle" font-size="10" fill="#5a5a5a">tactics = whatever the</text>
+    <text x="385" y="151" text-anchor="middle" font-size="10" fill="#5a5a5a">floor plan happens to be</text>
+    <path d="M 485 128 L 525 128" stroke="#8f3b2a" stroke-width="2" marker-end="url(#arrB)"/>
+    <rect x="530" y="96" width="370" height="64" fill="#ffffff" stroke="#8a8a8a"/>
+    <text x="715" y="118" text-anchor="middle" font-size="11" fill="#8f3b2a" font-weight="bold">result: accurate Roman guard post, flat fight</text>
+    <text x="715" y="136" text-anchor="middle" font-size="10" fill="#5a5a5a">one corridor, no height play, one route,</text>
+    <text x="715" y="150" text-anchor="middle" font-size="10" fill="#5a5a5a">nothing to pull, nothing to hold</text>
+  </g>
+
+  <!-- RIGHT ORDER row -->
+  <g>
+    <rect x="30" y="210" width="900" height="280" fill="#e7ece3" stroke="#5f7a52" stroke-width="1.5"/>
+    <text x="48" y="234" font-size="12" fill="#3e5a33" font-weight="bold">BATTLE-FIRST (the compiler order)</text>
+
+    <!-- stage 1: digest -->
+    <rect x="55" y="252" width="160" height="90" fill="#ffffff" stroke="#8a8a8a"/>
+    <text x="135" y="274" text-anchor="middle" font-size="11" fill="#2b2b2b" font-weight="bold">walk digest</text>
+    <text x="135" y="292" text-anchor="middle" font-size="9.5" fill="#5a5a5a">place + program + scale</text>
+    <text x="135" y="306" text-anchor="middle" font-size="9.5" fill="#5a5a5a">threat + faction state</text>
+    <text x="135" y="320" text-anchor="middle" font-size="9.5" fill="#5a5a5a">player history (what YOU</text>
+    <text x="135" y="333" text-anchor="middle" font-size="9.5" fill="#5a5a5a">left behind here)</text>
+    <path d="M 225 297 L 258 297" stroke="#3e5a33" stroke-width="2" marker-end="url(#arrG)"/>
+
+    <!-- stage 2: tactical skeleton (the spine, biggest box) -->
+    <rect x="263" y="245" width="240" height="205" fill="#fdfcf8" stroke="#3e5a33" stroke-width="2.5"/>
+    <text x="383" y="267" text-anchor="middle" font-size="11.5" fill="#3e5a33" font-weight="bold">TACTICAL SKELETON — the fun</text>
+    <!-- mini map sketch: height tiers -->
+    <rect x="285" y="282" width="196" height="110" fill="#efe9db" stroke="#9a927f"/>
+    <rect x="285" y="282" width="70" height="110" fill="#d9d2c4" stroke="#9a927f"/>
+    <rect x="285" y="282" width="34" height="110" fill="#c3b9a4" stroke="#9a927f"/>
+    <!-- route A: road through -->
+    <path d="M 470 372 C 420 372 420 330 383 330 C 346 330 340 300 296 300" stroke="#7a5f43" stroke-width="5" fill="none" opacity="0.85"/>
+    <!-- route B: flank -->
+    <path d="M 470 292 C 430 288 400 296 376 310" stroke="#8fa8b8" stroke-width="3.5" fill="none" stroke-dasharray="6,3"/>
+    <!-- chokepoint marker -->
+    <circle cx="383" cy="330" r="8" fill="none" stroke="#b0543f" stroke-width="2.5"/>
+    <!-- objective -->
+    <rect x="300" y="292" width="12" height="12" fill="#b0543f"/>
+    <!-- interactive -->
+    <circle cx="418" cy="372" r="5" fill="#5f7a52"/>
+    <text x="383" y="410" text-anchor="middle" font-size="9.5" fill="#4a4a4a">3 height tiers · 2 routes (fast/exposed vs</text>
+    <text x="383" y="423" text-anchor="middle" font-size="9.5" fill="#4a4a4a">slow/covered) · 1 chokepoint ◦ 1 lever</text>
+    <text x="383" y="436" text-anchor="middle" font-size="9.5" fill="#4a4a4a">■ objective on the high tier · legal retreat</text>
+    <path d="M 513 347 L 546 347" stroke="#3e5a33" stroke-width="2" marker-end="url(#arrG)"/>
+
+    <!-- stage 3: earthworks + architecture justify -->
+    <rect x="551" y="252" width="180" height="190" fill="#ffffff" stroke="#8a8a8a"/>
+    <text x="641" y="274" text-anchor="middle" font-size="11" fill="#2b2b2b" font-weight="bold">justification pass</text>
+    <text x="641" y="294" text-anchor="middle" font-size="9.5" fill="#5a5a5a">earthworks make the tiers</text>
+    <text x="641" y="307" text-anchor="middle" font-size="9.5" fill="#5a5a5a">honest (cut/fill/retain)</text>
+    <text x="641" y="326" text-anchor="middle" font-size="9.5" fill="#5a5a5a">grammar dresses the routes:</text>
+    <text x="641" y="339" text-anchor="middle" font-size="9.5" fill="#5a5a5a">chokepoint becomes the GATE,</text>
+    <text x="641" y="352" text-anchor="middle" font-size="9.5" fill="#5a5a5a">high tier becomes the DECK,</text>
+    <text x="641" y="365" text-anchor="middle" font-size="9.5" fill="#5a5a5a">cover becomes crates/parapet</text>
+    <text x="641" y="384" text-anchor="middle" font-size="9.5" fill="#5a5a5a">program obligations ride</text>
+    <text x="641" y="397" text-anchor="middle" font-size="9.5" fill="#5a5a5a">along (threshold, lookout,</text>
+    <text x="641" y="410" text-anchor="middle" font-size="9.5" fill="#5a5a5a">retreat) — never invented</text>
+    <text x="641" y="423" text-anchor="middle" font-size="9.5" fill="#5a5a5a">by the renderer</text>
+    <path d="M 741 347 L 774 347" stroke="#3e5a33" stroke-width="2" marker-end="url(#arrG)"/>
+
+    <!-- stage 4: result -->
+    <rect x="779" y="252" width="130" height="190" fill="#ffffff" stroke="#8a8a8a"/>
+    <text x="844" y="274" text-anchor="middle" font-size="11" fill="#3e5a33" font-weight="bold">result</text>
+    <text x="844" y="294" text-anchor="middle" font-size="9.5" fill="#4a4a4a">a place that reads</text>
+    <text x="844" y="307" text-anchor="middle" font-size="9.5" fill="#4a4a4a">as real AND plays</text>
+    <text x="844" y="320" text-anchor="middle" font-size="9.5" fill="#4a4a4a">like a designed</text>
+    <text x="844" y="333" text-anchor="middle" font-size="9.5" fill="#4a4a4a">tactics map</text>
+    <text x="844" y="356" text-anchor="middle" font-size="9.5" fill="#4a4a4a">FFT evidence:</text>
+    <text x="844" y="369" text-anchor="middle" font-size="9.5" fill="#4a4a4a">median 120 cells —</text>
+    <text x="844" y="382" text-anchor="middle" font-size="9.5" fill="#4a4a4a">fun is DENSITY of</text>
+    <text x="844" y="395" text-anchor="middle" font-size="9.5" fill="#4a4a4a">choices, not acreage</text>
+  </g>
+
+  <defs>
+    <marker id="arrG" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#3e5a33"/></marker>
+    <marker id="arrB" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#8f3b2a"/></marker>
+  </defs>
+</svg>

@@ -1,0 +1,78 @@
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg" font-family="Menlo, Consolas, monospace">
+  <rect x="0" y="0" width="960" height="540" fill="#f4f1ea"/>
+  <text x="480" y="30" text-anchor="middle" font-size="16" fill="#2b2b2b" font-weight="bold">THE ARCHIVE IS THE SOURCE — scope is a filter, never a deletion</text>
+
+  <!-- Sources column -->
+  <g>
+    <rect x="30" y="60" width="250" height="300" fill="#ffffff" stroke="#8a8a8a" stroke-width="1.5"/>
+    <text x="155" y="84" text-anchor="middle" font-size="12" fill="#2b2b2b" font-weight="bold">SOURCES (everything stays)</text>
+    <rect x="45" y="98" width="220" height="42" fill="#efe9db" stroke="#b0a890"/>
+    <text x="155" y="115" text-anchor="middle" font-size="10" fill="#2b2b2b">Engine table markdown — ALL rows,</text>
+    <text x="155" y="129" text-anchor="middle" font-size="10" fill="#2b2b2b">out-of-scope rows get a TAG, not an exit</text>
+    <rect x="45" y="148" width="220" height="42" fill="#efe9db" stroke="#b0a890"/>
+    <text x="155" y="165" text-anchor="middle" font-size="10" fill="#2b2b2b">walk rollers: urban / wilderness / dungeon</text>
+    <text x="155" y="179" text-anchor="middle" font-size="10" fill="#2b2b2b">— code untouched, harnesses still run</text>
+    <rect x="45" y="198" width="220" height="42" fill="#efe9db" stroke="#b0a890"/>
+    <text x="155" y="215" text-anchor="middle" font-size="10" fill="#2b2b2b">CLASS_PROGRESSION: all 12 classes</text>
+    <text x="155" y="229" text-anchor="middle" font-size="10" fill="#2b2b2b">bestiary: all 510 · realms: all 11</text>
+    <rect x="45" y="248" width="220" height="42" fill="#efe9db" stroke="#b0a890"/>
+    <text x="155" y="265" text-anchor="middle" font-size="10" fill="#2b2b2b">golden sites, travel, settlements,</text>
+    <text x="155" y="279" text-anchor="middle" font-size="10" fill="#2b2b2b">TIYL starts — all present, all tested</text>
+    <text x="155" y="315" text-anchor="middle" font-size="10.5" fill="#3e5a33" font-weight="bold">CI keeps ALL of this green forever</text>
+    <text x="155" y="331" text-anchor="middle" font-size="9.5" fill="#5a5a5a">an archive that rots is a deletion</text>
+    <text x="155" y="345" text-anchor="middle" font-size="9.5" fill="#5a5a5a">with extra steps</text>
+  </g>
+
+  <!-- Scope manifest -->
+  <g>
+    <rect x="330" y="120" width="180" height="150" fill="#fdfcf8" stroke="#b0543f" stroke-width="2.5"/>
+    <text x="420" y="144" text-anchor="middle" font-size="11.5" fill="#b0543f" font-weight="bold">LAUNCH SCOPE</text>
+    <text x="420" y="158" text-anchor="middle" font-size="11.5" fill="#b0543f" font-weight="bold">MANIFEST</text>
+    <text x="420" y="178" text-anchor="middle" font-size="9.5" fill="#4a4a4a">one committed file</text>
+    <text x="420" y="192" text-anchor="middle" font-size="9.5" fill="#4a4a4a">envs: [dungeon, town]</text>
+    <text x="420" y="206" text-anchor="middle" font-size="9.5" fill="#4a4a4a">classes: [war, mage, rogue]</text>
+    <text x="420" y="220" text-anchor="middle" font-size="9.5" fill="#4a4a4a">realm: [one] · tiers: [...]</text>
+    <text x="420" y="240" text-anchor="middle" font-size="10" fill="#2b2b2b" font-weight="bold">the single un-cap point</text>
+    <text x="420" y="254" text-anchor="middle" font-size="9.5" fill="#5a5a5a">(LEVEL_CEILING pattern)</text>
+  </g>
+  <path d="M 280 195 L 325 195" stroke="#5a5a5a" stroke-width="2" marker-end="url(#arrK)"/>
+
+  <!-- Three chokepoints -->
+  <g>
+    <rect x="560" y="60" width="180" height="88" fill="#ffffff" stroke="#8a8a8a" stroke-width="1.5"/>
+    <text x="650" y="82" text-anchor="middle" font-size="10.5" fill="#2b2b2b" font-weight="bold">compile profile</text>
+    <text x="650" y="98" text-anchor="middle" font-size="9.5" fill="#5a5a5a">compile-tables.py reads scope,</text>
+    <text x="650" y="112" text-anchor="middle" font-size="9.5" fill="#5a5a5a">emits CONTAINED tables.json/js</text>
+    <text x="650" y="126" text-anchor="middle" font-size="9.5" fill="#5a5a5a">(full compile stays available</text>
+    <text x="650" y="140" text-anchor="middle" font-size="9.5" fill="#5a5a5a">for dev + harnesses)</text>
+  </g>
+  <g>
+    <rect x="560" y="166" width="180" height="74" fill="#ffffff" stroke="#8a8a8a" stroke-width="1.5"/>
+    <text x="650" y="188" text-anchor="middle" font-size="10.5" fill="#2b2b2b" font-weight="bold">walk dealer gate</text>
+    <text x="650" y="204" text-anchor="middle" font-size="9.5" fill="#5a5a5a">deals only in-scope walks;</text>
+    <text x="650" y="218" text-anchor="middle" font-size="9.5" fill="#5a5a5a">rollers untouched — starved,</text>
+    <text x="650" y="232" text-anchor="middle" font-size="9.5" fill="#5a5a5a">not severed</text>
+  </g>
+  <g>
+    <rect x="560" y="258" width="180" height="74" fill="#ffffff" stroke="#8a8a8a" stroke-width="1.5"/>
+    <text x="650" y="280" text-anchor="middle" font-size="10.5" fill="#2b2b2b" font-weight="bold">creator filter</text>
+    <text x="650" y="296" text-anchor="middle" font-size="9.5" fill="#5a5a5a">3 classes offered; all 12</text>
+    <text x="650" y="310" text-anchor="middle" font-size="9.5" fill="#5a5a5a">stay in data — sites starve</text>
+    <text x="650" y="324" text-anchor="middle" font-size="9.5" fill="#5a5a5a">automatically via the dealer</text>
+  </g>
+  <path d="M 510 160 L 555 110 M 510 195 L 555 200 M 510 230 L 555 290" stroke="#5a5a5a" stroke-width="1.6" fill="none" marker-end="url(#arrK)"/>
+
+  <!-- Teeth row -->
+  <g>
+    <rect x="30" y="390" width="900" height="120" fill="#e7ece3" stroke="#5f7a52" stroke-width="1.5"/>
+    <text x="48" y="414" font-size="12" fill="#3e5a33" font-weight="bold">TEETH (the ruling is real only when these exist)</text>
+    <text x="60" y="438" font-size="10" fill="#2b2b2b">1. verify-launch-scope.mjs — rolls a walk census against the contained build: 100% of dealt walks/classes/monsters in-scope, zero leakage; red-first (un-tag one row, watch it fail)</text>
+    <text x="60" y="458" font-size="10" fill="#2b2b2b">2. full-surface CI stays green — archived rollers, tables, and harnesses keep passing on the FULL compile; bit-rot in the archive fails the build TODAY, not at the sequel</text>
+    <text x="60" y="478" font-size="10" fill="#2b2b2b">3. single-accessor grep — scope is read ONLY via the manifest accessor; a scattered "if contained" conditional anywhere else fails the wiring check (NC-GOLDEN-GENERATOR spirit)</text>
+    <text x="60" y="498" font-size="10" fill="#2b2b2b">4. ARCHIVE-LEDGER.md — every scoped-out system listed with its re-entry condition; the archive list doubles as the expansion map</text>
+  </g>
+
+  <defs>
+    <marker id="arrK" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#5a5a5a"/></marker>
+  </defs>
+</svg>

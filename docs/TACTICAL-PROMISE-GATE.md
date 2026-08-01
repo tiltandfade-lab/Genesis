@@ -133,8 +133,12 @@ name: `receipt.tacticalPromise = { sizeClass, metrics{...}, verdicts{...} }`.
 
 1. Band blend: FFT rows only, or FFT+TS pooled? T1 emits BOTH groupings side-by-side so
    the ruling can be made on visible numbers rather than in the abstract.
-2. WARN policy: does a WARN-carrying skeleton reach candidate scoring with a penalty, or
-   only when no all-green candidate exists in the bounded set?
+2. ~~WARN policy~~ **RULED (Adam, 2026-07-31): B now, A ideally.** WARN-carrying
+   candidates are a fallback tier — selected only when the bounded candidate set holds
+   no all-green member (B). The aspirational end-state, revisited once real candidates
+   exist, is A: warned candidates compete with a penalty, so an outlier-but-brilliant
+   composition can occasionally beat a boring all-green one. Any move from B to A is
+   its own founder ruling with visible candidate evidence.
 3. ~~Interactives~~ **RULED (Adam, 2026-07-31):** floor accepted for now, reframed
    noun-centric — **≥1 interactive NOUN per skeleton** (a gate, a windlass, a brazier:
    one doer affording many verbs), ASSUMED band until a dedicated interactives study

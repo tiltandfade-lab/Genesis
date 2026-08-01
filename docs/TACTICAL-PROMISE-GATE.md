@@ -131,8 +131,11 @@ name: `receipt.tacticalPromise = { sizeClass, metrics{...}, verdicts{...} }`.
 
 ## 5. Open founder questions (none block T1/T2)
 
-1. Band blend: FFT rows only, or FFT+TS pooled? T1 emits BOTH groupings side-by-side so
-   the ruling can be made on visible numbers rather than in the abstract.
+1. ~~Band blend~~ **RULED (Adam, 2026-07-31, on visible numbers): pool everything —
+   FFT+TS pooled bands for all eight metrics.** (Claude's pool-except-height-delta
+   recommendation was considered and overruled; the Telliore unit-incomparability
+   caveat stays flagged in the bands data, and the pooled delta max of 32 stands as
+   the BLOCK ceiling.)
 2. ~~WARN policy~~ **RULED (Adam, 2026-07-31): B now, A ideally.** WARN-carrying
    candidates are a fallback tier — selected only when the bounded candidate set holds
    no all-green member (B). The aspirational end-state, revisited once real candidates

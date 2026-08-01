@@ -1,0 +1,455 @@
+{
+  "chassisVersion": "ChassisV0",
+  "id": "chassis-guard-watchhouse-NEG-missing-wall-segment",
+  "family": "compact-watch-structures",
+  "label": "Guard watchhouse \u2014 Site 1 shoulder-route-control post, three family envelopes as one chassis",
+  "parameters": [
+    {
+      "name": "familyVariant",
+      "min": 0,
+      "max": 2,
+      "default": 0,
+      "integer": true,
+      "affects": [
+        "footprint.w",
+        "footprint.d",
+        "deckAttachment",
+        "sitePlacement.anchorX",
+        "sitePlacement.anchorY",
+        "wallRuns[].openings[].station"
+      ],
+      "_source": "vignette-synthesizer.js:453-468 familyLayoutVariant"
+    },
+    {
+      "name": "crownLiftH",
+      "min": 0,
+      "max": 1,
+      "default": 0,
+      "integer": true,
+      "affects": [
+        "deckAttachment.bearingH",
+        "foundation.shelfH"
+      ],
+      "_source": "vignette-synthesizer.js:446 crownLift; shelf 7+crownLift lines 547-549; crown rows 9-10+crownLift lines 500-507"
+    },
+    {
+      "name": "roomShift",
+      "min": 0,
+      "max": 1,
+      "default": 0,
+      "integer": true,
+      "affects": [
+        "sitePlacement.anchorX"
+      ],
+      "_source": "vignette-synthesizer.js:448 roomShift; anchor line 461; deckLayouts x offsets lines 464-466 (deck x and footprint x shift together, so the chassis-local deck offset is roomShift-invariant)"
+    }
+  ],
+  "footprint": {
+    "w": {
+      "selectByParam": "familyVariant",
+      "options": [
+        4,
+        4,
+        6
+      ]
+    },
+    "d": {
+      "selectByParam": "familyVariant",
+      "options": [
+        4,
+        6,
+        4
+      ]
+    },
+    "wRange": {
+      "min": 4,
+      "max": 6
+    },
+    "dRange": {
+      "min": 4,
+      "max": 6
+    },
+    "_source": "vignette-synthesizer.js:459-460; the three envelopes 4x4 / 4x6 / 6x4 as one chassis"
+  },
+  "storeys": [
+    {
+      "id": "storey-0",
+      "role": "guardroom",
+      "enclosure": "enclosed",
+      "heightUnits": 2.25,
+      "plan": "footprint",
+      "_source": "architecture-forms.js:1977-2005 wall height 2.25 above plinth 1.02; vignette structures[0] role guardroom"
+    },
+    {
+      "id": "storey-1",
+      "role": "roof-lookout",
+      "enclosure": "open-deck",
+      "heightUnits": 0.68,
+      "plan": "footprint",
+      "_source": "architecture-forms.js:2006-2010 walkable deck at 3.32 with 0.68 parapet; vignette guardroom storeys: 2 read as room + parapeted deck"
+    }
+  ],
+  "wallRuns": [
+    {
+      "id": "guard-road-wall",
+      "storey": "storey-0",
+      "face": "e",
+      "span": "full",
+      "class": "masonry-wall",
+      "thicknessUnits": 0.38,
+      "supportedBy": [
+        "foundation"
+      ],
+      "openings": [
+        {
+          "id": "guard-door",
+          "kind": "door",
+          "station": {
+            "selectByParam": "familyVariant",
+            "options": [
+              2,
+              3,
+              2
+            ]
+          },
+          "widthCells": 1,
+          "clearance": {
+            "widthUnits": 1.25,
+            "heightUnits": 1.75,
+            "sillUnits": 0
+          },
+          "access": "walk",
+          "observation": false,
+          "_source": "architecture-forms.js:1998-2001 guard-door 1.25x1.75; face per vignette road side; station quantized from 3.95/6.1"
+        }
+      ],
+      "_source": "architecture-forms.js:1994-2005 front piers run (door carrier)"
+    },
+    {
+      "id": "guard-flank-wall",
+      "storey": "storey-0",
+      "face": "w",
+      "span": "full",
+      "class": "masonry-wall",
+      "thicknessUnits": 0.38,
+      "supportedBy": [
+        "foundation"
+      ],
+      "openings": [
+        {
+          "id": "guard-observation",
+          "kind": "observation-window",
+          "station": {
+            "selectByParam": "familyVariant",
+            "options": [
+              1,
+              2,
+              1
+            ]
+          },
+          "widthCells": 2,
+          "clearance": {
+            "widthUnits": 2.1,
+            "heightUnits": 0.72,
+            "sillUnits": 0.9
+          },
+          "access": "none",
+          "observation": true,
+          "_source": "architecture-forms.js:1980-1983 guard-observation 2.1 wide, sill 0.9; opposite the door per AF-03 back wall; watches the terrain-flank counterplay route"
+        }
+      ],
+      "_source": "architecture-forms.js:1977-1984 back wall (observation carrier), mapped opposite the door"
+    },
+    {
+      "id": "guard-crown-wall",
+      "storey": "storey-0",
+      "face": "n",
+      "span": {
+        "from": 0,
+        "to": 2
+      },
+      "class": "masonry-wall",
+      "thicknessUnits": 0.38,
+      "supportedBy": [
+        "foundation"
+      ],
+      "openings": [],
+      "_source": "architecture-forms.js:1985-1993 blank side walls; crown side"
+    },
+    {
+      "id": "guard-approach-wall",
+      "storey": "storey-0",
+      "face": "s",
+      "span": "full",
+      "class": "masonry-wall",
+      "thicknessUnits": 0.38,
+      "supportedBy": [
+        "foundation"
+      ],
+      "openings": [],
+      "_source": "architecture-forms.js:1985-1993 blank side walls; approach side"
+    },
+    {
+      "id": "guard-parapet-n",
+      "storey": "storey-1",
+      "face": "n",
+      "span": "full",
+      "class": "masonry-parapet",
+      "thicknessUnits": 0.28,
+      "supportedBy": [
+        "roof-deck"
+      ],
+      "openings": [],
+      "_source": "architecture-forms.js:2009-2010 parapet rect, three closed sides"
+    },
+    {
+      "id": "guard-parapet-s",
+      "storey": "storey-1",
+      "face": "s",
+      "span": "full",
+      "class": "masonry-parapet",
+      "thicknessUnits": 0.28,
+      "supportedBy": [
+        "roof-deck"
+      ],
+      "openings": [],
+      "_source": "architecture-forms.js:2009-2010 parapet rect, three closed sides"
+    },
+    {
+      "id": "guard-parapet-w",
+      "storey": "storey-1",
+      "face": "w",
+      "span": "full",
+      "class": "masonry-parapet",
+      "thicknessUnits": 0.28,
+      "supportedBy": [
+        "roof-deck"
+      ],
+      "openings": [],
+      "_source": "architecture-forms.js:2009-2010 parapet rect, three closed sides"
+    }
+  ],
+  "declaredOpen": [
+    {
+      "storey": "storey-1",
+      "face": "e",
+      "span": "full",
+      "socketType": "open",
+      "reason": "defensive-overwatch-and-stair-arrival",
+      "_source": "architecture-forms.js:2010 openSide 'south' -> AF-03 front -> chassis 'e' via clay-room butt-join-s axis {x:0,z:+1}; stair head arrives at this face's exterior corner"
+    }
+  ],
+  "roof": {
+    "familyId": "flat-deck-parapet",
+    "covers": "top-enclosed-storey",
+    "walkable": true,
+    "thicknessUnits": 0.24,
+    "supportedBy": [
+      "storey-0-walls"
+    ],
+    "class": "timber-deck",
+    "_source": "architecture-forms.js:2006-2008 guard-roof-deck timber-surface bearing on all four wall runs, access walk; flat-deck roof is the locked guard-post ruling (docs/STRUCTURE-KIT-CATALOG.md program)"
+  },
+  "deckAttachment": {
+    "id": "crown-deck",
+    "kind": "crown-deck",
+    "face": "n",
+    "alongOffset": {
+      "selectByParam": "familyVariant",
+      "options": [
+        -4,
+        -5,
+        -1
+      ]
+    },
+    "w": {
+      "selectByParam": "familyVariant",
+      "options": [
+        6,
+        8,
+        5
+      ]
+    },
+    "d": {
+      "selectByParam": "familyVariant",
+      "options": [
+        3,
+        3,
+        5
+      ]
+    },
+    "lapRows": {
+      "selectByParam": "familyVariant",
+      "options": [
+        0,
+        1,
+        1
+      ]
+    },
+    "bearingH": {
+      "sum": [
+        9,
+        {
+          "param": "crownLiftH"
+        }
+      ]
+    },
+    "bearing": [
+      "terrain-crown",
+      "roof-deck"
+    ],
+    "attachSocketType": "walk-surface",
+    "externalAccess": true,
+    "programRole": "lookout",
+    "label": {
+      "selectByParam": "familyVariant",
+      "options": [
+        "balanced crown deck",
+        "long signal gallery",
+        "deep compact crown terrace"
+      ]
+    },
+    "_source": "vignette-synthesizer.js:463-468 deckLayouts + lines 760-768 observation-deck structure; chassis-local offsets computed from deck x minus footprint x (both carry +roomShift, so it cancels): v0 (2+r)-(6+r)=-4, v1 (1+r)-(6+r)=-5, v2 (3+r)-(4+r)=-1; lapRows from deck yEnd minus footprint y0: [4-4, 4-3, 5-4]"
+  },
+  "foundation": {
+    "modes": [
+      "negotiated-bearing-shelf",
+      "shoulder-plinth"
+    ],
+    "shelfH": {
+      "sum": [
+        7,
+        {
+          "param": "crownLiftH"
+        }
+      ]
+    },
+    "plinthTopUnits": 1.02,
+    "apronWidthCells": 1,
+    "apronFaces": [
+      "n",
+      "e",
+      "s",
+      "w"
+    ],
+    "terrainBearings": [
+      "terrain-crown"
+    ],
+    "approach": {
+      "face": "e",
+      "provider": "site-grade",
+      "external": true
+    },
+    "_source": "vignette-synthesizer.js:542-563 R1-09 bearing shelf 7+crownLift negotiated into the shoulder (+ family correction 599-632); architecture-forms.js:1975-1976 plinth 6.4x4.8 top 1.02 extending past the walls (apron); approach graded by the site, no built step in AF-03"
+  },
+  "stairs": [
+    {
+      "id": "guard-roof-stair",
+      "from": "ground",
+      "to": "storey-1",
+      "face": "e",
+      "widthCells": 1,
+      "steps": 7,
+      "supportMode": "bearing-on-lower-structure",
+      "supportedBy": [
+        "foundation-apron"
+      ],
+      "class": "stair-bearing",
+      "_source": "architecture-forms.js:2011-2015 stair base 1.02 (apron) to 3.32 (deck), width 1.05, 7 steps, supportedBy guard-plinth; supportMode per architectureAddStair default lines 1149-1151; climbs the east exterior"
+    }
+  ],
+  "accessRecords": [
+    {
+      "id": "guard-entry",
+      "from": "exterior:road-apron",
+      "to": "storey-0",
+      "kind": "door-threshold",
+      "via": "guard-door",
+      "programRole": "operating-threshold",
+      "_source": "architecture-forms.js:2028 architectureAddAccess guard-entry road-apron -> guardroom walk 1.25"
+    },
+    {
+      "id": "guard-roof-route",
+      "from": "ground",
+      "to": "storey-1",
+      "kind": "stair",
+      "via": "guard-roof-stair",
+      "_source": "architecture-forms.js:2029 guard-roof-route guardroom -> roof-lookout stair 1.05, rebased to the exterior apron the built stair actually starts on"
+    },
+    {
+      "id": "guard-crown-retreat",
+      "from": "storey-1",
+      "to": "exterior:crown",
+      "kind": "deck-egress",
+      "via": "crown-deck",
+      "external": true,
+      "programRole": "retreat",
+      "_source": "vignette-synthesizer.js:767 'terrain flank reaches the crown behind the defensive edge'; retreat at chassis scope is the crown egress (translator judgment, see translationGuesses)"
+    }
+  ],
+  "supportClasses": {
+    "masonry-wall": {
+      "maxOverhangCells": 0
+    },
+    "masonry-parapet": {
+      "maxOverhangCells": 0
+    },
+    "timber-deck": {
+      "maxOverhangCells": 0
+    },
+    "stair-bearing": {
+      "maxOverhangCells": 0
+    },
+    "_source": "architecture-forms.js supportedBy chains (walls on plinth, deck on walls, parapet on deck, stair on plinth); zero cell-resolution overhang anywhere in AF-03 (roof lip 0.035-0.075 wu is sub-cell)"
+  },
+  "sitePlacement": {
+    "anchorX": {
+      "sum": [
+        10,
+        {
+          "param": "roomShift"
+        },
+        {
+          "selectByParam": "familyVariant",
+          "options": [
+            -4,
+            -4,
+            -6
+          ]
+        }
+      ]
+    },
+    "anchorY": {
+      "selectByParam": "familyVariant",
+      "options": [
+        4,
+        3,
+        4
+      ]
+    },
+    "_source": "vignette-synthesizer.js:461-462 guardFootprintX = 10 + roomShift - w; guardFootprintY = d > 4 ? 3 : 4"
+  },
+  "obligations": {
+    "operatingThreshold": {
+      "exactly": 1
+    },
+    "lookout": {
+      "min": 0,
+      "max": 1
+    },
+    "retreat": {
+      "min": 1
+    },
+    "_source": "R4 probe brief (docs/research/CODEX-CHASSIS-THROUGHPUT-PROBE.md setup item 3): one operating threshold, lookout when declared; vignette preserves 'the same operated-threshold obligations' across families (lines 449-452)"
+  },
+  "declares": {
+    "operatingThreshold": 1,
+    "lookout": 1,
+    "retreat": 1
+  },
+  "_expect": {
+    "verdict": "FAIL",
+    "check": "closed-wall-loops"
+  },
+  "_sabotage": "guard-crown-wall span cut from full to slots 0..2: the storey-0 north wall no longer reaches its corner, so the enclosed wall loop is open (worse on the 6-wide family)."
+}

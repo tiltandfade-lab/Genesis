@@ -2,7 +2,7 @@
 type: canon
 status: ACTIVE — stable decision ids over the chronological registries
 created: 2026-07-22
-updated: 2026-07-29
+updated: 2026-07-31
 owner: docs/canon/README.md (precedence law)
 ---
 
@@ -117,6 +117,7 @@ noted). Implementation states of wave rulings are UNAUDITED by default (ledger b
 | GEN-VIS-10 | Brightness law + 9 visual-campaign laws; PS1 retired game-wide | visual-campaign rulings 2026-07-10/11 | BUILT | |
 | GEN-VIS-11 | Golden visual standard = FFT composition economy + TS material/presentation discipline + Genesis persistent consequence; materials reserve identity before topology, bind exact demands after faces exist, and are judged through hard/soft/provisional evidence | ART-DIRECTION-CANON.md 2026-07-29; GOLDEN-VIGNETTE-VISUAL-GUIDE.md; MATERIAL-LANE.md §10 | FOUNDER-AUTHORIZED / WAVE-GATED | research measurements remain evidence, not automatic law |
 | GEN-VIS-12 | Assetforge is the primary factory envelope; its eight Golden surface/material/context/proof applications are specified/unbuilt and must wrap rather than duplicate canonical specialists | ASSETFORGE.md; intel/golden-vignette-assetforge-applications-v1.json | ACCEPTED SPEC / UNBUILT | current thirteen tools remain candidate-ready/not-proved |
+| GEN-VIS-13 | Sprite Foundry is offline-first and factorized: finite donors/modules/masks plus deterministic demand-built recipes replace Cartesian pre-generation; substantial gear may license repose under physical/identity/contact gates; runtime provider use remains optional and separately gated | DESIGN.md 2026-07-31; ART-DEPARTMENT.md §18–19; SPRITE-FOUNDRY.md | FOUNDER-RULED / APPLICATION-UNBUILT | ImageGen feasibility proof retained; no output admitted and no fourteenth candidate-ready factory claimed |
 
 ## G. The procedural-dungeon program (route)
 

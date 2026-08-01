@@ -9,9 +9,15 @@ related:
   - "[[MODEL-GRAMMAR]]"
   - "[[TABLETOP-VISION]]"
   - "[[GRAPHICS-PRODUCTION-RESEARCH-WAVE]]"
+  - "[[SPRITE-FOUNDRY]]"
 ---
 
 # OFFLINE ART FOUNDRY: a donor grammar, not an asset dump
+
+> **2026-07-31 production route:** this research remains the evidence for donor-grammar and
+> recipe-first production. `SPRITE-FOUNDRY.md` is the current executable specification for
+> provider-derived sprite, wall-face, and decal descendants; it preserves this document's
+> “grammar, not dump” law while adding finite-factor budgets and runtime-cost boundaries.
 
 ## 0. Ruling
 

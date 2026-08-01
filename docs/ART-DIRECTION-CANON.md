@@ -2756,3 +2756,79 @@ Binding reading:
 - Genesis takes FFT's graphic economy and TS's richer authored face treatment as references, then
   develops its own material, culture, terrain, and condition language. The goal is not realism and
   not literal imitation.
+
+## WORLD PIXEL RESOLUTION EXTENDS TO CHARACTERS (Adam, 2026-07-31 — binding)
+
+Adam's ruling:
+
+> "so if we have established that 32px per foot is the world pixel resolution, that should also
+> probably be the character sprite resolution too huh"
+
+Binding reading:
+
+- `32 px/ft` is the shared source-art physical register for world surfaces and standee subjects.
+  A six-foot character therefore occupies 192 logical subject pixels from physical ground contact
+  to physical top before separately declared canvas padding.
+- This does not impose one canvas size, cell aspect, or screen magnification on every body. Body
+  shape, equipment silhouette, giant/titan format, and safe padding remain subject-dependent.
+- Image providers may work on larger reference canvases, but admitted candidates are normalized
+  deterministically to the native physical register. Downscaling is not allowed to blur, soften,
+  invent, or silently discard the style's intentional pixel clusters.
+- Runtime screen pixels remain a camera and renderer concern; they never rewrite the source-art
+  physical contract.
+
+`PHYSICAL-TEXTURE-MODULE-STANDARD.md` owns the dimensional specification.
+
+## GENERATIVE SPRITE DESCENDANTS USE FACTORS, NOT A CARTESIAN ASSET DUMP
+
+Adam's equipment-family direction (2026-07-31):
+
+> "would things like weapons and armor render in the second pass? this sounds like an interesting
+> way of taking a base human model sprite and then adding all sorts of stuff to that donor sprite
+> to create a whole family of sprites that are closely related to that donor sprite? I've seen tech
+> that does this, there's a great API based image sprite generator out there where you can take a
+> parent sprite, merge it with an item, and a new sprite gets generated where the parent sprite is
+> wearing armor, colors, and is styled like the item it was merged with. it's amazing"
+
+Adam's pose clarification:
+
+> "a repose is probably ideal if the gear is substantially different, would look corny if every
+> pose was the same."
+
+Adam's production-scale concern:
+
+> "ok so eventually i think we will be able to bake this sprite factory right into the game but
+> tokens and speed just aren't there yet, but they will be in a year or two. until this what is a
+> wise approach for this game without generating 500k sprites to cover every possible permutation
+> of every creature in the game"
+
+> "I am very very intersted in how we can use it to create wall modules and decal modules, and its
+> like...in my head i can see like yes we could literally cover every biome, material, construction
+> style, culture whatever. but the sprite count would be in the millions eventually. how do we not
+> do that?"
+
+Binding reading:
+
+- The production pipeline is offline-first while provider cost and latency remain unsuitable for
+  ordinary play. The shipped game never requires a player-funded generation call to complete a
+  map, character, or encounter.
+- Genesis admits a finite basis of donors, silhouette-changing descendants, attachments, authored
+  face modules, palette/signifier channels, and causal condition masks. Deterministic recipes
+  compose demanded combinations; the engine does not pre-generate their Cartesian product.
+- Recolor, faction mark, ordinary condition, material parameter, lighting, and compatible simple
+  attachments do not justify a complete redraw. A new descendant is reserved for meaningful
+  silhouette, anatomy, pose/contact, authored face-language, recurring identity, or high-reuse
+  demand.
+- Substantial equipment is licensed to cause a plausible repose. Physical scale, identity,
+  bearing, contact datum, anatomy, grip, and equipment function remain proof obligations. Pose
+  difference alone is not a failure, and forcing incompatible gear into one paper-doll stance is
+  not the goal.
+- Specific authored assets remain legal and useful; production limits their frequency rather than
+  rejecting specificity.
+- Wall and decal families are composed from physical-scale parents, `W5H5`/`W5H10` features,
+  compatible corner/end/trim grammar, cultural signifiers, and generic receiver-aware condition
+  layers. Biome, culture, material, and condition influence eligible recipes instead of directly
+  multiplying source images.
+
+`SPRITE-FOUNDRY.md` owns the executable machinery, budget, schemas, Codex runbook, packaging path,
+and future optional-runtime gates.

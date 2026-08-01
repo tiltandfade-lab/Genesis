@@ -788,3 +788,44 @@ terrain vertices and driven by downhill flow, concavity, exposure, substrate, an
 Large ivy uses shallow/crossed extrusion or equivalent contact-rooted geometry. Keep centered
 unrelated face stickers, one-decal-per-tile terrain, coupled overlays, and repetitive failures in
 the rejection lineage rather than overwriting them.
+
+---
+
+## 18. Donor descendants, native physical resolution, and equipment repose (verbatim, Adam, 2026-07-31)
+
+> "so if we have established that 32px per foot is the world pixel resolution, that should also probably be the character sprite resolution too huh"
+
+> "would things like weapons and armor render in the second pass? this sounds like an interesting way of taking a base human model sprite and then adding all sorts of stuff to that donor sprite to create a whole family of sprites that are closely related to that donor sprite? I've seen tech that does this, there's a great API based image sprite generator out there where you can take a parent sprite, merge it with an item, and a new sprite gets generated where the parent sprite is wearing armor, colors, and is styled like the item it was merged with. it's amazing"
+
+> "a repose is probably ideal if the gear is substantially different, would look corny if every pose was the same."
+
+Department reading: the sprite factory may create related character and creature descendants from
+an admitted donor plus one or more equipment/style references. Six physical feet occupy 192 native
+subject pixels at the shared `32 px/ft` register; canvas padding remains separate and body-specific.
+Provider output is quarantined and deterministically normalized rather than trusted to arrive on
+that grid.
+
+Equipment jobs declare pose intent. Minor treatment uses `PRESERVE`; substantial equipment may use
+`ADAPT_TO_GEAR`, where bracing, grip, balance, occlusion, and stance may change plausibly. That
+licensed repose is desirable when a fixed pose would read like a costume pasted onto a paper doll.
+Identity, physical height, tactical occupancy, bearing, ground/contact datum, anatomy, equipment
+attachment/function, and native-scale style remain mandatory visual-review gates.
+
+This is separate from the sprite-emote factory: an emote changes portrayal/state of one equipped
+identity, while a descendant job changes the visual build or equipment family. Both share the
+Assetforge quarantine/proof/receipt/admission envelope. `SPRITE-FOUNDRY.md` owns factor routing,
+typed recipes, budgets, current Codex operation, and the future interface/package contract.
+
+## 19. Offline-first finite-basis production (verbatim, Adam, 2026-07-31)
+
+> "ok so eventually i think we will be able to bake this sprite factory right into the game but tokens and speed just aren't there yet, but they will be in a year or two. until this what is a wise approach for this game without generating 500k sprites to cover every possible permutation of every creature in the game"
+
+> "I am very very intersted in how we can use it to create wall modules and decal modules, and its like...in my head i can see like yes we could literally cover every biome, material, construction style, culture whatever. but the sprite count would be in the millions eventually. how do we not do that?"
+
+Department reading: current generation is an offline production process, with Codex as the fastest
+first operator. Genesis grows a reviewed basis library—donors, significant kit descendants,
+attachments, physical-scale face modules, palette/signifier masks, and generic causal condition
+layers—and realizes variety from deterministic recipes. It does not materialize every possible
+combination into the live registry. Runtime provider use remains optional and separately gated in
+the future; ordinary players must receive complete local fallbacks and never inherit an unseen
+generation bill.

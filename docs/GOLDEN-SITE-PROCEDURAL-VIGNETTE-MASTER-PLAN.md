@@ -310,6 +310,7 @@ machine, evidence store, light source, or person.
 | **Procedural lathe/sweep** | bottles, urns, bowls, columns, ropes, chains, pipes, roots, horns, cables | arbitrary complex hero forms better served by a donor |
 | **Material/texture foundry** | Material Maker parent graphs; albedo/normal/ORM; trim sheets; ground parents/patches; decals and masks; realm/culture channels; wetness, soot, moss, wear, breach, repair and other causal condition fields | deciding topology, circulation, mechanics, or adding random grunge |
 | **Canonical standee sprites** | PCs, NPCs, creatures, readable identity/pose/state at the game camera | load-bearing geometry or collision truth |
+| **Offline generative Sprite Foundry** | selective donor descendants for meaningful silhouette/pose changes; missing authored face/decal modules; native-scale normalization; finite visual-factor recipes and demand/cost receipts | Cartesian pre-generation; ordinary recolor/condition/light variants; player-required provider calls; duplicate palette/material/decal/citizenship algorithms |
 | **Runtime VFX/light** | flame, emission, smoke, dust, water motion, atmosphere, range/falloff/shadows; always attached to an owned source | free-floating unexplained bulbs or topology |
 | **Context cards/plates** | honest noninteractive near/mid/far world continuation with provenance, masks, camera and knowledge compatibility | traversable ground, interactive nouns, hidden canon, or false exits |
 
@@ -331,6 +332,13 @@ machine, evidence store, light source, or person.
    and canonical renders.
 8. Every rejection teaches the router. Two repeated failures for the same structural
    reason reroute the family rather than consuming an endless generation loop.
+9. Treat generated visual variety as a factor-and-recipe problem. Palette, faction marks,
+   reusable conditions, material parameters, and compatible attachments remain independent
+   factors; commission a full descendant only when silhouette, contact, pose/anatomy, authored
+   surface language, named identity, or reuse-weighted demand justifies it.
+10. Census real Golden, walk, encounter, and equipment demand before growing the basis library.
+    Deterministic site composites are rebuildable cache products, not new art citizens. The typed
+    machinery and budget contract live in `SPRITE-FOUNDRY.md`.
 
 ### 5.4 Cross-site asset priority
 

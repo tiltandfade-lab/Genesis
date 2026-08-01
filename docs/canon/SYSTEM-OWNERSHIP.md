@@ -2,7 +2,7 @@
 type: canon
 status: ACTIVE — the authority map: which system owns which facts
 created: 2026-07-22
-updated: 2026-07-29
+updated: 2026-07-31
 owner: docs/canon/README.md (precedence law)
 ---
 
@@ -44,6 +44,7 @@ Two columns of truth run through this file and must never be conflated:
 | Semantic identity versus exact face/material demand | semantic plan owns `SemanticIdentityReservation`; `SurfaceAssemblyPlan` owns real faces/local frames; asset plan derives `SurfaceMaterialDemand` only after the face exists | `GOLDEN-SITE-VIGNETTE-CONTRACTS.md` §4.1; `GOLDEN-VIGNETTE-VISUAL-GUIDE.md` §4 |
 | Visual review standard | founder law in `ART-DIRECTION-CANON.md`, routed through `GOLDEN-VIGNETTE-VISUAL-GUIDE.md`; hard/soft/provisional machine rubric is a verifier input, not taste authority | founder ruling 2026-07-29 |
 | Visual asset factory envelope | Assetforge owns typed manifests, quarantine, specialist-tool orchestration, proofs, receipts, and explicit admission; specialist material/palette/trim/registry/persistence engines retain their algorithms | `ASSETFORGE.md`; Golden application ledger |
+| Generative visual descendant/factor recipes | Sprite Foundry owns provider-neutral donor/mutation recipes, representation routing, demand budgets, normalized candidates, and derivative fingerprints inside Assetforge; canonical sprite/material/palette/decal/trim/citizenship/atlas owners remain singular | `SPRITE-FOUNDRY.md`; `ASSETFORGE.md`; `PHYSICAL-TEXTURE-MODULE-STANDARD.md` |
 | Site identity, host semantics, transforms, and active extent | persistent `SiteIdentity` + host `RoomProgram`/operating-model obligations + ordered `TransformStack` + bounded `MaterializationWindow` | Waves 1-2; `GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md` reconciliation |
 | Spatial legality (cells, volumes, elevation, boundaries, zones, provenance) | `SpatialPlanV2` via the staged pipeline SpatialIntent → legality → `TacticalCompositionPlan` → `SurfaceAssemblyPlan` | Wave 3 P3.5 |
 | Connections, portals, secrets, vertical traversal, circulation | canonical `Connection` objects + traversal transactions + Secret Networks | Wave 4 (single subject authority) |

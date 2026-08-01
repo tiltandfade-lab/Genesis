@@ -3,7 +3,7 @@ type: next-steps
 branch: Genesis
 status: living
 created: 2026-06-18
-updated: 2026-07-29
+updated: 2026-07-31
 related:
   - "[[DESIGN]]"
   - "[[GAP-ANALYSIS]]"
@@ -59,6 +59,13 @@ and visual review now advance through the same Waves 0–8 gates.
 9. ☐ Run intermittent game flows and PC-versus-enemy battle simulations throughout,
    escalating from current zone combat to exact-cell assertions only after that
    separate replacement-proof cutover is ready.
+
+**2026-07-31 Sprite Foundry planning checkpoint:** `SPRITE-FOUNDRY.md` now freezes the
+offline-first, finite-basis direction, provider-neutral recipes, demand budget, current Codex
+runbook, packaging contract, and optional-runtime gates. The ImageGen donor/equipment experiment
+is feasibility evidence only. SF-1 implementation does not preempt Wave 2; the Guard Post/Tavern
+fixtures may request only its smallest demand-backed schema/validator slice after clay and stable
+surface/body contracts exist.
 
 ## Do next (2026-07-28 — Golden Site ontology / engine marriage)
 

@@ -4,7 +4,7 @@ project: Genesis
 status: ACTIVE DIRECTION
 created: 2026-07-30
 authority: ART-DIRECTION-CANON.md
-companions: MATERIAL-LANE.md, TRIM-SHEET-PIPELINE.md, GOLDEN-VIGNETTE-VISUAL-GUIDE.md
+companions: MATERIAL-LANE.md, TRIM-SHEET-PIPELINE.md, GOLDEN-VIGNETTE-VISUAL-GUIDE.md, SPRITE-FOUNDRY.md
 ---
 
 # Physical Texture Module Standard

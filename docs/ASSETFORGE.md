@@ -2,7 +2,7 @@
 type: production-machinery-spec
 status: PRIMARY-ASSET-FACTORY-CANDIDATE-SUITE
 created: 2026-07-27
-updated: 2026-07-29
+updated: 2026-07-31
 owner: art-pipeline
 first_implementation: build/assetforge.py
 ---
@@ -589,6 +589,46 @@ context/state comparison changes mechanics; changed-seed image mislabeled as the
 
 No application advances merely because it is listed. A current Golden wave must name the demand,
 fixtures, specialist authorities, negative controls, owner files, and stop condition.
+
+## Generative Sprite Foundry application — specified, not built
+
+`SPRITE-FOUNDRY.md` specifies a separate Assetforge application for donor-derived character,
+creature, wall-face, decal, signifier, and condition candidates. The 2026-07-31 Codex/ImageGen
+equipment experiment establishes backend feasibility only; it does not add a fourteenth
+candidate-ready factory or admit any output.
+
+The application exists separately from `sprite-emote` because an emote changes the portrayal or
+state of one equipped identity, while a descendant job may change silhouette, equipment family,
+authored surface language, or a declared gear-responsive pose. Both use this shared job envelope,
+quarantine, proof, receipt, and admission boundary.
+
+Its core production correction is finite-basis routing:
+
+```text
+typed visual demand
+  -> renderer/palette/mask/decal/attachment/deterministic-composite when truthful
+  -> selective provider descendant only for meaningful silhouette or authored-language change
+  -> normalized native candidate + receipt
+  -> explicit admission
+```
+
+It may wrap the canonical palette, decal, trim, condition, citizenship, atlas, material, and
+sprite-extrusion owners. It may not duplicate their algorithms or pre-materialize every creature ×
+gear × culture × biome × condition combination. Deterministic combinations remain rebuildable
+cache products rather than new citizens.
+
+The proposed family command surface begins only after SF-1 schemas and negative fixtures land:
+
+```text
+python3 build/assetforge.py foundry init ...
+python3 build/assetforge.py foundry ingest ...
+python3 build/assetforge.py foundry review ...
+python3 build/assetforge.py foundry self-test ...
+```
+
+Current operation is the documented Codex runbook. Ordinary shipped play uses studio-prebaked
+citizens and deterministic local composition; a future provider bridge remains optional and
+separately gated for cost, latency, privacy, fallback, and explicit spend control.
 
 # Sprite-emote factory
 

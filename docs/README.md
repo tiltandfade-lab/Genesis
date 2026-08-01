@@ -39,6 +39,7 @@ Adam) can jump straight to the right doc instead of grepping/reading its way the
 | Latest passed Golden engine gate | `GOLDEN-SITE-WAVE-1-OBSERVATORY-BRIEF.md` — Gate W1 passed; deterministic audit harness, read-only adapters, disposition/unresolved ledgers, 12,000-request checkpoint |
 | Next Golden engine implementation cut | `GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md` § Wave 2 — proxy-first Tavern identity and Guard Post visual/tactical compiler proof |
 | Generated-asset compilers and Golden material/face applications | `ASSETFORGE.md` — primary factory envelope; thirteen candidate-ready/not-proved tools; eight Golden applications specified/unbuilt |
+| Finite sprite/wall/decal generation without permutation explosion | `SPRITE-FOUNDRY.md` — offline-first donor descendants, visual-factor routing, demand budgets, native normalization, Codex runbook, future interface/runtime gates, and distributable package contract |
 | Shared procedural battlefield and town-tray composition | `BATTLEMAP-TOWNTRAY-COMPOSITION.md` (high-priority accepted direction; implementation unauthorized) |
 | Table architecture (markdown source → compiled JSON) | `Two tracks run in parallel` section below + `compile-tables.py` |
 | Module list / what owns what symbol | `manifest.json` (repo root) |
@@ -102,7 +103,15 @@ canon-and-scope pass). Small index-and-law files, never spec duplicates: `canon/
   proof, receipt, and explicit admission. Thirteen current tools are candidate-ready/not-proved.
   Eight Golden Vignette additions are specified/unbuilt for surface-demand routing, coherent
   material families, world projection, identity faces, causal state, join kits, context bands,
-  and governed proof packaging. (2026-07-29)
+  and governed proof packaging. The separate Sprite Foundry application is specified/unbuilt and
+  does not inflate the candidate-ready count. (2026-07-31)
+- `SPRITE-FOUNDRY.md` (`type: production-machinery-spec`) — offline-first, provider-neutral
+  machinery for donor-derived character/creature descendants and reusable wall/decal modules. It
+  prevents Cartesian asset growth through a finite visual-factor basis, representation routing,
+  demand-weighted budgets, content-addressed derivatives, native `32 px/ft` normalization,
+  provider-independent recipes, a Codex-operated runbook, packaging rules, and optional future
+  runtime gates. ImageGen feasibility is proved; the Assetforge application remains unbuilt.
+  (2026-07-31)
 - `NEW-GAME-FLOW.md` — the bardo / guided new-game passage.
 - `CHAR-CREATION.md` — the two-layer character creation system.
 - `SPATIAL-MODEL.md` — the lazy hex/node world-geometry model.

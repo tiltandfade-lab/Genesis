@@ -3,7 +3,7 @@ type: design-doc
 branch: Genesis
 status: living
 created: 2026-06-17
-updated: 2026-07-22
+updated: 2026-07-31
 canonical: true
 related:
   - "[[genesis.html]]"
@@ -1970,3 +1970,15 @@ Owning contract: `ASSETFORGE.md`. Executable surface: `build/assetforge.py`. Ret
 | Identity/material timing | **Accepted recommendation:** reserve identity faces/communication obligations during semantic planning; emit exact material, trim, decal, projection, and shallow-extrusion demands only after geometry has produced actual stable faces. |
 | Visual guide authority | `GOLDEN-VIGNETTE-VISUAL-GUIDE.md` routes the founder law and retained FFT/TS evidence into execution. Machine companions preserve hard rejection versus soft target versus provisional calibration. |
 | Assetforge Golden applications | Eight additions are **SPECCED / UNBUILT** under `ASSETFORGE.md`: surface-demand, material-family, surface-project, identity-face, causal-surface-state, join-kit, context-band, and vignette-proof. They do not alter the thirteen current candidate-ready/not-proved tools or duplicate canonical specialist algorithms. |
+
+## Locked decisions (2026-07-31 — finite-basis Sprite Foundry)
+
+| Decision | Ruling |
+|---|---|
+| Offline-first provider use | Codex/provider generation is a build-time art-production process while latency and cost make ordinary runtime use unsuitable. Shipped play has complete local assets and truthful fallbacks; no map, character, or encounter requires a player-funded generation call. Optional runtime generation is a separately gated future capability with explicit opt-in, estimate, cap, cache, cancellation, and fallback. |
+| No Cartesian art corpus | The engine stores a finite basis of admitted donors, significant silhouette-kit descendants, attachments, physical-scale face modules, palette/signifier channels, generic condition masks, and deterministic recipes. It does not pre-generate creature × gear × culture × biome × material × condition permutations. Rebuildable compiled derivatives are cache products, not new citizens. |
+| Significance gate | Recolor, faction marks, common conditions, material parameters, lighting, and compatible simple attachments use their specialist/runtime layers. Provider descendants are reserved for meaningful silhouette, pose/contact/anatomy, authored construction language, named identity, or reuse-weighted demand that an admitted factor cannot cover. |
+| Equipment-aware repose | A substantial equipment change may and often should repose the donor. The job declares pose intent; physical scale, identity, tactical occupancy, bearing, contact datum, anatomy, grip, and equipment function remain locked proof obligations. Pose difference is not automatically drift, and one cloned paper-doll pose is not the target. |
+| Shared physical sprite register | Character and creature subject art uses the same `32 px/ft` physical source register as architectural sprites. Canvas/aspect/padding remain subject-dependent; provider output is deterministically normalized and visually reviewed rather than assumed native. |
+| Architecture factoring | Wall variation composes continuous physical-scale parents, authored `W5H5`/`W5H10` features, corner/end/remainder/trim grammar, culture/faction signifiers, and receiver-aware causal conditions. WFC chooses compatible topology and semantic sockets, not one pre-baked culture/material/condition image. |
+| Machinery owner | `SPRITE-FOUNDRY.md` owns the provider-neutral factor/recipe schemas, representation ladder, demand budget, Codex runbook, package layout, and optional-runtime gates inside the Assetforge envelope. Existing sprite, material, palette, trim, decal, condition, citizenship, atlas, geometry, and persistence owners remain singular. |

@@ -51,6 +51,7 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 | Golden Vignette visual/material execution standard | `docs/GOLDEN-VIGNETTE-VISUAL-GUIDE.md` | compact composition, connected-natural/chunky-constructed form, face/material staging, four bearings, context, persistence, review rubric |
 | FFT × Triangle Strategy evidence packet | `Reference/FFT-Triangle-Strategy-World-Study/` | retained research, measurements, estimates, sources, and experiments; guide routes supported findings without promoting every number to law |
 | Assetforge primary factory and Golden applications | `docs/ASSETFORGE.md` | shared quarantine/proof/admission envelope; thirteen current candidates; eight Golden surface/material/context/proof applications specified/unbuilt |
+| Finite generative sprite/wall/decal machinery | `docs/SPRITE-FOUNDRY.md` | offline-first donor descendants; representation ladder; demand budgets; native normalization; factor recipes; Codex workflow; packaging and optional-runtime gates |
 | Frozen procedural-vignette integration boundary | `docs/GOLDEN-SITE-VIGNETTE-CONTRACTS.md` | v1 request/plan/asset-demand/receipt fields, terrain/structure join law, negative controls |
 | Latest passed Golden engine gate | `docs/GOLDEN-SITE-WAVE-1-OBSERVATORY-BRIEF.md` | Gate W1 passed: deterministic demand census, read-only adapters, dispositions, unresolved/asset ledgers |
 | Current Golden engine implementation cut | `docs/GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md` § Wave 2 | proxy-first Tavern identity and Guard Post visual/tactical compiler proof |
@@ -114,7 +115,7 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 - docs/ARCHITECTURE.md — current-canon (implementation map) — architecture/living(2026-07-05) — describes CURRENT code; predates dungeon program by design
 - docs/ART-DEPARTMENT.md — current-canon — style-canon/LAW(2026-07-24) — pixel register home; sibling of ART-DIRECTION-CANON (scoped, not rival); routes new packet formatting to dev/model-qa/sprite-sheets/PRODUCTION-FORMAT
 - docs/ART-DIRECTION-CANON.md — current-canon — style-canon/LAW(2026-07-14) — faceted RESERVE register master copy
-- docs/ASSETFORGE.md — accepted-supporting + implementation-evidence — production-machinery-spec/PRIMARY-ASSET-FACTORY-CANDIDATE-SUITE(2026-07-29) — thirteen candidate-ready/not-proved factories plus eight Golden applications specified/unbuilt; canonical specialists remain singular
+- docs/ASSETFORGE.md — accepted-supporting + implementation-evidence — production-machinery-spec/PRIMARY-ASSET-FACTORY-CANDIDATE-SUITE(2026-07-31) — thirteen candidate-ready/not-proved factories plus eight Golden applications and the finite-basis Sprite Foundry application specified/unbuilt; canonical specialists remain singular
 - docs/ASSET-PROMPTS.md — operations — working-doc(2026-07-01) — image-gen shopping list; no frontmatter
 - docs/ASSET-SOURCING-RESEARCH.md — research — research(2026-07-16) — license-safe source shortlist
 - docs/ASSET-SYNC.md — operations — ops-note/ADOPTED(2026-07-09) — fetch-on-demand heavy assets
@@ -366,6 +367,7 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 - docs/SPICE-RAISE.md — accepted-supporting — system-spec/SPEC-LOCKED(2026-07-06) — adopted stance; §10 = drift-risk registry of old-distribution sites
 - docs/SPICE-RULER.md — proposed — doctrine/DRAFT-for-blessing(2026-07-02) — ⚠ 20 days unresolved
 - docs/SPRITE-BILLBOARD-RESEARCH.md — research — none(2026-07-16)
+- docs/SPRITE-FOUNDRY.md — accepted-supporting — production-machinery-spec/SPECCED-IMAGEGEN-FEASIBILITY-PROVED-APPLICATION-UNBUILT(2026-07-31) — offline-first finite visual-factor basis, selective donor descendants, wall/decal modules, demand budget, Codex runbook, packaging, optional-runtime gates
 - docs/SPRITE-GEN-V2.md — current-canon (ruled sections) — none — §10 regen block awaits Adam confirm (memory-tracked)
 - docs/SPRITE-IMPLEMENTATION-STRATEGY.md — implementation-evidence — system-spec/LANDED(2026-07-12)
 - docs/SPRITE-SHEETS.md — current-canon for slicer/keying/runtime provenance — system-spec/PARTIALLY-SUPERSEDED(2026-07-24) — fixed 6×6 + hero-single production format retired to dev/model-qa/sprite-sheets/PRODUCTION-FORMAT

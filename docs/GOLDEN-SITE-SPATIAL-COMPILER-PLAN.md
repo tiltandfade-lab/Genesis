@@ -584,3 +584,33 @@ This spatial correction is complete only when current repository evidence proves
 
 Until these are true, the current Guard Post remains useful terrain/material/renderer research, but
 not a proven procedural family.
+
+## Founder rulings — 2026-07-31 (Adam, in-session; evidence in docs/research/)
+
+Grounded in docs/research/SPATIAL-COMPILER-METHOD-SWEEP.md (38-source method sweep) and
+docs/research/SPATIAL-COMPILER-DIVERSITY-MATH.md (6,000-walk measured demand + exact/MC
+axis-space analysis), plus the battle-first discussion of the same session.
+
+1. **P3 reframed — RULED.** The §5–§6 assembly layer is a bounded deterministic
+   constraint solver over authored chassis with an authored completion grammar. The WFC
+   framing is dropped (ancestry, not architecture): no shipped or published system lets
+   WFC carry program obligations, and the piece layer adds zero categorical distinctness
+   by §7.2's own definition. Piece-level deterministic collapse is retained for
+   specificity and return recognition, never as a diversity source.
+2. **Dealing memory — RULED.** The §7.2 categorical-signature receipt is promoted from a
+   census check to a campaign-state dealing constraint: per-family memory of dealt
+   signatures; new candidates must pass the diversity gate against the family's dealt
+   set. Sizing per the math: ~6 chassis per high-frequency host, ~60–90 dealt
+   compositions of library depth. Memoryless rolling is rejected as unable to meet
+   replayability at any chassis count.
+3. **Codex chassis throughput probe — GO.** Per docs/research/
+   CODEX-CHASSIS-THROUGHPUT-PROBE.md: validator harness first, then the ten-chassis
+   authoring probe; decision rule as written there.
+4. **Tactical promise gate — GO, and the compiler order is battle-first.** The engine's
+   goal is the fun of the best tactics games, not architectural verisimilitude (Adam:
+   accuracy to "Roman guard post" is not the objective). The tactical skeleton is the
+   SPINE — rolled from the walk digest before plots and assembly; earthworks and
+   architecture are the justification pass. Fun becomes a measured gate:
+   docs/TACTICAL-PROMISE-GATE.md (FFT-corpus bands over eight tactical metrics,
+   red-first against the legacy template). §2's compiler order is amended accordingly:
+   TacticalCompositionPlan moves ahead of BuildPlotPlan as a first-class planning stage.

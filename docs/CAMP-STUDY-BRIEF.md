@@ -8,7 +8,7 @@ Opus 5 in the background"). Background execution: all five lanes in one pass, on
 Fable re-gates the return personally.
 authorities, read in order: `docs/GOLDEN-SITES-CATALOG.md` (the RULED Site 2 brief, the
 depth law, the guest-family property, the culture-expressive tent-forms ruling) ·
-`Reference/FFT-Guard-Post-Study/` (the method) · `docs/STRUCTURE-KIT-CATALOG.md` §5
+`docs/FFT-TS-RESEARCH-EXTERNAL.md` (the transferred method) · `docs/STRUCTURE-KIT-CATALOG.md` §5
 (geometry/paint split) + §8 (material roster the findings feed).
 
 ## Mission
@@ -47,9 +47,9 @@ ledger + synthesis as markdown; modest ledgered image pulls under
    trail shelter — the courtesy-of-the-road reading) · well/spring stops. Extract:
    service-yard grammar, apron relations, frontage-WITHOUT-control (versus the guard
    post's commanded threshold).
-4. **FFT cohort.** Sweep the five-angle corpus — in-repo at
-   `Reference/FFT-Guard-Post-Study/study-archive/maps/five-angle/` (121 maps × 5 views,
-   `<map>_<view>.gif`) — for encampment / tent / clearing maps.
+4. **FFT cohort.** Use the findings preserved in the transferred corpus routed by
+   `docs/FFT-TS-RESEARCH-EXTERNAL.md`; the copyrighted comparison frames are no longer in Genesis.
+   The original pass swept 121 maps × 5 views for encampment / tent / clearing maps.
    If the corpus lacks true camps, say so plainly — the lesson then becomes FFT's
    open-clearing and forest-pocket terrain grammar (the camp's banked §10.3 dimension).
    Report which lesson the corpus actually offers.

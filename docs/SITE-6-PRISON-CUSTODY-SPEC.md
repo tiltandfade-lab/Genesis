@@ -24,7 +24,7 @@ research:
   - ../Reference/Prison-Custody-Study-0727/README.md
   - ../Reference/Prison-Custody-Study-0727/MEASURED-REFERENCES.md
   - ../Reference/Prison-Custody-Study-0727/DOCTRINE-PAIR-TWO.md
-  - ../Reference/Prison-Custody-Study-0727/FFT-COHORT-COMPARISON.md
+  - FFT-TS-RESEARCH-EXTERNAL.md
   - ../Reference/Prison-Custody-Study-0727/BREADTH-SWEEP.md
   - PARTIAL — initial depth and doctrine pass returned with declared gaps; 2026-07-27 pass
     closes the measured-breadth and FFT gaps within that PARTIAL tier (see the dated addendum

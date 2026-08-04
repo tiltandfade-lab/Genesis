@@ -15,7 +15,7 @@ research:
   - ../Reference/Mine-Workshop-Study/SOURCE-LEDGER.md
   - ../Reference/Mine-Workshop-Study/synthesis.md
   - ../Reference/Mine-Workshop-Study-0727/synthesis.md
-  - ../Reference/Mine-Workshop-Study-0727/FFT-COHORT-COMPARISON.md
+  - FFT-TS-RESEARCH-EXTERNAL.md
   - ../Reference/Mine-Workshop-Study-0727/MEASURED-REFERENCES.md
   - ../Reference/Mine-Workshop-Study-0727/BREADTH-SWEEP.md
 ---
@@ -716,7 +716,7 @@ Research packet (gap-close addendum, 2026-07-27 — additive, does not replace t
 
 - `Reference/Mine-Workshop-Study-0727/README.md`
 - `Reference/Mine-Workshop-Study-0727/synthesis.md`
-- `Reference/Mine-Workshop-Study-0727/FFT-COHORT-COMPARISON.md`
+- `docs/FFT-TS-RESEARCH-EXTERNAL.md`
 - `Reference/Mine-Workshop-Study-0727/MEASURED-REFERENCES.md`
 - `Reference/Mine-Workshop-Study-0727/BREADTH-SWEEP.md`
 - `Reference/Mine-Workshop-Study-0727/LICENSE-LEDGER.md`

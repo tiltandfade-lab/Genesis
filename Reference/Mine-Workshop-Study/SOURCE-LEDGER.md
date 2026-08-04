@@ -43,7 +43,7 @@ explicitly permits repository reuse
 | MW-L02 | `docs/procedural-dungeon-direction/wave-02/02-questions-06-10.md` | accepted state behavior | confirms lower pumping failure may make deep extraction dormant while upper processing/storage remain active |
 | MW-L03 | `docs/STRUCTURE-KIT-CATALOG.md` | grid, access, inherited pieces | confirms stairs/terraces/timber inheritance and Site 5 signature portal/shoring/ramp family |
 | MW-L04 | `docs/GOLDEN-SITES-CATALOG.md` Site 7 | site boundary | natural/feral workings belong to Lair; true flat-ceiling/pillar/shoring/shaft/waterline mine family belongs here |
-| MW-L05 | `Reference/FFT-Guard-Post-Study/analysis/FFT-TO-GENESIS-RELATIONAL-SHAPE-GRAMMAR-STUDY.md` | cross-site taste constitution | broad masses, primary sentence, quiet ground, meaningful edges, fixed production camera |
+| MW-L05 | `docs/FFT-TS-RESEARCH-EXTERNAL.md` | cross-site taste constitution | broad masses, primary sentence, quiet ground, meaningful edges, fixed production camera |
 
 ## Declared gaps
 

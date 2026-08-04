@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "status": "wave-0-retained-selectors",
-  "updated": "2026-07-29",
+  "updated": "2026-08-04",
   "authority": [
     "docs/GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md",
     "docs/GOLDEN-SITE-VIGNETTE-CONTRACTS.md"
@@ -57,7 +57,7 @@
       },
       "shapeSource": {
         "path": "docs/SITE-1-GUARD-POST-SPEC.md",
-        "sha256": "7bc71b6c637f78e4e8e7250a4548add44337748a372031a8bcb1663d9254994b"
+        "sha256": "51c7e54ae318ba0275a174d3282b40b6bb69ee4b01dc254ce408a0c4ab789560"
       },
       "plannedEvidence": [
         {

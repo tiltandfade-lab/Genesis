@@ -1,16 +1,36 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-07-29
+updated: 2026-08-04
 ---
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-08-04, FFT / TRIANGLE STRATEGY RESEARCH TRANSFER CLEAN CLOSE) [Codex]
+
+The complete project-authored FFT/Triangle Strategy research packet now belongs to Into the
+Strangedeep. Its canonical package preserves 58 files from Genesis commit `a9eb49ff` byte-for-byte
+under a SHA-256 manifest. Genesis retains adopted product rulings and one locator:
+`docs/FFT-TS-RESEARCH-EXTERNAL.md`; it no longer owns or duplicates the underlying study corpus.
+
+The transfer deliberately excludes twenty-two loose copyrighted battle-map screenshots and one
+derived LFS comparison-image pointer. Those files were removed from live Genesis branches without
+being copied into Strangedeep. Git history remains the recovery record.
+
+The clean close found and repaired one stale retained-source receipt: `GP-SHAPE-01` still pinned the
+Guard Post spec's pre-transfer hash after that spec gained the external research locator. Its
+verifier now passes 72/72. Cross-repo verification passes 58/58 exact hashes with zero package
+duplicates and zero live Genesis source paths. The full dependency-isolated CI-equivalent sweep,
+manifest, bridge, table lint, compile freshness, bug probes, archive limits, and GitHub CI are green.
+Optional local Chrome-only probes still expose the already documented visual-threshold debt; those
+non-CI probes are unrelated to this docs/research ownership change.
+
+**Do next:** continue Golden Site Wave 2 from `NEXT-STEPS.md`. Consult the Strangedeep packet through
+the locator when its evidence is useful; do not rebuild or re-import a Genesis copy.
+
 ## ⭐ Latest (2026-07-29, GOLDEN VISUAL / MATERIAL / ASSETFORGE MARRIAGE) [Codex]
 
-The visual foundation required before Wave 2 is now explicit. The complete FFT/Triangle Strategy
-research packet has moved to Into the Strangedeep; `docs/FFT-TS-RESEARCH-EXTERNAL.md` preserves the
-live location while Genesis retains its adopted product rulings.
+The visual foundation required before Wave 2 is now explicit.
 `GOLDEN-VIGNETTE-VISUAL-GUIDE.md` promotes the supported direction into one routed
 standard: FFT composition economy, Triangle Strategy material/presentation discipline,
 and Genesis persistent consequence. Its verified JSON companion separates fifteen hard

@@ -3,7 +3,7 @@ type: next-steps
 branch: Genesis
 status: living
 created: 2026-06-18
-updated: 2026-07-29
+updated: 2026-08-04
 related:
   - "[[DESIGN]]"
   - "[[GAP-ANALYSIS]]"
@@ -17,6 +17,17 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
 **Auto-archive rule (2026-07-09):** at most 4 dated `## Do next (...)` blocks live here; older ones
 roll into `NEXT-STEPS-ARCHIVE.md` via `python3 build/archive-docs.py --emit`. Standing plan
 sections (tracks/layers/etc.) are never auto-archived.
+
+## Do next (2026-08-04 — FFT / Triangle Strategy research ownership transferred)
+
+1. ☑ Preserve one canonical, checksum-verified project-authored study package in Into the
+   Strangedeep and remove the live Genesis copies.
+2. ☑ Keep copyrighted comparison frames out of both production repositories; preserve source and
+   provenance ledgers without redistributing the pixels.
+3. ☑ Route Genesis consumers through `FFT-TS-RESEARCH-EXTERNAL.md` and retain only the product
+   rulings Genesis already adopted.
+4. ☐ Continue the Golden Site Wave-2 work below. If the transferred evidence is needed, consult the
+   locator; do not recreate a local research corpus.
 
 ## Do next (2026-07-29 — Golden Site procedural-vignette master program)
 
@@ -280,19 +291,6 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 - O2. ☑ **Fragments for the opening surface — DONE 2026-06-19.** Authored 6–10 word sensory fragments for all 9 world-genesis tables (218 rows) + both pressure tables, held in a parallel `FRAG` map in `genesis.html` (no row-array surgery). Threaded through `lookup`/`rollTbl`/`rollPressure` (each now returns the row `idx` + fragment). **The player sees the fragment at the roll** (genesis cards + the triad nearby), and pressures stay veiled (player sees the fragment, DM holds danger+doom); the world view *after founding* shows real names (the reveal arc), and `handToDM` carries the truth. Bundle/entry rolls already read as fragments, so weren't duplicated. Verified: FRAG arrays align to row counts, runtime threading 0 misses in 9000 rolls, script parses clean.
 - O3. ☐ **Carry the sensory-first ordering** from `_START_New World` into how the opening is *presented* (place before powers).
 - Then mid-session verbs: ~~Wilderness Encounter port~~ **STALE — the generator IS ported** (`src/engine/wild-walk.js`, all 24 `wilderness-*` tables compiled; prep walks consume it). The real gap was the Travel verb ignoring it → **☑ SPECCED as `docs/TRAVEL-WALKS.md`** (2026-07-01 night: travel becomes the walk). Urban/Dungeon remain callable via prep walks.
-
-## Do next (2026-07-25, post split + singular close)
-
-1. ☐ **Adam's visual verdicts** — the open PENDING ADAM ledger: visual-correction C2–C4 sheets,
-   the AO contact fix triptych, the split's visual-equivalence sheet, the torchlit C3 look (which
-   also owns the env1* expectation update).
-2. ☐ **Guard-post build resumes on the split architecture** — future graphics changes land in one
-   module each (docs/THEATER-MODULES.md is the map; GOLDEN-SITES-CATALOG.md the program).
-3. ☐ **Split follow-ups** (none block the guard post): d4-doors option-b + theater-doors extraction,
-   AO A/B rig clip-box pin, material-contract re-baseline, root's 16 dead import bindings,
-   dungeon-interior §18 negative-clause rescope, diegetic-light LFS-env reds.
-4. ☐ **Material lane taste pass** (GP-MM-STONE-V001 four stone candidates await Adam's cards) —
-   gates the MM engine wiring.
 
 ## Do next (2026-07-27, integration close + campaign day)
 

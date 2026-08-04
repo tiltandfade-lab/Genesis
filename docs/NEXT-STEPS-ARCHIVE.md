@@ -18,6 +18,19 @@ just preserves the old ordered-queue framing for anyone reconstructing why a cal
 
 ---
 
+## Do next (2026-07-25, post split + singular close)
+
+1. ☐ **Adam's visual verdicts** — the open PENDING ADAM ledger: visual-correction C2–C4 sheets,
+   the AO contact fix triptych, the split's visual-equivalence sheet, the torchlit C3 look (which
+   also owns the env1* expectation update).
+2. ☐ **Guard-post build resumes on the split architecture** — future graphics changes land in one
+   module each (docs/THEATER-MODULES.md is the map; GOLDEN-SITES-CATALOG.md the program).
+3. ☐ **Split follow-ups** (none block the guard post): d4-doors option-b + theater-doors extraction,
+   AO A/B rig clip-box pin, material-contract re-baseline, root's 16 dead import bindings,
+   dungeon-interior §18 negative-clause rescope, diegetic-light LFS-env reds.
+4. ☐ **Material lane taste pass** (GP-MM-STONE-V001 four stone candidates await Adam's cards) —
+   gates the MM engine wiring.
+
 ## Do next (2026-07-24 — CONSOLIDATION CLOSED; guard-post program fully specced; delegate the next wave)
 
 Master is the singular canonical line again (six --no-ff merges: root strays · CL-R0 reset ·

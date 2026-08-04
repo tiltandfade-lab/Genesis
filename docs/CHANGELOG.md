@@ -8,6 +8,34 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-08-04 — FFT / Triangle Strategy research ownership transfer [Codex]
+
+**Added**
+- `FFT-TS-RESEARCH-EXTERNAL.md`, the single Genesis locator for the comparative study packet now
+  owned by Into the Strangedeep.
+
+**Changed**
+- Preserved 58 project-authored studies, measurements, diagrams, ledgers, and tools byte-for-byte
+  under Strangedeep's `research/fft-triangle-strategy/`, with a checked SHA-256 manifest and a
+  current Strangedeep implications digest.
+- Repointed active Genesis authorities, evidence lists, material manifests, briefs, and source
+  metadata to the external locator while retaining Genesis's adopted product rulings.
+- Refreshed the `GP-SHAPE-01` retained-source hash after its Guard Post authority gained the new
+  research locator.
+
+**Removed**
+- Removed the transferred research corpus from Genesis `master` and the active
+  `docs/spatial-compiler-research` branch. Twenty-two copyrighted loose screenshots and one derived
+  LFS comparison-image pointer were removed without transfer.
+
+**Verified**
+- Cross-repo verification: 58/58 destination files match Genesis commit `a9eb49ff` byte-for-byte,
+  zero duplicate hashes exist in the package, and zero transferred source paths remain live on the
+  two Genesis branches.
+- Full clean-close CI-equivalent sweep, manifest, bridge, table-lint, compile-fresh, bug probes,
+  archive limits, and GitHub CI are green. Optional local Chrome-only probes continue to expose the
+  previously documented visual-threshold debt that GitHub's dependency-isolated policy excludes.
+
 ## 2026-07-29 — Golden Vignette visual/material/Assetforge marriage [Codex]
 
 **Added**
@@ -757,30 +785,3 @@ close, not to this checkpoint.
   (branch diff vs master carries zero src/data files; all 52 geometry fixtures pass, 0 regressions).
   Merged `docs/procedural-dungeon-waves-3-6-checkpoint` --no-ff to master, pushed, GitHub CI confirmed
   green. NEXT-STEPS gained the 2026-07-23 Do-next block; HANDOFF's FULL-CI-PENDING marker discharged.
-
-## 2026-07-23 — FOUNDER REVIEW: ALL TWELVE WAVES DESIGN-CLOSED [Fable chairing, Adam ruling]
-
-**Added**
-- Ran the staged founder-review session (2026-07-22/23, interactive, docs-only): Adam answered all six Batch-1
-  founder questions (Q7-A B · Q8-A B · Q9-A B · Q9-B B · Q11-A B · Q12-A A), then swept waves 7/8/9/11/12 in
-  plain language and explicitly closed each (§16.6-7 · §17.6-7 · §18.6-7 · §19.6-7 · §20.6-7). The procedural-
-  dungeon design program is complete; the implementation hold stands; Q12-B is the single reserved gate.
-- New decision-index ids GEN-CBT-9, GEN-WLD-10, GEN-DM-11/12, GEN-PROD-5/6, and the BINDING **GEN-PROD-7
-  no-dark-patterns law**. Ten follow-ups tracked (F7.1-3, F8.1-2, F9.1-3, F11.1, F12.1) including the DM
-  rule-bend-and-reconcile vision, the player-rolled physical dice mode, the playable-DM-seat product vision, and
-  the cozy/peaceful register.
-- Sweep riders recorded as law: hand floor, performance-layer freedom, harness-first/loosen-by-evidence,
-  no-plot-armor offscreen, no-unexplained-reversion, organic-regrowth-on-ecology-clocks, DMG-sourced material
-  catalog, heated-metal conduction, DC reveal-at-commit, three-tier worlds, never-brick essential.
-
-**Changed**
-- Applied every pending ladder/ledger addition (now BOUND): W7 tactical corpus + refinements, F8.1 breakable door
-  + W8 mutation row, W9 hand/cadence row, W11 workbench row, W12 persistence row + F12.1 instrument. Flipped
-  QUESTION-COVERAGE, the questionnaire live bookmark, the program front door, and OPEN-QUESTIONS (Batch 1
-  discharged; Batch 2 gained #11 realm-introduction order — Adam leaning Lost World). MODULE-PHASING is ACTIVE:
-  ship-travel deferral confirmed and promoted to a prototype→ideal sketch ("we do want it").
-
-**Deferred**
-- DOCS-INDEX tooling (DI-1/2/3): deferred with a mandatory re-scope precondition before execution. Gemini-
-  transcript gather, FOREVER-STORAGE wiring verify, and sidekick-data gather remain queued mechanical follow-ups.
-  FULL CI PENDING — fast checkpoint only, no push.

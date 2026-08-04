@@ -14,6 +14,32 @@ to load every session (the live file keeps the newest entries; see the script fo
 Newest-first, same as the live file — the two files read as one continuous history, live file
 first. Read-only record: never hand-edit, never add entries here directly.
 
+## 2026-07-23 — FOUNDER REVIEW: ALL TWELVE WAVES DESIGN-CLOSED [Fable chairing, Adam ruling]
+
+**Added**
+- Ran the staged founder-review session (2026-07-22/23, interactive, docs-only): Adam answered all six Batch-1
+  founder questions (Q7-A B · Q8-A B · Q9-A B · Q9-B B · Q11-A B · Q12-A A), then swept waves 7/8/9/11/12 in
+  plain language and explicitly closed each (§16.6-7 · §17.6-7 · §18.6-7 · §19.6-7 · §20.6-7). The procedural-
+  dungeon design program is complete; the implementation hold stands; Q12-B is the single reserved gate.
+- New decision-index ids GEN-CBT-9, GEN-WLD-10, GEN-DM-11/12, GEN-PROD-5/6, and the BINDING **GEN-PROD-7
+  no-dark-patterns law**. Ten follow-ups tracked (F7.1-3, F8.1-2, F9.1-3, F11.1, F12.1) including the DM
+  rule-bend-and-reconcile vision, the player-rolled physical dice mode, the playable-DM-seat product vision, and
+  the cozy/peaceful register.
+- Sweep riders recorded as law: hand floor, performance-layer freedom, harness-first/loosen-by-evidence,
+  no-plot-armor offscreen, no-unexplained-reversion, organic-regrowth-on-ecology-clocks, DMG-sourced material
+  catalog, heated-metal conduction, DC reveal-at-commit, three-tier worlds, never-brick essential.
+
+**Changed**
+- Applied every pending ladder/ledger addition (now BOUND): W7 tactical corpus + refinements, F8.1 breakable door
+  + W8 mutation row, W9 hand/cadence row, W11 workbench row, W12 persistence row + F12.1 instrument. Flipped
+  QUESTION-COVERAGE, the questionnaire live bookmark, the program front door, and OPEN-QUESTIONS (Batch 1
+  discharged; Batch 2 gained #11 realm-introduction order — Adam leaning Lost World). MODULE-PHASING is ACTIVE:
+  ship-travel deferral confirmed and promoted to a prototype→ideal sketch ("we do want it").
+
+**Deferred**
+- DOCS-INDEX tooling (DI-1/2/3): deferred with a mandatory re-scope precondition before execution. Gemini-
+  transcript gather, FOREVER-STORAGE wiring verify, and sidekick-data gather remain queued mechanical follow-ups.
+  FULL CI PENDING — fast checkpoint only, no push.
 ## 2026-07-22 — WAVE 10 PHASED THROUGH BOUNDED TOWN CONTINUITY [Codex]
 
 **Added**

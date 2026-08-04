@@ -8,8 +8,9 @@ updated: 2026-07-29
 
 ## ⭐ Latest (2026-07-29, GOLDEN VISUAL / MATERIAL / ASSETFORGE MARRIAGE) [Codex]
 
-The visual foundation required before Wave 2 is now explicit. The complete retained
-`Reference/FFT-Triangle-Strategy-World-Study/` packet remains research evidence.
+The visual foundation required before Wave 2 is now explicit. The complete FFT/Triangle Strategy
+research packet has moved to Into the Strangedeep; `docs/FFT-TS-RESEARCH-EXTERNAL.md` preserves the
+live location while Genesis retains its adopted product rulings.
 `GOLDEN-VIGNETTE-VISUAL-GUIDE.md` promotes the supported direction into one routed
 standard: FFT composition economy, Triangle Strategy material/presentation discipline,
 and Genesis persistent consequence. Its verified JSON companion separates fifteen hard

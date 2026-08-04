@@ -3,7 +3,7 @@ type: build-spec
 status: SPECCED
 unit: feat/terrain-expression
 base: feat/terrain-bench-r1 (c8702e12)
-research: scratchpad FFT-SURFACE-GRAMMAR.md · STANDEE-CONTRACT-NONFLAT.md · GRID-BREAKING-STUDY.md
+research: transferred FFT/TS corpus · STANDEE-CONTRACT-NONFLAT.md · GRID-BREAKING-STUDY.md
 ---
 
 # TERRAIN-EXPRESSION-BUILD — getting off the chonky blocks, with standee proof
@@ -60,7 +60,8 @@ Bins are `ART-DIRECTION-CANON`'s three: material / decal-paint / prop.
   faces and props.
 - **A2 · Material roll-over at the arris** (material). The top material wraps and droops over the
   top edge so the hard two-tone cube line never exists. **The #1 Minecraft-breaking device in the FFT
-  corpus** — visible as grass hanging over rock in `Reference/FFT Battle Maps/image2.webp`.
+  corpus** — documented in the transferred corpus routed by
+  `docs/FFT-TS-RESEARCH-EXTERNAL.md`.
 - **A3 · The arris chamfer** (geometry, but free). A uniform ~1/8-cell chamfer that stays **strictly
   below the top plane**: zero intrusion on the standee disc at any size, zero change to the walkable
   census. This is Adam's 1/9-corner instinct, relocated out of the top plane — where it costs

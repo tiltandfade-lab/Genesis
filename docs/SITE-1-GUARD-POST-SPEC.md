@@ -8,7 +8,7 @@ authority:
   - GOLDEN-SITES-CATALOG.md
   - STRUCTURE-KIT-CATALOG.md
 research:
-  - ../Reference/FFT-Guard-Post-Study/
+  - FFT-TS-RESEARCH-EXTERNAL.md
 preservation: GOLDEN-SITE-ROLLER-PRESERVATION-LEDGER.md
 context-projection: GOLDEN-SITE-WORLD-CONTEXT-PROJECTION.md
 ---

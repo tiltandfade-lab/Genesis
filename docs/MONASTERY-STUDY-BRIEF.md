@@ -6,7 +6,7 @@ background agent, all lanes one pass, Fable re-gates the return personally).
 authorities, read in order: `docs/GOLDEN-SITES-CATALOG.md` (the Site 4 brief — the
 banked rulings this study pressures: the institutional chassis, the repetition ruling,
 the stepped-courtyard deck, the RULED hillside exemplary seed, the hip debut, the
-walkable-pitch law) · `Reference/FFT-Guard-Post-Study/analysis/GUARD-POST-LOCK-AUDIT.md`
+walkable-pitch law) · `docs/FFT-TS-RESEARCH-EXTERNAL.md`
 (the model output) · `docs/STRUCTURE-KIT-CATALOG.md` §2/§5/§7 (grid, geometry/paint,
 roof families).
 
@@ -49,10 +49,9 @@ game screenshots are local comparison evidence only, never committed imagery.
    militant-order houses, dzong-form compounds). Extract: bell/watch tower placement
    grammar · what a defended gate looks like on a house whose wall is "for separation,
    not war" · which defensive pieces are occupancy-licensed additions vs baseline.
-5. **FFT cohort.** The corpus at
-   `Reference/FFT-Guard-Post-Study/study-archive/maps/five-angle/` (121 maps × 5 views;
-   `<map>_<view>.gif`; view 0 = top-down plan; the id→name table is at
-   `study-archive/tools/heretic/src/map.c` — verified empirically by the lair study).
+5. **FFT cohort.** Use the findings in the transferred corpus routed by
+   `docs/FFT-TS-RESEARCH-EXTERNAL.md`. The original study inspected 121 maps × 5 views
+   (view 0 = top-down plan) and verified its id→name table empirically in the lair study.
    Find the institutional subset: Orbonne Monastery (locate its id via the name table),
    the church maps (36, 95), map 59's barrel-vault arcades (repeated-bay evidence),
    Golgorand (63), and whatever else qualifies. Extract: how FFT composes institutional

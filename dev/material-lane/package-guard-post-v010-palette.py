@@ -132,7 +132,7 @@ def main() -> None:
         "studyTargets": {
             "daylightP98": [85, 100],
             "environmentSaturationMean": [41, 78],
-            "source": "Reference/FFT-Triangle-Strategy-World-Study/lane-3-material-texture-palette.md",
+            "source": "docs/FFT-TS-RESEARCH-EXTERNAL.md",
         },
         "outputs": outputs,
     }

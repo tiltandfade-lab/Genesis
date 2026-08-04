@@ -6,8 +6,8 @@ Opus 5 in the background on those study briefs?"). Background execution: run all
 lanes in one pass and report once (the stop-and-report batching applies to interactive
 executors). Fable re-gates the return personally — self-reported green is never trusted.
 authorities, read in order: `docs/GOLDEN-SITES-CATALOG.md` (the depth law + the Site 7
-banked rulings this study pressures) · `Reference/FFT-Guard-Post-Study/` README +
-`analysis/` (the method being replicated) · `docs/STRUCTURE-KIT-CATALOG.md` (grid /
+banked rulings this study pressures) · `docs/FFT-TS-RESEARCH-EXTERNAL.md` (the transferred
+method being replicated) · `docs/STRUCTURE-KIT-CATALOG.md` (grid /
 socket / access-class law the findings must land inside).
 
 ## Mission
@@ -48,8 +48,9 @@ pressure, not conclusions to decorate.**
    collapse, flooding. The dug-by-someone-else origin, the uninhabited-lair case, and
    the mishap-entry fiction (falling through into old workings). Extract: how built
    geometry decays toward natural; where the mine↔cave hybrid boundary reads.
-4. **FFT cave cohort (the local corpus).** From the five-angle corpus — now in-repo at
-   `Reference/FFT-Guard-Post-Study/study-archive/maps/five-angle/` (moved 2026-07-24;
+4. **FFT cave cohort (the comparison corpus).** From the five-angle corpus used during the
+   original study (the copyrighted frames were never production assets and are no longer in Genesis;
+   see `docs/FFT-TS-RESEARCH-EXTERNAL.md` for the preserved written findings;
    121 maps × 5 views, files `<map>_<view>.gif`) — identify the underground / cave /
    rock-interior subset and run the guard-post comparison method: matched views,
    relations induced, never layouts copied. Extract: how FFT fakes cave irregularity in

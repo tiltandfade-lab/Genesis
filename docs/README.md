@@ -62,8 +62,8 @@ canon-and-scope pass). Small index-and-law files, never spec duplicates: `canon/
   Genesis persistent consequence; compact composition, connected natural/chunky
   constructed form, two-stage identity/face-material demand, coherent material
   families, governed quarter turns, context, and machine-checkable hard/soft/
-  provisional review. Evidence remains under
-  `../Reference/FFT-Triangle-Strategy-World-Study/`. (2026-07-29)
+  provisional review. The underlying study corpus is routed through
+  `FFT-TS-RESEARCH-EXTERNAL.md`. (2026-07-29; moved 2026-08-04)
 - `GOLDEN-SITE-1-VISUAL-TARGET.md` — noncanonical ImageGen art-direction target for the Guard Post
   family: a tangible FFT/TS/Genesis blend, explicit binding versus inspirational readings, and an
   honest gap list against the current engine. Source image lives under
@@ -205,12 +205,9 @@ canon-and-scope pass). Small index-and-law files, never spec duplicates: `canon/
 
 **Research / exploration** — thinking not yet promoted to normative spec.
 
-- `FFT-TRIANGLE-STRATEGY-WORLD-STUDY-BRIEF.md` (`type: research-brief`) — executor-ready
-  comparative visual study: controlled FFT / Ivalice Chronicles / Triangle Strategy cohorts,
-  current-terrain capture audit across active worktrees, measured map footprint and topology,
-  geometry/material/light/post/sprite/context decomposition, state-mutation translation, and a
-  solo-project adoption/decline matrix. Research only; no map cap, build wave, or target-art
-  replacement is authorized. (2026-07-29)
+- `FFT-TS-RESEARCH-EXTERNAL.md` (`type: research-location`) — the live location of the FFT,
+  Ivalice Chronicles, and Triangle Strategy comparative level-design corpus after its 2026-08-04
+  transfer to Into the Strangedeep. Genesis retains adopted rulings, not a duplicate corpus.
 - `FEATURE-PRIORITIZATION.md` (`type: build-plan`) — the readable answer to "what do we build, in
   what order, what's prototype vs MVP, how is each tested, and when is it declared arrived" —
   derived 2026-07-23 from the closed twelve-wave program (ladder/ledger/wave records stay

@@ -9,8 +9,7 @@ authority:
   - TERRAIN-EXPRESSION-R2.md
   - SITE-9-CONTESTED-FORTRESS-SPEC.md
 evidence:
-  - intel-terrain/FFT-SURFACE-GRAMMAR.md
-  - ../Reference/Contested-Fortress-Study-0727/lane-3-fft-cohort.md
+  - FFT-TS-RESEARCH-EXTERNAL.md
   - ../Reference/Contested-Fortress-Study-0727/synthesis.md
 ---
 

@@ -18,7 +18,7 @@ research:
   - ../Reference/Camp-Service-Study-0727/synthesis.md
   - ../Reference/Camp-Service-Study-0727/MEASURED-REFERENCES.md
   - ../Reference/Camp-Service-Study-0727/BREADTH-SWEEP.md
-  - ../Reference/Camp-Service-Study-0727/FFT-COHORT-COMPARISON.md
+  - FFT-TS-RESEARCH-EXTERNAL.md
 preservation: GOLDEN-SITE-ROLLER-PRESERVATION-LEDGER.md
 context-projection: GOLDEN-SITE-WORLD-CONTEXT-PROJECTION.md
 ---

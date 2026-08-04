@@ -49,7 +49,7 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 | Golden Site authority and four status gates | `docs/GOLDEN-SITES-CATALOG.md` | audited briefs, recommendation classes, Proof/MVP/Ideal, FFT/import boundary |
 | Golden Site procedural-vignette execution program | `docs/GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md` | one terrain/construction engine, coverage and asset routing, walk/game/battle loops, Waves 0–8, multi-session gates |
 | Golden Vignette visual/material execution standard | `docs/GOLDEN-VIGNETTE-VISUAL-GUIDE.md` | compact composition, connected-natural/chunky-constructed form, face/material staging, four bearings, context, persistence, review rubric |
-| FFT × Triangle Strategy evidence packet | `Reference/FFT-Triangle-Strategy-World-Study/` | retained research, measurements, estimates, sources, and experiments; guide routes supported findings without promoting every number to law |
+| FFT × Triangle Strategy evidence packet | `docs/FFT-TS-RESEARCH-EXTERNAL.md` | moved to Into the Strangedeep; Genesis retains adopted rulings, and the guide routes supported findings without duplicating the study corpus |
 | Assetforge primary factory and Golden applications | `docs/ASSETFORGE.md` | shared quarantine/proof/admission envelope; thirteen current candidates; eight Golden surface/material/context/proof applications specified/unbuilt |
 | Frozen procedural-vignette integration boundary | `docs/GOLDEN-SITE-VIGNETTE-CONTRACTS.md` | v1 request/plan/asset-demand/receipt fields, terrain/structure join law, negative controls |
 | Latest passed Golden engine gate | `docs/GOLDEN-SITE-WAVE-1-OBSERVATORY-BRIEF.md` | Gate W1 passed: deterministic demand census, read-only adapters, dispositions, unresolved/asset ledgers |

@@ -91,7 +91,7 @@ fully performs the reconciliation:
 - a targeted FFT civic-authority cohort extension (Office of Lesalia Castle, Zeltennia Castle,
   Bethla Garrison — three ids neither prior FFT lane opened), read in place from the sibling
   `genesis` worktree's archive per THE FFT BOUNDARY —
-  `Reference/Urban-Institution-Study-0727/FFT-COHORT-COMPARISON.md`;
+  `docs/FFT-TS-RESEARCH-EXTERNAL.md`;
 - the spec is now reconciled against `BUILDING-PROGRAM-TABLE-FAMILIES.md` (which `BF-` kits
   serve Site 10, and what the 42-roll audit proved), `URBAN-FABRIC.md` (the live typed-building
   roller and district-fabric layer), and `SETTLED-LIFE-SITES-PROGRAM.md` (the settled-life
@@ -774,7 +774,7 @@ Research packet (gap-close addendum, 2026-07-27 — additive, does not replace t
 
 - `Reference/Urban-Institution-Study-0727/README.md`
 - `Reference/Urban-Institution-Study-0727/synthesis.md`
-- `Reference/Urban-Institution-Study-0727/FFT-COHORT-COMPARISON.md`
+- `docs/FFT-TS-RESEARCH-EXTERNAL.md`
 - `Reference/Urban-Institution-Study-0727/MEASURED-REFERENCES.md`
 - `Reference/Urban-Institution-Study-0727/BREADTH-SWEEP.md`
 - `Reference/Urban-Institution-Study-0727/LICENSE-LEDGER.md`

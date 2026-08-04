@@ -34,7 +34,7 @@ copied into this packet
 | TV-L04 | `Engine/03. _Tables/03. Session Mechanics/Tavern/` | compiled source tables | name, four foundation subtables, sensory, barkeep quirk, and in-media-res are callable; only the name table is consumed by the current typed-building roll |
 | TV-L05 | `data/building-kits.js`, `data/place-skins.js`, `src/engine/codex-roll.js`, `src/world/urban.js` | live engine path | supplies place skin, typed label, generic interior, name, codex proprietor/cast, lifecycle, Distant Word, and chance encounter |
 | TV-L06 | `Reference/Camp-Study/contact/l3-caravanserai-plan.jpg`, `l3-coaching-inn-george.jpg`, and `lane-3-waystation-typology.md` | already-retained route-hospitality comparison | provides local visual/form evidence for route compound and coaching-inn expressions; this packet does not duplicate those images |
-| TV-L07 | `Reference/Camp-Study/lane-4-fft-cohort.md` | direct FFT corpus audit | records that the 121-map FFT corpus contains no inn, tavern, camp, or waystation by name or visual inspection; Golden Venue FFT proof must therefore use relational surrogate grammar, not claim a direct tavern precedent |
+| TV-L07 | `docs/FFT-TS-RESEARCH-EXTERNAL.md` | direct FFT corpus audit | records that the 121-map FFT corpus contains no inn, tavern, camp, or waystation by name or visual inspection; Golden Venue FFT proof must therefore use relational surrogate grammar, not claim a direct tavern precedent |
 
 ## Evidence / inference boundary
 

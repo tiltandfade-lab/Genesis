@@ -16,7 +16,7 @@ context-projection: GOLDEN-SITE-WORLD-CONTEXT-PROJECTION.md
 research:
   - ../Reference/Anomalous-Living-Mobile-Study-0727/README.md
   - ../Reference/Anomalous-Living-Mobile-Study-0727/breadth-sweep.md
-  - ../Reference/Anomalous-Living-Mobile-Study-0727/fft-cohort.md
+  - FFT-TS-RESEARCH-EXTERNAL.md
   - ../Reference/Anomalous-Living-Mobile-Study-0727/engine-evidence.md
   - ../Reference/Anomalous-Living-Mobile-Study-0727/synthesis.md
   - ../Reference/Anomalous-Living-Mobile-Study-0727/LICENSE-LEDGER.md
@@ -1184,7 +1184,7 @@ study.
 - `Reference/Anomalous-Living-Mobile-Study-0727/README.md`
 - `Reference/Anomalous-Living-Mobile-Study-0727/breadth-sweep.md` — six substrate families, sourced
 - `Reference/Anomalous-Living-Mobile-Study-0727/LICENSE-LEDGER.md` — 13 Commons images
-- `Reference/Anomalous-Living-Mobile-Study-0727/fft-cohort.md` — 8 FFT maps read in place
+- `docs/FFT-TS-RESEARCH-EXTERNAL.md` — 8 FFT maps read in place
 - `Reference/Anomalous-Living-Mobile-Study-0727/engine-evidence.md` — measured demand
 - `Reference/Anomalous-Living-Mobile-Study-0727/substrate-demand-measure.mjs` — reproducible
 - `Reference/Anomalous-Living-Mobile-Study-0727/synthesis.md` — grammar, proof profiles, spice grade

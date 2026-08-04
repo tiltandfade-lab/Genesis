@@ -31,7 +31,7 @@ claims to it at once."
 |---|---|---|
 | 1 | [`lane-1-breadth-sweep.md`](lane-1-breadth-sweep.md) | "What else could this site be" — twelve candidate readings of *contested fortress*, web-sourced, with the four that survive |
 | 2 | [`lane-2-image-study.md`](lane-2-image-study.md) | Fifteen real reference images read one at a time; the relational findings each earns |
-| 3 | [`lane-3-fft-cohort.md`](lane-3-fft-cohort.md) | The FFT fortress cohort read **in place** under THE FFT BOUNDARY; the Bethla Garrison five-map set is the key result |
+| 3 | [`lane-3-fft-cohort.md`](../../docs/FFT-TS-RESEARCH-EXTERNAL.md) *(moved)* | The FFT fortress cohort read **in place** under THE FFT BOUNDARY; the Bethla Garrison five-map set is the key result |
 | 4 | [`lane-4-roller-audit.md`](lane-4-roller-audit.md) | What the **live** Genesis rollers already produce toward this site, classified `LIVE` / `LIVE-COMPOSED` / `AUTHORED-UNWIRED` |
 | — | [`synthesis.md`](synthesis.md) | The nine findings, the honest gaps, and what changed about the site |
 | — | [`LICENSE-LEDGER.md`](LICENSE-LEDGER.md) | Per-image source URL, licence, and why it earns its place |

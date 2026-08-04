@@ -18,7 +18,7 @@ research:
   - ../Reference/Dormant-Abandoned-Study-0727/synthesis.md
   - ../Reference/Dormant-Abandoned-Study-0727/lane-1-breadth-sweep.md
   - ../Reference/Dormant-Abandoned-Study-0727/lane-2-image-lane.md
-  - ../Reference/Dormant-Abandoned-Study-0727/lane-3-fft-cohort.md
+  - FFT-TS-RESEARCH-EXTERNAL.md
   - ../Reference/Dormant-Abandoned-Study-0727/lane-4-engine-content-audit.md
 spawnables: intel-sites/SITE-3-SPAWNABLE.md
 ---
@@ -88,12 +88,12 @@ authority. The three that carry the most load are the founder questions in §16.
 
 ### 1.5 Working-environment note
 
-Every image tracked in this repository is a git-LFS pointer in a fresh worktree, not bytes.
-Research in this pass had to run `git lfs pull --include="Reference/FFT Battle Maps/*"` (a
-read-only fetch) before any FFT frame could be inspected, and the Desktop-local 605-GIF
-five-angle archive named by earlier studies no longer exists on this machine. That is why
-parts of the FFT lane are documentary rather than pixel-verified, and it is declared rather
-than hidden.
+At the time of this pass, every tracked comparison image was a git-LFS pointer in a fresh
+worktree, not bytes. The research run materialized the 22-image reference set read-only before
+inspection; those copyrighted images were later removed during the Strangedeep transfer and
+were never transferred. The source-authored findings now live in the corpus routed by
+`FFT-TS-RESEARCH-EXTERNAL.md`. Parts of the FFT lane remain documentary rather than
+pixel-verified, and that boundary is declared rather than hidden.
 
 ---
 

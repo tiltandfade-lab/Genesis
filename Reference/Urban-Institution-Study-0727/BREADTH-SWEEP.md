@@ -134,7 +134,7 @@ reused civic building; this is a genuine gap the touchstone lane, not the FFT la
 - `docs/SETTLED-LIFE-SITES-PROGRAM.md` §3, §4 (read in full for this pass).
 - `docs/BUILDING-PROGRAM-TABLE-FAMILIES.md` §2, §"Why Prison/Custody is a dedicated family",
   §4 (read in full for this pass).
-- `Reference/Monastery-Study/lane-5-fft-cohort.md` (cited, not reclassified).
+- `docs/FFT-TS-RESEARCH-EXTERNAL.md` (cited, not reclassified).
 - `Reference/Urban-Study/lane-6-touchstones.md` (cited, not reclassified).
 - Disco Elysium wiki (Fandom), `Precinct 41` — web search 2026-07-27, secondary source only,
   not independently verified against the game itself this pass.

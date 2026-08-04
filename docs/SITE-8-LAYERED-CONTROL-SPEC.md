@@ -17,7 +17,7 @@ context-projection: GOLDEN-SITE-WORLD-CONTEXT-PROJECTION.md
 research:
   - ../Reference/Layered-Control-Study-0727/synthesis.md
   - ../Reference/Layered-Control-Study-0727/lane-1-breadth-sweep.md
-  - ../Reference/Layered-Control-Study-0727/lane-2-fft-cohort.md
+  - FFT-TS-RESEARCH-EXTERNAL.md
   - ../Reference/Layered-Control-Study-0727/lane-3-engine-audit.md
   - ../Reference/Layered-Control-Study-0727/images/LICENSE-LEDGER.md
 related:

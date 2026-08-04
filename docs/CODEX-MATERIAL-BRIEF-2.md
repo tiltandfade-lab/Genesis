@@ -7,8 +7,8 @@ consumer: Codex. Runs in PARALLEL with the clay-ladder lane — zero dependency 
 outputs are consumed when CL-R4 (material bench) opens.
 authorities, read in order: `docs/MATERIAL-LANE.md` (the lane's source of truth) ·
 `docs/STRUCTURE-KIT-CATALOG.md` §8 (the roster you are authoring) + §13 (the locked deck ruling) ·
-`Reference/FFT-Guard-Post-Study/analysis/GUARD-POST-MATERIAL-MAKER-1.3-SEED-GRAPH-SPEC.md`
-(your node/graph/mutation/export contract) · `GUARD-POST-TRIM-SHEET-MM1.3-SPEC.md` (band work).
+`docs/FFT-TS-RESEARCH-EXTERNAL.md` (the transferred node/graph/mutation/export contract and
+guard-post trim-sheet band work).
 
 ## Binding workflow override — sprite first, MM depth second
 

@@ -12,12 +12,7 @@
     "assetforgeApplications": "docs/intel/golden-vignette-assetforge-applications-v1.json"
   },
   "evidence": [
-    "Reference/FFT-Triangle-Strategy-World-Study/synthesis.md",
-    "Reference/FFT-Triangle-Strategy-World-Study/lane-1-footprint-topology-pacing.md",
-    "Reference/FFT-Triangle-Strategy-World-Study/lane-2-geometry-shape-language.md",
-    "Reference/FFT-Triangle-Strategy-World-Study/lane-3-material-texture-palette.md",
-    "Reference/FFT-Triangle-Strategy-World-Study/lane-6-diorama-worldfulness.md",
-    "Reference/FFT-Triangle-Strategy-World-Study/lane-7-state-mutation-consequence.md"
+    "docs/FFT-TS-RESEARCH-EXTERNAL.md"
   ],
   "target": "FFT_COMPOSITION_ECONOMY__TS_MATERIAL_PRESENTATION_DISCIPLINE__GENESIS_PERSISTENT_CONSEQUENCE",
   "executionOrder": [

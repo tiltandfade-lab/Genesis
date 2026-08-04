@@ -12,7 +12,7 @@ that with evidence instead of invention.
 authorities, read in order: `docs/GOLDEN-SITES-CATALOG.md` (the Site 10 brief — the
 banked rulings this study pressures: the road-grown-walls capsule, the frontage buy,
 the three-expression deck including the terrain-street/Lombard pattern, market hall +
-fountain seed) · `Reference/FFT-Guard-Post-Study/analysis/GUARD-POST-LOCK-AUDIT.md`
+fountain seed) · `docs/FFT-TS-RESEARCH-EXTERNAL.md`
 (the model output) · `docs/STRUCTURE-KIT-CATALOG.md` §5 (geometry/paint) + §8 (the
 roster format lane 2's deliverable must land in) · `docs/BATTLEMAP-TOWNTRAY-COMPOSITION.md`
 (the TownTray/C2M engine seam this site feeds).
@@ -59,9 +59,9 @@ local comparison evidence only.
    meet: shared walls, jettied upper storeys, shopfront bay anatomy (stall board,
    sign, door, display), balcony construction, exterior stairs. Extract: the frontage
    bay's geometry/paint split per §5 · the multi-storey street wall's piece list.
-5. **FFT trade-city cohort.** The corpus at
-   `Reference/FFT-Guard-Post-Study/study-archive/maps/five-angle/` (view 0 = plan;
-   id→name at `study-archive/tools/heretic/src/map.c`; exclude test maps 116–120, 125).
+5. **FFT trade-city cohort.** Use the findings in the transferred corpus routed by
+   `docs/FFT-TS-RESEARCH-EXTERNAL.md`; the copyrighted comparison frames are no longer in Genesis.
+   The original pass treated view 0 as plan and excluded test maps 116–120 and 125.
    Study the trade cities (22 Gariland · 42 Warjilis · 47 Zarghidas · 99 Lesalia main
    street) plus the slums set (32, 40, 48 — already classified by the camp study;
    reuse, do not reclassify) and 103 Windmill Shed. Extract: FFT's street-slice

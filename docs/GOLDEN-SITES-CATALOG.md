@@ -99,14 +99,13 @@ redistributed.
 
 The Desktop study directory was ~349 MB. Per the repository's LFS posture, the attribution law
 ([ATTRIBUTION.md](ATTRIBUTION.md)), and actual runtime need, **none of that binary archive is
-tracked in the current Golden Site reference packet.** The verified tracked
-`Reference/FFT-Guard-Post-Study/` directory is the lean written packet only (16 files,
-about 308 KB at the 2026-07-25 audit).
+tracked in the current Golden Site reference packet.** The lean written packet used for the
+2026-07-25 audit has since moved to Into the Strangedeep; see
+`docs/FFT-TS-RESEARCH-EXTERNAL.md`.
 
-The full evidence archive may exist locally at
-`Reference/FFT-Guard-Post-Study/study-archive/`; it is intentionally untracked and is not
-part of this isolated worktree or the source-controlled packet. The historical “moved”
-note therefore records local evidence storage, not a repository import. The per-asset
+The historical full evidence archive was intentionally untracked and is not part of this
+source-controlled packet. The old “moved” note recorded local evidence storage, not a repository
+import. The per-asset
 dispositions below describe tracked repository truth; the license obligations still
 govern any later use of the omitted evidence.
 

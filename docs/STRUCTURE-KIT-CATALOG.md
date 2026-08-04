@@ -34,10 +34,10 @@ states the demand).
 
 1. **Fun over reproduction.** The goal is fun environments for tactical strategy battles,
    not reproducing reality. Reality is inspiration; the map must be fun every time.
-2. **The FFT masterclass rule.** If in doubt, consult the FFT battle maps
-   (`Reference/FFT Battle Maps/`) — they are masterclasses in exactly the style of tactical
-   map we are aiming for. Their core lesson: richness lives in the paint; geometry exists
-   for silhouette and tactical truth.
+2. **The FFT masterclass rule.** If in doubt, consult the transferred findings routed by
+   `docs/FFT-TS-RESEARCH-EXTERNAL.md`. The original battle-map comparisons are masterclasses
+   in exactly the style of tactical map we are aiming for. Their core lesson: richness lives
+   in the paint; geometry exists for silhouette and tactical truth.
 3. **Near-universal access.** Pretty much every surface has some type of access for
    non-flying units — stairs, terracing, rocks, stacked crates, ladders.
 4. **Simpler is better (for now).** Stairs, rocks, and terracing are preferred over
@@ -354,16 +354,16 @@ rung C brings the shed/weather roof, rung D the tower cap.
   through-road`; sibling table archetypes: switchback-watch, road-cut-checkpoint,
   terrace-gate.
 
-Authorities now in-repo (resolved at the 2026-07-24 consolidation close): the LIVING
+Authorities resolved at the 2026-07-24 consolidation close: the LIVING
 golden-sites authority is `GOLDEN-SITES-CATALOG.md` (the door-lane session's structured
-2026-07-23 fold of the Desktop packet — discovered at merge); the full verbatim Desktop
-record is preserved as `Reference/FFT-Guard-Post-Study/DESKTOP-CATALOG-SNAPSHOT.md`,
-beside the study (analysis specs + lock audit; heavy binaries stayed Desktop-local — see
-IMPORT-NOTE.md). The lock audit's LOCKED/WORKING/OPEN grid is the authority snapshot;
+2026-07-23 fold of the Desktop packet — discovered at merge); the transferred written packet,
+including the analysis specs, lock audit, and import note, is routed by
+`docs/FFT-TS-RESEARCH-EXTERNAL.md`. Heavy binaries were never imported. The lock audit's
+LOCKED/WORKING/OPEN grid is the authority snapshot;
 THIS file consumes it and must not contradict it. Also imported
 with it: the C1A finding that the clay room's **visual acceptance is withdrawn**
 (clay-override regression, Lighting Lab bypass, washed goblin) with the reset ladder in
-`analysis/CLAYROOM-RESET-PROOF-LADDER-AND-DEV-WORKBENCH.md` — the `Genesis-clayroom`
+the transferred packet — the `Genesis-clayroom`
 worktree (`feat/cl-r0-clayroom-reset`) is that lane.
 Plan sketch: `diagrams/guard-post-anchor-layout.svg` (locked form).
 

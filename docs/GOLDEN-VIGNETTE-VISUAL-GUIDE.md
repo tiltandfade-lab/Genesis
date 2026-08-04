@@ -10,7 +10,7 @@ authority:
   - GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md
   - GOLDEN-SITE-VIGNETTE-CONTRACTS.md
 evidence:
-  - ../Reference/FFT-Triangle-Strategy-World-Study/
+  - FFT-TS-RESEARCH-EXTERNAL.md
 machine_companion:
   - intel/golden-vignette-visual-rubric-v1.json
 ---
@@ -28,8 +28,8 @@ target is:
 The sentence describes a transfer of principles, never a transfer of layouts, meshes,
 textures, palettes, or other protected content.
 
-This guide turns Adam's binding art rulings and the retained
-`Reference/FFT-Triangle-Strategy-World-Study/` evidence into one review grammar. It
+This guide turns Adam's binding art rulings and the externally retained evidence routed by
+`FFT-TS-RESEARCH-EXTERNAL.md` into one review grammar. It
 does not replace its owners:
 
 - `ART-DIRECTION-CANON.md` remains the verbatim founder law.

@@ -1439,9 +1439,8 @@ var CL_F08_TERRAIN_FEATURE_BOOK = Object.freeze({
   featureIds: TERRAIN_AUTHORED_FEATURE_IDS,
   sources: Object.freeze([
     "docs/TERRAIN-PROGRAM.md",
-    "docs/intel-terrain/FFT-SURFACE-GRAMMAR.md",
-    "docs/SITE-9-CONTESTED-FORTRESS-SPEC.md",
-    "Reference/Contested-Fortress-Study-0727/lane-3-fft-cohort.md"
+    "docs/FFT-TS-RESEARCH-EXTERNAL.md",
+    "docs/SITE-9-CONTESTED-FORTRESS-SPEC.md"
   ]),
   scenes: Object.freeze([
     Object.freeze({

@@ -7,7 +7,7 @@ owner: contained-launch program
 serves:
   - the 2026-07-31 contained-launch direction (full record in session memory + this doc)
   - GOLDEN-SITE-SPATIAL-COMPILER-PLAN.md (all four 07-31 rulings inherited unchanged)
-  - docs/TACTICAL-PROMISE-GATE.md
+  - docs/FFT-TS-RESEARCH-EXTERNAL.md (transferred tactical-promise evidence and gate)
 companion: docs/FICTION-ORACLE.md
 ---
 

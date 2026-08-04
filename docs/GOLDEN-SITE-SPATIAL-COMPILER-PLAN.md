@@ -585,11 +585,11 @@ This spatial correction is complete only when current repository evidence proves
 Until these are true, the current Guard Post remains useful terrain/material/renderer research, but
 not a proven procedural family.
 
-## Founder rulings — 2026-07-31 (Adam, in-session; evidence in docs/research/)
+## Founder rulings — 2026-07-31 (Adam, in-session; evidence transferred)
 
-Grounded in docs/research/SPATIAL-COMPILER-METHOD-SWEEP.md (38-source method sweep) and
-docs/research/SPATIAL-COMPILER-DIVERSITY-MATH.md (6,000-walk measured demand + exact/MC
-axis-space analysis), plus the battle-first discussion of the same session.
+Grounded in the 38-source method sweep, the 6,000-walk measured-demand and exact/MC
+axis-space analysis, and the battle-first discussion of the same session. The source documents
+now live in the Strangedeep packet routed by `docs/FFT-TS-RESEARCH-EXTERNAL.md`.
 
 1. **P3 reframed — RULED.** The §5–§6 assembly layer is a bounded deterministic
    constraint solver over authored chassis with an authored completion grammar. The WFC
@@ -611,6 +611,7 @@ axis-space analysis), plus the battle-first discussion of the same session.
    accuracy to "Roman guard post" is not the objective). The tactical skeleton is the
    SPINE — rolled from the walk digest before plots and assembly; earthworks and
    architecture are the justification pass. Fun becomes a measured gate:
-   docs/TACTICAL-PROMISE-GATE.md (FFT-corpus bands over eight tactical metrics,
-   red-first against the legacy template). §2's compiler order is amended accordingly:
+   the transferred tactical-promise gate (FFT-corpus bands over eight tactical metrics,
+   red-first against the legacy template; see `docs/FFT-TS-RESEARCH-EXTERNAL.md`). §2's
+   compiler order is amended accordingly:
    TacticalCompositionPlan moves ahead of BuildPlotPlan as a first-class planning stage.

@@ -1,0 +1,37 @@
+{
+  "request": {
+    "skill": "Sleight of Hand",
+    "ability": "dex",
+    "dc": 12,
+    "adv": null
+  },
+  "result": {
+    "ok": true,
+    "resolvedLocally": false,
+    "liveResolutionNeeded": true,
+    "pending": {
+      "action": "(I roll Sleight of Hand: 10)",
+      "rolls": [
+        {
+          "label": "Sleight of Hand",
+          "die": "d20",
+          "result": 7,
+          "mods": "+1 +2 prof",
+          "total": 10,
+          "adv": null,
+          "pair": null
+        }
+      ]
+    },
+    "recovered": false,
+    "resolution": null,
+    "branchNarration": null,
+    "newLedger": [],
+    "pc": {
+      "name": "Mira Quill",
+      "hp": "6/6",
+      "conditions": [],
+      "status": "living"
+    }
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "turnId": "t-msg83k6ix9j3f",
+  "narration": "You become the courier’s shadow beneath the balcony. Their report names the tune as a command key: Room Seven woke, and the guards were ordered to feed more voices into the widening absence. Captain Ilyra Venn goes still. She takes the missing chain-link from the courier, jams it across the humming mechanism, and the void folds shut like a black eye. Its answering pressure vanishes across the district. The other captain runs. Venn removes her badge and says, to nobody she can see, ‘I will put every order in the public book.’ You entered unseen, heard the truth, and watched one enforcer break the machine and herself from its service.",
+  "events": [
+    {
+      "type": "walk_advance",
+      "payload": {
+        "nodeId": "frontier-s0-0",
+        "toSeg": 6
+      },
+      "source": "declared"
+    },
+    {
+      "type": "codex_add",
+      "payload": {
+        "id": "npc:captain-ilyra-venn",
+        "kind": "npc",
+        "name": "Captain Ilyra Venn",
+        "fields": {
+          "role": "defected corrupt guard captain",
+          "appearance": "a guard captain with a stripped badge and chain-burned palm",
+          "voice": "precise, newly unguarded",
+          "permanentChange": "She broke the void mechanism, renounced the guard conspiracy, and committed to putting its orders in the public record."
+        },
+        "dm": {
+          "truth": "Venn helped operate the command-key void until the courier report made her understand that the victims’ stolen voices were feeding it.",
+          "want": "survive long enough to publish every order"
+        },
+        "status": {
+          "at": "frontier-s0-0",
+          "known": true,
+          "soft": false
+        }
+      },
+      "source": "declared"
+    },
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "factId": "brineglass-void-command-key-broken",
+        "what": "The shared three-note tune was being used as a command key to feed stolen voices into an expanding void; Captain Ilyra Venn permanently broke its mechanism and renounced the guard conspiracy."
+      },
+      "source": "declared"
+    },
+    {
+      "type": "encounter_resolved",
+      "payload": {
+        "foes": [
+          {
+            "cr": 2,
+            "victimClass": "captain"
+          },
+          {
+            "cr": 2,
+            "victimClass": "captain"
+          }
+        ],
+        "method": "stealth, revelation, and defection",
+        "objectiveRef": "escape the captains with the courier report",
+        "outcome": "averted without combat"
+      },
+      "source": "declared"
+    },
+    {
+      "type": "crit_outcome",
+      "payload": {
+        "actor": "pc",
+        "natural": 20,
+        "magnitude": 18,
+        "success": true,
+        "tier": "amplified-major",
+        "scope": "regional",
+        "cascade": false,
+        "lensCount": 2,
+        "lenses": [
+          {
+            "row": 2,
+            "lens": "A person is permanently changed",
+            "detail": "Captain Ilyra Venn renounces the guard conspiracy and commits to a public accounting.",
+            "placeHandoff": false
+          },
+          {
+            "row": 11,
+            "lens": "A threat is broken at the root",
+            "detail": "The command-key mechanism feeding the expanding void is physically broken and its pressure ends across the district.",
+            "placeHandoff": false
+          }
+        ],
+        "placeHandoff": false
+      },
+      "source": "declared"
+    }
+  ],
+  "ruling": {
+    "understoodAction": "Resolve the open Stealth 23 natural 20 and amplified-major magnitude while shadowing the courier toward the elite guard pair.",
+    "ruling": "The critical success enters segment six unseen and satisfies both generated magnitude lenses through the scene’s snapped-chain mechanism and void threat: one captain changes permanently, and the regional danger is ended at its source. The player is not forced into the failed branch’s combat.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "Resolved by the open natural 20 and magnitude 18.",
+    "outcomeBranches": {
+      "success": {
+        "total": 23,
+        "dc": 13,
+        "natural": 20,
+        "magnitude": 18
+      }
+    },
+    "proposedEvents": [
+      {
+        "type": "walk_advance"
+      },
+      {
+        "type": "codex_add"
+      },
+      {
+        "type": "fact_canonized"
+      },
+      {
+        "type": "encounter_resolved"
+      },
+      {
+        "type": "crit_outcome"
+      }
+    ]
+  }
+}

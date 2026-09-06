@@ -2,7 +2,7 @@
 type: canon
 status: ACTIVE — stable decision ids over the chronological registries
 created: 2026-07-22
-updated: 2026-07-29
+updated: 2026-08-05
 owner: docs/canon/README.md (precedence law)
 ---
 
@@ -42,6 +42,10 @@ noted). Implementation states of wave rulings are UNAUDITED by default (ledger b
 | GEN-PROD-5 | Workbench is an internal instrument now (Adam+agents+QA); player-facing creator surface = tracked feature goal, promoted via P11.1 seams on post-MVP evidence | wave-11 §19.4 founder ruling (2026-07-22, Q11-A B) | ACCEPTED |
 | GEN-PROD-6 | Local-first, zero telemetry, explicit-export sharing only; opt-in diagnostics only ever as a future explicit founder decision through the existing consent seam | wave-12 §20.4 founder ruling (2026-07-22, Q12-A A) | ACCEPTED |
 | GEN-PROD-7 | No-dark-patterns law: "i am not a data broker" — Genesis thrives without dark practices or patterns (no data brokering, manipulative retention/monetization, or consent traps); wraps and exceeds GEN-PROD-6 | wave-12 §20.6 founder ruling (2026-07-22/23, P12.8 sweep) | BINDING |
+| GEN-PROD-8 | Current implementation priority is text-first walk restoration: infinite story, sparse persistent object/world state, realms, and scoped AI digest; visuals are optional projections and Theater Lab is preserved but not prerequisite | TEXT-FIRST-WALK-RESTORATION.md; DESIGN.md 2026-08-03 | FOUNDER-RULED / IMPLEMENTING |
+| GEN-LAW-10 | Focus is not lifecycle: selecting another walk suspends the prior cursor/state; only explicit abandonment or resolution closes it | TEXT-FIRST-WALK-RESTORATION.md §2.2; HOOK-WALKS resume ruling | FOUNDER-RULED / IMPLEMENTING |
+| GEN-LAW-11 | Substantive walks target 8–12 segments; short 1–3 beat errands are scene chains; PC level controls threat rather than world size | TEXT-FIRST-WALK-RESTORATION.md §2.1; HOOK-WALKS 2026-07-08 ruling | FOUNDER-RULED / IMPLEMENTING |
+| GEN-LAW-12 | Latency target is meaningful feedback ≤4s; ≥8s without real feedback is a failure flag; older ≤15s routine completion is an outer ceiling; all are measured evidence gates, not claimed provider guarantees | SPEED-DOCTRINE.md 2026-08-04 clarification; DESIGN.md 2026-08-04 | BINDING / INSTRUMENTED |
 
 ## B. World, state, and persistence
 
@@ -67,13 +71,17 @@ noted). Implementation states of wave rulings are UNAUDITED by default (ledger b
 | GEN-DM-3 | Normalization once at the contract boundary (dmFoldPayload/DM_EVENT_FIELDS) | CLAUDE.md discipline | BUILT |
 | GEN-DM-4 | DMClient seat abstraction; bridge first, API second; every DM feature codes to the seat | DESIGN-GUIDE T4; DM-SEAT.md | BUILT (bridge) / SPECCED (API) |
 | GEN-DM-5 | Provider-neutral seat: any supported LLM, same facts/mechanics/refusals; Gemini = proving provider only | Wave 10 §11.83 | ACCEPTED |
-| GEN-DM-6 | Engine-first resolution receipts; "Open intent, constrained outcome"; no narration of engine-rejected events | Wave 2 §10.11.25-26 | ACCEPTED |
+| GEN-DM-6 | Engine-first resolution receipts; "Open intent, constrained outcome"; no narration or replay of engine-settled/rejected events | Wave 2 §10.11.25-26; DESIGN.md 2026-08-04 | BUILT FOR REST + ITEM TRANSFER / EXPANDING |
 | GEN-DM-7 | Transactional creative DM: SYNTHESIZE lane, C0-C4 matrix, valence-neutral, graduated counters, P0-P4 precedents; full semantic resolver = core vision | Wave 2 G2.1 (§10.G2.1.5-13) | ACCEPTED |
 | GEN-DM-8 | DM dressing improvisation: prevalidated latent reserves; tiny allowlist until "the DM seat proves itself" (class-by-class conformance) | Wave 2 §10.11.2; Wave 5 P5.8/F5.8a | ACCEPTED / EVIDENCE-GATED |
 | GEN-DM-9 | Private tiered DM deliberation sandbox; nothing canonical; benefit A/B-tested | Wave 2 G2.1-DM-SCRATCH | ACCEPTED / EVIDENCE-GATED |
 | GEN-DM-10 | DM hand: MUST PLAY→…→LOCAL SPICE; service guarantees; deferral raises pressure | Wave 1 §8.10 | ACCEPTED (Wave 9 owns detail) |
 | GEN-DM-11 | DM initiative default: forward-leaning weaver on a versioned campaign-profile surface; Adam: tune through gameplay later — the surface, not a reopen, is the tuning point | wave-09 §18.4 founder ruling (2026-07-22, Q9-A B) | ACCEPTED |
 | GEN-DM-12 | New-player assistance default: reactive affordance help — capability summaries on request, never suggestions; no unprompted coaching; tutorial voice = tracked later register | wave-09 §18.4 founder ruling (2026-07-22, Q9-B B) | ACCEPTED |
+| GEN-DM-13 | Conservative execution routing has exactly three modes (`local-fact`, `declared-mechanic`, `freeform-ruling`); unknown/contextual free text defaults open; verb keywords and fast/deep quality triage never grant execution authority | DESIGN.md 2026-08-04; MECHANIZATION-INTERPRETATION-BOUNDARY.md §4 | BUILT |
+| GEN-DM-14 | Portable-item custody is atomic and identity-conserving: native PC/corpse owners keep their stores, ordinary world holders use `w.itemCustody`, and natural-language placement remains open until an explicit holder is adjudicated | DESIGN.md 2026-08-04; EVENT-CONTRACT `item_transfer` | BUILT |
+| GEN-DM-15 | Full `dmDigest()` remains bootstrap/debug truth; ordinary turns use sparse `beat-digest/v1` (`scene`/`inventory`/`combat`/`travel`/`social`) under a 3 KiB target, with deterministic named off-scene retrieval; action nouns refresh a two-turn continuity band while merely carried nouns age out; omission cannot redefine canon or grant execution authority | DESIGN.md 2026-08-04/05; MECHANIZATION-INTERPRETATION-BOUNDARY.md §3.7 | BUILT |
+| GEN-DM-16 | A green synthetic replay corpus does not by itself authorize provider spend; continue a preserved campaign copy until longer zero-provider play stops finding P0/P1 engine defects, then compare providers only on copied fixtures, never campaign state | DESIGN.md 2026-08-05; MECHANIZATION-INTERPRETATION-BOUNDARY.md §7 | FOUNDER-RULED / SOAK IN PROGRESS |
 
 ## D. Combat, crits, and tactics
 
@@ -109,7 +117,7 @@ noted). Implementation states of wave rulings are UNAUDITED by default (ledger b
 | GEN-VIS-2 | Faceted register = RESERVE; prop/decal/kit contracts | ART-DIRECTION-CANON.md | BUILT (reserve) | |
 | GEN-VIS-3 | Graphics Convergence Charter governs all graphics work; protected walk/table core; measured convergence to approved mocks | GRAPHICS-CONVERGENCE-CHARTER.md | BINDING | |
 | GEN-VIS-4 | Walk-native boundary: graphics PROJECT the walk (walkSceneFrom); dioramas are provenanced projections | WALK-NATIVE-A.md; WALK-CARD-DEALING.md | BUILT (boundary) | |
-| GEN-VIS-5 | Release-direction candidate: PreAlpha BattleMat + EngagementLens; hybrid 3D substrate + pixel citizens; theater = feature-flagged laboratory | Wave 10 P10.1/F10.1c | ACCEPTED | supersedes TABLETOP-VISION sequence + DESIGN-GUIDE T6 as destination; final release selection reserved for Adam (P10.12) |
+| GEN-VIS-5 | BattleMat + EngagementLens remain a retained future-projection candidate; the current product does not expect a battlefield, and Theater Lab is explicit opt-in rather than a release prerequisite | TEXT-FIRST-WALK-RESTORATION.md; historical candidate Wave 10 P10.1/F10.1c | ACCEPTED / SUSPENDED | 2026-08-03 supersedes the candidate as first implementation priority without deleting it |
 | GEN-VIS-6 | Four governed production bearings separated by 90° over one immutable place; authored starting bearing plus three player quarter turns; no free orbit; governed focus/cutaway | ART-DIRECTION-CANON.md 2026-07-29; GOLDEN-VIGNETTE-VISUAL-GUIDE.md | BINDING / BUILD-GATED | supersedes Wave 3's no-player-rotation clause while retaining governed pitch/distance/focus |
 | GEN-VIS-7 | Beauty floor is invariant; visual downgrade reduces generator complexity, never lighting/materials/sprites/beauty; 3D engine not deleted | Wave 10 P10.5; QUESTIONNAIRE §promotion | ACCEPTED | |
 | GEN-VIS-8 | No-clone law: procedural culture constitutions + material variation; never one sprite per modification | Wave 3 §12.2/§12.8 | ACCEPTED | |
@@ -127,7 +135,7 @@ The program's decisions live in the wave records; this index routes rather than 
 | GEN-PDG-1 | Program method: tile/slot room compiler; function-first rooms; engine owns structure and decoration; wave closure protocol | FOUNDATION.md; DESIGN.md 2026-07-18 | ACCEPTED |
 | GEN-PDG-2 | Waves 1-6 + 10 semantics | wave-01…wave-06, wave-10 records + phasing audits | CLOSED (design only) |
 | GEN-PDG-3 | Cross-wave phasing law; Clay Proof Ladder; Feature-Promotion Ledger | PHASING-FRAMEWORK.md; CLAY-PROOF-LADDER.md; FEATURE-PROMOTION-LEDGER.md | ACCEPTED |
-| GEN-PDG-4 | First implementation priority: mechanics → BattleMat+EngagementLens → provider-neutral seat → persistence/recovery, one retained room | Wave 10 §11.81; ladder law 11 | ACCEPTED |
+| GEN-PDG-4 | Historical first-priority sequence mechanics → BattleMat+EngagementLens → seat → recovery is superseded; current priority is Story-default walk/state/digest restoration, with the retained room and visual sequence preserved for Theater Lab | TEXT-FIRST-WALK-RESTORATION.md; historical Wave 10 §11.81 | SUPERSEDED 2026-08-03 |
 | GEN-PDG-5 | Implementation hold: no build authorized before Wave 12's gate | IMPLEMENTATION-HOLD.md | ACTIVE |
 | GEN-PDG-6 | Waves 7-9/11-12 dispositions: **ALL CLOSED** at the 2026-07-22/23 founder-review session (W7 §16.7 · W8 §17.7 · W9 §18.7 · W11 §19.7 · W12 §20.7) with founder Batch-1 rulings, sweep riders (hand floor, harness-first, no-plot-armor, three-tier worlds, visual-engine priority, never-brick), and 10 tracked follow-ups (F7.1-3, F8.1-2, F9.1-3, F11.1, F12.1). **The design program is complete; build stays gated on Q12-B** | wave-07…wave-12 records | CLOSED (design only) |
 | GEN-PDG-7 | Recovery-package gate: tagged, verified, LFS-complete recovery point + bundle + Drive archive is the first gate of any implementation plan | Wave 1 §8.14.1/.3 | ACCEPTED (Wave 12 owns) |
@@ -135,7 +143,7 @@ The program's decisions live in the wave records; this index routes rather than 
 | GEN-PDG-9 | Site 8 is the `LayeredControl` cross-host transform; persistent competing claims decide canon, semantic capacity decides spatial expression, and map growth requires prelicensed overflow | DESIGN.md 2026-07-26; GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md | ACCEPTED FOUNDATION; build routes through GEN-PDG-12 |
 | GEN-PDG-10 | Tavern is an ordinary venue/host program routed through Site 2/4/10 contexts and Site 3/8 transforms; `VENUE-TAVERN-01` is a retained Golden Venue fixture, not Site 13 | DESIGN.md 2026-07-26; TAVERN-VENUE-ROUTING-BRIEF.md | ACCEPTED (live story path; spatial proof open) |
 | GEN-PDG-11 | Terrain synthesis and building/site construction are two stages of one Procedural Vignette Synthesizer sharing request, macro plan, support/elevation, tactics, assets, receipts, and projections; a second terrain/town/building engine is forbidden | ART-DIRECTION-CANON.md 2026-07-29; GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md | BINDING / WAVE-GATED BUILD |
-| GEN-PDG-12 | The Golden Site master program is the next several-week execution owner; Wave 0 is authorized now, later waves enter only through their gates, and every wave includes appropriate walk-demand, game-flow, PC/enemy battle, visual, asset, and determinism evidence | GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md | FOUNDER-AUTHORIZED PROGRAM |
+| GEN-PDG-12 | The Golden Site master program and passed gates are preserved as an authorized visual/semantic program, but it is suspended as the current execution owner; semantic host/state work remains reusable and later visual waves resume only by founder ruling | TEXT-FIRST-WALK-RESTORATION.md; GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md | ACCEPTED / SUSPENDED 2026-08-03 |
 | GEN-PDG-13 | Waves 1–2 integrate through versioned `VignetteRequest`, `VignettePlan`, `SemanticAssetDemand`, and `SynthesisReceipt` boundaries; natural terrain is a connected responsive field, constructed form records its join, and random tile slopes/zipper seams/global height caps are rejection controls | GOLDEN-SITE-VIGNETTE-CONTRACTS.md; DESIGN.md 2026-07-29 | WAVE-0 FROZEN / BINDING |
 | GEN-PDG-14 | Gate W0 passed with open-work ownership, retained Tavern/Guard selectors, checked-in unseeded census before-state, Wave-1 observatory brief, and green pre-change walk/game/combat/save/terrain/Clayroom baselines; Wave 1 is authorized next | GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md; intel/golden-vignette-wave0-baseline.md | PASS / WAVE 1 NEXT |
 | GEN-PDG-15 | Gate W1 passed with a deterministic 12,718-row read-only corpus, eight adapters, six-way dispositions, complete source treatment, proxy-only role demand, stable Tavern/Guard selectors, and green retained production gates; combined `Prison / Asylum` demand remains explicitly unresolved; Wave 2 is authorized next | GOLDEN-SITE-WAVE-1-OBSERVATORY-BRIEF.md; intel/golden-vignette-wave1-verification.md | PASS / WAVE 2 NEXT |

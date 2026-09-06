@@ -31,6 +31,7 @@ const check = (name, cond, detail = "") =>
   cond ? (pass++, console.log("  ✓", name)) : (fail++, console.log("  ✗", name, "—", detail));
 
 check("dmTriage present after full load", typeof win.dmTriage === "function");
+check("dmRoute present after full load", typeof win.dmRoute === "function");
 
 // minimal world factory: a living PC at a node the DM has already narrated (so "new-place" is OFF by default)
 const mkWorld = (over = {}) => Object.assign({
@@ -42,6 +43,65 @@ const mkWorld = (over = {}) => Object.assign({
 }, over);
 
 const T = (w, action) => win.dmTriage(w, action);
+const R = (w, action, opts) => win.dmRoute(w, action, opts);
+
+// --- EXECUTION ROUTE: conservative by default; independent from model-quality triage ---
+let er=R(mkWorld(), "Show my inventory.");
+check("exact inventory display → local-fact / zero model", er.mode === "local-fact" && er.localKind === "inventory" && er.modelCall === false, JSON.stringify(er));
+er=R(mkWorld(), "What am I carrying right now?");
+check("observed Brineglass inventory wording → local-fact / zero model", er.mode === "local-fact" && er.localKind === "inventory" && er.modelCall === false, JSON.stringify(er));
+er=R(mkWorld(), "What do I have on me currently?");
+check("natural exact inventory synonym → local-fact / zero model", er.mode === "local-fact" && er.localKind === "inventory" && er.modelCall === false, JSON.stringify(er));
+er=R(mkWorld(), "I search my pack while the riders close in.");
+check("contextual pack search remains freeform-ruling", er.mode === "freeform-ruling" && er.modelCall === true, JSON.stringify(er));
+er=R(mkWorld(), "What am I carrying right now while the guard searches me?");
+check("consequential inventory clause remains freeform-ruling", er.mode === "freeform-ruling" && er.modelCall === true, JSON.stringify(er));
+const custodyWorld=mkWorld();
+custodyWorld.itemCustody={version:2,items:{tube:{item:{id:"tube",name:"The First Answer Tube",codexId:"item:first-answer"},
+  holder:{kind:"npc",ref:"npc:william",name:"William Sallow"},intent:"loan",at:{nodeId:custodyWorld.currentNodeId}}}};
+er=R(custodyWorld,"Who is holding the First Answer Tube right now?");
+check("exact name-matched custody query → local-fact / zero model",
+  er.mode==="local-fact"&&er.localKind==="custody"&&er.localRef==="tube"&&!er.modelCall,JSON.stringify(er));
+er=R(custodyWorld,"Where is the First Answer Tube now?");
+check("exact item-location custody query → local-fact / zero model",
+  er.mode==="local-fact"&&er.localKind==="custody"&&er.localRef==="tube"&&!er.modelCall,JSON.stringify(er));
+const pluralCustody=mkWorld();
+pluralCustody.itemCustody={version:2,items:{orders:{item:{id:"orders",name:"Copies of Venn’s Void Orders"},
+  holder:{kind:"object",ref:"belfry",name:"the alley belfry"},intent:"place",at:{nodeId:"n1"}}}};
+const pluralLine=win.dmLocalFactText(pluralCustody,{localKind:"custody",localRef:"orders"});
+check("local custody text is number-neutral for plural item names",
+  pluralLine==="Copies of Venn’s Void Orders — held by the alley belfry (place).",pluralLine);
+custodyWorld.itemCustody.items.remote={item:{id:"remote",name:"Remote Reliquary"},
+  holder:{kind:"npc",ref:"npc:far",name:"a distant keeper"},intent:"entrust",at:{nodeId:"n9"}};
+const currentCustodyLine=win.dmLocalFactText(custodyWorld,{localKind:"custody"});
+check("bare/current custody fact excludes remote holders while retaining here",
+  /First Answer Tube/.test(currentCustodyLine)&&!/Remote Reliquary/.test(currentCustodyLine),currentCustodyLine);
+const remoteCustodyLine=win.dmLocalFactText(custodyWorld,{localKind:"custody",localRef:"remote"});
+check("id-addressed where-is custody fact can still retrieve a remote holder",
+  /Remote Reliquary/.test(remoteCustodyLine)&&/distant keeper/.test(remoteCustodyLine),remoteCustodyLine);
+er=R(custodyWorld,"Where is the First Answer Tube now that William lied to me?");
+check("item-location question with consequential context remains freeform-ruling",
+  er.mode==="freeform-ruling",JSON.stringify(er));
+er=R(custodyWorld,"Why is William still holding the First Answer Tube?");
+check("custody question with interpretive meaning remains freeform-ruling",er.mode==="freeform-ruling",JSON.stringify(er));
+er=R(mkWorld(),"What are my current hit points and conditions?");
+check("combined HP/conditions query is a local health fact",
+  er.mode==="local-fact"&&er.localKind==="health"&&!er.modelCall,JSON.stringify(er));
+er=R(mkWorld(),"What are my current hit points and conditions while the poisoner watches me?");
+check("contextual HP/conditions question remains freeform-ruling",er.mode==="freeform-ruling",JSON.stringify(er));
+const healthWorld=mkWorld();
+healthWorld.characters[0].sheet.marks=[{text:"Your next poison save has disadvantage."}];
+const healthLine=win.dmLocalFactText(healthWorld,{localKind:"health"});
+check("local health text includes lasting marks without doubled punctuation",
+  /20 \/ 20/.test(healthLine)&&/Conditions: none/.test(healthLine)&&!/\.\.$/.test(healthLine),healthLine);
+er=R(mkWorld(), "I attack the nearest cultist.");
+check("attack is not mechanized by the combat keyword list", er.mode === "freeform-ruling" && T(mkWorld(), "I attack the nearest cultist.").lane === "deep", JSON.stringify(er));
+er=R(mkWorld(), "I take a short rest.");
+check("exact declared rest → declared-mechanic", er.mode === "declared-mechanic" && er.mechanic && er.mechanic.payload.kind === "short", JSON.stringify(er));
+er=R(mkWorld(), "I wedge the saint's jaw open with my shield.");
+check("novel object use defaults to an open ruling contract", er.mode === "freeform-ruling" && er.rulingRequest && er.rulingRequest.kind === "open-intent", JSON.stringify(er));
+er=R(mkWorld(), "Show my inventory.", { hidden:true });
+check("hidden scene/meta turns can never be swallowed as local facts", er.mode === "freeform-ruling", JSON.stringify(er));
 
 // --- DEFAULT FAST ---
 let r = T(mkWorld(), "I walk down the lane toward the well.");
@@ -56,6 +116,38 @@ r = T(mkWorld({ currentNodeId: "n2" }), "I look around.");   // currentNodeId !=
 check("arrival at un-narrated node → deep (new-place)", r.lane === "deep" && r.reasons.includes("new-place"), JSON.stringify(r));
 r = T(mkWorld({ currentNodeId: "n2", dm: { lastNarratedNodeId: "n2" } }), "I look around.");
 check("second turn at same node → fast (lastNarratedNodeId fallback)", r.lane === "fast", JSON.stringify(r.reasons));
+
+// --- A2: AUTHORED WALK FINALE ---
+const finaleWorld=mkWorld({ prep:{ activeWalkId:"walk-finale-test", nodes:{
+  "walk-finale-test":{
+    cursor:{ current:3, done:false },
+    walk:{ segments:[{num:1},{num:2},{num:3,isFinale:true}] },
+    segments:[{ref:"S3",encounterState:"unresolved"}]
+  }
+}}});
+r = T(finaleWorld, "I ask who hired him.");
+check("unresolved authored walk finale → deep regardless of routine verb",
+  r.lane === "deep" && r.reasons.includes("walk-finale"), JSON.stringify(r.reasons));
+const resolvedFinaleWorld=mkWorld({ prep:{ activeWalkId:"walk-finale-test", nodes:{
+  "walk-finale-test":{
+    cursor:{ current:3, done:false },
+    walk:{ segments:[{num:1},{num:2},{num:3,isFinale:true}] },
+    segments:[{ref:"S3",encounterState:"resolved"}]
+  }
+}}});
+r = T(resolvedFinaleWorld, "I ask what happens next.");
+check("resolved walk finale releases the quality floor",
+  r.lane === "fast" && !r.reasons.includes("walk-finale"), JSON.stringify(r.reasons));
+const completedFinaleWorld=mkWorld({ prep:{ activeWalkId:"walk-finale-test", nodes:{
+  "walk-finale-test":{
+    cursor:{ current:3, done:true },
+    walk:{ segments:[{num:3,isFinale:true}] },
+    segments:[{ref:"S3",encounterState:"unresolved"}]
+  }
+}}});
+r = T(completedFinaleWorld, "I ask what happens next.");
+check("completed walk does not remain pinned to deep",
+  r.lane === "fast" && !r.reasons.includes("walk-finale"), JSON.stringify(r.reasons));
 
 // --- C: COMBAT ACTION ---
 r = T(mkWorld(), "I attack the nearest cultist.");
@@ -115,9 +207,38 @@ check("CLOSED full clock → does not deep-lane", r.lane === "fast", JSON.string
 r = T(mkWorld({ pressures: [{ closed: false, clock: { filled: 2, size: 4 } }] }), "I order another ale.");
 check("half-full clock → fast", r.lane === "fast", JSON.stringify(r.reasons));
 
+// --- E2: TYPED PENDING SITUATION ---
+r = T(mkWorld({dm:{lastNarratedNodeId:"n1",pendingSituation:{kind:"rest-risk",effect:{kind:"tracking-mark"}}}}),
+  "I examine the chalk mark beside my bedroll.");
+check("typed pending rest consequence → deep (pending-situation)",
+  r.lane==="deep"&&r.reasons.includes("pending-situation"),JSON.stringify(r.reasons));
+
 // --- F: DEATH ---
 r = T(mkWorld({ characters: [{ status: "dead" }] }), "...");
 check("no living PC → deep (no-living-pc)", r.lane === "deep" && r.reasons.includes("no-living-pc"), JSON.stringify(r));
+
+const critTriage=win.dmTriage(mkWorld(),"(I roll Stealth: 23)",[
+  {label:"Stealth",result:20,total:23},
+  {label:"crit-magnitude",result:18,total:18,crit:{natural:20,magnitude:18,tier:"amplified-major"}}
+]);
+check("an open crit-magnitude follow-up receives the deep reasoning lane",
+  critTriage.lane==="deep"&&critTriage.model==="opus"&&critTriage.reasons.includes("crit-magnitude:amplified-major"),
+  JSON.stringify(critTriage));
+
+// --- local-fact wiring: no digest and no provider transport ---
+(() => {
+  const w=mkWorld({name:"Local Fact World"});
+  w.characters[0].sheet.inventory=[{id:"it-1",name:"Rope",qty:1}];
+  w.characters[0].sheet.gold=7;
+  win.U.worlds[w.id]=w; win.U.activeWorldId=w.id;
+  let digests=0, providerPosts=0;
+  win.dmDigest=()=>{digests++;return {};}; win.renderWorld=()=>{}; win.saveU=()=>{}; win.pushDmLog=()=>{};
+  win.fetch=(url)=>{ if(/\/(?:turn|seat)$/.test(String(url))) providerPosts++;
+    return Promise.resolve({ok:true,status:200,json:()=>Promise.resolve({})}); };
+  win.sendTurn("Show my inventory.",[]);
+  check("local-fact sendTurn builds no digest", digests===0, `digests=${digests}`);
+  check("local-fact sendTurn calls neither provider transport", providerPosts===0, `providerPosts=${providerPosts}`);
+})();
 
 // --- stamping wired into sendTurn (stub fetch, capture the posted turn body) ---
 (() => {

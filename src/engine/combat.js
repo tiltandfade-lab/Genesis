@@ -76,6 +76,19 @@ function cmZoneGrid(dims){
 /* clamp a lane string to a valid CM_LANES member (defensive — never invents a 4th lane). */
 function cmClampLane(lane){ return CM_LANES.indexOf(lane) >= 0 ? lane : "C"; }
 
+/* Clamp serialized/resolved combatants into THIS room's actual grid. Bestiary defaults commonly put
+   a foe at `near`; a 5×10-ft generated room may legally expose only `melee`. Leaving that default
+   untouched creates an impossible combatant outside grid.bands and breaks movement/OA reasoning. */
+function cmNormalizeCombatPlacement(combat){
+  if(!combat)return combat;
+  const grid=combat.grid||cmZoneGrid(null), bands=grid.bands||CM_BANDS, lanes=grid.lanes||CM_LANES;
+  const bandOf=b=>{const i=CM_BANDS.indexOf(b);return bands[Math.min(i>=0?i:0,Math.max(0,bands.length-1))]||"melee";};
+  const laneOf=l=>lanes.indexOf(l)>=0?l:(lanes.indexOf("C")>=0?"C":(lanes[0]||"C"));
+  if(combat.pc){combat.pc.band=bandOf(combat.pc.band);combat.pc.lane=laneOf(combat.pc.lane);}
+  (combat.foes||[]).forEach(f=>{f.band=bandOf(f.band);f.lane=laneOf(f.lane);});
+  return combat;
+}
+
 /* select the d20 for an attack/save: a supplied roll (the PC's open d20) wins; else the engine rolls,
    honoring advantage ("adv" → max of 2d20) / disadvantage ("dis" → min). Shared by resolveAttack + resolveSave. */
 function cmRollD20(o){
@@ -797,7 +810,7 @@ function combatStart(o){
   //     (absent from the player-facing DOM) until `revealed` flips true (spotted/triggered — the DM
   //     holds placement via a `dm`-only note upstream of this transient object, per §1's "the DM holds
   //     placement via `dm`; the reveal is play").
-  const scene = o.scene || { cover: {}, hazards: [], exits: [] };
+  const scene = cmNormalizeScene(o.scene || { cover: {}, hazards: [], exits: [] });
   if(!scene.elevZones) scene.elevZones = [];
   if(!scene.hazardZones) scene.hazardZones = [];
   const combat = {
@@ -807,9 +820,22 @@ function combatStart(o){
     scene, ledgerRefs: [],
     grid, segment: segment || null
   };
+  cmNormalizeCombatPlacement(combat);
   combat.pc.elev = cmZoneElev(combat, combat.pc.band, combat.pc.lane);
   foes.forEach(f => { f.elev = cmZoneElev(combat, f.band || "melee", f.lane || "C"); });
   return combat;
+}
+
+// The DM-facing event vocabulary naturally emits cover as either a zone-key map or a short list of
+// named obstacles. Normalize the list at the engine/reload boundary; otherwise Object.keys(array)
+// exposes "0", "1" to the digest/UI and the actual cover names disappear after a valid start.
+function cmNormalizeScene(scene){
+  scene=scene||{cover:{},hazards:[],exits:[]};
+  if(Array.isArray(scene.cover)) scene.cover=scene.cover.reduce((acc,name)=>{
+    if(name!=null&&String(name).trim())acc[String(name)]=true;
+    return acc;
+  },{});
+  return scene;
 }
 
 /* is the zone "band:lane" flagged elevated (dais/balcony/perch/terrace) on this combat's scene? */

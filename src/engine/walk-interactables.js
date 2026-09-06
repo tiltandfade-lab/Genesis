@@ -56,18 +56,11 @@
    place-distribution.js's OWN seed-formula convention verbatim, off engine.place-spatialize's shared
    dspHashStr/dspMulberry32 globals) — never Math.random, never a shared/ordinal-dependent stream.
 
-   PERSISTENCE GAP (documented, not silent — this repo's own "an untagged/exempt/red state that
-   tells the truth beats a green that lies" discipline, CLAUDE.md): dm.js's dmFindInteractable (D0)
-   reads a PERSISTED `w.prep.nodes[<activeWalkId>].interactables[]` array keyed by sourceRef, so a
-   state_transition event can find-and-mutate a placed entity across turns. This module's own
-   plan.interactables[] is, by design, a PURE re-derivable projection of (plan,walk,opts) — the SAME
-   convention place-dressing.js's plan.dressing[] already keeps (recomputed fresh every render call,
-   never persisted onto the prep node). Those are two different homes: a state mutation written onto
-   a plan.interactables[] entry would vanish the next time this function re-runs from the same
-   (plan,walk,opts) snapshot. D2's own spec scope stops at "the roll becomes a placed thing" (WHERE
-   placement refines is D3; render is D4) — wiring plan.interactables[] into a persisted prep-node
-   store (or re-deriving dmFindInteractable to read this ephemeral output instead) is NOT decided
-   here and is flagged for D3/D4 rather than invented ad hoc. */
+   PERSISTENCE: reconcileWalkInteractableState(prepNode, interactables) owns the small durable seam
+   between this pure projection and world state. The walk remains the content record; prepNode keeps
+   only {sourceRef,archetype,state}. Prep calls reconciliation when it binds a spatial plan, so object
+   identity exists in Story mode without requiring the Theater projection to run. Theater may call
+   the same owner again while re-deriving coordinates; it restores persisted state idempotently. */
 
 "use strict";
 
@@ -302,6 +295,27 @@ function bindWalkInteractables(plan, walk, opts) {
   return Object.assign({}, plan, { interactables: interactables });
 }
 
+/* Persist only stable identity + mutable state, then restore that state onto a fresh projection.
+   This deliberately knows nothing about DOM, THREE, or presentation mode: state_transition and the
+   DM digest can address an object even when no visual surface has ever mounted. */
+function reconcileWalkInteractableState(prepNode, interactables){
+  if(!prepNode || !Array.isArray(interactables) || !interactables.length) return interactables;
+  const store=Array.isArray(prepNode.interactables)?prepNode.interactables:(prepNode.interactables=[]);
+  const bySourceRef={};
+  store.forEach(rec=>{ if(rec&&rec.sourceRef!=null) bySourceRef[rec.sourceRef]=rec; });
+  interactables.forEach(entry=>{
+    if(!entry||entry.sourceRef==null) return;
+    const persisted=bySourceRef[entry.sourceRef];
+    if(persisted) entry.state=persisted.state;
+    else {
+      const rec={sourceRef:entry.sourceRef,archetype:entry.archetype,state:entry.state};
+      store.push(rec); bySourceRef[entry.sourceRef]=rec;
+    }
+  });
+  return interactables;
+}
+
 // ─── ES-module bridge (mirrors place-dressing.js's own convention: top-level `const` never auto-
 // attaches to `window`; a sealed ES-module scope can only reach in via `window.`) ────────────────
 window.bindWalkInteractables = bindWalkInteractables;
+window.reconcileWalkInteractableState = reconcileWalkInteractableState;

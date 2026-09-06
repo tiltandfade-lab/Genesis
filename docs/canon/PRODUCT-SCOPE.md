@@ -18,9 +18,10 @@ narrates; worlds persist forever in the browser and accumulate into a universe. 
 Arcana Engine but its own product. (`docs/DESIGN.md` §Vision; CLAUDE.md.)
 
 The dream, in Adam's words: "a dynamic, self-generating, fast fantasy game where no playthrough
-is the same and the world is full of meaning, mystery, fun, wackiness, drama, and scary monsters"
-— with a graphics engine eventually on top, a visual battle system first.
-(`docs/DESIGN-GUIDE.md` §0.)
+is the same and the world is full of meaning, mystery, fun, wackiness, drama, and scary monsters."
+The earlier “visual battle system first” sequence is superseded as implementation priority by
+`TEXT-FIRST-WALK-RESTORATION.md`: graphics may eventually sit on top, but Story is the default
+game and no battlefield is expected or required.
 
 **Why it exists (the north star):** AI drifts over long campaigns. Genesis is the architectural
 answer — the deterministic state layer is authoritative; the AI is the interpreter, never the
@@ -51,9 +52,11 @@ fast · meaning & mystery · hard & dangerous · grim/severe/hilarious · depth 
 constitution (`docs/DM-CHARTER.md`).
 
 **Authority split:** the player rolls their own dice openly and owns their PC's actions
-absolutely; the engine owns every number and noun; the DM (any provider in the neutral seat)
-owns verbs, meaning, and narration — and exerts will only through NPCs. (`docs/DM-CHARTER.md`;
-`docs/EVENT-CONTRACT.md`; Wave 2 G2.1.)
+absolutely; the engine owns every number/noun and executes settled rule arithmetic; the DM (any
+provider in the neutral seat) owns verbs, intent, rule applicability, difficulty/stakes/exceptions,
+meaning, and narration — and exerts will only through NPCs. Exact facts and fully declared mechanics
+may bypass or precede narration, but unknown/contextual free text defaults to open adjudication.
+(`docs/DM-CHARTER.md`; `docs/EVENT-CONTRACT.md`; `docs/DESIGN.md` 2026-08-04; Wave 2 G2.1.)
 
 ## 3. Supported content breadth (current rulings)
 
@@ -80,10 +83,11 @@ silently claims another:
 ### 4a. The no-cash Mac proof (current tier)
 
 Everything currently planned runs on Adam's existing Intel MacBook Pro plus the committed
-~$200/month Claude/Codex spend — zero new recurring cost. It proves: canonical mechanics, exact
-BattleMat tactics in one retained clay room, the mandatory EngagementLens, provider-neutral DM
-interaction with fictional fallback, persistence/recovery, and a bounded accessibility trace at
-a truthful low presentation tier. (Wave 10 §11.110-11.112; Clay stages C1A-C1K.)
+~$200/month Claude/Codex spend — zero new recurring cost. The current proof is Story-first: a
+substantive 8–12 segment walk, scoped DM digest, zone-based combat, suspended/resumed walk state,
+and one touched object surviving leave/save/reload/return. Sprites may accompany it; Theater Lab
+is optional and cannot be required for the proof. The older exact-BattleMat/EngagementLens clay
+proof remains retained evidence and future laboratory work.
 
 **The proof is never mislabeled as the game.** It is not a release-hardware minimum, not a
 beauty ceiling, not a support or usability claim, and not a replacement product for the working
@@ -92,27 +96,21 @@ engine. (PHASING-FRAMEWORK "proof is not product"; FABLE prompt preservation aud
 ### 4b. The playable pre-alpha/MVP
 
 A narrow but *recognizable* Genesis loop, playable for enjoyment — every critical and borderline
-behavior present at narrowed breadth. Its accepted composition (Wave 10 phasing audit,
-"Recommended Wave 10 pre-alpha slice" + pre-alpha-critical table):
+behavior present at narrowed breadth. Its current composition is:
 
-- the shared shell: left rail · central SceneTray/BattleMat · persistent provider-neutral right
-  DM conversation;
-- a party moving through exact cells with material route agency; validated object interaction;
-  attack/damage/condition; door/topology change; a revealed hazard; custody transfer; exact
-  terminal-state recovery after interruption;
-- the **mandatory EngagementLens** staging every material combat beat (one bespoke family,
-  truthful generic staging for the rest);
-- deterministic initiative (plain but complete), speakable stable labels, viewpoint-safe secrecy;
-- the coherent tabletop visual floor — existing sprites/lighting/materials retained; "cheap
-  assets do not license a debug-looking game";
-- fiction-first DM-seat fallback for every material receipt family; keyboard/mouse input; the
-  bounded accessibility equivalence suite;
-- the first implementation priority behind all of it: **canonical mechanics → BattleMat +
-  EngagementLens → provider-neutral DM-seat/fallback → persistence/recovery, in one retained
-  clay room, before module breadth** (ledger law 7; CLAY-PROOF-LADDER law 11).
+- the Story-default shell: persistent DM conversation plus character, actions, map, codex, and
+  state surfaces; optional 2D sprite citizens;
+- substantive branching walks with resumable cursors, multiple live story threads, realm-aware
+  nouns, and relevance-scoped digest retrieval;
+- validated object interaction and sparse persistent touched state across leave/save/reload/return;
+- the built 12-zone theater-of-mind combat resolver with attack/damage/condition, deterministic
+  initiative, hazards, custody, and fiction-first DM narration;
+- speakable stable labels, keyboard/mouse operation, prose twins, and the bounded accessibility
+  equivalence suite;
+- optional Theater Lab projection over the same receipts/state, never a prerequisite.
 
-Post-core pre-alpha modules (accepted, separately gated): bounded travel (C2H-C2L), bounded town
-(C2M), cold companion separation (C2G), waiting-party crossings (C2N).
+The older exact-cell BattleMat/EngagementLens composition remains a future projection candidate,
+not the current MVP dependency. Post-core modules remain separately gated.
 
 **The existing walk/table game remains playable throughout.** The MVP floor is not a removal
 list; working Genesis capabilities are protected unless a locked ruling supersedes them with

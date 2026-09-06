@@ -1,0 +1,141 @@
+{
+  "request": {
+    "skill": "Stealth",
+    "ability": "dex",
+    "dc": 13,
+    "adv": null,
+    "branches": {
+      "success": {
+        "narration": "You let the courier cross first and move only when both captains look toward the widening absence. From beneath the balcony you hear the report: Room Seven answered again, and the Office seal is waking people faster than expected. Neither captain knows you entered the plaza.",
+        "events": [
+          {
+            "type": "walk_advance",
+            "payload": {
+              "nodeId": "frontier-s0-0",
+              "toSeg": 6
+            }
+          },
+          {
+            "type": "fact_canonized",
+            "payload": {
+              "factId": "brineglass-captains-room-seven-report",
+              "what": "A courier reported to two corrupt guard captains that Room Seven answered again and that the Office seal is waking people faster than expected."
+            }
+          }
+        ]
+      },
+      "nearMiss": {
+        "narration": "You reach the wheelbarrow as one captain glances down. They saw motion, not identity. The courier completes the report, but both guards begin searching the plaza while the expanding void removes another strip of wall.",
+        "events": [
+          {
+            "type": "walk_advance",
+            "payload": {
+              "nodeId": "frontier-s0-0",
+              "toSeg": 6
+            }
+          }
+        ]
+      },
+      "fail": {
+        "narration": "A paving stone closes rubbery teeth around your boot. The wheelbarrow tips; the courier points; both captains descend from opposite balconies exactly as trained. The void cuts away the straight retreat, but the upper balcony and the road back remain open. They draw steel.",
+        "events": [
+          {
+            "type": "walk_advance",
+            "payload": {
+              "nodeId": "frontier-s0-0",
+              "toSeg": 6
+            }
+          },
+          {
+            "type": "combat_start",
+            "payload": {
+              "foes": [
+                {
+                  "name": "Bandit Captain",
+                  "count": 2,
+                  "role": "corrupt guard captain"
+                }
+              ],
+              "objectiveRef": "escape the captains with the courier report",
+              "segmentId": "s6",
+              "scene": {
+                "cover": [
+                  "wheelbarrow",
+                  "balcony pillars"
+                ],
+                "hazards": [
+                  "mimic paving",
+                  "expanding void"
+                ],
+                "exits": [
+                  "upper balcony",
+                  "road back to the boarding house"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "result": {
+    "ok": true,
+    "resolvedLocally": false,
+    "liveResolutionNeeded": true,
+    "pending": {
+      "action": "(I roll Stealth: 23)",
+      "rolls": [
+        {
+          "label": "Stealth",
+          "die": "d20",
+          "result": 20,
+          "mods": "+1 +2 prof",
+          "total": 23,
+          "adv": null,
+          "pair": null
+        },
+        {
+          "label": "crit-magnitude",
+          "die": "d20",
+          "result": 18,
+          "total": 18,
+          "crit": {
+            "natural": 20,
+            "magnitude": 18,
+            "success": true,
+            "tier": "amplified-major",
+            "scope": "regional",
+            "cascade": false,
+            "lensCount": 2,
+            "lenses": [
+              {
+                "row": 2,
+                "lens": "A person is permanently changed",
+                "detail": "A character in the scene is turned at the root — the bandit genuinely repents, an enemy becomes a lifelong ally, a coward is made brave forever.",
+                "placeHandoff": false
+              },
+              {
+                "row": 11,
+                "lens": "A threat is broken at the root",
+                "detail": "A danger is ended permanently, not just defeated — a monster sealed for an age, a tyranny's spine snapped, a plague's source burned out.",
+                "placeHandoff": false
+              }
+            ],
+            "placeHandoff": false,
+            "canon": false
+          }
+        }
+      ]
+    },
+    "recovered": false,
+    "resolution": null,
+    "branchNarration": null,
+    "newLedger": [],
+    "pc": {
+      "name": "Mira Quill",
+      "hp": "6/6",
+      "conditions": [],
+      "status": "living"
+    }
+  }
+}

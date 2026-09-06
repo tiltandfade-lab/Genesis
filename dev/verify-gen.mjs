@@ -127,6 +127,26 @@ const check = (name, cond, detail = "") =>
 // 4. codex_contact locks soft→hard; codex_update{name} on known REJECTED; pre-reveal rename succeeds.
 // ============================================================
 { const { win, world } = freshDom();
+  win.applyResponse({ turnId: "t-bound-item", narration: "n", events: [],
+    gen: [{ kind: "item", opts: { name: "The First Answer Tube" } }] });
+  const item = Object.values(win.codexOf(world).records).find(r => r.name === "The First Answer Tube");
+  check("3b. a named item never inherits a contradictory random object atom",
+    item&&item.rolled&&item.rolled.object==="The First Answer Tube"&&item.source.type==="bound-item"&&item.dm.needsDefinition===true,
+    JSON.stringify(item));
+  win.codexAdd(world,{id:"item:legacy-mismatch",kind:"item",name:"The Shadowless Message Tube",provenance:"rolled",
+    source:{type:"plot",ref:"plot-item#196"},rolled:{object:"A brass fish watch fob"},
+    fields:{object:"A brass fish watch fob"},dm:{why:"unrelated"},status:{known:true,soft:false}});
+  const repaired=win.genMigrateBoundItemAtoms(world), legacy=win.codexGet(world,"item:legacy-mismatch");
+  check("3b. saved name-override contradictions migrate without changing identity/status",
+    repaired===1&&legacy.name==="The Shadowless Message Tube"&&legacy.status.known===true&&
+      legacy.rolled.object===legacy.name&&legacy.source.type==="bound-item"&&legacy.dm.needsDefinition===false,
+    JSON.stringify({repaired,legacy}));
+}
+
+// ============================================================
+// 4. codex_contact locks soft→hard; codex_update{name} on known REJECTED; pre-reveal rename succeeds.
+// ============================================================
+{ const { win, world } = freshDom();
   win.applyResponse({ turnId: "t-1", narration: "n", events: [], gen: [{ kind: "npc", opts: { name: "Orrel" } }] });
   const id = Object.values(win.codexOf(world).records).find(r => r.kind === "npc").id;
   // pre-reveal rename succeeds

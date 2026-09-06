@@ -1,0 +1,13 @@
+{
+  "turnId": "t-msgb9uiy6y6e1",
+  "narration": "The foreman points you through the trap-control room and keeps every cage key. It opens onto the aqueduct wall, twenty-five feet above black water. Four merchant wagons form a barricade across its narrow crown. A flawless noble stands within them beside a guard captain and a locked strongbox; he is already telling the rescued families that his consortium saved them. His reflection in the channel moves a fraction late. Nobody has drawn steel. The control-room retreat remains open.",
+  "events": [
+    {
+      "type": "walk_advance",
+      "payload": {
+        "toSegment": 11
+      },
+      "source": "declared"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "turnId": "t-msgaynrhw8y3f",
+  "narration": "Your candle drifts into the flooded hall. The pale figures ignore both flames until wax taps a breastplate; then every head turns to the sound. The underwater stub is clenched in a drowned watch sergeant’s fist, burning without consuming. When his broken whistle clicks against his teeth, the others copy his step. They are following him, not the light. Your floating candle has drawn them toward the dead end; the drainage arch remains clear behind you.",
+  "events": [
+    {
+      "type": "walk_advance",
+      "payload": {
+        "toSegment": 8
+      },
+      "source": "declared"
+    },
+    {
+      "type": "item_transfer",
+      "payload": {
+        "itemId": "msfjud9rqgk9r",
+        "qty": 1,
+        "to": {
+          "kind": "object",
+          "ref": "walk:frontier-s0-0:s8:flooded-current",
+          "name": "the flooded current"
+        },
+        "intent": "place",
+        "note": "Mira sets one lit candle afloat through the flooded dead-end hall to test what the risen guards follow."
+      },
+      "source": "declared"
+    }
+  ]
+}

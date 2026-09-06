@@ -1,0 +1,258 @@
+{
+  "turnId": "t-msfkgqf9wqoh4",
+  "worldId": "msfjud9ebcves",
+  "action": "(I roll Arcana: 12)",
+  "rolls": [
+    {
+      "label": "Arcana",
+      "die": "d20",
+      "result": 12,
+      "mods": "+0",
+      "total": 12,
+      "adv": null,
+      "pair": null
+    }
+  ],
+  "digest": {
+    "schema": "beat-digest/v1",
+    "view": "scene",
+    "slices": [
+      "scene",
+      "pc",
+      "story-pressure",
+      "continuity"
+    ],
+    "worldId": "msfjud9ebcves",
+    "worldName": "The Brineglass Reach",
+    "clock": {
+      "day": 1,
+      "min": 450,
+      "band": "morning",
+      "exact": "07:30",
+      "session": 0,
+      "knowsTime": false
+    },
+    "location": "The Cobbled Tannery",
+    "pc": {
+      "name": "Mira Quill",
+      "headline": "a Charlatan Human Bard who went out on an adventure",
+      "pronouns": "she",
+      "class": "Bard",
+      "level": 1,
+      "hp": {
+        "cur": 6,
+        "max": 6
+      },
+      "conditions": [],
+      "marks": [
+        {
+          "id": "mk-msfjud9s5npiw",
+          "text": "You were poisoned; your next save against poison has disadvantage.",
+          "kind": "injury",
+          "sinceDay": 0
+        }
+      ],
+      "background": "Charlatan",
+      "ac": 12,
+      "inventory": [
+        {
+          "id": "msfjud9rhr2d7",
+          "name": "Leather Armor",
+          "conditions": []
+        },
+        {
+          "id": "msfjud9r7oduu",
+          "name": "Dagger",
+          "qty": 2,
+          "conditions": []
+        }
+      ],
+      "inventoryMore": 10
+    },
+    "powers": [
+      {
+        "clockId": "the-crier-s-circle",
+        "faction": "The Crier's Circle",
+        "dominant": true,
+        "agenda": "become something other than what it is",
+        "method": "rumor and propaganda",
+        "tags": [
+          "popular"
+        ],
+        "clock": "1/6"
+      },
+      {
+        "clockId": "the-orchard-wardens",
+        "faction": "The Orchard-Wardens",
+        "dominant": false,
+        "agenda": "widen its territory or reach",
+        "method": "ritual and the occult",
+        "tags": [
+          "desperate"
+        ],
+        "clock": "0/6"
+      }
+    ],
+    "fronts": [
+      {
+        "clockId": "the-leader-is-corrupt-failing-or-dying-and-the-scramble-to-replace-them-has-begun",
+        "kind": "internal",
+        "danger": "the leader is corrupt, failing, or dying, and the scramble to replace them has begun",
+        "impersonal": null,
+        "clock": "0/6",
+        "closed": false,
+        "dmOnly": {
+          "truth": null,
+          "doom": "displacement \u2014 the people scatter"
+        }
+      },
+      {
+        "clockId": "a-blight-or-plague-is-spreading-toward-the-town",
+        "kind": "external",
+        "danger": "a blight or plague is spreading toward the town",
+        "impersonal": "wildfire",
+        "clock": "0/6",
+        "closed": false,
+        "dmOnly": {
+          "truth": null,
+          "doom": "displacement \u2014 the people scatter"
+        }
+      }
+    ],
+    "recentLedger": [
+      {
+        "type": "canon",
+        "day": 1,
+        "min": 450,
+        "text": "\u25c6 Controlled handwriting comparison proved the fraudulent correction is Tessa Rill's right-hand script mirrored and impressed from the reverse side of the page; its blank oval marks where her shadow was removed."
+      },
+      {
+        "type": "outcome",
+        "day": 1,
+        "min": 450,
+        "text": "\u2726 +1 XP \u2014 11 total."
+      }
+    ],
+    "codex": [
+      {
+        "id": "npc:william-sallow",
+        "kind": "npc",
+        "name": "William Sallow",
+        "fields": {
+          "role": "Bandit or Road-agent",
+          "species": "Human",
+          "demeanor": "They refuse to admit they are wrong, even when presented with direct proof."
+        },
+        "dm": {
+          "secret": null,
+          "want": "Make peace between the two families before their children inherit the feud. \u2014 justice, family",
+          "fear": null,
+          "bond": null,
+          "leverage": "Fears one particular creditor enough to have stopped sleeping at home. \u2014 debt, fear",
+          "motivation": null,
+          "discoveryRolled": true,
+          "engaged": true
+        },
+        "status": {
+          "at": "the-cobbled-tannery",
+          "known": true,
+          "soft": false,
+          "condition": "ok"
+        },
+        "attitude": {
+          "value": 0,
+          "label": "Indifferent",
+          "opening": 0,
+          "floor": -2,
+          "ceiling": 2,
+          "terrified": false,
+          "read": false,
+          "lazy": true
+        }
+      }
+    ],
+    "revealed": [
+      "powers",
+      "map",
+      "ledger"
+    ],
+    "ambientPresence": {
+      "count": 3,
+      "texture": "a few locals going about their business"
+    },
+    "prepPending": {
+      "session": 0,
+      "frontiers": [
+        "frontier-s0-0 (urban)",
+        "frontier-s0-1 (dungeon)",
+        "frontier-s0-2 (wilderness)"
+      ],
+      "reason": "no-overlays"
+    },
+    "retrieval": {
+      "omitted": {
+        "codex": 25,
+        "powers": 1,
+        "gazetteer": 5
+      },
+      "rule": "Omitted state remains authoritative. Use supplied ids; never invent an omitted fact.",
+      "overTargetBytes": 3263
+    }
+  },
+  "route": {
+    "mode": "freeform-ruling",
+    "reasons": [
+      "open-intent-default"
+    ],
+    "relevantSlices": [
+      "scene",
+      "story-pressure",
+      "relevant-state"
+    ],
+    "modelCall": true
+  },
+  "rulingRequest": {
+    "contractVersion": 1,
+    "kind": "open-intent",
+    "playerAction": "(I roll Arcana: 12)",
+    "principle": "Interpret freely; propose consequences through the engine contract; never mutate state in prose.",
+    "returnFields": [
+      "understoodAction",
+      "ruling",
+      "needsRoll",
+      "proposedCheck",
+      "stakes",
+      "outcomeBranches",
+      "proposedEvents"
+    ],
+    "authority": {
+      "dm": [
+        "intent",
+        "rule-applicability",
+        "difficulty",
+        "advantage-disadvantage",
+        "stakes",
+        "exceptions",
+        "meaning"
+      ],
+      "engine": [
+        "identity",
+        "state",
+        "custody",
+        "dice",
+        "arithmetic",
+        "resources",
+        "clock",
+        "accepted-mutation"
+      ]
+    }
+  },
+  "receipt": null,
+  "lane": "fast",
+  "laneModel": "sonnet",
+  "laneReasons": [
+    "default-fast"
+  ],
+  "lastResolution": null,
+  "_received": 1785902881.260326
+}

@@ -1,0 +1,266 @@
+{
+  "turnId": "t-msfk9yl9cbqzv",
+  "worldId": "msfjud9ebcves",
+  "action": "I say \u201cwarmth\u201d to the sorting arm, then hold the altered order toward the passage carrying the warm draft. I keep the dagger between my hand and the mechanism and watch for what answers the countersign.",
+  "rolls": [],
+  "digest": {
+    "schema": "beat-digest/v1",
+    "view": "social",
+    "slices": [
+      "scene",
+      "pc",
+      "story-pressure",
+      "continuity",
+      "social",
+      "local-actors"
+    ],
+    "worldId": "msfjud9ebcves",
+    "worldName": "The Brineglass Reach",
+    "clock": {
+      "day": 1,
+      "min": 360,
+      "band": "dawn",
+      "exact": "06:00",
+      "session": 0,
+      "knowsTime": false
+    },
+    "location": "The Cobbled Tannery",
+    "pc": {
+      "name": "Mira Quill",
+      "headline": "a Charlatan Human Bard who went out on an adventure",
+      "pronouns": "she",
+      "class": "Bard",
+      "level": 1,
+      "hp": {
+        "cur": 6,
+        "max": 6
+      },
+      "conditions": [],
+      "marks": [
+        {
+          "id": "mk-msfjud9s5npiw",
+          "text": "You were poisoned; your next save against poison has disadvantage.",
+          "kind": "injury",
+          "sinceDay": 0
+        }
+      ],
+      "background": "Charlatan",
+      "gold": 19,
+      "mods": {
+        "str": -3,
+        "dex": 1,
+        "con": -2,
+        "int": 0,
+        "wis": -2,
+        "cha": 2
+      },
+      "skillProfs": [
+        "Deception",
+        "Sleight of Hand",
+        "Perception",
+        "Performance",
+        "Persuasion",
+        "Insight",
+        "Investigation",
+        "Stealth"
+      ],
+      "inventory": [
+        {
+          "id": "msfjud9r7oduu",
+          "name": "Dagger",
+          "qty": 2,
+          "conditions": []
+        },
+        {
+          "id": "msfjud9rhr2d7",
+          "name": "Leather Armor",
+          "conditions": []
+        }
+      ],
+      "inventoryMore": 8
+    },
+    "powers": [
+      {
+        "clockId": "the-crier-s-circle",
+        "faction": "The Crier's Circle",
+        "dominant": true,
+        "agenda": "become something other than what it is",
+        "method": "rumor and propaganda",
+        "tags": [
+          "popular"
+        ],
+        "clock": "1/6"
+      },
+      {
+        "clockId": "the-orchard-wardens",
+        "faction": "The Orchard-Wardens",
+        "dominant": false,
+        "agenda": "widen its territory or reach",
+        "method": "ritual and the occult",
+        "tags": [
+          "desperate"
+        ],
+        "clock": "0/6"
+      }
+    ],
+    "fronts": [
+      {
+        "clockId": "a-blight-or-plague-is-spreading-toward-the-town",
+        "kind": "external",
+        "danger": "a blight or plague is spreading toward the town",
+        "impersonal": "wildfire",
+        "clock": "0/6",
+        "closed": false,
+        "dmOnly": {
+          "truth": null,
+          "doom": "displacement \u2014 the people scatter"
+        }
+      }
+    ],
+    "recentLedger": [
+      {
+        "type": "canon",
+        "day": 1,
+        "min": 360,
+        "text": "\u25c6 The original Low Sluice order prioritized living occupants; a second hand reversed it to prioritize sealed records, used 'warmth' as the ninth word, and signed with a shadowless blank oval."
+      },
+      {
+        "type": "outcome",
+        "day": 1,
+        "min": 360,
+        "text": "\u2726 +1 XP \u2014 6 total."
+      }
+    ],
+    "codex": [
+      {
+        "id": "item:the-altered-low-sluice-order",
+        "kind": "item",
+        "name": "The Altered Low Sluice Order",
+        "fields": {
+          "object": "A document of safe passage, signed by two governments that are currently at war with each other.",
+          "opens": "Proves the negotiations were farther along than either side admitted \u2014 and someone has been sitting on the evidence."
+        },
+        "dm": {
+          "why": "It was issued during a period of negotiation that officially failed.",
+          "opens": "Proves the negotiations were farther along than either side admitted \u2014 and someone has been sitting on the evidence.",
+          "lock": null
+        },
+        "status": {
+          "at": "the-cobbled-tannery",
+          "known": false,
+          "soft": true,
+          "condition": "ok"
+        }
+      }
+    ],
+    "minted": [
+      {
+        "id": "item:the-altered-low-sluice-order",
+        "kind": "item",
+        "name": "The Altered Low Sluice Order",
+        "genRef": "t-msfk90p2cen96"
+      }
+    ],
+    "revealed": [
+      "powers",
+      "map",
+      "ledger"
+    ],
+    "ambientPresence": {
+      "count": 3,
+      "texture": "a few locals going about their business"
+    },
+    "prepPending": {
+      "session": 0,
+      "frontiers": [
+        "frontier-s0-0 (urban)",
+        "frontier-s0-1 (dungeon)",
+        "frontier-s0-2 (wilderness)"
+      ],
+      "reason": "no-overlays"
+    },
+    "itemCustody": [
+      {
+        "item": {
+          "id": "msfk2mblguaqs",
+          "name": "Candle",
+          "qty": 1,
+          "conditions": [],
+          "codexId": null
+        },
+        "holder": {
+          "kind": "object",
+          "ref": "low-sluice-ladder-well",
+          "name": "Low Sluice ladder well"
+        },
+        "note": "Mira lowers the relit candle into the Low Sluice ladder well on her lute strap."
+      }
+    ],
+    "retrieval": {
+      "omitted": {
+        "codex": 24,
+        "powers": 1,
+        "fronts": 1,
+        "gazetteer": 4
+      },
+      "rule": "Omitted state remains authoritative. Use supplied ids; never invent an omitted fact.",
+      "overTargetBytes": 3475
+    }
+  },
+  "route": {
+    "mode": "freeform-ruling",
+    "reasons": [
+      "open-intent-default"
+    ],
+    "relevantSlices": [
+      "scene",
+      "story-pressure",
+      "relevant-state"
+    ],
+    "modelCall": true
+  },
+  "rulingRequest": {
+    "contractVersion": 1,
+    "kind": "open-intent",
+    "playerAction": "I say \u201cwarmth\u201d to the sorting arm, then hold the altered order toward the passage carrying the warm draft. I keep the dagger between my hand and the mechanism and watch for what answers the countersign.",
+    "principle": "Interpret freely; propose consequences through the engine contract; never mutate state in prose.",
+    "returnFields": [
+      "understoodAction",
+      "ruling",
+      "needsRoll",
+      "proposedCheck",
+      "stakes",
+      "outcomeBranches",
+      "proposedEvents"
+    ],
+    "authority": {
+      "dm": [
+        "intent",
+        "rule-applicability",
+        "difficulty",
+        "advantage-disadvantage",
+        "stakes",
+        "exceptions",
+        "meaning"
+      ],
+      "engine": [
+        "identity",
+        "state",
+        "custody",
+        "dice",
+        "arithmetic",
+        "resources",
+        "clock",
+        "accepted-mutation"
+      ]
+    }
+  },
+  "receipt": null,
+  "lane": "fast",
+  "laneModel": "sonnet",
+  "laneReasons": [
+    "default-fast"
+  ],
+  "lastResolution": null,
+  "_received": 1785902565.260603
+}

@@ -154,6 +154,23 @@ const check = (name, cond, detail = "") =>
 
   const nestedBad = win.validateTurnResponse({ events: [{ payload: {} }] });   // event missing type
   check("validateTurnResponse: nested malformed event flagged with index", !nestedBad.ok && /events\[0\]/.test(nestedBad.errors.join()), JSON.stringify(nestedBad));
+
+  const openRuling = win.validateTurnResponse({ narration:"The hinge may hold.", events:[], ruling:{
+    understoodAction:"Wedge the stone jaw open with the shield", ruling:"Possible, but the hinge is under strain",
+    needsRoll:true, proposedCheck:{skill:"Athletics",dc:15}, stakes:"The shield may become trapped",
+    outcomeBranches:{success:{},nearMiss:{},fail:{}}, proposedEvents:[]
+  }});
+  check("validateTurnResponse: open ruling proposal passes", openRuling.ok, JSON.stringify(openRuling));
+  const badRuling = win.validateTurnResponse({ narration:"x", events:[], ruling:{needsRoll:"perhaps"} });
+  check("validateTurnResponse: malformed open ruling field is flagged", !badRuling.ok && /ruling.needsRoll/.test(badRuling.errors.join()), JSON.stringify(badRuling));
+  const observed={narration:"The chain catches.",events:[],ruling:{needsRoll:true,outcomeBranches:["success","fail"]},
+    rollRequest:{skill:"Athletics",dc:14,branches:{success:{narration:"It holds.",events:[]},fail:{narration:"It slips.",events:[]}}}};
+  check("validateTurnResponse: observed array-shaped ruling branches remain strictly invalid",
+    !win.validateTurnResponse(observed).ok,JSON.stringify(win.validateTurnResponse(observed)));
+  const normalized=win.dmNormalizeTurnResponse(observed);
+  check("response normalization repairs redundant ruling branches from executable rollRequest branches",
+    normalized.repairs.length===1&&normalized.response.ruling.outcomeBranches.success&&
+      win.validateTurnResponse(normalized.response).ok,JSON.stringify(normalized));
 }
 
 // ============================================================
@@ -215,10 +232,73 @@ const check = (name, cond, detail = "") =>
   check("e2e: row carries latency (number ≥ 0)", typeof r.latencyMs === "number" && r.latencyMs >= 0, JSON.stringify(r.latencyMs));
   check("e2e: row carries the payload byte counts", r.digestBytes > 0 && r.turnBytes > 0 && r.responseBytes > 0, `digest=${r.digestBytes} turn=${r.turnBytes} resp=${r.responseBytes}`);
   check("e2e: row lists the applied event types", Array.isArray(r.eventTypes) && r.eventTypes.indexOf("hp_changed") >= 0, JSON.stringify(r.eventTypes));
+  check("e2e: row measures the narration ceiling instead of silently trusting the prompt",
+    r.narrationWords===4&&r.narrationMaxWords===160&&r.narrationBudgetMiss===false,
+    JSON.stringify({words:r.narrationWords,max:r.narrationMaxWords,miss:r.narrationBudgetMiss}));
   check("e2e: row carries an estimated cost", r.cost && r.cost.estimated === true && typeof r.cost.usd === "number", JSON.stringify(r.cost));
   check("e2e: row.ok reflects the contract (true for a clean response)", r.ok === true);
   check("e2e: the row was fired at the /telemetry sink", telemetryPosts.some((p) => p.turnId === r.turnId), `posts=${telemetryPosts.length}`);
   check("e2e: lastTurnMeta cleared after the row closes", win.GS.dm.lastTurnMeta === null);
+}
+
+// ============================================================
+// 7b. ADJUDICATION SEAM — declared rest resolves BEFORE narration and cannot replay.
+// ============================================================
+{ const win = freshDom(); const world = seedWorld(win);
+  const sh=world.characters[0].sheet;
+  sh.hp=20; sh.hpCur=10; sh.gold=0;
+  sh.inventory=Array.from({length:40},(_,i)=>({id:"pack-"+i,name:"Unchanged pack item "+i,conditions:[]}));
+  sh.resources={hitDice:{cur:3,max:3,die:10}};
+  // Hold the random rider deterministic: the proof is ordering/authority, not rest-risk frequency.
+  win.restRiskRoll=()=>({ok:true,class:"secure",text:"The watch stays quiet.",severe:false,interrupted:false});
+  let captured=null;
+  win.fetch=(url,opts)=>{
+    if(String(url).endsWith("/turn")){ captured=JSON.parse(opts.body); return Promise.resolve({ok:true,status:200,json:()=>Promise.resolve({turnId:captured.turnId})}); }
+    return Promise.resolve({ok:true,status:204,json:()=>Promise.resolve({})});
+  };
+  const beforeMin=world.clock.min;
+  win.sendTurn("I take a short rest.",[]);
+  check("rest seam: route is declared-mechanic", captured && captured.route && captured.route.mode==="declared-mechanic", JSON.stringify(captured&&captured.route));
+  check("rest seam: engine advanced the clock before /turn POST", world.clock.min===beforeMin+60, `clock ${beforeMin} -> ${world.clock.min}`);
+  check("rest seam: immutable accepted receipt rides the request", captured && captured.receipt && captured.receipt.accepted===true && captured.receipt.schema==="mechanical-receipt/v1" && Object.isFrozen(win.GS.dm.lastTurnMeta.receipt), JSON.stringify(captured&&captured.receipt));
+  check("rest seam: digest and receipt both see post-resolution clock", captured && captured.receipt.after.clock.min===world.clock.min && captured.digest.clock.min===world.clock.min, `receipt=${captured&&captured.receipt&&captured.receipt.after.clock.min} digest=${captured&&captured.digest&&captured.digest.clock&&captured.digest.clock.min} world=${world.clock.min}`);
+  check("rest seam: receipt is delta-only and omits the 40 unchanged inventory records",
+    captured.receipt.deltaOnly===true&&captured.receipt.before.pc?.inventory===undefined&&captured.receipt.after.pc?.inventory===undefined&&
+      win.jsonBytes(captured.receipt)<3000,`bytes=${win.jsonBytes(captured&&captured.receipt)}`);
+  check("rest seam: TurnRequest carries an explicit fast narration ceiling",
+    captured.narrationBudget&&captured.narrationBudget.maxWords===70,JSON.stringify(captured.narrationBudget));
+  const settledMin=world.clock.min;
+  win.applyResponse({turnId:captured.turnId,narration:"An hour loosens the ache without loosening the watch.",events:[{type:"rest",payload:{kind:"short"}}]});
+  check("rest seam: narrator cannot replay the settled rest", world.clock.min===settledMin, `clock ${settledMin} -> ${world.clock.min}`);
+  const dmLine=(world.dmlog||[]).filter(x=>x.role==="dm").slice(-1)[0];
+  check("rest seam: replay is surfaced as settled-by-receipt", dmLine && dmLine.applied && dmLine.applied[0] && dmLine.applied[0].res.ignored==="settled-by-receipt", JSON.stringify(dmLine&&dmLine.applied));
+  const row=(win.GS.dm.telemetry||[]).slice(-1)[0];
+  check("rest seam: stage telemetry records route/mechanics/feedback/unlock", row && row.routeMode==="declared-mechanic" && typeof row.mechanicsMs==="number" && typeof row.meaningfulFeedbackMs==="number" && typeof row.unlockMs==="number", JSON.stringify(row));
+}
+
+// ============================================================
+// 7c. PENDING-TURN RECOVERY — timeout pauses identity; only explicit abandon rejects it.
+// ============================================================
+{ const win=freshDom(), world=seedWorld(win);
+  win.renderWorld=()=>{};win.wakeReveal=()=>{};win.saveU=()=>{};win.postState=()=>{};
+  const request={turnId:"t-paused",worldId:world.id,action:"I keep listening.",rolls:[],digest:{schema:"beat-digest/v1"}};
+  world.dm={pendingTurnId:"t-paused",pendingTurnRequest:request,
+    pendingTurnMeta:{turnId:"t-paused",worldId:world.id,startedAt:Date.now(),transport:"mailbox"}};
+  win.GS.dm={turnId:"t-paused",pending:true,poll:null,rollReq:null,ask:null,animate:false,telemetry:[]};
+  win.dmNoAnswer("t-paused");
+  check("timeout pauses the exact turn instead of clearing or rejecting it",
+    world.dm.pendingTurnId==="t-paused"&&world.dm.pendingTurnPause.reason==="timeout"&&
+      !(world.dm.rejectedTurnIds||[]).includes("t-paused")&&win.GS.dm.pending===false,JSON.stringify(world.dm));
+  let repost=null;
+  win.fetch=(url,opts)=>{if(String(url).endsWith("/turn"))repost=JSON.parse(opts.body);return new Promise(()=>{});};
+  win.dmResumePending();
+  check("resume reposts the persisted TurnRequest with the same turnId",
+    repost&&repost.turnId==="t-paused"&&repost.action==="I keep listening."&&win.GS.dm.pending===true,
+    JSON.stringify({repost,pending:win.GS.dm.pending}));
+  win.dmAbandonPending();
+  check("explicit abandon is the only path that rejects and clears the pending turn",
+    world.dm.pendingTurnId===null&&(world.dm.rejectedTurnIds||[]).includes("t-paused")&&win.GS.dm.pending===false,
+    JSON.stringify(world.dm));
 }
 
 // ============================================================
@@ -291,6 +371,41 @@ function seedPcHp(world, H) { const sh = world.characters[0].sheet; sh.hp = H; s
   win.applyEvent(world, { type: "hp_changed", payload: { delta: -4 }, source: "declared" });
   const coerce = (world.ledger || []).filter(l => l.data && l.data.kind === "payload-coercion");
   check("H3.7 clean number delta:-4 → NO payload-coercion ledger line", coerce.length === 0, `found=${coerce.length}`);
+}
+
+// ============================================================
+// 9. RESPONSE IDENTITY — bind by pending turn, queue inactive owners, suppress replay.
+// ============================================================
+{ const win=freshDom();
+  const worldA=seedWorld(win); delete win.U.worlds[worldA.id]; worldA.id="w-seam-a";
+  const worldB=seedWorld(win); delete win.U.worlds[worldB.id]; worldB.id="w-seam-b";
+  win.U.worlds[worldA.id]=worldA; win.U.worlds[worldB.id]=worldB; win.U.activeWorldId=worldB.id;
+  worldA.dm={pendingTurnId:"turn-world-a",pendingTurnMeta:{turnId:"turn-world-a",worldId:worldA.id,startedAt:Date.now()}};
+  worldB.dm={pendingTurnId:"turn-world-b",pendingTurnMeta:{turnId:"turn-world-b",worldId:worldB.id,startedAt:Date.now()}};
+  win.GS.dm={turnId:null,pending:false,poll:null,rollReq:null,ask:null,animate:false,telemetry:[]};
+  win.renderWorld=()=>{}; win.wakeReveal=()=>{}; win.saveU=()=>{}; win.postState=()=>{};
+  win.genReserveTopUp=()=>{}; win.turnRevealDrift=()=>{};
+  const response={turnId:"turn-world-a",narration:"Five minutes pass in the first world.",
+    events:[{type:"advance_clock",payload:{minutes:5,cause:"identity probe"}}]};
+  const ambiguous=win.applyResponse({narration:"An ownerless response must not land.",
+    events:[{type:"advance_clock",payload:{minutes:5,cause:"ambiguous probe"}}]});
+  check("identity: an id-less response cannot guess between two pending worlds",
+    ambiguous&&ambiguous.ignored==="ambiguous-turn"&&worldA.clock.min===480&&worldB.clock.min===480,
+    JSON.stringify(ambiguous));
+  const queued=win.applyResponse(response);
+  check("identity: an inactive world's reply queues on its pending-turn owner",
+    queued&&queued.queued===true&&worldA.dm.queuedResponse?.turnId==="turn-world-a",JSON.stringify(queued));
+  check("identity: queuing does not mutate either world's clock",
+    worldA.clock.min===480&&worldB.clock.min===480,JSON.stringify({a:worldA.clock,b:worldB.clock}));
+  win.U.activeWorldId=worldA.id;
+  const applied=win.applyResponse(worldA.dm.queuedResponse);
+  check("identity: the queued reply applies exactly once when its owner becomes active",
+    applied&&applied.ok===true&&worldA.clock.min===485&&worldB.clock.min===480,
+    JSON.stringify({applied,a:worldA.clock,b:worldB.clock}));
+  const duplicate=win.applyResponse(response);
+  check("identity: duplicate delivery is rejected without replaying events",
+    duplicate&&duplicate.ignored==="duplicate-response"&&worldA.clock.min===485,
+    JSON.stringify({duplicate,a:worldA.clock}));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

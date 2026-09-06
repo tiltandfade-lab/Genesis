@@ -1,0 +1,263 @@
+{
+  "turnId": "t-msfki3ck9eoa9",
+  "worldId": "msfjud9ebcves",
+  "action": "I hand Tessa the Altered Low Sluice Order with my right hand. \u201cKeep this. If I play three notes twice, burn it.\u201d Then I sheathe my dagger, take up the lute, and go to the tannery entrance to see who the Circle has sent.",
+  "rolls": [],
+  "digest": {
+    "schema": "beat-digest/v1",
+    "view": "social",
+    "slices": [
+      "scene",
+      "pc",
+      "story-pressure",
+      "continuity",
+      "social",
+      "local-actors"
+    ],
+    "worldId": "msfjud9ebcves",
+    "worldName": "The Brineglass Reach",
+    "clock": {
+      "day": 1,
+      "min": 450,
+      "band": "morning",
+      "exact": "07:30",
+      "session": 0,
+      "knowsTime": false
+    },
+    "location": "The Cobbled Tannery",
+    "pc": {
+      "name": "Mira Quill",
+      "headline": "a Charlatan Human Bard who went out on an adventure",
+      "pronouns": "she",
+      "class": "Bard",
+      "level": 1,
+      "hp": {
+        "cur": 6,
+        "max": 6
+      },
+      "conditions": [],
+      "marks": [
+        {
+          "id": "mk-msfjud9s5npiw",
+          "text": "You were poisoned; your next save against poison has disadvantage.",
+          "kind": "injury",
+          "sinceDay": 0
+        }
+      ],
+      "background": "Charlatan",
+      "gold": 19,
+      "mods": {
+        "str": -3,
+        "dex": 1,
+        "con": -2,
+        "int": 0,
+        "wis": -2,
+        "cha": 2
+      },
+      "skillProfs": [
+        "Deception",
+        "Sleight of Hand",
+        "Perception",
+        "Performance",
+        "Persuasion",
+        "Insight",
+        "Investigation",
+        "Stealth"
+      ],
+      "inventory": [
+        {
+          "id": "msfjud9r7oduu",
+          "name": "Dagger",
+          "qty": 2,
+          "conditions": []
+        },
+        {
+          "id": "msfjud9r36fkx",
+          "name": "Lute",
+          "conditions": []
+        },
+        {
+          "id": "msfkat4zjdxcl",
+          "name": "The Altered Low Sluice Order",
+          "qty": 1,
+          "conditions": []
+        },
+        {
+          "id": "msfjud9rhr2d7",
+          "name": "Leather Armor",
+          "conditions": []
+        }
+      ],
+      "inventoryMore": 8
+    },
+    "powers": [
+      {
+        "clockId": "the-crier-s-circle",
+        "faction": "The Crier's Circle",
+        "dominant": true,
+        "agenda": "become something other than what it is",
+        "method": "rumor and propaganda",
+        "tags": [
+          "popular"
+        ],
+        "clock": "1/6"
+      },
+      {
+        "clockId": "the-orchard-wardens",
+        "faction": "The Orchard-Wardens",
+        "dominant": false,
+        "agenda": "widen its territory or reach",
+        "method": "ritual and the occult",
+        "tags": [
+          "desperate"
+        ],
+        "clock": "0/6"
+      }
+    ],
+    "fronts": [
+      {
+        "clockId": "the-leader-is-corrupt-failing-or-dying-and-the-scramble-to-replace-them-has-begun",
+        "kind": "internal",
+        "danger": "the leader is corrupt, failing, or dying, and the scramble to replace them has begun",
+        "impersonal": null,
+        "clock": "0/6",
+        "closed": false,
+        "dmOnly": {
+          "truth": null,
+          "doom": "displacement \u2014 the people scatter"
+        }
+      }
+    ],
+    "recentLedger": [
+      {
+        "type": "canon",
+        "day": 1,
+        "min": 450,
+        "text": "\u25c6 Mira's near-miss ritual restored Tessa Rill's removed shadow, but bound Mira's three-note musical motif into the Altered Low Sluice Order as an active echo-key."
+      },
+      {
+        "type": "outcome",
+        "day": 1,
+        "min": 450,
+        "text": "\u2726 +1 XP \u2014 12 total."
+      }
+    ],
+    "codex": [
+      {
+        "id": "item:the-altered-low-sluice-order",
+        "kind": "item",
+        "name": "The Altered Low Sluice Order",
+        "fields": {
+          "object": "A document of safe passage, signed by two governments that are currently at war with each other.",
+          "opens": "Proves the negotiations were farther along than either side admitted \u2014 and someone has been sitting on the evidence.",
+          "echoKey": "Mira Quill's three-note motif is now recorded in the order and can awaken its copied ink."
+        },
+        "dm": {
+          "notes": [
+            {
+              "text": "A near-miss restitution ritual returned Tessa Rill's shadow but bound Mira Quill's musical call into the document.",
+              "day": 1,
+              "min": 450
+            }
+          ],
+          "why": "It was issued during a period of negotiation that officially failed.",
+          "opens": "Proves the negotiations were farther along than either side admitted \u2014 and someone has been sitting on the evidence.",
+          "lock": null
+        },
+        "status": {
+          "at": "the-cobbled-tannery",
+          "known": true,
+          "soft": false,
+          "condition": "ok"
+        }
+      }
+    ],
+    "revealed": [
+      "powers",
+      "map",
+      "ledger"
+    ],
+    "ambientPresence": {
+      "count": 3,
+      "texture": "a few locals going about their business"
+    },
+    "prepPending": {
+      "session": 0,
+      "frontiers": [
+        "frontier-s0-0 (urban)",
+        "frontier-s0-1 (dungeon)",
+        "frontier-s0-2 (wilderness)"
+      ],
+      "reason": "no-overlays"
+    },
+    "retrieval": {
+      "omitted": {
+        "codex": 27,
+        "powers": 1,
+        "fronts": 1,
+        "gazetteer": 3
+      },
+      "rule": "Omitted state remains authoritative. Use supplied ids; never invent an omitted fact.",
+      "pinnedCodexIds": [
+        "item:the-altered-low-sluice-order"
+      ],
+      "overTargetBytes": 3549
+    }
+  },
+  "route": {
+    "mode": "freeform-ruling",
+    "reasons": [
+      "open-intent-default"
+    ],
+    "relevantSlices": [
+      "scene",
+      "story-pressure",
+      "relevant-state"
+    ],
+    "modelCall": true
+  },
+  "rulingRequest": {
+    "contractVersion": 1,
+    "kind": "open-intent",
+    "playerAction": "I hand Tessa the Altered Low Sluice Order with my right hand. \u201cKeep this. If I play three notes twice, burn it.\u201d Then I sheathe my dagger, take up the lute, and go to the tannery entrance to see who the Circle has sent.",
+    "principle": "Interpret freely; propose consequences through the engine contract; never mutate state in prose.",
+    "returnFields": [
+      "understoodAction",
+      "ruling",
+      "needsRoll",
+      "proposedCheck",
+      "stakes",
+      "outcomeBranches",
+      "proposedEvents"
+    ],
+    "authority": {
+      "dm": [
+        "intent",
+        "rule-applicability",
+        "difficulty",
+        "advantage-disadvantage",
+        "stakes",
+        "exceptions",
+        "meaning"
+      ],
+      "engine": [
+        "identity",
+        "state",
+        "custody",
+        "dice",
+        "arithmetic",
+        "resources",
+        "clock",
+        "accepted-mutation"
+      ]
+    }
+  },
+  "receipt": null,
+  "lane": "fast",
+  "laneModel": "sonnet",
+  "laneReasons": [
+    "routine:go"
+  ],
+  "lastResolution": null,
+  "_received": 1785902944.6711092
+}

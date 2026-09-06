@@ -1,0 +1,120 @@
+{
+  "turnId": "t-msgbavd9y7hie",
+  "narration": "The rescued mason says your name before the noble can answer. The children repeat it; then the workers do. His smile remains flawless, but its reflection arrives a heartbeat late. He calls the strongbox a civic reward and names his consortium as the city's anonymous benefactor. When you ask who retained them, one wagon driver looks at another. The noble's answer is smooth enough to become history unless you break its rhythm in public. Make a Charisma (Persuasion) check, DC 14, with advantage from the witnesses and the delayed reflection.",
+  "events": [],
+  "rollRequest": {
+    "skill": "Persuasion",
+    "ability": "cha",
+    "dc": 14,
+    "adv": "advantage",
+    "branches": {
+      "success": {
+        "narration": "You make him answer each link separately. The consortium was hired under a guard seal; the seal came from a patron he names only as the Pale Office. The drivers unpin their wagons. In their moving mirrors his perfect face becomes a dry skull wearing borrowed color. The workers name you, not him, and close ranks around the rescued families. He abandons the strongbox and retreats along the aqueduct with no formation left to hide inside.",
+        "events": [
+          {
+            "type": "encounter_resolved",
+            "payload": {
+              "foes": [
+                {
+                  "name": "Bandit Captain",
+                  "cr": 2,
+                  "count": 1,
+                  "victimClass": "false noble"
+                }
+              ],
+              "method": "public testimony, separated questions, and the delayed reflection",
+              "objectiveRef": "prevent the false noble from taking credit for the district's rescue",
+              "outcome": "unmasked and driven off without combat"
+            }
+          },
+          {
+            "type": "fact_canonized",
+            "payload": {
+              "factId": "brineglass-pale-office-patron-chain",
+              "what": "The flawless noble's merchant consortium was retained under a guard seal issued through a higher patron called the Pale Office; rescued families and workers publicly credited Mira instead, and his delayed reflection exposed an undead skull beneath his living guise."
+            }
+          }
+        ]
+      },
+      "nearMiss": {
+        "narration": "He admits the consortium received a guard seal and that the seal came from a patron above the guard, but folds the name beneath applause before you can prise it loose. The rescued families keep shouting yours. Half the workers answer; half accept his wagons and easy story. His delayed reflection watches you while his face bows. He leaves with the strongbox, unable to erase you but still carrying part of the victory away.",
+        "events": [
+          {
+            "type": "encounter_resolved",
+            "payload": {
+              "foes": [
+                {
+                  "name": "Bandit Captain",
+                  "cr": 2,
+                  "count": 1,
+                  "victimClass": "false noble"
+                }
+              ],
+              "method": "contested public testimony",
+              "objectiveRef": "prevent the false noble from taking credit for the district's rescue",
+              "outcome": "partly exposed; withdrew with the strongbox"
+            }
+          },
+          {
+            "type": "fact_canonized",
+            "payload": {
+              "factId": "brineglass-guard-seal-patron-chain",
+              "what": "The merchant consortium admitted it was retained under a guard seal issued by an unnamed higher patron; rescued families publicly credited Mira, though the false noble preserved part of his claim and left with the strongbox."
+            }
+          }
+        ]
+      },
+      "fail": {
+        "narration": "He turns your refusal into an accusation: the strongbox was stolen, the panic was yours, and only his wagons restored order. The rescued mason objects. A driver strikes him down with a whip. The noble's delayed reflection tears free as a skull-shaped shadow while the wagons lock wheel to wheel. The families are behind you, the water channel and road back remain open, and he orders his formation to take you alive.",
+        "events": [
+          {
+            "type": "combat_start",
+            "payload": {
+              "foes": [
+                {
+                  "name": "Bandit Captain",
+                  "count": 1,
+                  "role": "undead false noble"
+                }
+              ],
+              "objectiveRef": "protect the rescued families and expose the false noble",
+              "segmentId": "s11",
+              "scene": {
+                "cover": [
+                  "merchant wagons",
+                  "aqueduct parapet"
+                ],
+                "hazards": [
+                  "wagon wheels",
+                  "twenty-five-foot drop"
+                ],
+                "exits": [
+                  "water channel",
+                  "road back through the district"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "ruling": {
+    "understoodAction": "Mira refuses the reward and false credit, identifies the noble's delayed reflection to the rescued witnesses, and publicly demands the chain of patrons behind his consortium without drawing steel.",
+    "ruling": "The witnesses and visible supernatural tell grant advantage. The check determines whether public truth breaks the noble's wagon formation, divides the crowd, or lets him convert the challenge into an arrest; Mira does not initiate violence and both generated retreats remain available.",
+    "needsRoll": true,
+    "proposedCheck": {
+      "skill": "Persuasion",
+      "ability": "cha",
+      "dc": 14,
+      "adv": "advantage"
+    },
+    "stakes": "Who receives public credit, how much of the patron chain becomes known, custody of the strongbox, and whether the false noble escalates to force.",
+    "outcomeBranches": {
+      "success": "the patron chain is named, the undead guise is exposed, and the wagon formation deserts him",
+      "nearMiss": "the guard-seal link is exposed but the higher patron and strongbox escape",
+      "fail": "the noble turns the crowd story against Mira and orders a telegraphed arrest"
+    },
+    "proposedEvents": []
+  }
+}

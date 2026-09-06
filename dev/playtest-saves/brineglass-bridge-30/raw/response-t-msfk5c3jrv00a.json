@@ -1,0 +1,44 @@
+{
+  "turnId": "t-msfk5c3jrv00a",
+  "narration": "The strap snaps taut across your shoulder as the black brine fans over the glass. Katherine\u2019s oilskin catches; the loose peg spins under the grate exactly as its edge rises. Rescue and jam happen in the same sliding heartbeat\u2014if your footing holds.",
+  "events": [],
+  "rollRequest": {
+    "skill": "Acrobatics",
+    "ability": "dex",
+    "dc": 12,
+    "dcHidden": true,
+    "adv": null,
+    "branches": {
+      "success": {
+        "narration": "Your boots skid, catch, and drive. Katherine slides clear against you while the glass peg wedges crosswise beneath the grate. It stays open a handspan, shuddering around the improvised brace; the pale jointed shape cannot pass, but you can see a ladder descending beside the surging water.",
+        "events": []
+      },
+      "nearMiss": {
+        "narration": "You drag Katherine beyond the jet, but lose your own footing. The peg jams the grate open as intended; you land hard at its edge with the lute strap biting your shoulder and one boot hanging over the dark ladder well.",
+        "events": []
+      },
+      "fail": {
+        "narration": "The strap slips from Katherine\u2019s oilskin before you gain leverage. Your kick still drives the peg under the grate, but Katherine catches the raised rim with both hands and hangs above the dark ladder while black water hammers past her wrists.",
+        "events": []
+      }
+    }
+  },
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Use the lute strap to rescue Katherine while simultaneously turning the removed glass peg into a grate brace.",
+    "ruling": "The combined maneuver is possible but depends on balance and timing under a sudden brine jet, so Acrobatics resolves it.",
+    "needsRoll": true,
+    "proposedCheck": {
+      "skill": "Acrobatics",
+      "dc": 12
+    },
+    "stakes": "The branch determines Katherine's immediate position and whether Mira remains secure; the player's peg-jam idea remains part of every outcome.",
+    "outcomeBranches": [
+      "success",
+      "nearMiss",
+      "fail"
+    ],
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 9: routine action-crisis branches locally. Failure never erases the player's valid grate-jam contribution, but it honestly withholds the rescue objective."
+}

@@ -1,0 +1,263 @@
+{
+  "turnId": "t-msfkj1vhe3w3s",
+  "worldId": "msfjud9ebcves",
+  "action": "I smile and play the three-note call once\u2014not twice. Then I sing the original evacuation order word for word, loudly enough for every sheltered family to hear, and finish by asking the dry official to contradict it in front of its living witnesses.",
+  "rolls": [],
+  "digest": {
+    "schema": "beat-digest/v1",
+    "view": "scene",
+    "slices": [
+      "scene",
+      "pc",
+      "story-pressure",
+      "continuity"
+    ],
+    "worldId": "msfjud9ebcves",
+    "worldName": "The Brineglass Reach",
+    "clock": {
+      "day": 1,
+      "min": 450,
+      "band": "morning",
+      "exact": "07:30",
+      "session": 0,
+      "knowsTime": false
+    },
+    "location": "The Cobbled Tannery",
+    "pc": {
+      "name": "Mira Quill",
+      "headline": "a Charlatan Human Bard who went out on an adventure",
+      "pronouns": "she",
+      "class": "Bard",
+      "level": 1,
+      "hp": {
+        "cur": 6,
+        "max": 6
+      },
+      "conditions": [],
+      "marks": [
+        {
+          "id": "mk-msfjud9s5npiw",
+          "text": "You were poisoned; your next save against poison has disadvantage.",
+          "kind": "injury",
+          "sinceDay": 0
+        }
+      ],
+      "background": "Charlatan",
+      "ac": 12,
+      "inventory": [
+        {
+          "id": "msfjud9rhr2d7",
+          "name": "Leather Armor",
+          "conditions": []
+        },
+        {
+          "id": "msfjud9r7oduu",
+          "name": "Dagger",
+          "qty": 2,
+          "conditions": []
+        }
+      ],
+      "inventoryMore": 9
+    },
+    "powers": [
+      {
+        "clockId": "the-crier-s-circle",
+        "faction": "The Crier's Circle",
+        "dominant": true,
+        "agenda": "become something other than what it is",
+        "method": "rumor and propaganda",
+        "tags": [
+          "popular"
+        ],
+        "clock": "1/6"
+      },
+      {
+        "clockId": "the-orchard-wardens",
+        "faction": "The Orchard-Wardens",
+        "dominant": false,
+        "agenda": "widen its territory or reach",
+        "method": "ritual and the occult",
+        "tags": [
+          "desperate"
+        ],
+        "clock": "0/6"
+      }
+    ],
+    "fronts": [
+      {
+        "clockId": "the-leader-is-corrupt-failing-or-dying-and-the-scramble-to-replace-them-has-begun",
+        "kind": "internal",
+        "danger": "the leader is corrupt, failing, or dying, and the scramble to replace them has begun",
+        "impersonal": null,
+        "clock": "0/6",
+        "closed": false,
+        "dmOnly": {
+          "truth": null,
+          "doom": "displacement \u2014 the people scatter"
+        }
+      },
+      {
+        "clockId": "a-blight-or-plague-is-spreading-toward-the-town",
+        "kind": "external",
+        "danger": "a blight or plague is spreading toward the town",
+        "impersonal": "wildfire",
+        "clock": "0/6",
+        "closed": false,
+        "dmOnly": {
+          "truth": null,
+          "doom": "displacement \u2014 the people scatter"
+        }
+      }
+    ],
+    "recentLedger": [
+      {
+        "type": "outcome",
+        "day": 1,
+        "min": 450,
+        "text": "\u2691 The Altered Low Sluice Order \u2014 claimed-npc (Tessa Rill)."
+      },
+      {
+        "type": "outcome",
+        "day": 1,
+        "min": 450,
+        "text": "Mira entrusts the Altered Low Sluice Order to Tessa Rill with instructions to burn it on a double three-note signal."
+      }
+    ],
+    "codex": [
+      {
+        "id": "item:the-altered-low-sluice-order",
+        "kind": "item",
+        "name": "The Altered Low Sluice Order",
+        "fields": {
+          "object": "A document of safe passage, signed by two governments that are currently at war with each other.",
+          "opens": "Proves the negotiations were farther along than either side admitted \u2014 and someone has been sitting on the evidence."
+        },
+        "dm": {
+          "notes": [
+            {
+              "text": "A near-miss restitution ritual returned Tessa Rill's shadow but bound Mira Quill's musical call into the document.",
+              "day": 1,
+              "min": 450
+            }
+          ],
+          "why": "It was issued during a period of negotiation that officially failed.",
+          "lock": null
+        },
+        "status": {
+          "at": "the-cobbled-tannery",
+          "known": true,
+          "soft": false,
+          "condition": "ok"
+        }
+      }
+    ],
+    "minted": [
+      {
+        "id": "npc:naivara-teinithra",
+        "kind": "npc",
+        "name": "Naivara Teinithra",
+        "genRef": "t-msfki3ck9eoa9"
+      }
+    ],
+    "revealed": [
+      "powers",
+      "map",
+      "ledger"
+    ],
+    "ambientPresence": {
+      "count": 3,
+      "texture": "a few locals going about their business"
+    },
+    "prepPending": {
+      "session": 0,
+      "frontiers": [
+        "frontier-s0-0 (urban)",
+        "frontier-s0-1 (dungeon)",
+        "frontier-s0-2 (wilderness)"
+      ],
+      "reason": "no-overlays"
+    },
+    "itemCustody": [
+      {
+        "item": {
+          "id": "msfkat4zjdxcl",
+          "name": "The Altered Low Sluice Order",
+          "qty": 1,
+          "conditions": [],
+          "codexId": "item:the-altered-low-sluice-order"
+        },
+        "holder": {
+          "kind": "npc",
+          "ref": "npc:tessa-rill",
+          "name": "Tessa Rill"
+        },
+        "note": "Mira entrusts the Altered Low Sluice Order to Tessa Rill with instructions to burn it on a double three-note signal."
+      }
+    ],
+    "retrieval": {
+      "omitted": {
+        "codex": 27,
+        "powers": 1,
+        "gazetteer": 5
+      },
+      "rule": "Omitted state remains authoritative. Use supplied ids; never invent an omitted fact.",
+      "overTargetBytes": 3620
+    }
+  },
+  "route": {
+    "mode": "freeform-ruling",
+    "reasons": [
+      "open-intent-default"
+    ],
+    "relevantSlices": [
+      "scene",
+      "story-pressure",
+      "relevant-state"
+    ],
+    "modelCall": true
+  },
+  "rulingRequest": {
+    "contractVersion": 1,
+    "kind": "open-intent",
+    "playerAction": "I smile and play the three-note call once\u2014not twice. Then I sing the original evacuation order word for word, loudly enough for every sheltered family to hear, and finish by asking the dry official to contradict it in front of its living witnesses.",
+    "principle": "Interpret freely; propose consequences through the engine contract; never mutate state in prose.",
+    "returnFields": [
+      "understoodAction",
+      "ruling",
+      "needsRoll",
+      "proposedCheck",
+      "stakes",
+      "outcomeBranches",
+      "proposedEvents"
+    ],
+    "authority": {
+      "dm": [
+        "intent",
+        "rule-applicability",
+        "difficulty",
+        "advantage-disadvantage",
+        "stakes",
+        "exceptions",
+        "meaning"
+      ],
+      "engine": [
+        "identity",
+        "state",
+        "custody",
+        "dice",
+        "arithmetic",
+        "resources",
+        "clock",
+        "accepted-mutation"
+      ]
+    }
+  },
+  "receipt": null,
+  "lane": "fast",
+  "laneModel": "sonnet",
+  "laneReasons": [
+    "default-fast"
+  ],
+  "lastResolution": null,
+  "_received": 1785902989.4460092
+}

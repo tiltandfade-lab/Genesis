@@ -1,0 +1,23 @@
+{
+  "turnId": "t-msgb3p75o0p18",
+  "narration": "The halberd finds the lie before your boot does. Its blade passes through painted stone, then drops into an open sewer throat hidden beneath the false floor. You score a safe crescent through the rubble with the butt and cross it without testing your luck. The next court is failing in several directions at once: masonry falls upward before crashing sideways, rescue workers form a line beneath trapped windows, and something large hammers inside an iron cage.",
+  "events": [
+    {
+      "type": "encounter_resolved",
+      "payload": {
+        "foes": [],
+        "method": "probed the illusionary floor from trusted rubble with the abandoned halberd",
+        "objectiveRef": "cross the false laboratory floor without falling",
+        "outcome": "safe route marked and crossed"
+      },
+      "source": "declared"
+    },
+    {
+      "type": "walk_advance",
+      "payload": {
+        "toSegment": 10
+      },
+      "source": "declared"
+    }
+  ]
+}

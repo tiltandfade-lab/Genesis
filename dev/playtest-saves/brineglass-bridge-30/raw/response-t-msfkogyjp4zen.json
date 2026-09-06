@@ -1,0 +1,48 @@
+{
+  "turnId": "t-msfkogyjp4zen",
+  "narration": "Malquis taps twice. Yes. Then the old elf\u2014preacher\u2019s hands trembling over the brass\u2014strikes the fresh one\u2013three\u2013two rhythm and closes their fist. Across the tannery, every message tube opens with a sigh. In the fused-glass walls, silhouettes peel free and run like spilled ink toward the feet of the living people who cast them. Voices return as coughs, sobs, and startled laughter throughout the district. Naivara announces what Malquis writes in charcoal: no preserved voice may outrank a living answer; the Circle will choose its next First Voice at noon, in public. Nobody asks whose song the families begin humming while the message passes from shelter to street.",
+  "events": [
+    {
+      "type": "front_closed",
+      "payload": {
+        "ledgerId": "the-leader-is-corrupt-failing-or-dying-and-the-scramble-to-replace-them-has-begun",
+        "how": "First Voice Malquis publicly ordered the archive to release borrowed identities and authorized a living, public succession at noon."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    },
+    {
+      "type": "codex_update",
+      "payload": {
+        "id": "item:the-altered-low-sluice-order",
+        "fields": {
+          "echoKey": "Dormant after Malquis ordered the archive to release borrowed voices and shadows."
+        },
+        "note": "The order remains evidence and a memory of Mira's three-note protocol, but the archive no longer answers it as authority."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    },
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "factId": "brineglass:living-succession-declared",
+        "what": "Malquis Xiloscient ordered all borrowed identities released, barred preserved voices from outranking living answers, and called a public Crier's Circle succession for noon."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    }
+  ],
+  "rollRequest": null,
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Offer Malquis a simple accessible yes/no decision about releasing the archive's stolen identities and returning succession authority to living people.",
+    "ruling": "Malquis chooses yes according to their own established desire to leave one anonymous communal song and end archival substitution. Mira frames the question but does not decide the leader's will.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "The immediate succession front closes through a public living process; the noon choice and broader faction future remain available for later play.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 27: NPC agency used the engine-minted want instead of serving a fixed plot. Front closes from player-authored protocol and Malquis's independent decision."
+}

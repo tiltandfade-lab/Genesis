@@ -1,0 +1,496 @@
+{
+  "turnId": "t-msgazol57f953",
+  "worldId": "msfjud9ebcves",
+  "action": "I do not fight the drowned guards. From the drainage lip I cast Minor Illusion at the mud-caked dead end, reproducing the sergeant’s whistle-click exactly. When they turn toward it, I move along the opposite wall toward the next exit; if they ignore it, I retreat through the drain.",
+  "rolls": [],
+  "digest": {
+    "schema": "beat-digest/v1",
+    "view": "combat",
+    "slices": [
+      "scene",
+      "pc",
+      "story-pressure",
+      "continuity",
+      "combat",
+      "combat-state",
+      "active-walk"
+    ],
+    "worldId": "msfjud9ebcves",
+    "worldName": "The Brineglass Reach",
+    "clock": {
+      "day": 1,
+      "min": 1191,
+      "band": "dusk",
+      "exact": "19:51",
+      "session": 0,
+      "knowsTime": false
+    },
+    "location": "Shadowed & Lawless — segment 8: The Undead Rising, Dead End Hall, 20' x 30' rectangle, magic-glow",
+    "pc": {
+      "id": "msfjud9rbeahy",
+      "name": "Mira Quill",
+      "class": "Bard",
+      "level": 3,
+      "hp": {
+        "cur": 6,
+        "max": 12
+      },
+      "conditions": [],
+      "marks": [
+        {
+          "id": "mk-msfjud9s5npiw",
+          "text": "You were poisoned; your next save against poison has disadvantage.",
+          "kind": "injury",
+          "sinceDay": 0
+        }
+      ],
+      "ac": 12,
+      "profBonus": 2,
+      "mods": {
+        "str": -3,
+        "dex": 1,
+        "con": -2,
+        "int": 0,
+        "wis": -2,
+        "cha": 2
+      },
+      "saveProfs": [
+        "dex",
+        "cha"
+      ],
+      "skillProfs": [
+        "Deception",
+        "Sleight of Hand",
+        "Perception",
+        "Performance",
+        "Persuasion",
+        "Insight",
+        "Investigation",
+        "Stealth"
+      ],
+      "resources": {
+        "hp": {
+          "cur": 6,
+          "max": 12
+        },
+        "slots": {
+          "1": "4/4",
+          "2": "2/2"
+        },
+        "pools": {
+          "Bardic Inspiration": "2/2 (d6)"
+        },
+        "hitDice": {
+          "cur": 3,
+          "max": 3,
+          "die": 8
+        }
+      },
+      "equipped": {
+        "mainHand": "msfjud9r7oduu",
+        "offHand": null,
+        "armor": "msfjud9rhr2d7"
+      },
+      "equippedWeapons": {
+        "mainHand": {
+          "weaponName": "Dagger",
+          "baseName": "Dagger",
+          "properties": [
+            "Finesse",
+            "Light",
+            "Thrown (Range 20/60)"
+          ],
+          "finesse": true,
+          "ranged": false,
+          "grip": "1h",
+          "magicBonus": 0,
+          "atkBonus": 0,
+          "rider": null,
+          "dmg": [
+            {
+              "n": 1,
+              "die": 4,
+              "bonus": 1,
+              "type": "piercing"
+            }
+          ]
+        },
+        "offHand": null
+      },
+      "inventory": [
+        {
+          "id": "msfjud9rhr2d7",
+          "name": "Leather Armor"
+        },
+        {
+          "id": "msfjud9r7oduu",
+          "name": "Dagger",
+          "qty": 2
+        }
+      ],
+      "cantrips": [
+        "Minor Illusion",
+        "Vicious Mockery"
+      ],
+      "spells": [
+        "Disguise Self",
+        "Dissonant Whispers",
+        "Faerie Fire",
+        "Healing Word"
+      ],
+      "inventoryMore": 9
+    },
+    "powers": [
+      {
+        "clockId": "the-crier-s-circle",
+        "faction": "The Crier's Circle",
+        "dominant": true,
+        "agenda": "become something other than what it is",
+        "method": "rumor and propaganda",
+        "tags": [
+          "popular"
+        ],
+        "clock": "3/6"
+      }
+    ],
+    "fronts": [
+      {
+        "clockId": "a-blight-or-plague-is-spreading-toward-the-town",
+        "kind": "external",
+        "danger": "a blight or plague is spreading toward the town",
+        "impersonal": "wildfire",
+        "clock": "0/6",
+        "closed": false,
+        "dmOnly": {
+          "truth": null,
+          "doom": "displacement — the people scatter"
+        }
+      }
+    ],
+    "recentLedger": [
+      {
+        "type": "outcome",
+        "day": 1,
+        "min": 1191,
+        "text": "Mira sets one lit candle afloat through the flooded dead-end hall to test what the risen guards follow.",
+        "matched": true
+      }
+    ],
+    "codex": [
+      {
+        "id": "location:amber-glass-quay",
+        "kind": "location",
+        "name": "Amber-Glass Quay",
+        "fields": {
+          "type": "The water tower platform"
+        },
+        "dm": {
+          "secret": "Gave an individual family perpetual easement over the mill road in exchange for a loan; the loan was repaid; the easement was never revoked; the family is now charging tolls on grounds the town cannot legally contest.",
+          "secretBand": "Grounded",
+          "itemsPool": "realm-items-frontier"
+        }
+      }
+    ],
+    "activeWalk": {
+      "nodeId": "frontier-s0-0",
+      "place": "Shadowed & Lawless",
+      "environment": "urban",
+      "topology": "The Rundown",
+      "skin": {
+        "text": "A specific song is being hummed by strangers who've never met. — The same unfamiliar tune, unconsciously, by people across the district who can't say where they learned it.",
+        "band": "Strange"
+      },
+      "risk": {
+        "danger": "risky",
+        "reward": "good",
+        "stakes": "loot-risk",
+        "trace": "clock",
+        "escapes": [
+          "flee",
+          "environment"
+        ],
+        "clock": {
+          "kind": "heat",
+          "note": "Heat is the default — you're already Burning (Heat 3)."
+        },
+        "promise": "Uncommon: Trident of Fish Command",
+        "telegraphs": [
+          {
+            "kind": "rumor",
+            "text": "Word on the street: Corrupt Guard holds this ground."
+          }
+        ]
+      },
+      "spiceTier": "baseline",
+      "cursor": {
+        "current": 8,
+        "total": 10,
+        "done": false
+      },
+      "segments": [
+        {
+          "num": 7,
+          "label": "Escalation",
+          "isFinale": false,
+          "state": "behind",
+          "approach": true,
+          "gist": "The Mob Surge / Hazard",
+          "scene": {
+            "type": "The Mob Surge",
+            "description": "A crowd ignited by rumor, preaching, or panic swells and turns violent, surging toward the party's position."
+          },
+          "area": {
+            "type": "Grand Chamber",
+            "dims": "40' x 40' square",
+            "side": "Fully ruined roof, 10' x 20' intact covered side-area."
+          },
+          "encounter": {
+            "type": "Hazard",
+            "text": "Urban Terrain: Deep Mud / Offal: A section of unpaved slum is flooded with muck. Treat as Difficult Terrain. A DC 11 Constitution save is required to avoid retching (Disadvantage on next attack/check).",
+            "isEnemy": false,
+            "composition": null,
+            "tactic": null
+          },
+          "resolution": {
+            "state": "resolved",
+            "method": "perfectly timed runoff crawl beneath the crowd’s sightline",
+            "outcome": "crossed unseen",
+            "objectiveRef": "escape the mob surge through the drainage arch"
+          },
+          "interactable": {
+            "name": "water pump",
+            "flavor": null,
+            "tags": [
+              "Resource",
+              "Hazard"
+            ],
+            "signal": "Loud",
+            "visibility": "Obvious"
+          },
+          "footing": {
+            "name": "Broken Cobblestones",
+            "impact": "The stones are broken or dislodged, counting as light rubble; this increases the DC of Dexterity (Acrobatics) checks by 2."
+          },
+          "reskin": {
+            "ref": "S7",
+            "encounterState": "resolved",
+            "encounterResolution": {
+              "method": "perfectly timed runoff crawl beneath the crowd’s sightline",
+              "outcome": "crossed unseen",
+              "objectiveRef": "escape the mob surge through the drainage arch"
+            }
+          },
+          "effectDie": null,
+          "light": "dark",
+          "dressing": {
+            "text": "Bones arranged into lines or clusters.",
+            "condition": "Decayed"
+          },
+          "atmo": "hammering from a distant workshop",
+          "creatures": null,
+          "surface": null
+        },
+        {
+          "num": 8,
+          "label": "Escalation",
+          "isFinale": false,
+          "state": "here",
+          "gist": "The Undead Rising / Enemy",
+          "scene": {
+            "type": "The Undead Rising",
+            "description": "Graves and crypts overflow; the dead rise confused or malevolent, filling streets and buildings."
+          },
+          "area": {
+            "type": "Dead End Hall",
+            "dims": "20' x 30' rectangle",
+            "side": "10' x 10' secret room hidden behind the dead end."
+          },
+          "encounter": {
+            "type": "Enemy",
+            "text": "The Crowd (Corrupt Guard): 2d6+2 Low CR — Mob Mentality: Civilians or rioters surge forward in mass. They chain the Help action and scatter if their apparent leader falls first.",
+            "isEnemy": true,
+            "composition": "The Crowd",
+            "tactic": "Mob Mentality: Civilians or rioters surge forward in mass. They chain the Help action and scatter if their apparent leader falls first."
+          },
+          "resolution": null,
+          "interactable": {
+            "name": "candle stub",
+            "flavor": null,
+            "tags": [
+              "Resource",
+              "Clue"
+            ],
+            "signal": "Quiet",
+            "visibility": "Obvious"
+          },
+          "footing": {
+            "name": "Flooded Street",
+            "impact": "2 feet of murky, stagnant water. Counts as _Difficult Terrain_ and grants improved cover to Small creatures."
+          },
+          "reskin": null,
+          "effectDie": null,
+          "light": "magic-glow",
+          "dressing": {
+            "text": "Mud clumps under a ledge; something nested there.",
+            "condition": "Fresh"
+          },
+          "atmo": "manure smell",
+          "creatures": [
+            {
+              "name": "Guard",
+              "realm": null,
+              "summary": null
+            }
+          ],
+          "surface": null
+        },
+        {
+          "num": 9,
+          "label": "Event Scene",
+          "isFinale": false,
+          "state": "ahead",
+          "approach": true,
+          "gist": "The Convergence of Infinite Threads / Hazard",
+          "scene": {
+            "type": "The Convergence of Infinite Threads",
+            "description": "A moment where all factions, powers, timelines, and possibilities gather in one space; what happens here echoes across realities."
+          },
+          "area": {
+            "type": "Laboratory",
+            "dims": "30' x 30' square",
+            "side": "10' x 10' reinforced containment cell."
+          },
+          "encounter": {
+            "type": "Hazard",
+            "text": "Alchemical/Magical: Illusionary Wall / Floor: A magical prank hides a brick wall or open sewer grate. DC 15 Investigation to discern. Failure means walking face-first into brick or falling 10 feet.",
+            "isEnemy": false,
+            "composition": null,
+            "tactic": null
+          },
+          "resolution": null,
+          "interactable": {
+            "name": "guard's halberd",
+            "flavor": null,
+            "tags": [
+              "Resource",
+              "Clue"
+            ],
+            "signal": "Moderate",
+            "visibility": "Obvious"
+          },
+          "footing": {
+            "name": "Light Debris / Rubble",
+            "impact": "Discarded junk. Counts as _Difficult Terrain_ and increases the DC of Dexterity (Acrobatics) checks by 2."
+          },
+          "reskin": null,
+          "effectDie": null,
+          "light": "torchlit",
+          "dressing": {
+            "text": "Damp streak down a wall with mineral bloom.",
+            "condition": "Uncanny"
+          },
+          "atmo": "downdraft, strong",
+          "creatures": null,
+          "surface": null
+        }
+      ],
+      "ambientPresence": null
+    },
+    "levelUp": {
+      "status": "pending",
+      "from": 1,
+      "to": 3,
+      "cantrips": 0,
+      "spells": 2,
+      "asiCount": 0,
+      "subclassName": "College of Lore"
+    },
+    "itemCustody": [
+      {
+        "item": {
+          "id": "msgayyjmqw4is",
+          "name": "Candle",
+          "qty": 1,
+          "conditions": [],
+          "codexId": null
+        },
+        "holder": {
+          "kind": "object",
+          "ref": "walk:frontier-s0-0:s8:flooded-current",
+          "name": "the flooded current"
+        },
+        "intent": "place",
+        "note": "Mira sets one lit candle afloat through the flooded dead-end hall to test what the risen guards follow."
+      }
+    ],
+    "retrieval": {
+      "omitted": {
+        "codex": 32,
+        "powers": 2,
+        "fronts": 1,
+        "gazetteer": 5
+      },
+      "rule": "Omitted state remains authoritative. Use supplied ids; never invent an omitted fact.",
+      "overTargetBytes": 8240
+    }
+  },
+  "route": {
+    "mode": "freeform-ruling",
+    "reasons": [
+      "open-intent-default"
+    ],
+    "relevantSlices": [
+      "scene",
+      "story-pressure",
+      "relevant-state"
+    ],
+    "modelCall": true
+  },
+  "rulingRequest": {
+    "contractVersion": 1,
+    "kind": "open-intent",
+    "playerAction": "I do not fight the drowned guards. From the drainage lip I cast Minor Illusion at the mud-caked dead end, reproducing the sergeant’s whistle-click exactly. When they turn toward it, I move along the opposite wall toward the next exit; if they ignore it, I retreat through the drain.",
+    "principle": "Interpret freely; propose consequences through the engine contract; never mutate state in prose.",
+    "returnFields": [
+      "understoodAction",
+      "ruling",
+      "needsRoll",
+      "proposedCheck",
+      "stakes",
+      "outcomeBranches",
+      "proposedEvents"
+    ],
+    "authority": {
+      "dm": [
+        "intent",
+        "rule-applicability",
+        "difficulty",
+        "advantage-disadvantage",
+        "stakes",
+        "exceptions",
+        "meaning"
+      ],
+      "engine": [
+        "identity",
+        "state",
+        "custody",
+        "dice",
+        "arithmetic",
+        "resources",
+        "clock",
+        "accepted-mutation"
+      ]
+    }
+  },
+  "receipt": null,
+  "lane": "deep",
+  "laneModel": "opus",
+  "laneReasons": [
+    "combat-action"
+  ],
+  "narrationBudget": {
+    "targetWords": 110,
+    "maxWords": 160
+  },
+  "lastResolution": null
+}

@@ -1,0 +1,51 @@
+{
+  "turnId": "t-msfkrnkcbnb6p",
+  "narration": "The new tube takes the one\u2013three\u2013two rhythm without echoing it back. For several seconds there is only rain on the tannery roof. Then a living voice answers from very far away, breathless and young: \u201cI heard you. The stone hives by the old wheel are singing your shelter song. The bees came back this morning, but they are made of glass.\u201d The connection closes with the creak of a vast turning wheel. Around you, the Living-First Song continues without needing the tube at all. The instrument in your hand has remembered only the answer, not your command.",
+  "events": [
+    {
+      "type": "item_changed",
+      "payload": {
+        "add": [
+          {
+            "name": "The First Answer Tube",
+            "qty": 1,
+            "codexId": "item:the-first-answer-tube"
+          }
+        ],
+        "note": "Naivara gives Mira the First Answer Tube, commemorating the live challenge protocol that broke the archive's authority."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    },
+    {
+      "type": "codex_contact",
+      "payload": {
+        "id": "item:the-first-answer-tube",
+        "engaged": true
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    },
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "factId": "brineglass:first-answer-stone-hives",
+        "what": "The First Answer Tube carried a live reply from the stone hives by the old creaking wheel: the bees returned that morning made of glass and are singing the Living-First Song."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    }
+  ],
+  "rollRequest": null,
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Accept the relationship-rooted tube, key it with the live challenge rhythm and new principle, then wait without prescribing who must answer.",
+    "ruling": "The tracked keepsake enters Mira's inventory and produces one distant living reply tied to the world's previously rolled nearby stone hives. It creates an optional next root rather than moving Mira there.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "The Low Sluice crisis is resolved; a strange but non-immediate living signal offers a future direction.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 30: full session close with commemorative item and optional world-rooted hook. Digest spotlight named the newly minted First Answer Tube but entity retrieval incorrectly supplied the older Shadowless Message Tube's unrelated generated fob fields."
+}

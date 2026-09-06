@@ -1,0 +1,92 @@
+{
+  "turnId": "t-msgaulc0f2xxn",
+  "narration": "You knot one costume above the pump where every shoulder can see it, then send the crowd’s own phrase back from the drainage arch in the voice of a street refrain. Heads turn before bodies do. The surge begins to shear around the basin, opening a wet outer line—but if your echo sounds like mockery instead of agreement, the same motion will point straight at you. Make a Charisma (Performance) check, DC 14.",
+  "events": [
+    {
+      "type": "walk_advance",
+      "payload": {
+        "toSeg": 7
+      },
+      "source": "declared"
+    },
+    {
+      "type": "item_transfer",
+      "payload": {
+        "itemId": "msfjud9rgenzo",
+        "qty": 1,
+        "to": {
+          "kind": "object",
+          "ref": "walk:frontier-s0-0:s7:water-pump",
+          "name": "the water pump"
+        },
+        "intent": "place",
+        "note": "Mira knots one costume high on the water pump as a false rally flag while crossing the mob square."
+      },
+      "source": "declared"
+    }
+  ],
+  "rollRequest": {
+    "skill": "Performance",
+    "ability": "cha",
+    "dc": 14,
+    "branches": {
+      "success": {
+        "narration": "Your false chorus catches. The front rank answers it and wheels toward the bright cloth; those behind follow the motion without knowing why. You keep the outer curb, step over the broken stones, and reach the drainage arch while the crowd argues with its own invented leader.",
+        "events": [
+          {
+            "type": "encounter_resolved",
+            "source": "branch",
+            "payload": {
+              "foes": [],
+              "method": "false rally flag and echoed crowd refrain",
+              "objectiveRef": "cross the mob surge without being swallowed by it",
+              "outcome": "diverted and bypassed"
+            }
+          }
+        ]
+      },
+      "nearMiss": {
+        "narration": "Half the square turns toward the cloth; the other half sees you moving. You reach the drainage arch, but a thrown cobble clips your shoulder and the crowd tears the costume from the pump behind you. The route is crossed, not quiet.",
+        "events": [
+          {
+            "type": "hp_changed",
+            "source": "branch",
+            "payload": {
+              "delta": -1
+            }
+          },
+          {
+            "type": "encounter_resolved",
+            "source": "branch",
+            "payload": {
+              "foes": [],
+              "method": "costume decoy and a bruising outer-curb crossing",
+              "objectiveRef": "cross the mob surge without being swallowed by it",
+              "outcome": "crossed under pursuit"
+            }
+          }
+        ]
+      },
+      "fail": {
+        "narration": "The echoed phrase lands as ridicule. Faces turn from the pump to you, and the outer curb disappears under a sideways shove. You hit the broken stones hard and crawl back to the cart-rut mouth before the surge closes, bruised, seen, and still on the near side of the drainage arch.",
+        "events": [
+          {
+            "type": "hp_changed",
+            "source": "branch",
+            "payload": {
+              "delta": -2
+            }
+          },
+          {
+            "type": "clock_advanced",
+            "source": "branch",
+            "payload": {
+              "id": "the-crier-s-circle",
+              "n": 1
+            }
+          }
+        ]
+      }
+    }
+  }
+}

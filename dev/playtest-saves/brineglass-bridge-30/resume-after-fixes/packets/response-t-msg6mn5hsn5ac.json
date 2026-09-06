@@ -1,0 +1,23 @@
+{
+  "turnId": "t-msg6mn5hsn5ac",
+  "narration": "Your false bell turns both masks toward the far roof. The cut rope snaps, but the loaded sled hesitates on one warped runner; gravity needs a precise kick before the guards look back. Time it well and the crates will divide them at the sinkhole. Miss, and the sled will clang broadside while both still share a clear route to you. Make a Dexterity (Sleight of Hand) check, DC 12.",
+  "events": [],
+  "rollRequest": {
+    "skill": "Sleight of Hand",
+    "ability": "dex",
+    "dc": 12,
+    "adv": null
+  },
+  "ruling": {
+    "understoodAction": "Use Minor Illusion as a diversion, release the loaded mud-sled, and split the guards with the sinkhole.",
+    "ruling": "The illusion works; placing the unstable sled requires precise timing.",
+    "needsRoll": true,
+    "proposedCheck": {
+      "skill": "Sleight of Hand",
+      "dc": 12
+    },
+    "stakes": "Success separates the guards before combat; failure alerts both with an open route to Mira.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  }
+}

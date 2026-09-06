@@ -1,0 +1,51 @@
+{
+  "turnId": "t-msfk9yl9cbqzv",
+  "narration": "At \u201cwarmth,\u201d the sorting arm opens every ivory finger. The new writing vanishes from the order, leaving the older instructions intact. Then the arm points\u2014not at either passage, but at a narrow slot hidden between them. When you present the slip, the slot drinks only the blank-oval correction ink; the original words remain. Glass hinges unfold along the warm-draft wall, revealing a small archive chamber where sealed message tubes hang in ranks like sleeping bells. From the black-water passage comes one angry knock. From the archive comes William\u2019s three-note rhythm, played faintly by dozens of tubes at once.",
+  "events": [
+    {
+      "type": "item_changed",
+      "payload": {
+        "add": [
+          {
+            "name": "The Altered Low Sluice Order",
+            "qty": 1,
+            "codexId": "item:the-altered-low-sluice-order"
+          }
+        ],
+        "note": "Mira takes possession of the engine-minted Altered Low Sluice Order after presenting its countersign."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    },
+    {
+      "type": "codex_contact",
+      "payload": {
+        "id": "item:the-altered-low-sluice-order",
+        "engaged": true
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    },
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "factId": "brineglass:warmth-opens-archive",
+        "what": "The countersign 'warmth' makes the dispatch mechanism strip the shadowless correction ink and open a hidden archive of sealed message tubes."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    }
+  ],
+  "rollRequest": null,
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Use the discovered ninth word as a countersign while presenting the altered order to the warm-draft mechanism.",
+    "ruling": "The correct established countersign and matching document activate the mechanism without a roll.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "A hidden archive is open; the hostile black-water passage remains active, and William's signal is being echoed from the tubes.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 13: correct player-discovered password works directly. The minted document becomes a real carried item with Codex identity; no route or next action is selected for Mira."
+}

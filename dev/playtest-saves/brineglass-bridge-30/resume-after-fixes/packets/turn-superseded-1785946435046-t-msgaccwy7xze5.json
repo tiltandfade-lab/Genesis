@@ -1,0 +1,364 @@
+{
+  "turnId": "t-msgaccwy7xze5",
+  "worldId": "msfjud9ebcves",
+  "action": "I do not try the cage again. I climb the alley belfry, tie the opened packet of orders to its clapper beside the scorched tag, and ring until the pages and names are visible from every window. Then I take the roof toward segment four before the office boots reach the street.",
+  "rolls": [],
+  "digest": {
+    "schema": "beat-digest/v1",
+    "view": "inventory",
+    "slices": [
+      "scene",
+      "pc",
+      "story-pressure",
+      "continuity",
+      "inventory",
+      "item-custody"
+    ],
+    "worldId": "msfjud9ebcves",
+    "worldName": "The Brineglass Reach",
+    "clock": {
+      "day": 1,
+      "min": 1116,
+      "band": "dusk",
+      "exact": "18:36",
+      "session": 0,
+      "knowsTime": false
+    },
+    "location": "Shadowed & Lawless — segment 5: The Dream-Touched Boarding House, Standard Room, 20' x 20' square, torchlit",
+    "pc": {
+      "id": "msfjud9rbeahy",
+      "name": "Mira Quill",
+      "class": "Bard",
+      "level": 3,
+      "hp": {
+        "cur": 12,
+        "max": 12
+      },
+      "conditions": [],
+      "marks": [
+        {
+          "id": "mk-msfjud9s5npiw",
+          "text": "You were poisoned; your next save against poison has disadvantage.",
+          "kind": "injury",
+          "sinceDay": 0
+        }
+      ],
+      "gold": 19,
+      "inventory": [
+        {
+          "id": "msg89nxu08g6s",
+          "name": "Copies of Venn’s Void Orders",
+          "qty": 1,
+          "codexId": "item:copies-of-venns-void-orders"
+        },
+        {
+          "id": "msfjud9rhr2d7",
+          "name": "Leather Armor"
+        },
+        {
+          "id": "msfjud9r7oduu",
+          "name": "Dagger",
+          "qty": 2
+        },
+        {
+          "id": "msfjud9r36fkx",
+          "name": "Lute"
+        },
+        {
+          "id": "msfjud9rn35kw",
+          "name": "Backpack"
+        },
+        {
+          "id": "msfjud9r0k2m0",
+          "name": "Bedroll"
+        },
+        {
+          "id": "msfjud9rgenzo",
+          "name": "Costume",
+          "qty": 2
+        },
+        {
+          "id": "msfjud9rqgk9r",
+          "name": "Candle",
+          "qty": 4
+        }
+      ],
+      "equipped": {
+        "mainHand": "msfjud9r7oduu",
+        "offHand": null,
+        "armor": "msfjud9rhr2d7"
+      },
+      "equippedWeapons": {
+        "mainHand": {
+          "weaponName": "Dagger",
+          "baseName": "Dagger",
+          "properties": [
+            "Finesse",
+            "Light",
+            "Thrown (Range 20/60)"
+          ],
+          "finesse": true,
+          "ranged": false,
+          "grip": "1h",
+          "magicBonus": 0,
+          "atkBonus": 0,
+          "rider": null,
+          "dmg": [
+            {
+              "n": 1,
+              "die": 4,
+              "bonus": 1,
+              "type": "piercing"
+            }
+          ]
+        },
+        "offHand": null
+      },
+      "inventoryMore": 4
+    },
+    "powers": [
+      {
+        "clockId": "the-crier-s-circle",
+        "faction": "The Crier's Circle",
+        "dominant": true,
+        "agenda": "become something other than what it is",
+        "method": "rumor and propaganda",
+        "tags": [
+          "popular"
+        ],
+        "clock": "2/6"
+      }
+    ],
+    "fronts": [
+      {
+        "clockId": "a-blight-or-plague-is-spreading-toward-the-town",
+        "kind": "external",
+        "danger": "a blight or plague is spreading toward the town",
+        "impersonal": "wildfire",
+        "clock": "0/6",
+        "closed": false,
+        "dmOnly": {
+          "truth": null,
+          "doom": "displacement — the people scatter"
+        }
+      }
+    ],
+    "recentLedger": [
+      {
+        "type": "clock",
+        "day": 1,
+        "min": 1116,
+        "text": "☼ The Crier's Circle: clock 2/6."
+      }
+    ],
+    "codex": [
+      {
+        "id": "item:copies-of-venns-void-orders",
+        "kind": "item",
+        "name": "Copies of Venn’s Void Orders",
+        "fields": {
+          "summary": "An oilskin packet of copied guard orders naming voice-collection sites, payments, and use of the three-note command key on occupied rooms."
+        },
+        "dm": {
+          "truth": "Venn made three copies: Mira carries one, Venn retains one, and the courier carries the third toward another public record."
+        }
+      }
+    ],
+    "activeWalk": {
+      "nodeId": "frontier-s0-0",
+      "place": "Shadowed & Lawless",
+      "environment": "urban",
+      "topology": "The Rundown",
+      "skin": {
+        "text": "A specific song is being hummed by strangers who've never met. — The same unfamiliar tune, unconsciously, by people across the district who can't say where they learned it.",
+        "band": "Strange"
+      },
+      "risk": {
+        "danger": "risky",
+        "reward": "good",
+        "stakes": "loot-risk",
+        "trace": "clock",
+        "escapes": [
+          "flee",
+          "environment"
+        ],
+        "clock": {
+          "kind": "heat",
+          "note": "Heat is the default — you're already Burning (Heat 3)."
+        },
+        "promise": "Uncommon: Trident of Fish Command",
+        "telegraphs": [
+          {
+            "kind": "rumor",
+            "text": "Word on the street: Corrupt Guard holds this ground."
+          }
+        ]
+      },
+      "spiceTier": "baseline",
+      "cursor": {
+        "current": 5,
+        "total": 10,
+        "done": false
+      },
+      "segments": [
+        {
+          "num": 5,
+          "label": "Hub",
+          "isFinale": false,
+          "state": "here",
+          "gist": "The Dream-Touched Boarding House / Problem",
+          "scene": {
+            "type": "The Dream-Touched Boarding House",
+            "description": "A flophouse where guests share feverish prophetic dreams; the landlord claims the building sits on a ley line and charges extra for the visions"
+          },
+          "area": {
+            "type": "Standard Room",
+            "dims": "20' x 20' square",
+            "side": "10' x 20' attached hallway."
+          },
+          "encounter": {
+            "type": "Problem",
+            "text": "Street Performer — DC 14 Wisdom (Insight) to realize they are a pickpocket or DC 13 Dexterity (Stealth) to blend in.",
+            "isEnemy": false,
+            "composition": null,
+            "tactic": null
+          },
+          "resolution": null,
+          "interactable": {
+            "name": "alley belfry",
+            "flavor": null,
+            "tags": [
+              "Distraction",
+              "Hazard"
+            ],
+            "signal": "Loud",
+            "visibility": "Obvious"
+          },
+          "footing": {
+            "name": "Dense Rubble",
+            "impact": "A collapsed wall blocking the path. Counts as _Difficult Terrain_."
+          },
+          "reskin": null,
+          "effectDie": null,
+          "light": "torchlit",
+          "dressing": {
+            "text": "Cloth tag tied to a hook with initials.",
+            "condition": "Burned/Scorched"
+          },
+          "atmo": "cold draft",
+          "creatures": null,
+          "surface": null
+        }
+      ],
+      "ambientPresence": null
+    },
+    "levelUp": {
+      "status": "pending",
+      "from": 1,
+      "to": 3,
+      "cantrips": 0,
+      "spells": 2,
+      "asiCount": 0,
+      "subclassName": "College of Lore"
+    },
+    "itemCustody": [
+      {
+        "item": {
+          "id": "msg7to0eh5tyc",
+          "name": "Scorched Cloth Room Tag",
+          "qty": 1,
+          "conditions": [],
+          "codexId": null
+        },
+        "holder": {
+          "kind": "object",
+          "ref": "walk:frontier-s0-0:s5:alley-belfry",
+          "name": "the alley belfry"
+        },
+        "intent": "place",
+        "note": "Mira ties the scorched O.A.W.—7 room tag beneath the alley belfry clapper as bait."
+      }
+    ],
+    "retrieval": {
+      "omitted": {
+        "codex": 33,
+        "powers": 2,
+        "fronts": 1,
+        "gazetteer": 5
+      },
+      "rule": "Omitted state remains authoritative. Use supplied ids; never invent an omitted fact.",
+      "pinnedCodexIds": [
+        "item:copies-of-venns-void-orders"
+      ],
+      "actionCodexIds": [
+        "item:copies-of-venns-void-orders"
+      ],
+      "overTargetBytes": 5009
+    }
+  },
+  "route": {
+    "mode": "freeform-ruling",
+    "reasons": [
+      "open-intent-default"
+    ],
+    "relevantSlices": [
+      "scene",
+      "story-pressure",
+      "relevant-state"
+    ],
+    "modelCall": true
+  },
+  "rulingRequest": {
+    "contractVersion": 1,
+    "kind": "open-intent",
+    "playerAction": "I do not try the cage again. I climb the alley belfry, tie the opened packet of orders to its clapper beside the scorched tag, and ring until the pages and names are visible from every window. Then I take the roof toward segment four before the office boots reach the street.",
+    "principle": "Interpret freely; propose consequences through the engine contract; never mutate state in prose.",
+    "returnFields": [
+      "understoodAction",
+      "ruling",
+      "needsRoll",
+      "proposedCheck",
+      "stakes",
+      "outcomeBranches",
+      "proposedEvents"
+    ],
+    "authority": {
+      "dm": [
+        "intent",
+        "rule-applicability",
+        "difficulty",
+        "advantage-disadvantage",
+        "stakes",
+        "exceptions",
+        "meaning"
+      ],
+      "engine": [
+        "identity",
+        "state",
+        "custody",
+        "dice",
+        "arithmetic",
+        "resources",
+        "clock",
+        "accepted-mutation"
+      ]
+    }
+  },
+  "receipt": null,
+  "lane": "fast",
+  "laneModel": "sonnet",
+  "laneReasons": [
+    "default-fast"
+  ],
+  "narrationBudget": {
+    "targetWords": 60,
+    "maxWords": 75
+  },
+  "lastResolution": {
+    "turnId": "t-msgaby1urswxw",
+    "skill": "Sleight of Hand",
+    "total": 9,
+    "degree": "failure",
+    "branch": "fail"
+  }
+}

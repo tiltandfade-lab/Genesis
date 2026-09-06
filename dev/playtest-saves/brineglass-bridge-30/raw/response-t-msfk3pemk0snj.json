@@ -1,0 +1,25 @@
+{
+  "turnId": "t-msfk3pemk0snj",
+  "narration": "The reply-knocks stop. For three breaths there is only rain and the grate\u2019s warm exhale. Then a bolt scrapes somewhere beneath you\u2014drawn halfway, no farther\u2014and a voice distorted by stone answers, \u201cOrders do not carry names. Give the ninth word.\u201d Katherine silently mouths, Ninth word? Whoever is below knows the Circle\u2019s procedure well enough to test you, but your invented inspection has brought a hand to the hidden lock.",
+  "events": [],
+  "rollRequest": {
+    "skill": "Deception",
+    "ability": "cha",
+    "dcHidden": true,
+    "adv": null
+  },
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Impersonate a Crier's Circle official and bluff the unseen occupant into identifying the order or opening the passage.",
+    "ruling": "The deception is plausible enough to engage the hidden listener, but they issue a countersign challenge. Resolve with Deception.",
+    "needsRoll": true,
+    "proposedCheck": {
+      "skill": "Deception",
+      "dc": 14
+    },
+    "stakes": "A success draws out identifying information and opens the inner catch; a miss exposes the false inspection and lets the occupant react.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 7: dramatic deception kept live rather than branched because the result determines identity, access, and opposition."
+}

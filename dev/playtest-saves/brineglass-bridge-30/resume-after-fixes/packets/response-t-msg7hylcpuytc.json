@@ -1,0 +1,37 @@
+{
+  "turnId": "t-msg7hylcpuytc",
+  "narration": "The roofline empties into a mud-choked courtyard where three generations of law survive on the same wall. Beneath soot and a newer quarantine seal, you find the original charter: the stone hives were municipal dispensaries, and their keeper answered to the Office of Amber Weights. Someone has chiseled away the officeholder’s name—but not the seal shaped like a split honeycomb.",
+  "events": [
+    {
+      "type": "walk_advance",
+      "payload": {
+        "nodeId": "frontier-s0-0",
+        "toSeg": 4
+      },
+      "source": "declared"
+    },
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "what": "The stone hives were founded as municipal dispensaries under the Office of Amber Weights, whose seal is a split honeycomb."
+      },
+      "source": "declared"
+    }
+  ],
+  "ruling": {
+    "understoodAction": "Advance along the roof route and study the surviving civic plaques.",
+    "ruling": "The carved history is freely readable and yields a named office and seal.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "The guards retain the shipment, but Mira gains a traceable authority above them.",
+    "outcomeBranches": null,
+    "proposedEvents": [
+      {
+        "type": "walk_advance"
+      },
+      {
+        "type": "fact_canonized"
+      }
+    ]
+  }
+}

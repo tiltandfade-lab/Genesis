@@ -1,0 +1,34 @@
+{
+  "turnId": "t-msg6lwqk1s2m4",
+  "narration": "The cloth catches each sliding pebble before it reaches the glass channel. You cross unheard and reach the burned guard post above the next street. Below, a sinkhole has opened through the boulevard. Two Circle guards in old plague masks wait on opposite sides, watching the obvious approaches but not your ledge. Between them, a mud-sled bears fresh crates stamped with the erased apothecary exemption.",
+  "events": [
+    {
+      "type": "walk_advance",
+      "payload": {
+        "toSeg": 3
+      },
+      "source": "declared"
+    }
+  ],
+  "ruling": {
+    "understoodAction": "Resolve the muffled crossing with Stealth 18 against DC 13.",
+    "ruling": "Success; the alarm remains silent and Mira reaches the next segment unseen.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "Resolved",
+    "outcomeBranches": {
+      "success": {
+        "total": 18,
+        "dc": 13
+      }
+    },
+    "proposedEvents": [
+      {
+        "type": "walk_advance",
+        "payload": {
+          "toSeg": 3
+        }
+      }
+    ]
+  }
+}

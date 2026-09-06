@@ -1,0 +1,36 @@
+{
+  "turnId": "t-msfknhlixheii",
+  "narration": "The dice give William a rhythm no archive could have stored: one beat, then three, then two. He shows every card, strikes it once into the ordinary tube, and waits. The bundled figure lifts a shaking hand. \u201cMalquis Xiloscient,\u201d Naivara tells the room\u2014the First Voice. Malquis repeats one\u2013three\u2013two against the brass with perfect, painful precision. Ordinary tubes throughout the shelter answer in the same new rhythm. A moment later the hidden archive adds a false seventh beat. Everyone hears the difference. The families call \u201cEcho!\u201d at the mistake, and the archive\u2019s borrowed authority breaks in public. Malquis keeps one finger resting on the tube, looking directly at you; the living leader has proved presence but has not yet declared what comes next.",
+  "events": [
+    {
+      "type": "codex_contact",
+      "payload": {
+        "id": "npc:malquis-xiloscient",
+        "engaged": true
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    },
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "factId": "brineglass:first-voice-live-proof",
+        "what": "Open dice generated the unseen 1-3-2 challenge; First Voice Malquis Xiloscient reproduced it live through ordinary message tubes, while the archive exposed itself by adding a false seventh beat."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    }
+  ],
+  "rollRequest": null,
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Resolve the openly rolled future-random challenge rhythm and test the First Voice against the archive.",
+    "ruling": "The exact 3d6 result is interpreted as beat lengths 1-3-2. Malquis reproduces the future-generated signal live, and the archive cannot counterfeit it without revealing an extra replay beat.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "The archive's claim to living authority is publicly discredited; the succession decision itself remains with Malquis and the people, not Mira or the DM.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 26: engine-generated non-d20 randomness becomes story structure. Minted leader binds as Malquis without inventing unsupported atoms; next turn can surface full record."
+}

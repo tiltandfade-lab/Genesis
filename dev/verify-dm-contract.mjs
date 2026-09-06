@@ -3,8 +3,8 @@
    artifact, the live runtime registries, and the seat prompts all agree:
 
      A. artifact ↔ generator  — regenerating from source reproduces the committed artifact byte-for-byte.
-     B. artifact ↔ runtime    — event set / sources / digest shape / per-event fields+aliases all match
-                                the live DM_EVENT_TYPES / DM_EVENT_SOURCES / DM_EVENT_FIELDS / DM_DIGEST_KEYS.
+     B. artifact ↔ runtime    — event set / sources / full+beat digest shapes / per-event fields+aliases
+                                match the live declared registries.
      C. examples fold clean    — every worked example folds through the LIVE dmFoldPayload with zero drift
                                 (+ the BUG-01 mutation assertion: a bogus key MOVES the ledger by exactly 1).
      D. artifact ↔ prompt      — the seat prompt's §events section teaches only real types + real fields.
@@ -41,7 +41,8 @@ const harness = `var U={worlds:{},activeWorldId:null,revealed:{}}; var SEED=null
 // share the eval lexical scope but aren't window.* under indirect eval — the documented gotcha).
 const expose = ";" + [
   "DM_EVENT_TYPES", "DM_EVENT_SOURCES", "DM_EVENT_FIELDS", "DM_DIGEST_KEYS",
-  "dmFoldPayload", "dmDigest", "seatEventVocabulary", "seatValidate", "ledgerOf",
+  "DM_BEAT_DIGEST_KEYS", "DM_BEAT_KINDS", "DM_BEAT_TARGET_BYTES",
+  "dmFoldPayload", "dmDigest", "dmBeatDigest", "seatEventVocabulary", "seatValidate", "ledgerOf",
 ].map((n) => `try{window.${n}=${n};}catch(e){}`).join("");
 
 function freshDom() {
@@ -122,7 +123,7 @@ let CONTRACT = null;
 try { CONTRACT = JSON.parse(read("dm-contract.json")); } catch (e) { CONTRACT = null; }
 
 // ============================================================
-// B. artifact ↔ runtime (4 checks)
+// B. artifact ↔ runtime (6 checks)
 // ============================================================
 {
   const win = freshDom();
@@ -167,6 +168,20 @@ try { CONTRACT = JSON.parse(read("dm-contract.json")); } catch (e) { CONTRACT = 
   }
   check("B4 every mapped event's fields+aliases match DM_EVENT_FIELDS; 6 pass-through carry fields:null",
     b4ok, b4detail);
+
+  check("B5 contract.turnDigest matches the declared sparse vocabulary/views/3 KiB target",
+    CONTRACT && CONTRACT.turnDigest &&
+      setEq(CONTRACT.turnDigest.potentialTopLevelKeys, win.DM_BEAT_DIGEST_KEYS) &&
+      deepEq(CONTRACT.turnDigest.views, win.DM_BEAT_KINDS) &&
+      CONTRACT.turnDigest.targetBytes === win.DM_BEAT_TARGET_BYTES &&
+      CONTRACT.turnDigest.schema === "beat-digest/v1",
+    JSON.stringify({contract:CONTRACT&&CONTRACT.turnDigest,keys:win.DM_BEAT_DIGEST_KEYS,kinds:win.DM_BEAT_KINDS,target:win.DM_BEAT_TARGET_BYTES}));
+
+  const beat=win.dmBeatDigest(world,"I look around.",null,{full:win.dmDigest()});
+  check("B6 live beat output is sparse, schema-stamped, and every emitted key is declared",
+    beat && beat.schema==="beat-digest/v1" && !("codexRoster" in beat) &&
+      Object.keys(beat).every(k=>win.DM_BEAT_DIGEST_KEYS.includes(k)),
+    JSON.stringify(beat));
 }
 
 // ============================================================

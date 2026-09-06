@@ -1,0 +1,59 @@
+{
+  "turnId": "t-msg7l9cyr5ql9",
+  "narration": "The courtyard wall carries you beyond the tollhouse into a torchlit boarding-house square. A street performer worries three bright notes from a wire-strung bow—the same tune—while sleepers watch from the windows. Their smile follows your face; their free hand follows your pouch. The crowd closes and opens around them like practiced scenery. Make a Wisdom (Insight) check, DC 14, to catch the theft before the hand withdraws.",
+  "events": [
+    {
+      "type": "walk_advance",
+      "payload": {
+        "nodeId": "frontier-s0-0",
+        "toSeg": 5
+      },
+      "source": "declared"
+    }
+  ],
+  "rollRequest": {
+    "skill": "Insight",
+    "ability": "wis",
+    "dc": 14,
+    "adv": null,
+    "branches": {
+      "success": {
+        "narration": "You watch the wrong hand. The bow hand is theater; the other is already two fingers inside your pouch. You close your wrist around theirs before anything leaves it. Up close, they are humming without seeming to hear themselves.",
+        "events": []
+      },
+      "nearMiss": {
+        "narration": "You turn at the last instant. Their fingers brush your pouch but come away empty, and the performer melts back a pace into the crowd. They are still humming—now with fear tightening the final note.",
+        "events": []
+      },
+      "fail": {
+        "narration": "The performer bows, the crowd parts, and only then do you feel the tug at your pouch. They vanish through the boarding-house door before you can tell what their fingers found. The three-note tune continues from somewhere upstairs.",
+        "events": []
+      }
+    }
+  },
+  "ruling": {
+    "understoodAction": "Reach the boarding-house hub under cover, listen for the shared tune, and scrutinize the strangers for concealed intent.",
+    "ruling": "The wall keeps Mira out of the tollhouse guards’ immediate sight. Her close attention engages the hub’s pickpocket problem as an Insight check.",
+    "needsRoll": true,
+    "proposedCheck": {
+      "skill": "Insight",
+      "ability": "wis",
+      "dc": 14
+    },
+    "stakes": "Success catches the performer in the act; a near miss prevents the theft but loses control of them; failure lets them slip inside after touching Mira’s pouch.",
+    "outcomeBranches": {
+      "success": "catch the hand",
+      "nearMiss": "prevent the theft but lose position",
+      "fail": "the performer slips into the boarding house"
+    },
+    "proposedEvents": [
+      {
+        "type": "walk_advance",
+        "payload": {
+          "nodeId": "frontier-s0-0",
+          "toSeg": 5
+        }
+      }
+    ]
+  }
+}

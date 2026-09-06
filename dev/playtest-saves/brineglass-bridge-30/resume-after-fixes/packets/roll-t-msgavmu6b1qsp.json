@@ -1,0 +1,92 @@
+{
+  "request": {
+    "skill": "Performance",
+    "ability": "cha",
+    "dc": 14,
+    "branches": {
+      "success": {
+        "narration": "Your false chorus catches. The front rank answers it and wheels toward the bright cloth; those behind follow the motion without knowing why. You keep the outer curb, step over the broken stones, and reach the drainage arch while the crowd argues with its own invented leader.",
+        "events": [
+          {
+            "type": "encounter_resolved",
+            "source": "branch",
+            "payload": {
+              "foes": [],
+              "method": "false rally flag and echoed crowd refrain",
+              "objectiveRef": "cross the mob surge without being swallowed by it",
+              "outcome": "diverted and bypassed"
+            }
+          }
+        ]
+      },
+      "nearMiss": {
+        "narration": "Half the square turns toward the cloth; the other half sees you moving. You reach the drainage arch, but a thrown cobble clips your shoulder and the crowd tears the costume from the pump behind you. The route is crossed, not quiet.",
+        "events": [
+          {
+            "type": "hp_changed",
+            "source": "branch",
+            "payload": {
+              "delta": -1
+            }
+          },
+          {
+            "type": "encounter_resolved",
+            "source": "branch",
+            "payload": {
+              "foes": [],
+              "method": "costume decoy and a bruising outer-curb crossing",
+              "objectiveRef": "cross the mob surge without being swallowed by it",
+              "outcome": "crossed under pursuit"
+            }
+          }
+        ]
+      },
+      "fail": {
+        "narration": "The echoed phrase lands as ridicule. Faces turn from the pump to you, and the outer curb disappears under a sideways shove. You hit the broken stones hard and crawl back to the cart-rut mouth before the surge closes, bruised, seen, and still on the near side of the drainage arch.",
+        "events": [
+          {
+            "type": "hp_changed",
+            "source": "branch",
+            "payload": {
+              "delta": -2
+            }
+          },
+          {
+            "type": "clock_advanced",
+            "source": "branch",
+            "payload": {
+              "id": "the-crier-s-circle",
+              "n": 1
+            }
+          }
+        ]
+      }
+    }
+  },
+  "result": {
+    "ok": true,
+    "resolvedLocally": true,
+    "liveResolutionNeeded": false,
+    "pending": null,
+    "recovered": false,
+    "resolution": {
+      "turnId": "t-msgavmu6b1qsp",
+      "skill": "Performance",
+      "total": 8,
+      "degree": "failure",
+      "branch": "fail"
+    },
+    "branchNarration": "The echoed phrase lands as ridicule. Faces turn from the pump to you, and the outer curb disappears under a sideways shove. You hit the broken stones hard and crawl back to the cart-rut mouth before the surge closes, bruised, seen, and still on the near side of the drainage arch.",
+    "newLedger": [
+      "✦ Mira Quill took 2 damage — HP 8→6/12.",
+      "◇ payload drift — clock_advanced carried unrecognized field (n) the engine does not read.",
+      "☼ The Crier's Circle: clock 3/6."
+    ],
+    "pc": {
+      "name": "Mira Quill",
+      "hp": "6/12",
+      "conditions": [],
+      "status": "living"
+    }
+  }
+}

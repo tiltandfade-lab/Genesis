@@ -1,0 +1,69 @@
+{
+  "turnId": "t-msgawwcbfeami",
+  "narration": "You let the crowd spend its anger uphill. In the gutter, their knees and elbows hide you better than any spell; runoff carries ash past your hands toward the arch. The danger is the final six feet, where the drain narrows beside the pump basin and anyone looking down will see your lute’s polished rim. Make a Dexterity (Stealth) check, DC 13. The cart-rut retreat remains behind you.",
+  "events": [],
+  "rollRequest": {
+    "skill": "Stealth",
+    "ability": "dex",
+    "dc": 13,
+    "branches": {
+      "success": {
+        "narration": "You cross those six feet between two waves of boots. The drainage arch takes you below the shouting, through cold brick, and out beyond the square. Behind you, the costume keeps snapping above the pump; ahead, the channel widens into a flooded dead-end hall where pale figures are moving against the current.",
+        "events": [
+          {
+            "type": "encounter_resolved",
+            "source": "branch",
+            "payload": {
+              "foes": [],
+              "method": "runoff crawl beneath the crowd’s sightline",
+              "objectiveRef": "escape the mob surge through the drainage arch",
+              "outcome": "crossed unseen"
+            }
+          }
+        ]
+      },
+      "nearMiss": {
+        "narration": "A heel catches your shoulder, but its owner thinks they stepped on refuse. You bite down on the cry and slide through the arch with one fresh bruise. The costume still snaps above the pump; ahead, the channel widens into a flooded dead-end hall where pale figures move against the current.",
+        "events": [
+          {
+            "type": "hp_changed",
+            "source": "branch",
+            "payload": {
+              "delta": -1
+            }
+          },
+          {
+            "type": "encounter_resolved",
+            "source": "branch",
+            "payload": {
+              "foes": [],
+              "method": "bruising runoff crawl under the crowd",
+              "objectiveRef": "escape the mob surge through the drainage arch",
+              "outcome": "crossed unseen at a cost"
+            }
+          }
+        ]
+      },
+      "fail": {
+        "narration": "A boot pins your coat before the arch. You wrench free, leaving cloth and skin against the cobbles, but the shout follows you back to the cart-rut mouth. You are still outside the drain, hurt and fully marked as the person who planted the flag; the roof stair remains open.",
+        "events": [
+          {
+            "type": "hp_changed",
+            "source": "branch",
+            "payload": {
+              "delta": -2
+            }
+          },
+          {
+            "type": "clock_advanced",
+            "source": "branch",
+            "payload": {
+              "id": "the-crier-s-circle",
+              "n": 1
+            }
+          }
+        ]
+      }
+    }
+  }
+}

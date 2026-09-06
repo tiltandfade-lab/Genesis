@@ -1,4 +1,4 @@
-/* Verify HQ3-C — REST-ECONOMY cluster (docs/HQ3-C-REST-CONCENTRATION.md, units C1-C4).
+/* Verify HQ3-C — REST-ECONOMY cluster (docs/HQ3-C-REST-CONCENTRATION.md, units C1-C5).
    jsdom full-app load (manifest.json loadOrder, real applyEvent/restRiders/dmDigest/applyResponse),
    same boot pattern as dev/verify-detected-events.mjs (STUBS list, seeded Math.random, seedWorld).
 
@@ -15,6 +15,9 @@
      C4 — a severe/interrupted rest-risk sets w.dm.pendingSituation; dmDigest ships it top-level;
           applyResponse's w.dm rebuild carries a FRESH one (set this turn) and drops a SEEN one
           (acked on the next response) — the literal-rebuild silent-wipe trap this unit closes.
+     C5 — all 20 rest-table rows have typed receipts; partial recovery and bonus resources are
+          script-owned; exact disadvantage language is consumed once; segment riders activate and
+          expire with the walk cursor; undefined Penalty/Insight/Boon language stays interpretive.
 
    Run:  node dev/verify-rest.mjs
    (jsdom resolved per CLAUDE.md "headless test"; override JSDOM_HOME if needed.) */
@@ -322,6 +325,81 @@ console.log("=== HQ3-C rest-economy verification ===\n");
   win.restRiskRoll = () => ({ ok: true, class: "inn", text: "a quiet, uneventful night.", band: null, severe: false, interrupted: false });
   win.applyEvent(w, { type: "rest", source: "declared", payload: { kind: "long" } });
   check("C4-e", "a non-severe (flavor-only) rest-risk sets nothing", !(w.dm && w.dm.pendingSituation), `w.dm=${JSON.stringify(w.dm)}`);
+}
+
+// =====================================================================================
+// C5 — typed rest-table effects: exact mechanics owned, undefined meaning preserved
+// =====================================================================================
+{
+  const win=boot();
+  const rows=Array.from({length:20},(_,i)=>win.restRiskEffectFor("urban-rest-complications",i+1));
+  check("C5-a","all 20 shared-semantics rest rows produce typed receipts with table+roll provenance",
+    rows.every((e,i)=>e&&e.kind&&e.scope&&e.source.table==="urban-rest-complications"&&e.source.roll===i+1),JSON.stringify(rows));
+  check("C5-b","row 6 exposes the missing Spatial/Temporal dependency instead of fabricating a roll",
+    rows[5].kind==="temporal-drag"&&rows[5].missingTable==="spatial-temporal",JSON.stringify(rows[5]));
+}
+{
+  const win=boot(),w=seedWorld(win,{hp:40,hpCur:10,level:5}),sh=w.characters[0].sheet;
+  sh.hitDice.cur=1;
+  win.restRiskRoll=()=>({ok:true,class:"wild",table:"urban-rest-complications",roll:7,text:"half recovery",severe:false,interrupted:false,
+    effect:win.restRiskEffectFor("urban-rest-complications",7)});
+  const res=win.applyEvent(w,{type:"rest",source:"declared",payload:{kind:"long"}});
+  check("C5-c","half-recovery row restores exactly half missing HP and half the normal long-rest Hit Dice",
+    sh.hpCur===25&&sh.hitDice.cur===2&&res.recoveryFraction===0.5,`hp=${sh.hpCur}; hitDice=${JSON.stringify(sh.hitDice)}; res=${JSON.stringify(res)}`);
+}
+{
+  const win=boot(),w=seedWorld(win,{hp:40,hpCur:10}),sh=w.characters[0].sheet;
+  win.restRiskRoll=()=>({ok:true,class:"camp",table:"urban-rest-complications",roll:9,text:"partial recovery",severe:false,interrupted:false,
+    effect:win.restRiskEffectFor("urban-rest-complications",9)});
+  const res=win.applyEvent(w,{type:"rest",source:"declared",payload:{kind:"short",spendHitDice:1,hdRolls:[6]}});
+  check("C5-d","partial short rest scales Hit-Dice healing inside the shared transaction (8 usual -> 4)",
+    res.hitDice&&res.hitDice.healed===4&&sh.hpCur===14,`hp=${sh.hpCur}; hitDice=${JSON.stringify(res.hitDice)}`);
+}
+{
+  const win=boot(),w=seedWorld(win,{}),sh=w.characters[0].sheet;
+  win.restRiskRoll=()=>({ok:true,class:"inn",table:"urban-rest-complications",roll:8,text:"next check disadvantage",severe:false,interrupted:false,
+    effect:win.restRiskEffectFor("urban-rest-complications",8)});
+  win.applyEvent(w,{type:"rest",source:"declared",payload:{kind:"short"}});
+  const before=win.resourceDigest(sh),first=win.restEffectCheckMode(sh,"Perception","wis","check"),second=win.restEffectCheckMode(sh,"Perception","wis","check");
+  check("C5-e","next-check disadvantage is digest-visible, applies once, then is consumed",
+    before.restEffects&&before.restEffects[0].kind==="next-check-disadvantage"&&first.mode==="disadvantage"&&second.mode===null,
+    JSON.stringify({before,first,second}));
+}
+{
+  const win=boot(),w=seedWorld(win,{}),sh=w.characters[0].sheet;
+  win.restEffectTrack(sh,win.restRiskEffectFor("urban-rest-complications",11));
+  const a=win.restEffectsAdvanceSegment(sh,"walk-1",3),active=JSON.stringify(win.resourceDigest(sh).restEffects);
+  const b=win.restEffectsAdvanceSegment(sh,"walk-1",4);
+  check("C5-f","next-segment rider activates on entry and expires on the following real segment",
+    a.activated[0]==="surprise-immunity"&&/\"status\":\"active\"/.test(active)&&b.expired[0]==="surprise-immunity"&&!win.resourceDigest(sh).restEffects,
+    JSON.stringify({a,active,b,now:win.resourceDigest(sh)}));
+}
+{
+  const win=boot(),w=seedWorld(win,{level:5}),sh=w.characters[0].sheet;
+  sh.hitDice.cur=1;
+  win.restRiskRoll=()=>({ok:true,class:"inn",table:"urban-rest-complications",roll:18,text:"extra resource",severe:false,interrupted:false,
+    effect:win.restRiskEffectFor("urban-rest-complications",18)});
+  const res=win.applyEvent(w,{type:"rest",source:"declared",payload:{kind:"long"}});
+  check("C5-g","extra-resource row restores one additional Hit Die after normal long-rest recovery",
+    sh.hitDice.cur===4&&res.bonusResource&&res.bonusResource.kind==="hit-die",`hitDice=${JSON.stringify(sh.hitDice)}; bonus=${JSON.stringify(res.bonusResource)}`);
+}
+{
+  const win=boot(),w=seedWorld(win,{hp:40,hpCur:10}),sh=w.characters[0].sheet,before=sh.hitDice.cur;
+  win.restRiskRoll=()=>({ok:true,class:"wild",table:"dungeon-rest-complications",roll:1,text:"assaulted",severe:true,interrupted:true,
+    effect:win.restRiskEffectFor("dungeon-rest-complications",1)});
+  const res=win.applyEvent(w,{type:"rest",source:"declared",payload:{kind:"short",spendHitDice:1,hdRolls:[8]}});
+  check("C5-h","an interrupted short rest spends no Hit Die and heals no HP",
+    res.hitDice===null&&sh.hitDice.cur===before&&sh.hpCur===10,JSON.stringify({res,hitDice:sh.hitDice,hp:sh.hpCur}));
+}
+{
+  const win=boot(),w=seedWorld(win,{}),sh=w.characters[0].sheet;
+  win.restEffectTrack(sh,win.restRiskEffectFor("urban-rest-complications",14));
+  const boon=win.restEffectTrack(sh,win.restRiskEffectFor("urban-rest-complications",20));
+  win.restEffectTrack(sh,win.restRiskEffectFor("urban-rest-complications",10));
+  const generic=win.restEffectCheckMode(sh,"Athletics","str","check");
+  check("C5-i","boon debt cancels the next rest Boon, while undefined physical Penalty stays interpretive",
+    boon&&boon.cancelled===true&&generic.mode===null&&sh.restEffects.some(e=>e.kind==="next-physical-action-penalty"),
+    JSON.stringify({boon,generic,effects:sh.restEffects}));
 }
 
 // ---------------------------------------------------------------------------

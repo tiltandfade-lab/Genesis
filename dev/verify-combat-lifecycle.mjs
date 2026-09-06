@@ -15,7 +15,8 @@
      5. Declared combat_end{outcome:"fled"} -> fled foes price zero XP.
      6. chase_start (targeting a live fid) then combat_end -> GS.chase.active still true after teardown.
      7. foe_action on a CR>=2 foe: without p.action -> not-autoplay-eligible (unchanged); with p.action ->
-        resolved attack, PC hp_changed on a hit. ⊗
+        resolved attack, PC hp_changed on a hit; Dodge imposes disadvantage on both a named foe action
+        and the ordinary eligible-autoplay branch. ⊗
      8. dmDigest().combat present mid-fight with proposals[] for non-autoplay foes; absent after
         combat_end; serialized block < 2KB in the 3-foe fixture. ⊗
      9. round_tick{phase:"end"} -> GS.combat.round incremented, side reset to first; condition TTLs still
@@ -111,18 +112,38 @@ const check = (name, cond, detail = "") =>
   const win = freshWin();
   const world = makeWorld(win);
   const r = win.applyEvent(world, { type: "combat_start", payload: {
-    foes: [{ name:"Goblin", count:3, cr:0.25 }]
+    foes: [{ name:"Goblin", count:3, cr:0.25 }],
+    scene:{cover:["stalled mud-sled","crates"],hazards:["open sinkhole"],exits:["roof ledge"]}
   } });
   check("1a. combat_start returns ok:true", r && r.ok === true, JSON.stringify(r));
   check("1b. GS.combat exists + active", win.GS.combat && win.GS.combat.active === true);
   check("1c. count:3 expands to 3 individual fids", win.GS.combat && win.GS.combat.foes.length === 3
     && win.GS.combat.foes.every(f=>/^f\d+$/.test(f.fid)), win.GS.combat && JSON.stringify(win.GS.combat.foes.map(f=>f.fid)));
   check("1d. each foe carries a band + lane", win.GS.combat && win.GS.combat.foes.every(f=>f.band && f.lane));
+  check("1d-ii. every combatant's band/lane is inside the generated room grid",
+    win.GS.combat.grid.bands.includes(win.GS.combat.pc.band)&&win.GS.combat.grid.lanes.includes(win.GS.combat.pc.lane)&&
+      win.GS.combat.foes.every(f=>win.GS.combat.grid.bands.includes(f.band)&&win.GS.combat.grid.lanes.includes(f.lane)),
+    JSON.stringify({grid:win.GS.combat.grid,pc:win.GS.combat.pc,foes:win.GS.combat.foes.map(f=>({fid:f.fid,band:f.band,lane:f.lane}))}));
   win.renderWorld();
   check("1e. GS.gamePanel === 'combat' after renderWorld()", win.GS.gamePanel === "combat", win.GS.gamePanel);
   const lastLedger = world.ledger[world.ledger.length-1];
   check("1f. the ledger carries the ⚔ combat-start prose line", lastLedger && /^⚔ Combat/.test(lastLedger.text), lastLedger && lastLedger.text);
   check("1g. return payload carries fids for the DM to target", r.combat && Array.isArray(r.combat.foes) && r.combat.foes.every(f=>f.fid), JSON.stringify(r.combat));
+  check("1h. the world owns the same live combat object used by GS", world.combat===win.GS.combat&&world.combat.active===true);
+  check("1i. array-shaped declared cover normalizes to named cover keys instead of numeric indices",
+    Object.keys(win.GS.combat.scene.cover).join("|")==="stalled mud-sled|crates"&&
+      win.combatDigest(world).scene.cover.join("|")==="stalled mud-sled|crates",
+    JSON.stringify({stored:win.GS.combat.scene.cover,digest:win.combatDigest(world).scene.cover}));
+
+  const serialized=JSON.stringify(world), reloaded=JSON.parse(serialized);
+  win.U.worlds[world.id]=reloaded; win.U.activeWorldId=reloaded.id; win.GS.combat=null;
+  const hydrated=win.combatRehydrate(reloaded), livePc=reloaded.characters.find(c=>c.status==="living");
+  check("1j. combat rehydrates from serialized world state with the same foe identity",
+    hydrated===reloaded.combat&&hydrated.foes.length===3&&hydrated.foes[0].fid===r.combat.foes[0].fid,
+    JSON.stringify(hydrated&&hydrated.foes));
+  check("1k. rehydration rebinds PC condition/equipment/inventory mirrors to the live sheet",
+    hydrated.pcRef.conditionsRef===livePc&&hydrated.pcRef.equipped===livePc.sheet.equipped&&
+      hydrated.pcRef.inventory===livePc.sheet.inventory);
 }
 
 // ============================================================================
@@ -260,6 +281,20 @@ const check = (name, cond, detail = "") =>
     world.characters[0].sheet.xp === xpBefore5g2, JSON.stringify({before:xpBefore5g2, after:world.characters[0].sheet.xp}));
 }
 
+// Player withdrawal needs a distinct semantic outcome; `fled` means the FOES fled.
+{
+  const win = freshWin();
+  const world = makeWorld(win);
+  win.applyEvent(world, { type: "combat_start", payload: { foes: [{ name:"Guard", cr:0.125 }] } });
+  const xpBefore = world.characters[0].sheet.xp;
+  const r = win.applyEvent(world, { type: "combat_end", payload: { outcome:"pc-fled", reason:"the PC escaped" } });
+  const line = [...world.ledger].reverse().find(e=>e.data&&e.data.kind==="combat-end");
+  check("5f-i. combat_end{pc-fled} records that the player escaped, not that the foes fled",
+    r&&r.ok===true&&line&&/you escape/.test(line.text)&&!/foes flee/.test(line.text), JSON.stringify(line));
+  check("5f-ii. combat_end{pc-fled} with no downed foes grants zero XP",
+    world.characters[0].sheet.xp===xpBefore, JSON.stringify({before:xpBefore,after:world.characters[0].sheet.xp}));
+}
+
 // ============================================================================
 // 5h. HQ3-B2 — combat_end accepts a free-text `reason` (alias `note`->`reason`) via DM_EVENT_FIELDS;
 //     it folds into the combat-end ledger DETAIL object and never burns a payload-drift line.
@@ -333,9 +368,44 @@ const check = (name, cond, detail = "") =>
   const hasAtk = (foe.actions||[]).some(a=>a.kind==="melee"||a.kind==="ranged");
   check("(fixture) Ogre has a resolvable melee/ranged action", hasAtk, JSON.stringify((foe.actions||[]).map(a=>a.name)));
   const atkName = (foe.actions||[]).find(a=>a.kind==="melee"||a.kind==="ranged").name;
+  const rDodge = win.applyEvent(world, { type: "action", payload: { kind: "dodge" } });
+  check("7b. Dodge lands a real dodging condition on the PC", rDodge&&rDodge.ok===true&&world.characters[0].conditions.some(c=>(c.cond||c.condition||c)==="dodging"), JSON.stringify(world.characters[0].conditions));
   const rNamed = win.applyEvent(world, { type: "foe_action", payload: { foe: foe.fid, action: atkName } });
-  check("7b. foe_action WITH p.action bypasses the eligibility gate and resolves that action", rNamed && rNamed.ok === true && rNamed.attack, JSON.stringify(rNamed));
-  check("7c. a hit from the named action changed the PC's hp (routed through hp_changed)", world.characters[0].sheet.hpCur !== hpBefore || (rNamed.attack && !rNamed.attack.hit), JSON.stringify({hpBefore, hpAfter:world.characters[0].sheet.hpCur, hit:rNamed.attack&&rNamed.attack.hit}));
+  check("7c. foe_action WITH p.action bypasses the eligibility gate and resolves that action", rNamed && rNamed.ok === true && rNamed.attack, JSON.stringify(rNamed));
+  check("7d. the named foe action derives disadvantage from the PC's Dodge condition",
+    rNamed&&rNamed.attack&&rNamed.attack.advDerived==="dis"&&rNamed.attack.advantage==="dis",
+    JSON.stringify(rNamed&&rNamed.attack));
+  check("7e. a hit from the named action changed the PC's hp (routed through hp_changed)", world.characters[0].sheet.hpCur !== hpBefore || (rNamed.attack && !rNamed.attack.hit), JSON.stringify({hpBefore, hpAfter:world.characters[0].sheet.hpCur, hit:rNamed.attack&&rNamed.attack.hit}));
+}
+
+// Eligible trash autoplay is a separate foe_action branch. The Brineglass soak found that both
+// branches had been targeting GS.combat.pc (or an AC-only stub), so cover both to prevent a half-fix.
+{
+  const win = freshWin();
+  const world = makeWorld(win);
+  win.applyEvent(world, { type: "combat_start", payload: { foes: [{ name:"Guard", cr:0.125 }] } });
+  const foe = win.GS.combat.foes[0];
+  win.applyEvent(world, { type: "action", payload: { kind: "dodge" } });
+  const rAuto = win.applyEvent(world, { type: "foe_action", payload: { foe: foe.fid } });
+  check("7f. ordinary eligible foe autoplay derives disadvantage from the PC's Dodge condition",
+    rAuto&&rAuto.ok===true&&rAuto.attack&&rAuto.attack.advDerived==="dis"&&rAuto.attack.advantage==="dis",
+    JSON.stringify(rAuto&&rAuto.attack));
+}
+
+{
+  const win = freshWin();
+  const world = makeWorld(win, { sheet: { hp: 999, hpCur: 999 } });
+  win.applyEvent(world, { type: "combat_start", payload: { foes: [{ name:"Guard", cr:0.125 }] } });
+  const foe = win.GS.combat.foes[0];
+  win.Math.random = () => 0; // deterministic natural 1 + magnitude 1
+  const rAuto = win.applyEvent(world, { type: "foe_action", payload: { foe: foe.fid } });
+  const critLine = world.ledger.find(e=>e.data&&e.data.kind==="crit");
+  check("7g. an autoplay foe's natural 1 attributes its crit outcome to the acting foe",
+    rAuto&&rAuto.attack&&rAuto.attack.natural===1&&critLine&&critLine.data.actor===foe.fid,
+    JSON.stringify({attack:rAuto&&rAuto.attack,critLine}));
+  check("7h. the engine's complete crit atom is accepted without false payload-drift",
+    !world.ledger.some(e=>e.data&&e.data.kind==="payload-drift"&&e.data.type==="crit_outcome"),
+    JSON.stringify(world.ledger.filter(e=>e.data&&e.data.kind==="payload-drift")));
 }
 
 // ============================================================================
@@ -369,12 +439,20 @@ const check = (name, cond, detail = "") =>
   win.GS.combat.side = first === "pc" ? "enemy" : "pc"; // simulate mid-round
   const foe = win.GS.combat.foes[0];
   win.addCondition(foe, "poisoned", { rounds: 2 }, win.GS.combat.round);
+  win.applyEvent(world, { type: "action", payload: { kind:"dodge" } });
+  foe.budget = { action:false, bonus:false, reaction:false, moved:true };
   const roundBefore = win.GS.combat.round;
   const r = win.applyEvent(world, { type: "round_tick", payload: { phase: "end" } });
   check("9a. round_tick{phase:'end'} returns ok:true", r && r.ok === true, JSON.stringify(r));
   check("9b. GS.combat.round increments", win.GS.combat.round === roundBefore + 1, JSON.stringify({before:roundBefore, after:win.GS.combat.round}));
   check("9c. GS.combat.side resets to the initiative winner", win.GS.combat.side === first, JSON.stringify({side:win.GS.combat.side, first}));
   check("9d. condition TTLs still tick (existing behavior intact — expired list returned)", Array.isArray(r.expired));
+  check("9e. a new round refreshes the PC and foe turn budgets",
+    win.GS.combat.pc.budget&&win.GS.combat.pc.budget.action===true&&foe.budget&&foe.budget.reaction===true,
+    JSON.stringify({pc:win.GS.combat.pc.budget,foe:foe.budget}));
+  check("9f. Dodge expires at the start of the PC's next player-facing turn",
+    !world.characters[0].conditions.some(c=>(c.condition||c)==="dodging")&&r.expired.some(e=>e.condition==="dodging"),
+    JSON.stringify({conditions:world.characters[0].conditions,expired:r.expired}));
   // HOTFIX-QUEUE-2026-07-06 H6 #4: 9d only checked the shape of r.expired, never that a condition
   // actually LEFT foe.conditions. Tick rounds until the poisoned {rounds:2} ttl lapses and assert the
   // condition is GONE from foe.conditions and r2.expired NAMES it (the VALUE moved, not just a label).
@@ -382,9 +460,9 @@ const check = (name, cond, detail = "") =>
   for (let i = 0; i < 3 && foe.conditions.some(c => c.cond === "poisoned" || c.condition === "poisoned"); i++) {
     r2 = win.applyEvent(world, { type: "round_tick", payload: { phase: "end" } });
   }
-  check("9e. the poisoned condition actually LEFT foe.conditions once its ttl lapsed",
+  check("9g. the poisoned condition actually LEFT foe.conditions once its ttl lapsed",
     !foe.conditions.some(c => c.cond === "poisoned" || c.condition === "poisoned"), JSON.stringify(foe.conditions));
-  check("9f. r.expired NAMES the poisoned condition on the tick that lifted it",
+  check("9h. r.expired NAMES the poisoned condition on the tick that lifted it",
     Array.isArray(r2.expired) && r2.expired.some(e => e.condition === "poisoned"), JSON.stringify(r2.expired));
 }
 
@@ -448,19 +526,25 @@ const check = (name, cond, detail = "") =>
   check("12a. RED probe (enterWorld): GS.combat===null AND GS.chase===null AND GS.theaterMounted===false",
     win.GS.combat === null && win.GS.chase === null && win.GS.theaterMounted === false,
     JSON.stringify({ combat: win.GS.combat, chase: win.GS.chase, theaterMounted: win.GS.theaterMounted }));
+  check("12b. switching worlds clears only the runtime pointer, not world A's persistent fight",
+    worldA.combat&&worldA.combat.active&&worldA.combat.foes[0].fid===fidA,JSON.stringify(worldA.combat));
+
+  win.enterWorld(worldA.id);
+  check("12c. returning to world A rehydrates its fight and stable foe ids",
+    win.GS.combat===worldA.combat&&win.GS.combat.foes[0].fid===fidA,JSON.stringify(win.GS.combat));
+  win.enterWorld(worldB.id);
 
   // same probe via startSession
-  win.applyEvent(worldA, { type: "combat_start", payload: { foes: [{ name:"Goblin", cr:0.25 }] } });
   win.fetch = () => Promise.resolve({ ok:false }); // autoOpenScene's bridge health-check — no live bridge in jsdom
   win.startSession(worldB.id);
-  check("12b. same via startSession: GS.combat===null AND GS.chase===null",
+  check("12d. same via startSession: GS.combat===null AND GS.chase===null",
     win.GS.combat === null && win.GS.chase === null,
     JSON.stringify({ combat: win.GS.combat, chase: win.GS.chase }));
 
   // post-switch event isolation: an attack against world A's old fid must not resolve/apply against any foe
   const foeAObj = worldA.characters; // world A's foe objects live only inside the (now-discarded) old GS.combat
   const rIso = win.applyEvent(worldB, { type: "attack", payload: { target: fidA } });
-  check("12c. post-switch event isolation: attack against a world-A fid resolves no target (no old-fight foe hp touched)",
+  check("12e. post-switch event isolation: attack against a world-A fid resolves no target (no old-fight foe hp touched)",
     win.GS.combat === null || !(win.GS.combat && win.GS.combat.foes && win.GS.combat.foes.some(f=>f.fid===fidA && f.hp!==foeAHpBefore)),
     JSON.stringify(rIso));
 }

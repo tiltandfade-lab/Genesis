@@ -1,0 +1,23 @@
+{
+  "turnId": "t-msfjv635z4sec",
+  "narration": "The three notes skip from pane to pane through the fused-glass street. Most faces turn toward you. Two do not: a child crouched beneath an oilskin watches the drain grates, and a one-eyed courier with a lacquered message tube watches the black seam of cloud closing over the sea-caves. At your third note, the courier answers with three taps against the tube\u2014not applause, but recognition. \u201cIf that was a warning,\u201d they say, \u201cyou are late. If it was a summons, choose who you mean to save.\u201d Wind drives the first cold rain through the tannery door, carrying the low roar of water from somewhere beneath the cobbles.",
+  "events": [],
+  "gen": [
+    {
+      "kind": "npc",
+      "opts": {}
+    }
+  ],
+  "rollRequest": null,
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Use a conspicuous musical signal to identify people already focused on the approaching storm.",
+    "ruling": "Ordinary observation reveals who reacts differently; no roll is needed until Mira tries to influence, deceive, or read concealed intent.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "The storm is now close enough to begin affecting the street.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 1: player-authored motif reciprocated; open handoff preserved. The courier becomes consequential and is engine-minted through gen[npc]."
+}

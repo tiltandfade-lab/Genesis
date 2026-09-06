@@ -34,8 +34,9 @@ var GS = {
   walkSpiceTier: "baseline",    // SPICE-RAISE: the active walk's region spice tier (baseline|fray1|fray2|rim), stamped at walk assembly; read by walkSpiceBand/rollWalkSkin defaults
   cmbLastStates: null,          // BATTLE-VISUALS A3: previous combatPanel render's {fid: stateWord} map, for the damage-flash diff
   cmbDioramaOpen: false,         // BATTLE-VISUALS A1: the "⌗ diorama" toggle — collapsed by default until Phase B (BATTLE-THEATER) replaces the slot
-  theaterMounted: false,         // BATTLE-STAGE (docs/BATTLE-THEATER.md §6): true once window.Theater.mount() has succeeded for the CURRENT fight — gates the stage-mode layout swap (feed moves to the right rail, the theater canvas + zone strip take the center). Reset to false on combat_end so the next fight re-attempts mount.
-  stageCollapsed: false,         // TABLETOP-UNITS U2 (docs/TABLETOP-UNITS.md §U2): the rail's stage-toggle, GS-only — true = the center stage is user-collapsed to the classic feed-hero layout even while mounted. Never persisted, never an event; toggleStage() (world.render) is the sole writer.
+  presentationMode: "story",    // TEXT-FIRST-WALK-RESTORATION: Story is the product default. "theater" is an explicit, reversible lab lens; neither mode owns gameplay facts.
+  theaterMounted: false,         // THEATER LAB: true only after the optional renderer mounts successfully. Presentation state only; never a gameplay fact.
+  stageCollapsed: false,         // Legacy Theater Lab collapse transient retained for internal/dev compatibility. Never persisted and never an event.
   archive: { open: false, worldId: null, entries: null, loading: false },  // Chronicle › archived-narration vault (FOREVER-STORAGE §2 on-demand read); entries = the fetched archiveReadForWorld slice, only while open
   // VQ2-RESPEC.md §3 unit L2 — the demand-vs-null census instrument. Read-only observation of which
   // resolution TIER each provenanced scene element (figure/sprite-texture/dressing-card/material/

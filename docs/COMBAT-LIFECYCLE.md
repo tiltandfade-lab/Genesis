@@ -72,7 +72,8 @@ section + the prose twin. Everything else already exists.
    fids them f1..fn in order).
 3. Build the pc arg from the living sheet: `{ name:t.c.name, mods:t.sh.mods, ac:t.sh.ac,
    hp:t.sh.hp, hpCur:t.sh.hpCur }` (the engine reads `mods.dex` for initiative).
-4. `GS.combat = combatStart({pc, foes, objectiveRef, segment, segmentId, scene})`.
+4. `GS.combat = combatStart({pc, foes, objectiveRef, segment, segmentId, scene})`, then
+   `w.combat = GS.combat`. The world owns persistence; `GS` is the active-world runtime reference.
 5. Ledger prose line (this IS the blind-playable transition-in twin — see §6):
    `⚔ Combat — <n> foes: <name (band)>, … <You/the foes> won initiative.` via `addLedger(w,"outcome",…)`.
 6. `renderWorld()` — the existing auto-open hook (`render.js:204`) does the panel switch; do NOT
@@ -106,7 +107,7 @@ byte-for-byte. This keeps every existing verify-combat/-tracker assertion intact
 
 ```js
 { type:"combat_end", payload:{
-    outcome:"resolved"|"fled"|"surrender"|"negotiated"|"pc-dead"|"aborted",
+    outcome:"resolved"|"fled"|"pc-fled"|"surrender"|"negotiated"|"pc-dead"|"aborted",
     method:"combat"|"stealth"|"social"|"environmental"|"avoided"   // optional, default "combat"
 } }
 ```
@@ -119,7 +120,7 @@ Seam behavior:
    (`dm.js:1692`) and faction escalation ride the existing cases untouched. Emit these **even on
    `pc-dead`** (downed foes died; escalation is real; `grantXp` to a dead PC is a harmless no-op).
 4. Ledger close line (the prose twin): `⚔ The fight ends — <outcome phrase>. <n> foes down<, m fled>.`
-5. `GS.combat = null`. `renderWorld()` — the existing `render.js:206` prevPanel restore handles
+5. `GS.combat = null; w.combat = null`. `renderWorld()` — the existing `render.js:206` prevPanel restore handles
    the panel teardown; do not add UI code.
 6. Return `{ok:true, outcome, downed:n, xpEvents:…}`.
 
@@ -234,7 +235,8 @@ Every check RED-FIRST (prove it fails before the seam lands). Mutation checks ma
 4. Downing the LAST foe auto-emits `combat_end`: PC XP increases (encounter_resolved), a
    `factionId` foe advances that faction's clock (kill → clock_advanced), `GS.combat===null`,
    `GS.gamePanel` restored to the pre-fight panel. ⊗ (disable `cmMaybeAutoEnd` → red)
-5. Declared `combat_end {outcome:"fled"}` → fled foes price **zero** XP.
+5. Declared `combat_end {outcome:"fled"}` → fled foes price **zero** XP; `outcome:"pc-fled"`
+   distinctly records that the player escaped and likewise grants no empty-foe XP.
 6. `chase_start` (targeting a live fid) then `combat_end` → `GS.chase.active` still true after
    teardown.
 7. `foe_action` on a CR≥2 foe: without `p.action` → `not-autoplay-eligible` (unchanged); with
@@ -245,6 +247,8 @@ Every check RED-FIRST (prove it fails before the seam lands). Mutation checks ma
    TTLs still expire (existing behavior intact).
 10. PC driven to `dead` mid-fight → `GS.combat===null` (the §3c teardown), rebirth flow reachable.
 11. `cmbProseSummary` output contains round, side, each live foe's name+band+state word.
+12. Serialized `w.combat` rehydrates with stable foe ids and live PC references; switching worlds
+    clears only the runtime pointer, and returning restores that world's active fight.
 
 **Regression sweep (must stay 0-failed):** verify-combat · verify-combat-tracker ·
 verify-battlemap · verify-combat-actions · verify-monster-tactics · verify-death-saves ·
@@ -270,9 +274,8 @@ script rolls; you never roll a die). Morale checkpoints per MONSTER-TACTICS (fir
 strength, leader down): emit `morale_check` — **the verdict is binding**. Close each full round
 with `round_tick {phase:"end"}`. The fight ends itself when the last foe drops (detected
 `combat_end`); for flee/surrender/negotiated ends emit `combat_end` yourself — and if the player
-pursues a fleeing foe, emit `chase_start` **before** `combat_end`. `GS.combat` is transient: a
-mid-fight reload drops the tracker — resume theater-of-mind and re-declare `combat_start` with
-the survivors if the fight still matters.
+pursues a fleeing foe, emit `chase_start` **before** `combat_end`. `w.combat` persists an unfinished
+fight; `GS.combat` rehydrates after reload/return, so re-declare `combat_start` only after a real end.
 
 ## §9 Decisions made in this spec (doctrine-grounded; flag = needs Adam only if he objects)
 
@@ -286,7 +289,7 @@ the survivors if the fight still matters.
 | 6 | Kills + encounter_resolved emit even on `pc-dead` | escalation is real; XP no-ops harmlessly |
 | 7 | XP objective-gate untouched | COMBAT.md "don't tune twice" — retune after live playtests |
 | 8 | Breach physics, surprise rounds, multi-PC sides: OUT of v1 | scope discipline; each is one comment line |
-| 9 | Mid-fight reload drops the fight (GS is transient by design); runbook owns the recovery | TEXT-FIRST/event-sourcing: the ledger already tells the story |
+| 9 | Mid-fight reload/return rehydrates `GS.combat` from durable `w.combat`; foe ids stay stable | Persistent state owns gameplay truth; GS is only the active-world reference |
 
 **Execution note (the standing pipeline):** Sonnet executes this spec on branch
 `feat/combat-lifecycle`; Opus reviews the diff (`/code-review`); never trust self-reported green —

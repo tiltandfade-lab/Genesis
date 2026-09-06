@@ -1,0 +1,345 @@
+{
+  "turnId": "t-msg88yzwjqbou",
+  "worldId": "msfjud9ebcves",
+  "action": "I step out where Captain Ilyra Venn can see me. I tell her I heard everything. I will carry copies of the orders to the public book, but I will not promise to protect her from what follows. I ask her to give me the evidence and tell me whether breaking the void also freed the strangers from the tune.",
+  "rolls": [],
+  "digest": {
+    "schema": "beat-digest/v1",
+    "view": "social",
+    "slices": [
+      "scene",
+      "pc",
+      "story-pressure",
+      "continuity",
+      "social",
+      "inventory",
+      "item-custody",
+      "local-actors"
+    ],
+    "worldId": "msfjud9ebcves",
+    "worldName": "The Brineglass Reach",
+    "clock": {
+      "day": 1,
+      "min": 856,
+      "band": "afternoon",
+      "exact": "14:16",
+      "session": 0,
+      "knowsTime": false
+    },
+    "location": "Shadowed & Lawless — The water tower platform, 5x10 ft, torchlit (Wandering Torch, Cinderblock Stack, Storm Drain Grate)",
+    "pc": {
+      "id": "msfjud9rbeahy",
+      "name": "Mira Quill",
+      "class": "Bard",
+      "level": 1,
+      "hp": {
+        "cur": 6,
+        "max": 6
+      },
+      "conditions": [],
+      "marks": [
+        {
+          "id": "mk-msfjud9s5npiw",
+          "text": "You were poisoned; your next save against poison has disadvantage.",
+          "kind": "injury",
+          "sinceDay": 0
+        }
+      ],
+      "gold": 19,
+      "mods": {
+        "str": -3,
+        "dex": 1,
+        "con": -2,
+        "int": 0,
+        "wis": -2,
+        "cha": 2
+      },
+      "skillProfs": [
+        "Deception",
+        "Sleight of Hand",
+        "Perception",
+        "Performance",
+        "Persuasion",
+        "Insight",
+        "Investigation",
+        "Stealth"
+      ],
+      "inventory": [
+        {
+          "id": "msfjud9rhr2d7",
+          "name": "Leather Armor"
+        },
+        {
+          "id": "msfjud9r7oduu",
+          "name": "Dagger",
+          "qty": 2
+        },
+        {
+          "id": "msfjud9r36fkx",
+          "name": "Lute"
+        },
+        {
+          "id": "msfjud9rn35kw",
+          "name": "Backpack"
+        },
+        {
+          "id": "msfjud9r0k2m0",
+          "name": "Bedroll"
+        },
+        {
+          "id": "msfjud9rgenzo",
+          "name": "Costume",
+          "qty": 2
+        },
+        {
+          "id": "msfjud9rqgk9r",
+          "name": "Candle",
+          "qty": 4
+        },
+        {
+          "id": "msfjud9rujmud",
+          "name": "Rations",
+          "qty": 5
+        }
+      ],
+      "equipped": {
+        "mainHand": "msfjud9r7oduu",
+        "offHand": null,
+        "armor": "msfjud9rhr2d7"
+      },
+      "inventoryMore": 3
+    },
+    "powers": [
+      {
+        "clockId": "the-crier-s-circle",
+        "faction": "The Crier's Circle",
+        "dominant": true,
+        "agenda": "become something other than what it is",
+        "method": "rumor and propaganda",
+        "tags": [
+          "popular"
+        ],
+        "clock": "1/6"
+      }
+    ],
+    "fronts": [
+      {
+        "clockId": "a-blight-or-plague-is-spreading-toward-the-town",
+        "kind": "external",
+        "danger": "a blight or plague is spreading toward the town",
+        "impersonal": "wildfire",
+        "clock": "0/6",
+        "closed": false,
+        "dmOnly": {
+          "truth": null,
+          "doom": "displacement — the people scatter"
+        }
+      }
+    ],
+    "recentLedger": [
+      {
+        "type": "canon",
+        "day": 1,
+        "min": 856,
+        "text": "◆ The shared three-note tune was being used as a command key to feed stolen voices into an expanding void; Captain Ilyra Venn permanently broke its mechanism and renounced the guard conspiracy.",
+        "matched": true
+      }
+    ],
+    "codex": [
+      {
+        "id": "npc:captain-ilyra-venn",
+        "kind": "npc",
+        "name": "Captain Ilyra Venn",
+        "fields": {
+          "permanentChange": "She broke the void mechanism, renounced the guard conspiracy, and committed to putting its orders in the public record."
+        },
+        "dm": {
+          "truth": "Venn helped operate the command-key void until the courier report made her understand that the victims’ stolen voices were feeding it.",
+          "want": "survive long enough to publish every order"
+        }
+      }
+    ],
+    "activeWalk": {
+      "nodeId": "frontier-s0-0",
+      "place": "Shadowed & Lawless",
+      "environment": "urban",
+      "topology": "The Rundown",
+      "skin": {
+        "text": "A specific song is being hummed by strangers who've never met. — The same unfamiliar tune, unconsciously, by people across the district who can't say where they learned it.",
+        "band": "Strange"
+      },
+      "risk": {
+        "danger": "risky",
+        "reward": "good",
+        "stakes": "loot-risk",
+        "trace": "clock",
+        "escapes": [
+          "flee",
+          "environment"
+        ],
+        "clock": {
+          "kind": "heat",
+          "note": "Heat is the default — you're already Burning (Heat 3)."
+        },
+        "promise": "Uncommon: Trident of Fish Command",
+        "telegraphs": [
+          {
+            "kind": "rumor",
+            "text": "Word on the street: Corrupt Guard holds this ground."
+          }
+        ]
+      },
+      "spiceTier": "baseline",
+      "cursor": {
+        "current": 6,
+        "total": 10,
+        "done": false
+      },
+      "segments": [
+        {
+          "num": 6,
+          "label": "Escalation",
+          "isFinale": false,
+          "state": "here",
+          "gist": "The Void Expansion / Enemy",
+          "scene": {
+            "type": "The Void Expansion",
+            "description": "A location begins devouring reality around it; matter, people, and light vanish into nothing; the void expands inexorably."
+          },
+          "area": {
+            "type": "Oval Chamber",
+            "dims": "40' x 60'",
+            "side": "10' wide open balcony wrapping the upper perimeter."
+          },
+          "encounter": {
+            "type": "Enemy",
+            "text": "The Elite Pair (Corrupt Guard): 2 Mid-High CR — Divide & Conquer: The pair splits the party by forcing them into separate alleys, rooms, or buildings, then engages each group separately.",
+            "isEnemy": true,
+            "composition": "The Elite Pair",
+            "tactic": "Divide & Conquer: The pair splits the party by forcing them into separate alleys, rooms, or buildings, then engages each group separately."
+          },
+          "resolution": {
+            "state": "resolved",
+            "method": "stealth, revelation, and defection",
+            "outcome": "averted without combat",
+            "objectiveRef": "escape the captains with the courier report"
+          },
+          "interactable": {
+            "name": "wheelbarrow",
+            "flavor": null,
+            "tags": [
+              "Cover",
+              "Movement"
+            ],
+            "signal": "Loud",
+            "visibility": "Obvious"
+          },
+          "footing": {
+            "name": "Mimic Paving",
+            "impact": "A cluster of young mimics imitating a crosswalk. Triggers a multi-target grapple ambush."
+          },
+          "reskin": {
+            "ref": "S6",
+            "encounterState": "resolved",
+            "encounterResolution": {
+              "method": "stealth, revelation, and defection",
+              "outcome": "averted without combat",
+              "objectiveRef": "escape the captains with the courier report"
+            }
+          },
+          "effectDie": null,
+          "light": "magic-glow",
+          "dressing": {
+            "text": "Snapped chain with the broken link missing.",
+            "condition": "Decayed"
+          },
+          "atmo": "still",
+          "creatures": [
+            {
+              "name": "Bandit Captain",
+              "realm": null,
+              "summary": null
+            }
+          ],
+          "surface": null
+        }
+      ],
+      "ambientPresence": null
+    },
+    "retrieval": {
+      "omitted": {
+        "codex": 33,
+        "powers": 1,
+        "fronts": 1,
+        "gazetteer": 5
+      },
+      "rule": "Omitted state remains authoritative. Use supplied ids; never invent an omitted fact.",
+      "pinnedCodexIds": [
+        "npc:captain-ilyra-venn"
+      ],
+      "actionCodexIds": [
+        "npc:captain-ilyra-venn"
+      ],
+      "overTargetBytes": 5231
+    }
+  },
+  "route": {
+    "mode": "freeform-ruling",
+    "reasons": [
+      "open-intent-default"
+    ],
+    "relevantSlices": [
+      "scene",
+      "story-pressure",
+      "relevant-state"
+    ],
+    "modelCall": true
+  },
+  "rulingRequest": {
+    "contractVersion": 1,
+    "kind": "open-intent",
+    "playerAction": "I step out where Captain Ilyra Venn can see me. I tell her I heard everything. I will carry copies of the orders to the public book, but I will not promise to protect her from what follows. I ask her to give me the evidence and tell me whether breaking the void also freed the strangers from the tune.",
+    "principle": "Interpret freely; propose consequences through the engine contract; never mutate state in prose.",
+    "returnFields": [
+      "understoodAction",
+      "ruling",
+      "needsRoll",
+      "proposedCheck",
+      "stakes",
+      "outcomeBranches",
+      "proposedEvents"
+    ],
+    "authority": {
+      "dm": [
+        "intent",
+        "rule-applicability",
+        "difficulty",
+        "advantage-disadvantage",
+        "stakes",
+        "exceptions",
+        "meaning"
+      ],
+      "engine": [
+        "identity",
+        "state",
+        "custody",
+        "dice",
+        "arithmetic",
+        "resources",
+        "clock",
+        "accepted-mutation"
+      ]
+    }
+  },
+  "receipt": null,
+  "lane": "fast",
+  "laneModel": "sonnet",
+  "laneReasons": [
+    "routine:ask"
+  ],
+  "narrationBudget": {
+    "targetWords": 60,
+    "maxWords": 75
+  },
+  "lastResolution": null
+}

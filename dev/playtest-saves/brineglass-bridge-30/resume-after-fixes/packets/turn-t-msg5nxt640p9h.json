@@ -1,0 +1,236 @@
+{
+  "turnId": "t-msg5nxt640p9h",
+  "worldId": "msfjud9ebcves",
+  "action": "What are my current hit points and conditions?",
+  "rolls": [],
+  "digest": {
+    "schema": "beat-digest/v1",
+    "view": "scene",
+    "slices": [
+      "scene",
+      "pc",
+      "story-pressure",
+      "continuity"
+    ],
+    "worldId": "msfjud9ebcves",
+    "worldName": "The Brineglass Reach",
+    "clock": {
+      "day": 1,
+      "min": 479,
+      "band": "morning",
+      "exact": "07:59",
+      "session": 0,
+      "knowsTime": false
+    },
+    "location": "The Cobbled Tannery",
+    "pc": {
+      "id": "msfjud9rbeahy",
+      "name": "Mira Quill",
+      "class": "Bard",
+      "level": 1,
+      "hp": {
+        "cur": 6,
+        "max": 6
+      },
+      "conditions": [],
+      "marks": [
+        {
+          "id": "mk-msfjud9s5npiw",
+          "text": "You were poisoned; your next save against poison has disadvantage.",
+          "kind": "injury",
+          "sinceDay": 0
+        }
+      ],
+      "ac": 12,
+      "inventory": [
+        {
+          "id": "msfjud9rhr2d7",
+          "name": "Leather Armor",
+          "conditions": []
+        },
+        {
+          "id": "msfjud9r7oduu",
+          "name": "Dagger",
+          "qty": 2,
+          "conditions": []
+        }
+      ],
+      "inventoryMore": 10
+    },
+    "powers": [
+      {
+        "clockId": "the-crier-s-circle",
+        "faction": "The Crier's Circle",
+        "dominant": true,
+        "agenda": "become something other than what it is",
+        "method": "rumor and propaganda",
+        "tags": [
+          "popular"
+        ],
+        "clock": "1/6"
+      }
+    ],
+    "fronts": [
+      {
+        "clockId": "a-blight-or-plague-is-spreading-toward-the-town",
+        "kind": "external",
+        "danger": "a blight or plague is spreading toward the town",
+        "impersonal": "wildfire",
+        "clock": "0/6",
+        "closed": false,
+        "dmOnly": {
+          "truth": null,
+          "doom": "displacement — the people scatter"
+        }
+      }
+    ],
+    "recentLedger": [
+      {
+        "type": "transition",
+        "day": 1,
+        "min": 479,
+        "text": "⌛ Katherine and Naivara rehearse the Second-Click warning. — now Day 1, morning."
+      }
+    ],
+    "codex": [
+      {
+        "id": "npc:katherine-holloway",
+        "kind": "npc",
+        "name": "Katherine Holloway",
+        "fields": {
+          "role": "Tailor or Weaver",
+          "species": "Human",
+          "demeanor": "They haggle tirelessly over the smallest copper piece to get the best deal.",
+          "listenerChoice": "Publish the test and warning under her name; keep the tube’s location secret.",
+          "authoredWarning": true
+        },
+        "dm": {
+          "want": "Shed the family name and be known for their own, whatever it takes. — pride, family"
+        },
+        "status": {
+          "at": "the-cobbled-tannery"
+        },
+        "attitude": {
+          "value": 0,
+          "label": "Indifferent"
+        }
+      },
+      {
+        "id": "npc:naivara-teinithra",
+        "kind": "npc",
+        "name": "Naivara Teinithra",
+        "fields": {
+          "role": "Baker or Cook",
+          "species": "Elf",
+          "demeanor": "Has an old naval-style coat repurposed.",
+          "knowsMillerLeatRoute": true,
+          "glassBeeInterpretation": "Circle slang for messages carried through fused walls; the report may have been sent without a living courier."
+        },
+        "dm": {
+          "want": "Keep the secret buried one more season. One more. One more. — secret"
+        },
+        "status": {
+          "at": "the-cobbled-tannery"
+        },
+        "attitude": {
+          "value": 1,
+          "label": "Friendly"
+        }
+      }
+    ],
+    "itemCustody": [
+      {
+        "item": {
+          "id": "msfkat4zjdxcl",
+          "name": "The Altered Low Sluice Order",
+          "qty": 1,
+          "conditions": [],
+          "codexId": "item:the-altered-low-sluice-order"
+        },
+        "holder": {
+          "kind": "npc",
+          "ref": "npc:tessa-rill",
+          "name": "Tessa Rill"
+        },
+        "intent": "entrust",
+        "note": "Mira entrusts the Altered Low Sluice Order to Tessa Rill with instructions to burn it on a double three-note signal."
+      }
+    ],
+    "retrieval": {
+      "omitted": {
+        "codex": 30,
+        "powers": 1,
+        "fronts": 1,
+        "gazetteer": 5
+      },
+      "rule": "Omitted state remains authoritative. Use supplied ids; never invent an omitted fact.",
+      "pinnedCodexIds": [
+        "npc:katherine-holloway",
+        "npc:naivara-teinithra"
+      ],
+      "continuityCodexIds": [
+        "npc:katherine-holloway",
+        "npc:naivara-teinithra"
+      ]
+    }
+  },
+  "route": {
+    "mode": "freeform-ruling",
+    "reasons": [
+      "open-intent-default"
+    ],
+    "relevantSlices": [
+      "scene",
+      "story-pressure",
+      "relevant-state"
+    ],
+    "modelCall": true
+  },
+  "rulingRequest": {
+    "contractVersion": 1,
+    "kind": "open-intent",
+    "playerAction": "What are my current hit points and conditions?",
+    "principle": "Interpret freely; propose consequences through the engine contract; never mutate state in prose.",
+    "returnFields": [
+      "understoodAction",
+      "ruling",
+      "needsRoll",
+      "proposedCheck",
+      "stakes",
+      "outcomeBranches",
+      "proposedEvents"
+    ],
+    "authority": {
+      "dm": [
+        "intent",
+        "rule-applicability",
+        "difficulty",
+        "advantage-disadvantage",
+        "stakes",
+        "exceptions",
+        "meaning"
+      ],
+      "engine": [
+        "identity",
+        "state",
+        "custody",
+        "dice",
+        "arithmetic",
+        "resources",
+        "clock",
+        "accepted-mutation"
+      ]
+    }
+  },
+  "receipt": null,
+  "lane": "fast",
+  "laneModel": "sonnet",
+  "laneReasons": [
+    "default-fast"
+  ],
+  "narrationBudget": {
+    "targetWords": 60,
+    "maxWords": 75
+  },
+  "lastResolution": null
+}

@@ -132,6 +132,40 @@ function restRiskSevere(text){
   return /violently interrupted|no recovery benefits|ambush|blockade|already (?:inside|in the)|slipped past the sentry|cordon/.test(t);
 }
 
+/* The two d20 rest-complication tables intentionally share row semantics. These typed receipts turn
+   their exact promises into state instead of disposable prose. `partial` is standardized at one-half
+   because a rest must resolve in the same event that rolls it; ambiguous mental recovery / Penalty /
+   Insight / Boon language stays typed for AI interpretation rather than acquiring invented numbers.
+   Row 6 names a Spatial/Temporal table that does not exist in the compiled corpus, so it is surfaced
+   honestly as missing-table instead of fabricating a roll. */
+const REST_RISK_EFFECT_BY_ROLL={
+  1:{kind:"interruption",scope:"immediate"},
+  2:{kind:"encroaching-threat",scope:"pending-situation"},
+  3:{kind:"tracking-mark",scope:"pending-situation"},
+  4:{kind:"infiltrated-threat",scope:"pending-situation"},
+  5:{kind:"blocked-exit",scope:"pending-situation"},
+  6:{kind:"temporal-drag",scope:"pending-situation",missingTable:"spatial-temporal"},
+  7:{kind:"half-recovery",scope:"immediate",recoveryFraction:0.5},
+  8:{kind:"next-check-disadvantage",scope:"next-check",mode:"disadvantage"},
+  9:{kind:"partial-recovery",scope:"immediate",recoveryFraction:0.5},
+  10:{kind:"next-physical-action-penalty",scope:"next-physical-action",note:"interpret penalty; table gives no number"},
+  11:{kind:"surprise-immunity",scope:"next-segment"},
+  12:{kind:"cryptic-clue-no-mental-recovery",scope:"pending-situation",note:"mental recovery is not a modeled pool"},
+  13:{kind:"next-initiative-or-reflex-disadvantage",scope:"next-initiative-or-reflex",mode:"disadvantage"},
+  14:{kind:"insight-and-boon-debt",scope:"until-resolved",note:"interpret Insight; cancel the next Boon"},
+  15:{kind:"damaged-records",scope:"pending-situation"},
+  16:{kind:"tense-success",scope:"immediate"},
+  17:{kind:"secure-success",scope:"immediate"},
+  18:{kind:"extra-resource",scope:"immediate",extraResource:1},
+  19:{kind:"found-curiosity",scope:"pending-situation"},
+  20:{kind:"segment-boon",scope:"next-segment",note:"interpret Boon for this segment"}
+};
+
+function restRiskEffectFor(tableId,total){
+  const spec=REST_RISK_EFFECT_BY_ROLL[Number(total)];
+  return spec?Object.assign({},spec,{source:{table:tableId||null,roll:Number(total)}}):null;
+}
+
 /* restRiskRoll(w, opts) — opts:{nodeId, kind ("short"|"dawn"|"montage"), env}. Returns:
      { ok:true, class, text, band, severe, interrupted }
    or {ok:false, reason:"no-table"} (uncompiled — null-safe). `interrupted` is TRUE only when the row
@@ -148,7 +182,8 @@ function restRiskRoll(w, opts){
   if(!roll){ console.warn("[wiring-a] "+cfg.table+" not compiled — rest-risk skipped (null-safe)"); return {ok:false, reason:"no-table"}; }
   const severe=restRiskSevere(roll.text);
   const interrupted=severe && Math.random()<cfg.interruptChance;
-  return { ok:true, class:cls, text:roll.text, band:roll.band, severe, interrupted };
+  return { ok:true, class:cls, table:cfg.table, roll:roll.total, text:roll.text, band:roll.band, severe, interrupted,
+    effect:restRiskEffectFor(cfg.table,roll.total) };
 }
 
 /* HQ3-C2 (SET-07-F1) — minutes elapsed before an INTERRUPTED rest was broken — a rolled partial

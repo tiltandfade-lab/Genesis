@@ -13,10 +13,10 @@
    corpseStatus, prepCastId. Registered in manifest.json (world.item-legacy);
    loaded immediately after src/world/rebirth.js. */
 
-/* §1 — the nine loss states. "cached" is the parked-Bastion seam (§1.1 ruling):
+/* §1 — the ten loss states. "cached" is the Bastion seam (§1.1 ruling):
    the enum member exists; no v1 code path ever SETS it (item_claimed refuses it,
    §7.3). CROWNING-BASTION B1 will flip that refusal later. */
-const LEGACY_LOSS_STATES = ["held","dropped","on-corpse","claimed-npc","claimed-creature",
+const LEGACY_LOSS_STATES = ["held","transferred","dropped","on-corpse","claimed-npc","claimed-creature",
                             "claimed-faction","cached","destroyed","unknown"];
 
 /* §1.2 — which instances are legacy-grade (verbatim predicate). A legacy string

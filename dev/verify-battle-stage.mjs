@@ -77,7 +77,7 @@ function freshWin() {
   return win;
 }
 
-function makeWorld(win, sheetOverrides = {}) {
+function makeWorld(win, sheetOverrides = {}, presentationMode = "theater") {
   const world = {
     id: "w-stagetest", name: "The Battle Stage Test World",
     seed: { master: { name: "Test Redoubt", desc: "a place for asserting DOM" } },
@@ -109,6 +109,7 @@ function makeWorld(win, sheetOverrides = {}) {
   win.GS.gamePanel = null; win.GS.menuOpen = false; win.GS.charTab = null; win.GS.actionsTab = "abilities";
   win.GS.activeShopId = null; win.GS.shopTab = "buy"; win.GS.shopSel = null;
   win.GS.combat = null; win.GS.prevPanel = undefined; win.GS.theaterMounted = false; win.GS.stageCollapsed = false;
+  win.GS.presentationMode = presentationMode; // existing theater assertions explicitly opt into the lab
   return world;
 }
 
@@ -140,6 +141,27 @@ function stubTheater(win, { mountReturns = true } = {}) {
 let pass = 0, fail = 0;
 const check = (name, cond, detail = "") =>
   cond ? (pass++, console.log("  ✓", name)) : (fail++, console.log("  ✗", name, "—", detail));
+
+// ============================================================================
+// 0. STORY IS THE DEFAULT; THEATER IS AN EXPLICIT LAB LENS
+// ============================================================================
+{
+  const win = freshWin();
+  check("0a. fresh app state defaults to Story presentation", win.GS.presentationMode === "story", win.GS.presentationMode);
+  const world = makeWorld(win, {}, "story");
+  const calls = stubTheater(win);
+  win.renderWorld();
+  win.renderWorld(); // settle any ordinary repeat-render initialization before fingerprinting the lens toggle
+  const canonicalBefore = JSON.stringify(world); // compare presentation toggles after ordinary render initialization
+  check("0b. Story mode never calls Theater.mount, even in a live session", calls.mount === 0, calls.mount);
+  check("0c. Story mode renders the classic text-first layout", !win.document.querySelector(".game.battle-stage"));
+  win.toggleTheaterLab();
+  check("0d. the explicit Theater Lab toggle mounts the preserved visual lens", calls.mount === 1 && win.GS.presentationMode === "theater", calls.mount);
+  check("0e. toggling the lab off returns to Story and retires its renderer", (win.toggleTheaterLab(), win.GS.presentationMode === "story" && calls.retire === 1));
+  const canonicalAfter=JSON.stringify(world), baselineWorld=JSON.parse(canonicalBefore);
+  const changedKeys=Object.keys(world).filter(k=>JSON.stringify(world[k])!==JSON.stringify(baselineWorld[k]));
+  check("0f. Story→Theater→Story changes no canonical world state", canonicalAfter === canonicalBefore, changedKeys.join(","));
+}
 
 // ============================================================================
 // 1. THEATER ABSENT -> CLASSIC LAYOUT (the clean-degrade law)
@@ -320,8 +342,8 @@ const check = (name, cond, detail = "") =>
   // TABLETOP-UNITS.md §U1 (2026-07-08): the gate text moved from combat-scoped to mount-scoped —
   // `GS.combat&&GS.combat.active` dropped out (the Standing Table activates outside combat too), but
   // the load-bearing half (never activate without a REAL mount) is exactly what this mutation proves.
-  const marker = `const stageMode=!!(GS.theaterMounted && !GS.stageCollapsed);`;
-  const mutated = `const stageMode=!!(!GS.stageCollapsed);`; // drop the mount gate — activates even pre-mount
+  const marker = `const stageMode=!!(theaterLab && GS.theaterMounted && !GS.stageCollapsed);`;
+  const mutated = `const stageMode=!!(theaterLab && !GS.stageCollapsed);`; // drop the mount gate — activates even pre-mount
   if (!original.includes(marker)) {
     fail++; console.log("  ✗ MUTATION(stage-mode-gate): guard text not found verbatim — spec drifted?");
   } else {

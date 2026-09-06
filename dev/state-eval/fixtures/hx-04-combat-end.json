@@ -295,7 +295,7 @@
             "xp": 100,
             "ac": 13,
             "maxHp": 22,
-            "hp": 22,
+            "hp": 0,
             "init": 1,
             "abilities": {
               "str": {
@@ -370,7 +370,7 @@
             "size": "large",
             "conditions": [],
             "band": "near",
-            "down": false,
+            "down": true,
             "factionId": "the-ironwood-circle",
             "victimClass": "monster",
             "fid": "f1",

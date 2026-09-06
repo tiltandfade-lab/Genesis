@@ -1,0 +1,413 @@
+{
+  "turnId": "t-msga9pr25kv57",
+  "worldId": "msfjud9ebcves",
+  "action": "I wake, check the light, and use the rooftops to return to the Office of Amber Weights rather than cross the crowd square.",
+  "rolls": [],
+  "digest": {
+    "schema": "beat-digest/v1",
+    "view": "travel",
+    "slices": [
+      "scene",
+      "pc",
+      "story-pressure",
+      "continuity",
+      "travel",
+      "active-walk"
+    ],
+    "worldId": "msfjud9ebcves",
+    "worldName": "The Brineglass Reach",
+    "clock": {
+      "day": 1,
+      "min": 921,
+      "band": "afternoon",
+      "exact": "15:21",
+      "session": 0,
+      "knowsTime": false
+    },
+    "location": "Shadowed & Lawless — segment 6: The Void Expansion, Oval Chamber, 40' x 60', magic-glow",
+    "pc": {
+      "id": "msfjud9rbeahy",
+      "name": "Mira Quill",
+      "class": "Bard",
+      "level": 3,
+      "hp": {
+        "cur": 12,
+        "max": 12
+      },
+      "conditions": [],
+      "marks": [
+        {
+          "id": "mk-msfjud9s5npiw",
+          "text": "You were poisoned; your next save against poison has disadvantage.",
+          "kind": "injury",
+          "sinceDay": 0
+        }
+      ],
+      "ac": 12,
+      "resources": {
+        "hp": {
+          "cur": 12,
+          "max": 12
+        },
+        "slots": {
+          "1": "4/4",
+          "2": "2/2"
+        },
+        "pools": {
+          "Bardic Inspiration": "2/2 (d6)"
+        },
+        "hitDice": {
+          "cur": 3,
+          "max": 3,
+          "die": 8
+        }
+      },
+      "equipped": {
+        "mainHand": "msfjud9r7oduu",
+        "offHand": null,
+        "armor": "msfjud9rhr2d7"
+      },
+      "inventory": [
+        {
+          "id": "msfjud9rhr2d7",
+          "name": "Leather Armor"
+        },
+        {
+          "id": "msfjud9r7oduu",
+          "name": "Dagger",
+          "qty": 2
+        }
+      ],
+      "inventoryMore": 10
+    },
+    "powers": [
+      {
+        "clockId": "the-crier-s-circle",
+        "faction": "The Crier's Circle",
+        "dominant": true,
+        "agenda": "become something other than what it is",
+        "method": "rumor and propaganda",
+        "tags": [
+          "popular"
+        ],
+        "clock": "1/6"
+      }
+    ],
+    "fronts": [
+      {
+        "clockId": "a-blight-or-plague-is-spreading-toward-the-town",
+        "kind": "external",
+        "danger": "a blight or plague is spreading toward the town",
+        "impersonal": "wildfire",
+        "clock": "0/6",
+        "closed": false,
+        "dmOnly": {
+          "truth": null,
+          "doom": "displacement — the people scatter"
+        }
+      }
+    ],
+    "recentLedger": [
+      {
+        "type": "outcome",
+        "day": 1,
+        "min": 861,
+        "text": "✦ Rest risk (camp): Temporal Drag — You slept far longer than intended. Roll on the Spatial/Temporal table.",
+        "matched": true
+      }
+    ],
+    "codex": [
+      {
+        "id": "location:amber-glass-quay",
+        "kind": "location",
+        "name": "Amber-Glass Quay",
+        "fields": {
+          "type": "The water tower platform"
+        },
+        "dm": {
+          "secret": "Gave an individual family perpetual easement over the mill road in exchange for a loan; the loan was repaid; the easement was never revoked; the family is now charging tolls on grounds the town cannot legally contest.",
+          "secretBand": "Grounded",
+          "itemsPool": "realm-items-frontier"
+        }
+      }
+    ],
+    "activeWalk": {
+      "nodeId": "frontier-s0-0",
+      "place": "Shadowed & Lawless",
+      "environment": "urban",
+      "topology": "The Rundown",
+      "skin": {
+        "text": "A specific song is being hummed by strangers who've never met. — The same unfamiliar tune, unconsciously, by people across the district who can't say where they learned it.",
+        "band": "Strange"
+      },
+      "risk": {
+        "danger": "risky",
+        "reward": "good",
+        "stakes": "loot-risk",
+        "trace": "clock",
+        "escapes": [
+          "flee",
+          "environment"
+        ],
+        "clock": {
+          "kind": "heat",
+          "note": "Heat is the default — you're already Burning (Heat 3)."
+        },
+        "promise": "Uncommon: Trident of Fish Command",
+        "telegraphs": [
+          {
+            "kind": "rumor",
+            "text": "Word on the street: Corrupt Guard holds this ground."
+          }
+        ]
+      },
+      "spiceTier": "baseline",
+      "cursor": {
+        "current": 6,
+        "touched": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "done": false,
+        "total": 10
+      },
+      "segments": [
+        {
+          "num": 5,
+          "label": "Hub",
+          "state": "behind"
+        },
+        {
+          "num": 6,
+          "label": "Escalation",
+          "isFinale": false,
+          "state": "here",
+          "gist": "The Void Expansion / Enemy",
+          "scene": {
+            "type": "The Void Expansion",
+            "description": "A location begins devouring reality around it; matter, people, and light vanish into nothing; the void expands inexorably."
+          },
+          "area": {
+            "type": "Oval Chamber",
+            "dims": "40' x 60'",
+            "side": "10' wide open balcony wrapping the upper perimeter."
+          },
+          "encounter": {
+            "type": "Enemy",
+            "text": "The Elite Pair (Corrupt Guard): 2 Mid-High CR — Divide & Conquer: The pair splits the party by forcing them into separate alleys, rooms, or buildings, then engages each group separately.",
+            "isEnemy": true,
+            "composition": "The Elite Pair",
+            "tactic": "Divide & Conquer: The pair splits the party by forcing them into separate alleys, rooms, or buildings, then engages each group separately."
+          },
+          "resolution": {
+            "state": "resolved",
+            "method": "stealth, revelation, and defection",
+            "outcome": "averted without combat",
+            "objectiveRef": "escape the captains with the courier report"
+          },
+          "interactable": {
+            "name": "wheelbarrow",
+            "flavor": null,
+            "tags": [
+              "Cover",
+              "Movement"
+            ],
+            "signal": "Loud",
+            "visibility": "Obvious"
+          },
+          "footing": {
+            "name": "Mimic Paving",
+            "impact": "A cluster of young mimics imitating a crosswalk. Triggers a multi-target grapple ambush."
+          },
+          "reskin": {
+            "ref": "S6",
+            "encounterState": "resolved",
+            "encounterResolution": {
+              "method": "stealth, revelation, and defection",
+              "outcome": "averted without combat",
+              "objectiveRef": "escape the captains with the courier report"
+            }
+          },
+          "effectDie": null,
+          "light": "magic-glow",
+          "dressing": {
+            "text": "Snapped chain with the broken link missing.",
+            "condition": "Decayed"
+          },
+          "atmo": "still",
+          "creatures": [
+            {
+              "name": "Bandit Captain",
+              "realm": null,
+              "summary": null
+            }
+          ],
+          "surface": null
+        },
+        {
+          "num": 7,
+          "label": "Escalation",
+          "isFinale": false,
+          "state": "ahead",
+          "approach": true,
+          "gist": "The Mob Surge / Hazard",
+          "scene": {
+            "type": "The Mob Surge",
+            "description": "A crowd ignited by rumor, preaching, or panic swells and turns violent, surging toward the party's position."
+          },
+          "area": {
+            "type": "Grand Chamber",
+            "dims": "40' x 40' square",
+            "side": "Fully ruined roof, 10' x 20' intact covered side-area."
+          },
+          "encounter": {
+            "type": "Hazard",
+            "text": "Urban Terrain: Deep Mud / Offal: A section of unpaved slum is flooded with muck. Treat as Difficult Terrain. A DC 11 Constitution save is required to avoid retching (Disadvantage on next attack/check).",
+            "isEnemy": false,
+            "composition": null,
+            "tactic": null
+          },
+          "resolution": null,
+          "interactable": {
+            "name": "water pump",
+            "flavor": null,
+            "tags": [
+              "Resource",
+              "Hazard"
+            ],
+            "signal": "Loud",
+            "visibility": "Obvious"
+          },
+          "footing": {
+            "name": "Broken Cobblestones",
+            "impact": "The stones are broken or dislodged, counting as light rubble; this increases the DC of Dexterity (Acrobatics) checks by 2."
+          },
+          "reskin": null,
+          "effectDie": null,
+          "light": "dark",
+          "dressing": {
+            "text": "Bones arranged into lines or clusters.",
+            "condition": "Decayed"
+          },
+          "atmo": "hammering from a distant workshop",
+          "creatures": null,
+          "surface": null
+        }
+      ],
+      "ambientPresence": null,
+      "briefing": null,
+      "cast": {
+        "locId": "location:amber-glass-quay",
+        "npcIds": [
+          "npc:erias",
+          "npc:falevalu-tavihiva"
+        ],
+        "itemIds": [
+          "item:a-formal-apothecary-s-label-printed-professionally-on-a-bottle-containing-something-entirely-different-from-what-is-labeled"
+        ],
+        "artIds": []
+      },
+      "moreSegments": 8
+    },
+    "levelUp": {
+      "status": "pending",
+      "from": 1,
+      "to": 3,
+      "cantrips": 0,
+      "spells": 2,
+      "asiCount": 0,
+      "subclassName": "College of Lore"
+    },
+    "pendingSituation": {
+      "kind": "rest-risk",
+      "text": "Temporal Drag — You slept far longer than intended. Roll on the Spatial/Temporal table.",
+      "class": "camp",
+      "severe": false,
+      "interrupted": false,
+      "effect": {
+        "kind": "temporal-drag",
+        "scope": "pending-situation",
+        "missingTable": "spatial-temporal",
+        "source": {
+          "table": "urban-rest-complications",
+          "roll": 6
+        }
+      },
+      "day": 1,
+      "min": 861
+    },
+    "retrieval": {
+      "omitted": {
+        "codex": 32,
+        "powers": 2,
+        "fronts": 1,
+        "gazetteer": 5
+      },
+      "rule": "Omitted state remains authoritative. Use supplied ids; never invent an omitted fact.",
+      "overTargetBytes": 6711
+    }
+  },
+  "route": {
+    "mode": "freeform-ruling",
+    "reasons": [
+      "open-intent-default"
+    ],
+    "relevantSlices": [
+      "scene",
+      "story-pressure",
+      "relevant-state"
+    ],
+    "modelCall": true
+  },
+  "rulingRequest": {
+    "contractVersion": 1,
+    "kind": "open-intent",
+    "playerAction": "I wake, check the light, and use the rooftops to return to the Office of Amber Weights rather than cross the crowd square.",
+    "principle": "Interpret freely; propose consequences through the engine contract; never mutate state in prose.",
+    "returnFields": [
+      "understoodAction",
+      "ruling",
+      "needsRoll",
+      "proposedCheck",
+      "stakes",
+      "outcomeBranches",
+      "proposedEvents"
+    ],
+    "authority": {
+      "dm": [
+        "intent",
+        "rule-applicability",
+        "difficulty",
+        "advantage-disadvantage",
+        "stakes",
+        "exceptions",
+        "meaning"
+      ],
+      "engine": [
+        "identity",
+        "state",
+        "custody",
+        "dice",
+        "arithmetic",
+        "resources",
+        "clock",
+        "accepted-mutation"
+      ]
+    }
+  },
+  "receipt": null,
+  "lane": "fast",
+  "laneModel": "sonnet",
+  "laneReasons": [
+    "default-fast"
+  ],
+  "narrationBudget": {
+    "targetWords": 60,
+    "maxWords": 75
+  },
+  "lastResolution": null
+}

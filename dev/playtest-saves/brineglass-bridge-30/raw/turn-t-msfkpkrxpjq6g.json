@@ -1,0 +1,308 @@
+{
+  "turnId": "t-msfkpkrxpjq6g",
+  "worldId": "msfjud9ebcves",
+  "action": "What am I carrying right now?",
+  "rolls": [],
+  "digest": {
+    "schema": "beat-digest/v1",
+    "view": "inventory",
+    "slices": [
+      "scene",
+      "pc",
+      "story-pressure",
+      "continuity",
+      "inventory",
+      "item-custody"
+    ],
+    "worldId": "msfjud9ebcves",
+    "worldName": "The Brineglass Reach",
+    "clock": {
+      "day": 1,
+      "min": 450,
+      "band": "morning",
+      "exact": "07:30",
+      "session": 0,
+      "knowsTime": false
+    },
+    "location": "The Cobbled Tannery",
+    "pc": {
+      "name": "Mira Quill",
+      "headline": "a Charlatan Human Bard who went out on an adventure",
+      "pronouns": "she",
+      "class": "Bard",
+      "level": 1,
+      "hp": {
+        "cur": 6,
+        "max": 6
+      },
+      "conditions": [],
+      "marks": [
+        {
+          "id": "mk-msfjud9s5npiw",
+          "text": "You were poisoned; your next save against poison has disadvantage.",
+          "kind": "injury",
+          "sinceDay": 0
+        }
+      ],
+      "gold": 19,
+      "inventory": [
+        {
+          "id": "msfjud9rhr2d7",
+          "name": "Leather Armor",
+          "conditions": []
+        },
+        {
+          "id": "msfjud9r7oduu",
+          "name": "Dagger",
+          "qty": 2,
+          "conditions": []
+        },
+        {
+          "id": "msfjud9r36fkx",
+          "name": "Lute",
+          "conditions": []
+        },
+        {
+          "id": "msfjud9rn35kw",
+          "name": "Backpack",
+          "conditions": []
+        },
+        {
+          "id": "msfjud9r0k2m0",
+          "name": "Bedroll",
+          "conditions": []
+        },
+        {
+          "id": "msfjud9rgenzo",
+          "name": "Costume",
+          "qty": 2,
+          "conditions": []
+        },
+        {
+          "id": "msfjud9rqgk9r",
+          "name": "Candle",
+          "qty": 4,
+          "conditions": []
+        },
+        {
+          "id": "msfjud9rujmud",
+          "name": "Rations",
+          "qty": 5,
+          "conditions": []
+        }
+      ],
+      "equipped": {
+        "mainHand": "msfjud9r7oduu",
+        "offHand": null,
+        "armor": "msfjud9rhr2d7"
+      },
+      "equippedWeapons": {
+        "mainHand": {
+          "weaponName": "Dagger",
+          "baseName": "Dagger",
+          "properties": [
+            "Finesse",
+            "Light",
+            "Thrown (Range 20/60)"
+          ],
+          "finesse": true,
+          "ranged": false,
+          "grip": "1h",
+          "magicBonus": 0,
+          "atkBonus": 0,
+          "rider": null,
+          "dmg": [
+            {
+              "n": 1,
+              "die": 4,
+              "bonus": 1,
+              "type": "piercing"
+            }
+          ]
+        },
+        "offHand": null
+      },
+      "inventoryMore": 3
+    },
+    "powers": [
+      {
+        "clockId": "the-crier-s-circle",
+        "faction": "The Crier's Circle",
+        "dominant": true,
+        "agenda": "become something other than what it is",
+        "method": "rumor and propaganda",
+        "tags": [
+          "popular"
+        ],
+        "clock": "1/6"
+      }
+    ],
+    "fronts": [
+      {
+        "clockId": "a-blight-or-plague-is-spreading-toward-the-town",
+        "kind": "external",
+        "danger": "a blight or plague is spreading toward the town",
+        "impersonal": "wildfire",
+        "clock": "0/6",
+        "closed": false,
+        "dmOnly": {
+          "truth": null,
+          "doom": "displacement \u2014 the people scatter"
+        }
+      }
+    ],
+    "recentLedger": [
+      {
+        "type": "canon",
+        "day": 1,
+        "min": 450,
+        "text": "\u25c6 Malquis Xiloscient ordered all borrowed identities released, barred preserved voices from outranking living answers, and called a public Crier's Circle succession for noon."
+      },
+      {
+        "type": "outcome",
+        "day": 1,
+        "min": 450,
+        "text": "\u2726 +1 XP \u2014 216 total."
+      }
+    ],
+    "codex": [
+      {
+        "id": "item:a-formal-apothecary-s-label-printed-professionally-on-a-bottle-containing-something-entirely-different-from-what-is-labeled",
+        "kind": "item",
+        "name": "A formal apothecary's label \u2014 printed, professionally \u2014 on a bottle containing something entirely different from what is labeled.",
+        "fields": {
+          "object": "A formal apothecary's label \u2014 printed, professionally \u2014 on a bottle containing something entirely different from what is labeled.",
+          "opens": "The apothecary dispensed it to order, knowingly, which means they have records of who ordered it and what was actually inside."
+        },
+        "dm": {
+          "why": "The label was applied at the apothecary, not relabeled later.",
+          "opens": "The apothecary dispensed it to order, knowingly, which means they have records of who ordered it and what was actually inside.",
+          "lock": null
+        },
+        "status": {
+          "at": "location:amber-glass-quay",
+          "known": false,
+          "soft": true,
+          "condition": "ok"
+        }
+      }
+    ],
+    "revealed": [
+      "powers",
+      "map",
+      "ledger"
+    ],
+    "ambientPresence": {
+      "count": 3,
+      "texture": "a few locals going about their business"
+    },
+    "prepPending": {
+      "session": 0,
+      "frontiers": [
+        "frontier-s0-0 (urban)",
+        "frontier-s0-1 (dungeon)",
+        "frontier-s0-2 (wilderness)"
+      ],
+      "reason": "no-overlays"
+    },
+    "itemCustody": [
+      {
+        "item": {
+          "id": "msfkat4zjdxcl",
+          "name": "The Altered Low Sluice Order",
+          "qty": 1,
+          "conditions": [],
+          "codexId": "item:the-altered-low-sluice-order"
+        },
+        "holder": {
+          "kind": "npc",
+          "ref": "npc:tessa-rill",
+          "name": "Tessa Rill"
+        },
+        "note": "Mira entrusts the Altered Low Sluice Order to Tessa Rill with instructions to burn it on a double three-note signal."
+      }
+    ],
+    "itemLegacy": [
+      {
+        "codexId": "item:the-altered-low-sluice-order",
+        "name": "The Altered Low Sluice Order",
+        "lossState": "claimed-npc",
+        "claimant": {
+          "kind": "npc",
+          "name": "Tessa Rill"
+        },
+        "lastSeenAt": "the-cobbled-tannery",
+        "lastSeenDay": 1,
+        "hookId": "thread:the-altered-low-sluice-order-where-it-lies-now",
+        "factionInterest": null,
+        "ench": false
+      }
+    ],
+    "retrieval": {
+      "omitted": {
+        "codex": 29,
+        "powers": 2,
+        "fronts": 1,
+        "gazetteer": 5
+      },
+      "rule": "Omitted state remains authoritative. Use supplied ids; never invent an omitted fact.",
+      "overTargetBytes": 4296
+    }
+  },
+  "route": {
+    "mode": "freeform-ruling",
+    "reasons": [
+      "open-intent-default"
+    ],
+    "relevantSlices": [
+      "scene",
+      "story-pressure",
+      "relevant-state"
+    ],
+    "modelCall": true
+  },
+  "rulingRequest": {
+    "contractVersion": 1,
+    "kind": "open-intent",
+    "playerAction": "What am I carrying right now?",
+    "principle": "Interpret freely; propose consequences through the engine contract; never mutate state in prose.",
+    "returnFields": [
+      "understoodAction",
+      "ruling",
+      "needsRoll",
+      "proposedCheck",
+      "stakes",
+      "outcomeBranches",
+      "proposedEvents"
+    ],
+    "authority": {
+      "dm": [
+        "intent",
+        "rule-applicability",
+        "difficulty",
+        "advantage-disadvantage",
+        "stakes",
+        "exceptions",
+        "meaning"
+      ],
+      "engine": [
+        "identity",
+        "state",
+        "custody",
+        "dice",
+        "arithmetic",
+        "resources",
+        "clock",
+        "accepted-mutation"
+      ]
+    }
+  },
+  "receipt": null,
+  "lane": "fast",
+  "laneModel": "sonnet",
+  "laneReasons": [
+    "default-fast"
+  ],
+  "lastResolution": null,
+  "_received": 1785903293.925667
+}

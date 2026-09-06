@@ -60,9 +60,9 @@ const TERRAIN_OPS = Object.keys(TERRAIN_PROSE); // HQ2-8b: derived, not hand-lis
    behind / ahead) + the pre-cast frontier cast. A SOFT prior — player intent and the live situation
    override it; the DM does not steer the party down it. Returns null when no walk is active (party in
    town / between walks).
-   DIGEST-DIET §3: full segment detail (gist/reskin/isFinale/effectDie) rides ONLY on the "here" segment
-   — the moment the DM actually plans from. Behind/ahead segments are `{num,label,state}` stubs; full
-   detail rides again on walk start / promotion / needsReskin (those call sites already re-run this). */
+   DIGEST-DIET §3: actionable segment detail rides on "here" plus the immediate reachable exits. The
+   latter is load-bearing: when a player crosses a boundary, a memoryless DM must see the generated
+   encounter it is about to narrate. Farther ahead and behind remain `{num,label,state}` stubs. */
 function activeWalkDigest(w){
   if(typeof prepOf!=="function"||typeof walkOfFrontier!=="function") return null;
   const P=prepOf(w), id=P.activeWalkId; if(!id) return null;
@@ -70,6 +70,8 @@ function activeWalkDigest(w){
   const ov=pn.segments||null;                            // the DM's Stage-2 reskin overlay (roll-keyed), if applied
   const cur=pn.cursor||{ current:1, touched:[], done:false };
   const stateOf=s=>(cur.touched||[]).indexOf(s.num)>=0 ? (s.num===cur.current?"here":"behind") : "ahead";
+  const hereRaw=(walk.segments||[]).find(s=>s.num===cur.current)||null;
+  const nextNums=new Set(((hereRaw&&hereRaw.exits)||[]).map(e=>e&&e.num).filter(n=>typeof n==="undefined"?false:true));
   return {
     nodeId:id, place:(mapOf(w).nodes[id]||{}).name||null,
     environment:walk.environment, topology:walk.topology||null, briefing:pn.briefing||null,
@@ -81,17 +83,71 @@ function activeWalkDigest(w){
     // and which exits are real. Pure read of the mint-time stamp; null on pre-contract walks.
     risk: (walk.risk && typeof sceneRiskDigest==="function") ? sceneRiskDigest(walk.risk) : null,
     spiceTier: walk.spiceTier||null,   // SPICE-RAISE: the walk's region tier (baseline|fray1|fray2|rim) — sizes the DM's connective-weirdness license (DM-CHARTER §8.5c)
-    cursor:{ current:cur.current, touched:cur.touched, done:!!cur.done, total:walk.segCount },
+    // Roller `segCount` is the authored non-finale budget; every current walk family appends a real
+    // finale/arrival node. Player/DM progress must report the graph's actual segment count.
+    cursor:{ current:cur.current, touched:cur.touched, done:!!cur.done,
+      total:(walk.segments&&walk.segments.length)||walk.segCount||0 },
     segments:(walk.segments||[]).map(s=>{
       const state=stateOf(s);
-      if(state!=="here") return { num:s.num, label:s.label, state };   // steady-state stub
+      // Graph reachability, not numeric direction, defines an immediate exit. A player can return
+      // through the door they just used; marking a touched/lower-numbered exit only "behind" hid
+      // its generated room truth on branch-back turns and forced the DM to invent the return route.
+      const approach=state!=="here"&&nextNums.has(s.num);
+      if(state!=="here"&&!approach) return { num:s.num, label:s.label, state };   // steady-state stub
       const reskin = ov ? (ov.find(o=>o.ref===("S"+s.num))||null) : null;
       return {
-        num:s.num, label:s.label, isFinale:!!s.isFinale, state,
+        num:s.num, label:s.label, isFinale:!!s.isFinale, state, approach:approach||undefined,
         gist:s.isFinale ? ((s.finale&&(s.finale.track||s.finale.revelation))||s.areaType||"arrival")
                         : [s.segType||s.areaType||s.biome, s.encounter&&s.encounter.type].filter(Boolean).join(" / "),
+        // The compact generated handoff needed to adjudicate an arrival without inventing a room.
+        // Keep story intent, exact encounter text, and actionable physical affordances; omit the
+        // deeper rollRef/table provenance and unopened loot payload from ordinary turn context.
+        scene:(s.segType||s.description)?{type:s.segType||null,description:s.description||null}:null,
+        area:(s.areaType||s.dims||s.side)?{type:s.areaType||null,dims:s.dims||null,side:s.side||null}:null,
+        encounter:s.encounter?{
+          type:s.encounter.type||null,text:s.encounter.text||null,isEnemy:!!s.encounter.isEnemy,
+          composition:s.encounter.composition||null,tactic:s.encounter.tactic||null
+        }:null,
+        // Urban/dungeon finales store their authored scene, revelation, adversary/social lead, and
+        // exit consequence under `finale` rather than the ordinary top-level segment fields. Hiding
+        // that nested record left an actionable exit labeled only "Combat" and forced invention at
+        // the walk's most consequential boundary. Keep the rolled ending compact but complete.
+        finale:(s.isFinale&&s.finale)?{
+          track:s.finale.track||null,
+          revelation:s.finale.revelation||null,
+          exitState:s.finale.exitState||null,
+          sceneFrame:s.finale.sceneFrame?{
+            frame:s.finale.sceneFrame.frame||null,dims:s.finale.sceneFrame.dims||null,
+            tactical:s.finale.sceneFrame.tactical||null
+          }:null,
+          boss:s.finale.boss?{
+            archetype:s.finale.boss.archetype||null,creature:s.finale.boss.creature||null,
+            threatId:s.finale.boss.threatId||null
+          }:null,
+          tacticalSetup:s.finale.tacticalSetup||null,
+          keyNpc:s.finale.keyNpc||null,
+          narrativeDevice:s.finale.narrativeDevice||null,
+          catalystCallback:s.finale.catalystCallback||null,
+          macguffin:s.finale.macguffin?{id:s.finale.macguffin.id||null,name:s.finale.macguffin.name||null}:null
+        }:null,
+        reward:(s.isFinale&&s.loot)?{
+          magic:s.loot.magic?{rarity:s.loot.magic.rarity||null,name:s.loot.magic.name||null,desc:s.loot.magic.desc||null}:null,
+          coin:s.loot.coin||null,valuable:s.loot.valuable||null,frame:s.loot.frame||null
+        }:null,
+        resolution:(reskin&&reskin.encounterState)?{
+          state:reskin.encounterState,
+          method:reskin.encounterResolution&&reskin.encounterResolution.method||null,
+          outcome:reskin.encounterResolution&&reskin.encounterResolution.outcome||null,
+          objectiveRef:reskin.encounterResolution&&reskin.encounterResolution.objectiveRef||null
+        }:null,
+        interactable:s.interactable?{
+          name:s.interactable.name||null,flavor:s.interactable.flavor||null,
+          tags:[s.interactable.tag,s.interactable.tag2].filter(Boolean),
+          signal:s.interactable.signal||null,visibility:s.interactable.visibility||null
+        }:null,
+        footing:s.footing?{name:s.footing,impact:s.footingImpact||null}:null,
         reskin,
-        // ON-DEMAND-GEN §4: the room die — surfaced ONLY on the "here" segment (ahead/behind stay veiled).
+        // ON-DEMAND-GEN §4: a captured room die may preview on an immediate approach; farther rooms stay veiled.
         // Captured via {type:"walk_update"} (BATCH-GUARDRAILS G4); rolledFace persisting means "narrate
         // the canon face, never re-roll" — the DM checks this before generating a fresh die.
         effectDie: (reskin&&reskin.effectDie)||null,
@@ -100,9 +156,8 @@ function activeWalkDigest(w){
         // right now (or will, the moment combat opens here). null when the walker didn't stamp one
         // (an older snapshot / narrow test harness), same graceful-until-authored discipline as `skin`.
         light: (s.light&&s.light.profile)||null,
-        // DRESSING-WIRING.md §"Behavior" 4: dressing rides the walk slice exactly like `feature` does
-        // (folded into `gist` above) — surfaced ONLY on the "here" segment (steady-state stubs above
-        // stay bare), same DIGEST-DIET discipline. The DM narrates the rolled dressing, never invents
+        // DRESSING-WIRING.md §"Behavior" 4: dressing rides the actionable walk slice exactly like
+        // `feature` does. Steady-state stubs stay bare; the DM narrates the roll, never invents
         // it. null when the walker didn't stamp one (an older snapshot / narrow test harness).
         dressing: s.dressing ? { text:s.dressing.text||null, condition:s.dressing.condition||null } : null,
         // DRESSING-ATMOSPHERE.md §"Data shapes": atmo rides the digest as the text string ONLY
@@ -159,14 +214,14 @@ function activeWalkDigest(w){
    derives from, so a fight's floor and its spawned creatures always agree on which realm is active.
    [] outside a breach/marooned-realm walk (activeRealmsFor's own byte-compatible default). */
 function theaterActiveRealmsFor(w){
-  if(typeof prepOf!=="function"||typeof walkOfFrontier!=="function"||typeof activeRealmsFor!=="function") return [];
-  const P=prepOf(w), id=P.activeWalkId; if(!id) return activeRealmsFor(null, w);
+  if(typeof walkOfFrontier!=="function"||typeof activeRealmsFor!=="function") return [];
+  const P=(w&&w.prep)||null, id=P&&P.activeWalkId; if(!id) return activeRealmsFor(null, w);
   const walk=walkOfFrontier(w,id);
   return activeRealmsFor(walk&&walk.skin, w);
 }
 function theaterEnvSegmentFor(w){
-  if(typeof prepOf!=="function"||typeof walkOfFrontier!=="function") return null;
-  const P=prepOf(w), id=P.activeWalkId; if(!id) return null;
+  if(typeof walkOfFrontier!=="function") return null;
+  const P=(w&&w.prep)||null, id=P&&P.activeWalkId; if(!id) return null;
   const pn=P.nodes&&P.nodes[id], walk=walkOfFrontier(w,id); if(!pn||!walk) return null;
   const cur=(pn.cursor&&pn.cursor.current)||1;
   const seg=(walk.segments||[]).find(s=>s.num===cur);
@@ -284,6 +339,25 @@ function tiylLifeDigest(c){
   return { age:L.age||null, steps:lines };
 }
 
+/* Reload-safe combat ownership. w.combat is the persistent object; GS.combat is the active world's
+   runtime reference to that same object. Rebind the embedded PC mirrors after JSON reload so combat
+   UI/conditions/equipment read the live character rather than the serialized duplicate. */
+function combatRehydrate(w){
+  if(!w||!w.combat||!w.combat.active)return null;
+  const cm=w.combat, t=(typeof livingSheet==="function")?livingSheet(w):null;
+  if(typeof cmNormalizeScene==="function")cm.scene=cmNormalizeScene(cm.scene);
+  if(typeof cmNormalizeCombatPlacement==="function")cmNormalizeCombatPlacement(cm);
+  if(t){
+    cm.pcRef=cm.pcRef||{};
+    cm.pcRef.name=t.c.name; cm.pcRef.class=t.sh.class; cm.pcRef.mods=t.sh.mods;
+    cm.pcRef.ac=t.sh.ac; cm.pcRef.hp=t.sh.hp; cm.pcRef.hpCur=t.sh.hpCur;
+    cm.pcRef.equipped=t.sh.equipped||null; cm.pcRef.inventory=t.sh.inventory||[];
+    cm.pcRef.conditionsRef=t.c;
+  }
+  GS.combat=cm;
+  return cm;
+}
+
 /* COMBAT-LIFECYCLE.md §4 — the combat block dmDigest() was missing entirely (docs/DM-BRIDGE.md:308
    referenced digest.combat.proposals[] but nothing built it). Present ONLY while GS.combat.active (zero
    bytes otherwise — the digest diet stands); foe HP stays coarse (cmFoeStateWord), never a number.
@@ -375,14 +449,31 @@ function combatDigest(w){
    the diorama with (mirrors theaterNodeBoardBuild's own dressRealm fallback chain: hybridProps ‖
    props ‖ "frontier" — never undefined).
    BUDGET (digest diet, dev/verify-digest-diet.mjs's discipline extended, not touched): target
-   <=120 B added over the bare nodeName() string for a typed node; ZERO bytes added for an untyped
-   node (no mapOf/codexGet, no bound codexId, no rec.rolled, or archetypeKey==null) — the return is
-   byte-identical to nodeName(w,id) alone in every one of those cases, same total-function/never-a-
-   throw discipline theaterNodeSourceFor itself keeps. Defensive throughout: absent mapOf/codexGet/
-   sceneDressingForPlace (a narrow test harness that doesn't load render.js/place-skins.js) degrades
-   to the bare name, never a throw. */
+   <=120 B added over the bare nodeName() string for a typed node; when NO walk is active, ZERO bytes
+   are added for an untyped node (no mapOf/codexGet, no bound codexId, no rec.rolled, or
+   archetypeKey==null). An active walk is the intentional higher-priority exception: its current
+   segment is more specific location truth than the node record. Defensive throughout: absent
+   mapOf/codexGet/sceneDressingForPlace (a narrow test harness that doesn't load render.js/place-
+   skins.js) degrades to the bare name, never a throw. */
 function dmDigestLocationLine(w){
   const base=nodeName(w,w.currentNodeId);
+  // WALK-CONSUMPTION: while a walk is active, its current generated segment is the player's
+  // location. The frontier node's typed-place record describes the broad district and can be
+  // physically contradictory (for example, "water-tower platform" while the cursor is in an
+  // oval chamber). Prefer the live cursor truth here; activeWalkDigest carries the fuller scene.
+  if(typeof prepOf==="function"&&typeof walkOfFrontier==="function"){
+    const P=prepOf(w), walkId=P&&P.activeWalkId, pn=walkId&&P.nodes&&P.nodes[walkId];
+    const walk=walkId&&walkOfFrontier(w,walkId), cur=pn&&pn.cursor&&pn.cursor.current;
+    const seg=walk&&Array.isArray(walk.segments)&&walk.segments.find(s=>s.num===cur);
+    if(seg){
+      const walkName=(typeof mapOf==="function"&&mapOf(w).nodes&&mapOf(w).nodes[walkId]&&mapOf(w).nodes[walkId].name)||base;
+      const parts=[seg.segType||seg.areaType||seg.label];
+      if(seg.areaType&&seg.areaType!==parts[0]) parts.push(seg.areaType);
+      if(seg.dims) parts.push(seg.dims);
+      if(seg.light&&seg.light.profile) parts.push(seg.light.profile);
+      return walkName+" — segment "+seg.num+": "+parts.filter(Boolean).join(", ");
+    }
+  }
   if(typeof theaterNodeSourceFor!=="function") return base;
   const rec=theaterNodeSourceFor(w,w&&w.currentNodeId);
   if(!rec||!rec.rolled) return base;
@@ -406,7 +497,7 @@ function dmDigestLocationLine(w){
 // below is ALWAYS present in the return object; many are null on a common turn). Machine truth
 // for build/gen-dm-contract.py; parity with the live return object is enforced by
 // dev/verify-dm-contract.mjs (add a key to dmDigest ⇒ add it here, the guard fails otherwise).
-const DM_DIGEST_KEYS = ["worldId","worldName","clock","location","setting","pc","powers","fronts","recentLedger","gazetteer","codex","codexRoster","minted","revealed","sessionLean","tarot","activeWalk","ambientPresence","combat","prepPending","levelUp","arrivalBrief","itemLegacy","bastion","pendingSituation"];
+const DM_DIGEST_KEYS = ["worldId","worldName","clock","location","setting","pc","powers","fronts","recentLedger","gazetteer","codex","codexRoster","minted","revealed","sessionLean","tarot","activeWalk","ambientPresence","combat","prepPending","levelUp","arrivalBrief","itemLegacy","itemCustody","bastion","pendingSituation"];
 
 function dmDigest(){
   const w=activeWorld(); if(!w) return null;
@@ -427,7 +518,7 @@ function dmDigest(){
               taboo:{name:s.taboo.name,desc:s.taboo.desc},
               myth:{name:s.myth.name,desc:s.myth.desc} } : null,
     pc: cur ? {
-      name:cur.name, headline:cur.headline||cur.spark, pronouns:cur.pronouns,
+      id:cur.id||null, name:cur.name, headline:cur.headline||cur.spark, pronouns:cur.pronouns,
       species:sh?sh.species:null, class:sh?sh.class:null, background:sh?sh.background:null,
       level:(sh&&sh.level)||1,
       // §S5 (BUG-03): hp is {cur,max} (+temp only when held); hpCur==null (pre-ensureResources
@@ -456,8 +547,9 @@ function dmDigest(){
           if(cc.durationMin!=null){ const c=clockOf(w); out.expiresInMin=Math.max(0, cc.durationMin-((c.day-cc.sinceDay)*1440+(c.min-cc.sinceMin))); } }
         return out; })():undefined,
       // ITEMS (docs/ITEMS.md): identity only (id/name/qty/conditions) — the DM references an item by
-      // id in condition_add/equip/item_split; it doesn't need the full mechanical lookup to narrate.
-      inventory:sh?(sh.inventory||[]).map(it=>({id:it.id,name:it.name,qty:it.qty,conditions:it.conditions||[]})):[],
+      // id in condition_add/equip/item_split/item_transfer; it doesn't need the full mechanical lookup to narrate.
+      inventory:sh?(sh.inventory||[]).map(it=>({id:it.id,name:it.name,qty:it.qty,
+        conditions:it.conditions||[],...(it.codexId?{codexId:it.codexId}:{})})):[],
       equipped:sh?(sh.equipped||null):null,
       // the actual fix for "the DM has to recall the weapon's dice from memory" (docs/ITEMS.md): the
       // objective damage spec for whatever's equipped, resolved against data/items.js — narrate FROM
@@ -483,6 +575,9 @@ function dmDigest(){
     // faction-held/trail-cold). null on the common turn (digest diet, zero bytes); cap 5. The DM weaves
     // the lost sword into rumor / a foe's hand / a vault from this, and never invents custody against it.
     itemLegacy:(typeof legacyDigest==="function")?legacyDigest(w):null,
+    // ITEM-CUSTODY: only portable items deliberately left in THIS scene. Null on the common turn;
+    // remote custody never bloats the creative context.
+    itemCustody:(typeof itemCustodyDigest==="function")?itemCustodyDigest(w,{nodeId:w.currentNodeId,cap:8}):null,
     // CROWNING-BASTION.md §7.B1.8 — the bastion slice: null when no bastion exists (digest diet).
     // `atNow` tells the DM whether the living PC is standing at its node (gates the deposit/withdraw
     // narration); `vault` is the manifest of what's cached — the DM narrates from this, never invents.
@@ -556,6 +651,224 @@ function dmDigest(){
   };
 }
 
+/* ============================================================
+   EXECUTION ROUTE → MECHANICAL RECEIPT → NARRATION
+   ============================================================
+   dmRoute (world.triage) owns only the conservative execution classification. This seam owns the
+   resulting engine work. Declared mechanics apply their real event before dmDigest(), capture exact
+   before/after state in a receipt, then prevent the narrator from applying the settled event again
+   when its response returns. Every unknown free-text action remains an open ruling. */
+function dmJsonClone(v){
+  try{ return v == null ? v : JSON.parse(JSON.stringify(v)); }
+  catch(_){ return null; }
+}
+
+function dmFreezeReceipt(v){
+  if(!v || typeof v!=="object" || Object.isFrozen(v)) return v;
+  Object.keys(v).forEach(k=>dmFreezeReceipt(v[k]));
+  return Object.freeze(v);
+}
+
+function dmMechanicalSnapshot(w){
+  const t=(typeof livingSheet==="function")?livingSheet(w):null;
+  const c=(typeof clockOf==="function")?clockOf(w):(w.clock||null);
+  return dmJsonClone({
+    clock:c?{day:c.day,min:c.min}:null,
+    pc:t?{
+      id:t.c.id||null, level:t.sh.level||1, xp:t.sh.xp||0,
+      hp:t.sh.hp, hpCur:t.sh.hpCur, tempHp:t.sh.tempHp||0, ac:t.sh.ac, gold:t.sh.gold||0,
+      exhaustion:t.sh.exhaustion||0, resources:t.sh.resources||{}, conditions:t.c.conditions||[],
+      concentration:t.sh.concentration||null, lastLongRest:t.sh.lastLongRest||null,
+      inventory:(t.sh.inventory||[]).map(it=>({id:it.id||null,name:it.name||it.base||"Item",qty:it.qty||1,
+        conditions:it.conditions||[],charges:(it.ench&&it.ench.charges)||null})),
+      equipped:t.sh.equipped||{}, marks:t.sh.marks||[]
+    }:null,
+    companions:w.companions||null,
+    itemCustody:(typeof itemCustodyDigest==="function")?itemCustodyDigest(w,{nodeId:w.currentNodeId,cap:8}):null,
+    pendingSituation:(w.dm&&w.dm.pendingSituation)||null
+  });
+}
+
+function dmMechanicalChangedPair(before, after){
+  try{if(JSON.stringify(before)===JSON.stringify(after))return null;}catch(_){}
+  const beforeObj=before&&typeof before==="object", afterObj=after&&typeof after==="object";
+  if(Array.isArray(before)&&Array.isArray(after)){
+    const keyed=before.concat(after).every(x=>x&&typeof x==="object"&&!Array.isArray(x)&&x.id!=null);
+    if(keyed){
+      const bm=new Map(before.map(x=>[String(x.id),x])), am=new Map(after.map(x=>[String(x.id),x]));
+      const ids=Array.from(new Set(Array.from(bm.keys()).concat(Array.from(am.keys()))));
+      const b=[], a=[];
+      ids.forEach(id=>{
+        const bv=bm.get(id), av=am.get(id);
+        try{if(JSON.stringify(bv)===JSON.stringify(av))return;}catch(_){}
+        if(bv!==undefined)b.push(dmJsonClone(bv));
+        if(av!==undefined)a.push(dmJsonClone(av));
+      });
+      return {before:b,after:a};
+    }
+    return {before:dmJsonClone(before),after:dmJsonClone(after)};
+  }
+  if(beforeObj&&afterObj&&!Array.isArray(before)&&!Array.isArray(after)){
+    const b={},a={};
+    Array.from(new Set(Object.keys(before).concat(Object.keys(after)))).forEach(key=>{
+      const pair=dmMechanicalChangedPair(before[key],after[key]);
+      if(!pair)return;
+      b[key]=pair.before===undefined?null:pair.before;
+      a[key]=pair.after===undefined?null:pair.after;
+    });
+    return {before:b,after:a};
+  }
+  return {before:before===undefined?null:dmJsonClone(before),after:after===undefined?null:dmJsonClone(after)};
+}
+
+function dmMechanicalReceipt(kind, request, result, before, after, eventTypes){
+  const changed=dmMechanicalChangedPair(before,after)||{before:{},after:{}};
+  return dmFreezeReceipt({
+    schema:"mechanical-receipt/v1",
+    id:"mr-"+uid(),
+    kind,
+    engineOwned:true,
+    deltaOnly:true,
+    accepted:!!(result&&result.ok),
+    request:dmJsonClone(request),
+    result:dmJsonClone(result),
+    before:changed.before,
+    after:changed.after,
+    settledEventTypes:(result&&result.ok)?(eventTypes||[]).slice():[]
+  });
+}
+
+function dmResolveTurnRoute(w, action, opts, startedAt){
+  const routeStarted=Date.now();
+  const route=(typeof dmRoute==="function")?dmRoute(w,action,opts):{
+    mode:"freeform-ruling", reasons:["router-unavailable"], relevantSlices:["scene","relevant-state"], modelCall:true
+  };
+  const routeMs=Date.now()-routeStarted;
+  let receipt=null, mechanicsMs=0;
+  if(route.mode==="declared-mechanic" && route.mechanic &&
+     (route.mechanic.type==="rest" || route.mechanic.type==="item-transfer")){
+    const mechanicsStarted=Date.now();
+    const before=dmMechanicalSnapshot(w);
+    const eventType=route.mechanic.type==="item-transfer"?"item_transfer":"rest";
+    const event={type:eventType,source:"player",payload:dmJsonClone(route.mechanic.payload)||{}};
+    const result=applyEvent(w,event);
+    const after=dmMechanicalSnapshot(w);
+    mechanicsMs=Date.now()-mechanicsStarted;
+    receipt=dmMechanicalReceipt(route.mechanic.type,event,result,before,after,[eventType]);
+  }
+  return {startedAt:startedAt||Date.now(),route,receipt,routeMs,mechanicsMs};
+}
+
+/* Build the identical TurnRequest envelope for mailbox and API-seat transports. Crucially, this is
+   called after dmResolveTurnRoute, so digest.pendingSituation and every recovered/charged resource
+   already reflect the settled receipt. */
+function dmPrepareTurn(w, action, rolls, opts, resolved){
+  const prep=resolved||dmResolveTurnRoute(w,action,opts,Date.now());
+  const tri=(typeof dmTriage==="function")?dmTriage(w,action,rolls||[]):null;
+  const lastRes=(w.dm&&w.dm.lastResolution)||null;
+  const digestStarted=Date.now();
+  const fullDigest=prep.route.mode==="local-fact"?null:dmDigest();
+  // BEAT-DIGEST: the full snapshot remains the bootstrap/debug compatibility surface; ordinary turns
+  // receive a sparse situation-shaped projection. Late-bound so narrow legacy harnesses that load
+  // dm.js without world.dm-digest keep the former full-digest behavior instead of failing.
+  const digest=prep.route.mode==="local-fact"?null:
+    ((typeof dmBeatDigest==="function")?dmBeatDigest(w,action,prep.route,{full:fullDigest}):fullDigest);
+  const digestMs=prep.route.mode==="local-fact"?0:(Date.now()-digestStarted);
+  const turn={ turnId:"t-"+uid(), worldId:w.id, action:action, rolls:rolls||[], digest,
+    route:{mode:prep.route.mode,reasons:prep.route.reasons,relevantSlices:prep.route.relevantSlices,
+      modelCall:prep.route.modelCall},
+    rulingRequest:prep.route.rulingRequest||null, receipt:prep.receipt||null,
+    lane:tri?tri.lane:null, laneModel:tri?tri.model:null, laneReasons:tri?tri.reasons:null,
+    narrationBudget:dmNarrationBudget(tri,prep.route), lastResolution:lastRes };
+  return Object.assign({},prep,{tri,turn,digestMs});
+}
+
+function dmNarrationBudget(tri,route){
+  if(route&&route.mode==="local-fact")return null;
+  if(route&&route.mode==="declared-mechanic")return {targetWords:50,maxWords:70};
+  if(tri&&tri.lane==="deep")return {targetWords:110,maxWords:160};
+  return {targetWords:60,maxWords:75};
+}
+
+function dmNarrationWords(text){
+  const words=String(text||"").trim().match(/\S+/g);
+  return words?words.length:0;
+}
+
+function dmTurnMeta(prepared, transport){
+  const turn=prepared.turn;
+  return { turnId:turn.turnId, lane:turn.lane, laneModel:turn.laneModel,
+    routeMode:turn.route&&turn.route.mode, transport:transport||"mailbox",
+    streamed:transport==="seat", startedAt:prepared.startedAt, routeMs:prepared.routeMs||0,
+    mechanicsMs:prepared.mechanicsMs||0, digestMs:prepared.digestMs||0,
+    receipt:prepared.receipt||null, digestBytes:jsonBytes(turn.digest), turnBytes:jsonBytes(turn),
+    narrationBudget:turn.narrationBudget||null,
+    requestAckMs:null, firstTokenMs:null, meaningfulFeedbackMs:null };
+}
+
+function dmLocalFactText(w, route){
+  const t=(typeof livingSheet==="function")?livingSheet(w):null;
+  if(!t) return "No living character sheet is available.";
+  const sh=t.sh, kind=route.localKind;
+  if(kind==="inventory"){
+    const items=(sh.inventory||[]).map(it=>(it.name||it.base||"Item")+((it.qty||1)>1?" ×"+(it.qty||1):""));
+    return "You are carrying "+(items.length?items.join(", "):"nothing")+". Gold: "+(sh.gold||0)+" gp.";
+  }
+  if(kind==="hp") return "Current hit points: "+(sh.hpCur==null?"—":sh.hpCur)+" / "+(sh.hp==null?"—":sh.hp)+".";
+  if(kind==="health"){
+    const conditions=(sh.conditions||t.c.conditions||[]).map(x=>(x&&x.condition)||String(x)).filter(Boolean);
+    const marks=(sh.marks||[]).map(x=>(x&&x.text)||String(x)).filter(Boolean);
+    const markText=marks.length?marks.join("; "):"none";
+    return "Current hit points: "+(sh.hpCur==null?"—":sh.hpCur)+" / "+(sh.hp==null?"—":sh.hp)+
+      ". Conditions: "+(conditions.length?conditions.join(", "):"none")+". Lasting marks: "+
+      markText+(/[.!?]$/.test(markText)?"":".");
+  }
+  if(kind==="ac") return "Armor Class: "+(sh.ac==null?"—":sh.ac)+".";
+  if(kind==="gold") return "Gold: "+(sh.gold||0)+" gp.";
+  if(kind==="custody"){
+    const ref=route.localRef||null, codexId=route.localCodexId||null;
+    const carried=(t.sh.inventory||[]).find(it=>(ref&&it.id===ref)||(codexId&&it.codexId===codexId));
+    if(carried)return "You are carrying "+(carried.name||carried.base||"that item")+".";
+    // A named "where is X?" query is deliberately global; its point is retrieval. A bare/current
+    // custody panel is local and must use the same walk/node scope as the digest, or it leaks remote
+    // entrusted objects into "here" (and makes a completed site's physical residue look incoherent).
+    const rows=(ref||codexId)
+      ? Object.values((w.itemCustody&&w.itemCustody.items)||{}).filter(rec=>rec&&rec.item&&
+          ((ref&&rec.item.id===ref)||(codexId&&rec.item.codexId===codexId)))
+      : ((typeof itemCustodyDigest==="function")?(itemCustodyDigest(w,{nodeId:w.currentNodeId,cap:64})||[]):[]);
+    if(!rows.length)return "No matching item has a tracked holder here.";
+    return rows.map(rec=>(rec.item.name||rec.item.base||"Item")+" — held by "+
+      ((rec.holder&&rec.holder.name)||(rec.holder&&rec.holder.ref)||"an unknown holder")+
+      (rec.intent&&rec.intent!=="transfer"?" ("+rec.intent+")":"")+".").join(" ");
+  }
+  if(kind==="map"){
+    const nodes=Object.keys((typeof mapOf==="function"?mapOf(w):(w.map||{nodes:{}})).nodes||{});
+    const names=nodes.map(id=>(typeof nodeName==="function")?nodeName(w,id):id);
+    return "Known places: "+(names.length?names.join(", "):"none yet")+". Current location: "+
+      ((typeof nodeName==="function")?nodeName(w,w.currentNodeId):(w.currentNodeId||"unmapped"))+".";
+  }
+  const cond=(t.c.conditions||[]).map(x=>(x&&x.condition)||String(x)).filter(Boolean);
+  return t.c.name+" — "+(sh.class||"Adventurer")+" level "+(sh.level||1)+"; HP "+
+    (sh.hpCur==null?"—":sh.hpCur)+"/"+(sh.hp==null?"—":sh.hp)+"; AC "+(sh.ac==null?"—":sh.ac)+
+    "; gold "+(sh.gold||0)+" gp"+(cond.length?"; conditions: "+cond.join(", "):"")+".";
+}
+
+function dmApplyLocalTurn(w, prepared, opts){
+  const turn=prepared.turn, answeredAt=Date.now(), elapsed=answeredAt-prepared.startedAt;
+  if(!(opts&&opts.hidden)) pushDmLog(w,"player",turn.action,{rolls:turn.rolls||[],turnId:turn.turnId});
+  const narration=dmLocalFactText(w,prepared.route);
+  pushDmLog(w,"dm",narration,{system:true,local:true,routeMode:"local-fact",latencyMs:elapsed,turnId:turn.turnId});
+  logDmTurn(w,{turnId:turn.turnId,worldId:w.id,t:answeredAt,session:w.session||0,
+    routeMode:"local-fact",transport:"local",streamed:false,lane:null,laneModel:null,
+    latencyMs:elapsed,meaningfulFeedbackMs:elapsed,unlockMs:elapsed,target4sMet:elapsed<=4000,silent8s:elapsed>=8000,
+    routeMs:prepared.routeMs||0,mechanicsMs:0,digestMs:0,digestBytes:0,
+    turnBytes:jsonBytes(turn),responseBytes:jsonBytes({narration}),narrationChars:narration.length,
+    narrationWords:dmNarrationWords(narration),narrationMaxWords:null,narrationBudgetMiss:false,
+    eventCount:0,eventTypes:[],mintCount:0,cost:{estimated:false,model:null,inTok:0,outTok:0,usd:0},ok:true});
+  saveU(U); renderWorld();
+  return Promise.resolve(turn.turnId);
+}
+
 /* Post the player's action (+ any open rolls) as a turn; poll for the DM's reply.
    rolls travel INTO the turn — the DM narrates FROM them and never fabricates them. */
 // DIGEST-DIET §3 (turn-envelope audit): tonight's `.dm/turn-*.json` "~14.8 KB outside the digest"
@@ -567,22 +880,17 @@ function dmDigest(){
 // against merged reality, record the difference.
 function sendTurn(action,rolls,opts){
   const w=activeWorld(); if(!w) return Promise.reject("no world");
-  // DM-SEAT (docs/DM-SEAT.md §5.1): the ONE branch point between the two transports. w.dm.transport
-  // is the persisted per-world toggle (seat.js's seatEnabled/seatToggleTransport); absent/"mailbox"
-  // takes the exact path below, UNCHANGED — this line is the entire diff the seat introduces into the
-  // mailbox's own call site. "seat" hands off to seat.js's seatSend, which reuses dmTriage/dmDigest/
-  // pushDmLog identically (DIET/ROLL-BRANCHES/ON-DEMAND-GEN transfer unchanged, §1) but assembles+POSTs
-  // messages per §2 and streams+validates per §3 instead of mailbox polling.
-  if(typeof seatEnabled==="function" && seatEnabled(w) && typeof seatSend==="function") return seatSend(action,rolls,opts);
+  if(w.dm&&w.dm.pendingTurnId)return Promise.reject(new Error("turn already pending: "+w.dm.pendingTurnId));
+  const resolved=dmResolveTurnRoute(w,action,opts,Date.now());
+  const prepared=dmPrepareTurn(w,action,rolls,opts,resolved);
+  if(prepared.route.mode==="local-fact") return dmApplyLocalTurn(w,prepared,opts);
+  // DM-SEAT (docs/DM-SEAT.md §5.1): this remains the ONE branch point between transports, but both
+  // now receive the SAME already-routed/prepared turn above. "seat" changes only assembly/streaming;
+  // mailbox changes only posting/polling. Neither transport may re-run or reorder mechanics.
+  if(typeof seatEnabled==="function" && seatEnabled(w) && typeof seatSend==="function") return seatSend(action,rolls,opts,prepared);
   // HYBRID FAST-LANE TRIAGE (docs/DM-BRIDGE.md): stamp the script-owned lane so the DM loop routes
   // routine beats to the fast model and memorable ones to Opus — without re-deciding per turn.
-  const tri=(typeof dmTriage==="function")?dmTriage(w,action):null;
-  // ROLL-BRANCHES §2/§4 step 4: the NEXT sendTurn after a local branch resolution carries lastResolution
-  // top-level, once — so the DM re-enters the conversation knowing exactly what the dice already decided.
-  const lastRes=(w.dm&&w.dm.lastResolution)||null;
-  const turn={ turnId:"t-"+uid(), worldId:w.id, action:action, rolls:rolls||[], digest:dmDigest(),
-               lane:tri?tri.lane:null, laneModel:tri?tri.model:null, laneReasons:tri?tri.reasons:null,
-               lastResolution:lastRes };
+  const turn=prepared.turn;
   // §4b: stamp turnId onto the dmlog line so session-cost-report.py can join dmlog↔.dm/turn-*.json
   // for lane distribution (tonight's ad-hoc audit found this join broken — dmlog carried no turnId).
   if(!(opts&&opts.hidden)) pushDmLog(w,"player",action,{rolls:rolls||[],turnId:turn.turnId});   // hidden = meta turns (e.g. the auto-opening) don't show as a player line
@@ -591,18 +899,21 @@ function sendTurn(action,rolls,opts){
   // snapshot. Stashed as PENDING (not yet the watermark — applyResponse promotes it only once the DM has
   // demonstrably seen this turn; a crashed/unanswered turn must not advance digestAckSeq).
   w.dm=w.dm||{}; w.dm.rollReq=null; w.dm.ask=null; w.dm.pendingTurnId=turn.turnId; w.dm.lastResolution=null;   // rode this turn — clear so it never repeats
+  w.dm.pendingTurnRequest=dmJsonClone(turn); w.dm.pendingTurnPause=null;
+  w.dm.pendingReceipt=prepared.receipt||null;
   w.dm.pendingAckSeq=(typeof codexOf==="function")?(codexOf(w).seq||0):(w.dm.pendingAckSeq||0);
+  w.dm.pendingTurnMeta=dmTurnMeta(prepared,"mailbox");
   saveU(U);
   postState();                                   // so the DM can read full state if the digest isn't enough
   // DM-SEAM telemetry: stash the send-side metrics the completed-turn row needs (measured now, while
   // we hold the assembled turn) — applyResponse reads these back to close out the DMTurnTelemetry row.
-  GS.dm.lastTurnMeta={ turnId:turn.turnId, lane:turn.lane, laneModel:turn.laneModel,
-    digestBytes:jsonBytes(turn.digest), turnBytes:jsonBytes(turn) };
-  GS.dm.pending=true; GS.dm.turnId=turn.turnId; GS.dm.turnStart=Date.now(); GS.dm.rollReq=null; GS.dm.ask=null; renderWorld();
+  GS.dm.lastTurnMeta=w.dm.pendingTurnMeta;
+  GS.dm.pending=true; GS.dm.turnId=turn.turnId; GS.dm.turnStart=prepared.startedAt; GS.dm.rollReq=null; GS.dm.ask=null; renderWorld();
   return fetch(DM_BASE+"/turn",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(turn)})
-    .then(r=>{ if(!r.ok) throw new Error("bridge "+r.status); return r.json(); })
+    .then(r=>{ if(GS.dm.lastTurnMeta) GS.dm.lastTurnMeta.requestAckMs=Date.now()-prepared.startedAt;
+      if(!r.ok) throw new Error("bridge "+r.status); return r.json(); })
     .then(j=>{ GS.dm.turnId=j.turnId; pollResponse(j.turnId); return j.turnId; })
-    .catch(e=>{ dmBridgeDown(e); throw e; });
+    .catch(e=>{ dmBridgeDown(e,turn.turnId); throw e; });
 }
 
 const DM_POLL_TIMEOUT = 300000;  // wait up to 5 min — a live DM (Claude) composing a turn can take a while; only give up if truly no one's watching
@@ -617,29 +928,130 @@ function pollResponse(turnId){
   const tick=()=>{
     fetch(DM_BASE+"/response?turnId="+encodeURIComponent(turnId)+"&wait="+DM_LONGPOLL_S).then(r=>{
       if(r.status===204){
-        if(Date.now()-started>=DM_POLL_TIMEOUT){ dmNoAnswer(); return null; }   // bridge up, but nobody is playing DM
+        if(Date.now()-started>=DM_POLL_TIMEOUT){ dmNoAnswer(turnId); return null; }   // bridge up, but nobody is playing DM
         GS.dm.poll=setTimeout(tick,120); return null;                           // long-poll lapsed → re-arm at once
       }
       if(!r.ok) throw new Error("bridge "+r.status);
       return r.json().then(applyResponse);
-    }).catch(dmBridgeDown);
+    }).catch(e=>dmBridgeDown(e,turnId));
   };
   tick();   // fire immediately — the request itself holds open until the answer is ready
 }
 
 /* The bridge served the turn, but no DM session answered within the window — don't spin forever
    on "considering". Surface what's wrong + the fallbacks. (The mailbox being up ≠ a DM watching it.) */
-function dmNoAnswer(){
-  const w=activeWorld(); GS.dm.pending=false; GS.dm.poll=null; GS.dm.turnId=null;
-  if(w) pushDmLog(w,"dm","(No DM answered. The bridge is running, but a DM session needs to be watching it — start one per docs/DM-BRIDGE.md, ideally on Sonnet for speed. Or use ✦ Copy world for the clipboard hand-off.)",{system:true});
-  if(w&&w.dm) w.dm.pendingTurnId=null;            // gave up on this turn — don't resume it on reload
-  saveU(U); renderWorld(); wakeReveal();          // never strand the player on the prep cinematic
+function dmPendingWorld(turnId){
+  const worlds=Object.values((typeof U!=="undefined"&&U&&U.worlds)||{});
+  return worlds.find(x=>x&&x.dm&&x.dm.pendingTurnId===(turnId||GS.dm.turnId))||activeWorld();
+}
+
+function dmPausePending(turnId,reason,message){
+  const w=dmPendingWorld(turnId), id=turnId||(w&&w.dm&&w.dm.pendingTurnId)||GS.dm.turnId||null;
+  if(GS.dm.poll){clearTimeout(GS.dm.poll);GS.dm.poll=null;}
+  if(!id||!w||!w.dm)return false;
+  GS.dm.pending=false; GS.dm.turnId=null;
+  const already=w.dm.pendingTurnPause&&w.dm.pendingTurnPause.turnId===id&&w.dm.pendingTurnPause.reason===reason;
+  w.dm.pendingTurnPause={turnId:id,reason:reason||"paused",at:Date.now()};
+  if(!already&&message)pushDmLog(w,"dm",message,{system:true,pendingTurn:true,turnId:id});
+  saveU(U); renderWorld(); wakeReveal();
+  return true;
+}
+
+function dmNoAnswer(turnId){
+  dmPausePending(turnId,"timeout","(No DM answered yet. This turn is paused, not discarded. Resume it when the bridge/DM is ready, or explicitly abandon it.)");
+}
+
+function dmResumePending(){
+  const w=activeWorld(), dm=w&&w.dm, turnId=dm&&dm.pendingTurnId;
+  if(!turnId)return Promise.reject(new Error("no paused turn"));
+  const turn=dm.pendingTurnRequest||null;
+  dm.pendingTurnPause=null;
+  GS.dm.pending=true; GS.dm.turnId=turnId; GS.dm.turnStart=(dm.pendingTurnMeta&&dm.pendingTurnMeta.startedAt)||Date.now();
+  GS.dm.lastTurnMeta=dm.pendingTurnMeta||GS.dm.lastTurnMeta||null;
+  saveU(U); renderWorld();
+  if(!turn){pollResponse(turnId);return Promise.resolve(turnId);}
+  postState();
+  return fetch(DM_BASE+"/turn",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(turn)})
+    .then(r=>{if(!r.ok)throw new Error("bridge "+r.status);return r.json();})
+    .then(j=>{const id=j.turnId||turnId;GS.dm.turnId=id;pollResponse(id);return id;})
+    .catch(e=>{dmBridgeDown(e,turnId);throw e;});
+}
+
+function dmAbandonPending(){
+  const w=activeWorld(), dm=w&&w.dm, turnId=dm&&dm.pendingTurnId;
+  if(!turnId)return false;
+  dmTurnRemember(w,"rejectedTurnIds",turnId);
+  dm.pendingTurnId=null; dm.pendingTurnMeta=null; dm.pendingTurnRequest=null; dm.pendingTurnPause=null;
+  dm.pendingReceipt=null; dm.pendingAckSeq=null;
+  if(GS.dm.poll){clearTimeout(GS.dm.poll);GS.dm.poll=null;}
+  GS.dm.pending=false;GS.dm.turnId=null;GS.dm.lastTurnMeta=null;GS.dm.turnStart=null;
+  pushDmLog(w,"dm","(The unanswered turn was explicitly abandoned. Its already-settled engine mechanics remain canonical.)",{system:true,abandonedTurn:true,turnId});
+  saveU(U);renderWorld();wakeReveal();return true;
+}
+
+const DM_TURN_HISTORY_CAP=32;
+function dmTurnRemember(w,key,turnId){
+  if(!w||!turnId)return [];
+  const dm=w.dm||(w.dm={}), rows=Array.isArray(dm[key])?dm[key].slice():[];
+  if(rows.indexOf(turnId)<0)rows.push(turnId);
+  dm[key]=rows.slice(-DM_TURN_HISTORY_CAP); return dm[key];
+}
+
+/* Resolve a response by its pending turn, never by the tab that happens to be active. An inactive
+   owner's response is persisted for that world and applied when the player returns. Direct legacy
+   harness/manual calls with no staged turn remain supported, but only bound production turns enter
+   replay history. */
+function dmResponseRoute(r){
+  const worlds=Object.values((typeof U!=="undefined"&&U&&U.worlds)||{}), active=activeWorld();
+  let turnId=r&&r.turnId||null;
+  let pending=turnId?worlds.filter(x=>x&&x.dm&&x.dm.pendingTurnId===turnId):[];
+  if(!turnId){
+    const allPending=worlds.filter(x=>x&&x.dm&&x.dm.pendingTurnId);
+    if(allPending.length===1){turnId=allPending[0].dm.pendingTurnId;r.turnId=turnId;pending=allPending;}
+    else if(allPending.length>1)return {mode:"reject",reason:"ambiguous-turn",world:null,turnId:null};
+  }
+  if(turnId){
+    const applied=worlds.find(x=>x&&x.dm&&Array.isArray(x.dm.appliedTurnIds)&&x.dm.appliedTurnIds.indexOf(turnId)>=0);
+    if(applied)return {mode:"reject",reason:"duplicate-response",world:applied,turnId};
+    const rejected=worlds.find(x=>x&&x.dm&&Array.isArray(x.dm.rejectedTurnIds)&&x.dm.rejectedTurnIds.indexOf(turnId)>=0);
+    if(rejected)return {mode:"reject",reason:"late-response",world:rejected,turnId};
+    if(pending.length>1)return {mode:"reject",reason:"ambiguous-turn",world:null,turnId};
+    if(pending.length===1){
+      const target=pending[0];
+      if(target!==active)return {mode:"queue",reason:"inactive-world",world:target,turnId,bound:true};
+      return {mode:"apply",world:target,turnId,bound:true};
+    }
+    const otherPending=worlds.find(x=>x&&x.dm&&x.dm.pendingTurnId);
+    if(otherPending)return {mode:"reject",reason:"turn-mismatch",world:otherPending,turnId};
+  }
+  return {mode:"apply",world:active,turnId,bound:false,legacy:true};
 }
 
 /* Render the narration + APPLY the events through the real mutators + surface rollRequest/ask. */
 function applyResponse(r){
-  const w=activeWorld(); if(!w||!r) return;
+  if(!r)return {ok:false,ignored:"empty-response"};
+  const normalized=dmNormalizeTurnResponse(r);
+  r=normalized.response;
+  const responseRepairs=normalized.repairs;
+  if(responseRepairs.length)console.warn("[dm-seam] turn-response normalized:",responseRepairs);
+  const route=dmResponseRoute(r), w=route.world;
+  if(route.mode==="reject"){
+    console.warn("[dm-seam] response ignored — "+route.reason,route.turnId);
+    return {ok:false,ignored:route.reason,turnId:route.turnId,worldId:w&&w.id||null};
+  }
+  if(!w)return {ok:false,ignored:"no-world",turnId:route.turnId||null};
+  if(route.mode==="queue"){
+    w.dm=w.dm||{};
+    if(w.dm.queuedResponse&&w.dm.queuedResponse.turnId===route.turnId)
+      return {ok:false,ignored:"duplicate-queued-response",turnId:route.turnId,worldId:w.id};
+    w.dm.queuedResponse=dmJsonClone(r);
+    if(GS.dm&&GS.dm.turnId===route.turnId){GS.dm.pending=false;GS.dm.turnId=null;GS.dm.lastTurnMeta=null;}
+    saveU(U); postState();
+    return {ok:true,queued:true,reason:route.reason,turnId:route.turnId,worldId:w.id};
+  }
+  const responseAt=Date.now();
   GS.dm.pending=false; GS.dm.poll=null; GS.dm.turnId=null;
+  if(route.bound)dmTurnRemember(w,"appliedTurnIds",route.turnId);
   // FIX (opening-overlay-teardown): the event-apply/render chain below runs a large amount of DM-supplied,
   // event-contract-dispatched, and gen-pipeline code (applyEvent's switch, genApply, pushDmLog, ...) with
   // no per-step guard. Any single throw in there used to abort applyResponse BEFORE renderWorld()/wakeReveal()
@@ -650,6 +1062,8 @@ function applyResponse(r){
   // ran because the DOM never updated, not because sendTurn itself was gated). Wrapping in try/finally
   // makes the render + overlay-dismiss unconditional — happy-path or not, the player is never stranded.
   try{
+    const _m=(w.dm&&w.dm.pendingTurnMeta)||(GS.dm&&GS.dm.lastTurnMeta)||{};
+    const _receipt=(w.dm&&w.dm.pendingReceipt)||_m.receipt||null;
     // HQ3-C4 — snapshot the pendingSituation object identity BEFORE events apply. A rest applied
     // THIS turn (below) assigns w.dm.pendingSituation a FRESH object; one already sitting there from
     // a PRIOR turn (the one the DM just answered) is the SAME object reference — the rebuild below
@@ -664,6 +1078,12 @@ function applyResponse(r){
     // already spends the slot (dm.js "cast" case), so the paired slot_spent must NOT double-apply.
     const _foldedSlots=(typeof dmFoldSlotSpends==="function")?dmFoldSlotSpends(r.events||[]):new Set();
     const applied=(r.events||[]).map((e,ei)=>{
+      // A mechanics-first receipt is already canonical. The narrator may describe it, but cannot
+      // replay or revise it by emitting the same event type after seeing the settled result.
+      if(e && _receipt && _receipt.accepted && Array.isArray(_receipt.settledEventTypes) &&
+         _receipt.settledEventTypes.indexOf(e.type)>=0){
+        return {type:e.type,res:{ok:true,ignored:"settled-by-receipt",receiptId:_receipt.id}};
+      }
       if(e && e.type==="slot_spent" && _foldedSlots.has(ei)){
         if(typeof addLedger==="function") addLedger(w,"outcome",{kind:"slot-fold",source:"detected"},
           "◇ the slot spend rides the cast — not double-charged.");
@@ -671,20 +1091,40 @@ function applyResponse(r){
       }
       return {type:e.type, res:applyEvent(w,e)};
     });
-    const latencyMs=(GS.dm.turnStart?Date.now()-GS.dm.turnStart:null); GS.dm.turnStart=null;   // turn round-trip (player send → DM answer)
-    // DM-SEAM structured telemetry: one row per completed turn (latency/lane/bytes/events/est. cost).
-    const _m=(GS.dm&&GS.dm.lastTurnMeta)||{}; const _rb=jsonBytes(r);
+    const turnStart=GS.dm.turnStart||_m.startedAt||null;
+    const responseMs=turnStart?(responseAt-turnStart):null;
+    const latencyMs=responseMs;   // backward-compatible field: send → complete response received
+    const unlockMs=turnStart?(Date.now()-turnStart):null;
+    const firstTokenMs=_m.firstTokenMs!=null?_m.firstTokenMs:responseMs;
+    const meaningfulFeedbackMs=_m.meaningfulFeedbackMs!=null?_m.meaningfulFeedbackMs:responseMs;
+    GS.dm.turnStart=null;
+    // DM-SEAM structured telemetry: route/mechanics/digest/ack/first-token/response/apply-unlock are
+    // separate evidence. The 4s value is a target flag, never represented as a guaranteed ceiling.
+    const _rb=jsonBytes(r);
     const _etypes=(r.events||[]).map(e=>e&&e.type).filter(Boolean);
+    const _narrationWords=dmNarrationWords(r.narration||"");
+    const _narrationMaxWords=_m.narrationBudget&&Number.isFinite(_m.narrationBudget.maxWords)
+      ? _m.narrationBudget.maxWords:null;
     logDmTurn(w,{ turnId:r.turnId||_m.turnId||null, worldId:w.id, t:Date.now(), session:w.session||0,
-      lane:_m.lane||null, laneModel:_m.laneModel||null, latencyMs,
+      lane:_m.lane||null, laneModel:_m.laneModel||null, routeMode:_m.routeMode||null,
+      transport:_m.transport||"mailbox", streamed:!!_m.streamed, latencyMs,
+      routeMs:_m.routeMs||0, mechanicsMs:_m.mechanicsMs||0, digestMs:_m.digestMs||0,
+      requestAckMs:_m.requestAckMs, firstTokenMs, meaningfulFeedbackMs,
+      responseMs, unlockMs, target4sMet:meaningfulFeedbackMs!=null?meaningfulFeedbackMs<=4000:null,
+      silent8s:meaningfulFeedbackMs!=null?meaningfulFeedbackMs>=8000:null,
       digestBytes:_m.digestBytes||0, turnBytes:_m.turnBytes||0, responseBytes:_rb,
       narrationChars:(r.narration||"").length, eventCount:_etypes.length, eventTypes:_etypes,
+      narrationWords:_narrationWords,narrationMaxWords:_narrationMaxWords,
+      narrationBudgetMiss:_narrationMaxWords!=null?_narrationWords>_narrationMaxWords:false,
       mintCount:Array.isArray(r.gen)?r.gen.length:0,
+      responseRepairs:responseRepairs.slice(),
       cost:dmEstimateCost(_m.laneModel||null, _m.turnBytes||0, _rb), ok:contract.ok });
     GS.dm.lastTurnMeta=null;
     // §4b: turnId rides the dm line too (r.turnId — the TurnResponse's own id) — same join key as the
     // player line, so session-cost-report.py can match a dmlog latency/lane pair to its .dm/turn-*.json.
-    pushDmLog(w,"dm",r.narration||"(the DM was silent)",{events:r.events||[], applied, dmNotes:r.dmNotes||null, latencyMs, turnId:r.turnId||null});
+    pushDmLog(w,"dm",r.narration||"(the DM was silent)",{events:r.events||[], applied,
+      ruling:r.ruling||null, receipt:_receipt, responseRepairs:responseRepairs.slice(),
+      dmNotes:r.dmNotes||null, latencyMs, turnId:r.turnId||null});
     GS.dm.animate=true;   // stream this fresh narration word-by-word (renderWorld → streamDMText)
     GS.dm.rollReq=sanitizeRollRequest(r.rollRequest||null);
     GS.dm.ask=r.ask||null;
@@ -712,6 +1152,19 @@ function applyResponse(r){
     // ON-DEMAND-GEN §8: carry the session-provenance watermark (captured once per session by startPrep)
     // through this reassignment — it must survive every turn, not just the mintQueue.
     const sessionSeqWatermark=(w.dm&&w.dm.sessionSeqWatermark)||0;
+    const appliedTurnIds=(w.dm&&w.dm.appliedTurnIds)||[];
+    const rejectedTurnIds=(w.dm&&w.dm.rejectedTurnIds)||[];
+    const pendingRetrieval=((((w.dm&&w.dm.pendingTurnRequest)||{}).digest||{}).retrieval||{});
+    const pendingPins=pendingRetrieval.pinnedCodexIds||[];
+    const pendingContinuity=new Set(pendingRetrieval.continuityCodexIds||[]);
+    // Only nouns selected by THIS action refresh the two-turn continuity band. Prior-band records
+    // may ride an anaphoric turn, but must still age out instead of pinning themselves forever.
+    // Old staged requests predate actionCodexIds, so derive the same distinction from their
+    // pinned-vs-continuity sets rather than discarding their explicit nouns.
+    const pendingContextIds=Array.isArray(pendingRetrieval.actionCodexIds)
+      ? pendingRetrieval.actionCodexIds : pendingPins.filter(id=>!pendingContinuity.has(id));
+    const priorContextTurns=(w.dm&&w.dm.continuityCodexTurns)||[];
+    const continuityCodexTurns=[pendingContextIds.slice(0,4)].concat(priorContextTurns).slice(0,2);
     // ON-DEMAND-GEN §2: mintQueue is cleared here (a fresh queue for genApply to fill) — the spotlight
     // persists across the whole prior turn (including a crashed/unanswered one) and is replaced only now
     // that a real response has demonstrably arrived. genApply pushes onto w.dm.mintQueue itself, so it
@@ -729,11 +1182,15 @@ function applyResponse(r){
     // fall-through: the follow-up turn just resolved it, so pendingRoll never persists stale.
     const _newPending = (w.dm && w.dm.pendingSituation && w.dm.pendingSituation !== _hadPending)
       ? w.dm.pendingSituation : null;
-    w.dm={rollReq:GS.dm.rollReq, ask:GS.dm.ask, pendingTurnId:null, lastNarratedNodeId:narratedNode,
+    w.dm={rollReq:GS.dm.rollReq, ask:GS.dm.ask, pendingTurnId:null, pendingTurnMeta:null,
+          pendingTurnRequest:null, pendingTurnPause:null, pendingReceipt:null, pendingAckSeq:null,
+          queuedResponse:null, appliedTurnIds, rejectedTurnIds, lastNarratedNodeId:narratedNode,
           digestAckSeq:ackSeq, mintQueue, sessionSeqWatermark, pendingSituation:_newPending, pendingRoll:null};
+    w.dm.continuityCodexTurns=continuityCodexTurns;
     saveU(U); postState();          // the DM sees post-event state next turn
     // §7: top up the reserve in the idle window (player is reading) — after the world is saved.
     if(typeof genReserveTopUp==="function"){ genReserveTopUp(w); saveU(U); }
+    return {ok:true,turnId:route.turnId||r.turnId||null,worldId:w.id};
   }catch(e){
     console.error("[dm] applyResponse mid-apply failure — narration/events may be partially applied; tearing down the prep overlay + re-rendering regardless",e);
   }finally{
@@ -786,6 +1243,40 @@ function genReserveDraw(w, kind, opts){
   return arr.shift();
 }
 
+/* A DM-supplied item name identifies fiction, not a request to disguise an unrelated random table
+   row. NPC/interior name overrides can safely retain their rolled anatomy; item/loot overrides cannot
+   claim that "The First Answer Tube" is secretly a glass eye or watch fob. Mint a truthful, explicitly
+   incomplete shell and let later narration/codex_update define its properties. */
+function genBindNamedPayload(kind,payload,opts){
+  if(!opts||!opts.name)return payload;
+  const name=String(opts.name).trim();if(!name)return payload;
+  if(kind!=="item"&&kind!=="loot")return Object.assign({},payload,{name});
+  const rolledName=payload&&payload.rolled&&(payload.rolled.object||payload.rolled.name);
+  if(rolledName&&String(rolledName).trim().toLowerCase()===name.toLowerCase())
+    return Object.assign({},payload,{name});
+  return {kind:"item",name,provenance:"declared",source:{type:"bound-item",ref:null},origin:null,
+    rolled:{object:name,bound:true},fields:{object:name},dm:{bound:true,needsDefinition:true}};
+}
+
+/* Repair saved records that prove the old override bug: a named item/loot record whose canonical
+   name disagrees with the table atom stored as its object. Status, links, identity, and story facts
+   remain untouched; only the contradictory generated atoms are replaced. */
+function genMigrateBoundItemAtoms(w){
+  if(!w||typeof codexOf!=="function")return 0;
+  let repaired=0;
+  Object.values(codexOf(w).records||{}).forEach(rec=>{
+    if(!rec||rec.kind!=="item"||!rec.source||["plot","loot"].indexOf(rec.source.type)<0)return;
+    const atom=rec.rolled&&(rec.rolled.object||rec.rolled.name);
+    if(!atom||String(atom).trim().toLowerCase()===String(rec.name||"").trim().toLowerCase())return;
+    rec.rolled={object:rec.name,bound:true};rec.fields={object:rec.name};
+    rec.dm={bound:true,needsDefinition:!(rec.status&&rec.status.known)};
+    rec.provenance="declared";rec.source={type:"bound-item",ref:null};rec.origin=null;
+    if(typeof codexTouch==="function")codexTouch(codexOf(w),rec);
+    repaired++;
+  });
+  return repaired;
+}
+
 /* §1 — apply the DM's gen[] requests: draw-or-roll, mint SOFT, chip, queue the spotlight. Capped at
    GEN_CAP; unknown kind or overflow logs + no-ops (forward-compatible, same posture as applyEvent). */
 function genApply(w, gen){
@@ -810,6 +1301,7 @@ function genApply(w, gen){
     if(!GEN_ROLLERS[kind]){ console.warn("[gen] unknown gen kind — no-op (forward-compatible):",kind); return; }
     let payload=genReserveDraw(w,kind,opts);
     if(!payload){ const fn=window[GEN_ROLLERS[kind]]; if(typeof fn!=="function") return; payload=fn(opts); }
+    payload=genBindNamedPayload(kind,payload,opts);
     // PLOT-ITEM-RECURRENCE (dev/top-band-uniqueness-report.md, class-(iii) #53/#54): a Mythic plot-item
     // fire carries `origin:"plot-item:<row>"` (codex-roll.js). If a codex item record from that SAME row
     // already exists in THIS world, this is the legendary thing resurfacing, not a fresh mint — hand back
@@ -828,7 +1320,6 @@ function genApply(w, gen){
         return;
       }
     }
-    if(opts.name) payload=Object.assign({},payload,{name:opts.name});   // DM name-in-a-bind, matched to real rolled atoms
     const status=Object.assign({ soft:true }, (kind!=="loot"&&w.currentNodeId)?{ at:w.currentNodeId }:{});
     // interiors carry the §4 room-die request flag on mint — the DM generates the bespoke die (dm.effectDie
     // round-trips via codex_update); other kinds don't need one.
@@ -877,10 +1368,14 @@ function postState(){
   fetch(DM_BASE+"/state",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(snap)}).catch(()=>{});
 }
 
-function dmBridgeDown(e){
-  GS.dm.pending=false; if(GS.dm.poll){clearTimeout(GS.dm.poll);GS.dm.poll=null;}
+function dmBridgeDown(e,turnId){
+  const paused=dmPausePending(turnId,"bridge-unreachable",
+    "(The DM bridge became unreachable. This turn is safely paused and can be resumed without sending a new player action.)");
   toast("DM bridge unreachable — run: python3 dev/dm-bridge.py");
-  renderWorld(); wakeReveal();                     // never strand the player on the prep cinematic
+  if(!paused){
+    GS.dm.pending=false;if(GS.dm.poll){clearTimeout(GS.dm.poll);GS.dm.poll=null;}
+    renderWorld();wakeReveal();
+  }
 }
 
 /* ---------- player-facing actions (wired to inline handlers in the World view) ---------- */
@@ -905,7 +1400,9 @@ function dmRollFor(skill,ability,adv){
   const cur=w.characters.filter(c=>c.status==="living").slice(-1)[0]; const sh=cur&&cur.sheet;
   const aMod=(sh&&sh.mods&&ability&&typeof sh.mods[ability]==="number")?sh.mods[ability]:0;
   const prof=(sh&&sh.skillProfs&&skill&&sh.skillProfs.indexOf(skill)>=0)?(sh.profBonus||0):0;
-  const mode=(adv==="advantage"||adv==="disadvantage")?adv:null;
+  const restRider=(sh&&typeof restEffectCheckMode==="function")?restEffectCheckMode(sh,skill,ability,"check"):{mode:null,consumed:[]};
+  const declaredMode=(adv==="advantage"||adv==="disadvantage")?adv:null;
+  const mode=(typeof restEffectMergeMode==="function")?restEffectMergeMode(declaredMode,restRider.mode):(declaredMode||restRider.mode);
   const d1=rollDie(20), d2=mode?rollDie(20):null;
   const die=mode==="advantage"?Math.max(d1,d2):mode==="disadvantage"?Math.min(d1,d2):d1;
   const pair=mode?[d1,d2]:null, total=die+aMod+prof;
@@ -919,7 +1416,8 @@ function dmRollFor(skill,ability,adv){
     const t2=(typeof livingSheet==="function")?livingSheet(w):null;
     if(t2 && t2.sh.concentration && Array.isArray(t2.sh.concentration.pendingSaves)) t2.sh.concentration.pendingSaves.shift();
   }
-  const rolls=[{label:skill+advTag,die:"d20",result:die,mods:mods,total:total,adv:mode,pair:pair}];
+  const rolls=[{label:skill+advTag,die:"d20",result:die,mods:mods,total:total,adv:mode,pair:pair,
+    ...(restRider.consumed.length?{restEffectsConsumed:restRider.consumed}: {})}];
   // CRIT-MAGNITUDE (§5 dice are open): a nat 20/1 demands a second open d20 — the magnitude die. The
   // engine maps it to a lens vector the DM narrates FROM; we never let the DM fabricate the spike.
   let crit=null;
@@ -1155,6 +1653,7 @@ function conditionTtlLabel(ttl){
   if(!ttl) return "";
   if(typeof ttl.rounds==="number") return ttl.rounds+" round"+(ttl.rounds===1?"":"s");
   if(ttl.untilSave) return "save "+(ttl.untilSave.ability||"?")+" DC "+(ttl.untilSave.dc||"?");
+  if(ttl.startOfNextTurn) return "start of next turn";
   if(ttl.endOfNextTurn) return "end of next turn";
   if(ttl.concentration) return "while concentration holds";
   if(ttl.indefinite) return "until cured";
@@ -1550,6 +2049,9 @@ function codexMintSignificantFoes(w, foes){
  * @property {number}        turnBytes            whole turn envelope in
  * @property {number}        responseBytes        narration+events out
  * @property {number}        narrationChars
+ * @property {number}        narrationWords
+ * @property {number|null}   narrationMaxWords
+ * @property {boolean}       narrationBudgetMiss
  * @property {number}        eventCount
  * @property {string[]}      eventTypes
  * @property {number}        mintCount            on-demand gen requests this turn
@@ -1562,7 +2064,7 @@ function codexMintSignificantFoes(w, foes){
 // list can't silently drift from the code that consumes it). An event whose type is NOT here still
 // applies if well-formed (validateEvent flags unknownType but passes it; the switch no-ops it) —
 // forward-compatible by design. Add a new case to the switch AND a line here (the test enforces both).
-const DM_EVENT_TYPES = ["hp_changed","death_save","temp_hp","combat_start","combat_end","attack","action","opportunity_attack","move_zone","grapple","shove","hazard_tick","slot_spent","cast","concentration_start","concentration_broken","resource_spent","rest","item_changed","item_split","item_use","charge_spend","charge_restore","condition_add","condition_remove","item_rust_exposure","item_claimed","condition_expired","round_tick","foe_morale","foe_action","equip","unequip","set_grip","attune","unattune","fact_canonized","codex_add","codex_link","codex_update","codex_reveal","codex_contact","social_check","attitude_shift","animal_interview","animal_care","morale_check","parley_open","insight_read","discovery","clock_advanced","clock_fired","front_closed","encounter_resolved","kill","claim_deed","gift","epithet_grant","hire","dismiss","tend_pet","companion_update","recruit_creature","choice_logged","inspiration_granted","inspiration_spend","check","crit_outcome","stage_fx","terrain_change","adjudication","level_applied","prep_applied","prep_contact","walk_advance","walk_update","walk_complete","capture","chase_start","chase_round","chase_yield","downtime","distant_word","shrine_omen","xp_granted","open_shop","district_mint","building_approach","building_contact","job_board_read","job_accept","tarot_landed","advance_clock","move_node","start_walk","travel_start","knockout","bastion_claim","mark_added","mark_removed","state_transition"];
+const DM_EVENT_TYPES = ["hp_changed","death_save","temp_hp","combat_start","combat_end","attack","action","opportunity_attack","move_zone","grapple","shove","hazard_tick","slot_spent","cast","concentration_start","concentration_broken","resource_spent","rest","item_changed","item_split","item_transfer","item_placed","item_use","charge_spend","charge_restore","condition_add","condition_remove","item_rust_exposure","item_claimed","condition_expired","round_tick","foe_morale","foe_action","equip","unequip","set_grip","attune","unattune","fact_canonized","codex_add","codex_link","codex_update","codex_reveal","codex_contact","social_check","attitude_shift","animal_interview","animal_care","morale_check","parley_open","insight_read","discovery","clock_advanced","clock_fired","front_closed","encounter_resolved","kill","claim_deed","gift","epithet_grant","hire","dismiss","tend_pet","companion_update","recruit_creature","choice_logged","inspiration_granted","inspiration_spend","check","crit_outcome","stage_fx","terrain_change","adjudication","level_applied","prep_applied","prep_contact","walk_advance","walk_update","walk_complete","capture","chase_start","chase_round","chase_yield","downtime","distant_word","shrine_omen","xp_granted","open_shop","district_mint","building_approach","building_contact","job_board_read","job_accept","tarot_landed","advance_clock","move_node","start_walk","travel_start","knockout","bastion_claim","mark_added","mark_removed","state_transition"];
 
 // The known provenance vocabulary — who asserted this event. "detected" = the engine derived it
 // from observed state (prefer); "declared" = the DM reported it (the default when omitted);
@@ -1615,6 +2117,8 @@ const DM_EVENT_FIELDS = {
   rest:              { accept:["kind","spendHitDice","hdRolls"], num:["spendHitDice"] },
   item_changed:      { accept:["add","force","gold","note","remove","removeAll","removeIds","takenBy"], num:["gold"] },
   item_split:        { accept:["itemId","qty"], num:["qty"] },
+  item_transfer:     { accept:["itemId","qty","to","intent","note"], num:["qty"] },
+  item_placed:       { accept:["item","to","intent","note"] },
   item_use:          { accept:["itemId","roll"] },
   charge_spend:      { accept:["itemId","n"], num:["n"] },
   charge_restore:    { accept:["itemId","n","target"], num:["n"] },
@@ -1674,7 +2178,7 @@ const DM_EVENT_FIELDS = {
   parley_open:       { accept:["ceiling","creature","floor","npc","openingAttitude","target","want"] },
   insight_read:      { accept:["bestMentalMod","dc","guarded","masking","mentalMods","target","total"], num:["bestMentalMod","dc","total"] },
   discovery:         { accept:["makeNode","nodeId","reveal","what","enter","travelMin"], alias:{ name:"what" } },
-  clock_advanced:    { accept:["clockId","delta"], num:["delta"], alias:{ id:"clockId", faction:"clockId", by:"delta" } },
+  clock_advanced:    { accept:["clockId","delta"], num:["delta"], alias:{ id:"clockId", faction:"clockId", by:"delta", n:"delta" } },
   clock_fired:       { accept:["clockId","factionId","forPlayer"], alias:{ id:"clockId", faction:"clockId", by:"delta" } },
   front_closed:      { accept:["factionId","frontId","how","ledgerId"], alias:{ clockId:"ledgerId", id:"ledgerId" } },
   encounter_resolved:{ accept:["foes","method","nodeId","objectiveRef","outcome"] },
@@ -1701,14 +2205,16 @@ const DM_EVENT_FIELDS = {
   // PRESENT keys) so there is no downside to keeping it future-proofed.
   inspiration_spend: { accept:["d20","d20b","o","on"], num:["d20","d20b"] },
   check:             { accept:["advantage","bonus","d20","dc","key","kind","reroll"], num:["d20","bonus","reroll","dc"] },
-  crit_outcome:      { accept:["cascade","lenses","magnitude","mythSeed","natural","placeHandoff","scope","target","tier"], num:["magnitude","natural"] },
+  crit_outcome:      { accept:["actor","canon","cascade","lenses","lensCount","magnitude","mythSeed","natural","placeHandoff","scope","success","target","tier"], num:["lensCount","magnitude","natural"] },
   stage_fx:          { accept:["from","note","to","verb","who"] },
   terrain_change:    { accept:["note","op","zone"], alias:{ at:"zone", kind:"op" } },
   adjudication:      { accept:["precedentId","ruling","situation"] },
   level_applied:     { accept:["from","pc","to"] },
   prep_contact:      { accept:["enter","nodeId"] },
   tarot_landed:      { accept:["via","ref"] },     // TAROT-2 §3.3 — DM-declared interpretive landing (telemetry; quiet)
-  walk_advance:      { accept:["nodeId","toSeg"] },
+  // The natural long form appeared in a live soak response. It is unambiguous bookkeeping, so
+  // fold it at the contract boundary instead of letting narration advance while the cursor does not.
+  walk_advance:      { accept:["nodeId","toSeg"], alias:{toSegment:"toSeg"} },
   walk_update:       { accept:["nodeId","overlay","seg"] },
   walk_complete:     { accept:["abandoned","nodeId"] },
   // UNIT W6 (2026-07-27, Site-6 blocker #1): capture graduated OUT of the whole-payload-pass
@@ -1834,6 +2340,22 @@ function validateEvent(e){
   return { ok:errors.length===0, errors, unknownType };
 }
 
+/* Repair only observed, unambiguous transport-shape drift at the inbound boundary. The strict
+   validator remains strict, so fixtures and providers still expose malformed output; applyResponse
+   normalizes a live answer before validation so one redundant array cannot poison an otherwise valid
+   turn. Executable branch truth always lives on rollRequest.branches. */
+function dmNormalizeTurnResponse(raw){
+  const response=dmJsonClone(raw)||raw, repairs=[];
+  const ruling=response&&response.ruling;
+  if(ruling&&typeof ruling==="object"&&!Array.isArray(ruling)&&Array.isArray(ruling.outcomeBranches)){
+    const branches=response.rollRequest&&response.rollRequest.branches;
+    ruling.outcomeBranches=(branches&&typeof branches==="object"&&!Array.isArray(branches))
+      ? dmJsonClone(branches) : null;
+    repairs.push("ruling.outcomeBranches:array->"+(ruling.outcomeBranches?"rollRequest.branches":"null"));
+  }
+  return {response,repairs};
+}
+
 /* Validate a whole TurnResponse. NON-BLOCKING by design — applyResponse applies what's valid and
    logs the rest (resilience > rejection at the narration seam). Returns {ok, errors[]}. */
 function validateTurnResponse(r){
@@ -1844,6 +2366,19 @@ function validateTurnResponse(r){
   if(Array.isArray(r.events)) r.events.forEach((e,i)=>{ const v=validateEvent(e); if(!v.ok) errors.push("events["+i+"]: "+v.errors.join("; ")); });
   if(r.gen!=null && !Array.isArray(r.gen)) errors.push("gen must be an array");
   if(r.dmNotes!=null && typeof r.dmNotes!=="string") errors.push("dmNotes must be a string");
+  if(r.ruling!=null){
+    const q=r.ruling;
+    if(!q || typeof q!=="object" || Array.isArray(q)) errors.push("ruling must be an object");
+    else{
+      if(q.understoodAction!=null && typeof q.understoodAction!=="string") errors.push("ruling.understoodAction must be a string");
+      if(q.ruling!=null && typeof q.ruling!=="string") errors.push("ruling.ruling must be a string");
+      if(q.needsRoll!=null && typeof q.needsRoll!=="boolean") errors.push("ruling.needsRoll must be boolean");
+      if(q.proposedCheck!=null && (typeof q.proposedCheck!=="object" || Array.isArray(q.proposedCheck))) errors.push("ruling.proposedCheck must be an object or null");
+      if(q.outcomeBranches!=null && (typeof q.outcomeBranches!=="object" || Array.isArray(q.outcomeBranches))) errors.push("ruling.outcomeBranches must be an object or null");
+      if(q.proposedEvents!=null && !Array.isArray(q.proposedEvents)) errors.push("ruling.proposedEvents must be an array");
+      if(Array.isArray(q.proposedEvents)) q.proposedEvents.forEach((e,i)=>{ const v=validateEvent(e); if(!v.ok) errors.push("ruling.proposedEvents["+i+"]: "+v.errors.join("; ")); });
+    }
+  }
   return { ok:errors.length===0, errors };
 }
 
@@ -1935,6 +2470,50 @@ function dmEntityState(ent, states){
   if(!ent) return null;
   if(ent.state!=null) return ent.state;
   return (Array.isArray(states) && states.length) ? states[0] : null;
+}
+
+/* Build one portable item instance without choosing its owner. Both `item_changed.add` (PC
+   inventory) and `item_placed` (world custody) must produce the same magic overlay, charge state,
+   codex linkage, and Outlandish provenance. Keeping that construction here prevents scene loot
+   from becoming a name-only imitation of the item the PC would have received. The caller validates
+   its destination and supplies a collision-free id before invoking this helper. */
+function dmBuildItemInstance(w,spec,instanceId){
+  const name=String((spec&&spec.name!=null?spec.name:spec)||"").trim(); if(!name)return null;
+  const inst={id:instanceId||uid(),name,conditions:[]};
+  if(spec&&typeof spec.qty==="number"&&spec.qty>0)inst.qty=spec.qty;
+  const md=(typeof magicDef==="function")?magicDef(name):null;
+  if(spec&&spec.base)inst.base=spec.base;
+  let ench=(spec&&spec.ench)?JSON.parse(JSON.stringify(spec.ench)):((md&&md.ench)?JSON.parse(JSON.stringify(md.ench)):null);
+  if(spec&&typeof spec.bonus==="number"){ ench=ench||{}; ench.bonus=spec.bonus; delete ench.bonusOptions; }
+  if(ench){ if(ench.charges&&ench.charges.cur==null)ench.charges.cur=ench.charges.max; inst.ench=ench; }
+  if(spec&&spec.codexId)inst.codexId=spec.codexId;
+  // ITEM-LEGACY §2.2 — a known storied item keeps its true overlay when it re-enters physical state.
+  if(inst.codexId && typeof codexGet==="function"){
+    const lr=codexGet(w,inst.codexId);
+    if(lr && lr.legacy && lr.legacy.lossState!=="held" && lr.legacy.instSnapshot){
+      const snap=lr.legacy.instSnapshot;
+      if(!inst.ench && snap.ench) inst.ench=JSON.parse(JSON.stringify(snap.ench));
+      if(!inst.base && snap.base) inst.base=snap.base;
+    }
+  }
+  // CROWNING-BASTION §7.B1.4 — materializing a cached item withdraws its one codex identity.
+  if(w.bastion && inst.codexId){ const vi=(w.bastion.vault||[]).indexOf(inst.codexId);
+    if(vi>=0){ w.bastion.vault.splice(vi,1);
+      w.bastion._vaultNames=w.bastion.vault.map(id=>{const rr=(typeof codexGet==="function")?codexGet(w,id):null;return rr?rr.name:id;});
+    } }
+  // LOOSE-ENDS §2 — high-band Outlandish items mint the same provenance thread in either owner.
+  if(spec&&spec.outlandish&&spec.outlandish.intrusion&&spec.outlandish.intrusion.hookBand&&typeof codexAdd==="function"){
+    const tid=(typeof prepCastId==="function")?prepCastId(w,"thread",name+" — where it fell from")
+      :("thread:"+slug(name)+"-provenance-"+uid());
+    const thread=codexAdd(w,{ id:tid, kind:"thread", provenance:"rolled",
+      name:name+" — where it fell from",
+      fields:{ desc:"Something else out there remembers "+name+", and who is carrying it now.", itemId:inst.id, band:spec.outlandish.band||null },
+      dm:{ legs:"thread-seed", pool:"outlandish-intrusion", inherits:null },
+      status:{ known:false, soft:true, at:w.currentNodeId||null } });
+    if(thread&&spec.codexId&&typeof codexLink==="function") codexLink(w,thread.id,"part-of",spec.codexId);
+    inst.intrusionThreadId=thread?thread.id:null;
+  }
+  return inst;
 }
 
 function applyEvent(w,e){
@@ -2074,6 +2653,9 @@ function applyEvent(w,e){
       if(typeof combatStart!=="function")return {ok:false,reason:"combat-unavailable"};
       if(GS.combat&&GS.combat.active)return {ok:false,reason:"combat-already-active"};
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      const initiativeRest=(typeof restEffectCheckMode==="function")?restEffectCheckMode(t.sh,"Initiative","dex","initiative"):{mode:null,consumed:[]};
+      let pcInitiativeRoll=null;
+      if(initiativeRest.mode==="disadvantage")pcInitiativeRoll=Math.min(rollDie(20),rollDie(20));
       const rawFoes=p.foes||[];
       const foes=[];
       rawFoes.forEach(f=>{
@@ -2140,14 +2722,18 @@ function applyEvent(w,e){
         }
       }
       GS.combat=combatStart({ pc, foes, objectiveRef:p.objectiveRef||null, segment,
-        segmentId:p.segmentId||null, scene:p.scene||null, cellDims });
+        segmentId:p.segmentId||null, scene:p.scene||null, cellDims, pcRoll:pcInitiativeRoll });
+      const surpriseEffect=Array.isArray(t.sh.restEffects)&&t.sh.restEffects.find(e=>e&&e.kind==="surprise-immunity"&&e.status==="active");
+      if(surpriseEffect)GS.combat.pc.surpriseImmune=true;
+      w.combat=GS.combat;                              // reload/world-switch persistence; same live ref
       // REALM-STORY-WIRING §3: mint/touch codex "creature" records for significant foes — script-owned,
       // fires unconditionally (idempotent no-op for a mook-only fight — codexMintSignificantFoes'
       // own significance guard drops those before ever calling codexAdd).
       if(typeof codexMintSignificantFoes==="function") codexMintSignificantFoes(w, GS.combat.foes);
       const foeList=GS.combat.foes.map(f=>f.name+" ("+(typeof cmFoeStateWord==="function"?cmFoeStateWord(f):"fresh")+")").join(", ");
       const wonInit=GS.combat.first==="pc"?"You won initiative.":"The foes won initiative.";
-      addLedger(w,"outcome",{kind:"combat-start",foes:GS.combat.foes.map(f=>({fid:f.fid,name:f.name,cr:f.cr})),first:GS.combat.first,source:src},
+      addLedger(w,"outcome",{kind:"combat-start",foes:GS.combat.foes.map(f=>({fid:f.fid,name:f.name,cr:f.cr})),first:GS.combat.first,
+          initiativeRestEffects:initiativeRest.consumed,surpriseImmune:!!surpriseEffect,source:src},
         "⚔ Combat — "+GS.combat.foes.length+" foe"+(GS.combat.foes.length===1?"":"s")+": "+foeList+". "+wonInit);
       renderWorld();
       return {ok:true, combat:{ round:GS.combat.round, first:GS.combat.first,
@@ -2169,7 +2755,7 @@ function applyEvent(w,e){
       const downCount=ev.kills.length;
       const foes=GS.combat.foes||[];
       const fledCount=foes.filter(f=>f.fled&&!f.down).length;
-      const outcomePhrase={resolved:"resolved",fled:"the foes flee",surrender:"the foes surrender",
+      const outcomePhrase={resolved:"resolved",fled:"the foes flee","pc-fled":"you escape",surrender:"the foes surrender",
         negotiated:"talked down","pc-dead":"you fall","aborted":"broken off"}[outcome]||outcome;
       // TRANSITION-CONTRACT.md §3.8 — combat ticks the clock off the round count (>=6s/round, min 1
       // min/fight). Ticks on EVERY outcome incl. pc-dead (time passed regardless). Captured BEFORE
@@ -2192,7 +2778,7 @@ function applyEvent(w,e){
         const traceOverlay=theaterCombatEndTraces(w,GS.combat);
         if(traceOverlay) walkUpdateSegment(w,undefined,traceOverlay,undefined);
       }
-      GS.combat=null;
+      GS.combat=null; w.combat=null;
       renderWorld();   // render.js:206's prevPanel restore handles the panel teardown
       return {ok:true, outcome, downed:downCount, minutes:combatMin, xpEvents:{encounter:ev.encounter, kills:ev.kills}};
     }
@@ -2291,7 +2877,7 @@ function applyEvent(w,e){
       // "obliterated by a crit." A fumble (natural 1) rides the SAME event so its lens vector/ledger line
       // exist for DM narration too — crit_outcome itself does nothing mechanical for a non-mythic tier.
       if(res.magnitude && typeof applyEvent==="function"){
-        applyEvent(w, {type:"crit_outcome", payload:Object.assign({target:p.target||null}, res.magnitude), source:src});
+        applyEvent(w, {type:"crit_outcome", payload:Object.assign({actor:"pc",target:p.target||null}, res.magnitude), source:src});
       }
       // DE-4: morale sweep FIRST (a swept flee can complete the "all foes resolved" picture), THEN
       // auto-end detection — this is the only site where a PC damages/downs a foe, i.e. the only
@@ -2322,7 +2908,7 @@ function applyEvent(w,e){
       // Dodge lands as a real `dodging` CONDITION on the PC's condition holder (t.c) — so resolveAttack's
       // conditionAdvDis consult gives ATTACKERS disadvantage, and round_tick's ttl auto-expires it. (The
       // budget lives on GS.combat.pc; the condition lives on t.c — two objects, per conditionHolder.)
-      if(p.kind==="dodge" && typeof addCondition==="function"){ const h=conditionHolder(w,"pc"); if(h) addCondition(h.obj,"dodging",{endOfNextTurn:true},round); }
+      if(p.kind==="dodge" && typeof addCondition==="function"){ const h=conditionHolder(w,"pc"); if(h) addCondition(h.obj,"dodging",{startOfNextTurn:true},round); }
       addLedger(w,"outcome",{kind:"action",pc:t.c.name,action:p.kind,effect:r.effect,source:src},
         "⚔ "+t.c.name+" — "+p.kind+(r.effect&&r.effect.note?(": "+r.effect.note):"")+".");
       return Object.assign({ok:true},r);
@@ -2578,15 +3164,6 @@ function applyEvent(w,e){
       // exploit path — "the exact hard/dangerous gap Adam ruled against").
       if(GS.combat && GS.combat.active) return {ok:false, reason:"combat-active"};
       const kind=(p.kind==="long")?"long":"short";
-      // HQ3-C1 (SET-07-F2) — a short rest heals ONLY by spending Hit Dice; do this BEFORE restRiders
-      // so its own ledger line lands ahead of the rest-risk/recovery lines. No-op on a long rest (a
-      // long rest already heals to full) or when no spend was requested.
-      let hd=null;
-      if(kind==="short" && p.spendHitDice && typeof spendHitDice==="function"){
-        hd=spendHitDice(t.sh, p.spendHitDice, p.hdRolls);
-        if(hd.ok) addLedger(w,"outcome",{kind:"hit-dice",pc:t.c.name,spent:hd.spent,healed:hd.healed,hp:hd.hp,source:src},
-          "✦ "+t.c.name+" spends "+hd.spent+" Hit "+(hd.spent===1?"Die":"Dice")+" — heals "+hd.healed+" ("+hd.hp+").");
-      }
       // COMPOSED at the 2026-07-07 spine integration — both specs planned for each other:
       // TRANSITION-CONTRACT §3.8 ticks the clock (+480 long / +60 short, or a partial window on an
       // INTERRUPTED rest — HQ3-C2, SET-07-F1: the double-penalty fix) and wakes a KO'd PC; DETECTED-
@@ -2597,10 +3174,13 @@ function applyEvent(w,e){
       // now rolls risk and returns the minutes to advance — the clock advances AFTER it returns (both
       // callers no longer pre-advance), so an interrupted rest burns only a rolled partial window.
       const restMin=(kind==="long")?480:60;
-      const rr=(typeof restRiders==="function")?restRiders(w,{restKind:kind, dayScale:(kind==="long")?1:0, fullMinutes:restMin, via:"dm"}):{};
+      const rr=(typeof restRiders==="function")?restRiders(w,{restKind:kind, dayScale:(kind==="long")?1:0, fullMinutes:restMin,
+        spendHitDice:p.spendHitDice,hdRolls:p.hdRolls,via:"dm"}):{};
       const advanced=(typeof rr.clockMinutes==="number")?rr.clockMinutes:restMin;
       if(typeof advanceClock==="function") advanceClock(w,advanced);
-      return {ok:true, rest:kind, restored:rr.restored, hitDice:hd, interrupted:!!rr.interrupted,
+      return {ok:true, rest:kind, restored:rr.restored, hitDice:rr.hitDice||null, restRisk:rr.restRisk||null,
+        recoveryFraction:rr.recoveryFraction||1, bonusResource:rr.bonusResource||null, trackedEffect:rr.trackedEffect||null,
+        recharged:rr.recharged||0, interrupted:!!rr.interrupted,
         interruptedMinutes:rr.interruptedMinutes||null, exhaustion:rr.exhaustionAfter,
         lodging:rr.lodging||null, leveled:rr.leveled||null, minutes:advanced};
     }
@@ -2650,56 +3230,10 @@ function applyEvent(w,e){
         const i=sh.inventory.findIndex(it=>String(it.name||"").trim().toLowerCase()===n);
         if(i>=0){ removed.push(sh.inventory[i]); sh.inventory.splice(i,1); } });
       (p.add||[]).forEach(spec=>{
-        const name=String((spec&&spec.name!=null?spec.name:spec)||"").trim(); if(!name)return;
-        const inst={id:uid(),name,conditions:[]};
-        if(spec&&typeof spec.qty==="number"&&spec.qty>0)inst.qty=spec.qty;
-        // CONGRUENCE (docs/ITEMS.md §E): a magic item mints with a base pointer + an enchantment overlay
-        // + an optional codex link. Explicit spec fields win; else the overlay defaults from the magic
-        // catalog (MAGIC_ITEMS_BY_NAME). `spec.bonus` is shorthand for choosing a generic +N template's
-        // value. Charges initialize full (cur=max) on mint. A mundane item stays a bare {id,name,...}.
-        const md=(typeof magicDef==="function")?magicDef(name):null;
-        if(spec&&spec.base)inst.base=spec.base;
-        let ench=(spec&&spec.ench)?JSON.parse(JSON.stringify(spec.ench)):((md&&md.ench)?JSON.parse(JSON.stringify(md.ench)):null);
-        if(spec&&typeof spec.bonus==="number"){ ench=ench||{}; ench.bonus=spec.bonus; delete ench.bonusOptions; }
-        if(ench){ if(ench.charges&&ench.charges.cur==null)ench.charges.cur=ench.charges.max; inst.ench=ench; }
-        if(spec&&spec.codexId)inst.codexId=spec.codexId;
-        // ITEM-LEGACY §2.2 (overlay restore): re-granting a storied item whose lifecycle says it left
-        // the PC (lossState≠"held") must not silently strip its +1/rider/charges. If the add spec carried
-        // NO ench/base of its own, deep-copy them from the record's instSnapshot (the truth of what the
-        // thing IS). Charges return at their last-witnessed cur (the world didn't refill the wand).
-        if(inst.codexId && typeof codexGet==="function"){
-          const lr=codexGet(w,inst.codexId);
-          if(lr && lr.legacy && lr.legacy.lossState!=="held" && lr.legacy.instSnapshot){
-            const snap=lr.legacy.instSnapshot;
-            if(!inst.ench && snap.ench) inst.ench=JSON.parse(JSON.stringify(snap.ench));
-            if(!inst.base && snap.base) inst.base=snap.base;
-          }
-        }
-        // CROWNING-BASTION.md §7.B1.4 — a cached item withdrawn from the vault leaves the vault list
-        // (ITEM-LEGACY's overlay-restore above already brought its true ench/base back).
-        if(w.bastion && inst.codexId){ const vi=(w.bastion.vault||[]).indexOf(inst.codexId);
-          if(vi>=0){ w.bastion.vault.splice(vi,1);
-            // §9b — keep the resolved-name cache in lockstep with the one array it mirrors.
-            w.bastion._vaultNames=w.bastion.vault.map(id=>{const rr=(typeof codexGet==="function")?codexGet(w,id):null;return rr?rr.name:id;});
-          } }
+        // CONGRUENCE (docs/ITEMS.md §E): the shared builder gives inventory and scene custody the
+        // same base/enchantment/charge/codex representation.
+        const inst=dmBuildItemInstance(w,spec,uid()); if(!inst)return;
         sh.inventory.push(inst); added.push(inst);
-        // LOOSE-ENDS §2 — Outlandish diegetic intrusion: spec.outlandish (the shape dwalkOutlandish()
-        // hands the caller, {band,intrusion:{note,hookBand}}) rides IN on the add[] entry when this
-        // pickup is an Outlandish-band surface. The item's mechanical row (inst above) is UNTOUCHED by
-        // this — additive only. hookBand (high-power/reality-breaking) mints a companion thread handle
-        // (the CONSEQUENCE-LADDER thread-seed sink, reused verbatim per companions.js's grievance-thread
-        // pattern); utility/combat intrude quietly — no thread, per §2's explicit spice gate.
-        if(spec&&spec.outlandish&&spec.outlandish.intrusion&&spec.outlandish.intrusion.hookBand&&typeof codexAdd==="function"){
-          const tid=(typeof prepCastId==="function")?prepCastId(w,"thread",name+" — where it fell from")
-            :("thread:"+slug(name)+"-provenance-"+uid());
-          const thread=codexAdd(w,{ id:tid, kind:"thread", provenance:"rolled",
-            name:name+" — where it fell from",
-            fields:{ desc:"Something else out there remembers "+name+", and who is carrying it now.", itemId:inst.id, band:spec.outlandish.band||null },
-            dm:{ legs:"thread-seed", pool:"outlandish-intrusion", inherits:null },
-            status:{ known:false, soft:true, at:w.currentNodeId||null } });
-          if(thread&&spec.codexId&&typeof codexLink==="function") codexLink(w,thread.id,"part-of",spec.codexId);
-          inst.intrusionThreadId=thread?thread.id:null;
-        }
       });
       // ITEM-LEGACY §2.2 — fold custody transitions into the ONE inventory event (no second event).
       // Removes: each legacy-grade removed instance with a codexId emits a detected item_claimed.
@@ -2735,6 +3269,217 @@ function applyEvent(w,e){
       addLedger(w,"outcome",{kind:"inventory",pc:t.c.name,removed,added,gold,source:src},
         p.note||("◆ "+t.c.name+" — "+(parts.join("; ")||"inventory unchanged")+"."));
       return {ok:true,removed,added,gold,inventory:sh.inventory.slice()};
+    }
+
+    case "item_transfer":{                           // atomically move all/part of one portable instance
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      const sh=t.sh;
+      if(!Array.isArray(sh.inventory))return {ok:false,reason:"no-inventory"};
+      const fromIndex=sh.inventory.findIndex(it=>it&&it.id===p.itemId);
+      const custodyRec=fromIndex<0&&typeof itemCustodyFind==="function"?itemCustodyFind(w,p.itemId):null;
+      const sourceStorage=fromIndex>=0?"inventory":(custodyRec?"custody":null);
+      if(!sourceStorage)return {ok:false,reason:"no-such-item"};
+      const from=sourceStorage==="inventory"?sh.inventory[fromIndex]:custodyRec.item;
+      const sourceOwner=sourceStorage==="inventory"
+        ? {kind:"pc",ref:t.c.id||null,name:t.c.name||null}
+        : Object.assign({},custodyRec.holder||{kind:"object",ref:"unknown"});
+
+      // Destination identity is always explicit. The event does not infer "the coffin" or any other
+      // noun from prose; the DM/UI supplies the stable ref after interpreting the fiction.
+      const rawTo=p.to;
+      if(!rawTo || typeof rawTo!=="object" || Array.isArray(rawTo))
+        return {ok:false,reason:"bad-destination"};
+      const toKind=String(rawTo.kind||"").trim().toLowerCase();
+      const allowed=(typeof ITEM_TRANSFER_DESTINATION_KINDS!=="undefined")?ITEM_TRANSFER_DESTINATION_KINDS:
+        ["pc","npc","creature","faction","container","corpse","place","object"];
+      if(allowed.indexOf(toKind)<0)return {ok:false,reason:"bad-destination-kind",kind:toKind||null};
+      const toRef=String(rawTo.ref==null?"":rawTo.ref).trim();
+      if(!toRef)return {ok:false,reason:"destination-ref-required",kind:toKind};
+      const to={kind:toKind,ref:toRef};
+      if(rawTo.name!=null && String(rawTo.name).trim())to.name=String(rawTo.name).trim();
+      const intent=(typeof itemTransferIntent==="function")?itemTransferIntent(p.intent):String(p.intent||"transfer").toLowerCase();
+      if(!intent)return {ok:false,reason:"bad-transfer-intent",intent:p.intent};
+
+      // Quantity is exact: a singleton may omit qty; a stack must state how many so "put down the
+      // arrows" can never silently mean one or all. Unlike item_split, fractions are rejected.
+      const have=from.qty==null?1:Number(from.qty);
+      if(!Number.isInteger(have) || have<1)return {ok:false,reason:"bad-stack",have:from.qty};
+      if(p.qty==null && have>1)return {ok:false,reason:"qty-required",have};
+      const want=p.qty==null?1:Number(p.qty);
+      if(!Number.isInteger(want) || want<1)return {ok:false,reason:"bad-qty",qty:p.qty};
+      if(want>have)return {ok:false,reason:"insufficient",have,want};
+      const whole=want===have;
+      // A codex id names one storied object. Splitting it would create two physical instances linked
+      // to one identity, so refuse instead of guessing how the story should fork.
+      if(!whole && from.codexId)return {ok:false,reason:"storied-stack-unsplittable",codexId:from.codexId};
+
+      let destinationStorage="custody", targetCharacter=null, targetItems=null;
+      if(toKind==="pc"){
+        targetCharacter=(w.characters||[]).find(c=>c&&c.id===toRef&&c.sheet&&c.status==="living")||null;
+        if(!targetCharacter)return {ok:false,reason:"no-destination-pc",ref:toRef};
+        if(sourceStorage==="inventory"&&targetCharacter===t.c)return {ok:false,reason:"same-holder",ref:toRef};
+        targetItems=Array.isArray(targetCharacter.sheet.inventory)?targetCharacter.sheet.inventory:[];
+        destinationStorage="inventory";
+        if(!to.name)to.name=targetCharacter.name||null;
+      } else if(toKind==="corpse"){
+        targetCharacter=(w.characters||[]).find(c=>c&&c.id===toRef&&c.corpse)||null;
+        if(!targetCharacter)return {ok:false,reason:"no-destination-corpse",ref:toRef};
+        targetItems=Array.isArray(targetCharacter.corpse.items)?targetCharacter.corpse.items:[];
+        destinationStorage="corpse";
+        if(!to.name)to.name=targetCharacter.name||null;
+      } else {
+        if(typeof itemCustodyOf!=="function" || typeof itemCustodyFind!=="function")
+          return {ok:false,reason:"custody-unavailable"};
+        const existingStore=w.itemCustody;
+        if(existingStore && (!existingStore.items || typeof existingStore.items!=="object" || Array.isArray(existingStore.items)))
+          return {ok:false,reason:"bad-custody-store"};
+        const existing=itemCustodyFind(w,from.id);
+        if(existing&&sourceStorage!=="custody")return {ok:false,reason:"custody-conflict",itemId:from.id};
+        if(existing&&sourceStorage==="custody"&&existing.holder&&existing.holder.kind===to.kind&&existing.holder.ref===to.ref)
+          return {ok:false,reason:"same-holder",ref:toRef};
+      }
+
+      let moved=from;
+      if(!whole){
+        moved=dmJsonClone(from);
+        if(!moved || typeof moved!=="object")return {ok:false,reason:"bad-item-instance"};
+        let nextId=null;
+        for(let tries=0;tries<8&&!nextId;tries++){
+          const candidate=uid();
+          const exists=(typeof itemCustodyIdExists==="function")?itemCustodyIdExists(w,candidate,null):false;
+          if(!exists)nextId=candidate;
+        }
+        if(!nextId)return {ok:false,reason:"instance-id-collision"};
+        moved.id=nextId; moved.qty=want;
+      }
+      if(targetItems && targetItems.some(it=>it&&it.id===moved.id))
+        return {ok:false,reason:"destination-id-conflict",itemId:moved.id};
+      if(whole && typeof itemCustodyIdExists==="function" && itemCustodyIdExists(w,moved.id,from))
+        return {ok:false,reason:"source-id-conflict",itemId:moved.id};
+      if(destinationStorage==="inventory" && typeof carryState==="function"){
+        const targetProbe=Object.assign({},targetCharacter.sheet,{inventory:targetItems.concat([moved])});
+        const load=carryState(targetProbe);
+        if(load&&load.overHard)return {ok:false,reason:"destination-over-capacity",load};
+      }
+
+      // Preflight the Codex transition before touching physical ownership. All failure branches above
+      // are read-only; after this point the remaining writes are a fixed splice/push/assignment.
+      let legacyResult=null;
+      if(from.codexId){
+        const lr=(typeof codexGet==="function")?codexGet(w,from.codexId):null;
+        if(!lr || lr.kind!=="item")return {ok:false,reason:"no-item-record:"+from.codexId};
+        let lossState="transferred";
+        if(toKind==="pc")lossState="held";
+        else if(toKind==="corpse")lossState="on-corpse";
+        else if((typeof itemTransferInvoluntary==="function")&&itemTransferInvoluntary(intent)){
+          if(intent==="lost")lossState="dropped";
+          else if(toKind==="npc" || toKind==="creature" || toKind==="faction")lossState="claimed-"+toKind;
+          else lossState="dropped";
+        }
+        const at=toKind==="place"?toRef:(w.currentNodeId||null);
+        const claimPayload={codexId:from.codexId,by:to,lossState,at};
+        if(toKind==="faction" && to.name)claimPayload.factionInterest=to.name;
+        legacyResult=applyEvent(w,{type:"item_claimed",source:"detected",payload:claimPayload});
+        if(!legacyResult || !legacyResult.ok)
+          return {ok:false,reason:"legacy-transition-failed",legacy:legacyResult};
+      }
+
+      // COMMIT: identity follows the moved object. A whole transfer keeps its id; a partial transfer
+      // leaves that id on the remainder and gives the moved quantity the freshly validated id.
+      if(whole){
+        if(sourceStorage==="inventory")sh.inventory.splice(fromIndex,1);
+        else delete itemCustodyOf(w).items[from.id];
+      }
+      else from.qty=have-want;
+      if(destinationStorage==="inventory"){
+        if(!Array.isArray(targetCharacter.sheet.inventory))targetCharacter.sheet.inventory=targetItems;
+        targetCharacter.sheet.inventory.push(moved);
+      } else if(destinationStorage==="corpse"){
+        if(!Array.isArray(targetCharacter.corpse.items))targetCharacter.corpse.items=targetItems;
+        targetCharacter.corpse.items.push(moved);
+      } else {
+        const c=clockOf(w), C=itemCustodyOf(w);
+        const atNode=(toKind==="place"?toRef:(w.currentNodeId||null));
+        const walkAt=(wkStamp&&atNode===w.currentNodeId)?wkStamp:null;
+        C.items[moved.id]={item:moved,holder:to,intent,
+          from:sourceOwner,
+          at:Object.assign({nodeId:atNode,day:c.day,min:c.min},walkAt?{walkId:walkAt.id,seg:walkAt.seg}:{})};
+        if(p.note)C.items[moved.id].note=String(p.note);
+      }
+
+      // Equipped slots point at carried instance ids. Only a whole transfer removes that instance.
+      const clearedSlots=[];
+      if(whole && sourceStorage==="inventory" && sh.equipped){
+        ["mainHand","offHand","armor"].forEach(slot=>{
+          if(sh.equipped[slot]===from.id){sh.equipped[slot]=null;clearedSlots.push(slot);}
+        });
+        if(clearedSlots.length && typeof cmSheetAC==="function")sh.ac=cmSheetAC(sh);
+      }
+      const remainingId=whole?null:from.id, remainingQty=whole?0:from.qty;
+      addLedger(w,"outcome",{kind:"item-transfer",pc:t.c.name,itemId:p.itemId,movedId:moved.id,
+        name:moved.name||moved.base||"Item",qty:want,remainingId,remainingQty,from:sourceOwner,
+        to,intent,destinationStorage,clearedSlots,source:src},
+        p.note||("◆ "+t.c.name+" moves "+want+" "+(moved.name||moved.base||"item")+" to "+(to.name||to.ref)+"."));
+      return {ok:true,movedId:moved.id,movedQty:want,remainingId,remainingQty,to,intent,
+        sourceStorage,destinationStorage,clearedSlots,legacy:legacyResult};
+    }
+
+    case "item_placed":{                            // originate newly revealed loot in world custody
+      // This is deliberately NOT a pickup and never touches the living PC's sheet. It closes the
+      // scene-reward gap where a chest, altar, public trust, or abandoned wagon owns an item before
+      // any character does. Existing instances still move only through item_transfer.
+      const spec=p.item;
+      if(!spec || typeof spec!=="object" || Array.isArray(spec))return {ok:false,reason:"bad-item-spec"};
+      const name=String(spec.name||"").trim();
+      if(!name)return {ok:false,reason:"item-name-required"};
+      if(spec.qty!=null && (!Number.isInteger(spec.qty)||spec.qty<1))
+        return {ok:false,reason:"bad-qty",qty:spec.qty};
+      const rawTo=p.to;
+      if(!rawTo || typeof rawTo!=="object" || Array.isArray(rawTo))return {ok:false,reason:"bad-destination"};
+      const toKind=String(rawTo.kind||"").trim().toLowerCase();
+      const allowed=(typeof ITEM_TRANSFER_DESTINATION_KINDS!=="undefined")?ITEM_TRANSFER_DESTINATION_KINDS:
+        ["pc","npc","creature","faction","container","corpse","place","object"];
+      if(allowed.indexOf(toKind)<0)return {ok:false,reason:"bad-destination-kind",kind:toKind||null};
+      if(toKind==="pc"||toKind==="corpse")return {ok:false,reason:"native-owner-requires-transfer",kind:toKind};
+      const toRef=String(rawTo.ref==null?"":rawTo.ref).trim();
+      if(!toRef)return {ok:false,reason:"destination-ref-required",kind:toKind};
+      const to={kind:toKind,ref:toRef};
+      if(rawTo.name!=null&&String(rawTo.name).trim())to.name=String(rawTo.name).trim();
+      const intent=(typeof itemTransferIntent==="function")?itemTransferIntent(p.intent||"place"):String(p.intent||"place").toLowerCase();
+      if(!intent)return {ok:false,reason:"bad-transfer-intent",intent:p.intent};
+      if(typeof itemCustodyOf!=="function"||typeof itemCustodyFind!=="function")return {ok:false,reason:"custody-unavailable"};
+      const existingStore=w.itemCustody;
+      if(existingStore&&(!existingStore.items||typeof existingStore.items!=="object"||Array.isArray(existingStore.items)))
+        return {ok:false,reason:"bad-custody-store"};
+      // One codex identity may never become two physical objects merely because a scene reward is
+      // described twice. This scan is read-only and runs before the builder's optional codex work.
+      if(spec.codexId){
+        const physical=[];
+        (w.characters||[]).forEach(c=>{
+          if(c&&c.sheet&&Array.isArray(c.sheet.inventory))physical.push.apply(physical,c.sheet.inventory);
+          if(c&&c.corpse&&Array.isArray(c.corpse.items))physical.push.apply(physical,c.corpse.items);
+        });
+        if(w.itemCustody&&w.itemCustody.items)Object.values(w.itemCustody.items).forEach(rec=>{if(rec&&rec.item)physical.push(rec.item);});
+        if(physical.some(it=>it&&it.codexId===spec.codexId))return {ok:false,reason:"duplicate-codex-instance",codexId:spec.codexId};
+      }
+      let instanceId=null;
+      for(let tries=0;tries<8&&!instanceId;tries++){
+        const candidate=uid();
+        if(!(typeof itemCustodyIdExists==="function")||!itemCustodyIdExists(w,candidate,null))instanceId=candidate;
+      }
+      if(!instanceId)return {ok:false,reason:"instance-id-collision"};
+      const inst=dmBuildItemInstance(w,spec,instanceId);
+      if(!inst)return {ok:false,reason:"bad-item-spec"};
+      const c=clockOf(w),atNode=(toKind==="place"?toRef:(w.currentNodeId||null));
+      const walkAt=(wkStamp&&atNode===w.currentNodeId)?wkStamp:null;
+      const C=itemCustodyOf(w);
+      C.items[inst.id]={item:inst,holder:to,intent,
+        from:{kind:"place",ref:w.currentNodeId||null,name:(typeof nodeName==="function")?nodeName(w,w.currentNodeId):null},
+        at:Object.assign({nodeId:atNode,day:c.day,min:c.min},walkAt?{walkId:walkAt.id,seg:walkAt.seg}:{})};
+      if(p.note)C.items[inst.id].note=String(p.note);
+      addLedger(w,"outcome",{kind:"item-placed",itemId:inst.id,name:inst.name,qty:inst.qty||1,to,intent,source:src},
+        p.note||("◆ "+inst.name+" is placed with "+(to.name||to.ref)+"."));
+      return {ok:true,itemId:inst.id,item:dmJsonClone(inst),to,intent,destinationStorage:"custody"};
     }
 
     case "item_split":{                              // split `qty` off a stackable instance into a new one
@@ -2998,6 +3743,10 @@ function applyEvent(w,e){
         } else if(p.lossState==="held" && by.kind==="pc"){
           if(r.legacy.recoveryHookId && typeof codexUpdate==="function")
             codexUpdate(w,r.legacy.recoveryHookId,{ status:{ condition:"resolved" } });
+        } else if(p.lossState==="transferred"){
+          if(r.legacy.recoveryHookId && typeof codexUpdate==="function")
+            codexUpdate(w,r.legacy.recoveryHookId,{status:{condition:"resolved"},note:"voluntary custody; no recovery required"});
+          r.legacy.recoveryHookId=null;
         } else if(p.lossState!=="held" && by.kind!=="pc" && p.lossState!=="on-corpse"){
           const faction=r.legacy.factionInterest||(by.kind==="faction"?by.name:null);
           legacyMintHook(w,r,legacyHookWhy(p.lossState,r,null,faction));
@@ -3037,6 +3786,16 @@ function applyEvent(w,e){
       if(GS.combat && GS.combat.active && phase==="end"){
         GS.combat.round=round+1;
         GS.combat.side=GS.combat.first;
+        // Open the next player-facing turn: expire start-of-next-turn effects (Dodge) and refresh
+        // every combatant's Action/Bonus/Reaction/movement budget. Previously the round header moved
+        // to 2 while the PC still carried round 1's spent Action, making every later action fail.
+        holders.forEach(h=>{
+          const exp=tickConditions(h.obj,GS.combat.round,"start");
+          exp.forEach(cond=>{ expiredAll.push({target:h.target,condition:cond,name:h.label});
+            addLedger(w,"outcome",{kind:"condition",target:h.target,name:h.label,condition:cond,expired:true,source:"detected"},
+              "◈ "+h.label+" — "+cond+" ends."); });
+        });
+        if(typeof resetTurnBudget==="function") [GS.combat.pc].concat(GS.combat.foes||[]).forEach(resetTurnBudget);
         addLedger(w,"outcome",{kind:"round-flip",round:GS.combat.round,side:GS.combat.side,source:"detected"},
           "— Round "+GS.combat.round+"; "+(GS.combat.side==="pc"?"you act.":"the foes act."));
       }
@@ -3103,6 +3862,12 @@ function applyEvent(w,e){
       const foe=(GS.combat.foes||[]).find(f=>f.fid===p.foe); if(!foe)return {ok:false,reason:"no-such-foe"};
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
       const targetAC=(t.sh.ac!=null)?t.sh.ac:10;
+      // Conditions that shape attacks against the PC live on the character object, not GS.combat.pc
+      // (the latter owns only initiative/turn-budget state). Keep BOTH foe-action branches on the same
+      // target wire as opportunity_attack, otherwise Dodge is silently ignored during ordinary enemy
+      // turns even though the action correctly added `dodging` to the character.
+      const pcHolder=conditionHolder(w,"pc");
+      const pcTarget=pcHolder?pcHolder.obj:t.c;
       // COMBAT-LIFECYCLE.md §5: p.action (a name or 0-based index from the foe's stat block) BYPASSES the
       // autoplay-eligibility gate — the DM picks the VERB for a non-trash foe (reading digest.combat.
       // proposals), the script still owns every die (resolveAttack, same math autoplay uses). Without
@@ -3112,7 +3877,7 @@ function applyEvent(w,e){
         const chosen=(typeof p.action==="number")?actions[p.action]
           :actions.find(a=>a&&a.name&&a.name.toLowerCase()===String(p.action).toLowerCase());
         if(!chosen||!chosen.dmg)return {ok:false,reason:"no-resolvable-action"};
-        const res=resolveAttack({atkBonus:chosen.atk||0,targetAC,dmg:chosen.dmg,attacker:foe,target:GS.combat.pc,
+        const res=resolveAttack({atkBonus:chosen.atk||0,targetAC,dmg:chosen.dmg,attacker:foe,target:pcTarget,
           range:chosen.kind==="ranged"?"ranged":"melee"});
         // CRIT-MAGNITUDE (2026-07-03): a foe's own natural 20/1 spikes the same magnitude die — the ledger
         // line names it so a nasty foe crit reads as dangerous as it is.
@@ -3129,7 +3894,7 @@ function applyEvent(w,e){
         // a foe crit's magnitude rides crit_outcome too — target:"pc" so a magnitude>=8 killing blow
         // against the PC resolves through the SAME obliteration gate (confirmed down + magnitude>=8).
         if(res.magnitude && typeof applyEvent==="function"){
-          applyEvent(w, {type:"crit_outcome", payload:Object.assign({target:"pc"}, res.magnitude), source:src});
+          applyEvent(w, {type:"crit_outcome", payload:Object.assign({actor:foe.fid,target:"pc"}, res.magnitude), source:src});
         }
         // COMBAT-LIFECYCLE.md §3b: foe_action is one of the three named auto-end detection sites — a
         // future self-damage path (a reckless/risky action that can down its own actor) routes through
@@ -3139,7 +3904,7 @@ function applyEvent(w,e){
         return {ok:true, attack:res, actionName:chosen.name||null};
       }
       if(!autoplayEligible(foe))return {ok:false,reason:"not-autoplay-eligible"};
-      const r=resolveFoeTurn(foe,GS.combat,{ac:targetAC});
+      const r=resolveFoeTurn(foe,GS.combat,{ac:targetAC,conditions:pcTarget.conditions||[]});
       if(!r.attack){
         addLedger(w,"outcome",{kind:"foe-turn",foe:foe.fid,name:foe.name,resolvable:false,proposal:r.proposal,source:src},
           `⚔ ${foe.name} — ${(r.proposal&&r.proposal.rationale)||"acts"} (no resolvable attack — the DM narrates).`);
@@ -3159,7 +3924,7 @@ function applyEvent(w,e){
       // MF-3b: foe.fid is the acting attacker, genuinely in scope at this resolve site.
       if(res.hit && res.damage>0) applyEvent(w,{type:"hp_changed",payload:{delta:-res.damage,crit:res.crit,attacker:foe.fid},source:"detected"});
       if(res.magnitude && typeof applyEvent==="function"){
-        applyEvent(w, {type:"crit_outcome", payload:Object.assign({target:"pc"}, res.magnitude), source:src});
+        applyEvent(w, {type:"crit_outcome", payload:Object.assign({actor:foe.fid,target:"pc"}, res.magnitude), source:src});
       }
       return {ok:true, proposal:r.proposal, attack:res};
     }
@@ -3656,6 +4421,16 @@ function applyEvent(w,e){
 
     case "encounter_resolved":{
       const foes=p.foes||[];
+      // A resolved walk encounter changes the site, not merely the ledger. Persist a compact overlay
+      // on the exact active segment so later memoryless turns see the rolled encounter AND its current
+      // state. This prevents a defeated/averted threat from respawning in narration on the next beat.
+      let walkResolution=null;
+      if(wkStamp&&typeof walkUpdateSegment==="function"){
+        walkResolution=walkUpdateSegment(w,wkStamp.seg,{
+          encounterState:"resolved",
+          encounterResolution:{method:p.method||null,outcome:p.outcome||"resolved",objectiveRef:p.objectiveRef||null}
+        },wkStamp.id);
+      }
       addLedger(w,"outcome",{kind:"encounter",foes:foes,method:p.method,objectiveRef:p.objectiveRef||null,outcome:p.outcome||null,walk:wkStamp,source:src},
         "✦ Encounter "+(p.outcome||"resolved")+" ("+(p.method||"?")+") — "+foes.length+" foe"+(foes.length===1?"":"s")+".");
       // ADVANCEMENT-RETUNE.md §0/§1: UN-GATED — every real fight pays; objectiveRef is now a BONUS
@@ -3677,7 +4452,7 @@ function applyEvent(w,e){
           codexUpdate(w, rec.id, { fields:{ lastOutcome:outcome, seenCount:(rec.fields.seenCount||0)+1 } });
         });
       }
-      return {ok:true};
+      return {ok:true,walkResolution:walkResolution&&walkResolution.ok?walkResolution.overlay:null};
     }
 
     case "kill":{
@@ -3896,7 +4671,7 @@ function applyEvent(w,e){
         ? (p.natural===1 ? "A mythic disaster scars the world" : "A mythic triumph is woven into the world")
         : (p.natural===1 ? "A crit failure leaves its mark" : "A crit success leaves its mark");
       addLedger(w, canon?"canon":"outcome",
-        {kind:"crit", natural:p.natural, magnitude:p.magnitude, tier, scope:p.scope||null,
+        {kind:"crit", actor:p.actor||null, target:p.target||null, natural:p.natural, magnitude:p.magnitude, tier, scope:p.scope||null,
          lenses:p.lenses||[], placeHandoff:!!p.placeHandoff, mythSeed:p.mythSeed||null, source:src},
         (canon?"◆ ":"✦ ")+head+(lensTxt?(" — "+lensTxt):"")+".");
       // BATTLE-THEATER §4 hook site 5/6: a Mythic-magnitude spike is exactly what `absurdity` (the

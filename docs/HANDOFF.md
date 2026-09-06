@@ -1,10 +1,218 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-07-29
+updated: 2026-08-05
 ---
 
 # Genesis — Session Hand-off
+
+## ⭐ Latest (2026-08-05, BRINEGLASS WALK COMPLETE — 95 TURNS, PROVIDER STILL GATED) [Codex]
+
+The preserved 30-turn Brineglass campaign has now run for **65 additional interactions** through
+the real headless production seams: **95 total campaign turns, zero external calls, and $0 actual API
+cost**. The canonical copy has 88 player transcript lines plus seven locally resolved branch rolls,
+108 DM lines, automatic request/response/roll snapshots, and 58 routed telemetry rows. It remains at
+`dev/playtest-saves/brineglass-bridge-30/resume-after-fixes/`; the original 30-turn evidence is frozen.
+
+Turns 66–95 completed the urban walk at its actual 11-segment length. The player rested, rejected
+the direct crowd route, published evidence, failed a notice-cage and decoy, chose another route,
+rescued civilians remotely, bypassed guards, entered the finale unarmed, publicly exposed the false
+noble, rejected his treasure, refused a new tracking lead, and returned to Tessa. Longest fictional
+no-consequence streak remained **1** (2 only for deliberately repeated diagnostic queries); longest
+railroad streak remained **0**. Failures cost HP/time or changed danger, while retreat, backtracking,
+alternate routes, and refusal all remained consequential.
+
+The new repairs type all twenty shared-semantics rest results; lock fixed-world solo danger to
+telegraph + flee rather than PC-level rubber-banding; normalize `toSegment` and clock `n` aliases;
+report actual graph totals; retain walk truth in pre-combat spell packets; deep-route unresolved
+finales and typed pending situations; originate new loot directly in scene custody via
+`item_placed`; preserve completed-site object residue; scope generic custody answers locally; and
+give explicitly retrieved places their verified `mapNodeId`. The public strongbox therefore never
+teleported through Mira's inventory, and movement back to Tessa used a real map identity.
+
+The current state is day 1 at 21:36 at the Cobbled Tannery. Mira is level 3 with 1,736 XP, 10/12 HP,
+2/3 Hit Dice, and 19 gold. The urban walk is complete. The strongbox contents remain in public scene
+custody; Mira carries the rubbing and countersigned inventory. Mechanics reached level 3, but the
+real UI still needs to prove the persistent two-spell choice flow.
+
+Measured hypothetical usage for the whole continuation is 84,607 input and 20,385 output tokens,
+or **$0.55958 under the harness's placeholder estimator**; this is neither a provider quote nor a
+charge. The 52 model-shaped packets averaged 5,185 bytes (p95 8,542; max 8,759), so compaction is the
+largest remaining performance gate. Focused gates currently include triage 59/59, beat digest 55/55,
+item transfer 38/38, walk consumption 57/57 (plus 30 repeated topology runs), DM seam 69/69,
+DM contract 120/120, rest 30/30, fixed-world danger 48/48, combat lifecycle 85/85, item legacy
+27/27, state-eval 7/7 regressions, and replay corpus 10/10. Contract generation, manifest, archive,
+and whitespace/diff gates are clean.
+
+**Do next:** compact walk/finale packets, verify level-up choices in the browser, then run one final
+zero-provider tranche through a promoted frontier, live typed rest rider, completed-site revisit,
+and combat reload. Paid comparison remains gated until that tranche finds no new P0/P1 state defect.
+
+## Earlier checkpoint (2026-08-05, BRINEGLASS REPAIR SOAK — 65 TURNS) [Codex]
+
+The preserved 30-turn Brineglass campaign has now run for **35 additional player interactions**
+through the real headless production seam: **65 campaign turns, zero provider calls, and $0 actual
+API cost**. Canonical state, the transcript, telemetry, automatic pre-response snapshots, and exact
+later turn/response/roll packets live in
+`dev/playtest-saves/brineglass-bridge-30/resume-after-fixes/`; the original evidence remains frozen.
+
+The second tranche deliberately introduced walk travel, generated interactables, failed ideas,
+combat, Dodge, escape, exact continuity/custody questions, a composite inventory+social action,
+pickpocketing, a performance trap, repeated rejection of the offered lead, pursuit, a natural-20
+magnitude branch, noncombat threat resolution, defection, and public evidence. It found and repaired
+another set of engine failures: composite actions dropping bounded inventory truth; unrelated legacy
+items bloating current turns; pouch/satchel queries missing inventory; exact item-location questions
+spending a model turn; immediate walk exits hiding the generated room the DM was about to narrate;
+critical magnitude remaining on the fast lane; resolved segment threats returning as live; and the
+top-level location naming a broad typed frontier site instead of the current walk segment.
+
+The combat probe also exposed the P0 class the soak was intended to catch. Ordinary foe actions were
+not receiving PC conditions, so declared Dodge did not impose disadvantage; turn 53's first
+application could kill the solo PC. Automatic pre-response evidence was preserved, the state was
+restored, and the same turn was replayed after the fix. The combat path now passes canonical PC
+conditions, refreshes round budgets, expires Dodge on the correct next turn, accepts full critical
+atoms, clamps combatants to the room grid, persists across reload, and distinguishes `pc-fled` from
+victory so escape awards no XP.
+
+Pacing and agency remain sound. Across the 35-turn continuation, the longest no-consequence stretch
+is 2 turns—both intentional repeated diagnostic queries—and it is only 1 in turns 47–65. Longest
+railroad streak is 0. The player escaped rather than winning, rejected Room Seven twice, built an
+alternative public trap, followed someone else, and refused a private bargain; all of those choices
+changed subsequent state. The critical result made Captain Ilyra Venn defect and break the void
+mechanism rather than forcing the generated elite-pair fight, and the segment now remembers that
+resolution.
+
+Three pre-provider gates remain open: typed application/expiry for non-severe rest rows; deliberate
+solo-party encounter and XP scaling (the level-1 walk generated two Bandit Captains and awarded
+1,125 XP for bypass); and compaction of truth-complete transition/critical packets, which peaked at
+6,622 bytes. The current state is day 1 at 14:16, Mira is 6/6 HP with 1,449 XP and a pending level-up,
+the urban walk is at segment 6/10, and Venn's copied orders are in Mira's inventory.
+
+Close gates are green: triage 52/52, beat digest 51/51, DM seam 69/69, item transfer 31/31,
+generation 70/70, plot recurrence 32/32, DM contract 119/119, seat 54/54, rest 21/21,
+text-first restoration 12/12, walk consumption 53/53, combat lifecycle 85/85, combat actions 38/38,
+critical magnitude 44/44, wake/prep 54/54, prep bundle 59/59, detected-events 9/9, roll branches
+46/46, DM events 70/70, and state evaluation 16/16 fixtures with 7/7 verifier regressions. The
+replay corpus passes 10 checks across seven arcs/28 turns at $0. **Do next:** fix rest-effect and solo encounter/XP semantics,
+then continue this copied campaign through level-up and another targeted tranche (roughly turn 75).
+Paid provider comparison remains gated until a further soak stops finding P0/P1 engine defects.
+
+## ⭐ Latest (2026-08-04, ZERO-PROVIDER GAP REPAIR) [Codex]
+
+The six provider-study blockers are fixed on `feat/text-first-walk-restoration`. Walk custody now
+stamps the exact walk/segment, disappears from other segments, and can source a stable-id pickup
+back into a PC inventory. Active fights persist under `w.combat`; `GS.combat` is rehydrated on
+reload or return to that world with live PC references rebound. Exact multi-word Codex identities
+are read from canonical storage and pinned through final digest fitting.
+
+Turn responses now bind to the world that owns the pending `turnId`, not whichever world happens to
+be active. Inactive-world replies queue durably until return; applied and timed-out turn histories
+suppress duplicates and late arrivals. The replay corpus carries no accepted known-gap sentinels:
+38/38 green checks and 26/26 dramatic anchors pass across seven arcs/28 turns at $0. State hygiene
+passes 12/12 goldens, 27 applicable dimensions, four negative controls, and 7/7 verifier regressions.
+
+Focused gates: item transfer 28/28, beat digest 34/34, combat lifecycle 74/74, DM seam 61/61,
+wake/reload 54/54, walk consumption 46/46, prep bundle 59/59, seat 54/54, and manifest `RESULT: OK`.
+**Do next:** run the small capped blind provider bake-off using copied fixture state—not a live
+campaign—and score voice/meaning, state hygiene, meaningful-feedback latency, and metered cost
+separately.
+
+## ⭐ Latest (2026-08-04, ZERO-PROVIDER REPLAY CORPUS) [Codex]
+
+The largest pre-provider context move is built on `feat/text-first-walk-restoration`. Ordinary DM
+turns now receive deterministic `beat-digest/v1` packets with one of five views: `scene`,
+`inventory`, `combat`, `travel`, or `social`. Every view preserves current PC/scene, the hottest
+story pressure, and newest continuity consequence; it adds only the state relevant to that beat.
+A named off-scene Codex noun is retrieved before projection. Unselected canon is explicitly marked
+omitted, remains authoritative, and is never treated as false or as permission to invent.
+
+`dmBeatDigest()` is a read-only context selector. It does not classify execution authority,
+adjudicate intent, or mechanize new verbs: `dmRoute()` and the existing event/mutator boundary still
+own those decisions. The complete `dmDigest()` remains available for session bootstrap,
+compatibility, and debugging. Ordinary non-combat fixtures fit a 3 KiB target; irreducible live
+combat truth is protected rather than truncated.
+
+The dedicated beat proof is `verify-beat-digest` 34/34, covering relevance, size, named retrieval,
+knowledge limits, determinism, authority separation, compatibility, real turn preparation, and
+telemetry. The new `dev/replay-corpus/` proof now drives seven persistent four-turn arcs through that
+production seam in fresh processes: custody, rest ordering/refusal, combat/reload, hidden knowledge,
+walk suspension/resumption, atomic failure recovery, and turn/world identity. Two consecutive runs
+pass 38/38 required state checks and 26/26 recorded dramatic anchors at $0; two exact fact turns make
+no model packet. `verify-replay-corpus` passes 10/10.
+
+This initial survey reproduced six limitations without counting them green. They are all resolved
+by the newer gap-repair block above; the corpus now treats each former sentinel as a required green
+assertion. Full evidence and commands are in `ZERO-PROVIDER-REPLAY-CORPUS.md`.
+
+## ⭐ Latest (2026-08-04, ATOMIC ITEM TRANSFER / CUSTODY) [Codex]
+
+The second no-provider mechanization slice is built on `feat/text-first-walk-restoration`.
+`item_transfer {itemId, qty?, to, note?}` now moves a carried item to an explicitly identified PC,
+NPC, creature, faction, container, corpse, place, or scene object in one engine operation. Whole
+moves preserve the instance id; partial moves preserve the remainder id, mint the moved id, and
+deep-preserve the complete instance. Stacks require exact quantity, and storied stacks cannot fork
+one Codex identity.
+
+PC inventories and `corpse.items` stay the native owners. Other destinations persist in the new
+additive `w.itemCustody` store; only current-scene records (cap 8) enter the DM digest, with walk
+placements scoped to the exact segment. Custody can source a stable-id pickup back to a PC. Linked
+legacy items fold through `item_claimed`. A whole move clears any equipped pointer to the departing id.
+Clean validation failures leave the world byte-identical, including vintage worlds with no prep or
+custody store; fixing that proof also made `walkStamp()` a genuinely read-only event prelude.
+
+A trusted structured `item-transfer` declaration now resolves before digest/narration and produces
+the same immutable `mechanical-receipt/v1` used by rest. Narrator replay is blocked. Natural-language
+placement remains `freeform-ruling`, so the DM still decides what “lay the javelin on the coffin”
+means and which object it addresses.
+
+Focused proofs: `verify-item-transfer` 28/28, `verify-walk-consumption` 46/46,
+`verify-dm-contract` 117/117, `verify-items` 136/136, `verify-item-legacy` 27/27,
+`verify-triage` 41/41, `verify-dm-seam` 56/56; manifest `RESULT: OK`. **Do next:** build
+beat-shaped 1–3 KB digest views, then promote the zero-provider replay corpus. Paid provider work
+remains gated behind those proofs.
+
+## ⭐ Latest (2026-08-04, OPEN ADJUDICATION / MECHANICS-FIRST REST) [Codex]
+
+Adam clarified the SPEED doctrine: mechanize bookkeeping and execution, not interpretation or
+possibility. The engine owns nouns, numbers, and receipts; the AI DM keeps intent, applicability,
+check/DC/advantage/stakes, exceptions, acting, and meaning. The 4-second value is a meaningful-
+feedback target, not a claimed ceiling; an 8-second silent wait is a failure flag that must be
+measured.
+
+The first no-provider implementation slice is built on `feat/text-first-walk-restoration`.
+`dmRoute()` now has exactly three conservative execution modes: `local-fact`,
+`declared-mechanic`, and `freeform-ruling`. Exact state-display requests bypass both transports;
+unknown/contextual free text—including attacks and novel object use—defaults open. `dmTriage()`
+remains an independent fast/deep quality floor and cannot grant execution authority.
+
+Exact declared short/long rests now resolve through the real `applyEvent(rest)` path before the
+digest is built. The narrator receives a frozen `mechanical-receipt/v1` with exact request,
+result, relevant before/after state, and settled event types; a returned duplicate `rest` is marked
+`settled-by-receipt` and cannot advance state twice. Mailbox and streaming seat share the seam.
+Freeform turns carry an open ruling request; optional ruling proposals are validated but only
+top-level accepted events can mutate state. Telemetry separates route, mechanics, digest, request
+acknowledgement, first token/meaningful feedback, response, and unlock.
+
+Focused proofs are green: `verify-triage` 41/41, `verify-dm-seam` 56/56, `verify-seat` 54/54,
+plus manifest validation. The atomic stack quantity transfer/custody follow-up is completed in the
+newer handoff block above. **Do next:** beat-shaped 1–3 KB digest views, then the 20–30 turn
+zero-provider replay corpus. Provider credentials and paid bake-off remain gated behind that corpus.
+
+## ⭐ Latest (2026-08-03, TEXT-FIRST WALK RESTORATION) [Codex]
+
+Adam restored Genesis's original product center: infinite storytelling, deterministic object/world
+state, imagination, realms, and relevance-scoped AI digest. A battlefield or visual engine is no
+longer a prerequisite or the next required cut. Existing theater, Golden Site, material, sprite,
+and spatial work is preserved as optional/future projection work; nothing is being deleted.
+
+`TEXT-FIRST-WALK-RESTORATION.md` is the active implementation contract. Story becomes the default
+presentation, sprites remain an optional 2D register, and the existing theater becomes explicit
+Theater Lab opt-in. Substantive walks return to the 8–12 functional range; changing focus suspends
+rather than abandons a prior walk; touched object state becomes the first realization proof.
+
+**Do next:** complete slice 1 on `feat/text-first-walk-restoration`: Story-default presentation,
+walk suspend/resume, substantive length restoration, old-save/digest/state gates, then one persistent
+walk-object round trip. The Golden Wave-2 visual queue is suspended intact, not retired.
 
 ## ⭐ Latest (2026-07-29, GOLDEN VISUAL / MATERIAL / ASSETFORGE MARRIAGE) [Codex]
 

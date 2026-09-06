@@ -1,0 +1,36 @@
+{
+  "turnId": "t-msfk2vx7jjr3z",
+  "narration": "\u201cKatherine Holloway,\u201d the child says, proud of the whole name. She keeps both hands around the candle\u2019s little shelter of glass. \u201cNothing comes out. People put things in. Bad promises. Sometimes teeth.\u201d At the gap, beneath the rush of warm air, you hear a scrape, then three deliberate knocks from below. A pause. Three more\u2014the rhythm you played at the tannery door. Katherine\u2019s eyes widen. \u201cIt never copied anyone before.\u201d The two remaining pegs tremble but stay seated.",
+  "events": [
+    {
+      "type": "codex_contact",
+      "payload": {
+        "id": "npc:katherine-holloway",
+        "engaged": true
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    },
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "factId": "brineglass:passage-copies-signal",
+        "what": "After Mira's three-note motif was used above the grate, something beneath Low Sluice answered with the same three-beat rhythm."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    }
+  ],
+  "rollRequest": null,
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Keep the access partly closed, identify the child, ask for history, and listen safely through the existing gap.",
+    "ruling": "No check is needed to hear a deliberate nearby signal or receive Katherine's volunteered local knowledge. Two pegs remain because only one removal was established.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "The concealed passage has now responded specifically to Mira's motif.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 6: corrected peg continuity without taking an action for the PC. The threat reacts to a player-created motif; no descent is forced."
+}

@@ -196,6 +196,7 @@ function renderDMFeed(w){
   }).join(""):`<div class="empty">The DM is silent. Say or do something to begin — make sure <code>dev/dm-bridge.py</code> is running.</div>`;
 
   let foot="";
+  const pausedTurn=!!(w.dm&&w.dm.pendingTurnId&&w.dm.pendingTurnPause);
   if(GS.dm.pending && GS.seat && GS.seat.streaming && GS.seat.streamText){
     // DM-SEAT (docs/DM-SEAT.md §1 "streaming"): real deltas are arriving NOW (seat.js's seatStreamAppend),
     // distinct from the mailbox's post-hoc word-by-word animation below — the seat has no completed
@@ -208,6 +209,11 @@ function renderDMFeed(w){
     const waits=["the world holds its breath…","the threads of fate gather…","something stirs in the dark…","the dream thickens around you…","the moment turns, slow as deep water…","fate sharpens its edge…"];
     const line=waits[(dmLogOf(w).length||0)%waits.length];
     foot=`<div class="dm-pending">✦ <span id="dmDie" class="die-mini">d20</span> <span class="dm-pending-line">${line}</span></div>`;
+  } else if(pausedTurn){
+    const why=w.dm.pendingTurnPause.reason==="timeout"?"No DM answered before the wait expired.":"The DM bridge is unavailable.";
+    foot=`<div class="dm-ask"><div class="dm-ask-row"><div class="dm-ask-q"><div class="dm-ask-lbl">Turn safely paused</div>${escHtml(why)} Resume this exact turn, or abandon it explicitly.</div>
+      <button class="btn sm" onclick="dmResumePending().catch(()=>{})">Resume</button>
+      <button class="btn ghost sm" onclick="dmAbandonPending()">Abandon</button></div></div>`;
   } else if(GS.dm.rollReq && GS.dm.rollReq.dice){
     // the DM asked for a specific dice roll (damage, healing, a table die) — roll exactly that expression.
     // Contextual roll prompt only (mockup "THE DM CALLS FOR A ROLL · [ROLL]"); dmRollDice wiring preserved.
@@ -232,8 +238,8 @@ function renderDMFeed(w){
       ${(showOpts&&a.orElse!==false)?`<div class="dm-orelse">…or something else.</div>`:""}</div>`;
   }
   // pinned composer (mockup) — the ONLY dice-rolling UI is the contextual roll prompt above; no standing tray.
-  const box=`<div class="dm-input"><textarea id="dmAction" rows="1" placeholder="type what you do…" aria-label="Your action" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();dmSend();}"></textarea>
-    <button onclick="dmSend()" ${GS.dm.pending?"disabled":""}>▷</button></div>`;
+  const box=`<div class="dm-input"><textarea id="dmAction" rows="1" placeholder="${pausedTurn?"resume or abandon the paused turn first":"type what you do…"}" aria-label="Your action" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();dmSend();}"></textarea>
+    <button onclick="dmSend()" ${(GS.dm.pending||pausedTurn)?"disabled":""}>▷</button></div>`;
 
   // TABLETOP-UNITS U2: the DM feed is the always-on live region (BLIND-PLAYABLE) — a roll trace,
   // a DM reply, an ask — every new line here must announce, whether the stage is showing or
@@ -266,12 +272,19 @@ function renderWorld(){
   const w=activeWorld();const host=document.getElementById("worldView");
   if(!w){host.innerHTML=`<div class="empty">No world is open.<br>Go to the Universe and forge or enter one.</div>`;return;}
   initKnown(w);   // seed what the character knows (once) before rendering the knowledge-gated panels
+  // COMBAT RELOAD: world state owns the fight; GS is only the active-world runtime reference.
+  if(!GS.combat&&w.combat&&w.combat.active&&typeof combatRehydrate==="function")combatRehydrate(w);
   // restore DM state across reloads — GS is transient, w.dm persists (only fill when GS is empty)
   if(w.dm){
     if(GS.dm.rollReq==null&&w.dm.rollReq) GS.dm.rollReq=w.dm.rollReq;
     if(GS.dm.ask==null&&w.dm.ask) GS.dm.ask=w.dm.ask;
+    // A response received while another world was active waits on its owner. Apply it before
+    // reattaching the pending poll; pendingTurnId stays live until this exact response commits.
+    if(w.dm.queuedResponse&&!GS.dm.pending&&typeof applyResponse==="function"){
+      const queued=w.dm.queuedResponse; applyResponse(queued); return;
+    }
     // a turn was in-flight when the page reloaded → re-attach the poll so the DM's reply still lands
-    if(w.dm.pendingTurnId && !GS.dm.pending && typeof pollResponse==="function"){
+    if(w.dm.pendingTurnId && !w.dm.pendingTurnPause && !GS.dm.pending && typeof pollResponse==="function"){
       GS.dm.pending=true; GS.dm.turnId=w.dm.pendingTurnId; pollResponse(w.dm.pendingTurnId);
     }
   }
@@ -298,16 +311,11 @@ function renderWorld(){
     // or the user collapsing the stage (GS.stageCollapsed toggle, a later unit).
   }
   const panel=GS.gamePanel||null;
-  // BATTLE-STAGE mode (docs/BATTLE-THEATER.md §6, IN-SESSION-UI three-zone frame) — TABLETOP-VISION
-  // §1 Standing Table (TABLETOP-UNITS.md §U1 seam 1): the stage is no longer combat-only — it's the
-  // permanent center stage for the whole in-session view. Combat's own success/mount discipline is
-  // unchanged (GS.theaterMounted is set by theaterStageSync, below, ONLY after a real mount() call
-  // returns true); this gate just drops the `GS.combat&&GS.combat.active` requirement so a mounted
-  // stage stays up outside a fight too. `!GS.stageCollapsed` is the user's own collapse toggle
-  // (GS-only, a later unit's rail button) — undefined reads as "not collapsed", the default. Absent/
-  // failed mount (or a collapsed stage) still renders the classic layout unchanged — the null-safe
-  // degrade the spec requires (TEXT-FIRST).
-  const stageMode=!!(GS.theaterMounted && !GS.stageCollapsed);
+  // TEXT-FIRST-WALK-RESTORATION: Story owns the normal product layout. The preserved standing table
+  // may replace it only after the player explicitly enables Theater Lab AND a real mount succeeds.
+  // The renderer remains a projection: absent/failed/disabled always means the complete Story UI.
+  const theaterLab=GS.presentationMode==="theater";
+  const stageMode=!!(theaterLab && GS.theaterMounted && !GS.stageCollapsed);
   // TABLETOP-VISION §1 Standing Table (TABLETOP-UNITS.md §U1 seam 2): "in-session" gates the mount
   // ATTEMPT (the probe below + theaterStageSync) — w.sessionLive is the same persistent flag
   // startSession/endSession (src/world/play.js) already flips, so the stage only ever tries to mount
@@ -355,7 +363,7 @@ function renderWorld(){
   // #theaterStage element to exist even in the classic branch to attempt that first mount. Hidden
   // (0-size, off-flow) until stageMode flips true, at which point theaterStageHtml renders the same
   // id as the real, visible canvas container — same element identity, no re-mount needed.
-  const mountProbe=(inSession&&!stageMode)
+  const mountProbe=(inSession&&theaterLab&&!stageMode)
     ? `<div id="theaterStage" class="theater-stage-canvas theater-stage-probe" aria-hidden="true"></div>` : "";
   // TABLETOP-UNITS U2 (docs/TABLETOP-UNITS.md §U2): the stage-col/feed-col arrangement is the
   // STANDING layout whenever a stage is actually up — this local `showStage` folds in the
@@ -427,7 +435,7 @@ function renderWorld(){
   // mount target element exists. Null-safe throughout: absent window.Theater / failed WebGL mount
   // leaves GS.theaterMounted false forever for this fight, and the classic combat-panel layout
   // (already painted above) is simply what stays on screen — no separate degrade path to maintain.
-  theaterStageSync(w,cur);
+  if(theaterLab) theaterStageSync(w,cur);
 }
 
 /* TABLETOP-UNITS.md §U1 seam 4 — the standing table's own source read: the active walk's
@@ -489,7 +497,7 @@ function theaterGuiseSnapshotFor(w,walk){
 function nodeIsSettlementKind(w, nodeId){
   if(!nodeId) return false;
   if(w && w.startNodeId && nodeId===w.startNodeId) return true;
-  const P=(typeof prepOf==="function") ? prepOf(w) : null;
+  const P=(w&&w.prep)||null; // projection reads never initialize canonical state
   const pn=P && P.nodes && P.nodes[nodeId];
   return !!(pn && pn.env==="urban");
 }
@@ -505,8 +513,8 @@ function nodeIsSettlementKind(w, nodeId){
 function theaterHereSourceFor(w){
   const realms=(typeof theaterActiveRealmsFor==="function")?theaterActiveRealmsFor(w):[];
   const clockMin=(typeof clockOf==="function"&&w)?clockOf(w).min:null;
-  const hasWalkSeam=(typeof prepOf==="function"&&typeof walkOfFrontier==="function");
-  const P=hasWalkSeam?prepOf(w):null, id=P&&P.activeWalkId;
+  const hasWalkSeam=(typeof walkOfFrontier==="function");
+  const P=(w&&w.prep)||null, id=P&&P.activeWalkId;
   if(!id){
     const nodeRec=theaterNodeSourceFor(w,w&&w.currentNodeId);
     if(nodeRec) return { kind:"node", record:nodeRec, realms:realms, clockMin:clockMin };
@@ -609,7 +617,7 @@ function theaterBeatInputFor(w){
   const restKey=lastLong?(lastLong.day+":"+lastLong.min):null;
   const justRested=!!(restKey&&GS.theaterBeatSeenRestStamp!==restKey);
   if(restKey) GS.theaterBeatSeenRestStamp=restKey;
-  const P=(typeof prepOf==="function")?prepOf(w):null;
+  const P=(w&&w.prep)||null; // presentation must not mint an empty prep store
   const pn=P&&P.nodes&&P.nodes[w.currentNodeId];
   // FOUND LIVE (a play-lens capture card caught this too — pl-015's "dungeon-complete" render was the
   // bare PC on a black void, no arrival stage at all): a FRONTIER (dungeon/wilderness) walk's segments
@@ -619,7 +627,7 @@ function theaterBeatInputFor(w){
   // nodeId) (src/world/prep.js) is the EXISTING helper that already reads both shapes correctly —
   // theaterHereSourceFor itself calls it for the identical purpose one function up; reused verbatim
   // here instead of re-deriving a second, narrower "where's the walk" formula.
-  const walk=(typeof walkOfFrontier==="function")?walkOfFrontier(w,w.currentNodeId):null;
+  const walk=(pn&&typeof walkOfFrontier==="function")?walkOfFrontier(w,w.currentNodeId):null;
   const walkCompleteHere=!!(pn&&pn.cursor&&pn.cursor.done&&walk&&!P.activeWalkId);
   const finaleSegment=walkCompleteHere?((walk.segments||[]).find(s=>s&&s.isFinale)||null):null;
   return { shopOpen, shopHere, justRested, walkCompleteHere, finaleSegment,
@@ -635,7 +643,7 @@ function theaterBeatInputFor(w){
    but the cast (PC/companions/contacted NPCs/ambients) works of hereNodeId alone, so this costs
    nothing to generalize. shopOpen mirrors the SAME GS fields open_shop (dm.js) stamps. */
 function theaterCastSourceFor(w,hereSource){
-  const P=(typeof prepOf==="function")?prepOf(w):null;
+  const P=(w&&w.prep)||null; // presentation must not mint an empty prep store
   const walking=!!(hereSource&&(hereSource.kind==="segment"||hereSource.kind==="interior"));
   const hereNodeId=(P&&P.activeWalkId)||(w&&w.currentNodeId)||null;
   const shopOpen=!!(GS.gamePanel==="shop"&&GS.activeShopId);
@@ -1105,13 +1113,10 @@ function streamDMText(){
    engraved icon exists) — helm · sword-shield · compass · key, from assets/icons/. */
 function gameRail(w,cur,panel){
   const rl=(key,icon,label,show)=>show?`<button class="rl ${panel===key?'on':''}" title="${label}" onclick="openPanel(${key===null?'null':`'${key}'`})"><img class="ic" src="assets/icons/${icon}.png" alt=""><span class="lb">${label}</span></button>`:"";
-  // TABLETOP-UNITS U2 (docs/TABLETOP-UNITS.md §U2): the stage-collapse toggle — GS.stageCollapsed
-  // is GS-only transient UI state (never persisted, never an event); "on" reads as "the stage is
-  // showing" (mirrors the other rail tabs' .on = "this is active" convention), so it's on when NOT
-  // collapsed. Shown whenever a soul is in play, same visibility rule as Character/Actions — the
-  // stage is part of the standing session chrome, not a combat-only affordance (TABLETOP-VISION §1:
-  // "collapsible to zero; game whole without it").
-  const stageToggle=cur?`<button class="rl ${GS.stageCollapsed?'':'on'}" title="Stage" aria-pressed="${GS.stageCollapsed?'false':'true'}" onclick="toggleStage()"><img class="ic" src="assets/icons/sun.png" alt=""><span class="lb">Stage</span></button>`:"";
+  // Theater Lab is explicit and reversible. It is visible as a dev/lab lens whenever a soul is in
+  // play, while Story remains the default and complete experience.
+  const theaterLab=GS.presentationMode==="theater";
+  const stageToggle=cur?`<button class="rl ${theaterLab?'on':''}" title="Theater Lab" aria-pressed="${theaterLab?'true':'false'}" onclick="toggleTheaterLab()"><img class="ic" src="assets/icons/sun.png" alt=""><span class="lb">Theater Lab</span></button>`:"";
   return `<nav class="game-rail">
     ${rl("character","helm","Character",!!cur)}
     ${rl("actions","sword-shield","Actions",!!cur)}
@@ -1127,6 +1132,19 @@ function gameRail(w,cur,panel){
    combat_end-only teardown); it only changes which branch of renderWorld's mainHtml ternary paints,
    so re-expanding is instant (no re-mount). */
 function toggleStage(){ GS.stageCollapsed=!GS.stageCollapsed; renderWorld(); }
+/* TEXT-FIRST-WALK-RESTORATION: visuals are an explicit lab lens. Disabling retires the renderer to
+   release its resources; enabling creates the normal hidden probe and lets theaterStageSync mount on
+   the next render. No world/codex/prep fact changes in either direction. */
+function toggleTheaterLab(){
+  const enabling=GS.presentationMode!=="theater";
+  GS.presentationMode=enabling?"theater":"story";
+  GS.stageCollapsed=false;
+  if(!enabling){
+    if(GS.theaterMounted&&typeof window!=="undefined"&&window.Theater&&typeof window.Theater.retire==="function") window.Theater.retire();
+    GS.theaterMounted=false;
+  }
+  renderWorld();
+}
 
 /* ⚙ Menu — an overflow POPOVER anchored above the rail's ⚙ button (docs/IN-SESSION-UI.md §6), NOT a
    slide-in panel: the feed stays full-width behind it. GS.menuOpen is a simple bool; toggleMenu flips

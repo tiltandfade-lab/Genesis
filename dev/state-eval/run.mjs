@@ -169,7 +169,10 @@ function assertMoved(before, after, assertSpec) {
 }
 
 // ---- digest section byte measurement (D9) -------------------------------------
-const DM_DIGEST_KEYS = ["worldId","worldName","clock","location","setting","pc","powers","fronts","recentLedger","gazetteer","codex","codexRoster","minted","revealed","sessionLean","tarot","activeWalk","combat","prepPending","levelUp","arrivalBrief"];
+// Ordinary turns now carry beat-digest/v1, not the complete bootstrap/debug dmDigest. Keep this
+// declaration in lock-step with DM_BEAT_DIGEST_KEYS; verify-state-eval locks the resulting 28-section
+// budget shape so a projection change cannot silently keep the old accounting.
+const DM_DIGEST_KEYS = ["schema","view","slices","worldId","worldName","clock","location","setting","pc","powers","fronts","recentLedger","gazetteer","codex","minted","revealed","sessionLean","tarot","activeWalk","ambientPresence","combat","prepPending","levelUp","arrivalBrief","itemLegacy","itemCustody","bastion","pendingSituation","retrieval"];
 
 function byteLen(v) {
   if (v === undefined) return 4;
@@ -178,7 +181,8 @@ function byteLen(v) {
 
 function sectionBytes(digest) {
   const out = {};
-  // worldId + worldName collapse into one "worldMeta" section (§7's 20-section accounting).
+  // worldId + worldName collapse into one "worldMeta" section so the 29-key vocabulary has 28
+  // independently budgeted sections.
   out.worldMeta = byteLen({ worldId: digest.worldId, worldName: digest.worldName });
   for (const key of DM_DIGEST_KEYS) {
     if (key === "worldId" || key === "worldName") continue;
@@ -213,13 +217,13 @@ function readTempState(dir) {
 }
 
 // ---- D6 seat/recorded response shape helper -----------------------------------
-async function callSeat(base, model, systemPath, turnId, lane, digest, action, rolls) {
+async function callSeat(base, model, systemPath, turn) {
   const systemText = readFileSync(systemPath, "utf-8");
   const body = {
-    turnId, lane, model, stream: true,
+    turnId: turn.turnId, lane: turn.lane, model, stream: true,
     messages: [
       { role: "system", content: systemText },
-      { role: "user", content: JSON.stringify({ digest, action, rolls }) },
+      { role: "user", content: JSON.stringify(turn) },
     ],
   };
   let res;
@@ -274,6 +278,7 @@ async function replayFixture(fixture, provider, opts) {
     // Step 2: digest
     const digestArgs = ["digest", "--dir", tmp, "--seed", String(fixture.seed), "--action", fixture.turn.action];
     if (fixture.turn.rolls && fixture.turn.rolls.length) digestArgs.push("--rolls", JSON.stringify(fixture.turn.rolls));
+    if (fixture.turn.opts) digestArgs.push("--opts", JSON.stringify(fixture.turn.opts));
     const digestOut = runBridgeless(digestArgs);
 
     // Step 3: response
@@ -284,12 +289,14 @@ async function replayFixture(fixture, provider, opts) {
     } else {
       const systemPath = opts.system || join(ROOT, "docs/SEAT-PROMPT.md");
       if (!existsSync(systemPath)) fail(3, "--system required (SEAT-PROMPT.md not yet authored)");
-      let raw = await callSeat(opts.base, opts.model, systemPath, digestOut.turnId, digestOut.lane, digestOut.digest, fixture.turn.action, fixture.turn.rolls);
+      let raw = await callSeat(opts.base, opts.model, systemPath, digestOut.turn);
       let parsed = extractJsonBlock(raw);
       if (!parsed) {
         parseInfo.retries = 1;
-        raw = await callSeat(opts.base, opts.model, systemPath, digestOut.turnId, digestOut.lane, digestOut.digest,
-          fixture.turn.action + "\n\nReply with ONLY the TurnResponse JSON.", fixture.turn.rolls);
+        const retryTurn = Object.assign({}, digestOut.turn, {
+          action: digestOut.turn.action + "\n\nReply with ONLY the TurnResponse JSON."
+        });
+        raw = await callSeat(opts.base, opts.model, systemPath, retryTurn);
         parsed = extractJsonBlock(raw);
       }
       if (!parsed) { parseInfo.ok = false; response = { narration: "", events: [] }; }
@@ -311,6 +318,7 @@ async function replayFixture(fixture, provider, opts) {
     const after = readTempState(tmp);
 
     return { fixture, digest: digestOut.digest, digestBytes: digestOut.digestBytes, lane: digestOut.lane || "unknown",
+      route: digestOut.route, receipt: digestOut.receipt, turn: digestOut.turn,
       response, before, after, applyOut, parseInfo };
   } finally {
     rmSync(tmp, { recursive: true, force: true });
@@ -374,10 +382,15 @@ function scoreD4(ctx) {
   const expect = ctx.fixture.expect && ctx.fixture.expect.location;
   const bw = ctx.before.U.worlds[ctx.before.U.activeWorldId];
   const aw = ctx.after.U.worlds[ctx.after.U.activeWorldId];
-  const teleportMovables = []; // no event type today can move the PC (BUG-05) — teleport guard always active
+  // These typed events own legitimate currentNodeId transitions in production. The list names
+  // public event seams, not low-level helpers: discovery/prep/start/move route through pcMoveTo;
+  // walk_complete owns arrival/turnback; capture owns forced relocation; travel_start may use its
+  // legacy instant-arrival fallback when the walk engine is unavailable.
+  const teleportMovables = ["discovery","prep_contact","start_walk","move_node","walk_complete","capture","travel_start"];
   const nodeChanged = bw.currentNodeId !== aw.currentNodeId;
   if (nodeChanged) {
-    const movementEvents = (ctx.applyOut.appliedResults || []).filter(r => teleportMovables.includes(r.type));
+    const movementEvents = (ctx.applyOut.appliedResults || []).filter(r =>
+      teleportMovables.includes(r.type) && (!r.res || r.res.ok !== false));
     if (!movementEvents.length) {
       return { status: "fail", why: "teleport — location moved with no movement event", moved: [{ path: "world.currentNodeId", before: bw.currentNodeId, after: aw.currentNodeId }] };
     }
@@ -469,7 +482,7 @@ function scoreD9(ctx, budgets) {
     if (ceiling != null && bytes > ceiling) { ok = false; }
     if (ceiling != null && bytes / ceiling > worst.bytes / (worst.ceiling || 1)) worst.section = key, worst.bytes = bytes, worst.ceiling = ceiling;
   }
-  const total = Object.values(sb).reduce((s, v) => s + v, 0);
+  const total = byteLen(ctx.digest);
   const totalCeiling = ctx.fixture.kind === "founding" ? budgets.totalFounding : budgets.totalSteady;
   if (total > totalCeiling) ok = false;
   return { ok, sections: sb, total, totalCeiling, worst };
@@ -513,7 +526,7 @@ function generateBudgets(scoredFixtures) {
       sections[key] = Math.max(sections[key] || 0, bytes);
     }
   }
-  const out = { sections: {}, totalFounding: 32768, totalSteady: 12288 };
+  const out = { sections: {}, totalFounding: 6144, totalSteady: 3072 };
   for (const [key, maxBytes] of Object.entries(sections)) {
     out.sections[key] = roundUpTo128(maxBytes * 1.25);
   }
@@ -582,7 +595,7 @@ async function main() {
   if (args.writeBudgets) {
     const fixtures = loadFixtures(fixturesDir, null, false);
     const scored = [];
-    for (const fx of fixtures) scored.push(await scoreOneFixture(fx, "recorded", {}, { sections: {}, totalFounding: 32768, totalSteady: 12288 }));
+    for (const fx of fixtures) scored.push(await scoreOneFixture(fx, "recorded", {}, { sections: {}, totalFounding: 6144, totalSteady: 3072 }));
     const budgets = generateBudgets(scored);
     writeFileSync(join(HERE, "budgets.json"), JSON.stringify(budgets, null, 2) + "\n");
     console.log("wrote budgets.json — " + Object.keys(budgets.sections).length + " sections");

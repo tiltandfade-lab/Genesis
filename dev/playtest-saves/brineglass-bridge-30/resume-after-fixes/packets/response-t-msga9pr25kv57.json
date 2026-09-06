@@ -1,0 +1,37 @@
+{
+  "turnId": "t-msga9pr25kv57",
+  "narration": "The light is wrong. Your hour became four while the district moved beneath you: the crowd has passed east, leaving broken shutters and wet footprints around the pump. You take Venn’s westward roofline instead. The office returns below you—amber windows dark now, its scales chained—but the belfry tag still hangs across the square. Nothing forces you toward Room Seven or the crowd’s wake.",
+  "ruling": {
+    "understoodAction": "Mira reads the temporal drag and returns by the chosen roof route to segment 5.",
+    "ruling": "Because the referenced Spatial/Temporal table is absent, this instance costs three additional hours; the ruling is logged, and the player’s backward branch is honored.",
+    "needsRoll": false,
+    "stakes": "Time was lost, but no forward route is forced."
+  },
+  "events": [
+    {
+      "type": "adjudication",
+      "source": "declared",
+      "payload": {
+        "precedentId": "rest-temporal-drag-urban-missing-table",
+        "situation": "Urban rest row 6 referenced an unavailable Spatial/Temporal table after a one-hour short rest.",
+        "ruling": "This instance costs three additional hours; preserve the missing-table receipt for future source repair."
+      }
+    },
+    {
+      "type": "advance_clock",
+      "source": "declared",
+      "payload": {
+        "minutes": 180,
+        "cause": "Temporal Drag during the loft rest"
+      }
+    },
+    {
+      "type": "walk_advance",
+      "source": "declared",
+      "payload": {
+        "nodeId": "frontier-s0-0",
+        "toSeg": 5
+      }
+    }
+  ]
+}

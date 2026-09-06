@@ -1,0 +1,292 @@
+{
+  "turnId": "t-msfk90p2cen96",
+  "worldId": "msfjud9ebcves",
+  "action": "I pin the offered message gently against the glass with my dagger tip and roll it writing-side up without putting my fingers in the sorting arm's grip. I read every line, seal, correction, and signature before I choose a passage.",
+  "rolls": [],
+  "digest": {
+    "schema": "beat-digest/v1",
+    "view": "inventory",
+    "slices": [
+      "scene",
+      "pc",
+      "story-pressure",
+      "continuity",
+      "inventory",
+      "item-custody"
+    ],
+    "worldId": "msfjud9ebcves",
+    "worldName": "The Brineglass Reach",
+    "clock": {
+      "day": 1,
+      "min": 360,
+      "band": "dawn",
+      "exact": "06:00",
+      "session": 0,
+      "knowsTime": false
+    },
+    "location": "The Cobbled Tannery",
+    "pc": {
+      "name": "Mira Quill",
+      "headline": "a Charlatan Human Bard who went out on an adventure",
+      "pronouns": "she",
+      "class": "Bard",
+      "level": 1,
+      "hp": {
+        "cur": 6,
+        "max": 6
+      },
+      "conditions": [],
+      "marks": [
+        {
+          "id": "mk-msfjud9s5npiw",
+          "text": "You were poisoned; your next save against poison has disadvantage.",
+          "kind": "injury",
+          "sinceDay": 0
+        }
+      ],
+      "gold": 19,
+      "inventory": [
+        {
+          "id": "msfjud9rhr2d7",
+          "name": "Leather Armor",
+          "conditions": []
+        },
+        {
+          "id": "msfjud9r7oduu",
+          "name": "Dagger",
+          "qty": 2,
+          "conditions": []
+        },
+        {
+          "id": "msfjud9r36fkx",
+          "name": "Lute",
+          "conditions": []
+        },
+        {
+          "id": "msfjud9rn35kw",
+          "name": "Backpack",
+          "conditions": []
+        },
+        {
+          "id": "msfjud9r0k2m0",
+          "name": "Bedroll",
+          "conditions": []
+        },
+        {
+          "id": "msfjud9rgenzo",
+          "name": "Costume",
+          "qty": 2,
+          "conditions": []
+        },
+        {
+          "id": "msfjud9rqgk9r",
+          "name": "Candle",
+          "qty": 4,
+          "conditions": []
+        },
+        {
+          "id": "msfjud9rujmud",
+          "name": "Rations",
+          "qty": 5,
+          "conditions": []
+        }
+      ],
+      "equipped": {
+        "mainHand": "msfjud9r7oduu",
+        "offHand": null,
+        "armor": "msfjud9rhr2d7"
+      },
+      "equippedWeapons": {
+        "mainHand": {
+          "weaponName": "Dagger",
+          "baseName": "Dagger",
+          "properties": [
+            "Finesse",
+            "Light",
+            "Thrown (Range 20/60)"
+          ],
+          "finesse": true,
+          "ranged": false,
+          "grip": "1h",
+          "magicBonus": 0,
+          "atkBonus": 0,
+          "rider": null,
+          "dmg": [
+            {
+              "n": 1,
+              "die": 4,
+              "bonus": 1,
+              "type": "piercing"
+            }
+          ]
+        },
+        "offHand": null
+      },
+      "inventoryMore": 2
+    },
+    "powers": [
+      {
+        "clockId": "the-crier-s-circle",
+        "faction": "The Crier's Circle",
+        "dominant": true,
+        "agenda": "become something other than what it is",
+        "method": "rumor and propaganda",
+        "tags": [
+          "popular"
+        ],
+        "clock": "1/6"
+      }
+    ],
+    "fronts": [
+      {
+        "clockId": "the-leader-is-corrupt-failing-or-dying-and-the-scramble-to-replace-them-has-begun",
+        "kind": "internal",
+        "danger": "the leader is corrupt, failing, or dying, and the scramble to replace them has begun",
+        "impersonal": null,
+        "clock": "0/6",
+        "closed": false,
+        "dmOnly": {
+          "truth": null,
+          "doom": "displacement \u2014 the people scatter"
+        }
+      }
+    ],
+    "recentLedger": [
+      {
+        "type": "outcome",
+        "day": 1,
+        "min": 360,
+        "text": "\u2726 +1 XP \u2014 5 total."
+      },
+      {
+        "type": "canon",
+        "day": 1,
+        "min": 360,
+        "text": "\u25c6 The Sealed Dispatch Landing \u2014 encountered; locked to canon."
+      }
+    ],
+    "codex": [
+      {
+        "id": "location:amber-glass-quay",
+        "kind": "location",
+        "name": "Amber-Glass Quay",
+        "fields": {
+          "desc": "A coastal trading post specializing in sea-glass, pitch, and whatever the latest storm washed in.",
+          "type": "The water tower platform"
+        },
+        "dm": {
+          "secret": "Gave an individual family perpetual easement over the mill road in exchange for a loan; the loan was repaid; the easement was never revoked; the family is now charging tolls on grounds the town cannot legally contest.",
+          "secretBand": "Grounded",
+          "history": null
+        },
+        "status": {
+          "at": null,
+          "known": false,
+          "soft": true,
+          "condition": "ok"
+        }
+      }
+    ],
+    "revealed": [
+      "powers",
+      "map",
+      "ledger"
+    ],
+    "ambientPresence": {
+      "count": 3,
+      "texture": "a few locals going about their business"
+    },
+    "prepPending": {
+      "session": 0,
+      "frontiers": [
+        "frontier-s0-0 (urban)",
+        "frontier-s0-1 (dungeon)",
+        "frontier-s0-2 (wilderness)"
+      ],
+      "reason": "no-overlays"
+    },
+    "itemCustody": [
+      {
+        "item": {
+          "id": "msfk2mblguaqs",
+          "name": "Candle",
+          "qty": 1,
+          "conditions": [],
+          "codexId": null
+        },
+        "holder": {
+          "kind": "object",
+          "ref": "low-sluice-ladder-well",
+          "name": "Low Sluice ladder well"
+        },
+        "note": "Mira lowers the relit candle into the Low Sluice ladder well on her lute strap."
+      }
+    ],
+    "retrieval": {
+      "omitted": {
+        "codex": 23,
+        "powers": 2,
+        "fronts": 1,
+        "gazetteer": 5
+      },
+      "rule": "Omitted state remains authoritative. Use supplied ids; never invent an omitted fact.",
+      "overTargetBytes": 3528
+    }
+  },
+  "route": {
+    "mode": "freeform-ruling",
+    "reasons": [
+      "open-intent-default"
+    ],
+    "relevantSlices": [
+      "scene",
+      "story-pressure",
+      "relevant-state"
+    ],
+    "modelCall": true
+  },
+  "rulingRequest": {
+    "contractVersion": 1,
+    "kind": "open-intent",
+    "playerAction": "I pin the offered message gently against the glass with my dagger tip and roll it writing-side up without putting my fingers in the sorting arm's grip. I read every line, seal, correction, and signature before I choose a passage.",
+    "principle": "Interpret freely; propose consequences through the engine contract; never mutate state in prose.",
+    "returnFields": [
+      "understoodAction",
+      "ruling",
+      "needsRoll",
+      "proposedCheck",
+      "stakes",
+      "outcomeBranches",
+      "proposedEvents"
+    ],
+    "authority": {
+      "dm": [
+        "intent",
+        "rule-applicability",
+        "difficulty",
+        "advantage-disadvantage",
+        "stakes",
+        "exceptions",
+        "meaning"
+      ],
+      "engine": [
+        "identity",
+        "state",
+        "custody",
+        "dice",
+        "arithmetic",
+        "resources",
+        "clock",
+        "accepted-mutation"
+      ]
+    }
+  },
+  "receipt": null,
+  "lane": "fast",
+  "laneModel": "sonnet",
+  "laneReasons": [
+    "default-fast"
+  ],
+  "lastResolution": null,
+  "_received": 1785902521.32688
+}

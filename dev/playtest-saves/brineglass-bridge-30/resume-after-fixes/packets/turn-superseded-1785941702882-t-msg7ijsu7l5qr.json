@@ -1,0 +1,290 @@
+{
+  "turnId": "t-msg7ijsu7l5qr",
+  "worldId": "msfjud9ebcves",
+  "action": "Before I move on, I read my notes back to myself. What exactly have I established about the Office of Amber Weights, the split-honeycomb seal, and its relationship to the stone hives?",
+  "rolls": [],
+  "digest": {
+    "schema": "beat-digest/v1",
+    "view": "travel",
+    "slices": [
+      "scene",
+      "pc",
+      "story-pressure",
+      "continuity",
+      "travel",
+      "active-walk"
+    ],
+    "worldId": "msfjud9ebcves",
+    "worldName": "The Brineglass Reach",
+    "clock": {
+      "day": 1,
+      "min": 826,
+      "band": "afternoon",
+      "exact": "13:46",
+      "session": 0,
+      "knowsTime": false
+    },
+    "location": "Shadowed & Lawless — The water tower platform, 5x10 ft, torchlit (Wandering Torch, Cinderblock Stack, Storm Drain Grate)",
+    "pc": {
+      "id": "msfjud9rbeahy",
+      "name": "Mira Quill",
+      "class": "Bard",
+      "level": 1,
+      "hp": {
+        "cur": 6,
+        "max": 6
+      },
+      "conditions": [],
+      "marks": [
+        {
+          "id": "mk-msfjud9s5npiw",
+          "text": "You were poisoned; your next save against poison has disadvantage.",
+          "kind": "injury",
+          "sinceDay": 0
+        }
+      ],
+      "ac": 12,
+      "resources": {
+        "hp": {
+          "cur": 6,
+          "max": 6
+        },
+        "slots": {
+          "1": "2/2"
+        },
+        "pools": {
+          "Bardic Inspiration": "2/2 (d6)"
+        },
+        "hitDice": {
+          "cur": 1,
+          "max": 1,
+          "die": 8
+        }
+      },
+      "equipped": {
+        "mainHand": "msfjud9r7oduu",
+        "offHand": null,
+        "armor": "msfjud9rhr2d7"
+      },
+      "inventory": [
+        {
+          "id": "msfjud9rhr2d7",
+          "name": "Leather Armor",
+          "conditions": []
+        },
+        {
+          "id": "msfjud9r7oduu",
+          "name": "Dagger",
+          "qty": 2,
+          "conditions": []
+        }
+      ],
+      "inventoryMore": 9
+    },
+    "powers": [
+      {
+        "clockId": "the-crier-s-circle",
+        "faction": "The Crier's Circle",
+        "dominant": true,
+        "agenda": "become something other than what it is",
+        "method": "rumor and propaganda",
+        "tags": [
+          "popular"
+        ],
+        "clock": "1/6"
+      }
+    ],
+    "fronts": [
+      {
+        "clockId": "a-blight-or-plague-is-spreading-toward-the-town",
+        "kind": "external",
+        "danger": "a blight or plague is spreading toward the town",
+        "impersonal": "wildfire",
+        "clock": "0/6",
+        "closed": false,
+        "dmOnly": {
+          "truth": null,
+          "doom": "displacement — the people scatter"
+        }
+      }
+    ],
+    "recentLedger": [
+      {
+        "type": "outcome",
+        "day": 1,
+        "min": 826,
+        "text": "✦ +1 XP — 220 total."
+      }
+    ],
+    "codex": [
+      {
+        "id": "location:amber-glass-quay",
+        "kind": "location",
+        "name": "Amber-Glass Quay",
+        "fields": {
+          "type": "The water tower platform"
+        },
+        "dm": {
+          "secret": "Gave an individual family perpetual easement over the mill road in exchange for a loan; the loan was repaid; the easement was never revoked; the family is now charging tolls on grounds the town cannot legally contest.",
+          "secretBand": "Grounded",
+          "itemsPool": "realm-items-frontier"
+        }
+      }
+    ],
+    "activeWalk": {
+      "nodeId": "frontier-s0-0",
+      "place": "Shadowed & Lawless",
+      "environment": "urban",
+      "topology": "The Rundown",
+      "skin": {
+        "text": "A specific song is being hummed by strangers who've never met. — The same unfamiliar tune, unconsciously, by people across the district who can't say where they learned it.",
+        "band": "Strange"
+      },
+      "risk": {
+        "danger": "risky",
+        "reward": "good",
+        "stakes": "loot-risk",
+        "trace": "clock",
+        "escapes": [
+          "flee",
+          "environment"
+        ],
+        "clock": {
+          "kind": "heat",
+          "note": "Heat is the default — you're already Burning (Heat 3)."
+        },
+        "promise": "Uncommon: Trident of Fish Command",
+        "telegraphs": [
+          {
+            "kind": "rumor",
+            "text": "Word on the street: Corrupt Guard holds this ground."
+          }
+        ]
+      },
+      "spiceTier": "baseline",
+      "cursor": {
+        "current": 4,
+        "touched": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "done": false,
+        "total": 10
+      },
+      "segments": [
+        {
+          "num": 3,
+          "label": "Escalation",
+          "state": "behind"
+        },
+        {
+          "num": 4,
+          "label": "Escalation",
+          "isFinale": false,
+          "state": "here",
+          "gist": "The Burning Building / Empty",
+          "reskin": null,
+          "effectDie": null,
+          "light": "lamplit",
+          "dressing": {
+            "text": "Narrow passage with scrape marks at shoulder height.",
+            "condition": "Tampered"
+          },
+          "atmo": "a sudden metallic clang followed by muttering",
+          "creatures": null,
+          "surface": null
+        },
+        {
+          "num": 5,
+          "label": "Hub",
+          "state": "ahead"
+        }
+      ],
+      "ambientPresence": null,
+      "briefing": null,
+      "cast": {
+        "locId": "location:amber-glass-quay",
+        "npcIds": [
+          "npc:erias",
+          "npc:falevalu-tavihiva"
+        ],
+        "itemIds": [
+          "item:a-formal-apothecary-s-label-printed-professionally-on-a-bottle-containing-something-entirely-different-from-what-is-labeled"
+        ],
+        "artIds": []
+      },
+      "moreSegments": 8
+    },
+    "retrieval": {
+      "omitted": {
+        "codex": 31,
+        "powers": 2,
+        "fronts": 1,
+        "gazetteer": 3
+      },
+      "rule": "Omitted state remains authoritative. Use supplied ids; never invent an omitted fact.",
+      "overTargetBytes": 3689
+    }
+  },
+  "route": {
+    "mode": "freeform-ruling",
+    "reasons": [
+      "open-intent-default"
+    ],
+    "relevantSlices": [
+      "scene",
+      "story-pressure",
+      "relevant-state"
+    ],
+    "modelCall": true
+  },
+  "rulingRequest": {
+    "contractVersion": 1,
+    "kind": "open-intent",
+    "playerAction": "Before I move on, I read my notes back to myself. What exactly have I established about the Office of Amber Weights, the split-honeycomb seal, and its relationship to the stone hives?",
+    "principle": "Interpret freely; propose consequences through the engine contract; never mutate state in prose.",
+    "returnFields": [
+      "understoodAction",
+      "ruling",
+      "needsRoll",
+      "proposedCheck",
+      "stakes",
+      "outcomeBranches",
+      "proposedEvents"
+    ],
+    "authority": {
+      "dm": [
+        "intent",
+        "rule-applicability",
+        "difficulty",
+        "advantage-disadvantage",
+        "stakes",
+        "exceptions",
+        "meaning"
+      ],
+      "engine": [
+        "identity",
+        "state",
+        "custody",
+        "dice",
+        "arithmetic",
+        "resources",
+        "clock",
+        "accepted-mutation"
+      ]
+    }
+  },
+  "receipt": null,
+  "lane": "fast",
+  "laneModel": "sonnet",
+  "laneReasons": [
+    "default-fast"
+  ],
+  "narrationBudget": {
+    "targetWords": 60,
+    "maxWords": 75
+  },
+  "lastResolution": null
+}

@@ -1,0 +1,59 @@
+{
+  "turnId": "t-msg73wcr0hcxz",
+  "narration": "You fold behind the cargo and make the law your shield as carefully as the crates. The nearer guard answers, “No signature. The hives choose what leaves.” The other says nothing; both advance with spears, unwilling to discuss who the vials are for. Your refusal to strike gives them one last chance to stop, but it also leaves the next proof to their choices. You watch their shoulders and give ground only when steel commits.",
+  "events": [
+    {
+      "type": "action",
+      "payload": {
+        "kind": "dodge"
+      },
+      "source": "declared"
+    },
+    {
+      "type": "foe_action",
+      "payload": {
+        "foe": "f1",
+        "action": "Spear"
+      },
+      "source": "declared"
+    },
+    {
+      "type": "foe_action",
+      "payload": {
+        "foe": "f2",
+        "action": "Spear"
+      },
+      "source": "declared"
+    },
+    {
+      "type": "round_tick",
+      "payload": {
+        "round": 1,
+        "phase": "end"
+      },
+      "source": "detected"
+    }
+  ],
+  "ruling": {
+    "understoodAction": "Take the Dodge action behind cover while demanding the shipment’s authority.",
+    "ruling": "The guards disclose one clue but continue the attack; the engine resolves both spear actions against Dodge.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "The guards may wound Mira; their refusal identifies the hives as the source of authority.",
+    "outcomeBranches": null,
+    "proposedEvents": [
+      {
+        "type": "action"
+      },
+      {
+        "type": "foe_action"
+      },
+      {
+        "type": "foe_action"
+      },
+      {
+        "type": "round_tick"
+      }
+    ]
+  }
+}

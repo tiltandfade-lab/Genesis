@@ -30,6 +30,7 @@ ok(kinds.join()==="dungeon,urban,wilderness", `kinds: ${kinds.join()}`);
 ok(b.ledger && b.ledger.tier===1 && Array.isArray(b.ledger.factions), "headless ledger context (empty, tier 1)");
 for(const e of b.environments){
   ok(e.walk && e.walk.segments && e.walk.segments.length>0, `${e.kind}: walk has segments`);
+  ok(e.walk.segments.length>=8&&e.walk.segments.length<=12, `${e.kind}: default walk is substantive (8–12 actual segments; got ${e.walk.segments.length})`);
   ok(e.hook && e.hook.leadsTo===e.kind, `${e.kind}: hook bound`);
   // ── CODEX Phase 3: the engine casts a soft location + 1–2 NPCs per frontier ──
   ok(e.cast && e.cast.location && e.cast.location.kind==="location" && e.cast.location.name, `${e.kind}: cast has a named location`);
@@ -55,6 +56,7 @@ ok(sum.schema==="prep-bundle-summary/v1", "summary schema");
 ok(sum.environments.length===3, "summary has 3 envs");
 for(const e of sum.environments){
   ok(e.walk.segments.every(s=>s.ref && s.label!==undefined), `${e.kind}: summary segs have ref/label`);
+  ok(e.walk.segCount===e.walk.segments.length, `${e.kind}: summary count includes the appended finale/arrival`);
   ok(e.walk.segments.some(s=>s.finale), `${e.kind}: summary marks a finale`);
   ok(e.hook && e.hook.macguffin, `${e.kind}: summary hook`);
   ok(e.cast && e.cast.location && Array.isArray(e.cast.npcs) && e.cast.npcs.every(n=>n.name), `${e.kind}: summary carries the compact cast (names/roles)`);

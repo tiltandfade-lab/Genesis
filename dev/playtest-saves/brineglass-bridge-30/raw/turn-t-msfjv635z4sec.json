@@ -1,0 +1,291 @@
+{
+  "turnId": "t-msfjv635z4sec",
+  "worldId": "msfjud9ebcves",
+  "action": "I stand in the tannery doorway and play a sharp three-note call on my lute, watching who looks toward the storm rather than toward me.",
+  "rolls": [],
+  "digest": {
+    "schema": "beat-digest/v1",
+    "view": "inventory",
+    "slices": [
+      "scene",
+      "pc",
+      "story-pressure",
+      "continuity",
+      "inventory",
+      "item-custody"
+    ],
+    "worldId": "msfjud9ebcves",
+    "worldName": "The Brineglass Reach",
+    "clock": {
+      "day": 1,
+      "min": 360,
+      "band": "dawn",
+      "exact": "06:00",
+      "session": 0,
+      "knowsTime": false
+    },
+    "location": "The Cobbled Tannery",
+    "setting": {
+      "name": "The Cobbled Tannery",
+      "desc": "A district of brine and leather built over natural sea caves.",
+      "smell": "River-Mud & Reeds",
+      "sound": "River-Rush",
+      "arch": "Fused Glass",
+      "taboo": {
+        "name": "The Left-Hand Insult",
+        "desc": "Passing coin or food with the left hand signals deep distrust."
+      },
+      "myth": {
+        "name": "The Shadowless Man",
+        "desc": "A traveler traded his shadow to never feel cold."
+      }
+    },
+    "pc": {
+      "name": "Mira Quill",
+      "headline": "a Charlatan Human Bard who went out on an adventure",
+      "pronouns": "she",
+      "class": "Bard",
+      "level": 1,
+      "hp": {
+        "cur": 6,
+        "max": 6
+      },
+      "conditions": [],
+      "marks": [
+        {
+          "id": "mk-msfjud9s5npiw",
+          "text": "You were poisoned; your next save against poison has disadvantage.",
+          "kind": "injury",
+          "sinceDay": 0
+        }
+      ],
+      "gold": 19,
+      "inventory": [
+        {
+          "id": "msfjud9rhr2d7",
+          "name": "Leather Armor",
+          "conditions": []
+        },
+        {
+          "id": "msfjud9r7oduu",
+          "name": "Dagger",
+          "qty": 2,
+          "conditions": []
+        },
+        {
+          "id": "msfjud9r36fkx",
+          "name": "Lute",
+          "conditions": []
+        },
+        {
+          "id": "msfjud9rn35kw",
+          "name": "Backpack",
+          "conditions": []
+        },
+        {
+          "id": "msfjud9r0k2m0",
+          "name": "Bedroll",
+          "conditions": []
+        },
+        {
+          "id": "msfjud9rgenzo",
+          "name": "Costume",
+          "qty": 2,
+          "conditions": []
+        },
+        {
+          "id": "msfjud9rqgk9r",
+          "name": "Candle",
+          "qty": 5,
+          "conditions": []
+        },
+        {
+          "id": "msfjud9rujmud",
+          "name": "Rations",
+          "qty": 5,
+          "conditions": []
+        }
+      ],
+      "equipped": {
+        "mainHand": "msfjud9r7oduu",
+        "offHand": null,
+        "armor": "msfjud9rhr2d7"
+      },
+      "equippedWeapons": {
+        "mainHand": {
+          "weaponName": "Dagger",
+          "baseName": "Dagger",
+          "properties": [
+            "Finesse",
+            "Light",
+            "Thrown (Range 20/60)"
+          ],
+          "finesse": true,
+          "ranged": false,
+          "grip": "1h",
+          "magicBonus": 0,
+          "atkBonus": 0,
+          "rider": null,
+          "dmg": [
+            {
+              "n": 1,
+              "die": 4,
+              "bonus": 1,
+              "type": "piercing"
+            }
+          ]
+        },
+        "offHand": null
+      },
+      "inventoryMore": 2
+    },
+    "powers": [
+      {
+        "clockId": "the-crier-s-circle",
+        "faction": "The Crier's Circle",
+        "dominant": true,
+        "agenda": "become something other than what it is",
+        "method": "rumor and propaganda",
+        "tags": [
+          "popular"
+        ],
+        "clock": "0/6"
+      }
+    ],
+    "fronts": [
+      {
+        "clockId": "a-blight-or-plague-is-spreading-toward-the-town",
+        "kind": "external",
+        "danger": "a blight or plague is spreading toward the town",
+        "impersonal": "wildfire",
+        "clock": "0/6",
+        "closed": false,
+        "dmOnly": {
+          "truth": null,
+          "doom": "displacement \u2014 the people scatter"
+        }
+      }
+    ],
+    "recentLedger": [
+      {
+        "type": "canon",
+        "day": 1,
+        "min": 360,
+        "text": "Mira Quill arrives sent or summoned; to The Crier's Circle, a stranger, unknown and unproven. Opening tension: the leader is corrupt, failing, or dying, and the scramble to replace them has begun. Opening register: mythic \u2014 the ground beneath this exact spot has been hollow for longer than anyone has lived, and tonight you can hear it breathing."
+      },
+      {
+        "type": "session",
+        "day": 1,
+        "min": 360,
+        "text": "Prep staged \u2014 3 frontiers rumored on the edge of the map, 11 soft entities cast."
+      }
+    ],
+    "codex": [
+      {
+        "id": "location:the-cobbled-tannery",
+        "kind": "location",
+        "name": "The Cobbled Tannery",
+        "fields": {
+          "desc": "A district of brine and leather built over natural sea caves.",
+          "cat": "Grounded"
+        },
+        "dm": {
+          "itemsPool": "realm-items-frontier",
+          "dressing": {
+            "props": "frontier",
+            "surfaces": "frontier"
+          }
+        },
+        "status": {
+          "at": null,
+          "known": false,
+          "soft": false,
+          "condition": "ok"
+        }
+      }
+    ],
+    "revealed": [
+      "map",
+      "ledger"
+    ],
+    "ambientPresence": {
+      "count": 3,
+      "texture": "a few locals going about their business"
+    },
+    "prepPending": {
+      "session": 0,
+      "frontiers": [
+        "frontier-s0-0 (urban)",
+        "frontier-s0-1 (dungeon)",
+        "frontier-s0-2 (wilderness)"
+      ],
+      "reason": "no-overlays"
+    },
+    "retrieval": {
+      "omitted": {
+        "codex": 5,
+        "powers": 2,
+        "fronts": 1,
+        "gazetteer": 4
+      },
+      "rule": "Omitted state remains authoritative. Use supplied ids; never invent an omitted fact.",
+      "overTargetBytes": 3683
+    }
+  },
+  "route": {
+    "mode": "freeform-ruling",
+    "reasons": [
+      "open-intent-default"
+    ],
+    "relevantSlices": [
+      "scene",
+      "story-pressure",
+      "relevant-state"
+    ],
+    "modelCall": true
+  },
+  "rulingRequest": {
+    "contractVersion": 1,
+    "kind": "open-intent",
+    "playerAction": "I stand in the tannery doorway and play a sharp three-note call on my lute, watching who looks toward the storm rather than toward me.",
+    "principle": "Interpret freely; propose consequences through the engine contract; never mutate state in prose.",
+    "returnFields": [
+      "understoodAction",
+      "ruling",
+      "needsRoll",
+      "proposedCheck",
+      "stakes",
+      "outcomeBranches",
+      "proposedEvents"
+    ],
+    "authority": {
+      "dm": [
+        "intent",
+        "rule-applicability",
+        "difficulty",
+        "advantage-disadvantage",
+        "stakes",
+        "exceptions",
+        "meaning"
+      ],
+      "engine": [
+        "identity",
+        "state",
+        "custody",
+        "dice",
+        "arithmetic",
+        "resources",
+        "clock",
+        "accepted-mutation"
+      ]
+    }
+  },
+  "receipt": null,
+  "lane": "deep",
+  "laneModel": "opus",
+  "laneReasons": [
+    "new-place"
+  ],
+  "lastResolution": null,
+  "_received": 1785901875.162242
+}

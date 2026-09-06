@@ -1,0 +1,47 @@
+{
+  "turnId": "t-msfk6rup8ww3g",
+  "narration": "The candle descends, turning slowly on the strap. Twelve feet down, its light finds a narrow dry landing beside the ladder while black water races through a lower channel. The walls glitter\u2014not bare glass, but hundreds of folded message slips fused inside it like pale leaves in amber. One bears the same doubled seal impressed on William\u2019s tube. Farther in, a jointed pale limb folds silently behind the edge of an unseen chamber. The strap tugs once from below, not hard enough to pull it from you.",
+  "events": [
+    {
+      "type": "item_transfer",
+      "payload": {
+        "itemId": "msfk2mblguaqs",
+        "to": {
+          "kind": "object",
+          "ref": "low-sluice-ladder-well",
+          "name": "Low Sluice ladder well"
+        },
+        "note": "Mira lowers the relit candle into the Low Sluice ladder well on her lute strap."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    },
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "factId": "brineglass:messages-in-glass",
+        "what": "The hidden Low Sluice landing is lined with old message slips fused inside glass; one carries the same doubled seal found on William Sallow's altered order."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    }
+  ],
+  "gen": [
+    {
+      "kind": "interior",
+      "opts": {}
+    }
+  ],
+  "rollRequest": null,
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Use the tracked candle and lute strap as a tethered scout without descending.",
+    "ruling": "The controlled light reveals obvious nearby geometry and objects without a check; anything concealed beyond its reach remains unresolved.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "Mira has a visible dry landing and documentary link, but something below has now touched the tether.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 10: persistent candle changes custody again and reveals a lower affordance while Mira remains above by choice. Interior is engine-minted for next-turn binding."
+}

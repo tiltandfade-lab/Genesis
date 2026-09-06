@@ -1,0 +1,20 @@
+{
+  "turnId": "t-msga6arj70e83",
+  "narration": "You wait. Venn watches the courier vanish into the alleys, then tears the badge from her coat and grinds its pin under her heel. Five minutes later the hammering east of the plaza changes rhythm: not a workshop now, but shutters being barred ahead of an approaching crowd. The water pump in the next square squeals once under no visible hand. Venn points west toward a dry loft above the closed weigh-house. ‘Rest there if you mean to. The street will not stay quiet.’",
+  "ruling": {
+    "understoodAction": "Mira waits to see what follows Venn’s choice.",
+    "ruling": "Time advances and the next district pressure becomes audible; no player movement is forced.",
+    "needsRoll": false,
+    "stakes": "The public evidence is moving, but a crowd is approaching."
+  },
+  "events": [
+    {
+      "type": "advance_clock",
+      "source": "declared",
+      "payload": {
+        "minutes": 5,
+        "cause": "Mira waits while Venn’s courier carries the public copy away"
+      }
+    }
+  ]
+}

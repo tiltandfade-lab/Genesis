@@ -90,6 +90,17 @@ console.log("=== EVENT-NUM-FOLD probes ===\n");
     after === before - 1, `filled ${before} -> ${after} (expected ${before - 1}); moved ${after < before ? "DOWN" : after > before ? "UP" : "NONE"}`);
 }
 
+// The short `n` spelling appeared in the live Brineglass soak. It must retain an exact multi-step
+// delta instead of warning and falling through to the handler's default +1.
+{
+  const win = boot();
+  const w = seedWorld(win, { clockFilled: 1 });
+  const res = win.applyEvent(w, { type: "clock_advanced", source: "declared", payload: { id: "The Ironwood Circle", n: 2 } });
+  probe("P1b", "clock_advanced n:2 aliases to an exact two-step delta",
+    res && res.ok && w.factions[0].clock.filled === 3,
+    `filled 1 -> ${w.factions[0].clock.filled} (expected 3)`);
+}
+
 // ---------------------------------------------------------------------------
 // P2 — grapple bonus:"2" (STRING), d20:17. No combat foe -> +0 defender.
 // RED: "2" concatenates into the contest total (non-finite / "...2").

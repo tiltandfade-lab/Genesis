@@ -331,16 +331,15 @@ function seatConsumeSSELine(line, onDelta){
    the stream closes (§1 "events apply then (never mid-stream)"). On a parse failure it retries ONCE
    with a corrective instruction appended (§3 step 1); a second failure returns the stutter envelope
    rather than throwing. */
-function seatSend(action, rolls, opts){
+function seatSend(action, rolls, opts, prepared){
   const w = activeWorld(); if(!w) return Promise.reject("no world");
-  const tri = (typeof dmTriage === "function") ? dmTriage(w, action) : null;
-  const lastRes = (w.dm && w.dm.lastResolution) || null;
-  const turnId = "t-" + uid();
-  const turnPayload = {
-    turnId, worldId: w.id, action: action, rolls: rolls || [], digest: dmDigest(),
-    lane: tri ? tri.lane : null, laneModel: tri ? tri.model : null, laneReasons: tri ? tri.reasons : null,
-    lastResolution: lastRes
-  };
+  if(w.dm&&w.dm.pendingTurnId)return Promise.reject(new Error("turn already pending: "+w.dm.pendingTurnId));
+  // sendTurn normally hands us the already-routed/pre-resolved payload. The fallback keeps direct
+  // seatSend harness calls on the same seam: no transport may resolve mechanics in a different order.
+  const built=prepared&&prepared.turn?prepared:dmPrepareTurn(w,action,rolls,opts,
+    dmResolveTurnRoute(w,action,opts,Date.now()));
+  if(built.route.mode==="local-fact") return dmApplyLocalTurn(w,built,opts);
+  const tri=built.tri, turnPayload=built.turn, turnId=turnPayload.turnId;
   // LANE→MODEL MAPPING (§1 "Providers & lanes"): the seat proxy needs to know which model to call —
   // the script-owned lane (dmTriage, unchanged from the mailbox) becomes a MODEL PARAMETER here instead
   // of runbook discipline a loop DM had to self-obey. "fast"→SEAT_MODEL_FAST, "deep"→SEAT_MODEL_DEEP;
@@ -350,9 +349,13 @@ function seatSend(action, rolls, opts){
 
   if(!(opts && opts.hidden)) pushDmLog(w, "player", action, { rolls: rolls || [], turnId });
   w.dm = w.dm || {}; w.dm.rollReq = null; w.dm.ask = null; w.dm.pendingTurnId = turnId; w.dm.lastResolution = null;
+  w.dm.pendingTurnRequest=dmJsonClone(turnPayload); w.dm.pendingTurnPause=null;
+  w.dm.pendingReceipt=built.receipt||null;
   w.dm.pendingAckSeq = (typeof codexOf === "function") ? (codexOf(w).seq || 0) : (w.dm.pendingAckSeq || 0);
+  w.dm.pendingTurnMeta=dmTurnMeta(built,"seat");
   saveU(U);
-  GS.dm.pending = true; GS.dm.turnId = turnId; GS.dm.turnStart = Date.now(); GS.dm.rollReq = null; GS.dm.ask = null;
+  GS.dm.lastTurnMeta=w.dm.pendingTurnMeta;
+  GS.dm.pending = true; GS.dm.turnId = turnId; GS.dm.turnStart = built.startedAt; GS.dm.rollReq = null; GS.dm.ask = null;
   seatState().streamText = "";      // the in-progress narration buffer this turn's stream fills
   renderWorld();
 
@@ -404,7 +407,9 @@ function seatPostAndStream(assembled, lane, turnId, retryNote){
   const body = Object.assign({}, assembled, { lane, turnId });
   if(retryNote) body.messages = assembled.messages.concat([{ role: "user", content: retryNote }]);
   return fetch(SEAT_ROUTE, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
-    .then(r => { if(!r.ok) throw new Error("seat " + r.status); return r; })
+    .then(r => { if(GS.dm&&GS.dm.lastTurnMeta&&GS.dm.lastTurnMeta.requestAckMs==null)
+        GS.dm.lastTurnMeta.requestAckMs=Date.now()-(GS.dm.lastTurnMeta.startedAt||Date.now());
+      if(!r.ok) throw new Error("seat " + r.status); return r; })
     .then(r => seatReadSSE(r, delta => seatStreamAppend(delta)));
 }
 
@@ -414,8 +419,18 @@ function seatPostAndStream(assembled, lane, turnId, retryNote){
    DM line; seat.js just keeps GS.seat.streamText current and re-renders). Cheap: renderWorld() is the
    same call every other transient UI update already makes. */
 function seatStreamAppend(delta){
+  if(delta && GS.dm&&GS.dm.lastTurnMeta&&GS.dm.lastTurnMeta.firstTokenMs==null)
+    GS.dm.lastTurnMeta.firstTokenMs=Date.now()-(GS.dm.lastTurnMeta.startedAt||Date.now());
   const s = seatState();
   s.streamText = (s.streamText || "") + delta;
+  // A provider's first token is often JSON punctuation. Count "meaningful feedback" only once at
+  // least one non-whitespace narration character is actually present in the accumulated contract.
+  const visible=String(s.streamText||"").trim();
+  const narrationVisible=/"narration"\s*:\s*"\s*(?:\\.|[^"\\\s])/.test(s.streamText);
+  const directProseVisible=!!visible && !/^[{[]/.test(visible); // normalized prose-delta adapters
+  if(GS.dm&&GS.dm.lastTurnMeta&&GS.dm.lastTurnMeta.meaningfulFeedbackMs==null &&
+     (narrationVisible||directProseVisible))
+    GS.dm.lastTurnMeta.meaningfulFeedbackMs=Date.now()-(GS.dm.lastTurnMeta.startedAt||Date.now());
   s.streaming = true;
   renderWorld();
 }
@@ -449,9 +464,10 @@ function seatApplyResponse(r){
 }
 
 function seatBridgeDown(e){
-  GS.dm.pending = false; const s = seatState(); s.streamText = null; s.streaming = false;
-  if(GS.dm.poll){ clearTimeout(GS.dm.poll); GS.dm.poll = null; }
+  const turnId=GS.dm&&GS.dm.turnId;
+  const s = seatState(); s.streamText = null; s.streaming = false;
+  if(typeof dmPausePending==="function")dmPausePending(turnId,"seat-unreachable",
+    "(The provider seat became unreachable. This exact TurnRequest is paused; it can be resumed through the bridge or explicitly abandoned.)");
+  else GS.dm.pending=false;
   toast("DM seat unreachable — check dev/dm-bridge.py's /seat route, or switch back to the mailbox.");
-  renderWorld();
-  if(typeof wakeReveal === "function") wakeReveal();
 }

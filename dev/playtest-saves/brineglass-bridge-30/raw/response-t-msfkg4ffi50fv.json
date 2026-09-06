@@ -1,0 +1,25 @@
+{
+  "turnId": "t-msfkg4ffi50fv",
+  "narration": "Tessa studies you, then places her palm over the sample. \u201cDo it.\u201d Candlelight throws her shadow across the fused glass. At your words, the shadow catches on the mirrored correction as cloth catches on a nail. One Tessa remains beside you; another, flat and dark, turns inside the wall and begins writing the evacuation order backward among the preserved messages. The sorting arm below answers with a distant click. This is no ordinary spell, but the structure is responding to authorship, priority, and restitution as if they were components. You have one moment to decide how those components close the circuit.",
+  "events": [],
+  "rollRequest": {
+    "skill": "Arcana",
+    "ability": "int",
+    "dcHidden": true,
+    "adv": null
+  },
+  "ask": null,
+  "ruling": {
+    "understoodAction": "With Tessa's consent, recreate the shadow-writing conditions and frame the act as restitution under the original order.",
+    "ruling": "Tessa consents because the test concerns her stolen authorship. The improvised magical circuit forms; Arcana determines whether Mira can guide its resolution rather than merely trigger it.",
+    "needsRoll": true,
+    "proposedCheck": {
+      "skill": "Arcana",
+      "dc": 13
+    },
+    "stakes": "Success can return the copied authorship cleanly; failure may let the archive complete another mirrored order or attach the unresolved shadow elsewhere.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 19: explicit consent condition honored. Dramatic improvised ritual kept live because its outcome changes identity state and cannot be safely prebranched as a routine check."
+}

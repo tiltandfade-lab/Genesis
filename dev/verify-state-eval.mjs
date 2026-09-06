@@ -5,10 +5,11 @@
    Asserts:
      1. all 16 fixtures (12 goldens + 4 negative controls) load as valid JSON with the required
         top-level keys (id/kind/seed/source/state/turn/response/resolvedBranch/expect).
-     2. budgets.json has exactly 20 sections + totalFounding + totalSteady.
+     2. budgets.json has exactly 28 beat-digest budget sections (world id/name share worldMeta)
+        + totalFounding + totalSteady.
      3. baseline-recorded.json has the expected scorecard shape (provider/fixtures/summary).
      4. --selftest catches 4/4 negative controls.
-     5. R1-R6 regression checks (§7) — each shown red-first via a live mutation, then restored.
+     5. R1-R7 regression checks (§7) — each shown red-first or bound to a repaired golden.
 
    Run: node dev/verify-state-eval.mjs   (jsdom via JSDOM_HOME, per CLAUDE.md headless-test)
 */
@@ -60,7 +61,7 @@ check("budgets.json exists", existsSync(budgetsPath));
 if (existsSync(budgetsPath)) {
   const budgets = JSON.parse(readFileSync(budgetsPath, "utf-8"));
   const sectionCount = Object.keys(budgets.sections || {}).length;
-  check("budgets.json sections 20/20", sectionCount === 20, `found ${sectionCount}`);
+  check("budgets.json sections 28/28", sectionCount === 28, `found ${sectionCount}`);
   check("budgets.json totalFounding + totalSteady present", typeof budgets.totalFounding === "number" && typeof budgets.totalSteady === "number");
 }
 
@@ -77,9 +78,9 @@ check("baseline-recorded.json shape OK", baselineOk);
 const selftestResult = runNode(["--selftest"]);
 check("selftest 4/4 caught, exit 0", selftestResult.code === 0 && /4\/4 caught/.test(selftestResult.out), selftestResult.out.slice(0, 200));
 
-// === 5. R1-R6 regression checks ===
+// === 5. R1-R7 regression checks ===
 let rChecksPassed = 0;
-const RCOUNT = 6;
+const RCOUNT = 7;
 
 // R1 (D1): nc-14 red under a presence-only D1, green under the real dim.
 {
@@ -168,11 +169,22 @@ const RCOUNT = 6;
   if (identical) rChecksPassed++;
 }
 
+// R7 (D4): a discovery{enter:true} is a typed movement seam, not a teleport false-positive.
+{
+  const r=runNode(["--only","hx-05","--json"]);
+  try{
+    const d=JSON.parse(r.out), d4=d.fixtures[0].dims.D4;
+    const recognized=d4.status==="pass";
+    console.log("  R7 (D4) discovery-enter movement:",d4.status,d4.why);
+    if(recognized)rChecksPassed++;
+  }catch(e){console.log("  R7 parse error",e.message);}
+}
+
 check(`R-checks ${RCOUNT}/${RCOUNT}`, rChecksPassed === RCOUNT, `${rChecksPassed}/${RCOUNT} passed`);
 
 console.log("");
 if (fail === 0) {
-  console.log(`PASS state-eval: fixtures 16/16 loadable · goldens 12 · controls 4 · budgets.json sections 20/20 + 2 totals · baseline shape OK · selftest 4/4 · R-checks ${rChecksPassed}/${RCOUNT}`);
+  console.log(`PASS state-eval: fixtures 16/16 loadable · goldens 12 · controls 4 · budgets.json sections 28/28 + 2 totals · baseline shape OK · selftest 4/4 · R-checks ${rChecksPassed}/${RCOUNT}`);
   process.exit(0);
 } else {
   console.log(`FAIL state-eval: ${pass} passed, ${fail} failed`);

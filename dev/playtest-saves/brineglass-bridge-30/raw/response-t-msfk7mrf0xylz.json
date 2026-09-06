@@ -1,0 +1,44 @@
+{
+  "turnId": "t-msfk7mrf0xylz",
+  "narration": "Katherine braces the strap above. \u201cThree fast knocks,\u201d she repeats, then adds, \u201cRescue fee negotiable.\u201d The ladder holds. On the dry landing, your candle reveals that the pale limb is no creature: it is a bone-white articulated sorting arm rooted in the glass wall. It had caught the strap between two ivory fingers. Now it releases you, turns with a patient click, and presents a water-curled message slip from a slot among hundreds. The doubled seal is visible, but the writing faces down in its palm. Beyond the mechanism, one narrow passage follows the warm draft; another slopes beside the black-water channel.",
+  "events": [
+    {
+      "type": "codex_update",
+      "payload": {
+        "id": "location:an-interior",
+        "name": "The Sealed Dispatch Landing",
+        "fields": {
+          "desc": "A hidden dry landing beneath the Cobbled Tannery, lined with messages fused in glass and served by a bone-white sorting arm."
+        },
+        "status": {
+          "at": "the-cobbled-tannery",
+          "known": true,
+          "soft": false
+        }
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    },
+    {
+      "type": "codex_contact",
+      "payload": {
+        "id": "location:an-interior",
+        "engaged": true
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    }
+  ],
+  "rollRequest": null,
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Establish a pull signal, keep the candle tethered, and descend cautiously to the revealed dry landing.",
+    "ruling": "The intact ladder and controlled descent pose no unresolved obstacle. The landing is bound from the engine-minted interior and promoted on contact.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "Mira is below street level with two visible continuations and a message offered by the sorting mechanism.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 11: player chose descent; no route is selected for her. Generic minted interior required DM binding and promotion, exposing weak interior atom quality."
+}

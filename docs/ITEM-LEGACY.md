@@ -85,7 +85,7 @@ r.legacy = {
   origin:   { how:"loot"|"plot"|"gift"|"craft"|"start"|"unknown", ref:null|string }, // set ONCE at ensure-time (§1.3)
   claimant: { kind:"pc"|"npc"|"creature"|"faction"|"corpse"|"none", ref:string|null, name:string|null },
   lastSeen: { nodeId:string|null, day:number },          // in-world day (clockOf(w).day), NEVER wall-clock
-  lossState:"held"|"dropped"|"on-corpse"|"claimed-npc"|"claimed-creature"|"claimed-faction"|"cached"|"destroyed"|"unknown",
+  lossState:"held"|"transferred"|"dropped"|"on-corpse"|"claimed-npc"|"claimed-creature"|"claimed-faction"|"cached"|"destroyed"|"unknown",
   recoveryHookId: string|null,                            // a codex kind:"thread" record id (§5)
   factionInterest: string|null,                           // faction NAME (factions are name-keyed; slug() where an id is needed)
   decayRef: null | { kind:"corpse", charId:string },      // POINTER to the clock that governs recoverability — never a second clock
@@ -220,7 +220,12 @@ flag; do not "fix" this with one.
 
 `equip`, `condition_add{dropped}`, `gift`, `kill` do **not** touch legacy state in v1. A legacy
 item's custody changes ONLY through: death, corpse claim, scavenge, `item_changed`
-remove/add, or a declared `item_claimed`. (Rationale: `dropped` the *condition* is a combat-round
+remove/add, atomic `item_transfer`, or a declared `item_claimed`. A whole `item_transfer` with a
+`codexId` folds the matching lifecycle transition before physical ownership commits. Voluntary
+transfer/entrust/gift/loan/place uses neutral `transferred` and creates no recovery hook; only explicit
+confiscated/stolen/lost intent uses claimed/dropped state. A partial storied stack is refused so one
+Codex identity cannot fork. (Rationale:
+`dropped` the *condition* is a combat-round
 disarm — transient, wrong altitude; `gift` already ledgers and the accompanying `item_changed`
 remove with `takenBy:{kind:"npc",...}` is the legacy write.)
 
@@ -251,7 +256,7 @@ delta-digest ride-along. That is why `codexOf` is a callTimeDep here.
 Function contracts (signatures are binding):
 
 ```js
-const LEGACY_LOSS_STATES=["held","dropped","on-corpse","claimed-npc","claimed-creature",
+const LEGACY_LOSS_STATES=["held","transferred","dropped","on-corpse","claimed-npc","claimed-creature",
                           "claimed-faction","cached","destroyed","unknown"];
 
 function legacyGrade(inst)            // §1.2 predicate, verbatim
@@ -561,7 +566,7 @@ The 24 checks, enumerated (executor implements exactly these, in this order):
 |---|---|---|
 | R1 | baseline: `corpseStatus` fresh→gone ladder unchanged (2 checks: fresh at day 0, gone past decayDays) | value moves fresh→gone |
 | R3 | baseline: mundane-only corpse claim still hauls (no legacy machinery invoked) | taker inventory length +N |
-| 4 | `LEGACY_LOSS_STATES` has length 9 and `indexOf("cached")>=0` | — |
+| 4 | `LEGACY_LOSS_STATES` has length 10 and includes `"transferred"` + `"cached"` | — |
 | 5–6 | `legacyGrade`: true for ench non-consumable; false for `{name:"Potion of Healing",ench:{}}` (consumable) and for `qty:20` stack | — |
 | 7 | P-DEATH (§8.1) now green | before≠after on record JSON |
 | 8 | death minted a recovery hook: `r.legacy.recoveryHookId` resolves to a `kind:"thread"` record linked `part-of` the item | hook record exists |

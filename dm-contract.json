@@ -61,6 +61,7 @@
       "levelUp",
       "arrivalBrief",
       "itemLegacy",
+      "itemCustody",
       "bastion",
       "pendingSituation"
     ],
@@ -88,9 +89,56 @@
       "levelUp": "a pending interpretive-pick span on the PC's sheet — awareness only, never invented values; null the common turn",
       "arrivalBrief": "the current node's unrevealed drift entries (dmOnly until narrated); null the common turn",
       "itemLegacy": "ITEM-LEGACY §5 slice — storied-item custody threads (lossState, holder, recovery hooks); null when no legacy-grade item is in play",
+      "itemCustody": "portable items deliberately left with a holder at the current node (full instance identity + holder); cap 8, null when none are here",
       "bastion": "CROWNING-BASTION.md §7.B1.8 — the world's bastion (name/nodeId/foundedDay/atNow/vault manifest); null when no bastion is claimed",
       "pendingSituation": "HQ3-C4 — a severe/interrupted rest-risk obligation the DM must honor THIS turn (kind/text/class/severe/interrupted/day/min); auto-clears once answered; null the common turn"
     }
+  },
+  "turnDigest": {
+    "sourceOfTruth": "src/world/dm-digest.js",
+    "schema": "beat-digest/v1",
+    "views": [
+      "scene",
+      "inventory",
+      "combat",
+      "travel",
+      "social"
+    ],
+    "targetBytes": 3072,
+    "potentialTopLevelKeys": [
+      "schema",
+      "view",
+      "slices",
+      "worldId",
+      "worldName",
+      "clock",
+      "location",
+      "setting",
+      "pc",
+      "powers",
+      "fronts",
+      "recentLedger",
+      "gazetteer",
+      "codex",
+      "minted",
+      "revealed",
+      "sessionLean",
+      "tarot",
+      "activeWalk",
+      "ambientPresence",
+      "combat",
+      "prepPending",
+      "levelUp",
+      "arrivalBrief",
+      "itemLegacy",
+      "itemCustody",
+      "bastion",
+      "pendingSituation",
+      "retrieval"
+    ],
+    "sparse": true,
+    "omissionRule": "an omitted key was not selected for this beat; it is not false and does not erase canonical state",
+    "fullCompatibilitySurface": "digest"
   },
   "events": {
     "action": {
@@ -484,7 +532,8 @@
       "aliases": {
         "id": "clockId",
         "faction": "clockId",
-        "by": "delta"
+        "by": "delta",
+        "n": "delta"
       },
       "num": [
         "delta"
@@ -773,18 +822,23 @@
     },
     "crit_outcome": {
       "fields": [
+        "actor",
+        "canon",
         "cascade",
         "lenses",
+        "lensCount",
         "magnitude",
         "mythSeed",
         "natural",
         "placeHandoff",
         "scope",
+        "success",
         "target",
         "tier"
       ],
       "aliases": {},
       "num": [
+        "lensCount",
         "magnitude",
         "natural"
       ],
@@ -1228,6 +1282,34 @@
         }
       }
     },
+    "item_placed": {
+      "fields": [
+        "item",
+        "to",
+        "intent",
+        "note"
+      ],
+      "aliases": {},
+      "num": [],
+      "example": {
+        "type": "item_placed",
+        "payload": {
+          "item": {
+            "name": "Trident of Fish Command"
+          },
+          "to": {
+            "kind": "container",
+            "ref": "S3.strongbox",
+            "name": "the public strongbox"
+          },
+          "intent": "place"
+        }
+      },
+      "valueNotes": {
+        "item": "a newly revealed portable item spec {name,qty?,base?,ench?,bonus?,codexId?}; use item_transfer for any already-owned instance",
+        "to": "an explicit stable world holder {kind,ref,name?}; pc and corpse are refused because their native arrays require item_changed/item_transfer"
+      }
+    },
     "item_rust_exposure": {
       "fields": [
         "itemId",
@@ -1257,6 +1339,36 @@
           "itemId": "it-12",
           "qty": 5
         }
+      }
+    },
+    "item_transfer": {
+      "fields": [
+        "itemId",
+        "qty",
+        "to",
+        "intent",
+        "note"
+      ],
+      "aliases": {},
+      "num": [
+        "qty"
+      ],
+      "example": {
+        "type": "item_transfer",
+        "payload": {
+          "itemId": "it-12",
+          "qty": 5,
+          "to": {
+            "kind": "object",
+            "ref": "S3.object",
+            "name": "the stone coffin"
+          },
+          "intent": "place"
+        }
+      },
+      "valueNotes": {
+        "to": "an explicit stable holder {kind,ref,name?}; kind is pc|npc|creature|faction|container|corpse|place|object — never infer this object from prose",
+        "intent": "transfer|entrust|gift|loan|place are voluntary and mint no recovery hook; use confiscated|stolen|lost only when the fiction is explicitly involuntary; omitted defaults transfer"
       }
     },
     "item_use": {
@@ -1856,7 +1968,9 @@
         "nodeId",
         "toSeg"
       ],
-      "aliases": {},
+      "aliases": {
+        "toSegment": "toSeg"
+      },
       "num": [],
       "example": {
         "type": "walk_advance",

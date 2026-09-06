@@ -2,7 +2,7 @@
 type: canon
 status: ACTIVE — the authority map: which system owns which facts
 created: 2026-07-22
-updated: 2026-07-29
+updated: 2026-08-04
 owner: docs/canon/README.md (precedence law)
 ---
 
@@ -34,6 +34,9 @@ Two columns of truth run through this file and must never be conflated:
 | Rules data (tables, items, spells, progression, bestiary) | Engine markdown + build/gen-*.py → generated `data/*.js`, `tables.js` | edit-source → compile-artifact; artifacts never hand-edited |
 | Module registry | `manifest.json` + check-manifest.py | the code spine |
 | DM↔engine interface | `EVENT-CONTRACT` typed events; payload repair ONCE in `dmFoldPayload`/`DM_EVENT_FIELDS` | never per-handler coercion |
+| Execution/adjudication route | `dmRoute` (`local-fact` / `declared-mechanic` / `freeform-ruling`) + engine-owned `mechanical-receipt/v1`; `dmTriage` separately owns only the model-quality floor | unknown/contextual free text remains open; built pre-resolution proofs are exact rest and trusted id-addressed item transfer |
+| DM turn-context projection | `world.dm-digest` derives sparse `beat-digest/v1` from full `dmDigest()` truth; `dmRoute` remains execution authority | five views; 3 KiB ordinary target; named off-scene Codex retrieval; omission is not falsehood |
+| Portable-item physical custody | character inventory or `corpse.items` for native owners; `w.itemCustody` (`world.item-custody`) for NPC/creature/faction/container/place/object holders; `r.legacy` remains the significance/recovery overlay | one physical owner per instance id; whole transfers preserve id, partial transfers preserve remainder id; current-scene digest is a projection only |
 | DM transport (dev) | DM bridge mailbox (`dev/dm-bridge.py`, `src/world/dm.js`) | dumb mailbox; app applies events with its own mutators |
 
 ## 2. Accepted design-level owners (ACCEPTED, unbuilt)
@@ -58,22 +61,33 @@ Two columns of truth run through this file and must never be conflated:
 | Land travel | one shared TravelWalk/SceneLineage contract; Fray/Spice authority reused, never duplicated | Wave 10 F10.9g |
 | Towns | bounded district graph + mounted real-roll venue grids | Wave 10 F10.9h |
 | Sparse persistence structure | one sparse canonical record per noun; typed refs; receipts; content-addressed dedup; separate narration; chunked persistence; scoped retrieval (codec = Wave 12) | Wave 6 §15.6 |
+| Current presentation disposition | Story is default; Sprites and Theater Lab are optional projections over identical canonical events/state | `TEXT-FIRST-WALK-RESTORATION.md` |
+| Walk focus/lifecycle | per-walk cursor/state persists; `activeWalkId` is digest focus; focus changes suspend rather than close | `TEXT-FIRST-WALK-RESTORATION.md` §2.2 |
 
 ## 3. Presentation and provider boundaries
 
 - **Projections own no facts.** BattleMat, EngagementLens, cards, maps, text views, audio, and DM
   prose consume committed receipts. "The renderer never becomes the source of a fact"
   (FOUNDATION §3). Renderer memory holds no gameplay state (Wave 10 P10.2).
-- **The DM (any provider) owns verbs and meaning, never nouns or numbers.** Engine rolls atoms
-  and owns every number; the DM interprets, narrates, connects, and — inside the earned
+- **The DM (any provider) owns verbs and meaning, never nouns or numbers.** This includes intent,
+  rule applicability, check/DC/advantage/stakes, exceptions, acting, and interpretation for novel
+  fiction. The engine rolls atoms, executes applicable rule math, and owns every number; the DM
+  interprets, narrates, connects, and — inside the earned
   SYNTHESIZE envelope — authors identity/meaning that the engine compiles, validates, and
   persists. "No consequential noun may exist only in prose" (Wave 2 G2.1.5).
+- **A keyword is never execution authority.** Exact factual display requests may be local; a
+  declared mechanic may resolve first only after it has a complete resolver, immutable receipt,
+  and false-positive proof. Every other utterance defaults to open DM adjudication. Quality routing
+  (`dmTriage`) cannot change this ownership split. (`DESIGN.md` 2026-08-04.)
 - **Provider input is proposals.** Propose → validate → commit/reject → narrate. An engine-
   rejected event is never narrated as having happened (Wave 2 §10.11.25). AI-authored executable
   code and prose-as-rules are forbidden (G2.1 compile law).
 - **The DM seat is provider-neutral.** One digest/tool/refusal contract for every supported
   model; per-provider behavior differences may not alter world/mechanics outcomes (Wave 10
   §11.83; `docs/SEAT-ADAPTER.md`).
+- **Context scope owns no truth.** A beat view may omit irrelevant canonical state but may not
+  redefine it. The full digest/store remains authoritative, and named references are retrieved
+  deterministically before a call (`DESIGN.md` 2026-08-04; `world.dm-digest`).
 - **Recovery** replays no mechanics: canonical receipt cursor + terminal-state rebuild + recap
   (Wave 10 F10.8c; C1F).
 
@@ -123,7 +137,7 @@ rolls → Connection records; current dungeon d200 → decomposed rollers + reci
 serialization → chunked persistence), the built system **keeps running and keeps its census
 protection** until Wave 12 authorizes the specific cutover with replacement proof (golden-beat
 preservation law, Wave 1 §8.11; PHASING-FRAMEWORK law 9: "the MVP floor is not a removal list").
-The general IMPLEMENTATION-HOLD still protects unscoped cutovers. Adam's 2026-07-29
-directive creates one scoped route: Wave 0 and each subsequently passed gate in
-`GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md`. Nothing in this map authorizes work
-outside that program or bypasses a replacement-proof cutover.
+The general IMPLEMENTATION-HOLD still protects unscoped cutovers. The passed Golden gates and
+their evidence remain preserved, but Adam's 2026-08-03 ruling suspends that program as the active
+implementation route. `TEXT-FIRST-WALK-RESTORATION.md` authorizes only its reversible slices;
+nothing here authorizes deletion of the visual stack or an unrelated accepted-owner cutover.

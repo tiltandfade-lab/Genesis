@@ -175,7 +175,9 @@
         "source": "declared",
         "payload": {
           "what": "The Miller's Leat",
-          "makeNode": true
+          "makeNode": true,
+          "enter": true,
+          "travelMin": 60
         }
       }
     ],
@@ -199,6 +201,9 @@
       "minMinutes": 10,
       "maxMinutes": 480,
       "requiresAdvanceClock": true
+    },
+    "location": {
+      "endNodeName": "The Miller's Leat"
     }
   }
 }

@@ -1,0 +1,297 @@
+{
+  "turnId": "t-msg6geztzbusy",
+  "worldId": "msfjud9ebcves",
+  "action": "I stay away from the ringing bell. I scrape rain-black grit from the oldest law plaque and compare its original exemption marks with the fresh signs above it, looking for who is still legally allowed through this quarter.",
+  "rolls": [],
+  "digest": {
+    "schema": "beat-digest/v1",
+    "view": "travel",
+    "slices": [
+      "scene",
+      "pc",
+      "story-pressure",
+      "continuity",
+      "travel",
+      "active-walk"
+    ],
+    "worldId": "msfjud9ebcves",
+    "worldName": "The Brineglass Reach",
+    "clock": {
+      "day": 1,
+      "min": 780,
+      "band": "afternoon",
+      "exact": "13:00",
+      "session": 0,
+      "knowsTime": false
+    },
+    "location": "Shadowed & Lawless — The water tower platform, 5x10 ft, torchlit (Wandering Torch, Cinderblock Stack, Storm Drain Grate)",
+    "pc": {
+      "id": "msfjud9rbeahy",
+      "name": "Mira Quill",
+      "class": "Bard",
+      "level": 1,
+      "hp": {
+        "cur": 6,
+        "max": 6
+      },
+      "conditions": [],
+      "marks": [
+        {
+          "id": "mk-msfjud9s5npiw",
+          "text": "You were poisoned; your next save against poison has disadvantage.",
+          "kind": "injury",
+          "sinceDay": 0
+        }
+      ],
+      "ac": 12,
+      "resources": {
+        "hp": {
+          "cur": 6,
+          "max": 6
+        },
+        "slots": {
+          "1": "2/2"
+        },
+        "pools": {
+          "Bardic Inspiration": "2/2 (d6)"
+        },
+        "hitDice": {
+          "cur": 1,
+          "max": 1,
+          "die": 8
+        }
+      },
+      "equipped": {
+        "mainHand": "msfjud9r7oduu",
+        "offHand": null,
+        "armor": "msfjud9rhr2d7"
+      },
+      "inventory": [
+        {
+          "id": "msfjud9rhr2d7",
+          "name": "Leather Armor",
+          "conditions": []
+        },
+        {
+          "id": "msfjud9r7oduu",
+          "name": "Dagger",
+          "qty": 2,
+          "conditions": []
+        }
+      ],
+      "inventoryMore": 9
+    },
+    "powers": [
+      {
+        "clockId": "the-crier-s-circle",
+        "faction": "The Crier's Circle",
+        "dominant": true,
+        "agenda": "become something other than what it is",
+        "method": "rumor and propaganda",
+        "tags": [
+          "popular"
+        ],
+        "clock": "1/6"
+      }
+    ],
+    "fronts": [
+      {
+        "clockId": "a-blight-or-plague-is-spreading-toward-the-town",
+        "kind": "external",
+        "danger": "a blight or plague is spreading toward the town",
+        "impersonal": "wildfire",
+        "clock": "0/6",
+        "closed": false,
+        "dmOnly": {
+          "truth": null,
+          "doom": "displacement — the people scatter"
+        }
+      }
+    ],
+    "recentLedger": [
+      {
+        "type": "transition",
+        "day": 1,
+        "min": 780,
+        "text": "→ Shadowed & Lawless — 1h on the way. Now Day 1, afternoon."
+      }
+    ],
+    "codex": [
+      {
+        "id": "npc:tessa-rill",
+        "kind": "npc",
+        "name": "Tessa Rill",
+        "dm": {
+          "want": "Feel what the drink and the dice give them one more time, and this time walk away ahead. — addiction, greed",
+          "leverage": "Has hidden where a beloved is buried, unmarked, and visits in secret. — grief, secret"
+        }
+      },
+      {
+        "id": "npc:katherine-holloway",
+        "kind": "npc",
+        "name": "Katherine Holloway",
+        "fields": {
+          "authoredWarning": true
+        },
+        "dm": {
+          "want": "Shed the family name and be known for their own, whatever it takes. — pride, family"
+        }
+      }
+    ],
+    "activeWalk": {
+      "nodeId": "frontier-s0-0",
+      "place": "Shadowed & Lawless",
+      "environment": "urban",
+      "topology": "The Rundown",
+      "skin": {
+        "text": "A specific song is being hummed by strangers who've never met. — The same unfamiliar tune, unconsciously, by people across the district who can't say where they learned it.",
+        "band": "Strange"
+      },
+      "risk": {
+        "danger": "risky",
+        "reward": "good",
+        "stakes": "loot-risk",
+        "trace": "clock",
+        "escapes": [
+          "flee",
+          "environment"
+        ],
+        "clock": {
+          "kind": "heat",
+          "note": "Heat is the default — you're already Burning (Heat 3)."
+        },
+        "promise": "Uncommon: Trident of Fish Command",
+        "telegraphs": [
+          {
+            "kind": "rumor",
+            "text": "Word on the street: Corrupt Guard holds this ground."
+          }
+        ]
+      },
+      "spiceTier": "baseline",
+      "cursor": {
+        "current": 1,
+        "touched": [
+          1
+        ],
+        "done": false,
+        "total": 10
+      },
+      "segments": [
+        {
+          "num": 1,
+          "label": "Spark",
+          "isFinale": false,
+          "state": "here",
+          "gist": "The Plague Outbreak / Rumor",
+          "reskin": null,
+          "effectDie": null,
+          "light": "lamplit",
+          "dressing": {
+            "text": "Loose floorboard over a shallow cavity.",
+            "condition": "Tampered"
+          },
+          "atmo": "wind, strong, moaning",
+          "creatures": null,
+          "surface": null
+        },
+        {
+          "num": 2,
+          "label": "Escalation",
+          "state": "ahead"
+        }
+      ],
+      "ambientPresence": null,
+      "briefing": null,
+      "cast": {
+        "locId": "location:amber-glass-quay",
+        "npcIds": [
+          "npc:erias",
+          "npc:falevalu-tavihiva"
+        ],
+        "itemIds": [
+          "item:a-formal-apothecary-s-label-printed-professionally-on-a-bottle-containing-something-entirely-different-from-what-is-labeled"
+        ],
+        "artIds": []
+      },
+      "moreSegments": 9
+    },
+    "retrieval": {
+      "omitted": {
+        "codex": 32,
+        "powers": 2,
+        "fronts": 1,
+        "gazetteer": 5
+      },
+      "rule": "Omitted state remains authoritative. Use supplied ids; never invent an omitted fact.",
+      "pinnedCodexIds": [
+        "npc:tessa-rill",
+        "npc:katherine-holloway"
+      ],
+      "continuityCodexIds": [
+        "npc:tessa-rill",
+        "npc:katherine-holloway"
+      ],
+      "overTargetBytes": 3835
+    }
+  },
+  "route": {
+    "mode": "freeform-ruling",
+    "reasons": [
+      "open-intent-default"
+    ],
+    "relevantSlices": [
+      "scene",
+      "story-pressure",
+      "relevant-state"
+    ],
+    "modelCall": true
+  },
+  "rulingRequest": {
+    "contractVersion": 1,
+    "kind": "open-intent",
+    "playerAction": "I stay away from the ringing bell. I scrape rain-black grit from the oldest law plaque and compare its original exemption marks with the fresh signs above it, looking for who is still legally allowed through this quarter.",
+    "principle": "Interpret freely; propose consequences through the engine contract; never mutate state in prose.",
+    "returnFields": [
+      "understoodAction",
+      "ruling",
+      "needsRoll",
+      "proposedCheck",
+      "stakes",
+      "outcomeBranches",
+      "proposedEvents"
+    ],
+    "authority": {
+      "dm": [
+        "intent",
+        "rule-applicability",
+        "difficulty",
+        "advantage-disadvantage",
+        "stakes",
+        "exceptions",
+        "meaning"
+      ],
+      "engine": [
+        "identity",
+        "state",
+        "custody",
+        "dice",
+        "arithmetic",
+        "resources",
+        "clock",
+        "accepted-mutation"
+      ]
+    }
+  },
+  "receipt": null,
+  "lane": "fast",
+  "laneModel": "sonnet",
+  "laneReasons": [
+    "default-fast"
+  ],
+  "narrationBudget": {
+    "targetWords": 60,
+    "maxWords": 75
+  },
+  "lastResolution": null
+}

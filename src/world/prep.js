@@ -605,6 +605,13 @@ function startPrep(w, opts){
   if(typeof nodeInhabited==="function" && typeof prepCastAmbient==="function" && nodeInhabited(w,w.currentNodeId)){
     prepCastAmbient(w, w.currentNodeId);
   }
+  // A bundle is session-scoped, but a contacted/suspended walk is world history. Freeze any legacy
+  // bundle-backed walk onto its prep node before replacing P.bundle; new nodes below store their walk
+  // directly from birth. This is additive save migration and makes any number of walks resumable.
+  if(P.bundle&&Array.isArray(P.bundle.environments)) Object.keys(P.nodes||{}).forEach(id=>{
+    const pn=P.nodes[id], env=pn&&P.bundle.environments[pn.idx];
+    if(pn&&!pn.walk&&env&&env.walk) pn.walk=env.walk;
+  });
   const bundle=assemblePrepBundle(Object.assign({ world:w }, opts||{}));
   P.session=w.session||0; P.bundle=bundle; P.overlays={}; P.harvest=null;
   const from=w.currentNodeId, m=mapOf(w);
@@ -613,7 +620,8 @@ function startPrep(w, opts){
     // and a slug-of-name collision would resurrect a recycled rumor. Unique id avoids that.
     const id=`frontier-s${w.session||0}-${i}`;
     m.nodes[id]={ id, name:prepNodeLabel(env), type:"Frontier", soft:true, prep:{ env:env.kind, idx:i } };
-    P.nodes[id]={ env:env.kind, idx:i, soft:true, locked:false, hook:env.hook };
+    P.nodes[id]={ env:env.kind, idx:i, soft:true, locked:false, hook:env.hook, walk:env.walk };
+    prepAttachSpatialPlan(w,id);                          // text-first object identity exists before synthesis or any visual mount
     if(from && from!==id && !findEdge(w,from,id)){
       m.edges.push({ from, to:id, soft:true, hook:true, bearing:"?", travelMin:0, leagues:0 });
     }
@@ -789,6 +797,11 @@ function prepAttachSpatialPlan(w, id){
     const plan0=spatializePlan(walk.segments, walk.topology, { walkId:id });
     pn.spatialResidents=pn.spatialResidents||[];
     pn.spatial=semanticizePlan(plan0, walk.segments, pn.spatialResidents);
+    if(typeof bindWalkInteractables==="function" && typeof reconcileWalkInteractableState==="function"){
+      const realms=(typeof activeRealmsFor==="function")?activeRealmsFor(walk.skin,w):null;
+      const projected=bindWalkInteractables(pn.spatial,walk,{walkId:id,realmId:realms&&realms[0]});
+      reconcileWalkInteractableState(pn,projected.interactables||[]);
+    }
   }catch(e){
     pn.spatial=null;   // honest-fail, never a hand-patched plan (mirrors U1/U2's own discipline)
   }
@@ -907,33 +920,37 @@ function spatialRepositionOnTimePass(pn, minutes){
   return positions;
 }
 
-/* DETECTED-EVENTS.md DE-5 — an orphaned walk closes ITSELF the moment a different walk activates.
-   Observable fact: activating walk B overwrites P.activeWalkId (below) with walk A's cursor never
-   `done` — a provenance leak the DM used to have to remember to close with
-   `walk_complete{abandoned:true}`. Only closes an UN-done cursor on a DIFFERENT node than the one
-   about to activate (E13: re-entering the SAME active walk is a no-op short-circuit, not a close).
-   The FINALE case stays declared (WALK-CONSUMPTION's own law) — this only catches abandonment. */
+/* Compatibility-named lifecycle seam: switching walks SUSPENDS the previous one. Abandonment is an
+   explicit story event (`walk_complete{abandoned:true}`), never inferred from attention moving to a
+   different frontier. Cursor/touched/ticked/object/overlay state remains on the prep node. */
 function walkCloseOrphan(w, exceptNodeId){
   const P=prepOf(w);
   if(!P.activeWalkId || P.activeWalkId===exceptNodeId) return null;
   const pn=P.nodes && P.nodes[P.activeWalkId];
   if(!pn || !pn.cursor || pn.cursor.done) return null;
-  return walkComplete(w,{ nodeId:P.activeWalkId, abandoned:true, noPromote:true });
+  pn.walkState="suspended";
+  const c=clockOf(w); pn.suspendedAt={day:c.day,min:c.min};
+  return {ok:true,suspended:P.activeWalkId,current:pn.cursor.current};
 }
 
 /* set the active walk when a frontier is contacted. Idempotent: re-entering a walk the party already
    walks just resumes its cursor. Opens a walkLog entry the provenance report reads (Step C). */
 function walkSetActive(w, nodeId){
-  walkCloseOrphan(w, nodeId);   // DE-5: close any dangling different-walk cursor before this one takes over
+  walkCloseOrphan(w, nodeId);
   const P=prepOf(w), pn=P.nodes&&P.nodes[nodeId], walk=walkOfFrontier(w,nodeId);
   if(!pn || !walk) return {ok:false, reason:"no-walk"};
   P.activeWalkId=nodeId;
   if(!pn.cursor){ const e=walkEntrySeg(walk); pn.cursor={ current:e, touched:[e], done:false }; }
+  if(pn.walkState==="suspended"){
+    const c=clockOf(w); pn.resumedAt={day:c.day,min:c.min};
+  }
+  pn.walkState="active";
   // one walkLog entry per frontier (keyed by nodeId) — created on first contact, updated as it's walked.
   // TRAVEL-WALKS §3 step 5: kind stamps "travel" vs "frontier" so walkProvenanceReport can bucket them.
   if(!P.walkLog.some(l=>l.walkId===nodeId)){
     P.walkLog.push({ walkId:nodeId, env:walk.environment, topology:walk.topology||null, kind:pn.kind||"frontier",
-      segCount:walk.segCount, touched:pn.cursor.touched.slice(), finaleReached:false, session:w.session||0 });
+      segCount:walk.segCount, totalSegments:(walk.segments&&walk.segments.length)||walk.segCount||0,
+      touched:pn.cursor.touched.slice(), finaleReached:false, session:w.session||0 });
   }
   return {ok:true, current:pn.cursor.current};
 }
@@ -941,7 +958,11 @@ function walkSetActive(w, nodeId){
 // sync the open walkLog entry to the live cursor (best-effort; provenance only)
 function walkLogSync(w, nodeId){
   const P=prepOf(w), pn=P.nodes&&P.nodes[nodeId]; if(!pn||!pn.cursor) return;
-  const l=P.walkLog.find(x=>x.walkId===nodeId); if(l) l.touched=pn.cursor.touched.slice();
+  const l=P.walkLog.find(x=>x.walkId===nodeId); if(l){
+    l.touched=pn.cursor.touched.slice();
+    const walk=walkOfFrontier(w,nodeId);
+    if(walk)l.totalSegments=(walk.segments&&walk.segments.length)||walk.segCount||l.segCount||0;
+  }
 }
 
 /* advance the cursor to a segment the party has moved into. Permissive on the target (topologies branch;
@@ -974,6 +995,9 @@ function walkAdvance(w, toSeg, nodeId){
   pn.cursor.current=toSeg;
   if(pn.cursor.touched.indexOf(toSeg)<0) pn.cursor.touched.push(toSeg);
   pn.cursor.tickedSegs.push(toSeg);
+  if(typeof livingSheet==="function"&&typeof restEffectsAdvanceSegment==="function"){
+    const t=livingSheet(w);if(t&&t.sh)restEffectsAdvanceSegment(t.sh,nodeId,toSeg);
+  }
   walkLogSync(w,nodeId);
   if(pn.kind==="travel" && typeof advanceClock==="function"){
     const per=Math.round((pn.travelMin||0)/(walk.segCount||1));
@@ -1008,7 +1032,10 @@ function walkUpdateSegment(w, seg, overlay, nodeId){
 
 /* mark a beat's walk provenance (Step C) — {id,seg} for the active walk, or null. */
 function walkStamp(w){
-  const P=prepOf(w); if(!P.activeWalkId) return null;
+  // Read path: applyEvent calls this before it knows whether an event will be accepted. Using prepOf
+  // here used to create an empty w.prep even for a rejected event, violating failure atomicity on a
+  // vintage save. No active prep store simply means there is no walk provenance to stamp.
+  const P=w&&w.prep; if(!P || !P.activeWalkId) return null;
   const pn=P.nodes&&P.nodes[P.activeWalkId]; if(!pn||!pn.cursor) return null;
   return { id:P.activeWalkId, seg:pn.cursor.current };
 }
@@ -1028,6 +1055,7 @@ function walkComplete(w, opts){
   const pn=P.nodes&&P.nodes[nodeId]; if(!pn) return {ok:false, reason:"no-active-walk"};
   if(pn.kind==="travel"){
     if(pn.cursor) pn.cursor.done=true;
+    pn.walkState=opts.abandoned?"abandoned":"completed";
     const l=P.walkLog.find(x=>x.walkId===nodeId);
     if(l){ l.finaleReached=!opts.abandoned; if(pn.cursor) l.touched=pn.cursor.touched.slice(); }
     P.activeWalkId=null;
@@ -1080,6 +1108,7 @@ function walkComplete(w, opts){
      own mutation check). */
   if(pn.kind==="job"){
     if(pn.cursor) pn.cursor.done=true;
+    pn.walkState=opts.abandoned?"abandoned":"completed";
     const l=P.walkLog.find(x=>x.walkId===nodeId);
     if(l){ l.finaleReached=!opts.abandoned; if(pn.cursor) l.touched=pn.cursor.touched.slice(); }
     P.activeWalkId=null;
@@ -1090,6 +1119,7 @@ function walkComplete(w, opts){
       postingId:pn.postingId, gold:(payout&&payout.gold)||0, payoutApplied:!!(payout&&payout.ok)};
   }
   if(pn.cursor) pn.cursor.done=true;
+  pn.walkState=opts.abandoned?"abandoned":"completed";
   const l=P.walkLog.find(x=>x.walkId===nodeId);
   if(l){ l.finaleReached=!opts.abandoned; if(pn.cursor) l.touched=pn.cursor.touched.slice(); }
   P.activeWalkId=null;

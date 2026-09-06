@@ -1,0 +1,17 @@
+{
+  "turnId": "t-msfkpkrxpjq6g",
+  "narration": "You are carrying leather armor; two daggers; your lute; a backpack; a bedroll; two costumes; five candles total; five days of rations; a waterskin; and a disguise kit. You have 19 gp. The Altered Low Sluice Order is not on you\u2014it remains with Tessa Rill under your burn-signal instruction.",
+  "events": [],
+  "rollRequest": null,
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Display Mira's exact current carried inventory and distinguish the entrusted order from carried possessions.",
+    "ruling": "This is an authoritative state query and should have resolved locally. The router incorrectly sent it as freeform; the bridge DM had to consult full state because the inventory digest omitted three carried entries.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "None; this is a factual display.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 28: mechanization miss. 'What am I carrying right now?' routed freeform, made a model call, and sent inventoryMore:3 instead of an exact local response. Full bridge state was required to answer safely."
+}

@@ -1,0 +1,333 @@
+{
+  "turnId": "t-msg6k5yhimy92",
+  "worldId": "msfjud9ebcves",
+  "action": "I cut two strips from the edge of my bedroll, wrap them over my boots, and cross the loose-gravel passage slowly. I keep one hand on the wall and stop whenever the toll bell moves.",
+  "rolls": [],
+  "digest": {
+    "schema": "beat-digest/v1",
+    "view": "inventory",
+    "slices": [
+      "scene",
+      "pc",
+      "story-pressure",
+      "continuity",
+      "inventory",
+      "item-custody"
+    ],
+    "worldId": "msfjud9ebcves",
+    "worldName": "The Brineglass Reach",
+    "clock": {
+      "day": 1,
+      "min": 795,
+      "band": "afternoon",
+      "exact": "13:15",
+      "session": 0,
+      "knowsTime": false
+    },
+    "location": "Shadowed & Lawless — The water tower platform, 5x10 ft, torchlit (Wandering Torch, Cinderblock Stack, Storm Drain Grate)",
+    "pc": {
+      "id": "msfjud9rbeahy",
+      "name": "Mira Quill",
+      "class": "Bard",
+      "level": 1,
+      "hp": {
+        "cur": 6,
+        "max": 6
+      },
+      "conditions": [],
+      "marks": [
+        {
+          "id": "mk-msfjud9s5npiw",
+          "text": "You were poisoned; your next save against poison has disadvantage.",
+          "kind": "injury",
+          "sinceDay": 0
+        }
+      ],
+      "gold": 19,
+      "inventory": [
+        {
+          "id": "msfjud9rhr2d7",
+          "name": "Leather Armor",
+          "conditions": []
+        },
+        {
+          "id": "msfjud9r7oduu",
+          "name": "Dagger",
+          "qty": 2,
+          "conditions": []
+        },
+        {
+          "id": "msfjud9r36fkx",
+          "name": "Lute",
+          "conditions": []
+        },
+        {
+          "id": "msfjud9rn35kw",
+          "name": "Backpack",
+          "conditions": []
+        },
+        {
+          "id": "msfjud9r0k2m0",
+          "name": "Bedroll",
+          "conditions": []
+        },
+        {
+          "id": "msfjud9rgenzo",
+          "name": "Costume",
+          "qty": 2,
+          "conditions": []
+        },
+        {
+          "id": "msfjud9rqgk9r",
+          "name": "Candle",
+          "qty": 4,
+          "conditions": []
+        },
+        {
+          "id": "msfjud9rujmud",
+          "name": "Rations",
+          "qty": 5,
+          "conditions": []
+        }
+      ],
+      "equipped": {
+        "mainHand": "msfjud9r7oduu",
+        "offHand": null,
+        "armor": "msfjud9rhr2d7"
+      },
+      "equippedWeapons": {
+        "mainHand": {
+          "weaponName": "Dagger",
+          "baseName": "Dagger",
+          "properties": [
+            "Finesse",
+            "Light",
+            "Thrown (Range 20/60)"
+          ],
+          "finesse": true,
+          "ranged": false,
+          "grip": "1h",
+          "magicBonus": 0,
+          "atkBonus": 0,
+          "rider": null,
+          "dmg": [
+            {
+              "n": 1,
+              "die": 4,
+              "bonus": 1,
+              "type": "piercing"
+            }
+          ]
+        },
+        "offHand": null
+      },
+      "inventoryMore": 3
+    },
+    "powers": [
+      {
+        "clockId": "the-crier-s-circle",
+        "faction": "The Crier's Circle",
+        "dominant": true,
+        "agenda": "become something other than what it is",
+        "method": "rumor and propaganda",
+        "tags": [
+          "popular"
+        ],
+        "clock": "1/6"
+      }
+    ],
+    "fronts": [
+      {
+        "clockId": "the-leader-is-corrupt-failing-or-dying-and-the-scramble-to-replace-them-has-begun",
+        "kind": "internal",
+        "danger": "the leader is corrupt, failing, or dying, and the scramble to replace them has begun",
+        "impersonal": null,
+        "clock": "1/6",
+        "closed": true,
+        "dmOnly": {
+          "truth": null,
+          "doom": "displacement — the people scatter"
+        }
+      }
+    ],
+    "recentLedger": [
+      {
+        "type": "outcome",
+        "day": 1,
+        "min": 780,
+        "text": "✦ +1 XP — 219 total."
+      }
+    ],
+    "codex": [
+      {
+        "id": "location:amber-glass-quay",
+        "kind": "location",
+        "name": "Amber-Glass Quay",
+        "fields": {
+          "type": "The water tower platform"
+        },
+        "dm": {
+          "secret": "Gave an individual family perpetual easement over the mill road in exchange for a loan; the loan was repaid; the easement was never revoked; the family is now charging tolls on grounds the town cannot legally contest.",
+          "secretBand": "Grounded",
+          "itemsPool": "realm-items-frontier"
+        }
+      }
+    ],
+    "activeWalk": {
+      "nodeId": "frontier-s0-0",
+      "place": "Shadowed & Lawless",
+      "environment": "urban",
+      "topology": "The Rundown",
+      "skin": {
+        "text": "A specific song is being hummed by strangers who've never met. — The same unfamiliar tune, unconsciously, by people across the district who can't say where they learned it.",
+        "band": "Strange"
+      },
+      "risk": {
+        "danger": "risky",
+        "reward": "good",
+        "stakes": "loot-risk",
+        "trace": "clock",
+        "escapes": [
+          "flee",
+          "environment"
+        ],
+        "clock": {
+          "kind": "heat",
+          "note": "Heat is the default — you're already Burning (Heat 3)."
+        },
+        "promise": "Uncommon: Trident of Fish Command",
+        "telegraphs": [
+          {
+            "kind": "rumor",
+            "text": "Word on the street: Corrupt Guard holds this ground."
+          }
+        ]
+      },
+      "spiceTier": "baseline",
+      "cursor": {
+        "current": 2,
+        "total": 10,
+        "done": false
+      },
+      "segments": [
+        {
+          "num": 2,
+          "label": "Escalation",
+          "isFinale": false,
+          "state": "here",
+          "gist": "The Ambush Funnel / Problem",
+          "reskin": null,
+          "effectDie": null,
+          "light": "lamplit",
+          "dressing": {
+            "text": "Chamber pot behind a board screen.",
+            "condition": "Burned/Scorched"
+          },
+          "atmo": "cold draft",
+          "creatures": null,
+          "surface": null
+        }
+      ],
+      "ambientPresence": null
+    },
+    "itemLegacy": [
+      {
+        "codexId": "item:the-altered-low-sluice-order",
+        "name": "The Altered Low Sluice Order",
+        "lossState": "transferred",
+        "claimant": {
+          "kind": "npc",
+          "name": "Tessa Rill"
+        },
+        "lastSeenAt": "the-cobbled-tannery",
+        "lastSeenDay": 1,
+        "hookId": null,
+        "factionInterest": null,
+        "ench": false
+      },
+      {
+        "codexId": "item:the-first-answer-tube",
+        "name": "The First Answer Tube",
+        "lossState": "transferred",
+        "claimant": {
+          "kind": "npc",
+          "name": "Tessa Rill"
+        },
+        "lastSeenAt": "the-cobbled-tannery",
+        "lastSeenDay": 1,
+        "hookId": null,
+        "factionInterest": null,
+        "ench": false
+      }
+    ],
+    "retrieval": {
+      "omitted": {
+        "codex": 30,
+        "powers": 2,
+        "fronts": 1,
+        "gazetteer": 5
+      },
+      "rule": "Omitted state remains authoritative. Use supplied ids; never invent an omitted fact.",
+      "overTargetBytes": 4349
+    }
+  },
+  "route": {
+    "mode": "freeform-ruling",
+    "reasons": [
+      "open-intent-default"
+    ],
+    "relevantSlices": [
+      "scene",
+      "story-pressure",
+      "relevant-state"
+    ],
+    "modelCall": true
+  },
+  "rulingRequest": {
+    "contractVersion": 1,
+    "kind": "open-intent",
+    "playerAction": "I cut two strips from the edge of my bedroll, wrap them over my boots, and cross the loose-gravel passage slowly. I keep one hand on the wall and stop whenever the toll bell moves.",
+    "principle": "Interpret freely; propose consequences through the engine contract; never mutate state in prose.",
+    "returnFields": [
+      "understoodAction",
+      "ruling",
+      "needsRoll",
+      "proposedCheck",
+      "stakes",
+      "outcomeBranches",
+      "proposedEvents"
+    ],
+    "authority": {
+      "dm": [
+        "intent",
+        "rule-applicability",
+        "difficulty",
+        "advantage-disadvantage",
+        "stakes",
+        "exceptions",
+        "meaning"
+      ],
+      "engine": [
+        "identity",
+        "state",
+        "custody",
+        "dice",
+        "arithmetic",
+        "resources",
+        "clock",
+        "accepted-mutation"
+      ]
+    }
+  },
+  "receipt": null,
+  "lane": "fast",
+  "laneModel": "sonnet",
+  "laneReasons": [
+    "default-fast"
+  ],
+  "narrationBudget": {
+    "targetWords": 60,
+    "maxWords": 75
+  },
+  "lastResolution": null
+}

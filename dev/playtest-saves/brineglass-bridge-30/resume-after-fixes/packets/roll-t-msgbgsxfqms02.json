@@ -1,0 +1,126 @@
+{
+  "request": {
+    "skill": "Persuasion",
+    "ability": "cha",
+    "dc": 14,
+    "adv": "advantage",
+    "branches": {
+      "success": {
+        "narration": "You make him answer each link separately. The consortium was hired under a guard seal; the seal came from a patron he names only as the Pale Office. The drivers unpin their wagons. In their moving mirrors his perfect face becomes a dry skull wearing borrowed color. The workers name you, not him, and close ranks around the rescued families. He abandons the strongbox and retreats along the aqueduct with no formation left to hide inside.",
+        "events": [
+          {
+            "type": "encounter_resolved",
+            "payload": {
+              "foes": [
+                {
+                  "name": "Bandit Captain",
+                  "cr": 2,
+                  "count": 1,
+                  "victimClass": "false noble"
+                }
+              ],
+              "method": "public testimony, separated questions, and the delayed reflection",
+              "objectiveRef": "prevent the false noble from taking credit for the district's rescue",
+              "outcome": "unmasked and driven off without combat"
+            }
+          },
+          {
+            "type": "fact_canonized",
+            "payload": {
+              "factId": "brineglass-pale-office-patron-chain",
+              "what": "The flawless noble's merchant consortium was retained under a guard seal issued through a higher patron called the Pale Office; rescued families and workers publicly credited Mira instead, and his delayed reflection exposed an undead skull beneath his living guise."
+            }
+          }
+        ]
+      },
+      "nearMiss": {
+        "narration": "He admits the consortium received a guard seal and that the seal came from a patron above the guard, but folds the name beneath applause before you can prise it loose. The rescued families keep shouting yours. Half the workers answer; half accept his wagons and easy story. His delayed reflection watches you while his face bows. He leaves with the strongbox, unable to erase you but still carrying part of the victory away.",
+        "events": [
+          {
+            "type": "encounter_resolved",
+            "payload": {
+              "foes": [
+                {
+                  "name": "Bandit Captain",
+                  "cr": 2,
+                  "count": 1,
+                  "victimClass": "false noble"
+                }
+              ],
+              "method": "contested public testimony",
+              "objectiveRef": "prevent the false noble from taking credit for the district's rescue",
+              "outcome": "partly exposed; withdrew with the strongbox"
+            }
+          },
+          {
+            "type": "fact_canonized",
+            "payload": {
+              "factId": "brineglass-guard-seal-patron-chain",
+              "what": "The merchant consortium admitted it was retained under a guard seal issued by an unnamed higher patron; rescued families publicly credited Mira, though the false noble preserved part of his claim and left with the strongbox."
+            }
+          }
+        ]
+      },
+      "fail": {
+        "narration": "He turns your refusal into an accusation: the strongbox was stolen, the panic was yours, and only his wagons restored order. The rescued mason objects. A driver strikes him down with a whip. The noble's delayed reflection tears free as a skull-shaped shadow while the wagons lock wheel to wheel. The families are behind you, the water channel and road back remain open, and he orders his formation to take you alive.",
+        "events": [
+          {
+            "type": "combat_start",
+            "payload": {
+              "foes": [
+                {
+                  "name": "Bandit Captain",
+                  "count": 1,
+                  "role": "undead false noble"
+                }
+              ],
+              "objectiveRef": "protect the rescued families and expose the false noble",
+              "segmentId": "s11",
+              "scene": {
+                "cover": [
+                  "merchant wagons",
+                  "aqueduct parapet"
+                ],
+                "hazards": [
+                  "wagon wheels",
+                  "twenty-five-foot drop"
+                ],
+                "exits": [
+                  "water channel",
+                  "road back through the district"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "result": {
+    "ok": true,
+    "resolvedLocally": true,
+    "liveResolutionNeeded": false,
+    "pending": null,
+    "recovered": false,
+    "resolution": {
+      "turnId": "t-msgbgsxfqms02",
+      "skill": "Persuasion",
+      "total": 19,
+      "degree": "success",
+      "branch": "success"
+    },
+    "branchNarration": "You make him answer each link separately. The consortium was hired under a guard seal; the seal came from a patron he names only as the Pale Office. The drivers unpin their wagons. In their moving mirrors his perfect face becomes a dry skull wearing borrowed color. The workers name you, not him, and close ranks around the rescued families. He abandons the strongbox and retreats along the aqueduct with no formation left to hide inside.",
+    "newLedger": [
+      "✦ Encounter unmasked and driven off without combat (public testimony, separated questions, and the delayed reflection) — 1 foe.",
+      "✦ +281 XP — 1734 total.",
+      "◆ The flawless noble's merchant consortium was retained under a guard seal issued through a higher patron called the Pale Office; rescued families and workers publicly credited Mira instead, and his delayed reflection exposed an undead skull beneath his living guise.",
+      "✦ +1 XP — 1735 total."
+    ],
+    "pc": {
+      "name": "Mira Quill",
+      "hp": "6/12",
+      "conditions": [],
+      "status": "living"
+    }
+  }
+}

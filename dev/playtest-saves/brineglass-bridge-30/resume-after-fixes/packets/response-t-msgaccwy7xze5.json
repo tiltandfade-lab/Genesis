@@ -1,0 +1,42 @@
+{
+  "turnId": "t-msgaccwy7xze5",
+  "narration": "You abandon the hasp and take the louder truth. The packet opens across the belfry clapper; each peal snaps names and payment columns into the torchlight. Windows rise before the office door opens. You are already crossing the west roof when the next courtyard flares orange—a warehouse top floor burning above trapped stables. Behind you, the orders keep ringing without you.",
+  "ruling": {
+    "understoodAction": "Mira accepts the failed cage attempt, publishes by the existing belfry affordance, and returns through the west exit to segment 4.",
+    "ruling": "No repeated lock check is required; the loud method exposes the evidence and the generated return room becomes the next situation.",
+    "needsRoll": false,
+    "stakes": "The evidence is public, while a burning building now demands a choice."
+  },
+  "events": [
+    {
+      "type": "item_transfer",
+      "source": "declared",
+      "payload": {
+        "itemId": "msg89nxu08g6s",
+        "to": {
+          "kind": "object",
+          "ref": "walk:frontier-s0-0:s5:alley-belfry",
+          "name": "the alley belfry"
+        },
+        "intent": "place",
+        "note": "Mira ties her entire packet of Venn’s void orders to the alley belfry clapper for every window to see and keeps no secret copy."
+      }
+    },
+    {
+      "type": "fact_canonized",
+      "source": "declared",
+      "payload": {
+        "factId": "brineglass-void-orders-public-belfry",
+        "what": "Mira published her entire packet of Venn’s void orders from the alley belfry, keeping no secret copy."
+      }
+    },
+    {
+      "type": "walk_advance",
+      "source": "declared",
+      "payload": {
+        "nodeId": "frontier-s0-0",
+        "toSeg": 4
+      }
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "request": {
+    "skill": "Stealth",
+    "ability": "dex",
+    "dc": 13,
+    "adv": null
+  },
+  "result": {
+    "ok": true,
+    "resolvedLocally": false,
+    "liveResolutionNeeded": true,
+    "pending": {
+      "action": "(I roll Stealth: 18)",
+      "rolls": [
+        {
+          "label": "Stealth",
+          "die": "d20",
+          "result": 15,
+          "mods": "+1 +2 prof",
+          "total": 18,
+          "adv": null,
+          "pair": null
+        }
+      ]
+    },
+    "recovered": false,
+    "resolution": null,
+    "branchNarration": null,
+    "newLedger": [],
+    "pc": {
+      "name": "Mira Quill",
+      "hp": "6/6",
+      "conditions": [],
+      "status": "living"
+    }
+  }
+}

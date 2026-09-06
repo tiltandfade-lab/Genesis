@@ -1,0 +1,35 @@
+{
+  "turnId": "t-msgbrqv59c24a",
+  "narration": "The hour closes four points of hurt; you rise steadier at ten of twelve. The lantern-room door is still barred from within, yet fresh salt chalk marks its outside lintel: an open eye crossed by the same three broken strokes the district hummed. No footprint approaches it. A worker recognizes none of their signs. Whoever made it knew where you stopped, but has not shown whether the mark guides a watcher, a spell, or both.",
+  "events": [
+    {
+      "type": "codex_add",
+      "payload": {
+        "id": "thread:brineglass-lantern-room-tracking-mark",
+        "kind": "thread",
+        "name": "The Lantern-Room Tracking Mark",
+        "fields": {
+          "summary": "A fresh salt-chalk open eye crossed by three broken musical strokes appeared outside Mira's internally barred rest room; local workers do not recognize it."
+        },
+        "dm": {
+          "truth": "The engine establishes that Mira is being tracked, but the tracker and whether the mark is mundane, magical, or both remain unresolved.",
+          "want": "lead its watcher to Mira's next exposed stop"
+        },
+        "status": {
+          "at": "frontier-s0-0",
+          "known": true,
+          "soft": false
+        }
+      },
+      "source": "declared"
+    },
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "factId": "brineglass-lantern-room-tracking-mark",
+        "what": "During Mira's post-rescue rest, an unknown hand marked the outside of her internally barred lantern room with a salt-chalk eye and three broken musical strokes; the local workers did not recognize the sign."
+      },
+      "source": "declared"
+    }
+  ]
+}

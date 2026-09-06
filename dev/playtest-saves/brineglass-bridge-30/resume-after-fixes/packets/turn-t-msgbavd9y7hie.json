@@ -1,0 +1,406 @@
+{
+  "turnId": "t-msgbavd9y7hie",
+  "worldId": "msfjud9ebcves",
+  "action": "I do not draw steel. I point to the noble’s delayed reflection and tell the rescued families exactly who timed their line. Then I ask him, loudly enough for the workers to hear, who hired his consortium and who hired that patron. I will not accept the strongbox or let him take the credit.",
+  "rolls": [],
+  "digest": {
+    "schema": "beat-digest/v1",
+    "view": "social",
+    "slices": [
+      "scene",
+      "pc",
+      "story-pressure",
+      "continuity",
+      "social",
+      "inventory",
+      "item-custody",
+      "local-actors"
+    ],
+    "worldId": "msfjud9ebcves",
+    "worldName": "The Brineglass Reach",
+    "clock": {
+      "day": 1,
+      "min": 1236,
+      "band": "night",
+      "exact": "20:36",
+      "session": 0,
+      "knowsTime": false
+    },
+    "location": "Shadowed & Lawless — segment 11: Pit Trap Room, 30' x 30' square, lamplit",
+    "pc": {
+      "id": "msfjud9rbeahy",
+      "name": "Mira Quill",
+      "class": "Bard",
+      "level": 3,
+      "hp": {
+        "cur": 6,
+        "max": 12
+      },
+      "conditions": [],
+      "marks": [
+        {
+          "id": "mk-msfjud9s5npiw",
+          "text": "You were poisoned; your next save against poison has disadvantage.",
+          "kind": "injury",
+          "sinceDay": 0
+        }
+      ],
+      "gold": 19,
+      "mods": {
+        "str": -3,
+        "dex": 1,
+        "con": -2,
+        "int": 0,
+        "wis": -2,
+        "cha": 2
+      },
+      "skillProfs": [
+        "Deception",
+        "Sleight of Hand",
+        "Perception",
+        "Performance",
+        "Persuasion",
+        "Insight",
+        "Investigation",
+        "Stealth"
+      ],
+      "inventory": [
+        {
+          "id": "msfjud9rhr2d7",
+          "name": "Leather Armor"
+        },
+        {
+          "id": "msfjud9r7oduu",
+          "name": "Dagger",
+          "qty": 2
+        },
+        {
+          "id": "msfjud9r36fkx",
+          "name": "Lute"
+        },
+        {
+          "id": "msfjud9rn35kw",
+          "name": "Backpack"
+        },
+        {
+          "id": "msfjud9r0k2m0",
+          "name": "Bedroll"
+        },
+        {
+          "id": "msfjud9rgenzo",
+          "name": "Costume",
+          "qty": 1
+        },
+        {
+          "id": "msfjud9rqgk9r",
+          "name": "Candle",
+          "qty": 3
+        },
+        {
+          "id": "msfjud9rujmud",
+          "name": "Rations",
+          "qty": 5
+        }
+      ],
+      "equipped": {
+        "mainHand": "msfjud9r7oduu",
+        "offHand": null,
+        "armor": "msfjud9rhr2d7"
+      },
+      "inventoryMore": 3
+    },
+    "powers": [
+      {
+        "clockId": "the-crier-s-circle",
+        "faction": "The Crier's Circle",
+        "dominant": true,
+        "agenda": "become something other than what it is",
+        "method": "rumor and propaganda",
+        "tags": [
+          "popular"
+        ],
+        "clock": "3/6"
+      }
+    ],
+    "fronts": [
+      {
+        "clockId": "a-blight-or-plague-is-spreading-toward-the-town",
+        "kind": "external",
+        "danger": "a blight or plague is spreading toward the town",
+        "impersonal": "wildfire",
+        "clock": "0/6",
+        "closed": false,
+        "dmOnly": {
+          "truth": null,
+          "doom": "displacement — the people scatter"
+        }
+      }
+    ],
+    "recentLedger": [
+      {
+        "type": "canon",
+        "day": 1,
+        "min": 1221,
+        "text": "◆ Mira read the madness cascade’s real intervals and timed the rescue line that extracted a mason and two children before the wall fell.",
+        "matched": true
+      }
+    ],
+    "codex": [
+      {
+        "id": "npc:captain-ilyra-venn",
+        "kind": "npc",
+        "name": "Captain Ilyra Venn",
+        "fields": {
+          "copiesMade": 3
+        },
+        "dm": {
+          "truth": "Venn helped operate the command-key void until the courier report made her understand that the victims’ stolen voices were feeding it.",
+          "want": "survive long enough to publish every order",
+          "notes": [
+            {
+              "text": "Venn gives Mira one packet, retains one, and sends the courier with the third.",
+              "day": 1,
+              "min": 856
+            }
+          ]
+        }
+      }
+    ],
+    "activeWalk": {
+      "nodeId": "frontier-s0-0",
+      "place": "Shadowed & Lawless",
+      "environment": "urban",
+      "topology": "The Rundown",
+      "skin": {
+        "text": "A specific song is being hummed by strangers who've never met. — The same unfamiliar tune, unconsciously, by people across the district who can't say where they learned it.",
+        "band": "Strange"
+      },
+      "risk": {
+        "danger": "risky",
+        "reward": "good",
+        "stakes": "loot-risk",
+        "trace": "clock",
+        "escapes": [
+          "flee",
+          "environment"
+        ],
+        "clock": {
+          "kind": "heat",
+          "note": "Heat is the default — you're already Burning (Heat 3)."
+        },
+        "promise": "Uncommon: Trident of Fish Command",
+        "telegraphs": [
+          {
+            "kind": "rumor",
+            "text": "Word on the street: Corrupt Guard holds this ground."
+          }
+        ]
+      },
+      "spiceTier": "baseline",
+      "cursor": {
+        "current": 11,
+        "total": 11,
+        "done": false
+      },
+      "segments": [
+        {
+          "num": 10,
+          "label": "Escalation",
+          "isFinale": false,
+          "state": "behind",
+          "approach": true,
+          "gist": "The Madness Cascade / Spectacle",
+          "scene": {
+            "type": "The Madness Cascade",
+            "description": "Reality becomes unreliable; physics fails, impossible geometry manifests, and minds break under the weight of wrongness."
+          },
+          "area": {
+            "type": "Tower Roof",
+            "dims": "30' diameter open",
+            "side": "10' x 10' enclosed trapdoor housing."
+          },
+          "encounter": {
+            "type": "Spectacle",
+            "text": "A building is actively collapsing— stone and timber falling into the street, people screaming (rescue workers are forming a line but civilians are still trapped inside)",
+            "isEnemy": false,
+            "composition": null,
+            "tactic": null
+          },
+          "finale": null,
+          "reward": null,
+          "resolution": {
+            "state": "resolved",
+            "method": "three-cycle observation and lute-timed rescue line",
+            "outcome": "civilians rescued; cage remained shut",
+            "objectiveRef": "extract civilians without entering the madness cascade"
+          },
+          "interactable": {
+            "name": "Caged Exotic Beast",
+            "flavor": null,
+            "tags": [
+              "Hazard",
+              "Distraction"
+            ],
+            "signal": "Loud",
+            "visibility": "Obvious"
+          },
+          "footing": {
+            "name": "Dense Rubble",
+            "impact": "Collapsed masonry. _Difficult Terrain_. Increases the DC of Dexterity (Acrobatics) checks by 5, and Stealth checks by 2."
+          },
+          "reskin": {
+            "ref": "S10",
+            "encounterState": "resolved",
+            "encounterResolution": {
+              "method": "three-cycle observation and lute-timed rescue line",
+              "outcome": "civilians rescued; cage remained shut",
+              "objectiveRef": "extract civilians without entering the madness cascade"
+            }
+          },
+          "effectDie": null,
+          "light": "lamplit",
+          "dressing": {
+            "text": "Damp streak down a wall with mineral bloom.",
+            "condition": "Tampered"
+          },
+          "atmo": "metallic smell",
+          "creatures": null,
+          "surface": null
+        },
+        {
+          "num": 11,
+          "label": "Breaking Point",
+          "isFinale": true,
+          "state": "here",
+          "gist": "Combat",
+          "scene": null,
+          "area": {
+            "type": "Pit Trap Room",
+            "dims": "30' x 30' square",
+            "side": "20' x 20' central pit; 10' x 10' control room attached."
+          },
+          "encounter": null,
+          "finale": {
+            "track": "Combat",
+            "revelation": "The culprit was hired by someone above them — and that person was hired by someone else; the chain goes higher than the party can currently reach.",
+            "exitState": "Someone else claims the victory — a local noble, the city guard, a merchant consortium. Your name fades while others grow fat on the credit. The district celebrates the wrong heroes.",
+            "sceneFrame": {
+              "frame": "Aqueduct Wall",
+              "dims": "5' x 120' wall",
+              "tactical": "25' drop; water channel on inside (narrow, DC 10 to balance)."
+            },
+            "boss": {
+              "archetype": "Lich pretending to be living noble (undead hidden beneath perfection; unmasking changes fight entirely)",
+              "creature": "Bandit Captain",
+              "threatId": "Corrupt Guard"
+            },
+            "tacticalSetup": "Merchant wagon formation — three-four large wagons in defensive circle, wooden sides (half cover), wheels and undercarriage (hazard to crawl under), drivers can crack whips as improvised weapons, mobile if someone takes reins",
+            "keyNpc": null,
+            "narrativeDevice": null,
+            "catalystCallback": null,
+            "macguffin": null
+          },
+          "reward": {
+            "magic": {
+              "rarity": "Uncommon",
+              "name": "Trident of Fish Command",
+              "desc": "This magic weapon has 3 charges, and it regains 1d3 expended charges daily at dawn. _(Weapon (Trident), attunement; SRD p.249)_"
+            },
+            "coin": "40 gp + 1 gem (10 gp)",
+            "valuable": null,
+            "frame": "stash/lockbox/strongbox"
+          },
+          "resolution": null,
+          "interactable": null,
+          "footing": null,
+          "reskin": null,
+          "effectDie": null,
+          "light": "lamplit",
+          "dressing": null,
+          "atmo": null,
+          "creatures": null,
+          "surface": null
+        }
+      ],
+      "ambientPresence": null
+    },
+    "levelUp": {
+      "status": "pending",
+      "from": 1,
+      "to": 3,
+      "cantrips": 0,
+      "spells": 2,
+      "asiCount": 0,
+      "subclassName": "College of Lore"
+    },
+    "retrieval": {
+      "omitted": {
+        "codex": 32,
+        "powers": 1,
+        "fronts": 1,
+        "gazetteer": 5
+      },
+      "rule": "Omitted state remains authoritative. Use supplied ids; never invent an omitted fact.",
+      "overTargetBytes": 6833
+    }
+  },
+  "route": {
+    "mode": "freeform-ruling",
+    "reasons": [
+      "open-intent-default"
+    ],
+    "relevantSlices": [
+      "scene",
+      "story-pressure",
+      "relevant-state"
+    ],
+    "modelCall": true
+  },
+  "rulingRequest": {
+    "contractVersion": 1,
+    "kind": "open-intent",
+    "playerAction": "I do not draw steel. I point to the noble’s delayed reflection and tell the rescued families exactly who timed their line. Then I ask him, loudly enough for the workers to hear, who hired his consortium and who hired that patron. I will not accept the strongbox or let him take the credit.",
+    "principle": "Interpret freely; propose consequences through the engine contract; never mutate state in prose.",
+    "returnFields": [
+      "understoodAction",
+      "ruling",
+      "needsRoll",
+      "proposedCheck",
+      "stakes",
+      "outcomeBranches",
+      "proposedEvents"
+    ],
+    "authority": {
+      "dm": [
+        "intent",
+        "rule-applicability",
+        "difficulty",
+        "advantage-disadvantage",
+        "stakes",
+        "exceptions",
+        "meaning"
+      ],
+      "engine": [
+        "identity",
+        "state",
+        "custody",
+        "dice",
+        "arithmetic",
+        "resources",
+        "clock",
+        "accepted-mutation"
+      ]
+    }
+  },
+  "receipt": null,
+  "lane": "deep",
+  "laneModel": "opus",
+  "laneReasons": [
+    "walk-finale"
+  ],
+  "narrationBudget": {
+    "targetWords": 110,
+    "maxWords": 160
+  },
+  "lastResolution": null
+}

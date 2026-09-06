@@ -1,0 +1,47 @@
+{
+  "turnId": "t-msfkqhtlqcd0k",
+  "narration": "Katherine thinks for exactly one breath. \u201cThe Living-First Song,\u201d she declares. \u201cAnd Katherine Holloway named it.\u201d Tessa mounts the altered order beneath a clear pane at the shelter entrance, with her two comparison samples beside it so no future official can separate evidence from explanation. William repeats your refrain until he can carry every word, then sets out into the rain; for once his road-work is making peace rather than collecting a debt. Naivara removes an unsealed lacquered tube from inside the old naval coat and offers it to you with the right hand. \u201cA new Circle should begin with a device that cannot speak until someone living answers it.\u201d",
+  "events": [
+    {
+      "type": "codex_update",
+      "payload": {
+        "id": "item:the-altered-low-sluice-order",
+        "fields": {
+          "publicRecord": "Displayed at the restored Low Sluice shelter with Tessa Rill's blinded handwriting comparison."
+        },
+        "note": "Mira leaves the order in Tessa Rill's custody as a public record rather than reclaiming it."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    },
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "factId": "brineglass:living-first-song",
+        "what": "Katherine Holloway named the communal evacuation refrain 'The Living-First Song'; William Sallow carried it to the other shelters before the public succession."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    }
+  ],
+  "gen": [
+    {
+      "kind": "item",
+      "opts": {
+        "name": "The First Answer Tube"
+      }
+    }
+  ],
+  "rollRequest": null,
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Let the community name and preserve the victory, formalize Tessa's custody of the order, and send William to spread the authenticated living version.",
+    "ruling": "Each request aligns with established NPC motives and the resolved crisis. The offered keepsake is minted only now, from the relationship and protocol that created it.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "The local resolution becomes portable public memory; Mira may accept or decline the new tube.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 29: relationship-rooted aftermath and reward. Digest retrieved William but omitted explicitly named Katherine and Tessa again; continuity required conversation memory."
+}

@@ -204,29 +204,35 @@ function walkProvenanceReport(w){
   const jobLog=log.filter(l=>l.kind==="job");
   const planned=(P.bundle&&P.bundle.environments)?P.bundle.environments.length:0;
   const walked=frontierLog.length;
-  const segs=frontierLog.reduce((a,l)=>({ touched:a.touched+((l.touched||[]).length), total:a.total+(l.segCount||0) }), {touched:0,total:0});
-  const travelSegs=travelLog.reduce((a,l)=>({ touched:a.touched+((l.touched||[]).length), total:a.total+(l.segCount||0) }), {touched:0,total:0});
-  const jobSegs=jobLog.reduce((a,l)=>({ touched:a.touched+((l.touched||[]).length), total:a.total+(l.segCount||0) }), {touched:0,total:0});
+  // `segCount` is the rollers' non-finale authoring budget. Old walk-log rows therefore undercount
+  // the appended finale/arrival by one. Derive the actual graph total when available; the explicit
+  // additive totalSegments keeps newer rows self-describing without rewriting old saves.
+  const actualTotal=l=>{
+    const pn=P.nodes&&P.nodes[l.walkId], walk=pn&&pn.walk;
+    return (walk&&walk.segments&&walk.segments.length)||l.totalSegments||l.segCount||0;
+  };
+  const foldSegs=rows=>rows.reduce((a,l)=>({touched:a.touched+((l.touched||[]).length),total:a.total+actualTotal(l)}),{touched:0,total:0});
+  const segs=foldSegs(frontierLog), travelSegs=foldSegs(travelLog), jobSegs=foldSegs(jobLog);
   return {
     session:P.session||0,
     planned, walked,                                                   // e.g. 3 rolled, 1 actually walked
     finales:frontierLog.filter(l=>l.finaleReached).length,
     segmentsTouched:segs.touched, segmentsRolled:segs.total,
     consumption: segs.total ? Math.round((segs.touched/segs.total)*100)/100 : 0,   // 0..1 — the headline ratio
-    walks: frontierLog.map(l=>({ env:l.env, topology:l.topology, ran:`${(l.touched||[]).length}/${l.segCount}`, finale:!!l.finaleReached })),
+    walks: frontierLog.map(l=>({ env:l.env, topology:l.topology, ran:`${(l.touched||[]).length}/${actualTotal(l)}`, finale:!!l.finaleReached })),
     travel: {
       count: travelLog.length,
       arrivals: travelLog.filter(l=>l.finaleReached).length,
       segmentsTouched: travelSegs.touched, segmentsRolled: travelSegs.total,
       consumption: travelSegs.total ? Math.round((travelSegs.touched/travelSegs.total)*100)/100 : 0,
-      trips: travelLog.map(l=>({ ran:`${(l.touched||[]).length}/${l.segCount}`, arrived:!!l.finaleReached })),
+      trips: travelLog.map(l=>({ ran:`${(l.touched||[]).length}/${actualTotal(l)}`, arrived:!!l.finaleReached })),
     },
     job: {
       count: jobLog.length,
       completions: jobLog.filter(l=>l.finaleReached).length,
       segmentsTouched: jobSegs.touched, segmentsRolled: jobSegs.total,
       consumption: jobSegs.total ? Math.round((jobSegs.touched/jobSegs.total)*100)/100 : 0,
-      jobs: jobLog.map(l=>({ ran:`${(l.touched||[]).length}/${l.segCount}`, completed:!!l.finaleReached })),
+      jobs: jobLog.map(l=>({ ran:`${(l.touched||[]).length}/${actualTotal(l)}`, completed:!!l.finaleReached })),
     },
   };
 }

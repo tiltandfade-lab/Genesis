@@ -1,0 +1,420 @@
+{
+  "turnId": "t-msgb4o3qiohpp",
+  "worldId": "msfjud9ebcves",
+  "action": "I do not open the cage or enter the collapsing building. I watch three cycles of the impossible masonry from the rescue line, then use my lute as a timing signal: workers pull only on the beat when the falling direction is real, and stop if my pattern breaks.",
+  "rolls": [],
+  "digest": {
+    "schema": "beat-digest/v1",
+    "view": "inventory",
+    "slices": [
+      "scene",
+      "pc",
+      "story-pressure",
+      "continuity",
+      "inventory",
+      "item-custody"
+    ],
+    "worldId": "msfjud9ebcves",
+    "worldName": "The Brineglass Reach",
+    "clock": {
+      "day": 1,
+      "min": 1221,
+      "band": "night",
+      "exact": "20:21",
+      "session": 0,
+      "knowsTime": false
+    },
+    "location": "Shadowed & Lawless — segment 10: The Madness Cascade, Tower Roof, 30' diameter open, lamplit",
+    "pc": {
+      "id": "msfjud9rbeahy",
+      "name": "Mira Quill",
+      "class": "Bard",
+      "level": 3,
+      "hp": {
+        "cur": 6,
+        "max": 12
+      },
+      "conditions": [],
+      "marks": [
+        {
+          "id": "mk-msfjud9s5npiw",
+          "text": "You were poisoned; your next save against poison has disadvantage.",
+          "kind": "injury",
+          "sinceDay": 0
+        }
+      ],
+      "gold": 19,
+      "inventory": [
+        {
+          "id": "msfjud9r36fkx",
+          "name": "Lute"
+        },
+        {
+          "id": "msfjud9rhr2d7",
+          "name": "Leather Armor"
+        },
+        {
+          "id": "msfjud9r7oduu",
+          "name": "Dagger",
+          "qty": 2
+        },
+        {
+          "id": "msfjud9rn35kw",
+          "name": "Backpack"
+        },
+        {
+          "id": "msfjud9r0k2m0",
+          "name": "Bedroll"
+        },
+        {
+          "id": "msfjud9rgenzo",
+          "name": "Costume",
+          "qty": 1
+        },
+        {
+          "id": "msfjud9rqgk9r",
+          "name": "Candle",
+          "qty": 3
+        },
+        {
+          "id": "msfjud9rujmud",
+          "name": "Rations",
+          "qty": 5
+        }
+      ],
+      "equipped": {
+        "mainHand": "msfjud9r7oduu",
+        "offHand": null,
+        "armor": "msfjud9rhr2d7"
+      },
+      "equippedWeapons": {
+        "mainHand": {
+          "weaponName": "Dagger",
+          "baseName": "Dagger",
+          "properties": [
+            "Finesse",
+            "Light",
+            "Thrown (Range 20/60)"
+          ],
+          "finesse": true,
+          "ranged": false,
+          "grip": "1h",
+          "magicBonus": 0,
+          "atkBonus": 0,
+          "rider": null,
+          "dmg": [
+            {
+              "n": 1,
+              "die": 4,
+              "bonus": 1,
+              "type": "piercing"
+            }
+          ]
+        },
+        "offHand": null
+      },
+      "inventoryMore": 3
+    },
+    "powers": [
+      {
+        "clockId": "the-crier-s-circle",
+        "faction": "The Crier's Circle",
+        "dominant": true,
+        "agenda": "become something other than what it is",
+        "method": "rumor and propaganda",
+        "tags": [
+          "popular"
+        ],
+        "clock": "3/6"
+      }
+    ],
+    "fronts": [
+      {
+        "clockId": "a-blight-or-plague-is-spreading-toward-the-town",
+        "kind": "external",
+        "danger": "a blight or plague is spreading toward the town",
+        "impersonal": "wildfire",
+        "clock": "0/6",
+        "closed": false,
+        "dmOnly": {
+          "truth": null,
+          "doom": "displacement — the people scatter"
+        }
+      }
+    ],
+    "recentLedger": [
+      {
+        "type": "outcome",
+        "day": 1,
+        "min": 1206,
+        "text": "✦ Encounter safe route marked and crossed (probed the illusionary floor from trusted rubble with the abandoned halberd) — 0 foes."
+      }
+    ],
+    "codex": [
+      {
+        "id": "item:copies-of-venns-void-orders",
+        "kind": "item",
+        "name": "Copies of Venn’s Void Orders",
+        "fields": {
+          "summary": "An oilskin packet of copied guard orders naming voice-collection sites, payments, and use of the three-note command key on occupied rooms."
+        },
+        "dm": {
+          "truth": "Venn made three copies: Mira carries one, Venn retains one, and the courier carries the third toward another public record."
+        }
+      }
+    ],
+    "activeWalk": {
+      "nodeId": "frontier-s0-0",
+      "place": "Shadowed & Lawless",
+      "environment": "urban",
+      "topology": "The Rundown",
+      "skin": {
+        "text": "A specific song is being hummed by strangers who've never met. — The same unfamiliar tune, unconsciously, by people across the district who can't say where they learned it.",
+        "band": "Strange"
+      },
+      "risk": {
+        "danger": "risky",
+        "reward": "good",
+        "stakes": "loot-risk",
+        "trace": "clock",
+        "escapes": [
+          "flee",
+          "environment"
+        ],
+        "clock": {
+          "kind": "heat",
+          "note": "Heat is the default — you're already Burning (Heat 3)."
+        },
+        "promise": "Uncommon: Trident of Fish Command",
+        "telegraphs": [
+          {
+            "kind": "rumor",
+            "text": "Word on the street: Corrupt Guard holds this ground."
+          }
+        ]
+      },
+      "spiceTier": "baseline",
+      "cursor": {
+        "current": 10,
+        "total": 10,
+        "done": false
+      },
+      "segments": [
+        {
+          "num": 9,
+          "label": "Event Scene",
+          "isFinale": false,
+          "state": "behind",
+          "approach": true,
+          "gist": "The Convergence of Infinite Threads / Hazard",
+          "scene": {
+            "type": "The Convergence of Infinite Threads",
+            "description": "A moment where all factions, powers, timelines, and possibilities gather in one space; what happens here echoes across realities."
+          },
+          "area": {
+            "type": "Laboratory",
+            "dims": "30' x 30' square",
+            "side": "10' x 10' reinforced containment cell."
+          },
+          "encounter": {
+            "type": "Hazard",
+            "text": "Alchemical/Magical: Illusionary Wall / Floor: A magical prank hides a brick wall or open sewer grate. DC 15 Investigation to discern. Failure means walking face-first into brick or falling 10 feet.",
+            "isEnemy": false,
+            "composition": null,
+            "tactic": null
+          },
+          "resolution": {
+            "state": "resolved",
+            "method": "probed the illusionary floor from trusted rubble with the abandoned halberd",
+            "outcome": "safe route marked and crossed",
+            "objectiveRef": "cross the false laboratory floor without falling"
+          },
+          "interactable": {
+            "name": "guard's halberd",
+            "flavor": null,
+            "tags": [
+              "Resource",
+              "Clue"
+            ],
+            "signal": "Moderate",
+            "visibility": "Obvious"
+          },
+          "footing": {
+            "name": "Light Debris / Rubble",
+            "impact": "Discarded junk. Counts as _Difficult Terrain_ and increases the DC of Dexterity (Acrobatics) checks by 2."
+          },
+          "reskin": {
+            "ref": "S9",
+            "encounterState": "resolved",
+            "encounterResolution": {
+              "method": "probed the illusionary floor from trusted rubble with the abandoned halberd",
+              "outcome": "safe route marked and crossed",
+              "objectiveRef": "cross the false laboratory floor without falling"
+            }
+          },
+          "effectDie": null,
+          "light": "torchlit",
+          "dressing": {
+            "text": "Damp streak down a wall with mineral bloom.",
+            "condition": "Uncanny"
+          },
+          "atmo": "downdraft, strong",
+          "creatures": null,
+          "surface": null
+        },
+        {
+          "num": 10,
+          "label": "Escalation",
+          "isFinale": false,
+          "state": "here",
+          "gist": "The Madness Cascade / Spectacle",
+          "scene": {
+            "type": "The Madness Cascade",
+            "description": "Reality becomes unreliable; physics fails, impossible geometry manifests, and minds break under the weight of wrongness."
+          },
+          "area": {
+            "type": "Tower Roof",
+            "dims": "30' diameter open",
+            "side": "10' x 10' enclosed trapdoor housing."
+          },
+          "encounter": {
+            "type": "Spectacle",
+            "text": "A building is actively collapsing— stone and timber falling into the street, people screaming (rescue workers are forming a line but civilians are still trapped inside)",
+            "isEnemy": false,
+            "composition": null,
+            "tactic": null
+          },
+          "resolution": null,
+          "interactable": {
+            "name": "Caged Exotic Beast",
+            "flavor": null,
+            "tags": [
+              "Hazard",
+              "Distraction"
+            ],
+            "signal": "Loud",
+            "visibility": "Obvious"
+          },
+          "footing": {
+            "name": "Dense Rubble",
+            "impact": "Collapsed masonry. _Difficult Terrain_. Increases the DC of Dexterity (Acrobatics) checks by 5, and Stealth checks by 2."
+          },
+          "reskin": null,
+          "effectDie": null,
+          "light": "lamplit",
+          "dressing": {
+            "text": "Damp streak down a wall with mineral bloom.",
+            "condition": "Tampered"
+          },
+          "atmo": "metallic smell",
+          "creatures": null,
+          "surface": null
+        },
+        {
+          "num": 11,
+          "label": "Breaking Point",
+          "isFinale": true,
+          "state": "ahead",
+          "approach": true,
+          "gist": "Combat",
+          "scene": null,
+          "area": {
+            "type": "Pit Trap Room",
+            "dims": "30' x 30' square",
+            "side": "20' x 20' central pit; 10' x 10' control room attached."
+          },
+          "encounter": null,
+          "resolution": null,
+          "interactable": null,
+          "footing": null,
+          "reskin": null,
+          "effectDie": null,
+          "light": "lamplit",
+          "dressing": null,
+          "atmo": null,
+          "creatures": null,
+          "surface": null
+        }
+      ],
+      "ambientPresence": null
+    },
+    "levelUp": {
+      "status": "pending",
+      "from": 1,
+      "to": 3,
+      "cantrips": 0,
+      "spells": 2,
+      "asiCount": 0,
+      "subclassName": "College of Lore"
+    },
+    "retrieval": {
+      "omitted": {
+        "codex": 32,
+        "powers": 2,
+        "fronts": 1,
+        "gazetteer": 5
+      },
+      "rule": "Omitted state remains authoritative. Use supplied ids; never invent an omitted fact.",
+      "overTargetBytes": 6785
+    }
+  },
+  "route": {
+    "mode": "freeform-ruling",
+    "reasons": [
+      "open-intent-default"
+    ],
+    "relevantSlices": [
+      "scene",
+      "story-pressure",
+      "relevant-state"
+    ],
+    "modelCall": true
+  },
+  "rulingRequest": {
+    "contractVersion": 1,
+    "kind": "open-intent",
+    "playerAction": "I do not open the cage or enter the collapsing building. I watch three cycles of the impossible masonry from the rescue line, then use my lute as a timing signal: workers pull only on the beat when the falling direction is real, and stop if my pattern breaks.",
+    "principle": "Interpret freely; propose consequences through the engine contract; never mutate state in prose.",
+    "returnFields": [
+      "understoodAction",
+      "ruling",
+      "needsRoll",
+      "proposedCheck",
+      "stakes",
+      "outcomeBranches",
+      "proposedEvents"
+    ],
+    "authority": {
+      "dm": [
+        "intent",
+        "rule-applicability",
+        "difficulty",
+        "advantage-disadvantage",
+        "stakes",
+        "exceptions",
+        "meaning"
+      ],
+      "engine": [
+        "identity",
+        "state",
+        "custody",
+        "dice",
+        "arithmetic",
+        "resources",
+        "clock",
+        "accepted-mutation"
+      ]
+    }
+  },
+  "receipt": null,
+  "lane": "fast",
+  "laneModel": "sonnet",
+  "laneReasons": [
+    "default-fast"
+  ],
+  "narrationBudget": {
+    "targetWords": 60,
+    "maxWords": 75
+  },
+  "lastResolution": null
+}

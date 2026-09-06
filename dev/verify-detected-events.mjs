@@ -242,15 +242,18 @@ console.log("=== DETECTED-EVENTS probes ===\n");
   const keysBefore = Object.keys(P.nodes).sort();
   win.walkSetActive(w, nodeA);
   win.walkAdvance(w, 2, nodeA);
-  const doneBeforeB = P.nodes[nodeA].cursor.done;
+  const cursorBeforeB = JSON.stringify(P.nodes[nodeA].cursor);
   win.walkSetActive(w, nodeB);
   const doneAfterB = P.nodes[nodeA].cursor.done;
   const logA = P.walkLog.find((l) => l.walkId === nodeA);
   const keysAfter = Object.keys(P.nodes).sort();
   const noNewPromotion = JSON.stringify(keysBefore) === JSON.stringify(keysAfter);
-  probe("DE-P5", "activating a different walk closes the orphaned one (walkCloseOrphan)",
-    doneBeforeB === false && doneAfterB === true && P.activeWalkId === nodeB && logA && logA.finaleReached === false && noNewPromotion,
-    `done before B=${doneBeforeB}, after B=${doneAfterB}; activeWalkId=${P.activeWalkId} (expected ${nodeB}); logA=${JSON.stringify(logA)}; keys ${JSON.stringify(keysBefore)} -> ${JSON.stringify(keysAfter)}`);
+  const noCompletion=!(w.ledger||[]).some(e=>e.data&&e.data.kind==="walk-complete"&&e.data.nodeId===nodeA);
+  win.walkSetActive(w,nodeA);
+  probe("DE-P5", "activating a different walk suspends it; returning resumes the exact cursor",
+    doneAfterB === false && P.nodes[nodeB].walkState === "suspended" && P.nodes[nodeA].walkState === "active"
+      && JSON.stringify(P.nodes[nodeA].cursor)===cursorBeforeB && noCompletion && logA && logA.finaleReached === false && noNewPromotion,
+    `done after B=${doneAfterB}; activeWalkId=${P.activeWalkId} (expected resumed ${nodeA}); logA=${JSON.stringify(logA)}; keys ${JSON.stringify(keysBefore)} -> ${JSON.stringify(keysAfter)}`);
 }
 
 // ---------------------------------------------------------------------------

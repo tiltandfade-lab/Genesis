@@ -23,9 +23,10 @@ the transfer a **structured file/HTTP handshake both sides can see**, with the D
 **typed events** the script applies — so playtesting the loop also tests `EVENT-CONTRACT.md`.
 
 This is not a new direction — it's the locked design made runnable. `DESIGN.md`'s anti-drift
-north star already says the app *"serves a small, relevance-scoped state digest each beat"*;
-`handToDM` (`src/world/handoff.js`) already assembles exactly that digest. The bridge just sends
-it as JSON to an endpoint and renders the structured reply, instead of `navigator.clipboard`.
+north star already says the app *"serves a small, relevance-scoped state digest each beat"*.
+The complete `dmDigest()` remains the bootstrap/debug truth; `dmBeatDigest()` projects the smallest
+sufficient turn view from it. The bridge sends that turn packet as JSON and renders the structured
+reply, instead of using `navigator.clipboard`.
 
 ## Principles inherited (do not relitigate)
 
@@ -98,23 +99,48 @@ drift risk. Don't.)*
   "rolls": [                       // the player's OPEN rolls; the DM narrates FROM these
     { "label": "Investigation", "die": "d20", "result": 14, "mods": "+5", "total": 19 }
   ],
-  "digest": {                      // the scoped state digest (the JSON twin of handToDM's prose)
+  "route": {                       // execution authority; separate from model-quality lane
+    "mode": "freeform-ruling",     // local-fact | declared-mechanic | freeform-ruling
+    "reasons": ["open-intent-default"],
+    "relevantSlices": ["scene", "story-pressure", "relevant-state"],
+    "modelCall": true
+  },
+  "rulingRequest": {               // open proposal contract on freeform turns; null otherwise
+    "contractVersion": 1,
+    "kind": "open-intent",
+    "returnFields": ["understoodAction", "ruling", "needsRoll", "proposedCheck", "stakes", "outcomeBranches", "proposedEvents"]
+  },
+  "receipt": null,                 // mechanical-receipt/v1 after rest or trusted item-transfer resolves first
+  "narrationBudget": {             // script-selected output budget; obey maxWords
+    "targetWords": 60,
+    "maxWords": 75
+  },
+  "digest": {                      // sparse beat-digest/v1; full dmDigest remains bootstrap/debug truth
+    "schema": "beat-digest/v1",
+    "view": "scene",              // scene | inventory | combat | travel | social
+    "slices": ["scene", "pc", "story-pressure", "continuity"],
     "clock":   { "day": 2, "band": "morning", "exact": "07:14", "session": 3 },
     "location": "Saltmarsh Shrine",
-    "scene":   { "tension": "...", "present": ["NPC: Brother Vael"] },
     "pc":      { "name": "...", "species": "...", "class": "...", "level": 3,
                  "hp": "19/24", "ac": 15, "conditions": [], "skillProfs": ["..."] },
     "powers":  [ { "faction": "Tide-Wardens", "agenda": "...", "clock": "3/6" } ],
     "fronts":  [ { "kind": "...", "danger": "...", "clock": "2/4",
                    "dmOnly": { "truth": "...", "doom": "..." } } ],
     "recentLedger": [ "...last ~6 entries..." ],
-    "revealed": ["map", "ledger"]
+    "itemCustody": [ { "item": {"id":"jav-1","name":"Javelin","qty":1},
+                       "holder":{"kind":"object","ref":"coffin-1","name":"the coffin"} } ],
+    "revealed": ["map", "ledger"],
+    "retrieval": {
+      "omitted": { "codex": 31, "gazetteer": 6 },
+      "rule": "Omitted state remains authoritative. Use supplied ids; never invent an omitted fact."
+    }
   }
 }
 ```
-The `digest` is assembled by extending `handToDM` into a structured `dmDigest()` (the prose
-version stays for the manual/clipboard fallback). `dmOnly` fields carry the hidden layer the DM
-already gets today.
+`dmDigest()` remains the complete structured truth used for bootstrap, compatibility, debug, and
+the manual/clipboard fallback. `world.dm-digest` derives the ordinary TurnRequest packet from it.
+The projection is sparse: an omitted key was not selected for this beat; it is not false and does
+not erase canon. `dmOnly` fields still carry the hidden layer where selected.
 
 ### TurnResponse — `GET /response?turnId=…` → `200` when ready, `204` while pending
 
@@ -131,11 +157,38 @@ already gets today.
   "rollRequest": null,             // a CHECK: { "skill": "Stealth", "ability": "dex", "dcHidden": true, "adv": "advantage" }
                                    // OR a DICE roll: { "dice": "2d6+3", "label": "fire damage" }  (any NdM±K combo)
   "ask":         null,             // OR { "prompt": "...", "options": ["A","B","C"], "orElse": true }
+  "ruling": {                      // OPTIONAL; omit for pure acting/voice with no material ruling
+    "understoodAction": "Search the collapsed nave without disturbing the unstable arch",
+    "ruling": "Possible, but careful searching risks losing time rather than collapse",
+    "needsRoll": true,
+    "proposedCheck": { "skill": "Investigation", "dc": 15 },
+    "stakes": "time advances on a miss",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
   "dmNotes": "adjudication: treated the shrine as difficult terrain; precedent logged"
 }
 ```
 - `events[]` use the **exact `EVENT-CONTRACT.md` envelope** (`type` / `payload` / `source` /
   clocks / `ledgerRefs`). The app validates + applies each via `applyEvent`.
+- `route.mode` is set conservatively by `dmRoute()`. `local-fact` never reaches either transport.
+  `declared-mechanic` means the engine already resolved the operation and `receipt` is authoritative.
+  `freeform-ruling` is the default for unknown/contextual text. Combat/routine keywords never grant
+  execution authority; `lane`/`laneModel` are a separate quality decision.
+- `ruling` is an optional, schema-validated explanation/proposal. Its `proposedEvents` are **not
+  executable**; only accepted top-level `events[]` mutate state. Omit the object when a dialogue or
+  voice turn needs no material adjudication rather than manufacturing procedural filler.
+- A present accepted `mechanical-receipt/v1` owns the result. It is `deltaOnly:true`: `before` and
+  `after` contain only changed mechanical paths, so omitted receipt paths mean unchanged. Narrate from its `result` and `after`
+  fields. Never re-emit a type listed in `settledEventTypes`; the app ignores such replay attempts.
+  Built pre-resolution operations are exact declared rests and trusted, id-addressed
+  `item-transfer` declarations. Natural-language object placement remains `freeform-ruling` until
+  the DM/UI supplies the explicit holder; the router never guesses custody from prose.
+- Response identity is durable and world-bound. The app resolves `turnId` against every world's
+  `w.dm.pendingTurnId`; an inactive owner's reply queues on that world and duplicate/applied ids are
+  ignored. Timeout or bridge loss pauses the persisted TurnRequest without rejecting it. Resume
+  reposts the same id; only explicit Abandon rejects the id and suppresses a late arrival. A response
+  never mutates the merely active tab.
 - `rollRequest` — when the DM needs a check, it **asks**; the app prompts the player to roll
   openly (real dice engine, `ui.dice`); the result rides the **next** TurnRequest's `rolls`.
   The DM never resolves the roll itself.
@@ -192,10 +245,10 @@ it can only apply what you send. Each turn, after narrating, fire the matching e
 - **The party clears a segment of the active walk → `walk_advance`** `{payload:{toSeg:N}}` (see
   "Read `digest.activeWalk` every turn" below — this is the event that keeps the script's cursor in
   sync with where you've actually narrated the party).
-- **Finale resolved? Emit `walk_complete`** `{payload:{}}` — walking off to another road closes the
-  old walk itself (detected, DETECTED-EVENTS.md DE-5): the script promotes + reskins the next prepped
-  frontier — don't invent the next location yourself; wait for the promoted frontier in next turn's
-  digest.
+- **Finale resolved? Emit `walk_complete`** `{payload:{}}`. Switching to another walk suspends the
+  old walk with its exact state intact; it does not imply completion or abandonment. Emit
+  `{payload:{abandoned:true}}` only when the fiction explicitly establishes that the path was left.
+  Completion/abandonment promotes + reskins the next prepped frontier — don't invent it yourself.
 - **A PC is subdued/captured → `capture`** `{payload:{}}` (all fields optional — the script fills
   captor/cell/lever from live state). See "Capture as re-entry" below.
 - **A travel walk's finale resolves → `walk_complete` IS the arrival** (TRAVEL-WALKS.md): on a
@@ -271,12 +324,12 @@ You are not steering the party down it; you are tracking where they are.
 - Moved the party into a new segment? Emit **`walk_advance`** `{payload:{toSeg:N}}` so the cursor
   (and the eventual wrap's provenance report) stays accurate. Reaching the finale segment does
   **not** by itself complete the walk — narrate the finale beat, then:
-- Finale resolved? Emit **`walk_complete`** `{payload:{}}` — walking off to another road closes the
-  old walk itself (detected, DETECTED-EVENTS.md DE-5). The script clears the active walk and
-  **promotes the next prepped frontier**, reskinning it from the party's current position — you'll
-  see it as a new soft frontier (and `needsReskin` on its prep node) next session-prep cycle. Don't
-  invent the next location yourself.
-- `activeWalk` is `null` when the party is in town / between walks — narrate freely as today.
+- Finale resolved? Emit **`walk_complete`** `{payload:{}}`. Switching walks suspends the old one and
+  preserves its cursor/object state for return; explicit abandonment requires
+  `{payload:{abandoned:true}}`. Completion or abandonment clears the active walk and **promotes the
+  next prepped frontier**, reskinning it from the party's current position. Don't invent it yourself.
+- `activeWalk` is `null` when the party is in town / between walks; suspended walks remain in world
+  state and can be reactivated later.
 
 ### Capture as re-entry — when a PC is subdued, don't invent a prison
 
@@ -291,12 +344,17 @@ A `capture` opens a real **fireable** front-clock (`docs/WALK-CONSUMPTION.md §6
 any other front as time passes; it is allowed to actually go off. Don't let captivity become a free
 narrative vacation.
 
-### The lean digest — read it right, pull the rest (DIGEST-DIET.md, 2026-07-02)
+### The beat-shaped digest — read the situation, pull the rest (DIGEST-DIET + `beat-digest/v1`)
 
-The digest no longer ships the whole world every turn — it ships the SCENE:
-- **`codex`** = full records for the here-and-now only (current node, the active walk's cast,
-  anything freshly minted, anything that CHANGED since your last answered turn). **`codexRoster`**
-  = one-liners (`{id, kind, name, at, known}`) for everything else — enough to remember it exists.
+The ordinary TurnRequest no longer ships even the entire lean world snapshot. It ships one dramatic
+view—`scene`, `inventory`, `combat`, `travel`, or `social`—with an invariant current scene/PC/story-
+pressure/continuity core. The complete `dmDigest()` (including `codexRoster`) rides bootstrap/debug,
+not every turn. A named off-scene Codex noun mentioned in the action is retrieved full before the
+packet is built. `digest.retrieval.omitted` reports what stayed behind; omission is never permission
+to contradict or invent it.
+
+- **`codex`** = compact full records relevant now: here-and-now plus explicitly named retrieval.
+  There is deliberately no ordinary per-turn `codexRoster` dump.
 - **Pull on demand, never bulk-read:** `python3 dev/peek-state.py codex <id>` (one record) ·
   `codex --kind npc` · `ledger -n 12` · `walk` · `handoff` (the prep bundle). **NEVER raw-read
   `.dm/state.json`** — it's ~90k tokens; the peek script exists so you never pay that.
@@ -304,8 +362,11 @@ The digest no longer ships the whole world every turn — it ships the SCENE:
   once. Per turn, read only the turn file. Pull SRD records by key only when a spell/monster
   actually comes up. **Compact/restart the loop conversation every ~15 turns** — the lean digest
   makes a restart cheap.
-- **Narration budget:** routine (fast-lane) beats target **80–120 words**; deep-lane beats are
-  exempt. The slow drip favors economy — a budget, not a cage; a beat that earns more takes more.
+- **Narration budget:** obey `turn.narrationBudget`. Routine fast beats target **60 words / 75 max**;
+  pre-resolved mechanics target **50 / 70 max**; deep beats target **110 / 160 max**. This is a
+  script-owned latency control. Do not exceed the maximum merely to restate receipt or digest facts.
+  The client records `narrationWords`, `narrationMaxWords`, and `narrationBudgetMiss`; it does not
+  truncate prose, so a miss remains visible provider/evaluation evidence.
 - `digest.minted[]` = the spotlight on freshly generated nouns (`{id,kind,name,genRef}`) — the
   full atoms are in `codex`; it clears once you answer.
 
@@ -518,16 +579,17 @@ every foe is fled/surrendered but none are down (a lone foe breaking morale is t
 CHASE-CONTRACT-FIX.md), the script does NOT auto-end: `digest.combat.resolvable` reads "all foes
 fled/surrendered — declare combat_end, or chase_start first if pursued" as your cue — the foe stays
 live in `GS.combat` until you declare `chase_start` and/or `combat_end` yourself.
-`GS.combat` is transient: a mid-fight reload drops the tracker — resume theater-of-mind and re-declare
-`combat_start` with the survivors if the fight still matters.
+`w.combat` owns the active fight durably. `GS.combat` is the active world's runtime reference and is
+rehydrated after reload or when returning to that world; do not re-declare `combat_start` unless the
+previous fight was actually ended.
 
-### Hybrid fast-lane (keep Opus quality, lose the drag on routine turns)
+### Model-quality fast/deep lane (separate from execution authority)
 
 If you run the DM on Opus/fast-mode Opus for narration quality (Adam's setup), don't pay the 20–30s
 Opus cost on turns that don't need it. The loop **triages each turn by stakes** and routes the cheap
 ones to a fast model — snappy routine beats, full richness where it counts.
 
-**The lane is SCRIPT-OWNED — you don't re-decide it per turn.** `dmTriage` (`src/world/triage.js`, wired
+**The quality floor is SCRIPT-OWNED — you don't downgrade it per turn.** `dmTriage` (`src/world/triage.js`, wired
 into `sendTurn`) stamps every `.dm/turn-<id>.json` with:
 
 ```json
@@ -543,8 +605,9 @@ Read `turn.lane` and obey it:
   anything `dmTriage` saw no danger, new place, or jeopardy in (`laneReasons` ends in `routine:…` or
   `default-fast`). Tell the subagent to return the same `{narration, events[], rollRequest, ask}` contract.
 - **`"deep"` → compose on Opus yourself.** The classifier deep-lanes on signals it can see *before* you
-  write: `combat-active` / `combat-action`, `new-place` (first contact), `pc-downed` / `pc-bloodied` /
-  `pc-condition`, `clock-due`, `no-living-pc`. These earn the 20 seconds.
+  write: `combat-active` / `combat-action`, `new-place` (first contact), `walk-finale` (an unresolved
+  authored climax), `pending-situation` (a typed rest consequence awaiting fictional identity),
+  `pc-downed` / `pc-bloodied` / `pc-condition`, `clock-due`, `no-living-pc`. These earn the quality floor.
 
 **The one override — UPGRADE only, never downgrade.** Some deep beats aren't knowable from the player's
 action (a Mythic crit, a major revelation, a hard pivot you're about to spring). If a `fast`-stamped turn
@@ -555,6 +618,10 @@ The contract is identical either way (same `/response` shape, same EVENT-CONTRAC
 neither knows nor cares which model answered — only the wall-clock changes. The classifier already biases
 toward fast (a player would rather a quick good turn than a slow great one for "I check the door"), so when
 `turn.lane` says fast, trust it unless your own compose surfaces a ceiling beat.
+
+This lane never decides whether the engine understands the player's verb. `turn.route` owns that
+separate question. An attack can be `freeform-ruling` and `deep`; a contextual inventory search can be
+`freeform-ruling` and `fast`; an exact inventory display is `local-fact` and never reaches a model.
 
 ### Deep prep fan-out — front-load the slow work so live turns are fast
 

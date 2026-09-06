@@ -1,0 +1,82 @@
+{
+  "turnId": "t-msg7u5zqt7boy",
+  "narration": "You knot the scorched tag beneath the belfry clapper and give the square its tune with the last note bent deliberately flat. Heads turn. Two sleepers lean from separate windows; the desk keeper freezes; somewhere above, a floorboard answers. The trick is not making them hear you—it is making the true listener reveal that the mistake matters. Make a Charisma (Performance) check, DC 12.",
+  "events": [
+    {
+      "type": "item_transfer",
+      "payload": {
+        "itemId": "msg7to0eh5tyc",
+        "to": {
+          "kind": "object",
+          "ref": "walk:frontier-s0-0:s5:alley-belfry",
+          "name": "the alley belfry"
+        },
+        "intent": "place",
+        "note": "Mira ties the scorched O.A.W.—7 room tag beneath the alley belfry clapper as bait."
+      },
+      "source": "declared"
+    },
+    {
+      "type": "choice_logged",
+      "payload": {
+        "weight": "minor",
+        "forecloses": [
+          "immediate pursuit of the performer into Room Seven"
+        ]
+      },
+      "source": "declared"
+    }
+  ],
+  "rollRequest": {
+    "skill": "Performance",
+    "ability": "cha",
+    "dc": 12,
+    "adv": null,
+    "branches": {
+      "success": {
+        "narration": "You repeat the flattened note. The square winces, but Room Seven answers with the correct pitch—once, sharply—from behind its closed shutter. A second figure across the square starts toward the boarding house, realizes you saw them, and turns away.",
+        "events": [
+          {
+            "type": "fact_canonized",
+            "payload": {
+              "factId": "brineglass-room-seven-answers-tune",
+              "what": "When Mira deliberately played the shared tune wrong, the supposedly empty Room Seven answered with the correct final note."
+            }
+          }
+        ]
+      },
+      "nearMiss": {
+        "narration": "The wrong note draws a dozen unconscious corrections at once. You cannot isolate the first voice, but every correcting face turns toward the boarding house before its owner remembers not to. The trap reveals a shared direction, not a culprit.",
+        "events": []
+      },
+      "fail": {
+        "narration": "The bent note sets the belfry tag rattling and the clapper answers too loudly. Irritated faces turn toward you, then away. Whatever listened from upstairs stays silent; the performer has time to move while the square blames the bard.",
+        "events": []
+      }
+    }
+  },
+  "ruling": {
+    "understoodAction": "Reject the obvious pursuit, place the room tag on the alley belfry, and use an intentionally flawed performance as a public counter-trap.",
+    "ruling": "The alternate approach is valid and does not advance Mira into Room Seven. Placing the tag is deterministic; isolating a meaningful reaction from the crowd requires Performance.",
+    "needsRoll": true,
+    "proposedCheck": {
+      "skill": "Performance",
+      "ability": "cha",
+      "dc": 12
+    },
+    "stakes": "Success identifies a response from the supposedly empty room; a near miss reveals only collective orientation; failure makes noise without isolating the tune’s source.",
+    "outcomeBranches": {
+      "success": "Room Seven corrects the tune",
+      "nearMiss": "the crowd reveals only a direction",
+      "fail": "the signal is lost in the belfry noise"
+    },
+    "proposedEvents": [
+      {
+        "type": "item_transfer"
+      },
+      {
+        "type": "choice_logged"
+      }
+    ]
+  }
+}

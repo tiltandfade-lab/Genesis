@@ -1,0 +1,320 @@
+{
+  "turnId": "t-msg7dwrearuxc",
+  "worldId": "msfjud9ebcves",
+  "action": "Their answer is enough for now. I keep talking so their eyes stay on my face, then break for the roof ledge without giving either spear an opening. I am not trying to win this fight; I am taking the truth about the hives back to Tessa.",
+  "rolls": [],
+  "digest": {
+    "schema": "beat-digest/v1",
+    "view": "combat",
+    "slices": [
+      "scene",
+      "pc",
+      "story-pressure",
+      "continuity",
+      "combat",
+      "combat-state"
+    ],
+    "worldId": "msfjud9ebcves",
+    "worldName": "The Brineglass Reach",
+    "clock": {
+      "day": 1,
+      "min": 810,
+      "band": "afternoon",
+      "exact": "13:30",
+      "session": 0,
+      "knowsTime": false
+    },
+    "location": "Shadowed & Lawless — The water tower platform, 5x10 ft, torchlit (Wandering Torch, Cinderblock Stack, Storm Drain Grate)",
+    "pc": {
+      "id": "msfjud9rbeahy",
+      "name": "Mira Quill",
+      "class": "Bard",
+      "level": 1,
+      "hp": {
+        "cur": 6,
+        "max": 6
+      },
+      "conditions": [],
+      "marks": [
+        {
+          "id": "mk-msfjud9s5npiw",
+          "text": "You were poisoned; your next save against poison has disadvantage.",
+          "kind": "injury",
+          "sinceDay": 0
+        }
+      ],
+      "ac": 12,
+      "profBonus": 2,
+      "mods": {
+        "str": -3,
+        "dex": 1,
+        "con": -2,
+        "int": 0,
+        "wis": -2,
+        "cha": 2
+      },
+      "saveProfs": [
+        "dex",
+        "cha"
+      ],
+      "skillProfs": [
+        "Deception",
+        "Sleight of Hand",
+        "Perception",
+        "Performance",
+        "Persuasion",
+        "Insight",
+        "Investigation",
+        "Stealth"
+      ],
+      "resources": {
+        "hp": {
+          "cur": 6,
+          "max": 6
+        },
+        "slots": {
+          "1": "2/2"
+        },
+        "pools": {
+          "Bardic Inspiration": "2/2 (d6)"
+        },
+        "hitDice": {
+          "cur": 1,
+          "max": 1,
+          "die": 8
+        }
+      },
+      "equipped": {
+        "mainHand": "msfjud9r7oduu",
+        "offHand": null,
+        "armor": "msfjud9rhr2d7"
+      },
+      "equippedWeapons": {
+        "mainHand": {
+          "weaponName": "Dagger",
+          "baseName": "Dagger",
+          "properties": [
+            "Finesse",
+            "Light",
+            "Thrown (Range 20/60)"
+          ],
+          "finesse": true,
+          "ranged": false,
+          "grip": "1h",
+          "magicBonus": 0,
+          "atkBonus": 0,
+          "rider": null,
+          "dmg": [
+            {
+              "n": 1,
+              "die": 4,
+              "bonus": 1,
+              "type": "piercing"
+            }
+          ]
+        },
+        "offHand": null
+      },
+      "inventory": [
+        {
+          "id": "msfjud9rhr2d7",
+          "name": "Leather Armor",
+          "conditions": []
+        },
+        {
+          "id": "msfjud9r7oduu",
+          "name": "Dagger",
+          "qty": 2,
+          "conditions": []
+        }
+      ],
+      "cantrips": [
+        "Minor Illusion",
+        "Vicious Mockery"
+      ],
+      "spells": [
+        "Disguise Self",
+        "Dissonant Whispers",
+        "Faerie Fire",
+        "Healing Word"
+      ],
+      "inventoryMore": 9
+    },
+    "powers": [
+      {
+        "clockId": "the-crier-s-circle",
+        "faction": "The Crier's Circle",
+        "dominant": true,
+        "agenda": "become something other than what it is",
+        "method": "rumor and propaganda",
+        "tags": [
+          "popular"
+        ],
+        "clock": "1/6"
+      }
+    ],
+    "fronts": [
+      {
+        "clockId": "a-blight-or-plague-is-spreading-toward-the-town",
+        "kind": "external",
+        "danger": "a blight or plague is spreading toward the town",
+        "impersonal": "wildfire",
+        "clock": "0/6",
+        "closed": false,
+        "dmOnly": {
+          "truth": null,
+          "doom": "displacement — the people scatter"
+        }
+      }
+    ],
+    "recentLedger": [
+      {
+        "type": "outcome",
+        "day": 1,
+        "min": 810,
+        "text": "— Round 2; you act."
+      }
+    ],
+    "codex": [
+      {
+        "id": "npc:tessa-rill",
+        "kind": "npc",
+        "name": "Tessa Rill",
+        "dm": {
+          "want": "Feel what the drink and the dice give them one more time, and this time walk away ahead. — addiction, greed",
+          "leverage": "Has hidden where a beloved is buried, unmarked, and visits in secret. — grief, secret"
+        }
+      }
+    ],
+    "combat": {
+      "round": 2,
+      "side": "pc",
+      "first": "pc",
+      "pc": {
+        "band": "melee",
+        "lane": "C",
+        "hp": "6/6",
+        "conditions": []
+      },
+      "foes": [
+        {
+          "fid": "f1",
+          "name": "Guard",
+          "cr": 0.125,
+          "band": "near",
+          "lane": "C",
+          "state": "fresh",
+          "fled": false,
+          "surrendered": false,
+          "autoplay": true,
+          "conditions": [],
+          "realm": null
+        },
+        {
+          "fid": "f2",
+          "name": "Guard",
+          "cr": 0.125,
+          "band": "near",
+          "lane": "C",
+          "state": "fresh",
+          "fled": false,
+          "surrendered": false,
+          "autoplay": true,
+          "conditions": [],
+          "realm": null
+        }
+      ],
+      "scene": {
+        "cover": [
+          "stalled mud-sled",
+          "crates"
+        ],
+        "hazards": [
+          "open sinkhole"
+        ],
+        "exits": [
+          "gravel passage",
+          "roof ledge"
+        ]
+      },
+      "light": "lamplit",
+      "proposals": []
+    },
+    "retrieval": {
+      "omitted": {
+        "codex": 32,
+        "powers": 2,
+        "fronts": 1,
+        "gazetteer": 5
+      },
+      "rule": "Omitted state remains authoritative. Use supplied ids; never invent an omitted fact.",
+      "pinnedCodexIds": [
+        "npc:tessa-rill"
+      ],
+      "actionCodexIds": [
+        "npc:tessa-rill"
+      ],
+      "overTargetBytes": 3336
+    }
+  },
+  "route": {
+    "mode": "freeform-ruling",
+    "reasons": [
+      "open-intent-default"
+    ],
+    "relevantSlices": [
+      "scene",
+      "story-pressure",
+      "relevant-state"
+    ],
+    "modelCall": true
+  },
+  "rulingRequest": {
+    "contractVersion": 1,
+    "kind": "open-intent",
+    "playerAction": "Their answer is enough for now. I keep talking so their eyes stay on my face, then break for the roof ledge without giving either spear an opening. I am not trying to win this fight; I am taking the truth about the hives back to Tessa.",
+    "principle": "Interpret freely; propose consequences through the engine contract; never mutate state in prose.",
+    "returnFields": [
+      "understoodAction",
+      "ruling",
+      "needsRoll",
+      "proposedCheck",
+      "stakes",
+      "outcomeBranches",
+      "proposedEvents"
+    ],
+    "authority": {
+      "dm": [
+        "intent",
+        "rule-applicability",
+        "difficulty",
+        "advantage-disadvantage",
+        "stakes",
+        "exceptions",
+        "meaning"
+      ],
+      "engine": [
+        "identity",
+        "state",
+        "custody",
+        "dice",
+        "arithmetic",
+        "resources",
+        "clock",
+        "accepted-mutation"
+      ]
+    }
+  },
+  "receipt": null,
+  "lane": "deep",
+  "laneModel": "opus",
+  "laneReasons": [
+    "combat-active",
+    "combat-action"
+  ],
+  "narrationBudget": {
+    "targetWords": 110,
+    "maxWords": 160
+  },
+  "lastResolution": null
+}

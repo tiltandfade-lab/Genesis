@@ -1,0 +1,36 @@
+{
+  "turnId": "t-msfjwru6dhpeu",
+  "narration": "The courier takes your right hand with rain already shining on their knuckles. \u201cWilliam Sallow.\u201d Their gaze flicks once to your left hand, confirming that you understood the insult you did not give. \u201cThe cave-cutters below Low Sluice need the dry galleries. The Crier\u2019s Circle sealed those galleries at midnight for message stores that could survive perfectly well upstairs.\u201d William turns the lacquered tube so you can see its wax seal has been broken and pressed closed again. \u201cSomeone altered the evacuation order. I can prove where it was opened. I cannot prove who changed it.\u201d Beneath the street, the water\u2019s roar briefly resolves into something like a long, sleeping breath.",
+  "events": [
+    {
+      "type": "codex_contact",
+      "payload": {
+        "id": "npc:william-sallow",
+        "engaged": true
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    },
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "factId": "brineglass:shelter-order-altered",
+        "what": "The Low Sluice evacuation order was altered after sealing; the Crier's Circle reserved the dry galleries for message stores while cave-cutters remain exposed."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    }
+  ],
+  "rollRequest": null,
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Respect the local hand taboo and ask the identified courier who is endangered and who benefits.",
+    "ruling": "William answers because the gesture establishes basic respect and Mira asks for facts he is already trying to expose.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "The storm and altered evacuation order create a time-sensitive but still open problem.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 2: direct question receives actionable truth, preserves off-menu freedom, and contacts the engine-minted NPC. Pressure is tied to the rolled storm and faction rather than imposed travel."
+}

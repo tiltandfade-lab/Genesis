@@ -1,0 +1,101 @@
+{
+  "request": {
+    "skill": "Sleight of Hand",
+    "ability": "dex",
+    "dc": 14,
+    "adv": null,
+    "branches": {
+      "success": {
+        "narration": "The spring yields between two bell strokes. You pin every copied page behind the amber glass, names and payments facing the street, then close the hasp without a sound. By morning, nobody will need your permission to know.",
+        "events": [
+          {
+            "type": "item_transfer",
+            "source": "branch",
+            "payload": {
+              "itemId": "msg89nxu08g6s",
+              "to": {
+                "kind": "object",
+                "ref": "walk:frontier-s0-0:s5:office-public-notice-cage",
+                "name": "the Office public notice cage"
+              },
+              "intent": "place",
+              "note": "Mira publishes her entire packet of Venn’s void orders in the Office notice cage and keeps no secret copy."
+            }
+          },
+          {
+            "type": "fact_canonized",
+            "source": "branch",
+            "payload": {
+              "factId": "brineglass-void-orders-public-office",
+              "what": "Mira placed her entire packet of Venn’s void orders in the Office of Amber Weights public notice cage, keeping no secret copy."
+            }
+          }
+        ]
+      },
+      "nearMiss": {
+        "narration": "The hasp opens, but the office bell gives one clipped note. You get every page behind the glass before a lamp ignites upstairs. The evidence is public; so is the fact that someone breached the cage.",
+        "events": [
+          {
+            "type": "item_transfer",
+            "source": "branch",
+            "payload": {
+              "itemId": "msg89nxu08g6s",
+              "to": {
+                "kind": "object",
+                "ref": "walk:frontier-s0-0:s5:office-public-notice-cage",
+                "name": "the Office public notice cage"
+              },
+              "intent": "place",
+              "note": "Mira publishes her entire packet of Venn’s void orders in the Office notice cage and keeps no secret copy."
+            }
+          },
+          {
+            "type": "clock_advanced",
+            "source": "branch",
+            "payload": {
+              "clockId": "The Crier’s Circle",
+              "delta": 1
+            }
+          }
+        ]
+      },
+      "fail": {
+        "narration": "The spring snaps back and the office bell rings twice. A lamp blooms behind the amber windows; boots strike the stair. The packet is still in your hand, but the office network now knows someone tried to breach its public cage.",
+        "events": [
+          {
+            "type": "clock_advanced",
+            "source": "branch",
+            "payload": {
+              "clockId": "The Crier’s Circle",
+              "delta": 1
+            }
+          }
+        ]
+      }
+    }
+  },
+  "result": {
+    "ok": true,
+    "resolvedLocally": true,
+    "liveResolutionNeeded": false,
+    "pending": null,
+    "recovered": false,
+    "resolution": {
+      "turnId": "t-msgaby1urswxw",
+      "skill": "Sleight of Hand",
+      "total": 9,
+      "degree": "failure",
+      "branch": "fail"
+    },
+    "branchNarration": "The spring snaps back and the office bell rings twice. A lamp blooms behind the amber windows; boots strike the stair. The packet is still in your hand, but the office network now knows someone tried to breach its public cage.",
+    "newLedger": [
+      "☼ The Crier's Circle: clock 2/6."
+    ],
+    "pc": {
+      "name": "Mira Quill",
+      "hp": "12/12",
+      "conditions": [],
+      "status": "living"
+    }
+  }
+}

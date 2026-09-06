@@ -159,11 +159,11 @@ function ageCorpse(win, w, dead, extraDays) {
     `taker inventory ${before}→${taker.sheet.inventory.length}, gold=${taker.sheet.gold}`);
 }
 
-// ---- 4: LEGACY_LOSS_STATES length 9, has "cached" ----------------------------
+// ---- 4: LEGACY_LOSS_STATES length 10, has "transferred" + "cached" -----------
 {
   const win = boot();
   const L = win.LEGACY_LOSS_STATES;
-  check("4", Array.isArray(L) && L.length === 9 && L.indexOf("cached") >= 0,
+  check("4", Array.isArray(L) && L.length === 10 && L.indexOf("transferred") >= 0 && L.indexOf("cached") >= 0,
     `LEGACY_LOSS_STATES=${JSON.stringify(L)}`);
 }
 

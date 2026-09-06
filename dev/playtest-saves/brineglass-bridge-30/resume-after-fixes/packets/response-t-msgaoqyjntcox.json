@@ -1,0 +1,13 @@
+{
+  "turnId": "t-msgaoqyjntcox",
+  "narration": "The oilskins still hold, but soot has begun to blur the lowest signatures. A salt porter in a red scarf copies one complete order onto a flour wrapper, including the paymaster’s name, then reads it back beneath the belfry. Three witnesses correct the date together. She folds the wrapper under her coat and takes the lit arcade toward the public book. The originals remain overhead; their first independent copy has left by another road.",
+  "events": [
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "what": "A red-scarfed salt porter made a witnessed independent copy of one named void order and carried it toward the public book; Mira’s published originals remained on the alley belfry."
+      },
+      "source": "declared"
+    }
+  ]
+}

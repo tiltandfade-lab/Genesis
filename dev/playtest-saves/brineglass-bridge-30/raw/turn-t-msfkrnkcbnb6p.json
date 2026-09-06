@@ -1,0 +1,266 @@
+{
+  "turnId": "t-msfkrnkcbnb6p",
+  "worldId": "msfjud9ebcves",
+  "action": "I accept the tube with my right hand. I tap the fresh one\u2013three\u2013two rhythm into it and say, \u201cNo preserved voice outranks a living answer.\u201d Then I hold it to my ear and wait to hear who answers first.",
+  "rolls": [],
+  "digest": {
+    "schema": "beat-digest/v1",
+    "view": "social",
+    "slices": [
+      "scene",
+      "pc",
+      "story-pressure",
+      "continuity",
+      "social",
+      "local-actors"
+    ],
+    "worldId": "msfjud9ebcves",
+    "worldName": "The Brineglass Reach",
+    "clock": {
+      "day": 1,
+      "min": 450,
+      "band": "morning",
+      "exact": "07:30",
+      "session": 0,
+      "knowsTime": false
+    },
+    "location": "The Cobbled Tannery",
+    "pc": {
+      "name": "Mira Quill",
+      "headline": "a Charlatan Human Bard who went out on an adventure",
+      "pronouns": "she",
+      "class": "Bard",
+      "level": 1,
+      "hp": {
+        "cur": 6,
+        "max": 6
+      },
+      "conditions": [],
+      "marks": [
+        {
+          "id": "mk-msfjud9s5npiw",
+          "text": "You were poisoned; your next save against poison has disadvantage.",
+          "kind": "injury",
+          "sinceDay": 0
+        }
+      ],
+      "background": "Charlatan",
+      "gold": 19,
+      "mods": {
+        "str": -3,
+        "dex": 1,
+        "con": -2,
+        "int": 0,
+        "wis": -2,
+        "cha": 2
+      },
+      "skillProfs": [
+        "Deception",
+        "Sleight of Hand",
+        "Perception",
+        "Performance",
+        "Persuasion",
+        "Insight",
+        "Investigation",
+        "Stealth"
+      ],
+      "inventory": [
+        {
+          "id": "msfjud9rhr2d7",
+          "name": "Leather Armor",
+          "conditions": []
+        },
+        {
+          "id": "msfjud9r7oduu",
+          "name": "Dagger",
+          "qty": 2,
+          "conditions": []
+        }
+      ],
+      "inventoryMore": 9
+    },
+    "powers": [
+      {
+        "clockId": "the-crier-s-circle",
+        "faction": "The Crier's Circle",
+        "dominant": true,
+        "agenda": "become something other than what it is",
+        "method": "rumor and propaganda",
+        "tags": [
+          "popular"
+        ],
+        "clock": "1/6"
+      },
+      {
+        "clockId": "the-orchard-wardens",
+        "faction": "The Orchard-Wardens",
+        "dominant": false,
+        "agenda": "widen its territory or reach",
+        "method": "ritual and the occult",
+        "tags": [
+          "desperate"
+        ],
+        "clock": "0/6"
+      }
+    ],
+    "fronts": [
+      {
+        "clockId": "a-blight-or-plague-is-spreading-toward-the-town",
+        "kind": "external",
+        "danger": "a blight or plague is spreading toward the town",
+        "impersonal": "wildfire",
+        "clock": "0/6",
+        "closed": false,
+        "dmOnly": {
+          "truth": null,
+          "doom": "displacement \u2014 the people scatter"
+        }
+      }
+    ],
+    "recentLedger": [
+      {
+        "type": "canon",
+        "day": 1,
+        "min": 450,
+        "text": "\u25c6 Katherine Holloway named the communal evacuation refrain 'The Living-First Song'; William Sallow carried it to the other shelters before the public succession."
+      },
+      {
+        "type": "outcome",
+        "day": 1,
+        "min": 450,
+        "text": "\u2726 +1 XP \u2014 217 total."
+      }
+    ],
+    "codex": [
+      {
+        "id": "item:the-shadowless-message-tube",
+        "kind": "item",
+        "name": "The Shadowless Message Tube",
+        "fields": {
+          "object": "A watch-chain fob, brass, shaped like a fish, with \"from B.\" engraved on the back.",
+          "opens": "\"B.\" is identifiable through the jeweler who made it \u2014 custom work, one piece."
+        },
+        "dm": {
+          "why": "A gift from \"B.\" \u2014 the giver didn't want more identity than an initial in the engraving.",
+          "opens": "\"B.\" is identifiable through the jeweler who made it \u2014 custom work, one piece.",
+          "lock": null
+        },
+        "status": {
+          "at": "the-cobbled-tannery",
+          "known": false,
+          "soft": true,
+          "condition": "ok"
+        }
+      }
+    ],
+    "minted": [
+      {
+        "id": "item:the-first-answer-tube",
+        "kind": "item",
+        "name": "The First Answer Tube",
+        "genRef": "t-msfkqhtlqcd0k"
+      }
+    ],
+    "revealed": [
+      "powers",
+      "map",
+      "ledger"
+    ],
+    "ambientPresence": {
+      "count": 3,
+      "texture": "a few locals going about their business"
+    },
+    "prepPending": {
+      "session": 0,
+      "frontiers": [
+        "frontier-s0-0 (urban)",
+        "frontier-s0-1 (dungeon)",
+        "frontier-s0-2 (wilderness)"
+      ],
+      "reason": "no-overlays"
+    },
+    "itemCustody": [
+      {
+        "item": {
+          "id": "msfkat4zjdxcl",
+          "name": "The Altered Low Sluice Order",
+          "qty": 1,
+          "conditions": [],
+          "codexId": "item:the-altered-low-sluice-order"
+        },
+        "holder": {
+          "kind": "npc",
+          "ref": "npc:tessa-rill",
+          "name": "Tessa Rill"
+        },
+        "note": "Mira entrusts the Altered Low Sluice Order to Tessa Rill with instructions to burn it on a double three-note signal."
+      }
+    ],
+    "retrieval": {
+      "omitted": {
+        "codex": 29,
+        "powers": 1,
+        "fronts": 1,
+        "gazetteer": 5
+      },
+      "rule": "Omitted state remains authoritative. Use supplied ids; never invent an omitted fact.",
+      "overTargetBytes": 3439
+    }
+  },
+  "route": {
+    "mode": "freeform-ruling",
+    "reasons": [
+      "open-intent-default"
+    ],
+    "relevantSlices": [
+      "scene",
+      "story-pressure",
+      "relevant-state"
+    ],
+    "modelCall": true
+  },
+  "rulingRequest": {
+    "contractVersion": 1,
+    "kind": "open-intent",
+    "playerAction": "I accept the tube with my right hand. I tap the fresh one\u2013three\u2013two rhythm into it and say, \u201cNo preserved voice outranks a living answer.\u201d Then I hold it to my ear and wait to hear who answers first.",
+    "principle": "Interpret freely; propose consequences through the engine contract; never mutate state in prose.",
+    "returnFields": [
+      "understoodAction",
+      "ruling",
+      "needsRoll",
+      "proposedCheck",
+      "stakes",
+      "outcomeBranches",
+      "proposedEvents"
+    ],
+    "authority": {
+      "dm": [
+        "intent",
+        "rule-applicability",
+        "difficulty",
+        "advantage-disadvantage",
+        "stakes",
+        "exceptions",
+        "meaning"
+      ],
+      "engine": [
+        "identity",
+        "state",
+        "custody",
+        "dice",
+        "arithmetic",
+        "resources",
+        "clock",
+        "accepted-mutation"
+      ]
+    }
+  },
+  "receipt": null,
+  "lane": "fast",
+  "laneModel": "sonnet",
+  "laneReasons": [
+    "routine:wait"
+  ],
+  "lastResolution": null,
+  "_received": 1785903390.8134232
+}

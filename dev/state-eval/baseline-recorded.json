@@ -53,7 +53,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 7006
+      "digestBytes": 3296
     },
     {
       "id": "hx-02-check-carried",
@@ -112,7 +112,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1487
+      "digestBytes": 1061
     },
     {
       "id": "hx-03-combat-hit",
@@ -174,7 +174,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1950
+      "digestBytes": 1801
     },
     {
       "id": "hx-04-combat-end",
@@ -296,7 +296,7 @@
                     "xp": 100,
                     "ac": 13,
                     "maxHp": 22,
-                    "hp": 22,
+                    "hp": 0,
                     "init": 1,
                     "abilities": {
                       "str": {
@@ -371,7 +371,7 @@
                     "size": "large",
                     "conditions": [],
                     "band": "near",
-                    "down": false,
+                    "down": true,
                     "factionId": "the-ironwood-circle",
                     "victimClass": "monster",
                     "fid": "f1",
@@ -457,7 +457,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1939
+      "digestBytes": 1790
     },
     {
       "id": "hx-05-travel-arrival",
@@ -488,8 +488,8 @@
           "unknownTypes": []
         },
         "D3": {
-          "status": "fail",
-          "why": "clock moved 0m, expected 10-480m",
+          "status": "pass",
+          "why": null,
           "moved": [
             {
               "path": "clock",
@@ -499,13 +499,13 @@
               },
               "after": {
                 "day": 1,
-                "min": 480
+                "min": 540
               }
             }
           ]
         },
         "D4": {
-          "status": "skip",
+          "status": "pass",
           "why": null,
           "moved": []
         },
@@ -531,7 +531,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1487
+      "digestBytes": 1152
     },
     {
       "id": "hx-06-rest",
@@ -605,7 +605,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1487
+      "digestBytes": 1061
     },
     {
       "id": "hx-07-social-gift",
@@ -674,7 +674,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1802
+      "digestBytes": 1399
     },
     {
       "id": "hx-08-codex-note",
@@ -714,7 +714,11 @@
               "path": "codex:npc:corran-vale.dm.notes",
               "before": null,
               "after": [
-                "Spared Sella at dusk; terms widened — 3 days to deliver"
+                {
+                  "text": "Spared Sella at dusk; terms widened — 3 days to deliver",
+                  "day": 1,
+                  "min": 480
+                }
               ],
               "pass": true
             }
@@ -737,7 +741,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1802
+      "digestBytes": 1407
     },
     {
       "id": "hx-09-clock-front",
@@ -799,7 +803,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1487
+      "digestBytes": 1061
     },
     {
       "id": "hx-10-loot-claim",
@@ -861,7 +865,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1487
+      "digestBytes": 1061
     },
     {
       "id": "hx-11-lethal-telegraph",
@@ -915,7 +919,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1361
+      "digestBytes": 920
     },
     {
       "id": "hx-12-lull",
@@ -969,22 +973,22 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1487
+      "digestBytes": 1061
     }
   ],
   "summary": {
-    "deterministicPass": 25,
-    "deterministicFail": 1,
-    "skipped": 70,
+    "deterministicPass": 27,
+    "deterministicFail": 0,
+    "skipped": 69,
     "pendingContract": 0,
     "vocabDrift": false,
     "negativeControlsCaught": null,
     "budget": {
       "ok": true,
       "worst": {
-        "section": "recentLedger",
-        "bytes": 806,
-        "ceiling": 1024
+        "section": "fronts",
+        "bytes": 544,
+        "ceiling": 768
       }
     },
     "cost": {

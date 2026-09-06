@@ -1,0 +1,35 @@
+{
+  "turnId": "t-msfkb2kya221c",
+  "narration": "The archive answers in a bright scatter of three-note echoes. One by one they settle into unison\u2014except for a tube sealed in dull black wax. It remains silent while every other tube rings. Then, after the chamber has gone still, it speaks in your own voice: \u201cShelter is a kind of door.\u201d A second tube, labeled LOW SLUICE in flaking white paint, answers late with William\u2019s message-tube taps and the distant noise of many feet gathering above. The black-sealed tube turns slightly on its cord though there is no draft inside the chamber.",
+  "events": [
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "factId": "brineglass:shadow-tube-copies-mira",
+        "what": "A black-sealed tube in the hidden archive refused Mira's three-note call, then repeated 'Shelter is a kind of door' in Mira Quill's own voice."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    }
+  ],
+  "gen": [
+    {
+      "kind": "item",
+      "opts": {
+        "name": "The Shadowless Message Tube"
+      }
+    }
+  ],
+  "rollRequest": null,
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Use Mira's established musical motif as a non-contact comparison test across the archive.",
+    "ruling": "The repeated controlled signal makes the obvious anomalous response directly perceptible; no roll is needed.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "William and evacuees have reached the grate above while one responsive archive object has copied Mira's voice.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 14: player-created motif remains mechanically useful rather than decorative. The anomalous tube is minted only after becoming consequential."
+}

@@ -144,7 +144,8 @@ function removeCondition(holder, name){
 }
 
 /* TICK all of holder's structured-ttl conditions at a turn boundary. `round` = the CURRENT round number;
-   `phase` = "end"|"start" of the holder's OWN turn (only {rounds:n} and {endOfNextTurn} advance off a
+   `phase` = "end"|"start" of the holder's OWN turn ({rounds:n}, {startOfNextTurn}, and
+   {endOfNextTurn} advance off a
    bare tick — {untilSave} needs an actual save result the caller supplies via tickUntilSaveResult;
    {concentration} lifts via engine.concentration calling removeCondition directly, not this tick).
    Returns the list of condition NAMES that expired this call (the caller emits condition_expired per
@@ -163,6 +164,9 @@ function tickConditions(holder, round, phase){
         const remaining = ttl.rounds - (round - (e.appliedRound || 0));
         if(remaining <= 0){ expired.push(e.condition); return; }
       }
+      keep.push(e);
+    } else if(ttl.startOfNextTurn){
+      if(phase === "start" && round > (e.appliedRound || 0)){ expired.push(e.condition); return; }
       keep.push(e);
     } else if(ttl.endOfNextTurn){
       // lifts at the end of the holder's turn FOLLOWING the one it was applied on.

@@ -198,6 +198,8 @@ function migrateWorld(w){
   });
   // migrate gazetteer/factions into the codex entity store (idempotent; non-destructive) — docs/CODEX.md
   if(typeof ensureCodex==="function")ensureCodex(w);
+  if(typeof itemCustodyMigrate==="function")itemCustodyMigrate(w);
+  if(typeof genMigrateBoundItemAtoms==="function")genMigrateBoundItemAtoms(w);
   // DURABILITY-TRIO.md §3: one-time idempotent import of any legacy w.log prose line lacking a ledger
   // twin, as a session-type ledger entry (chronicleMigrateLegacyLog stamps w._chronicleMigrated so a
   // second migrateWorld call is a no-op).

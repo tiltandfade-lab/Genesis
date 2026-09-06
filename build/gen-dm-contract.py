@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """build/gen-dm-contract.py — regenerate dm-contract.json (repo root) — the ONE machine-readable
 DM↔engine contract (docs/DM-CONTRACT-ARTIFACT.md). Every event type, its accepted payload fields,
-its aliases, the source enum, the digest's top-level shape, and one worked example per event are
-extracted from the DECLARED registries src/world/dm.js already owns — NEVER hand-copied, NEVER by
-parsing/regexing applyEvent's body.
+its aliases, the source enum, the full digest's top-level shape, the sparse turn-digest vocabulary,
+and one worked example per event are extracted from the DECLARED registries src/world/dm.js and
+src/world/dm-digest.js already own — NEVER hand-copied, NEVER by parsing/regexing applyEvent's body.
 
 Also splices the `### Common event types` section of every DM seat prompt (PROMPT_TARGETS) between
 the DM-CONTRACT:EVENTS markers, killing the prompt-teaches-a-wrong-field-name drift class at source.
@@ -24,6 +24,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DM_JS = ROOT / "src" / "world" / "dm.js"
+BEAT_JS = ROOT / "src" / "world" / "dm-digest.js"
 ARTIFACT = ROOT / "dm-contract.json"
 
 # --------------------------------------------------------------------------------------------------
@@ -59,6 +60,8 @@ EXAMPLES = {
     "rest": {"kind": "short", "spendHitDice": 1},
     "item_changed": {"add": [{"name": "Dagger", "qty": 1}], "gold": -2},
     "item_split": {"itemId": "it-12", "qty": 5},
+    "item_transfer": {"itemId": "it-12", "qty": 5, "to": {"kind": "object", "ref": "S3.object", "name": "the stone coffin"}, "intent": "place"},
+    "item_placed": {"item": {"name": "Trident of Fish Command"}, "to": {"kind": "container", "ref": "S3.strongbox", "name": "the public strongbox"}, "intent": "place"},
     "item_use": {"itemId": "it-7"},
     "charge_spend": {"itemId": "it-3", "n": 1},
     "charge_restore": {"itemId": "it-3"},
@@ -155,6 +158,10 @@ VALUE_NOTES = {
     "attitude_shift.target": "codex id from the digest (post-S1 `id` is an accepted alias)",
     "clock_advanced.clockId": "copy digest `powers[].clockId` / `fronts[].clockId` verbatim",
     "item_changed.removeIds": "instance ids, never names",
+    "item_transfer.to": "an explicit stable holder {kind,ref,name?}; kind is pc|npc|creature|faction|container|corpse|place|object — never infer this object from prose",
+    "item_transfer.intent": "transfer|entrust|gift|loan|place are voluntary and mint no recovery hook; use confiscated|stolen|lost only when the fiction is explicitly involuntary; omitted defaults transfer",
+    "item_placed.item": "a newly revealed portable item spec {name,qty?,base?,ench?,bonus?,codexId?}; use item_transfer for any already-owned instance",
+    "item_placed.to": "an explicit stable world holder {kind,ref,name?}; pc and corpse are refused because their native arrays require item_changed/item_transfer",
     "condition_add.condition": "the condition name — the field is `condition`, `cond` is not read",
     "check.d20": "the PLAYER's own open roll — the engine never rolls the player's dice",
     "codex_update.note": "APPENDS to dm.notes[] (DM-only)",
@@ -191,6 +198,7 @@ DIGEST_NOTES = {
     "levelUp": "a pending interpretive-pick span on the PC's sheet — awareness only, never invented values; null the common turn",
     "arrivalBrief": "the current node's unrevealed drift entries (dmOnly until narrated); null the common turn",
     "itemLegacy": "ITEM-LEGACY §5 slice — storied-item custody threads (lossState, holder, recovery hooks); null when no legacy-grade item is in play",
+    "itemCustody": "portable items deliberately left with a holder at the current node (full instance identity + holder); cap 8, null when none are here",
     "bastion": "CROWNING-BASTION.md §7.B1.8 — the world's bastion (name/nodeId/foundedDay/atNow/vault manifest); null when no bastion is claimed",
     "pendingSituation": "HQ3-C4 — a severe/interrupted rest-risk obligation the DM must honor THIS turn (kind/text/class/severe/interrupted/day/min); auto-clears once answered; null the common turn",
 }
@@ -199,7 +207,7 @@ DIGEST_NOTES = {
 # render order. Everything else stays engine/digest-driven or lives in docs.
 PROMPT_TAUGHT = [
     "hp_changed", "temp_hp", "condition_add", "condition_remove", "check", "cast", "slot_spent",
-    "concentration_broken", "rest", "item_changed", "equip", "attitude_shift", "social_check", "gift",
+    "concentration_broken", "rest", "item_changed", "item_transfer", "item_placed", "equip", "attitude_shift", "social_check", "gift",
     "codex_add", "codex_update", "codex_link", "codex_reveal", "codex_contact", "discovery",
     "fact_canonized", "clock_advanced", "stage_fx", "combat_start", "combat_end",
     "mark_added", "mark_removed",
@@ -379,16 +387,32 @@ def _parse_literal(src, name):
             % (name, off, snippet.replace("\n", " ")))
 
 
+def _parse_scalar(src, name):
+    """Parse the string/number scalar declarations used by the beat-digest contract."""
+    m = re.search(r"\b(?:const|let|var)\s+" + re.escape(name) + r"\s*=\s*(\"(?:\\.|[^\"])*\"|\d+)", src)
+    if not m:
+        die("could not find scalar declaration for %s" % name)
+    try:
+        return json.loads(m.group(1))
+    except json.JSONDecodeError:
+        die("could not parse scalar declaration for %s" % name)
+
+
 # --------------------------------------------------------------------------------------------------
 # BUILD THE ARTIFACT
 # --------------------------------------------------------------------------------------------------
 
 def build_contract():
     src = DM_JS.read_text(encoding="utf-8")
+    beat_src = BEAT_JS.read_text(encoding="utf-8")
     types = _parse_literal(src, "DM_EVENT_TYPES")
     sources = _parse_literal(src, "DM_EVENT_SOURCES")
     fields = _parse_literal(src, "DM_EVENT_FIELDS")
     digest_keys = _parse_literal(src, "DM_DIGEST_KEYS")
+    beat_keys = _parse_literal(beat_src, "DM_BEAT_DIGEST_KEYS")
+    beat_kinds = _parse_literal(beat_src, "DM_BEAT_KINDS")
+    beat_schema = _parse_scalar(beat_src, "DM_BEAT_DIGEST_SCHEMA")
+    beat_target = _parse_scalar(beat_src, "DM_BEAT_TARGET_BYTES")
 
     # ---- gen-time hard-fails (§2) ----
     # 6. duplicate types
@@ -447,6 +471,18 @@ def build_contract():
         only_keys = set(digest_keys) - set(DIGEST_NOTES)
         die("DIGEST_NOTES keys must set-equal DM_DIGEST_KEYS. only-in-notes=%s only-in-keys=%s"
             % (sorted(only_notes), sorted(only_keys)))
+
+    # Beat packets are sparse subsets of the full truth plus four envelope keys. A new semantic
+    # state field belongs in dmDigest first; the projection may select it, but never invent a second
+    # authority that exists only in the model packet.
+    beat_envelope = {"schema", "view", "slices", "retrieval"}
+    beat_only = set(beat_keys) - set(digest_keys) - beat_envelope
+    if beat_only:
+        die("DM_BEAT_DIGEST_KEYS contains non-envelope keys absent from DM_DIGEST_KEYS: %s" % sorted(beat_only))
+    if len(set(beat_keys)) != len(beat_keys):
+        die("DM_BEAT_DIGEST_KEYS has duplicate entries")
+    if set(beat_kinds) != {"scene", "inventory", "combat", "travel", "social"}:
+        die("DM_BEAT_KINDS must set-equal scene/inventory/combat/travel/social")
 
     # PROMPT_TAUGHT sanity — every taught type must be a real type (not enforced by spec's numbered
     # hard-fails, but a taught type that isn't a real event is a generator bug worth catching)
@@ -511,6 +547,16 @@ def build_contract():
             "topLevelKeys": list(digest_keys),
             "notes": {k: DIGEST_NOTES[k] for k in digest_keys},
         },
+        "turnDigest": {
+            "sourceOfTruth": "src/world/dm-digest.js",
+            "schema": beat_schema,
+            "views": list(beat_kinds),
+            "targetBytes": beat_target,
+            "potentialTopLevelKeys": list(beat_keys),
+            "sparse": True,
+            "omissionRule": "an omitted key was not selected for this beat; it is not false and does not erase canonical state",
+            "fullCompatibilitySurface": "digest",
+        },
         "events": events,
     }
 
@@ -520,6 +566,7 @@ def build_contract():
         "passthrough": passthrough,
         "sources": len(sources),
         "digestKeys": len(digest_keys),
+        "beatDigestKeys": len(beat_keys),
     }
     return contract, counts
 
@@ -576,8 +623,9 @@ def render_prompt_section(contract):
         "- Do NOT emit `xp_granted` — it is a no-op by design. XP is the engine's job; you narrate beats."
     )
     lines.append(
-        "- Ids are never invented: copy `clockId` from the digest's `powers[]`/`fronts[]`, item ids "
-        "from `pc.inventory[].id`, codex ids from `codex`/`codexRoster`."
+        "- Ids are never invented: copy `clockId` from this beat digest's `powers[]`/`fronts[]`, "
+        "item ids from `pc.inventory[].id`, and codex ids from `codex`. A sparse omitted section is "
+        "not permission to invent it; the full bootstrap/debug digest remains authoritative."
     )
     lines.append(
         "- Every other event type in the engine's vocabulary also works (dm-contract.json is the full "
@@ -666,10 +714,10 @@ def main():
             p.write_text(new_text, encoding="utf-8")
         spliced += 1
 
-    print("dm-contract.json: %d events (%d field-mapped, %d pass-through), %d sources, %d digest keys; "
+    print("dm-contract.json: %d events (%d field-mapped, %d pass-through), %d sources, %d full digest keys, %d beat digest keys; "
           "prompts spliced: %d, skipped-absent: %d"
           % (counts["events"], counts["fieldMapped"], counts["passthrough"], counts["sources"],
-             counts["digestKeys"], spliced, skipped))
+             counts["digestKeys"], counts["beatDigestKeys"], spliced, skipped))
     sys.exit(0)
 
 

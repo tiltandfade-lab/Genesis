@@ -1,0 +1,124 @@
+{
+  "turnId": "t-msgbnikc0m4co",
+  "narration": "Three workers mark the seals, the mason turns both keys, and the children count aloud: forty gold crowns, one blue-green gem valued at ten, and a trident whose silver tines make the runoff circle like schooling fish. Each line goes onto two inventories. You sign neither as owner. The workers lock every object back inside and divide the keys; they give you only their countersigned copy. Behind them, your name—not the noble's—is already moving through the district.",
+  "events": [
+    {
+      "type": "codex_add",
+      "payload": {
+        "id": "item:brineglass-trident-of-fish-command",
+        "kind": "item",
+        "name": "Trident of Fish Command",
+        "fields": {
+          "summary": "An uncommon silver-tined trident with three charges, recovered from the false noble's strongbox and placed in witnessed public custody."
+        },
+        "status": {
+          "at": "frontier-s0-0",
+          "known": true,
+          "soft": false
+        }
+      },
+      "source": "declared"
+    },
+    {
+      "type": "item_placed",
+      "payload": {
+        "item": {
+          "name": "Trident of Fish Command",
+          "codexId": "item:brineglass-trident-of-fish-command"
+        },
+        "to": {
+          "kind": "container",
+          "ref": "walk:frontier-s0-0:s11:public-strongbox",
+          "name": "the co-signed public strongbox"
+        },
+        "intent": "place",
+        "note": "The Trident of Fish Command is inventoried under the rescued families' witness and locked in the workers' joint-custody strongbox."
+      },
+      "source": "declared"
+    },
+    {
+      "type": "item_placed",
+      "payload": {
+        "item": {
+          "name": "Sealed Coin Parcel (40 gp)"
+        },
+        "to": {
+          "kind": "container",
+          "ref": "walk:frontier-s0-0:s11:public-strongbox",
+          "name": "the co-signed public strongbox"
+        },
+        "intent": "place",
+        "note": "Forty gold crowns are counted aloud, sealed as one parcel, and locked in the workers' joint-custody strongbox."
+      },
+      "source": "declared"
+    },
+    {
+      "type": "item_placed",
+      "payload": {
+        "item": {
+          "name": "Blue-Green Gem (10 gp)"
+        },
+        "to": {
+          "kind": "container",
+          "ref": "walk:frontier-s0-0:s11:public-strongbox",
+          "name": "the co-signed public strongbox"
+        },
+        "intent": "place",
+        "note": "One blue-green gem valued at ten gold is witnessed and locked in the workers' joint-custody strongbox."
+      },
+      "source": "declared"
+    },
+    {
+      "type": "item_changed",
+      "payload": {
+        "add": [
+          {
+            "name": "Countersigned Strongbox Inventory"
+          }
+        ],
+        "note": "Mira receives only a countersigned inventory of the public strongbox; its weapon, coin, and gem remain in joint custody."
+      },
+      "source": "declared"
+    },
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "factId": "brineglass-strongbox-public-custody",
+        "what": "The false noble's strongbox was opened before rescued families and workers: its Trident of Fish Command, forty gold, and ten-gold gem were inventoried into workers' joint public custody, while Mira accepted only a countersigned record."
+      },
+      "source": "declared"
+    },
+    {
+      "type": "walk_complete",
+      "payload": {
+        "nodeId": "frontier-s0-0"
+      },
+      "source": "declared"
+    }
+  ],
+  "ruling": {
+    "understoodAction": "Open the abandoned strongbox only under public witness, inventory its authored reward, place every valuable into stable joint custody, and let Mira retain only a signed receipt.",
+    "ruling": "The finale opposition has already been defeated, so no new check is required. The contents become physical scene state rather than player inventory, the requested paper copy enters Mira's gear, and the resolved walk can close.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "The generated reward's exact identity, physical custody, and the public ownership of the victory persist beyond the closing narration.",
+    "outcomeBranches": null,
+    "proposedEvents": [
+      {
+        "type": "codex_add"
+      },
+      {
+        "type": "item_placed"
+      },
+      {
+        "type": "item_changed"
+      },
+      {
+        "type": "fact_canonized"
+      },
+      {
+        "type": "walk_complete"
+      }
+    ]
+  }
+}

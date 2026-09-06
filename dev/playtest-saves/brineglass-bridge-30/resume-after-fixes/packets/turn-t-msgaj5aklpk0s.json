@@ -1,0 +1,27 @@
+{
+  "turnId": "t-msgaj5aklpk0s",
+  "worldId": "msfjud9ebcves",
+  "action": "Who is holding Copies of Venn’s Void Orders right now?",
+  "rolls": [],
+  "digest": null,
+  "route": {
+    "mode": "local-fact",
+    "reasons": [
+      "exact-fact:custody"
+    ],
+    "relevantSlices": [
+      "pc",
+      "item-custody"
+    ],
+    "modelCall": false
+  },
+  "rulingRequest": null,
+  "receipt": null,
+  "lane": "fast",
+  "laneModel": "sonnet",
+  "laneReasons": [
+    "default-fast"
+  ],
+  "narrationBudget": null,
+  "lastResolution": null
+}

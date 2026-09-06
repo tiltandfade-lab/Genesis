@@ -1,0 +1,17 @@
+{
+  "turnId": "t-msfkedkhtlu7d",
+  "narration": "An hour passes in the restored gallery. Nothing in you needed mending, but the shelter settles around its occupants: wet clothes steam near the vents, William finally lowers his message tube, and Katherine bargains three adults out of the bench she has declared hers. Rest never becomes ease. Every flex of fused glass sounds like a footstep from the archive below, and you remain too alert to be caught wholly unaware in the next stretch. When you rise at half past seven, Tessa Rill is still waiting with charcoal and scrap paper, ready to compare her hand with the impossible correction.",
+  "events": [],
+  "rollRequest": null,
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Take an exact short rest after securing the evacuees.",
+    "ruling": "The engine already resolved the rest: sixty minutes, no resources restored, no interruption, and Heightened Paranoia prevents surprise in the next segment. Narration cannot revise or replay that receipt.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "Time advances to 07:30; the shelter remains stable and Tessa remains available.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 17: mechanics-first receipt narrated without re-emitting rest. Receipt is authoritative but unusually large because it repeats the full inventory before and after."
+}

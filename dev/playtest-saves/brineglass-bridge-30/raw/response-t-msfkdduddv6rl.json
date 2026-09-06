@@ -1,0 +1,58 @@
+{
+  "turnId": "t-msfkdduddv6rl",
+  "narration": "You leave the black-sealed tube below, and nothing drags you back. The recovered candle returns to your pack. For the next half hour the story is blankets, names, wet boots, and arguments over bench space; Katherine proves ferocious at assigning places, while William turns his message tube into a marshal\u2019s baton. Only when the last family is under cover does an elderly woman with ink-blackened fingertips answer your question. \u201cI drafted it,\u201d she says. \u201cTessa Rill. Thirty-one years ago.\u201d She studies the correction you carry and goes pale. \u201cThat is also my hand. I did not write it\u2014and I have never signed with my left.\u201d",
+  "events": [
+    {
+      "type": "item_transfer",
+      "payload": {
+        "itemId": "msfk2mblguaqs",
+        "to": {
+          "kind": "pc",
+          "ref": "msfjud9rbeahy",
+          "name": "Mira Quill"
+        },
+        "note": "Mira recovers her tethered candle from the Low Sluice ladder well."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    },
+    {
+      "type": "advance_clock",
+      "payload": {
+        "minutes": 30,
+        "cause": "Mira helps the evacuated Low Sluice families settle into the restored dry gallery."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    },
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "factId": "brineglass:tessa-order-hand",
+        "what": "Tessa Rill drafted the original Low Sluice order thirty-one years ago; the fraudulent correction matches her handwriting but not her will, and bears a left-hand signature she never uses."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    }
+  ],
+  "gen": [
+    {
+      "kind": "npc",
+      "opts": {
+        "name": "Tessa Rill"
+      }
+    }
+  ],
+  "rollRequest": null,
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Decline the shadow-tube hook, recover the tracked candle, help the evacuees, and ask community elders who authored the order.",
+    "ruling": "Mira's choice to return and help is honored. The factual question reaches the living author after an earned settlement interval; no roll is needed.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "The immediate crisis has breathing room; the correction now points to copied identity rather than simple forgery.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 16: explicit anti-railroad probe passed\u2014the optional anomaly does not pursue Mira. Time, custody, communal payoff, and a new consequence all persist."
+}

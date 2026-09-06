@@ -1,0 +1,16 @@
+{
+  "turnId": "t-msgay0swltpzm",
+  "narration": "You move when the crowd inhales. No boot touches you; no face turns. Beneath the arch, you find the dry maintenance lip hidden above the runoff and cross without wetting the lute. From there you can watch the flooded dead-end hall without entering it: pale figures wade against the current, following a candle stub that burns under water. A roof stair remains behind you. The hall waits for your decision.",
+  "events": [
+    {
+      "type": "encounter_resolved",
+      "source": "declared",
+      "payload": {
+        "foes": [],
+        "method": "perfectly timed runoff crawl beneath the crowd’s sightline",
+        "objectiveRef": "escape the mob surge through the drainage arch",
+        "outcome": "crossed unseen"
+      }
+    }
+  ]
+}

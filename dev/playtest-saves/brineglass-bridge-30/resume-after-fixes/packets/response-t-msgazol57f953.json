@@ -1,0 +1,30 @@
+{
+  "turnId": "t-msgazol57f953",
+  "narration": "Your duplicate whistle clicks from the mud-caked dead end. The sergeant turns first; the risen guards follow him in a single dragging surge, crowding the false sound instead of you. You keep the opposite wall and pass through a low service door before the illusion fades. Beyond it lies a torchlit laboratory choked with light rubble. Fine luminous threads converge above a guard’s abandoned halberd, while one section of floor refuses to hold the torchlight correctly.",
+  "events": [
+    {
+      "type": "cast",
+      "payload": {
+        "spell": "Minor Illusion"
+      },
+      "source": "declared"
+    },
+    {
+      "type": "encounter_resolved",
+      "payload": {
+        "foes": [],
+        "method": "Minor Illusion reproduced the drowned sergeant’s command whistle",
+        "objectiveRef": "pass the risen guard crowd without fighting",
+        "outcome": "misdirected and bypassed"
+      },
+      "source": "declared"
+    },
+    {
+      "type": "walk_advance",
+      "payload": {
+        "toSegment": 9
+      },
+      "source": "declared"
+    }
+  ]
+}

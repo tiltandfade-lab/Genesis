@@ -1,0 +1,26 @@
+{
+  "turnId": "t-msgbrhyantnlw",
+  "worldId": "msfjud9ebcves",
+  "action": "Show current item custody.",
+  "rolls": [],
+  "digest": null,
+  "route": {
+    "mode": "local-fact",
+    "reasons": [
+      "exact-fact:custody"
+    ],
+    "relevantSlices": [
+      "item-custody"
+    ],
+    "modelCall": false
+  },
+  "rulingRequest": null,
+  "receipt": null,
+  "lane": "fast",
+  "laneModel": "sonnet",
+  "laneReasons": [
+    "default-fast"
+  ],
+  "narrationBudget": null,
+  "lastResolution": null
+}

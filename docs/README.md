@@ -22,6 +22,8 @@ Adam) can jump straight to the right doc instead of grepping/reading its way the
 | Looking for... | Go to |
 | --- | --- |
 | **The current ruling on anything (canonical front door)** | **`canon/README.md`** — precedence law, product scope, ownership map, decision index, question coverage, open founder questions, glossary, document map |
+| **The active build program: text-first walk restoration** | **`TEXT-FIRST-WALK-RESTORATION.md`** — Story default, Theater Lab preservation, 8–12 substantive walks, suspension/resumption, persistent object-state proof, realms/Golden semantic routing |
+| **The active AI-seat prerequisite: mechanization / interpretation boundary** | **`MECHANIZATION-INTERPRETATION-BOUNDARY.md`** — conservative routing, mechanics-first receipts, `beat-digest/v1`, and provider-spend boundary. Executable evidence and the six surfaced gaps: **`ZERO-PROVIDER-REPLAY-CORPUS.md`** |
 | What to work on next / the live build queue | `NEXT-STEPS.md` (top section only — older queues archived in `NEXT-STEPS-ARCHIVE.md`) |
 | Orientation for a new session | `HANDOFF.md` |
 | Why a decision was made | `DESIGN.md` (locked decisions, dated) → `canon/DECISION-INDEX.md` for stable ids → then the linked spec |
@@ -31,7 +33,7 @@ Adam) can jump straight to the right doc instead of grepping/reading its way the
 | Realm identity / style / touchstone | `REALM-HOOKS.md` (current, re-keyed) — `data/realms.js` is the older baseline |
 | Creature stats, names, per-realm rosters | `data/bestiary.js` (SRD/global) · `dev/model-qa/realm-bestiary-draft.json` (per-realm, compiled from `REALM-BESTIARY-DRAFT.md`) |
 | 3D model / render style rules (silhouette, value, pose) | `MODEL-FOUNDRY.md` (the 6 laws) |
-| **The next several weeks: unified Golden Site procedural-vignette engine** | **`GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md`** — one terrain/construction compiler, asset router, walk census, game/battle cadence, wave gates, and multi-session law |
+| Suspended visual program: unified Golden Site procedural-vignette engine | `GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md` — preserved Theater Lab/future-projection program; superseded as active build owner by `TEXT-FIRST-WALK-RESTORATION.md` on 2026-08-03 |
 | **Golden Vignette visual and material standard** | **`GOLDEN-VIGNETTE-VISUAL-GUIDE.md`** — compact composition, connected terrain/chunky construction, face/material pipeline, value/light, four bearings, context, persistence, hard/soft/provisional review |
 | **Golden Site 1 tangible visual target** | **`GOLDEN-SITE-1-VISUAL-TARGET.md`** — noncanonical FFT/TS/Genesis Guard Post concept, binding takeaways, inspirational-only details, and measured distance from the runtime |
 | **Guard Post reusable sprite/mask sources** | **`GUARD-POST-REUSABLE-SPRITE-SOURCE-KIT.md`** — v015 universal/family/specific source census, specificity budget, cleanup contract, and 32 px/ft masonry candidate |
@@ -56,7 +58,7 @@ canon-and-scope pass). Small index-and-law files, never spec duplicates: `canon/
 **North star** (`type: design-guide`) — the dream, the look, and the ordered path; sits *above* the decision registry.
 
 - `CLAYROOM-RESET-LADDER.md` — **the Clayroom reset/proof ladder (CL-R0…CL-R6)**: the Clayroom is a deterministic procedural acceptance fixture, and this is the renderer/fixture-trust gate that must pass before C1H, C1I, or Guard Post 1 may consume it. Also owns the diagnostic-clay surface contract, the clay capture/receipt law, Lighting Lab 2.0's recipe contract, the bounded Sprite Editor crosshair delta, and the Clayroom Workbench boundary. CL-R0 BUILT 2026-07-23. (2026-07-23)
-- `GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md` — founder-authorized orchestration owner for the next several weeks: one procedural engine whose terrain and construction stages share a macro plan; the complete twelve-case/ordinary-venue coverage matrix; in-engine/Meshy/sprite-extrusion/material/context asset router; deterministic walk-demand observatory; recurring synthesis, full-game, PC-versus-enemy battle, and visual review loops; Waves 0–8; and the rule that multi-session work exists only to close a named Golden engine gate. (2026-07-29)
+- `GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md` — preserved founder-authorized visual/semantic orchestration program, suspended as the active build owner by `TEXT-FIRST-WALK-RESTORATION.md` on 2026-08-03. Its contracts, passed gates, evidence, and assets remain retained for Theater Lab/future projection work.
 - `GOLDEN-VIGNETTE-VISUAL-GUIDE.md` — founder-authorized visual execution front door:
   FFT composition economy + Triangle Strategy material/presentation discipline +
   Genesis persistent consequence; compact composition, connected natural/chunky

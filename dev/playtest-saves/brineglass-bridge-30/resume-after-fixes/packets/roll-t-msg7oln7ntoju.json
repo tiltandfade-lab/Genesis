@@ -1,0 +1,44 @@
+{
+  "request": {
+    "skill": "Insight",
+    "ability": "wis",
+    "dc": 14,
+    "adv": null,
+    "branches": {
+      "success": {
+        "narration": "You watch the wrong hand. The bow hand is theater; the other is already two fingers inside your pouch. You close your wrist around theirs before anything leaves it. Up close, they are humming without seeming to hear themselves.",
+        "events": []
+      },
+      "nearMiss": {
+        "narration": "You turn at the last instant. Their fingers brush your pouch but come away empty, and the performer melts back a pace into the crowd. They are still humming—now with fear tightening the final note.",
+        "events": []
+      },
+      "fail": {
+        "narration": "The performer bows, the crowd parts, and only then do you feel the tug at your pouch. They vanish through the boarding-house door before you can tell what their fingers found. The three-note tune continues from somewhere upstairs.",
+        "events": []
+      }
+    }
+  },
+  "result": {
+    "ok": true,
+    "resolvedLocally": true,
+    "liveResolutionNeeded": false,
+    "pending": null,
+    "recovered": false,
+    "resolution": {
+      "turnId": "t-msg7oln7ntoju",
+      "skill": "Insight",
+      "total": 7,
+      "degree": "failure",
+      "branch": "fail"
+    },
+    "branchNarration": "The performer bows, the crowd parts, and only then do you feel the tug at your pouch. They vanish through the boarding-house door before you can tell what their fingers found. The three-note tune continues from somewhere upstairs.",
+    "newLedger": [],
+    "pc": {
+      "name": "Mira Quill",
+      "hp": "6/6",
+      "conditions": [],
+      "status": "living"
+    }
+  }
+}

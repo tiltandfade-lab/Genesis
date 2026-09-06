@@ -332,5 +332,21 @@ console.log("\n--- 14. Validator vocab sweep ---");
   check("14c. null risk -> risk:missing", missing.ok === false && missing.errors[0] === "risk:missing", JSON.stringify(missing));
 }
 
+console.log("\n--- 15. Fixed-world solo danger: never rubber-band, always warn + permit escape ---");
+{
+  const win=newWin();
+  const deadly={environment:"urban",tier:2,posture:"Reactive",skin:{band:"Mythic"},heatStart:3,
+    segments:[mkSeg(1,{encounter:{type:"Combat",isEnemy:true}}),mkSeg(2,{encounter:{type:"Combat",isEnemy:true}})]};
+  const low=JSON.parse(JSON.stringify(deadly)),high=JSON.parse(JSON.stringify(deadly));
+  const wLow={characters:[{sheet:{level:1}}]},wHigh={characters:[{sheet:{level:10}}]};
+  win.sceneRiskOf(low,wLow);win.sceneRiskOf(high,wHigh);
+  check("15. L1 and L10 receive the same fixed-world danger contract (no party/level rubber-band)",
+    JSON.stringify(low.risk)===JSON.stringify(high.risk),JSON.stringify({low:low.risk,high:high.risk}));
+  const valid=win.sceneRiskValidate(low.risk);
+  check("15b. deadly fixed-world scene validates with a danger telegraph and flee-first escape",
+    low.risk.dangerBand==="deadly"&&low.risk.telegraphs.length>0&&low.risk.escapeModes[0]==="flee"&&valid.ok,
+    JSON.stringify({risk:low.risk,valid}));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

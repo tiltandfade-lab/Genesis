@@ -1,0 +1,27 @@
+{
+  "turnId": "t-msfkf3rm9wbs9",
+  "narration": "Tessa writes the sentence twice. Her right-hand sample shares the original order\u2019s hooked r and the habit of closing every o from below. Her left hand is blocky and slow; it matches nothing. When you place the correction beside them, the answer is stranger: it is Tessa\u2019s right hand, but mirrored. The pressure ridges rise on the wrong face of the paper, as if the words were written by someone looking through the page from the other side. Tessa turns the order toward the fused-glass wall. The blank oval aligns exactly with the shadow of her head\u2014except the inked mark remains empty. \u201cThat is not my signature,\u201d she says. \u201cIt is where my shadow was removed.\u201d",
+  "events": [
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "factId": "brineglass:correction-written-from-other-side",
+        "what": "Controlled handwriting comparison proved the fraudulent correction is Tessa Rill's right-hand script mirrored and impressed from the reverse side of the page; its blank oval marks where her shadow was removed."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    }
+  ],
+  "rollRequest": null,
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Run a blinded handwriting comparison using Tessa's right- and left-hand samples.",
+    "ruling": "The controlled comparison directly distinguishes authorship and handedness; no roll is needed for the conspicuous mirrored pressure pattern.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "The correction now implicates a mechanism or actor that can reproduce a person's recorded action from the other side of a surface.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 18: player-designed experiment earns the revelation. Tessa was explicitly named in the action but omitted from the social digest; only the order record was retrieved."
+}

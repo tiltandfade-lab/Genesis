@@ -171,6 +171,8 @@ old shape yet:
 | `condition_add` *(new)* | `{itemId, condition}` | mirrors the PC condition pattern, scoped to one inventory instance; `condition` must be in `ITEM_CONDITIONS` |
 | `condition_remove` *(new)* | `{itemId, condition}` | — |
 | `item_split` *(new)* | `{itemId, qty}` | splits `qty` off a stackable instance into a new instance with its own id (e.g. "drop 5 of 20 arrows") |
+| `item_transfer` *(2026-08-04)* | `{itemId, qty?, to:{kind,ref,name?}, note?}` | atomically moves the whole instance or an exact partial quantity to a stable holder; returns moved/remainder ids and quantities |
+| `item_placed` *(2026-08-05)* | `{item:{name,qty?,base?,ench?,bonus?,codexId?}, to:{kind,ref,name?}, note?}` | originates newly revealed scene loot directly at a stable non-PC holder; uses the same congruent instance builder as `item_changed.add` and never pretends the PC picked it up |
 | `equip` *(new)* | `{itemId, slot: mainHand\|offHand\|armor}` | points the slot at the instance; clears whatever was there (one occupant per slot) |
 | `unequip` *(new)* | `{slot}` | clears the slot |
 
@@ -235,6 +237,20 @@ regressions across 11 other full-app verifiers (599 checks total).
   own id, same `name`, the remainder qty on each). Symmetric with `item_changed.add{qty}` re-merging
   isn't auto-stacked — two same-name instances can coexist (one dropped, one carried); that's correct,
   not a bug, since they may carry different `conditions`.
+- **Custody conserves identity.** `item_transfer` is the placement operation `item_split` lacked.
+  A whole move keeps its id; a partial move keeps the original id on the carried remainder and gives
+  the moved quantity a new id while deep-preserving conditions/overlays. The destination must be an
+  explicit `{kind,ref}`; stacks require an explicit quantity; a codex-storied stack cannot split one
+  identity into two. Other PCs and corpses use their existing inventories; ordinary NPC/object/place/
+  container custody persists under `w.itemCustody`. Walk placements stamp `walkId` + segment and ride
+  the DM digest only on that exact segment while the walk is active; after completion/abandonment,
+  its residue is discoverable again from that node instead of disappearing with the cursor. Legacy
+  placements retain current-node scope. Custody is a valid transfer source, so a stable instance can
+  be picked back up into a PC inventory without a remint. `item_placed` covers the different case of
+  newly revealed loot already held by a scene actor/container: it uses the same congruent instance
+  builder as `item_changed.add` and writes directly to custody, never faking a PC pickup first. These
+  operations are mechanics-first only through trusted structured declarations—free prose remains an
+  open ruling.
 - **Weight is wired now, not deferred.** Every inventory render shows total weight (`Σ weight×qty`
   across resolved instances) against carrying capacity (`STR score × 15 lb`, SRD's Small/Medium row —
   Genesis PCs don't span other sizes). This is **informational, not a hard gate** — SRD's own carrying-

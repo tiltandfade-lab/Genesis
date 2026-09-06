@@ -1,0 +1,27 @@
+{
+  "turnId": "t-msg6phgbpotj2",
+  "reason": "ordinary foe_action ignored the PC Dodge condition",
+  "restoredTo": "completed turn 52, immediately before the tainted player action",
+  "evidence": [
+    "turn-t-msg6phgbpotj2.json",
+    "response-tainted-t-msg6phgbpotj2.json",
+    "state-tainted-t-msg6phgbpotj2.json"
+  ],
+  "assertions": {
+    "ledgerCheckpoint": 101,
+    "clock": {
+      "day": 1,
+      "min": 810
+    },
+    "pc": {
+      "id": "msfjud9rbeahy",
+      "status": "living",
+      "hpCur": 6
+    },
+    "factionClocks": {
+      "The Crier's Circle": 1,
+      "The Orchard-Wardens": 0,
+      "The Alms-Bread Sisterhood": 1
+    }
+  }
+}

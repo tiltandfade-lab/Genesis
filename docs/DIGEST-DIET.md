@@ -1,6 +1,6 @@
 ---
 type: system-spec
-status: specced — BUILD FIRST, before the ON-DEMAND-GEN run (2026-07-01; from live-session token data)
+status: implemented v1; extended by beat-digest/v1 on 2026-08-04
 created: 2026-07-01
 related:
   - "[[DM-BRIDGE]]"
@@ -82,9 +82,9 @@ Bounded: the here-set tracks scene size (~5–10 KB) regardless of world size; t
   monster actually comes up.
 - **Compaction guidance:** restart/compact the loop conversation every ~15 turns; the lean digest
   + bootstrap makes a restart cheap (this is what the fat digest was accidentally insuring against).
-- **Narration budget:** routine (fast-lane) beats target **80–120 words**; deep-lane beats are
-  exempt. Output tokens are generation time — and the Charter's slow drip favors economy anyway.
-  A budget, not a cage: a beat that earns more takes more.
+- **Narration budget:** the TurnRequest now carries a hard `narrationBudget`: routine fast
+  **60 target / 75 max**, pre-resolved mechanics **50 / 70**, deep **110 / 160**. Output tokens are
+  generation time; a beat that needs more must be routed deep rather than silently overrunning fast.
 - Keep the fast-lane discipline (leg 1): `dmTriage` already routes routine beats to Sonnet — the
   diet multiplies with it, not instead of it.
 
@@ -126,7 +126,9 @@ Safe during live play (read-only, never touches the mailbox).
    holds; answered → drops back to roster.
 3. `w.dm.mintQueue` members always full (the ON-DEMAND-GEN §2 contract).
 4. `setting` absent per-turn, present in the founding/handoff payload; `sessionLean.rule` is the
-   stub; `activeWalk` steady-state has one full segment (`here`) + stubs.
+   stub; `activeWalk` carries the current segment plus actionable detail for its immediate graph
+   exits, while farther-ahead and behind segments remain stubs. This is the minimum a memoryless DM
+   needs to narrate crossing a boundary without inventing the arriving room.
 5. **Size regression guard:** a fixture world with 50 codex records + an active walk → digest
    < 12 KB (tonight's equivalent: 48.5 KB). This assertion is the spec's whole point — keep it.
 6. `peek-state.py codex <id>` returns one record; `--kind npc` filters; bad id exits nonzero.
@@ -142,3 +144,44 @@ Safe during live play (read-only, never touches the mailbox).
 - The DM still narrates from atoms (scoped digest never starves the current scene) and still tracks
   the walk (`here` always present).
 - Session cost drops roughly an order of magnitude before model-routing savings.
+
+## §9. 2026-08-04 extension — beat-shaped ordinary turns
+
+The v1 diet made the complete world digest lean enough to bootstrap and inspect. It did not make
+that complete snapshot the right ordinary turn packet. `src/world/dm-digest.js` now projects
+`beat-digest/v1` from the full `dmDigest()` without taking ownership of any game rule or state:
+
+- every turn selects exactly one deterministic view: `scene`, `inventory`, `combat`, `travel`, or
+  `social`;
+- current PC/scene, the hottest story pressure, and newest continuity consequence remain invariant;
+- view-specific state rides only when relevant, while a named off-scene Codex noun is retrieved
+  before projection. `actionCodexIds` records identities actually named now; `continuityCodexIds`
+  carries a bounded two-turn anaphoric bridge and cannot refresh itself indefinitely;
+- `retrieval.omitted` makes absence explicit: omitted canon remains authoritative and is not a
+  license to invent or contradict it;
+- ordinary scene/social/inventory/travel fixtures are structurally fitted to a 3 KiB target;
+  load-bearing live combat truth may exceed the target rather than be silently discarded;
+- full `dmDigest()` remains the compatibility, session-bootstrap, and debug surface.
+
+The projector now also keeps bounded inventory truth in a composite inventory+social action, treats
+`pouch`, `satchel`, `bag`, and `belongings` as inventory vocabulary, and excludes unrelated legacy
+transfers unless the action explicitly asks about loss, theft, confiscation, recovery, or legacy.
+Exact `Where is <item> now?` custody questions bypass the model; consequential clauses remain open.
+
+A combat-shaped action before `combat_start` is a hybrid beat, not permission to erase its scene:
+the combat-capable PC slice rides alongside the active walk's current segment and graph-reachable
+exits. Once combat is actually live, the combat tracker remains the sole tactical scene packet.
+Current-segment resolution overlays and immediate graph-exit previews survive fitting. Complex live
+transition/critical packets may exceed the 3 KiB ordinary target rather than hide those truths. The
+95-turn Brineglass soak measured 52 model-shaped packets at 5,185 bytes average, 8,542-byte p95, and
+8,759-byte maximum. Those measurements are an explicit compaction target, not permission to truncate.
+
+The completed-walk pass also closed two identity gaps. A combat-shaped spell action remains a hybrid
+walk packet until combat actually exists, and an explicitly retrieved place carries its verified
+`mapNodeId` so the DM can request real movement without guessing between Codex and map namespaces.
+Authored finale/reward detail and actual graph totals remain protected through the final transition.
+
+`dev/verify-beat-digest.mjs` holds the 55-case size, relevance, knowledge, retrieval, continuity,
+composite-action, immediate-walk-preview, determinism, authority, compatibility, and real-turn
+integration proof. The replay corpus and live Brineglass repair soak remain zero-provider gates;
+provider selection stays downstream of them.

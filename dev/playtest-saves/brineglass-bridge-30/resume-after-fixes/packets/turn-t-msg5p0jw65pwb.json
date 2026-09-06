@@ -1,0 +1,29 @@
+{
+  "turnId": "t-msg5p0jw65pwb",
+  "worldId": "msfjud9ebcves",
+  "action": "What are my current hit points and conditions?",
+  "rolls": [],
+  "digest": null,
+  "route": {
+    "mode": "local-fact",
+    "reasons": [
+      "exact-fact:health"
+    ],
+    "relevantSlices": [
+      "pc",
+      "hp",
+      "conditions",
+      "marks"
+    ],
+    "modelCall": false
+  },
+  "rulingRequest": null,
+  "receipt": null,
+  "lane": "fast",
+  "laneModel": "sonnet",
+  "laneReasons": [
+    "default-fast"
+  ],
+  "narrationBudget": null,
+  "lastResolution": null
+}

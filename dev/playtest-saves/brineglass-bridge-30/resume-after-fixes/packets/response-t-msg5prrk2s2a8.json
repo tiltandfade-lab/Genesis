@@ -1,0 +1,17 @@
+{
+  "narration": "You rest for an hour while the tannery settles into damp, watchful quiet. Nothing needed restoring, but every creak resembles a footstep and sleep never becomes deep. When you rise at 08:59, Katherine’s warning is still folded safely away, Naivara has kept her distance without leaving, and the noon gathering remains three hours off.",
+  "events": [],
+  "rollRequest": null,
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Take the exact short rest already settled by the engine receipt.",
+    "ruling": "The engine advanced sixty minutes, restored nothing, and rolled Heightened Paranoia. Narration preserves the receipt without replaying the rest or inventing a lasting mechanical status.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "Time advances and the uneasy rest colors the next beat; the table’s stated surprise immunity is not yet represented in canonical state.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Continuation turn 46 exposed an unresolved table/engine mismatch: non-severe rest rows are classified flavor-only even when their authored text grants a next-segment mechanic.",
+  "turnId": "t-msg5prrk2s2a8"
+}

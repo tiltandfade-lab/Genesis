@@ -1,0 +1,13 @@
+{
+  "turnId": "t-msgat6b8czwju",
+  "narration": "The belfry keeps speaking after you leave it. You cross the oval plaza under Venn’s abandoned balcony, using the overturned wheelbarrow to avoid the mimic paving. The mechanism’s housing is split and silent; the darkness it fed has become an ordinary gap in the wall. No captain closes the route. At the far alley, fresh cart ruts descend toward water, while a narrower stair climbs above the roofs.",
+  "events": [
+    {
+      "type": "walk_advance",
+      "payload": {
+        "toSegment": 6
+      },
+      "source": "declared"
+    }
+  ]
+}

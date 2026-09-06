@@ -1,0 +1,19 @@
+{
+  "turnId": "t-msga812m3sla0",
+  "narration": "The loft is real, dry, and barely large enough for your bedroll. Venn takes the stair while you bar the hatch with a broken scale beam. Below, the crowd noise passes in uneven waves. You put the lute under one hand, the copied orders under the other, and let the district spend an hour without you.",
+  "ruling": {
+    "understoodAction": "Mira takes the contextual short rest in Venn’s indicated loft.",
+    "ruling": "The declared rest event owns risk, recovery, elapsed time, and the pending level claim.",
+    "needsRoll": false,
+    "stakes": "The urban rest table may impose a typed complication."
+  },
+  "events": [
+    {
+      "type": "rest",
+      "source": "declared",
+      "payload": {
+        "kind": "short"
+      }
+    }
+  ]
+}

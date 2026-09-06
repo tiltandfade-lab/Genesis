@@ -1,0 +1,20 @@
+{
+  "turnId": "t-msg6geztzbusy",
+  "narration": "The grit gives way to three older exemptions: water carriers, burial carts, and apothecaries bearing sealed vials. The fresh board preserves only Circle officers. Beneath a tampered floorboard you find a merchant ledger listing glass-vial deliveries to the tollhouse after it was supposedly abandoned. No bell rings while you read. The lawful route forward is a narrow passage roofed in loose gravel; crossing quietly would keep whoever changed the sign from knowing you found their supply trail.",
+  "events": [
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "what": "The abandoned tollhouse continued receiving sealed glass-vial shipments after closure, under an erased apothecary exemption."
+      },
+      "source": "declared"
+    },
+    {
+      "type": "walk_advance",
+      "payload": {
+        "toSeg": 2
+      },
+      "source": "declared"
+    }
+  ]
+}

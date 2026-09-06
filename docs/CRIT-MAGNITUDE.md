@@ -127,7 +127,8 @@ reads the band → lens count (`critBand`, success + inverted-failure ladders), 
 returns an atom payload only — never writes the world. The `crit_outcome` event (`applyEvent`, `world.dm`)
 auto-writes a Mythic result to the Ledger as **canon** (amplified → `outcome`). `dmRollFor` detects a
 nat 20/1 and rolls the magnitude die **openly**, attaching the lens vector to the turn so the DM narrates
-*from* the dice. Verified `dev/verify-crit.mjs` 23/23.
+*from* the dice. A still-open magnitude follow-up automatically routes to the deep narration lane;
+this is meaning-making work, not a routine fast continuation. Verified `dev/verify-crit.mjs` 44/44.
 
 ## 5. DM-side conduct (Charter alignment)
 
@@ -151,5 +152,6 @@ nat 20/1 and rolls the magnitude die **openly**, attaching the lens vector to th
 - **Engine wiring — ☑ BUILT 2026-06-26** (`feat/crit-magnitude`): `src/engine/crit.js`
   (`rollCritMagnitude`/`critBand`/`critDrawLenses` — magnitude die → band → distinct lenses → Myth-suite
   handoff, atoms only); the `crit_outcome` event in `applyEvent` (auto-Ledger canon for Mythic); and the
-  `dmRollFor` nat-20/1 open-magnitude-die hook. `dev/verify-crit.mjs` 23/23; check-manifest OK (44 modules).
+  `dmRollFor` nat-20/1 open-magnitude-die hook. Open magnitude follow-ups are deep-lane work by
+  contract. `dev/verify-crit.mjs` 44/44; check-manifest OK.
   *(In-play handshake render to eyeball at the next live Bridge session — headless-verified here.)*

@@ -1,0 +1,96 @@
+{
+  "turnId": "t-msg88yzwjqbou",
+  "narration": "Venn does not ask twice for safety. She divides the orders into three oilskin packets and gives you one. ‘Copies are protection enough.’ The pages name collection sites, payments, and the instruction to use the three-note key on occupied rooms. Breaking the mechanism ended its pull; strangers may remember the tune, she says, but it can no longer steer them or feed the void. She keeps one packet and sends the courier with the third.",
+  "events": [
+    {
+      "type": "codex_add",
+      "payload": {
+        "id": "item:copies-of-venns-void-orders",
+        "kind": "item",
+        "name": "Copies of Venn’s Void Orders",
+        "fields": {
+          "summary": "An oilskin packet of copied guard orders naming voice-collection sites, payments, and use of the three-note command key on occupied rooms."
+        },
+        "dm": {
+          "truth": "Venn made three copies: Mira carries one, Venn retains one, and the courier carries the third toward another public record."
+        },
+        "status": {
+          "at": "frontier-s0-0",
+          "known": true,
+          "soft": false
+        }
+      },
+      "source": "declared"
+    },
+    {
+      "type": "item_changed",
+      "payload": {
+        "add": [
+          {
+            "name": "Copies of Venn’s Void Orders",
+            "qty": 1,
+            "codexId": "item:copies-of-venns-void-orders"
+          }
+        ],
+        "note": "◆ Captain Ilyra Venn gives Mira one of three oilskin packets containing copies of the void orders."
+      },
+      "source": "declared"
+    },
+    {
+      "type": "codex_update",
+      "payload": {
+        "id": "npc:captain-ilyra-venn",
+        "fields": {
+          "evidenceGiven": true,
+          "copiesMade": 3
+        },
+        "note": "Venn gives Mira one packet, retains one, and sends the courier with the third."
+      },
+      "source": "declared"
+    },
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "factId": "brineglass-tune-after-void",
+        "what": "Breaking the command-key mechanism ended the tune’s coercive pull and stopped it feeding the void; people may still remember or hum the melody, but it can no longer steer them through that machine."
+      },
+      "source": "declared"
+    },
+    {
+      "type": "choice_logged",
+      "payload": {
+        "weight": "major",
+        "forecloses": [
+          "keeping the void orders secret",
+          "trading the only copy as private leverage"
+        ]
+      },
+      "source": "declared"
+    }
+  ],
+  "ruling": {
+    "understoodAction": "Reveal Mira’s presence to Captain Ilyra Venn, offer public distribution without personal protection, request the evidence, and ask what breaking the void changed about the shared tune.",
+    "ruling": "Venn’s established permanent defection and public-record goal make another persuasion roll unnecessary. She accepts distributed copies as safer than a single protected witness, transfers one mechanically tracked packet, and answers from the now-resolved segment state.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "Mira gains evidence and commits it to public rather than private use; multiple copies prevent one loss from erasing the truth.",
+    "outcomeBranches": null,
+    "proposedEvents": [
+      {
+        "type": "codex_add"
+      },
+      {
+        "type": "item_changed"
+      },
+      {
+        "type": "codex_update"
+      },
+      {
+        "type": "fact_canonized"
+      },
+      {
+        "type": "choice_logged"
+      }
+    ]
+  }
+}

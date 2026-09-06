@@ -1,0 +1,27 @@
+{
+  "turnId": "t-msfkkf7x88b5w",
+  "narration": "Naivara opens their repurposed naval coat. Its dryness is only good oilcloth; beneath it, the elf\u2019s baker\u2019s apron is soaked at the hem. \u201cThat answer is disappointingly ordinary,\u201d they say. The other is not. \u201cOur First Voice has been dying for months. Every faction inside the Circle has a successor ready, and each would rather split the town than lose.\u201d They look toward the gallery full of people repeating your song. \u201cThe archive was told to preserve continuity. It began borrowing the hands, voices, and shadows of anyone whose old orders could postpone a decision. The shelter order was not changed to profit from the storm. It was changed to keep the sealed voices alive long enough to choose our next leader.\u201d Naivara\u2019s friendliness does not make the confession painless. \u201cI came for the paper because it proves the Circle is no longer obeying living people.\u201d",
+  "events": [
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "factId": "brineglass:archive-preserves-failing-first-voice",
+        "what": "The Crier's Circle's First Voice is dying; to postpone a succession conflict, the hidden archive began borrowing recorded hands, voices, and shadows and altered the shelter order to preserve sealed authority over living occupants."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    }
+  ],
+  "rollRequest": null,
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Keep the confrontation public and ask the now-Friendly Naivara about the fraudulent order and their dryness.",
+    "ruling": "Naivara gives the mundane coat explanation and a consequential confession because Mira's successful public performance moved them to Friendly and made suppression untenable. No further social roll is charged for accepting the earned result.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "The immediate shelter fraud is part of a larger succession crisis: the Circle's archive is governing in place of a dying leader.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 23: engine-computed Friendly attitude materially changes the NPC performance. Rolled baker/cook role and repurposed naval coat are incorporated rather than ignored."
+}

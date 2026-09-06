@@ -1,0 +1,19 @@
+{
+  "turnId": "t-msgaj5aklpk0s",
+  "local": true,
+  "narration": "Copies of Venn’s Void Orders is held by the alley belfry (place).",
+  "route": {
+    "mode": "local-fact",
+    "reasons": [
+      "exact-fact:custody"
+    ],
+    "relevantSlices": [
+      "pc",
+      "item-custody"
+    ],
+    "modelCall": false,
+    "localKind": "custody",
+    "localRef": "msg89nxu08g6s",
+    "localCodexId": "item:copies-of-venns-void-orders"
+  }
+}

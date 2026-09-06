@@ -1,0 +1,27 @@
+{
+  "turnId": "t-msfkc1909jr0o",
+  "narration": "William\u2019s voice comes down through the rain: \u201cHolding.\u201d The sorting arm takes the order by its unaltered edge and presses the word LIVING against the glass. The archive racks rise\u2014not opening the black-water passage, but uncovering a broad transverse gallery with dry benches, old vents, and chalk marks for family places. Above you, stone grinds. William shouts, astonished: a sealed stair has opened inside the tannery itself, wide enough for the evacuees to enter without using your ladder. Katherine starts directing boots toward it before anyone asks. The black-sealed tube remains hanging in the exposed archive, turning slowly toward the newly opened shelter.",
+  "events": [
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "factId": "brineglass:dry-gallery-restored",
+        "what": "By presenting the original evacuation order and prioritizing living occupants, Mira restored the hidden dry-gallery shelter and opened its broad access stair inside the Cobbled Tannery."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    }
+  ],
+  "rollRequest": null,
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Hold the crowd until the route is verified, then use the original order's priority language to ask the dispatch mechanism for shelter rather than deeper access.",
+    "ruling": "The restored original instruction is the mechanism's valid authority. It opens the existing shelter path directly; no check or arbitrary extra task is required.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "The immediate shelter shortage is relieved, while the shadowless tube and hostile black-water route remain unresolved optional threats.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 15: the player's semantic distinction solves the shelter problem. This is an earned consequence, not a forced next scene; the unresolved mystery remains optional."
+}

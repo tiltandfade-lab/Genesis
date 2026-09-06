@@ -1,0 +1,36 @@
+{
+  "turnId": "t-msfklpsoqqgjr",
+  "narration": "Naivara\u2019s expression changes from defense to calculation. \u201cA live challenge and response. Yes.\u201d Then: \u201cThe First Voice can still breathe, but cannot speak without the archive completing the sound. Bring them here and the Low Sluice tube could carry that living breath into every sealed message in the district.\u201d They point toward the open stair. \u201cThe black-sealed tube is the only one that refused your recorded call; it may still know the difference between echo and answer.\u201d Of the two messengers who arrived with Naivara, only one remains. The other has already slipped back into the storm with news of the public confession. Naivara sends the remaining messenger for the First Voice. \u201cYou have proposed a vote made of music,\u201d they say. \u201cNow the succession has heard its first note.\u201d",
+  "events": [
+    {
+      "type": "clock_advanced",
+      "payload": {
+        "clockId": "the-leader-is-corrupt-failing-or-dying-and-the-scramble-to-replace-them-has-begun",
+        "delta": 1
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    },
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "factId": "brineglass:live-voice-proof-plan",
+        "what": "Mira proposed authenticating the living First Voice through a live three-note challenge-and-response broadcast over the Low Sluice tubes; Naivara agreed and sent for the leader."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    }
+  ],
+  "rollRequest": null,
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Propose a live, publicly verifiable broadcast that distinguishes the living leader from replayed archive authority.",
+    "ruling": "Naivara accepts the technically and politically plausible plan because they are Friendly and share the need to end archival rule. The black-sealed tube is identified as one route, not an order to retrieve it.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "The First Voice is being brought to the tannery, while a rival messenger has carried news into the active succession struggle.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 24: player authors the political resolution mechanism. Front pressure advances as a consequence of making the crisis public, not as a funnel toward a prewritten scene."
+}

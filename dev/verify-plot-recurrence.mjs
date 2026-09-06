@@ -280,8 +280,9 @@ function forceMythicRowPersistent(win, row){
 
 // ============================================================
 // MUTATION PROOF — drop the origin-tag check in genApply → the harness goes RED (a duplicate mints).
-// Each fire is given a DISTINCT opts.name so codexAdd's own (unrelated) name-collision merge can't
-// mask the mutation — the origin check must be the ONLY thing standing between two mints here.
+// Each fire receives a distinct synthetic payload name through the reserve so codexAdd's unrelated
+// name-collision merge cannot mask the mutation. `opts.name` is deliberately not used: named items
+// are truthful declared shells now and therefore do not inherit a random row's origin identity.
 // ============================================================
 {
   const original = read("src/world/dm.js");
@@ -294,8 +295,10 @@ function forceMythicRowPersistent(win, row){
       man.loadOrder.filter(p => p.endsWith(".js")).map(p => p === "src/world/dm.js" ? original.replace(marker, mutated) : read(p)).join("\n;\n");
     const { win, world } = freshDom(mutSrc);
     forceMythicRow(win, 299);
-    win.applyResponse({ turnId: "t-1", narration: "n", events: [], gen: [{ kind: "item", opts: { name: "Mutation Fire A" } }] });
-    win.applyResponse({ turnId: "t-2", narration: "n2", events: [], gen: [{ kind: "item", opts: { name: "Mutation Fire B" } }] });
+    const a=win.rollItem({}),b=win.rollItem({});a.name="Mutation Fire A";b.name="Mutation Fire B";
+    world.prefetch={reserve:{npc:[],interior:[],item:[a,b],loot:[]}};
+    win.applyResponse({ turnId: "t-1", narration: "n", events: [], gen: [{ kind: "item" }] });
+    win.applyResponse({ turnId: "t-2", narration: "n2", events: [], gen: [{ kind: "item" }] });
     const items = Object.values(win.codexOf(world).records).filter(r => r.kind === "item");
     const duplicated = items.length === 2;
     check("MUTATION (shown RED then restored): dropping the origin-tag check lets the same Mythic row mint a duplicate",
@@ -304,18 +307,20 @@ function forceMythicRowPersistent(win, row){
 }
 
 // ============================================================
-// MUTATION PROOF 2 — confirm the SAME two-distinct-name fires are correctly deduped under the REAL
+// MUTATION PROOF 2 — confirm the SAME two-distinct-name reserve payloads dedupe under the REAL
 // (unmutated) code, proving mutation proof 1 isn't a name-collision artifact but a real origin-check
 // catch: distinct names would normally mint two records; the origin gate collapses them to one anyway.
 // ============================================================
 { const { win, world } = freshDom();
   forceMythicRow(win, 298);
-  win.applyResponse({ turnId: "t-1", narration: "n", events: [], gen: [{ kind: "item", opts: { name: "Real Fire A" } }] });
-  win.applyResponse({ turnId: "t-2", narration: "n2", events: [], gen: [{ kind: "item", opts: { name: "Real Fire B" } }] });
+  const a=win.rollItem({}),b=win.rollItem({});a.name="Real Fire A";b.name="Real Fire B";
+  world.prefetch={reserve:{npc:[],interior:[],item:[a,b],loot:[]}};
+  win.applyResponse({ turnId: "t-1", narration: "n", events: [], gen: [{ kind: "item" }] });
+  win.applyResponse({ turnId: "t-2", narration: "n2", events: [], gen: [{ kind: "item" }] });
   const items = Object.values(win.codexOf(world).records).filter(r => r.kind === "item");
   check("MUTATION-CONTROL: under real code, two DIFFERENTLY-NAMED fires of the same Mythic row still dedupe to one record (origin, not name, is the key)",
     items.length === 1, "items=" + items.length);
-  check("MUTATION-CONTROL: the surviving record keeps its FIRST name (opts.name on the recurrence draw is not applied)",
+  check("MUTATION-CONTROL: the surviving record keeps its FIRST payload name",
     items[0] && items[0].name === "Real Fire A", items[0] && items[0].name);
 }
 

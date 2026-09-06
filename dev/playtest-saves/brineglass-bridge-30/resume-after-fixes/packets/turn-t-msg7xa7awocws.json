@@ -1,0 +1,27 @@
+{
+  "turnId": "t-msg7xa7awocws",
+  "worldId": "msfjud9ebcves",
+  "action": "Where is the Scorched Cloth Room Tag now?",
+  "rolls": [],
+  "digest": null,
+  "route": {
+    "mode": "local-fact",
+    "reasons": [
+      "exact-fact:custody"
+    ],
+    "relevantSlices": [
+      "pc",
+      "item-custody"
+    ],
+    "modelCall": false
+  },
+  "rulingRequest": null,
+  "receipt": null,
+  "lane": "fast",
+  "laneModel": "sonnet",
+  "laneReasons": [
+    "default-fast"
+  ],
+  "narrationBudget": null,
+  "lastResolution": null
+}

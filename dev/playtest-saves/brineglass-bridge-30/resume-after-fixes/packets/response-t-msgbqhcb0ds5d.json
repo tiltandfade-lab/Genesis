@@ -1,0 +1,16 @@
+{
+  "turnId": "t-msgbqhcb0ds5d",
+  "local": true,
+  "narration": "The Altered Low Sluice Order — held by Tessa Rill (entrust). The First Answer Tube — held by Tessa Rill (entrust). Scorched Cloth Room Tag — held by the alley belfry (place). Copies of Venn’s Void Orders — held by the alley belfry (place). Costume — held by the water pump (place). Candle — held by the flooded current (place). Trident of Fish Command — held by the co-signed public strongbox (place). Sealed Coin Parcel (40 gp) — held by the co-signed public strongbox (place). Blue-Green Gem (10 gp) — held by the co-signed public strongbox (place).",
+  "route": {
+    "mode": "local-fact",
+    "reasons": [
+      "exact-fact:custody"
+    ],
+    "relevantSlices": [
+      "item-custody"
+    ],
+    "modelCall": false,
+    "localKind": "custody"
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "request": {
+    "skill": "Constitution save",
+    "ability": "con",
+    "dc": 12,
+    "adv": "advantage",
+    "branches": {
+      "success": {
+        "narration": "You follow the wet cloth back twice: first with the groom coughing against your shoulder, then dragging a child free of the fallen gate as the stable roof folds behind you. Both reach the mud alive. The hitching post tears loose only after your hand leaves it.",
+        "events": [
+          {
+            "type": "encounter_resolved",
+            "source": "branch",
+            "payload": {
+              "foes": [],
+              "method": "wet-cloth smoke guide and two-person rescue",
+              "objectiveRef": "rescue the trapped stable occupants",
+              "outcome": "rescued"
+            }
+          },
+          {
+            "type": "fact_canonized",
+            "source": "branch",
+            "payload": {
+              "factId": "brineglass-burning-stable-rescue",
+              "what": "Mira rescued both trapped occupants from the burning stable using a wet costume tied to the hitching post as a smoke guide."
+            }
+          }
+        ]
+      },
+      "nearMiss": {
+        "narration": "You bring the groom out, then return for the lower voice. The roof gives before you reach it. You escape under falling sparks with scorched hands and one life still trapped beyond the collapsed gate.",
+        "events": [
+          {
+            "type": "hp_changed",
+            "source": "branch",
+            "payload": {
+              "delta": -2
+            }
+          },
+          {
+            "type": "fact_canonized",
+            "source": "branch",
+            "payload": {
+              "factId": "brineglass-burning-stable-partial-rescue",
+              "what": "Mira rescued the groom from the burning stable, but the roof collapsed before she could reach the second trapped voice."
+            }
+          }
+        ]
+      },
+      "fail": {
+        "narration": "Smoke closes your throat before you reach the far stall. You crawl back by the wet cloth as the gate and roof collapse together. The voices vanish under timber; you reach the courtyard burned and coughing, with the rescue failed but your retreat still open.",
+        "events": [
+          {
+            "type": "hp_changed",
+            "source": "branch",
+            "payload": {
+              "delta": -4
+            }
+          },
+          {
+            "type": "fact_canonized",
+            "source": "branch",
+            "payload": {
+              "factId": "brineglass-burning-stable-collapse",
+              "what": "The burning stable roof collapsed with trapped occupants still inside after smoke forced Mira back."
+            }
+          }
+        ]
+      }
+    }
+  },
+  "result": {
+    "ok": true,
+    "resolvedLocally": true,
+    "liveResolutionNeeded": false,
+    "pending": null,
+    "recovered": false,
+    "resolution": {
+      "turnId": "t-msgahogzt0lwv",
+      "skill": "Constitution save",
+      "total": 2,
+      "degree": "crit-failure",
+      "branch": "fail"
+    },
+    "branchNarration": "Smoke closes your throat before you reach the far stall. You crawl back by the wet cloth as the gate and roof collapse together. The voices vanish under timber; you reach the courtyard burned and coughing, with the rescue failed but your retreat still open.",
+    "newLedger": [
+      "✦ Mira Quill took 4 damage — HP 12→8/12.",
+      "◆ The burning stable roof collapsed with trapped occupants still inside after smoke forced Mira back.",
+      "✦ +1 XP — 1451 total."
+    ],
+    "pc": {
+      "name": "Mira Quill",
+      "hp": "8/12",
+      "conditions": [],
+      "status": "living"
+    }
+  }
+}

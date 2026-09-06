@@ -1,0 +1,66 @@
+{
+  "turnId": "t-msfkj1vhe3w3s",
+  "narration": "The single three-note call reaches Tessa as intended; no flame rises behind you. Your melody carries the old order through the tannery, and people recognize their own rescue in its words. The dry official waits until you name living occupants. \u201cNaivara Teinithra,\u201d they introduce themself, almost courteously. \u201cA song is not a seal.\u201d But they have answered before the crowd, exactly where you wanted them. Whether the order now belongs to public memory or can still be dismissed as your performance depends on how completely you make the room carry it.",
+  "events": [
+    {
+      "type": "codex_contact",
+      "payload": {
+        "id": "npc:naivara-teinithra",
+        "engaged": true
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    }
+  ],
+  "rollRequest": {
+    "skill": "Performance",
+    "ability": "cha",
+    "dc": 14,
+    "dcHidden": true,
+    "adv": null,
+    "branches": {
+      "success": {
+        "narration": "By the final line, the families are singing it back. Naivara can dispute a document, but not erase a hundred living witnesses who now know the original words; they lower their voice and ask to speak with you instead of ordering the shelter closed.",
+        "events": [
+          {
+            "type": "social_check",
+            "payload": {
+              "target": "npc:naivara-teinithra",
+              "skill": "Performance",
+              "total": 0,
+              "dc": 14,
+              "cause": "Mira turned the original evacuation order into public communal memory before Naivara could suppress it."
+            },
+            "source": "declared"
+          }
+        ]
+      },
+      "nearMiss": {
+        "narration": "The refrain catches, but unevenly. Half the room can repeat the priority and half only the tune. Naivara seizes that gap: \u201cA memorable counterfeit is still counterfeit.\u201d The crowd does not disperse, but neither does it speak as one.",
+        "events": []
+      },
+      "fail": {
+        "narration": "Rain and frightened conversation swallow the legal phrasing, leaving only your beautiful refrain. Naivara waits it out, then says, \u201cThank you for the entertainment.\u201d Several families look toward Tessa for proof you deliberately left out of sight.",
+        "events": []
+      }
+    }
+  },
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Publish the original order as a song before the community and force the Circle representative to contest it publicly.",
+    "ruling": "The tactic is valid and changes the arena from private custody to shared memory. Performance determines whether the exact order becomes communal testimony rather than merely a catchy claim.",
+    "needsRoll": true,
+    "proposedCheck": {
+      "skill": "Performance",
+      "dc": 14
+    },
+    "stakes": "Success makes suppression socially costly; failure leaves Naivara able to frame the song as unsupported theater.",
+    "outcomeBranches": [
+      "success",
+      "nearMiss",
+      "fail"
+    ],
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 22: open social tactic prebranched for instant resolution. Engine-minted Naivara is contacted before the social outcome applies."
+}

@@ -1,0 +1,101 @@
+{
+  "turnId": "t-msg7ywhmbrjxf",
+  "narration": "The figure leaves Room Seven behind and slips into an oval plaza glowing without lamps. At its edge, paving stones imitate a crosswalk a little too perfectly; beyond them, darkness is eating chips from a wall without leaving rubble. Two guard captains hold opposite balconies, watching for a report. You can trail your quarry through the wheelbarrow shadows before the pair closes its net. Make a Dexterity (Stealth) check, DC 13.",
+  "events": [],
+  "rollRequest": {
+    "skill": "Stealth",
+    "ability": "dex",
+    "dc": 13,
+    "adv": null,
+    "branches": {
+      "success": {
+        "narration": "You let the courier cross first and move only when both captains look toward the widening absence. From beneath the balcony you hear the report: Room Seven answered again, and the Office seal is waking people faster than expected. Neither captain knows you entered the plaza.",
+        "events": [
+          {
+            "type": "walk_advance",
+            "payload": {
+              "nodeId": "frontier-s0-0",
+              "toSeg": 6
+            }
+          },
+          {
+            "type": "fact_canonized",
+            "payload": {
+              "factId": "brineglass-captains-room-seven-report",
+              "what": "A courier reported to two corrupt guard captains that Room Seven answered again and that the Office seal is waking people faster than expected."
+            }
+          }
+        ]
+      },
+      "nearMiss": {
+        "narration": "You reach the wheelbarrow as one captain glances down. They saw motion, not identity. The courier completes the report, but both guards begin searching the plaza while the expanding void removes another strip of wall.",
+        "events": [
+          {
+            "type": "walk_advance",
+            "payload": {
+              "nodeId": "frontier-s0-0",
+              "toSeg": 6
+            }
+          }
+        ]
+      },
+      "fail": {
+        "narration": "A paving stone closes rubbery teeth around your boot. The wheelbarrow tips; the courier points; both captains descend from opposite balconies exactly as trained. The void cuts away the straight retreat, but the upper balcony and the road back remain open. They draw steel.",
+        "events": [
+          {
+            "type": "walk_advance",
+            "payload": {
+              "nodeId": "frontier-s0-0",
+              "toSeg": 6
+            }
+          },
+          {
+            "type": "combat_start",
+            "payload": {
+              "foes": [
+                {
+                  "name": "Bandit Captain",
+                  "count": 2,
+                  "role": "corrupt guard captain"
+                }
+              ],
+              "objectiveRef": "escape the captains with the courier report",
+              "segmentId": "s6",
+              "scene": {
+                "cover": [
+                  "wheelbarrow",
+                  "balcony pillars"
+                ],
+                "hazards": [
+                  "mimic paving",
+                  "expanding void"
+                ],
+                "exits": [
+                  "upper balcony",
+                  "road back to the boarding house"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "ruling": {
+    "understoodAction": "Reject Room Seven, shadow the responding figure away from the boarding house, and learn whom they report to without initiating a confrontation.",
+    "ruling": "The player-directed detour is honored. The immediate generated exit is a void-struck plaza watched by an elite guard pair; the described lantern discipline permits a Stealth check before contact rather than forcing the encounter.",
+    "needsRoll": true,
+    "proposedCheck": {
+      "skill": "Stealth",
+      "ability": "dex",
+      "dc": 13
+    },
+    "stakes": "Success overhears the report unseen; a near miss enters the plaza with the guards searching; failure triggers the telegraphed elite-pair encounter while both listed escapes remain available.",
+    "outcomeBranches": {
+      "success": "enter unseen and hear the report",
+      "nearMiss": "enter unidentified but hunted",
+      "fail": "the captains engage"
+    },
+    "proposedEvents": []
+  }
+}

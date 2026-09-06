@@ -1,0 +1,53 @@
+{
+  "turnId": "t-msgbvaysczdx4",
+  "narration": "Runoff takes the chalk; your rubbing keeps every broken stroke. Nothing follows along the cooper lanes. At the tannery, Tessa reads the paper before your story and covers the First Answer Tube with both hands. “Not a Crier route-sign,” she says. “Those are rests, not notes—spaces left for another voice.” Only then does she look up. “Now tell me whose voice was missing.”",
+  "events": [
+    {
+      "type": "item_changed",
+      "payload": {
+        "add": [
+          {
+            "name": "Rubbing of the Lantern-Room Tracking Mark"
+          }
+        ],
+        "note": "Mira preserves an exact rubbing of the salt-chalk tracking mark before washing the original away."
+      },
+      "source": "declared"
+    },
+    {
+      "type": "move_node",
+      "payload": {
+        "nodeId": "the-cobbled-tannery",
+        "cause": "Mira returns by a different cooper lane after erasing the tracking mark."
+      },
+      "source": "declared"
+    },
+    {
+      "type": "codex_update",
+      "payload": {
+        "id": "npc:tessa-rill",
+        "note": "Shown the lantern-room mark before hearing Mira's account, Tessa said it was not Crier route notation: its broken strokes read as rests left for another voice."
+      },
+      "source": "declared"
+    }
+  ],
+  "ruling": {
+    "understoodAction": "Preserve and erase the tracking mark, refuse its implied pursuit, return by an alternate local route, and test Tessa's unprompted reading before supplying context.",
+    "ruling": "No check is needed to make the rubbing or traverse the already connected district edge. The tracker does not get a forced encounter; Tessa offers a bounded expert interpretation, recorded as her note rather than omniscient fact.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "The mark survives as an exact object while its author remains unresolved, and the player—not the generated next frontier—chooses where the story goes.",
+    "outcomeBranches": null,
+    "proposedEvents": [
+      {
+        "type": "item_changed"
+      },
+      {
+        "type": "move_node"
+      },
+      {
+        "type": "codex_update"
+      }
+    ]
+  }
+}

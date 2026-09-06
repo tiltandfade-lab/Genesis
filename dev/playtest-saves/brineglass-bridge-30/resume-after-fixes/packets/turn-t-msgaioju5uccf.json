@@ -1,0 +1,431 @@
+{
+  "turnId": "t-msgaioju5uccf",
+  "worldId": "msfjud9ebcves",
+  "action": "I do not go back under the collapsed roof. I mark the trapped stall from outside, hammer the fire-call on the hitching post, and return to the belfry square to bring a real rescue line rather than chase the sounds toward the dam.",
+  "rolls": [],
+  "digest": {
+    "schema": "beat-digest/v1",
+    "view": "travel",
+    "slices": [
+      "scene",
+      "pc",
+      "story-pressure",
+      "continuity",
+      "travel",
+      "active-walk"
+    ],
+    "worldId": "msfjud9ebcves",
+    "worldName": "The Brineglass Reach",
+    "clock": {
+      "day": 1,
+      "min": 1131,
+      "band": "dusk",
+      "exact": "18:51",
+      "session": 0,
+      "knowsTime": false
+    },
+    "location": "Shadowed & Lawless — segment 4: The Burning Building, Open Courtyard, 50' x 80' rectangle, lamplit",
+    "pc": {
+      "id": "msfjud9rbeahy",
+      "name": "Mira Quill",
+      "class": "Bard",
+      "level": 3,
+      "hp": {
+        "cur": 8,
+        "max": 12
+      },
+      "conditions": [],
+      "marks": [
+        {
+          "id": "mk-msfjud9s5npiw",
+          "text": "You were poisoned; your next save against poison has disadvantage.",
+          "kind": "injury",
+          "sinceDay": 0
+        }
+      ],
+      "ac": 12,
+      "resources": {
+        "hp": {
+          "cur": 8,
+          "max": 12
+        },
+        "slots": {
+          "1": "4/4",
+          "2": "2/2"
+        },
+        "pools": {
+          "Bardic Inspiration": "2/2 (d6)"
+        },
+        "hitDice": {
+          "cur": 3,
+          "max": 3,
+          "die": 8
+        }
+      },
+      "equipped": {
+        "mainHand": "msfjud9r7oduu",
+        "offHand": null,
+        "armor": "msfjud9rhr2d7"
+      },
+      "inventory": [
+        {
+          "id": "msfjud9rhr2d7",
+          "name": "Leather Armor"
+        },
+        {
+          "id": "msfjud9r7oduu",
+          "name": "Dagger",
+          "qty": 2
+        }
+      ],
+      "inventoryMore": 9
+    },
+    "powers": [
+      {
+        "clockId": "the-crier-s-circle",
+        "faction": "The Crier's Circle",
+        "dominant": true,
+        "agenda": "become something other than what it is",
+        "method": "rumor and propaganda",
+        "tags": [
+          "popular"
+        ],
+        "clock": "2/6"
+      }
+    ],
+    "fronts": [
+      {
+        "clockId": "a-blight-or-plague-is-spreading-toward-the-town",
+        "kind": "external",
+        "danger": "a blight or plague is spreading toward the town",
+        "impersonal": "wildfire",
+        "clock": "0/6",
+        "closed": false,
+        "dmOnly": {
+          "truth": null,
+          "doom": "displacement — the people scatter"
+        }
+      }
+    ],
+    "recentLedger": [
+      {
+        "type": "canon",
+        "day": 1,
+        "min": 1131,
+        "text": "◆ The burning stable roof collapsed with trapped occupants still inside after smoke forced Mira back.",
+        "matched": true
+      }
+    ],
+    "codex": [
+      {
+        "id": "item:a-stone-that-is-always-cold-even-in-fire",
+        "kind": "item",
+        "name": "A stone that is always cold, even in fire.",
+        "fields": {
+          "opens": "Placed at a threshold, it prevents the temperature from crossing it — a room sealed by the stone stays exactly as it was."
+        },
+        "dm": {
+          "why": "It was pulled from water that should have frozen but didn't, at a place where winter ended irregularly.",
+          "opens": "Placed at a threshold, it prevents the temperature from crossing it — a room sealed by the stone stays exactly as it was."
+        }
+      }
+    ],
+    "activeWalk": {
+      "nodeId": "frontier-s0-0",
+      "place": "Shadowed & Lawless",
+      "environment": "urban",
+      "topology": "The Rundown",
+      "skin": {
+        "text": "A specific song is being hummed by strangers who've never met. — The same unfamiliar tune, unconsciously, by people across the district who can't say where they learned it.",
+        "band": "Strange"
+      },
+      "risk": {
+        "danger": "risky",
+        "reward": "good",
+        "stakes": "loot-risk",
+        "trace": "clock",
+        "escapes": [
+          "flee",
+          "environment"
+        ],
+        "clock": {
+          "kind": "heat",
+          "note": "Heat is the default — you're already Burning (Heat 3)."
+        },
+        "promise": "Uncommon: Trident of Fish Command",
+        "telegraphs": [
+          {
+            "kind": "rumor",
+            "text": "Word on the street: Corrupt Guard holds this ground."
+          }
+        ]
+      },
+      "spiceTier": "baseline",
+      "cursor": {
+        "current": 4,
+        "touched": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "done": false,
+        "total": 10
+      },
+      "segments": [
+        {
+          "num": 3,
+          "label": "Escalation",
+          "isFinale": false,
+          "state": "behind",
+          "approach": true,
+          "gist": "The Dam Failure / Enemy",
+          "scene": {
+            "type": "The Dam Failure",
+            "description": "A reservoir barrier cracks and ruptures; water floods the lower city with frightening speed, drowning everything it touches."
+          },
+          "area": {
+            "type": "Small Room",
+            "dims": "10' x 15' rectangle",
+            "side": "5' x 10' attached privy/closet."
+          },
+          "encounter": {
+            "type": "Enemy",
+            "text": "The Elite Pair (Corrupt Guard): 2 Mid-High CR — Divide & Conquer: The pair splits the party by forcing them into separate alleys, rooms, or buildings, then engages each group separately.",
+            "isEnemy": true,
+            "composition": "The Elite Pair",
+            "tactic": "Divide & Conquer: The pair splits the party by forcing them into separate alleys, rooms, or buildings, then engages each group separately."
+          },
+          "resolution": null,
+          "interactable": {
+            "name": "Smuggler's Mud-Sled",
+            "flavor": null,
+            "tags": [
+              "Movement",
+              "Access"
+            ],
+            "signal": "Loud",
+            "visibility": "Obvious"
+          },
+          "footing": {
+            "name": "Sinkhole (Sudden)",
+            "impact": "Treated as a 20-foot-deep pit trap that cannot be reset. Falling deals 2d6 Bludgeoning damage and knocks the target Prone."
+          },
+          "reskin": null,
+          "effectDie": null,
+          "light": "lamplit",
+          "dressing": {
+            "text": "Rotting banner with a faint symbol.",
+            "condition": "Decayed"
+          },
+          "atmo": "still",
+          "creatures": [
+            {
+              "name": "Cultist Fanatic",
+              "realm": null,
+              "summary": null
+            }
+          ],
+          "surface": null
+        },
+        {
+          "num": 4,
+          "label": "Escalation",
+          "isFinale": false,
+          "state": "here",
+          "gist": "The Burning Building / Empty",
+          "scene": {
+            "type": "The Burning Building",
+            "description": "A warehouse's top floor ignites; smoke rolls into adjacent streets and the conflagration spreads with each passing round."
+          },
+          "area": {
+            "type": "Open Courtyard",
+            "dims": "50' x 80' rectangle",
+            "side": "10' x 20' attached stables."
+          },
+          "encounter": {
+            "type": "Empty",
+            "text": "Carved History — Plaques, dates, or names etched into stone or wood reveal the area's past. Gain a piece of historical lore or advantage on one Intelligence check related to the district's history.",
+            "isEnemy": false,
+            "composition": null,
+            "tactic": null
+          },
+          "resolution": null,
+          "interactable": {
+            "name": "hitching post",
+            "flavor": null,
+            "tags": [
+              "Clue",
+              "Movement"
+            ],
+            "signal": "Quiet",
+            "visibility": "Obvious"
+          },
+          "footing": {
+            "name": "Thick Mud",
+            "impact": "Wet, clinging muck. Counts as _Difficult Terrain_. Any creature knocked Prone in the mud must use all of its movement (instead of half) to stand up."
+          },
+          "reskin": null,
+          "effectDie": null,
+          "light": "lamplit",
+          "dressing": {
+            "text": "Narrow passage with scrape marks at shoulder height.",
+            "condition": "Tampered"
+          },
+          "atmo": "a sudden metallic clang followed by muttering",
+          "creatures": null,
+          "surface": null
+        },
+        {
+          "num": 5,
+          "label": "Hub",
+          "isFinale": false,
+          "state": "behind",
+          "approach": true,
+          "gist": "The Dream-Touched Boarding House / Problem",
+          "scene": {
+            "type": "The Dream-Touched Boarding House",
+            "description": "A flophouse where guests share feverish prophetic dreams; the landlord claims the building sits on a ley line and charges extra for the visions"
+          },
+          "area": {
+            "type": "Standard Room",
+            "dims": "20' x 20' square",
+            "side": "10' x 20' attached hallway."
+          },
+          "encounter": {
+            "type": "Problem",
+            "text": "Street Performer — DC 14 Wisdom (Insight) to realize they are a pickpocket or DC 13 Dexterity (Stealth) to blend in.",
+            "isEnemy": false,
+            "composition": null,
+            "tactic": null
+          },
+          "resolution": null,
+          "interactable": {
+            "name": "alley belfry",
+            "flavor": null,
+            "tags": [
+              "Distraction",
+              "Hazard"
+            ],
+            "signal": "Loud",
+            "visibility": "Obvious"
+          },
+          "footing": {
+            "name": "Dense Rubble",
+            "impact": "A collapsed wall blocking the path. Counts as _Difficult Terrain_."
+          },
+          "reskin": null,
+          "effectDie": null,
+          "light": "torchlit",
+          "dressing": {
+            "text": "Cloth tag tied to a hook with initials.",
+            "condition": "Burned/Scorched"
+          },
+          "atmo": "cold draft",
+          "creatures": null,
+          "surface": null
+        }
+      ],
+      "ambientPresence": null,
+      "briefing": null,
+      "cast": {
+        "locId": "location:amber-glass-quay",
+        "npcIds": [
+          "npc:erias",
+          "npc:falevalu-tavihiva"
+        ],
+        "itemIds": [
+          "item:a-formal-apothecary-s-label-printed-professionally-on-a-bottle-containing-something-entirely-different-from-what-is-labeled"
+        ],
+        "artIds": []
+      },
+      "moreSegments": 8
+    },
+    "levelUp": {
+      "status": "pending",
+      "from": 1,
+      "to": 3,
+      "cantrips": 0,
+      "spells": 2,
+      "asiCount": 0,
+      "subclassName": "College of Lore"
+    },
+    "retrieval": {
+      "omitted": {
+        "codex": 33,
+        "powers": 2,
+        "fronts": 1,
+        "gazetteer": 5
+      },
+      "rule": "Omitted state remains authoritative. Use supplied ids; never invent an omitted fact.",
+      "overTargetBytes": 7203
+    }
+  },
+  "route": {
+    "mode": "freeform-ruling",
+    "reasons": [
+      "open-intent-default"
+    ],
+    "relevantSlices": [
+      "scene",
+      "story-pressure",
+      "relevant-state"
+    ],
+    "modelCall": true
+  },
+  "rulingRequest": {
+    "contractVersion": 1,
+    "kind": "open-intent",
+    "playerAction": "I do not go back under the collapsed roof. I mark the trapped stall from outside, hammer the fire-call on the hitching post, and return to the belfry square to bring a real rescue line rather than chase the sounds toward the dam.",
+    "principle": "Interpret freely; propose consequences through the engine contract; never mutate state in prose.",
+    "returnFields": [
+      "understoodAction",
+      "ruling",
+      "needsRoll",
+      "proposedCheck",
+      "stakes",
+      "outcomeBranches",
+      "proposedEvents"
+    ],
+    "authority": {
+      "dm": [
+        "intent",
+        "rule-applicability",
+        "difficulty",
+        "advantage-disadvantage",
+        "stakes",
+        "exceptions",
+        "meaning"
+      ],
+      "engine": [
+        "identity",
+        "state",
+        "custody",
+        "dice",
+        "arithmetic",
+        "resources",
+        "clock",
+        "accepted-mutation"
+      ]
+    }
+  },
+  "receipt": null,
+  "lane": "fast",
+  "laneModel": "sonnet",
+  "laneReasons": [
+    "routine:go"
+  ],
+  "narrationBudget": {
+    "targetWords": 60,
+    "maxWords": 75
+  },
+  "lastResolution": {
+    "turnId": "t-msgahogzt0lwv",
+    "skill": "Constitution save",
+    "total": 2,
+    "degree": "crit-failure",
+    "branch": "fail"
+  }
+}

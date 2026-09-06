@@ -1,0 +1,48 @@
+{
+  "turnId": "t-msfkgqf9wqoh4",
+  "narration": "You understand the circuit one instant too late. \u201cLiving occupants first\u201d is the right priority, but the archive still needs a present author. Tessa\u2019s flat double finishes its mirrored sentence, peels out of the glass, and joins the old dwarf\u2019s heels. Her shadow is whole again. The copied ink also drains from the wall\u2014but instead of disappearing, it curls into the Altered Low Sluice Order in your hand as three tiny musical strokes. When you test the page with one soft note, those strokes answer with the rest of your call. Tessa exhales. \u201cYou gave me mine back,\u201d she says. \u201cBut you gave the thing your voice.\u201d",
+  "events": [
+    {
+      "type": "codex_contact",
+      "payload": {
+        "id": "npc:tessa-rill",
+        "engaged": true
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    },
+    {
+      "type": "codex_update",
+      "payload": {
+        "id": "item:the-altered-low-sluice-order",
+        "fields": {
+          "echoKey": "Mira Quill's three-note motif is now recorded in the order and can awaken its copied ink."
+        },
+        "note": "A near-miss restitution ritual returned Tessa Rill's shadow but bound Mira Quill's musical call into the document."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    },
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "factId": "brineglass:tessa-restored-mira-echo-bound",
+        "what": "Mira's near-miss ritual restored Tessa Rill's removed shadow, but bound Mira's three-note musical motif into the Altered Low Sluice Order as an active echo-key."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    }
+  ],
+  "rollRequest": null,
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Resolve the improvised restitution ritual after Mira's Arcana check.",
+    "ruling": "A total of 12 misses DC 13 by one: Tessa's stolen authorship and shadow return, but the incomplete circuit uses Mira's performed voice as the remaining author component.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "The rescue succeeds with a durable complication attached to a tracked story item rather than being softened into full success.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 20: tight near miss preserved. Tessa's rolled Dwarf identity was absent from prior social digests, so it could only be cleanly bound after full-state audit."
+}

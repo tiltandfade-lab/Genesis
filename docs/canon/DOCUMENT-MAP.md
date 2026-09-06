@@ -44,10 +44,12 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 | Pre-dungeon-era locked decisions (June 2026) | `docs/DESIGN.md` dated blocks | chronological registry; DECISION-INDEX carries the ids |
 | Current implementation map (what code exists) | `docs/ARCHITECTURE.md` | implementation evidence, NOT design target |
 | Session state / what happened / what's next | `docs/HANDOFF.md` · `docs/CHANGELOG.md` · `docs/NEXT-STEPS.md` | chronological operations surfaces |
+| Current implementation priority: text-first walk restoration | `docs/TEXT-FIRST-WALK-RESTORATION.md` | Story default; Theater Lab preserved/optional; substantive 8–12 walks; suspend/resume; sparse touched-object state; renderer-neutral realms |
+| Mechanization / interpretation boundary and provider-spend gate | `docs/MECHANIZATION-INTERPRETATION-BOUNDARY.md` | Conservative execution route; mechanics-first receipts; `beat-digest/v1`; one full Brineglass walk completed at turn 95; compaction/UI/final zero-provider soak gate paid comparison |
 | Graphics governing charter | `docs/GRAPHICS-CONVERGENCE-CHARTER.md` | protected core + convergence law |
 | Is the Clayroom fixture trustworthy? (reset ladder CL-R0…CL-R6) | `docs/CLAYROOM-RESET-LADDER.md` | renderer/fixture-trust gate across passes; gates C1H/C1I/Guard Post 1 |
 | Golden Site authority and four status gates | `docs/GOLDEN-SITES-CATALOG.md` | audited briefs, recommendation classes, Proof/MVP/Ideal, FFT/import boundary |
-| Golden Site procedural-vignette execution program | `docs/GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md` | one terrain/construction engine, coverage and asset routing, walk/game/battle loops, Waves 0–8, multi-session gates |
+| Golden Site procedural-vignette execution program (preserved, currently suspended) | `docs/GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md` | retained Theater Lab/future-projection program; superseded as current build owner by TEXT-FIRST-WALK-RESTORATION |
 | Golden Vignette visual/material execution standard | `docs/GOLDEN-VIGNETTE-VISUAL-GUIDE.md` | compact composition, connected-natural/chunky-constructed form, face/material staging, four bearings, context, persistence, review rubric |
 | FFT × Triangle Strategy evidence packet | `Reference/FFT-Triangle-Strategy-World-Study/` | retained research, measurements, estimates, sources, and experiments; guide routes supported findings without promoting every number to law |
 | Assetforge primary factory and Golden applications | `docs/ASSETFORGE.md` | shared quarantine/proof/admission envelope; thirteen current candidates; eight Golden surface/material/context/proof applications specified/unbuilt |
@@ -167,7 +169,7 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 - docs/DECK-CLEARING-FINDINGS.md — research — working-note/awaiting-review(2026-06-28) — corrects REAUTHORING-SWEEP-PLAN merges
 - docs/DESIGN-GUIDE.md — current-canon — design-guide/v1(2026-07-01) — pillars + Ivalice bible + T0-T7; visual sections now read through Wave 10/GCC routing (see §4)
 - docs/DESIGN-REVIEW-2026-07-15.md — proposed — design-review/OPEN(2026-07-15) — ⚠ open gate; verify whether the "design meeting" resolved elsewhere (dungeon waves largely absorbed it)
-- docs/DESIGN.md — current-canon — design-doc/living/canonical(2026-06-17→07-22) — the locked-decision registry (chronological blocks)
+- docs/DESIGN.md — current-canon — design-doc/living/canonical(2026-06-17→08-04) — the locked-decision registry (chronological blocks)
 - docs/DETECTED-EVENTS.md — implementation-evidence — system-spec/SPEC-LOCKED(2026-07-06) — BUILT 2026-07-07 per CLAUDE.md/index — ⚠ status never flipped
 - docs/DEV-PORTAL.md — proposed — system-spec/SPECCED(2026-07-18)
 - docs/DICE-OVERLAY.md — current-canon — system-spec/BUILT(2026-07-01)
@@ -181,6 +183,7 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 - docs/DM-SEAT.md — current-canon — system-spec/SPECCED(2026-07-03) — provider-neutral seat law (Wave 10 §11.83) now governs the product boundary
 - docs/DM-TURN-WALKTHROUGH.md — research — exhibit/DRAFT — ⚠ self-flagged verify-before-public-use items
 - docs/DREAM-HORIZON.md — current-canon — vision(2026-07-02) — bearing, not build queue; TEXT-FIRST/BLIND-PLAYABLE doctrines restated
+- docs/TEXT-FIRST-WALK-RESTORATION.md — current-canon — system-spec/FOUNDER-RULED-IMPLEMENTING(2026-08-03) — active build owner; Story default, Theater Lab preservation, substantive-walk restoration, suspend/resume, touched-object persistence, semantic realm/Golden routing
 - docs/DRESSING-ATMOSPHERE.md — implementation-evidence — system-spec(2026-07-04) — ⚠ status SPECCED but landed same day
 - docs/DRESSING-WIRING.md — current-canon — system-spec/BUILT(2026-07-04)
 - docs/DUNGEON-GRAPH.md — current-canon (built system) — system-spec/BUILT(2026-07-10) — future connection/secret/vertical authority = wave-04 record (self-noted 2026-07-22); resident-scaled wording constrained by P3.4/P6.4
@@ -204,7 +207,7 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 - docs/GEOMETRY-ACCELERATION-TOOLCHAIN.md — proposed — system-spec/SPECCED(2026-07-12)
 - docs/GEOMETRY-OSS-INTEGRATION.md — proposed — system-spec/SPECCED(2026-07-12) — landed pieces tracked in CHANGELOG (geometry default flip)
 - docs/GIT-LFS-MIGRATION.md — operations (done) — runbook/"READY"(2026-07-10) — ⚠ stale: LFS live since 2026-07-18 per DESIGN.md infra note
-- docs/GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md — current-canon — orchestration-plan/FOUNDER-AUTHORIZED-PROGRAM(2026-07-29) — unified terrain/construction vignette engine, Golden/ordinary coverage, asset foundry routes, deterministic demand census, recurring game/battle/visual proof, Waves 0–8, multi-session law
+- docs/GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md — accepted-supporting/suspended — orchestration-plan/FOUNDER-AUTHORIZED-PROGRAM(2026-07-29; priority superseded 2026-08-03) — retained unified terrain/construction vignette and visual proof program; not the active build owner
 - docs/GOLDEN-VIGNETTE-VISUAL-GUIDE.md — current-canon — design-guide/FOUNDER-AUTHORIZED-WORKING-GUIDE(2026-07-29) — FFT/TS/Genesis visual front door; face/material pipeline; hard/soft/provisional machine rubric; governed four-bearing review
 - docs/GOLDEN-SITE-VIGNETTE-CONTRACTS.md — current-canon — system-contract/WAVE-0-FROZEN-FOR-WAVE-1(2026-07-29) — v1 request/plan/asset-demand/receipt integration boundary and terrain/structure join law; machine companion under docs/intel
 - docs/GOLDEN-SITE-WAVE-1-OBSERVATORY-BRIEF.md — passed-evidence — implementation-brief/GATE-W1-PASSED(2026-07-29) — deterministic audit harness, read-only adapters, demand/disposition ledgers, replayable corpus and Gate-W1 verification under docs/intel
@@ -247,6 +250,7 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 - docs/LOOT-REMAP.md — current-canon — loot-overhaul-spec(2026-06-18) — L4/L3b deferred per TIER-SCOPE
 - docs/LOST-WORLD-REKEY.md — proposed — design-note/DRAFT(2026-07-08) — ⚠ in-doc RESOLVED section vs header
 - docs/MATERIAL-IDENTITY.md — proposed — system-spec/SPECCED-WITH-SPIKE(2026-07-11) — clean 07-20 not-implemented clarification (Wave 10 evidence)
+- docs/MECHANIZATION-INTERPRETATION-BOUNDARY.md — current-canon + implementation-evidence — research-record/PHASE-2F-IN-PROGRESS(2026-08-05) — zero-provider study; conservative execution router; typed mechanics-first rest + direct scene custody; five beat-shaped digest views; 95-turn Brineglass walk-completion/provider gate
 - docs/MESHY-PREMIUM-MONTH-1-MODEL-SLATE.md — operations — production-slate/MONTH-1-DEFINITIVE-LIST(2026-07-25) — 300-slot volumetric donor-model queue; ART-DIRECTION-CANON + MODEL_RECIPE remain authority
 - docs/MICRO-PROPS.md — superseded — system-spec(2026-07-04) — partially superseded by BEAUTY-WAVE-5 (self-noted)
 - docs/MODEL-BLITZ-24H.md — operations — runbook/LOCKED(2026-07-08)
@@ -361,7 +365,7 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 - docs/SOCIAL.md — current-canon (built) — system-spec/"draft"(2026-06-28) — ⚠ resolvers live per SOCIAL-SPINE-FIXES
 - docs/SPATIAL-MODEL.md — current-canon — design-doc/canonical(2026-06-19)
 - docs/SPECULATIVE-PREFETCH.md — proposed — system-spec/draft(2026-06-30)
-- docs/SPEED-DOCTRINE.md — current-canon — doctrine/locked-BINDING(2026-07-02)
+- docs/SPEED-DOCTRINE.md — current-canon — doctrine/locked-BINDING(2026-07-02; clarified by Adam 2026-08-04)
 - docs/SPICE-CURVE.md — current-canon (vocabulary) — none — §1 distribution superseded by SPICE-RAISE (mutually noted)
 - docs/SPICE-RAISE.md — accepted-supporting — system-spec/SPEC-LOCKED(2026-07-06) — adopted stance; §10 = drift-risk registry of old-distribution sites
 - docs/SPICE-RULER.md — proposed — doctrine/DRAFT-for-blessing(2026-07-02) — ⚠ 20 days unresolved

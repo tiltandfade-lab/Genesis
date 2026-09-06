@@ -1,0 +1,52 @@
+{
+  "turnId": "t-msg6o1cdfwl99",
+  "narration": "Your kick lands too high. The sled turns broadside and slams the curb; every crate answers with a glass chorus. Both masks snap toward you. One guard vaults the sinkhole while the other draws a spear behind the stalled cargo, leaving you on the ledge with retreat open but the shipment between them. The bell begins ringing by itself. Their surprise is gone; yours is not yet a surrender.",
+  "events": [
+    {
+      "type": "combat_start",
+      "payload": {
+        "foes": [
+          {
+            "name": "Guard",
+            "count": 2,
+            "role": "quarantine enforcer"
+          }
+        ],
+        "objectiveRef": "the illicit apothecary crates",
+        "segmentId": "s3",
+        "scene": {
+          "cover": [
+            "stalled mud-sled",
+            "crates"
+          ],
+          "hazards": [
+            "open sinkhole"
+          ],
+          "exits": [
+            "gravel passage",
+            "roof ledge"
+          ]
+        }
+      },
+      "source": "declared"
+    }
+  ],
+  "ruling": {
+    "understoodAction": "Resolve Sleight of Hand 10 against DC 12.",
+    "ruling": "Failure; the sled stalls loudly and both guards engage.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "Resolved",
+    "outcomeBranches": {
+      "failure": {
+        "total": 10,
+        "dc": 12
+      }
+    },
+    "proposedEvents": [
+      {
+        "type": "combat_start"
+      }
+    ]
+  }
+}

@@ -1,0 +1,251 @@
+{
+  "turnId": "t-msgbvaysczdx4",
+  "worldId": "msfjud9ebcves",
+  "action": "I do not follow the mark. I make a rubbing, wash the original away with runoff, and leave by a different route to return to Tessa Rill at the Cobbled Tannery. I show her the copy before I tell her what happened.",
+  "rolls": [],
+  "digest": {
+    "schema": "beat-digest/v1",
+    "view": "social",
+    "slices": [
+      "scene",
+      "pc",
+      "story-pressure",
+      "continuity",
+      "social",
+      "local-actors"
+    ],
+    "worldId": "msfjud9ebcves",
+    "worldName": "The Brineglass Reach",
+    "clock": {
+      "day": 1,
+      "min": 1296,
+      "band": "night",
+      "exact": "21:36",
+      "session": 0,
+      "knowsTime": false
+    },
+    "location": "Shadowed & Lawless — The water tower platform, 5x10 ft, torchlit (Wandering Torch, Cinderblock Stack, Storm Drain Grate)",
+    "pc": {
+      "id": "msfjud9rbeahy",
+      "name": "Mira Quill",
+      "class": "Bard",
+      "level": 3,
+      "hp": {
+        "cur": 10,
+        "max": 12
+      },
+      "conditions": [],
+      "marks": [
+        {
+          "id": "mk-msfjud9s5npiw",
+          "text": "You were poisoned; your next save against poison has disadvantage.",
+          "kind": "injury",
+          "sinceDay": 0
+        }
+      ],
+      "gold": 19,
+      "mods": {
+        "str": -3,
+        "dex": 1,
+        "con": -2,
+        "int": 0,
+        "wis": -2,
+        "cha": 2
+      },
+      "skillProfs": [
+        "Deception",
+        "Sleight of Hand",
+        "Perception",
+        "Performance",
+        "Persuasion",
+        "Insight",
+        "Investigation",
+        "Stealth"
+      ]
+    },
+    "powers": [
+      {
+        "clockId": "the-crier-s-circle",
+        "faction": "The Crier's Circle",
+        "dominant": true,
+        "agenda": "become something other than what it is",
+        "method": "rumor and propaganda",
+        "tags": [
+          "popular"
+        ],
+        "clock": "3/6"
+      }
+    ],
+    "fronts": [
+      {
+        "clockId": "a-blight-or-plague-is-spreading-toward-the-town",
+        "kind": "external",
+        "danger": "a blight or plague is spreading toward the town",
+        "impersonal": "wildfire",
+        "clock": "0/6",
+        "closed": false,
+        "dmOnly": {
+          "truth": null,
+          "doom": "displacement — the people scatter"
+        }
+      }
+    ],
+    "recentLedger": [
+      {
+        "type": "canon",
+        "day": 1,
+        "min": 1296,
+        "text": "◆ During Mira's post-rescue rest, an unknown hand marked the outside of her internally barred lantern room with a salt-chalk eye and three broken musical strokes; the local workers did not recognize the sign."
+      }
+    ],
+    "codex": [
+      {
+        "id": "npc:tessa-rill",
+        "kind": "npc",
+        "name": "Tessa Rill",
+        "dm": {
+          "want": "Feel what the drink and the dice give them one more time, and this time walk away ahead. — addiction, greed",
+          "leverage": "Has hidden where a beloved is buried, unmarked, and visits in secret. — grief, secret",
+          "firstAnswerAssessment": "Archive echo and living message remain indistinguishable without asking an unrecorded contradiction; the test may teach the listener."
+        }
+      },
+      {
+        "id": "location:the-cobbled-tannery",
+        "kind": "location",
+        "name": "The Cobbled Tannery",
+        "mapNodeId": "the-cobbled-tannery",
+        "fields": {
+          "cat": "Grounded"
+        },
+        "dm": {
+          "itemsPool": "realm-items-frontier",
+          "dressing": {
+            "props": "frontier",
+            "surfaces": "frontier"
+          }
+        }
+      }
+    ],
+    "levelUp": {
+      "status": "pending",
+      "from": 1,
+      "to": 3,
+      "cantrips": 0,
+      "spells": 2,
+      "asiCount": 0,
+      "subclassName": "College of Lore"
+    },
+    "itemCustody": [
+      {
+        "item": {
+          "id": "msgbovelo8vyb",
+          "name": "Blue-Green Gem (10 gp)",
+          "qty": 1,
+          "conditions": [],
+          "codexId": null
+        },
+        "holder": {
+          "kind": "container",
+          "ref": "walk:frontier-s0-0:s11:public-strongbox",
+          "name": "the co-signed public strongbox"
+        },
+        "intent": "place",
+        "note": "One blue-green gem valued at ten gold is witnessed and locked in the workers' joint-custody strongbox."
+      },
+      {
+        "item": {
+          "id": "msgbovellpf3r",
+          "name": "Sealed Coin Parcel (40 gp)",
+          "qty": 1,
+          "conditions": [],
+          "codexId": null
+        },
+        "holder": {
+          "kind": "container",
+          "ref": "walk:frontier-s0-0:s11:public-strongbox",
+          "name": "the co-signed public strongbox"
+        },
+        "intent": "place",
+        "note": "Forty gold crowns are counted aloud, sealed as one parcel, and locked in the workers' joint-custody strongbox."
+      }
+    ],
+    "retrieval": {
+      "omitted": {
+        "codex": 36,
+        "powers": 1,
+        "fronts": 1,
+        "gazetteer": 4,
+        "itemCustody": 5
+      },
+      "rule": "Omitted state remains authoritative. Use supplied ids; never invent an omitted fact.",
+      "pinnedCodexIds": [
+        "npc:tessa-rill",
+        "location:the-cobbled-tannery"
+      ],
+      "actionCodexIds": [
+        "location:the-cobbled-tannery",
+        "npc:tessa-rill"
+      ],
+      "overTargetBytes": 3454
+    }
+  },
+  "route": {
+    "mode": "freeform-ruling",
+    "reasons": [
+      "open-intent-default"
+    ],
+    "relevantSlices": [
+      "scene",
+      "story-pressure",
+      "relevant-state"
+    ],
+    "modelCall": true
+  },
+  "rulingRequest": {
+    "contractVersion": 1,
+    "kind": "open-intent",
+    "playerAction": "I do not follow the mark. I make a rubbing, wash the original away with runoff, and leave by a different route to return to Tessa Rill at the Cobbled Tannery. I show her the copy before I tell her what happened.",
+    "principle": "Interpret freely; propose consequences through the engine contract; never mutate state in prose.",
+    "returnFields": [
+      "understoodAction",
+      "ruling",
+      "needsRoll",
+      "proposedCheck",
+      "stakes",
+      "outcomeBranches",
+      "proposedEvents"
+    ],
+    "authority": {
+      "dm": [
+        "intent",
+        "rule-applicability",
+        "difficulty",
+        "advantage-disadvantage",
+        "stakes",
+        "exceptions",
+        "meaning"
+      ],
+      "engine": [
+        "identity",
+        "state",
+        "custody",
+        "dice",
+        "arithmetic",
+        "resources",
+        "clock",
+        "accepted-mutation"
+      ]
+    }
+  },
+  "receipt": null,
+  "lane": "fast",
+  "laneModel": "sonnet",
+  "laneReasons": [
+    "default-fast"
+  ],
+  "narrationBudget": {
+    "targetWords": 60,
+    "maxWords": 75
+  },
+  "lastResolution": null
+}

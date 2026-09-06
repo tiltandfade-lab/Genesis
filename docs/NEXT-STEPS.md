@@ -3,7 +3,7 @@ type: next-steps
 branch: Genesis
 status: living
 created: 2026-06-18
-updated: 2026-07-29
+updated: 2026-08-05
 related:
   - "[[DESIGN]]"
   - "[[GAP-ANALYSIS]]"
@@ -18,7 +18,91 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
 roll into `NEXT-STEPS-ARCHIVE.md` via `python3 build/archive-docs.py --emit`. Standing plan
 sections (tracks/layers/etc.) are never auto-archived.
 
-## Do next (2026-07-29 — Golden Site procedural-vignette master program)
+## Do next (2026-08-04 — mechanization / interpretation boundary)
+
+`MECHANIZATION-INTERPRETATION-BOUNDARY.md` is the active AI-seat prerequisite. The original
+six-turn mailbox probe has grown into a 28-turn replay corpus and a 95-turn copied campaign soak,
+all through production state seams with **zero provider calls**. The continuing rule is that routine
+truth and mechanics settle before narration while interpretation, acting, and meaning stay open.
+
+1. ☑ Run the first local bridge probe set: opening, observation, inventory query, object transfer,
+   dialogue/on-demand NPC mint, and short rest.
+2. ☑ Record the boundary failures: narration contradicted equipped-object state; an inventory read
+   spent a full DM turn; `rest` rolled its consequence after prose; stack split+placement lacks one
+   atomic operation.
+3. ☑ Add conservative `dmRoute()` execution modes ahead of and independent from quality triage:
+   `local-fact`, `declared-mechanic`, `freeform-ruling`. Unknown/contextual text defaults open.
+4. ☑ Define `mechanical-receipt/v1`; prove exact declared rests resolve before digest/narration on
+   both transports; block event replay; validate the optional open-ruling proposal.
+5. ☑ Instrument route, mechanics, digest, request acknowledgement, first token/meaningful feedback,
+   response, and unlock. Treat ≤4s as a measured target and ≥8s silence as a failure flag—not a claim.
+6. ☑ Add atomic `item_transfer` for whole/partial stacks with stable ids, explicit destinations,
+   persistent current-scene custody, legacy linkage, save/reload, failure atomicity, and settled
+   receipt replay protection; custody can now be segment-scoped and picked back up. Newly revealed
+   scene loot can also originate directly in world custody without teleporting through the PC, and
+   completed-walk residue remains discoverable at its node (`verify-item-transfer` 38/38).
+7. ☑ Replace the general steady-state turn digest with `beat-digest/v1` views (`scene`, `inventory`,
+   `combat`, `travel`, `social`) under a verified 3 KiB ordinary target, preserving story pressure,
+   knowledge/status limits, current Codex recall, and named off-scene retrieval (`verify-beat-digest`
+   55/55). Keep full `dmDigest()` as bootstrap/debug compatibility truth.
+8. ☑ Promote the probes + existing state-eval fixtures into a 28-turn zero-provider replay corpus:
+   seven persistent four-turn arcs, 38/38 required green state checks, 26/26 recorded dramatic
+   anchors, two local/no-model turns, and two consecutive clean runs. See
+   `ZERO-PROVIDER-REPLAY-CORPUS.md` and `dev/replay-corpus/`.
+9. ☑ Fix all six reproduced provider-study gaps: walk-segment custody scope, custody→PC pickup,
+   combat reload survival, exact named retrieval under fitting, duplicate response suppression, and
+   pending-turn/world response routing. No known-gap sentinel remains in the corpus.
+10. ☑ Continue the copied Brineglass campaign beyond its original 30 turns before paying for a
+    provider. The repair soak reached turn 95 at $0. It exercised travel, failed ideas, lethal combat,
+    Dodge, escape, custody, composite actions, player-authored alternatives, critical magnitude,
+    branching/backtracking, rescue, a complete 11-segment walk/finale, direct scene loot, rest, and
+    refusal of a newly created lead. Evidence:
+    `dev/playtest-saves/brineglass-bridge-30/resume-after-fixes/`.
+11. ☑ Specify and build typed non-severe rest-row effects. All twenty shared-semantics rows now use
+    engine-owned typed vocabulary: exact recovery fractions, one-use disadvantage, next-segment
+    duration, bonus resources, and interruption apply and consume mechanically; vague Penalty,
+    Insight, and Boon meaning remains available to the DM without becoming a fabricated number.
+12. ☑ Audit fixed-world solo danger without adding PC-level rubber-banding. Deadly scenes remain
+    deadly and noncombat resolution retains equal credit; generated danger must be telegraphed and
+    a solo PC receives a flee-first escape instead of an invisible roster nerf. Live failure,
+    retreat, alternate-route, rescue, and public-resolution probes exercised that contract.
+13. ☐ Compact truth-complete transition and critical packets toward the 3 KiB ordinary target. Do
+    not remove the current segment, its immediate graph exits, critical lenses, or selected canon to
+    hit a byte number; 52 model-shaped live packets averaged 5,185 bytes, with an 8,542-byte p95 and
+    8,759-byte maximum.
+14. ☑ Continue the same copied campaign through a targeted third tranche. Turns 66–95 re-tested
+    typed rest effects, walk branching/return, inventory and scene custody, failed high-stakes
+    approaches, critical branches, finale routing, player refusal, movement, pacing drought, and
+    railroad pressure. The walk completed without hiding or erasing its world residue.
+15. ☐ Only after the continuing soak stops surfacing P0/P1 engine defects, run a small capped blind
+    bake-off: OpenAI direct (GPT-5.6 Terra/Sol) vs Anthropic direct (Claude Sonnet 5/Fable 5). Use
+    copied fixtures, never the Brineglass campaign state.
+16. ☐ Before that spend, exercise the pending level-up choices in the real browser UI, compact the
+    walk/finale packets, then run one last zero-provider tranche: promoted frontier, a live typed
+    next-check/next-segment rider, completed-site revisit, and save/reload during a new combat.
+
+## Do next (2026-08-03 — text-first walk restoration)
+
+`TEXT-FIRST-WALK-RESTORATION.md` is the active implementation owner. Story, state, walks,
+realms, and scoped AI context are the product spine; the theater and Golden visual pipeline are
+preserved as optional/future projections rather than current prerequisites.
+
+1. ☑ Make **Story** the default presentation and require explicit **Theater Lab** opt-in; do not
+   delete or unload the theater in the first slice.
+2. ☑ Change walk switching from implicit abandonment to suspension/resumption with cursor and
+   overlays intact.
+3. ☑ Restore substantive prep walks to the 8–12 segment functional range; retain short errands as
+   separately classified scene chains.
+4. ☑ Add focused gates: presentation-state parity, switch/resume, L1/L10 length, 12-segment digest
+   budget, and old-save round trip.
+5. ☑ Close one stable walk-object state proof across leave → save → reload → resume.
+6. ☐ After the first slice passes, extract renderer-neutral realm context; only then consider a
+   derived 2D node map.
+
+The prior Golden Site Wave-2 queue below is preserved as the suspended Theater Lab/visual program.
+It is not the active build owner and resumes only on a later founder ruling.
+
+## Suspended visual program (was Do next 2026-07-29 — Golden Site procedural-vignette master program)
 
 `GOLDEN-SITE-PROCEDURAL-VIGNETTE-MASTER-PLAN.md` is the execution owner for the next
 several weeks. Terrain and construction are stages of one synthesizer. The Golden
@@ -280,19 +364,6 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 - O2. ☑ **Fragments for the opening surface — DONE 2026-06-19.** Authored 6–10 word sensory fragments for all 9 world-genesis tables (218 rows) + both pressure tables, held in a parallel `FRAG` map in `genesis.html` (no row-array surgery). Threaded through `lookup`/`rollTbl`/`rollPressure` (each now returns the row `idx` + fragment). **The player sees the fragment at the roll** (genesis cards + the triad nearby), and pressures stay veiled (player sees the fragment, DM holds danger+doom); the world view *after founding* shows real names (the reveal arc), and `handToDM` carries the truth. Bundle/entry rolls already read as fragments, so weren't duplicated. Verified: FRAG arrays align to row counts, runtime threading 0 misses in 9000 rolls, script parses clean.
 - O3. ☐ **Carry the sensory-first ordering** from `_START_New World` into how the opening is *presented* (place before powers).
 - Then mid-session verbs: ~~Wilderness Encounter port~~ **STALE — the generator IS ported** (`src/engine/wild-walk.js`, all 24 `wilderness-*` tables compiled; prep walks consume it). The real gap was the Travel verb ignoring it → **☑ SPECCED as `docs/TRAVEL-WALKS.md`** (2026-07-01 night: travel becomes the walk). Urban/Dungeon remain callable via prep walks.
-
-## Do next (2026-07-25, post split + singular close)
-
-1. ☐ **Adam's visual verdicts** — the open PENDING ADAM ledger: visual-correction C2–C4 sheets,
-   the AO contact fix triptych, the split's visual-equivalence sheet, the torchlit C3 look (which
-   also owns the env1* expectation update).
-2. ☐ **Guard-post build resumes on the split architecture** — future graphics changes land in one
-   module each (docs/THEATER-MODULES.md is the map; GOLDEN-SITES-CATALOG.md the program).
-3. ☐ **Split follow-ups** (none block the guard post): d4-doors option-b + theater-doors extraction,
-   AO A/B rig clip-box pin, material-contract re-baseline, root's 16 dead import bindings,
-   dungeon-interior §18 negative-clause rescope, diegetic-light LFS-env reds.
-4. ☐ **Material lane taste pass** (GP-MM-STONE-V001 four stone candidates await Adam's cards) —
-   gates the MM engine wiring.
 
 ## Do next (2026-07-27, integration close + campaign day)
 

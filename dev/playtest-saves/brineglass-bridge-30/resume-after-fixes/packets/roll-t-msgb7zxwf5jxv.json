@@ -1,0 +1,92 @@
+{
+  "request": {
+    "skill": "Investigation",
+    "ability": "int",
+    "dc": 15,
+    "adv": "advantage",
+    "branches": {
+      "success": {
+        "narration": "Your fourth beat lands exactly when weight becomes honest. The line pulls twice: a mason from the high window, then two children wrapped together in a curtain. On your final cutoff, the wall falls across the empty interval they just crossed. The workers keep the rhythm without you; the trapped civilians are out, and the cage remains shut.",
+        "events": [
+          {
+            "type": "encounter_resolved",
+            "source": "branch",
+            "payload": {
+              "foes": [],
+              "method": "three-cycle observation and lute-timed rescue line",
+              "objectiveRef": "extract civilians without entering the madness cascade",
+              "outcome": "civilians rescued; cage remained shut"
+            }
+          },
+          {
+            "type": "fact_canonized",
+            "source": "branch",
+            "payload": {
+              "what": "Mira read the madness cascade’s real intervals and timed the rescue line that extracted a mason and two children before the wall fell."
+            }
+          }
+        ]
+      },
+      "nearMiss": {
+        "narration": "Your first beat is true and the line pulls a mason clear. The next interval shifts early; you cut the signal before anyone commits, and the remaining workers obey. One life is out, two windows remain unreachable, and the cage is still shut. The rescue has gained something, but the pattern will not repeat for you.",
+        "events": [
+          {
+            "type": "encounter_resolved",
+            "source": "branch",
+            "payload": {
+              "foes": [],
+              "method": "one true interval followed by a safe abort",
+              "objectiveRef": "extract civilians without entering the madness cascade",
+              "outcome": "one civilian rescued; others remained trapped"
+            }
+          },
+          {
+            "type": "fact_canonized",
+            "source": "branch",
+            "payload": {
+              "what": "Mira’s timed rescue line saved one mason, then stopped safely when the madness cascade changed rhythm; other civilians remained trapped."
+            }
+          }
+        ]
+      },
+      "fail": {
+        "narration": "The fourth cycle contradicts all three before it. You cut the signal before the line moves, exactly as promised. Nobody outside is hurt—but the upper windows fold inward while everyone waits, sealing two voices behind stone. The cage’s hammering stops at the same instant, as if it had been setting the false rhythm for you.",
+        "events": [
+          {
+            "type": "fact_canonized",
+            "source": "branch",
+            "payload": {
+              "what": "The madness cascade broke its apparent rhythm before the rescue line committed; two trapped voices were sealed behind the collapsed upper windows, while the caged beast stopped hammering at the same instant."
+            }
+          }
+        ]
+      }
+    }
+  },
+  "result": {
+    "ok": true,
+    "resolvedLocally": true,
+    "liveResolutionNeeded": false,
+    "pending": null,
+    "recovered": false,
+    "resolution": {
+      "turnId": "t-msgb7zxwf5jxv",
+      "skill": "Investigation",
+      "total": 16,
+      "degree": "success",
+      "branch": "success"
+    },
+    "branchNarration": "Your fourth beat lands exactly when weight becomes honest. The line pulls twice: a mason from the high window, then two children wrapped together in a curtain. On your final cutoff, the wall falls across the empty interval they just crossed. The workers keep the rhythm without you; the trapped civilians are out, and the cage remains shut.",
+    "newLedger": [
+      "✦ Encounter civilians rescued; cage remained shut (three-cycle observation and lute-timed rescue line) — 0 foes.",
+      "◆ Mira read the madness cascade’s real intervals and timed the rescue line that extracted a mason and two children before the wall fell.",
+      "✦ +1 XP — 1453 total."
+    ],
+    "pc": {
+      "name": "Mira Quill",
+      "hp": "6/12",
+      "conditions": [],
+      "status": "living"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "turnId": "t-msfk90p2cen96",
+  "narration": "The arm does not resist the dagger. The slip opens flat. Two instructions occupy the same paper in different inks. The older hand reads: \u201cLiving occupants first to dry galleries; sealed records to tannery loft.\u201d The correction reverses them: \u201cSealed voices first; living occupants hold Low Sluice.\u201d Its ninth word is warmth. The doubled wax belongs to the Crier\u2019s Circle, but the correction is signed only by a blank oval\u2014and when your candle turns, every raised letter casts a tiny shadow except that mark. On the back, a fresh wet line has appeared: SHELTER IS A KIND OF DOOR.",
+  "events": [
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "factId": "brineglass:order-text-and-shadow-mark",
+        "what": "The original Low Sluice order prioritized living occupants; a second hand reversed it to prioritize sealed records, used 'warmth' as the ninth word, and signed with a shadowless blank oval."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    }
+  ],
+  "gen": [
+    {
+      "kind": "item",
+      "opts": {
+        "name": "The Altered Low Sluice Order"
+      }
+    }
+  ],
+  "rollRequest": null,
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Manipulate and inspect the offered document without placing Mira's hand in the sorting mechanism.",
+    "ruling": "The dagger method safely turns an exposed slip. Reading visible writing, seals, corrections, and signature needs no check.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "The document links the evacuation fraud to the local shadow-for-warmth myth and has just written a new line in response to the crisis.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 12: player controls when to choose a route. Digest failed to include the contacted interior/message context and instead surfaced unrelated Amber-Glass Quay; session memory carried continuity."
+}

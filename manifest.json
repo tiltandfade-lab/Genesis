@@ -66,6 +66,7 @@
     "src/world/saga.js",
     "src/world/rebirth.js",
     "src/world/item-legacy.js",
+    "src/world/item-custody.js",
     "src/ui/reference-shelf.js",
     "src/ui/ref-wiki.js",
     "src/ui/ref-atlas.js",
@@ -135,6 +136,7 @@
     "src/world/capture.js",
     "src/world/triage.js",
     "src/world/dm.js",
+    "src/world/dm-digest.js",
     "src/world/seat.js",
     "src/world/shop.js",
     "src/world/companions.js",
@@ -814,7 +816,13 @@
         "applyHpDelta",
         "spendSlot",
         "spendResource",
+        "spendHitDice",
         "restRecover",
+        "restoreOneResource",
+        "restEffectTrack",
+        "restEffectCheckMode",
+        "restEffectMergeMode",
+        "restEffectsAdvanceSegment",
         "resourceDigest",
         "spellDigest",
         "spellListsOf",
@@ -1184,7 +1192,21 @@
         "corpseStatus",
         "prepCastId"
       ],
-      "desc": "The item lifecycle contract (docs/ITEM-LEGACY.md) — death → corpse → scavenge → recovery custody, tracked on the CODEX item record under one block r.legacy (the seven GPT lifecycle fields: origin/claimant/lastSeen/lossState/recoveryHook/factionInterest/decay-pointer + an instSnapshot re-mint truth). The inventory instance gains ZERO new fields; the existing inst.codexId link is the only seam. legacyGrade(inst) is the significance gate (codex-storied OR enchanted non-consumable non-stack). legacyEnsureRecord mints/ensures the record + r.legacy (auto-promotes an enchanted item at death); legacyStamp is the sole r.legacy writer after ensure (touches the record for the delta digest + one ledger line). corpseLegacyStamp (from killCharacter, world.fate) stamps every legacy-grade carried item on-corpse + mints a recovery-hook thread (legacyMintHook, reusing the thread-seed pattern). corpseScavengeResolve is the enemy-gets-your-gear path — a LAZY, once-per-corpse engine d6 (SCAVENGE_TEETH: den 3 / travelled 2 / wild 1 / sealed 0) fired only at claimCorpse + runBardo (never on a read path); a hit moves one item to claimed-creature/npc/faction, a gone corpse sweeps the rest to unknown. legacyDigest is the dmDigest itemLegacy slice (null when empty, cap 5). One new event item_claimed + item_changed takenBy widening carry the custody moves. INFERENCE COST ZERO — no model call anywhere. lossState:\"cached\" is the parked-Bastion seam (refused in v1). Layer 2. Added 2026-07-06 (ITEM-LEGACY unit)."
+      "desc": "The item lifecycle contract (docs/ITEM-LEGACY.md) — death → corpse → scavenge → recovery custody, tracked on the CODEX item record under one block r.legacy (the seven GPT lifecycle fields: origin/claimant/lastSeen/lossState/recoveryHook/factionInterest/decay-pointer + an instSnapshot re-mint truth). The inventory instance gains ZERO new fields; the existing inst.codexId link is the only seam. legacyGrade(inst) is the significance gate (codex-storied OR enchanted non-consumable non-stack). legacyEnsureRecord mints/ensures the record + r.legacy (auto-promotes an enchanted item at death); legacyStamp is the sole r.legacy writer after ensure (touches the record for the delta digest + one ledger line). corpseLegacyStamp (from killCharacter, world.fate) stamps every legacy-grade carried item on-corpse + mints a recovery-hook thread (legacyMintHook, reusing the thread-seed pattern). corpseScavengeResolve is the enemy-gets-your-gear path — a LAZY, once-per-corpse engine d6 (SCAVENGE_TEETH: den 3 / travelled 2 / wild 1 / sealed 0) fired only at claimCorpse + runBardo (never on a read path); a hit moves one item to claimed-creature/npc/faction, a gone corpse sweeps the rest to unknown. legacyDigest is the dmDigest itemLegacy slice (null when empty, cap 5). item_claimed is the lifecycle mutator; item_changed and item_transfer fold physical custody moves through it. INFERENCE COST ZERO — no model call anywhere. lossState:\"cached\" is the parked-Bastion seam (refused in v1). Layer 2. Added 2026-07-06 (ITEM-LEGACY unit)."
+    },
+    {
+      "id": "world.item-custody",
+      "path": "src/world/item-custody.js",
+      "type": "logic",
+      "owns": [
+        "ITEM_CUSTODY_VERSION",
+        "ITEM_TRANSFER_DESTINATION_KINDS",
+        "itemCustodyOf",
+        "itemCustodyFind",
+        "itemCustodyIdExists",
+        "itemCustodyDigest"
+      ],
+      "desc": "Durable ordinary-item custody for Story-first play. Inventory owns carried items and corpse.items owns items on bodies; w.itemCustody owns the third case: a full portable-item instance placed with an explicitly identified npc, creature, faction, container, place, or scene object. world.dm mutates it through item_transfer for an existing physical instance or item_placed for newly revealed loot that already belongs at the scene. itemCustodyFind/itemCustodyIdExists are read-only collision helpers; itemCustodyDigest emits only locally relevant records (cap 8): the exact active walk segment while walking, then completed/abandoned segment residue at the matching node after the walk closes. This preserves a placed javelin without sending the world's full object registry. Additive lazy state; old saves require no destructive migration. Added 2026-08-04; completed-walk residue/direct-origin extension 2026-08-05."
     },
     {
       "id": "ui.reference-shelf",
@@ -1403,7 +1425,8 @@
         "ssPartyStrip",
         "ssPartyRow",
         "cmAllyChip",
-        "sidekickMiniSheet"
+        "sidekickMiniSheet",
+        "toggleTheaterLab"
       ],
       "callTimeDeps": [
         "activeWorld",
@@ -2188,9 +2211,10 @@
       "path": "src/engine/walk-interactables.js",
       "type": "logic",
       "owns": [
-        "bindWalkInteractables"
+        "bindWalkInteractables",
+        "reconcileWalkInteractableState"
       ],
-      "desc": "docs/STAGE-D-WAVE-SPECS.md D2 (Walk→coordinate binding) = BEAUTY-WAVE-5.md IA-2 verbatim. bindWalkInteractables(plan, walk, opts) turns the walk's text-only per-room object/feature/door rolls (dungeon-walk.js) into plan.interactables=[{archetype,slug,state,extrudeDepth,name,flavor,x,y,roomSegNum,sourceRef,reserve?}], a NEW field sibling to engine.place-dressing's plan.dressing[]. Archetype resolution is a documented HONEST GAP: the dungeon-walk object/feature tables roll texture/terrain flavor, not the 8 objects-dg-03 archetype nouns directly, so a keyword map (WI_ARCHETYPE_KEYWORDS) matches rolled text against door/chest/lever/shrine/campfire/trap/portal/container — no match means no projection for that field (Law 5: the raw segment stays canon and unchanged either way); the door archetype is resolved structurally off segment.exits[0].door, never a text guess, with its own Dungeon Door State roll mapped (WI_DOOR_STATE_KEYWORDS) onto shut/ajar/open/broken. Starting state is the rolled door state when present, else data.interactables' INTERACTABLE_ARCHETYPE_STATES[archetype][0] resting default (D0's own dmEntityState convention) — never a fresh roll. opts.budgetPerRoom (default Infinity, 'default-empty screen budget') caps how many of a room's resolved candidates get a real (x,y); the remainder become reserve:true entries (x:null,y:null) — a walk-backed staging reserve, never a discard lane. Placement reuses engine.place-dressing's dpRoomFloorCells/dpAdjacentToWall/dpCenter2x2 globals (door archetype instead binds to plan.doors filtered by betweenSegs) and data.interactables' INTERACTABLES_REGISTRY for slug/extrudeDepth/location (typeof-guarded; degrades to an empty projection, never throws, when the registry is absent). Every placed entry seeds an independent dspMulberry32 stream off hash('walk-interactable:v1:'+walkId+':'+roomSegNum+':'+sourceRef), mirroring engine.place-distribution's own seed-formula convention verbatim (must load after engine.place-spatialize/engine.place-dressing — see manifest loadOrder / genesis.html script order). PERSISTENCE GAP (documented, not solved here): dm.js's dmFindInteractable (D0) reads a PERSISTED w.prep.nodes[<activeWalkId>].interactables[] array so a state_transition can find-and-mutate a placed entity across turns; this module's own plan.interactables[] is, like plan.dressing[], a PURE re-derivable projection recomputed fresh every call — wiring the two together (or re-deriving dmFindInteractable) is explicitly left to D3/D4, not invented here. Pure engine-layer data code, no THREE/DOM/render, no Math.random (fully deterministic function of its inputs). Placement refinement (D3 ROOM-GRAMMAR) and render (D4) are out of scope. Added 2026-07-14."
+      "desc": "docs/STAGE-D-WAVE-SPECS.md D2 (Walk→coordinate binding) = BEAUTY-WAVE-5.md IA-2 verbatim. bindWalkInteractables(plan, walk, opts) turns the walk's text-only per-room object/feature/door rolls (dungeon-walk.js) into plan.interactables=[{archetype,slug,state,extrudeDepth,name,flavor,x,y,roomSegNum,sourceRef,reserve?}], a NEW field sibling to engine.place-dressing's plan.dressing[]. Archetype resolution is a documented HONEST GAP: the dungeon-walk object/feature tables roll texture/terrain flavor, not the 8 objects-dg-03 archetype nouns directly, so a keyword map (WI_ARCHETYPE_KEYWORDS) matches rolled text against door/chest/lever/shrine/campfire/trap/portal/container — no match means no projection for that field (Law 5: the raw segment stays canon and unchanged either way); the door archetype is resolved structurally off segment.exits[0].door, never a text guess, with its own Dungeon Door State roll mapped (WI_DOOR_STATE_KEYWORDS) onto shut/ajar/open/broken. Starting state is the rolled door state when present, else data.interactables' INTERACTABLE_ARCHETYPE_STATES[archetype][0] resting default (D0's own dmEntityState convention) — never a fresh roll. opts.budgetPerRoom (default Infinity, 'default-empty screen budget') caps how many of a room's resolved candidates get a real (x,y); the remainder become reserve:true entries (x:null,y:null) — a walk-backed staging reserve, never a discard lane. Placement reuses engine.place-dressing's dpRoomFloorCells/dpAdjacentToWall/dpCenter2x2 globals (door archetype instead binds to plan.doors filtered by betweenSegs) and data.interactables' INTERACTABLES_REGISTRY for slug/extrudeDepth/location (typeof-guarded; degrades to an empty projection, never throws, when the registry is absent). Every placed entry seeds an independent dspMulberry32 stream off hash('walk-interactable:v1:'+walkId+':'+roomSegNum+':'+sourceRef), mirroring engine.place-distribution's own seed-formula convention verbatim (must load after engine.place-spatialize/engine.place-dressing — see manifest loadOrder / genesis.html script order). PERSISTENCE: reconcileWalkInteractableState(prepNode, interactables) owns the minimal durable {sourceRef,archetype,state} store and restores it onto fresh projections; world.prep invokes it before synthesis or any visual mount, while Theater delegates to the same owner. Pure engine-layer data code, no THREE/DOM/render, no Math.random (fully deterministic function of its inputs). Placement refinement (D3 ROOM-GRAMMAR) and render (D4) are out of scope. Added 2026-07-14."
     },
     {
       "id": "engine.room-grammar",
@@ -2810,10 +2834,10 @@
         "gradeColor",
         "prepEligibleCompanionCreatures",
         "codexHereNowIds",
-        "codexOf",
         "codexGetAttitude",
         "codexAmbientPresenceFor",
-        "interiorBuildBoard"
+        "interiorBuildBoard",
+        "reconcileWalkInteractableState"
       ],
       "desc": "BATTLE-THEATER T1 (docs/BATTLE-THEATER.md §1/§7) + T1.5 PSX grit pass + PASS 2 archetypes/silhouettes (2026-07-03, \"get the shapes covered\") + MODEL-GRAMMAR G2 §4b shape-hint resolver + REALM-RENDER-STYLE.md v1 (2026-07-05: theaterBoardFrom grades every tile's tint through realmRenderProfile(opts.realms)/gradeColor — data/realms.js, read defensively via typeof guards like PART_NAMES — and passes `realms` through on its return so the GL layer can grade the void/light colors it owns off the identical profile; absent/empty opts.realms is a byte-identical passthrough) — the PURE data layer feeding the three.js battle stage. theaterBoardFrom(segment, scene, opts) re-projects the existing zone grid (reuses engine.combat's cmZoneGrid, never duplicates the dims parse) into a 3x3-tiles-per-zone board: {tiles:[{x,z,h,kind,tint,altTop,zone}], props:[{kind,zone,x,z,level}], grid, env}. opts.env (default \"dungeon\") selects a desaturated-earth THEATER_ENV_PALETTE entry (dungeon/urban/wilderness/breach — theaterPaletteFor) that drives every tint: floor top/side/altTop (world-parity checker alternation on plain floor only), water/scorch hazard tints, elevated accent, cover prop tint. elevZones raise a patch THEATER_STEP; scene.hazardZones tint (and, for water/pit-ish free-text kinds, sink) their patch; scene.cover/scene.zoneCover zones get a cover prop entry. theaterUnitsFrom(combat) reads combat.grid + combat.pc/allies/foes into units[] {id,kind,archetype,x,z,down,fled,silhouette?,weapon} — archetype is a creatureType-x-size(-x-name) -> one of 9 fallback-figure buckets (biped/quadruped/flyer/serpent/swarm/giant/ooze/arachnid/amorphous-horror, theaterArchetypeFor): `giant` type or huge/gargantuan-sized biped-mapped types (minus an animal-shaped name-keyword guard, THEATER_QUAD_WORD_RX) -> giant; a spider-keyword name override (THEATER_ARACHNID_WORD_RX) -> arachnid regardless of type; `ooze` type -> ooze; `aberration` type -> amorphous-horror. PC/allies also carry `silhouette` (theaterClassSilhouetteFor off pcRef.class/a.class -> martial/ranger/caster/cleric) and `weapon` derived from it (theaterWeaponForClass); foes carry `weapon` from a name/action-text keyword scan (theaterWeaponForFoe, THEATER_WEAPON_WORD_RX — \"none\" when no weapon word is found). Multi-occupant zones get a deterministic seeded offset (theaterWithinZoneOffset, same cmSeedHash discipline as combat.js's cmPlaceFoeLane — never Math.random). MODEL-GRAMMAR G2 §4b: resolveShapeHint(shape) validates a DM-authored off-bestiary creature shape hint ({base,size,modules,channels,stance}) against the real part vocabulary (data/model-recipes.js's generated PART_NAMES global — read defensively, never imported, keeping the classic/module boundary one-way) — an unknown base drops to THEATER_SHAPE_FALLBACK_BASE (\"torso-biped\"), an unknown module part or anchor is omitted; every drop is returned in gaps[] for the caller (src/world/codex.js's codexAdd, the sole state owner) to write to the shape-gaps ledger line — this file itself never touches GS/w/U/ledger. Zero DOM/GL — the GL half (src/ui/theater-boot.js, an ES module) only consumes this file's output. Headless-testable (dev/verify-theater-data.mjs, dev/verify-model-grammar.mjs). Added 2026-07-03 (theater-core T1); extended 2026-07-03 (theater-psx-grit T1.5, theater-archetypes-2 pass 2, MODEL-GRAMMAR G2 shape-hint resolver). TABLETOP-UNITS.md §U4 (2026-07-08): castFrom(w,source)->units[] + arrangeTableau(units,arrangement)->units[] — the cast tableau (PC/companions/contacted-here-NPCs/soft-ambients) + the 5-way mechanical arrangement grammar (facing-pair/ring/march/shopfront/vignette), attitude-driven distance/facing inside facing-pair/ring only. Combat's theaterUnitsFrom path is untouched."
     },
@@ -4362,6 +4386,11 @@
         "DM_BASE",
         "sendTurn",
         "restRecover",
+        "spendHitDice",
+        "restoreOneResource",
+        "restEffectTrack",
+        "restRiskRoll",
+        "restInterruptMinutes",
         "pendingLevelUp",
         "levelForXp",
         "applyEvent",
@@ -4555,9 +4584,12 @@
         "activeRealmsFor",
         "applyRustExposure",
         "livingSheet",
-        "codexAttitudeOpen"
+        "codexAttitudeOpen",
+        "bindWalkInteractables",
+        "reconcileWalkInteractableState",
+        "restEffectsAdvanceSegment"
       ],
-      "desc": "Session-Prep state (docs/SESSION-PREP.md #3+#5): startPrep assembles the bundle + binds each environment to a SOFT 'rumored frontier' node (soft edge = the quest hook); applyPrep enriches frontiers from the DM's synthesis overlays + writes soft new-canon; lockOnContact flips soft→hard on entry (Charter §8.4); prepHandoff/copyPrepHandoff export the staged bundle for the Bridge. Recycle/debt for unvisited prep. TRAVEL-WALKS (docs/TRAVEL-WALKS.md): prepStartTravelWalk stores a kind:\"travel\" walk directly on the destination node's prep slot (walkOfFrontier reads pn.walk first); walkAdvance/walkComplete branch on pn.kind===\"travel\" for per-segment clock + arrival-vs-promotion. DURABILITY-TRIO.md §2: walkComplete's travel-arrival branch detects a \"water\" biome among the completed walk's rolled legs (the one real submersion signal in this codebase) and rolls a rust exposure (world.durability's applyRustExposure, late-binding call) against every carried instance."
+      "desc": "Session-Prep state (docs/SESSION-PREP.md #3+#5): startPrep assembles the bundle + binds each environment to a SOFT 'rumored frontier' node (soft edge = the quest hook); applyPrep enriches frontiers from the DM's synthesis overlays + writes soft new-canon; lockOnContact flips soft→hard on entry (Charter §8.4); prepHandoff/copyPrepHandoff export the staged bundle for the Bridge. Recycle/debt for unvisited prep. TRAVEL-WALKS (docs/TRAVEL-WALKS.md): prepStartTravelWalk stores a kind:\"travel\" walk directly on the destination node's prep slot (walkOfFrontier reads pn.walk first); walkAdvance/walkComplete branch on pn.kind===\"travel\" for per-segment clock + arrival-vs-promotion; walkStamp is a read-only provenance lookup (direct w.prep read, with no lazy creation on rejected events). DURABILITY-TRIO.md §2: walkComplete's travel-arrival branch detects a \"water\" biome among the completed walk's rolled legs (the one real submersion signal in this codebase) and rolls a rust exposure (world.durability's applyRustExposure, late-binding call) against every carried instance."
     },
     {
       "id": "world.capture",
@@ -4610,12 +4642,16 @@
       "owns": [
         "DM_COMBAT_VERBS",
         "DM_ROUTINE_VERBS",
+        "DM_ROUTE_MODES",
+        "dmOpenRulingRequest",
+        "dmRouteResult",
+        "dmRoute",
         "dmTriage"
       ],
       "callTimeDeps": [
         "GS"
       ],
-      "desc": "HYBRID FAST-LANE TRIAGE (docs/DM-BRIDGE.md §\"Hybrid fast-lane\"). dmTriage(w,action,opts) is a PURE, script-owned classifier deciding which model lane the DM loop answers on, so routing is mechanized instead of the DM eyeballing stakes per turn (anti-drift: the script owns the decision). Default FAST; escalate to DEEP only on signals knowable before the DM composes — combat-active/combat-action, first contact with a place (new-place, via w.dm.lastNarratedNodeId), the PC in jeopardy (pc-downed/pc-bloodied/pc-condition), a doom clock come due (clock-due), or death (no-living-pc). Returns {lane,model,reasons[]}; sendTurn stamps lane/laneModel/laneReasons onto the turn. The DM keeps an UPGRADE override for deep beats only it can foresee mid-compose (Mythic crit, major revelation); it never downgrades."
+      "desc": "Two PURE routers with separate authority. dmRoute(w,action,opts) conservatively selects local-fact, declared-mechanic, or freeform-ruling; only rest and a trusted id-addressed item-transfer have resolve-before-narrate mechanic paths, while unknown/contextual free text always remains an open ruling. dmTriage(w,action) independently sets the fast/deep model-quality floor from pre-compose stakes. Execution mode never comes from the routine/combat keyword lists."
     },
     {
       "id": "world.dm",
@@ -4628,6 +4664,15 @@
         "dmDigest",
         "DM_DIGEST_KEYS",
         "tiylLifeDigest",
+        "dmJsonClone",
+        "dmFreezeReceipt",
+        "dmMechanicalSnapshot",
+        "dmMechanicalReceipt",
+        "dmResolveTurnRoute",
+        "dmPrepareTurn",
+        "dmTurnMeta",
+        "dmLocalFactText",
+        "dmApplyLocalTurn",
         "sendTurn",
         "pollResponse",
         "applyResponse",
@@ -4710,6 +4755,8 @@
         "spendSlot",
         "spendResource",
         "restRecover",
+        "restEffectCheckMode",
+        "restEffectMergeMode",
         "RESOURCE_POOLS",
         "codexAdd",
         "codexFindByOrigin",
@@ -4804,6 +4851,11 @@
         "legacySnapshot",
         "legacyDigest",
         "LEGACY_LOSS_STATES",
+        "ITEM_TRANSFER_DESTINATION_KINDS",
+        "itemCustodyOf",
+        "itemCustodyFind",
+        "itemCustodyIdExists",
+        "itemCustodyDigest",
         "regionForNode",
         "regionClampTier",
         "regionEconBump",
@@ -4842,9 +4894,56 @@
         "sceneRiskDigest",
         "restRiders",
         "concentrationAutoBreak",
-        "livingSheet"
+        "livingSheet",
+        "dmRoute",
+        "dmTriage"
       ],
-      "desc": "The DM Bridge client + the EVENT-CONTRACT runtime. dmDigest()/sendTurn/pollResponse/applyResponse run the turn→response handshake against dev/dm-bridge.py; applyEvent(w,e) dispatches typed EVENT-CONTRACT.md events to the real mutators (the DM never writes U — item_use fires potion effects, charge_spend/charge_restore manage magic-item charges, item_changed mints the congruent base/ench/codex overlay, open_shop mints/loads a w.shops record per docs/SHOP-UI.md §2b, item_rust_exposure rolls DURABILITY-TRIO.md §2's rain-combat/acid rust exposures — DECLARED, the DM narrates since no weather/hazard signal exists yet to detect them). WIRING-SWEEP-A §3/§4 (docs/WIRING-MAP.md items 6-7, world.wiring-a): foe_morale now rolls parleyWantRoll on a \"surrender\" break (stashed foe.parleyWant) and huntedBehaviorRoll on a \"flee\"/\"rout-panic\" break (stashed foe.huntedBehavior); parley_open defaults p.want from a live combat foe's stashed parleyWant when the caller doesn't supply one. Dev/test harness per docs/DM-BRIDGE.md; the runtime is reused by ADVANCEMENT/DIFFICULTY. sendTurn's FIRST line branches to world.seat's seatSend when w.dm.transport===\"seat\" (docs/DM-SEAT.md §5.1) — the mailbox path below it is otherwise byte-for-byte unchanged."
+      "desc": "The DM Bridge client + EVENT-CONTRACT runtime. sendTurn first uses world.triage's conservative execution route: exact local facts bypass transport/digest; declared rest and trusted item-transfer mechanics resolve through applyEvent before dmDigest and produce mechanical-receipt/v1; unknown/contextual free text carries the open ruling request. dmPrepareTurn is shared by mailbox and world.seat so ordering/authority cannot drift; it derives ordinary turn context through world.dm-digest while dmDigest remains the full bootstrap/debug compatibility snapshot. applyResponse validates optional ruling proposals, applies only top-level events, and blocks replay of receipt-settled event types. Stage telemetry records route/mechanics/digest/request-ack/first-token/response/unlock. applyEvent remains the one real mutator dispatcher; the DM never writes U."
+    },
+    {
+      "id": "world.dm-digest",
+      "path": "src/world/dm-digest.js",
+      "type": "logic",
+      "owns": [
+        "DM_BEAT_DIGEST_SCHEMA",
+        "DM_BEAT_KINDS",
+        "DM_BEAT_TARGET_BYTES",
+        "DM_BEAT_DIGEST_KEYS",
+        "DM_BEAT_SOCIAL_RE",
+        "DM_BEAT_TRAVEL_RE",
+        "DM_BEAT_INVENTORY_RE",
+        "DM_BEAT_MENTION_STOP",
+        "dmBeatClone",
+        "dmBeatBytes",
+        "dmBeatNorm",
+        "dmBeatMentions",
+        "dmBeatItemTokenMentioned",
+        "dmBeatItemMentioned",
+        "dmBeatKind",
+        "dmBeatProfile",
+        "dmBeatCompactValue",
+        "dmBeatLimitedObject",
+        "dmBeatCodexRecord",
+        "dmBeatCodexSlice",
+        "dmBeatSelectedItems",
+        "dmBeatPc",
+        "dmBeatClockRatio",
+        "dmBeatPressureSlice",
+        "dmBeatLedgerSlice",
+        "dmBeatWalkSlice",
+        "dmBeatNonEmpty",
+        "dmBeatPut",
+        "dmBeatFitDigest",
+        "dmBeatDigest"
+      ],
+      "callTimeDeps": [
+        "GS",
+        "combatActionAsserted",
+        "codexGet",
+        "codexFullRecord",
+        "dmDigest"
+      ],
+      "desc": "Pure beat-shaped projection over world.dm's full dmDigest truth. Selects one primary view (scene, inventory, combat, travel, social), preserves a small invariant core plus current pressure/consequences, retrieves explicitly mentioned off-scene Codex nouns before projection, and omits unrelated roster/world bulk under a 3 KB ordinary-turn target. Selection never grants execution authority; dmRoute remains the sole mechanization boundary. Sparse omission means not selected, never false. Added 2026-08-04."
     },
     {
       "id": "world.seat",
@@ -4888,6 +4987,10 @@
         "toast",
         "renderWorld",
         "wakeReveal",
+        "dmResolveTurnRoute",
+        "dmPrepareTurn",
+        "dmApplyLocalTurn",
+        "dmTurnMeta",
         "dmTriage",
         "dmDigest",
         "pushDmLog",
@@ -5219,7 +5322,10 @@
         "restSecurityClass",
         "REST_RISK_CLASS",
         "restRiskSevere",
+        "REST_RISK_EFFECT_BY_ROLL",
+        "restRiskEffectFor",
         "restRiskRoll",
+        "restInterruptMinutes",
         "IGNORED_STALE_DAYS",
         "ignoredTierOf",
         "ignoredFallbackRange",

@@ -1,0 +1,43 @@
+{
+  "turnId": "t-msg7ovctk28fh",
+  "narration": "No coin is gone, and nothing obvious is missing. Something has been added: a scorched cloth room-tag marked O.A.W.—7 beneath your candles. The desk keeper sees it and stops pretending to polish the register. ‘Seven. Nobody has checked out of Seven, but nobody sleeps there. The rent arrives every new moon.’ Upstairs, the three-note tune cuts off mid-phrase. The performer has given you a room and a warning.",
+  "events": [
+    {
+      "type": "item_changed",
+      "payload": {
+        "add": [
+          {
+            "name": "Scorched Cloth Room Tag",
+            "qty": 1
+          }
+        ],
+        "note": "◆ Mira finds a scorched cloth room-tag marked O.A.W.—7 planted in her pouch."
+      },
+      "source": "declared"
+    },
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "factId": "brineglass-boarding-house-room-seven",
+        "what": "Room Seven of the dream-touched boarding house remains paid through each new moon although nobody sleeps there; its room tags bear the initials O.A.W."
+      },
+      "source": "declared"
+    }
+  ],
+  "ruling": {
+    "understoodAction": "Check the pouch after the failed pickpocket read, hold the doorway, and question the desk keeper about the performer and the shared tune.",
+    "ruling": "The authoritative purse and carried inventory show no confirmed loss among the surfaced contents. The segment’s scorched cloth tag and the retrieved occupied-room record combine into a planted clue; the keeper answers without a check because Mira presents direct evidence.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "The failed Insight check still creates a consequence: the performer escapes upstairs but leaves Mira a specific room lead and a physical object.",
+    "outcomeBranches": null,
+    "proposedEvents": [
+      {
+        "type": "item_changed"
+      },
+      {
+        "type": "fact_canonized"
+      }
+    ]
+  }
+}

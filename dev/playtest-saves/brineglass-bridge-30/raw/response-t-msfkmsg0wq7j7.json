@@ -1,0 +1,26 @@
+{
+  "turnId": "t-msfkmsg0wq7j7",
+  "narration": "Naivara looks toward the open stair, then laughs once. \u201cBetter. The proof belongs to the future, so the archive cannot own it yet.\u201d William clears a space on an ordinary tube\u2019s brass rim and asks three children to stand where everyone can see his hands. At that moment the tannery doors open. Two soaked attendants carry in a bundled figure on a narrow chair; the person is breathing, awake, and not yet otherwise described. Naivara kneels beside them. William holds three blank beat-cards over a bowl and looks to you. The dice can choose a rhythm none of you knew before this moment.",
+  "events": [],
+  "gen": [
+    {
+      "kind": "npc",
+      "opts": {}
+    }
+  ],
+  "rollRequest": {
+    "dice": "3d6",
+    "label": "live challenge rhythm"
+  },
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Reject the suggested shadowless tube and replace it with a future-random challenge that a recording archive cannot anticipate.",
+    "ruling": "The alternative is logically stronger and is accepted. The engine's open dice generate the new three-beat rhythm so neither DM nor archive chooses it after the fact.",
+    "needsRoll": true,
+    "proposedCheck": null,
+    "stakes": "The arriving First Voice must reproduce a newly generated rhythm live before public witnesses.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 25: explicit anti-funnel probe passed. Player replaced the apparent required object with a superior protocol; DM adopts it. First Voice is teased loosely until engine mint lands."
+}

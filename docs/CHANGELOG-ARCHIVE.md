@@ -14,6 +14,199 @@ to load every session (the live file keeps the newest entries; see the script fo
 Newest-first, same as the live file — the two files read as one continuous history, live file
 first. Read-only record: never hand-edit, never add entries here directly.
 
+## 2026-07-24 (latest) — THE CONSOLIDATION CLOSE — five lanes merged to a singular canonical master [Claude Fable 5]
+
+### Added
+- **`docs/STRUCTURE-KIT-CATALOG.md`** — the structure-kit spec for the twelve golden sites,
+  closed through three founder ruling rounds in one session: tone laws (fun over realism ·
+  FFT masterclass rule · near-universal access · stairs/rocks/terracing over ladders), grid
+  law (5-ft cell, h=2.5 ft, storey 4h, ≤30° slopes), two-tier grain (pieces + assemblies),
+  socket schema reconciled onto CL-S08, geometry/paint split by gameplay legibility,
+  SRD-native access classes (walk / climb-cost / climb-DC banded 12/15/17, one check per
+  storey, DC climbs never a sole route) with gear as PLANNED access-graph verbs, roof order
+  parapet→shed→gable→hip, the corrected growth ladder (open-top guard room first, tower
+  LAST — the atalaya finding), the full material possibility roster, six vernaculars incl.
+  makeshift/tribal, the **OCCUPANCY AXIS** (invariant functional topology × rolled
+  who-runs-it-now), the **ARRIVAL HOOK LAW** (no site arrival without an active
+  band-appropriate hook — enforcing check owed), and the LOCKED roof posture (flat deck
+  both cultures; cover promise invariant, edge pattern culture-expressive). The guard-post
+  founder queue is EMPTY — everything else is deliberately card-time or clay-deferred.
+- **`docs/diagrams/`** — new standing home for design diagrams (Adam's ruling: save keepers
+  to docs so Adam + Codex can use them): roof/parapet/terracing vocabulary · GP-SHAPE-01
+  anchor-layout plan · roof postures sheet.
+- **`Reference/FFT-Guard-Post-Study/`** — the Desktop study imported (analysis specs, lock
+  audit, cohort overview, reference index, verbatim Desktop catalog snapshot); ~335 MB of
+  app/map/reference binaries deliberately stay Desktop-local per IMPORT-NOTE.md.
+- **`Reference/FFT Battle Maps/` + border-stray tools** — untracked root artifacts rescued
+  (the 22-image taste corpus, bleed-audit kit, Q12-B session prompt).
+- **GP-MM-STONE-V001** (Codex lane merged) — four deterministic MM 1.3 stone parents
+  (M01 coursed = Institutional / M02 fitted rubble = Upland ×2 tastes each), byte-identical
+  dual exports re-proven independently at close, plus the normal-layer, condition-workbench,
+  trim-sheet-layout, and uneven-ground proofs.
+- **Prototype sprite admission path** (merged) — previously fail-ruled sprites render via
+  `prototypeAdmitted` flags (`dev/model-qa/prototype-admissions.json`); prototype-only
+  pending the full sprite review.
+
+### Changed
+- **Catalog authority resolved:** `docs/GOLDEN-SITES-CATALOG.md` (door-lane 2026-07-23
+  fold) is the living golden-sites authority; the verbatim Desktop record moved to
+  `Reference/FFT-Guard-Post-Study/DESKTOP-CATALOG-SNAPSHOT.md`.
+- **CL-R0 clayroom reset + C1B door/movement lanes merged** (their own 2026-07-23/24
+  entries below/above stand as written; Codex's FULL CI PENDING marker is discharged by
+  this close's gate run).
+## 2026-07-23 — CL-R0 CLAYROOM RESET BUILT · DESKTOP RESEARCH PACKET FOLDED [Claude]
+
+### Added
+- **`docs/CLAYROOM-RESET-LADDER.md`** — the single owning specification for the Clayroom reset/proof
+  ladder **CL-R0…CL-R6**, the retained fixture family CL-F00…CL-F06, the diagnostic-clay surface
+  contract, the clay capture/receipt law, Lighting Lab 2.0's recipe contract, the bounded Sprite
+  Editor crosshair delta, and the Clayroom Workbench boundary. Subordinate to CLAY-PROOF-LADDER
+  (which keeps the C1A…C5 ids) — a renderer-trust gate across passes, not a rival ladder.
+- **`docs/GOLDEN-SITES-CATALOG.md`** — golden-site structure/material catalog + the Guard Post brief:
+  FFT relational shape grammar and anti-rules, `GP-SHAPE-01`, the low-poly construction translation,
+  cultural-mutation MVP/Ideal and acceptance gate, lock audit, seed law, and the binding FFT/import
+  boundary with a per-asset not-vendored rationale.
+- **`CLAY_DIAGNOSTIC_SURFACE_RECIPE`** (`src/engine/clay-room.js`) — versioned role→route table
+  (`diagnostic-clay` | `passthrough` | `unclaimed`; modes `clay` | `role-id`) plus
+  `clayDiagnosticRoleForKind` / `clayDiagnosticRouteFor` / `clayDiagnosticModeFrom`.
+- **`clayRoomSurfaceCensus()`** + a `Surfaces` overlay tab + `window.Theater._claySurfaceCensusForTest`
+  / `_clayProvenanceAuditForTest` / `_clayCameraPoseForTest` — machine-answerable "which system owns
+  every visible surface".
+- **`dev/capture-clayroom-fixture.cjs`** (gameplay-scale before/after captures with a full receipt:
+  fixture + recipe identity, camera, runtime path, light values, surface census, settle timeline, and
+  a panel-hidden clean frame) and **`dev/measure-clay-capture.py`** (luma/clipping/chroma over
+  declared regions). Evidence in `dev/clay-captures/cl-r0/`.
+- **`dev/verify-clay-room.mjs` check 18** — the CL-R0 durability invariant (97 checks total).
+
+### Added (later the same session)
+- **Camera-side wall-omission ruling (RULED FOR TEST) + CL-R3a BUILT** — Adam's FFT wall-grammar
+  ruling captured verbatim in ART-DIRECTION-CANON; compile-time omission (camera-facing ∧ occludes
+  staged floor → stem only) live in the clay fixture through the production shell compiler, decision
+  set as versioned receipt data, harness check 21, A/B captures in `dev/clay-captures/cl-r3a/`.
+  Cascades: clay shell default ON (17b2 rewritten red-first), mount-socket warning discharged,
+  fade-aware material swap (check 20) keeps the remaining cutaway linkage intact.
+- **Sprite sRGB root-cause fix** — `spriteTextureFor` never tagged colour space (three r166 outputs
+  sRGB); proven by A/B (`dev/clay-captures/cl-r1-sprite-ab/`), ON by default, check 19.
+
+### Changed
+- **Diagnostic clay is now durable.** Deleted `clayRoomFlattenStructure`/`clayRoomFlattenFurniture`
+  (a one-shot sweep over a hardcoded four-kind whitelist) and the per-frame light-reassert patch;
+  replaced by one post-rebuild hook `clayRoomAfterInteriorBoardRebuild()` at `setInteriorBoard`'s
+  tail — the single funnel all five async replay sites pass through.
+- `docs/ART-DIRECTION-CANON.md` — Adam's 2026-07-23 rulings appended verbatim (six Clayroom reset
+  redlines; FFT low-poly construction language; the narrative-furnishing boundary; Material Maker 1.3
+  and every-material-is-a-fertile-seed).
+- `docs/TRIM-SHEET-PIPELINE.md` §15 (proposed `genesis-architecture-core-h6-v1` realization) and
+  `docs/MATERIAL-LANE.md` §9 (Guard Post parent-seed roster + lineage law) — amendments to the
+  existing owners, never a parallel authority.
+- `docs/C1A-CLAY-ROOM.md` addendum D17 — records which mechanism CL-R0 superseded and why.
+
+### Fixed
+- **CR-1** the settled Clayroom frame showed the realm's textured dungeon floor (floor-region mean
+  saturation 175.4 → 29.2; whole-frame near-black 46.8% → 0.04%).
+- **CR-6** the D12a seam grid had never rendered — it was built in the record's local frame and
+  mounted (3, 13) cells away from the room, off-camera, while auditing "owned". The provenance audit
+  now reports a world bbox per owned root.
+- **CR-7** per-instance `setColorAt` tint defeated the clay material swap; claimed instances are now
+  neutralized (recorded in the census).
+- **CR-8** the census was scoped to `S.interiorGroup`; it now walks `S.scene` and attributes each
+  mesh to its owning group.
+- **CR-9** a module-eval-time read of the engine recipe broke every harness that loads
+  `theater-boot.js` alone; recipe reads are call-time only, asserted by the harness.
+
+### Deferred
+- **CL-R0 is not fully clean and this is not hidden:** the `bracket-generic` mount-socket warning
+  still fires (CR-3 → CL-R1); the door still renders as an open gap while the record and prose twin
+  both say closed (RL-1, now a visible TEXT-FIRST contradiction, not a wiring chore); the room-shell
+  construction path is still bypassed (`?clayshell=1` makes the A/B reproducible; default unmoved →
+  CL-R3). The washed-out sprite (CR-4) and the unreadable two-temperature rig (CR-2) are CL-R1/CL-R2.
+- **FULL CI PENDING** — fast checkpoint, not an evening close. No merge, no push.
+- **Sweep honesty correction:** an earlier report in this session said the full verify sweep was
+  clean apart from one red. That was read from a still-running sweep and was wrong. Full `dev/verify-*.mjs` sweep: **12 reds, all baseline-identical** — the same 12 fail with
+this branch's code and with `master`'s code in the same tree, so **zero new reds**. Cause is
+environmental, not a regression: this worktree was created with `GIT_LFS_SKIP_SMUDGE=1`, so every
+sprite/texture PNG except the one goblin asset materialized for this work is an LFS pointer file.
+Chrome is present, so these render/measure harnesses actually run rather than dep-skipping, and then
+measure null/zero standee and texture patches. The 12: `verify-bw2-3-material-texel`,
+`verify-diegetic-light`, `verify-env1-light-profiles`, `verify-env1b-tabletop-shadows`,
+`verify-env1c-celestial-arc`, `verify-gallery-pass`, `verify-interior-camera-frustum`,
+`verify-light-lab`, `verify-mf4-turn-rhythm`, `verify-occlusion-fade`, `verify-room-shell-render`,
+`verify-shot-compose`. A full-LFS tree is required to gate them honestly — that belongs to the CI
+close, not to this checkpoint.
+
+---
+## 2026-07-23 (latest) — Q12-B FIRED · C1A CLAY ROOM ON THE REAL PIPELINE · RECOVERY→DRIVE [Fable, Adam ruling]
+
+### Added
+- **Q12-B gate FIRED** (wave-12 §20.9) — implementation hold lifts for Stage 1 (C1A→C1G) only;
+  Adam's eight pre-build answers verbatim, incl. the clay-lighting rider (production lighting,
+  full native resolution, two-temp opposing + low ambient).
+- **C1A clay room — TRUTH-ARRIVED** (`src/engine/clay-room.js`, theater-boot.js CLAY-ROOM region,
+  `dev/verify-clay-room.mjs` 79 checks): one canonical 5×5 room compiled + rendered through the
+  REAL `spatializePlan`→`interiorBuildBoard`→`setInteriorBoard` chain; dev-flag `?clayroom=1`,
+  boot self-mount, Facts/Explain/edit-refusal overlay, D13 provenance audit (0 orphans), seam grid.
+- **`.claude/skills/genesis-clay-pass`** — the front-end/back-end gate-split skill (Claude owns the
+  measurable back-end gate; Adam gates the visual) + THE TEETH LAW (rulings recorded only with
+  enforcing checks) + the plain-English capture-packet law.
+- **Material lane folded into canon** (`docs/MATERIAL-LANE.md` + `docs/CODEX-MATERIAL-BRIEF.md`):
+  Material Maker 1.3 pinned + headless-proven; SUBTLE-TEXTURE split; Codex Wave-1 authoring brief.
+- **TEETH-AUDIT-2026-07-23** — 57 Stage-1 laws classified (28 need teeth / 20 have / 9 stay prose).
+- **Stage-0 recovery package** — tag `pre-redesign-2026-07-23`, verified bundle + LFS-complete zip,
+  restore drill PASSED, migrated to Google Drive (double cloud copies), zero durable local residue.
+
+### Changed
+- **Repo relocated** into a parent container: `~/Desktop/Work/projects/Genesis/genesis` (worktree
+  convention + launchers + skill paths updated); the sprite lane's uncommitted prototype-admission
+  work parked on `feat/sprite-prototype-admission` (preserved, not merged — its lane's call).
+
+### Deferred
+- **C1A → C1B redlines:** RL-1 door leaf (wire `bindWalkInteractables`), RL-2 clay lighting over
+  the interior dimming. Door catalog + swing-clearance + socket schema authored into the C1B/C1H
+  specs (D14; structure-kit catalog is the C1H-opener writing task).
+## 2026-07-23 (later) — FEATURE-PRIORITIZATION VIEW + CLEAN CLOSE [Fable]
+
+**Added**
+- `docs/FEATURE-PRIORITIZATION.md` (type: build-plan, Adam's request) — the readable answer to "what do
+  we build, in what order, what's prototype vs MVP, how tested, when declared arrived": the arrival law
+  (4 conditions for prototype-arrived, 5 for MVP-arrived), stages 0-7 in dependency order (visual proof
+  = Stage 2 per Adam's guard's-post priority), 21 per-feature prototype/MVP test rows, and every parked
+  feature with its named trigger. Derived view — ledger/ladder/wave records stay authoritative;
+  authorizes no build (Q12-B gates). Indexed in `docs/README.md`.
+
+**Changed**
+- Clean close (Adam: "clean close ... with a CI check"): full CI-equivalent gate run locally
+  (check-manifest OK · verify-*.mjs sweep with CI dep-skip emulation · verify-bridge 64/0 ·
+  verify-table-lint 37/0 · playtest-bug-probes) — the one working-tree red (`verify-geometry-fixtures`
+  scope-guard 7a/7b) is the co-resident sprite lane's dirty `src/ui/theater-boot.js`, not this branch
+  (branch diff vs master carries zero src/data files; all 52 geometry fixtures pass, 0 regressions).
+  Merged `docs/procedural-dungeon-waves-3-6-checkpoint` --no-ff to master, pushed, GitHub CI confirmed
+  green. NEXT-STEPS gained the 2026-07-23 Do-next block; HANDOFF's FULL-CI-PENDING marker discharged.
+## 2026-07-23 — FOUNDER REVIEW: ALL TWELVE WAVES DESIGN-CLOSED [Fable chairing, Adam ruling]
+
+**Added**
+- Ran the staged founder-review session (2026-07-22/23, interactive, docs-only): Adam answered all six Batch-1
+  founder questions (Q7-A B · Q8-A B · Q9-A B · Q9-B B · Q11-A B · Q12-A A), then swept waves 7/8/9/11/12 in
+  plain language and explicitly closed each (§16.6-7 · §17.6-7 · §18.6-7 · §19.6-7 · §20.6-7). The procedural-
+  dungeon design program is complete; the implementation hold stands; Q12-B is the single reserved gate.
+- New decision-index ids GEN-CBT-9, GEN-WLD-10, GEN-DM-11/12, GEN-PROD-5/6, and the BINDING **GEN-PROD-7
+  no-dark-patterns law**. Ten follow-ups tracked (F7.1-3, F8.1-2, F9.1-3, F11.1, F12.1) including the DM
+  rule-bend-and-reconcile vision, the player-rolled physical dice mode, the playable-DM-seat product vision, and
+  the cozy/peaceful register.
+- Sweep riders recorded as law: hand floor, performance-layer freedom, harness-first/loosen-by-evidence,
+  no-plot-armor offscreen, no-unexplained-reversion, organic-regrowth-on-ecology-clocks, DMG-sourced material
+  catalog, heated-metal conduction, DC reveal-at-commit, three-tier worlds, never-brick essential.
+
+**Changed**
+- Applied every pending ladder/ledger addition (now BOUND): W7 tactical corpus + refinements, F8.1 breakable door
+  + W8 mutation row, W9 hand/cadence row, W11 workbench row, W12 persistence row + F12.1 instrument. Flipped
+  QUESTION-COVERAGE, the questionnaire live bookmark, the program front door, and OPEN-QUESTIONS (Batch 1
+  discharged; Batch 2 gained #11 realm-introduction order — Adam leaning Lost World). MODULE-PHASING is ACTIVE:
+  ship-travel deferral confirmed and promoted to a prototype→ideal sketch ("we do want it").
+
+**Deferred**
+- DOCS-INDEX tooling (DI-1/2/3): deferred with a mandatory re-scope precondition before execution. Gemini-
+  transcript gather, FOREVER-STORAGE wiring verify, and sidekick-data gather remain queued mechanical follow-ups.
+  FULL CI PENDING — fast checkpoint only, no push.
 ## 2026-07-22 — WAVE 10 PHASED THROUGH BOUNDED TOWN CONTINUITY [Codex]
 
 **Added**

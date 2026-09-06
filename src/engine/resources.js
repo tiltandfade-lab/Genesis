@@ -146,8 +146,9 @@ function spendResource(sh,key,n){
    each, sum, heal, decrement the pool. rolls[] (optional) lets a transparent client pass the
    player's own dice (mirrors item_use's payload.roll). Returns {ok, spent, healed, hp, cur, max}
    or {ok:false, reason}. Pure mutator on sh (the only writer of sh.hitDice.cur besides restRecover). */
-function spendHitDice(sh, n, rolls){
+function spendHitDice(sh, n, rolls, opts){
   ensureResources(sh);
+  opts=opts||{};
   const want = Math.max(0, Math.floor(Number(n)||0));
   if(want<=0) return {ok:false, reason:"none-requested"};
   const have = (sh.hitDice&&sh.hitDice.cur)||0;
@@ -161,39 +162,121 @@ function spendHitDice(sh, n, rolls){
                : (typeof rollDie==="function"? rollDie(die) : Math.ceil((die+1)/2));
     healed += Math.max(0, roll + con);        // per-die floor 0 (a negative CON never drains HP)
   }
+  const fraction=(typeof opts.fraction==="number")?clamp(opts.fraction,0,1):1;
+  healed=Math.floor(healed*fraction);
   sh.hitDice.cur = have - spend;
   const r = applyHpDelta(sh, healed);
-  return {ok:true, spent:spend, healed:r.delta, hp:r.to+"/"+r.max, cur:sh.hitDice.cur, max:sh.hitDice.max};
+  return {ok:true, spent:spend, healed:r.delta, hp:r.to+"/"+r.max, cur:sh.hitDice.cur, max:sh.hitDice.max,
+    fraction:fraction<1?fraction:undefined};
 }
 
 /* Rest recovery. kind="long" → full reset (HP, all slots, pact, every pool, ⌊level/2⌋ min 1 hit dice
    regained — HQ3-C1). kind="short" → pact slots + short-rest pools (Channel Divinity, Focus, Action
    Surge) + 1 Rage; HP/Vancian slots are unchanged (SRD: short-rest HP is the player spending Hit
    Dice — spendHitDice above, wired from the `rest` handler). Returns a short summary string. */
-function restRecover(sh,kind){
+function restRecover(sh,kind,opts){
   ensureResources(sh);
+  opts=opts||{};
   const long=kind==="long";
+  const fraction=(typeof opts.fraction==="number")?clamp(opts.fraction,0,1):1;
+  const restore=(cur,max)=>Math.min(max,cur+Math.floor(Math.max(0,max-cur)*fraction));
   const parts=[];
-  if(long&&sh.hpCur!==sh.hp){sh.hpCur=sh.hp;parts.push("HP full");}
+  if(long&&sh.hpCur!==sh.hp){const before=sh.hpCur;sh.hpCur=restore(sh.hpCur,sh.hp);if(sh.hpCur>before)parts.push(fraction<1?"HP partial":"HP full");}
   if(long&&Array.isArray(sh.slots)&&Array.isArray(sh.slotsMax)){
-    const had=sh.slots.some((v,i)=>v<(sh.slotsMax[i]||0));
-    sh.slots=sh.slotsMax.slice();if(had)parts.push("spell slots");
+    const before=sh.slots.slice();
+    sh.slots=sh.slots.map((v,i)=>restore(v,sh.slotsMax[i]||0));
+    if(sh.slots.some((v,i)=>v>before[i]))parts.push(fraction<1?"spell slots partial":"spell slots");
   }
-  if(sh.pact&&sh.pact.cur<sh.pact.max){sh.pact.cur=sh.pact.max;parts.push("pact slots");}
+  if(sh.pact&&sh.pact.cur<sh.pact.max){const before=sh.pact.cur;sh.pact.cur=restore(sh.pact.cur,sh.pact.max);if(sh.pact.cur>before)parts.push(fraction<1?"pact slots partial":"pact slots");}
   for(const k in (sh.pools||{})){
     const pool=sh.pools[k],def=RESOURCE_POOLS[k]||{};
     if(pool.cur>=pool.max)continue;
-    if(long){pool.cur=pool.max;parts.push((def.label||k));}
-    else if(def.recover==="short"){pool.cur=pool.max;parts.push((def.label||k));}
-    else if(def.recover==="rage"){if(pool.cur<pool.max){pool.cur=Math.min(pool.max,pool.cur+1);parts.push((def.label||k)+" +1");}}
+    if(long){const before=pool.cur;pool.cur=restore(pool.cur,pool.max);if(pool.cur>before)parts.push((def.label||k)+(fraction<1?" partial":""));}
+    else if(def.recover==="short"){const before=pool.cur;pool.cur=restore(pool.cur,pool.max);if(pool.cur>before)parts.push((def.label||k)+(fraction<1?" partial":""));}
+    else if(def.recover==="rage"){
+      const gain=Math.floor(1*fraction);
+      if(gain>0&&pool.cur<pool.max){pool.cur=Math.min(pool.max,pool.cur+gain);parts.push((def.label||k)+" +"+gain);}
+    }
   }
   if(long && sh.hitDice){
     const back = Math.max(1, Math.floor((sh.level||1)/2));
     const before = sh.hitDice.cur;
-    sh.hitDice.cur = Math.min(sh.hitDice.max, sh.hitDice.cur + back);
+    sh.hitDice.cur = Math.min(sh.hitDice.max, sh.hitDice.cur + Math.floor(back*fraction));
     if(sh.hitDice.cur>before) parts.push("hit dice");
   }
   return parts.length?parts.join(", "):"nothing to restore";
+}
+
+/* A rest-table row can promise one ADDITIONAL die/resource after normal recovery. Deterministic
+   priority keeps that promise script-owned without inventing which power the fiction meant: a spent
+   Hit Die first, then pact slot, class pool, then spell slot. Returns a compact receipt. */
+function restoreOneResource(sh){
+  ensureResources(sh);
+  if(sh.hitDice&&sh.hitDice.cur<sh.hitDice.max){sh.hitDice.cur++;return {ok:true,kind:"hit-die",cur:sh.hitDice.cur,max:sh.hitDice.max};}
+  if(sh.pact&&sh.pact.cur<sh.pact.max){sh.pact.cur++;return {ok:true,kind:"pact-slot",cur:sh.pact.cur,max:sh.pact.max};}
+  for(const k in (sh.pools||{})){const p=sh.pools[k];if(p.cur<p.max){p.cur++;return {ok:true,kind:"pool",key:k,cur:p.cur,max:p.max};}}
+  for(let i=0;i<(sh.slots||[]).length;i++){const max=(sh.slotsMax||[])[i]||0;if(sh.slots[i]<max){sh.slots[i]++;return {ok:true,kind:"spell-slot",level:i+1,cur:sh.slots[i],max};}}
+  return {ok:false,reason:"already-full"};
+}
+
+/* Typed, durable rest riders. The engine owns exact durations and exact disadvantage language; the
+   AI owns what an undefined "Penalty", "Insight", or "Boon" means in the fiction. This deliberately
+   tracks those obligations without silently translating them into made-up arithmetic. */
+function restEffectTrack(sh,effect){
+  if(!sh||!effect||!["next-check","next-initiative-or-reflex","next-physical-action","next-segment","until-resolved"].includes(effect.scope))return null;
+  sh.restEffects=Array.isArray(sh.restEffects)?sh.restEffects:[];
+  if(effect.kind==="segment-boon"){
+    const debt=sh.restEffects.findIndex(e=>e&&e.kind==="insight-and-boon-debt");
+    if(debt>=0){sh.restEffects.splice(debt,1);return {kind:"segment-boon",cancelled:true,by:"insight-and-boon-debt"};}
+  }
+  const e={kind:effect.kind,scope:effect.scope,status:"pending",source:effect.source||null};
+  if(effect.mode)e.mode=effect.mode;
+  if(effect.note)e.note=effect.note;
+  sh.restEffects.push(e);
+  if(sh.restEffects.length>8)sh.restEffects=sh.restEffects.slice(-8);
+  return e;
+}
+
+/* Consume only effects whose table text gives an exact d20 mode. General "penalty"/Boon/Insight
+   riders remain visible for interpretation instead of being flattened into a video-game modifier. */
+function restEffectCheckMode(sh,skill,ability,kind){
+  if(!sh||!Array.isArray(sh.restEffects))return {mode:null,consumed:[]};
+  const label=String(skill||"").toLowerCase(), k=String(kind||"check").toLowerCase();
+  const consumed=[];
+  sh.restEffects=sh.restEffects.filter(e=>{
+    const next=e&&e.status!=="active"&&e.scope==="next-check";
+    const reflex=e&&e.status!=="active"&&e.scope==="next-initiative-or-reflex"&&
+      (k==="initiative"||k==="reflex"||/reflex|dexterity save/.test(label));
+    if(next||reflex){consumed.push(e.kind);return false;}
+    return true;
+  });
+  return {mode:consumed.length?"disadvantage":null,consumed};
+}
+
+function restEffectMergeMode(a,b){
+  a=(a==="advantage"||a==="disadvantage")?a:null;
+  b=(b==="advantage"||b==="disadvantage")?b:null;
+  if(a&&b&&a!==b)return null;
+  return a||b||null;
+}
+
+/* The walk cursor owns "next segment" duration. On a real advance, old active riders expire and
+   pending riders activate on the entered segment; a replay/no-op advance never calls this helper. */
+function restEffectsAdvanceSegment(sh,walkId,toSeg){
+  if(!sh||!Array.isArray(sh.restEffects))return {activated:[],expired:[]};
+  const activated=[],expired=[];
+  sh.restEffects=sh.restEffects.filter(e=>{
+    if(e&&e.scope==="next-segment"&&e.status==="active"){
+      if(e.walkId!==walkId||e.segment!==toSeg){expired.push(e.kind);return false;}
+    }
+    return true;
+  });
+  sh.restEffects.forEach(e=>{
+    if(e&&e.scope==="next-segment"&&e.status==="pending"){
+      e.status="active";e.walkId=walkId||null;e.segment=toSeg;activated.push(e.kind);
+    }
+  });
+  return {activated,expired};
 }
 
 /* ---------- read-side views (digest + UI) ---------- */
@@ -211,6 +294,9 @@ function resourceDigest(sh){
   // HQ3-C1 — the short-rest heal budget (pc.resources.hitDice {cur,max,die}); always shipped for a
   // real PC (max>0), sparse-safe otherwise.
   if(sh.hitDice && sh.hitDice.max>0) out.hitDice={cur:sh.hitDice.cur, max:sh.hitDice.max, die:sh.hitDice.die};
+  if(Array.isArray(sh.restEffects)&&sh.restEffects.length)out.restEffects=sh.restEffects.slice(-4).map(e=>({
+    kind:e.kind,scope:e.scope,status:e.status,...(e.walkId?{walkId:e.walkId}:{}),...(e.segment!=null?{segment:e.segment}:{})
+  }));
   return out;
 }
 

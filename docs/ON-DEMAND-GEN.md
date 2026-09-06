@@ -35,7 +35,7 @@ follow the real shapes, don't force the dungeon's.
 | Dice visibility | **Behind the screen.** Generation rolls are plumbing — no board overlay. One feed chip ("⚙ the world provides — <kind> rolled"), no atoms shown. Player dice keep the theater. |
 | Turn shape | **Strict player↔DM alternation.** `gen[]` rides the DM's normal response; the app rolls instantly; atoms reach the DM **next turn** (the codex already rides every digest — §2). No auto-continuation half-turn: the sanctioned background lane is Speculative Prefetch (assets never narration; unused recycles). Bridge-era same-beat shortcut: `dev/roll-noun.mjs` (§9). |
 | v1 kinds | **`npc` · `interior` · `item` · `loot`** (loot promoted to v1 — Adam's call, pass 2). `place` reserved for prep/frontier machinery. |
-| Naming | **Roller-minted by race, immutable once revealed.** `build/gen-names.py` regenerates `data/names.js` from the NPC Name Megatable (race × gender/age + clan/family/virtue pools) + a 1d2 gender roll in `rollNPC`. DM name-in-a-bind OK via `opts.name` — always matched with real rolled atoms. No renames after reveal (guard, §3). |
+| Naming | **Roller-minted by race, immutable once revealed.** `build/gen-names.py` regenerates `data/names.js` from the NPC Name Megatable (race × gender/age + clan/family/virtue pools) + a 1d2 gender roll in `rollNPC`. NPC/interior `opts.name` keeps compatible rolled atoms. Item/loot `opts.name` mints a truthful `bound-item` shell (`needsDefinition:true`) instead of disguising an unrelated random object row. No renames after reveal (guard, §3). |
 | Primary path | **Rolled, always:** reserve → ambient pool → gen handshake → freehand only in a bind (back-filled same session). Measured via the session provenance slice (§8), not code-enforced. |
 | Room-die cadence | **One significant d8–d20 per room — interiors AND walk segments** (the Hungering-Stone dragon-egg standard). Generated to the `CONSEQUENCE-LADDER §8` contract in the Stage-2 synthesis pass (prep-time primary); interiors get theirs on mint. Player-rolled OPEN; one roll per room, ever (§4). |
 | P1 bundled | **Yes** — the deterministic reserve (SPECULATIVE-PREFETCH P1) ships in this run; it's the ambient pool generalized (§7). |
@@ -177,7 +177,8 @@ zero meaning to recycle (it never existed).
   kind to cap by firing the rollers. Also top up after a draw. Synchronous JS is fine (rollers are
   instant); if it ever needs deferring, `requestIdleCallback` — but don't build that until felt.
 - **Draw:** §1 step 1 pops a matching payload (loot only when `opts` match the reserved slot's
-  rarity — else roll live). `opts.name` overrides the reserved name at mint.
+  rarity — else roll live). NPC/interior `opts.name` overrides the reserved name at mint. Item/loot
+  names discard incompatible random atoms and become declared bound shells awaiting definition.
 - Eviction: cap-bounded FIFO; no TTL in v1.
 
 This is the whole of P1 — no LLM, no bridge change. P2/P3 (idle-window LLM compile,
@@ -254,6 +255,8 @@ events. Read-only; never touches `.dm/` — safe during a live session.
 2. Next `dmDigest()` carries `minted[{id,kind,name,genRef}]`; it persists until a response arrives,
    then clears.
 3. `opts.name` ("Vess") mints under that name with full rolled atoms.
+3b. Named item `opts.name` mints a bound shell whose `rolled.object` matches the canonical name; a
+   legacy mismatched item migrates without changing id, status, or links.
 4. `codex_contact` locks soft→hard; a subsequent `codex_update {name}` on the known record is
    REJECTED; pre-reveal rename succeeds.
 5. `interior` mints carry `dm.needsEffectDie:true`; `codex_update {dm:{effectDie}}` round-trips;

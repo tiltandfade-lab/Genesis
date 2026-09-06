@@ -64,7 +64,7 @@ consumers):
 | # | Step | One-liner | Depends on |
 |---|---|---|---|
 | **A** | Active-walk in the digest + cursor | The DM stops forgetting the walk until it's walked | — |
-| **D** | Stage-scaled walk length | Shorter walks early game, longer late game | — |
+| **D** | Substantive walk length | 8–12 segments at every level; danger scales, possibility does not shrink | — |
 | **C** | Walk provenance + wrap report | You can finally *see* which segments ran | A |
 | **B** | Advance / reskin on walk-complete | Walk walked → route to the next prepped walk, reskinned | A, C |
 | **E** | Capture as re-entry | Capture drops the PC into a holding segment of the active walk | A |
@@ -115,8 +115,9 @@ forget the walk until it's been walked."
 - **Advance it:** new event `walk_advance` in `applyEvent` (see below).
 
 ### `activeWalkDigest(w)` — the payload
-Returns `null` when `P.activeWalkId` is unset. Otherwise a **compact, reskinned** view (walks are
-3–7 segments, so the whole thing is cheap to carry):
+Returns `null` when `P.activeWalkId` is unset. Otherwise a **compact, reskinned** view of the
+substantive 8–12-segment walk. The current segment and its immediate graph exits carry actionable
+generated truth; farther segments stay veiled stubs:
 
 ```js
 function activeWalkDigest(w){
@@ -124,6 +125,7 @@ function activeWalkDigest(w){
   const pn = P.nodes[id]; const walk = walkOfFrontier(w, id); if(!walk || !pn) return null;
   const ov = pn.segments || null;                      // the DM's reskin overlay (from applyPrep), if any
   const cur = pn.cursor || { current:1, touched:[1], done:false };
+  const current = walk.segments.find(s=>s.num===cur.current);
   return {
     nodeId: id,
     place: (mapOf(w).nodes[id]||{}).name || null,
@@ -131,14 +133,19 @@ function activeWalkDigest(w){
     topology: walk.topology || null,
     briefing: pn.briefing || null,                     // the DM's own Stage-2 throughline for this frontier
     cursor: { current: cur.current, touched: cur.touched, done: cur.done, total: walk.segCount },
-    segments: walk.segments.map(s => ({
-      num: s.num, label: s.label, isFinale: !!s.isFinale,
-      gist: s.isFinale
-        ? (s.finale && (s.finale.track||s.finale.revelation) || s.areaType || "arrival")
-        : [s.segType||s.areaType||s.biome, s.encounter && s.encounter.type].filter(Boolean).join(" / "),
-      reskin: ov ? (ov.find(o=>o.ref===("S"+s.num))||null) : null,   // roll-keyed reskin, never a rewrite
-      state: cur.touched.includes(s.num) ? (s.num===cur.current ? "here" : "behind") : "ahead",
-    })),
+    segments: walk.segments.map(s => {
+      const state = cur.touched.includes(s.num) ? (s.num===cur.current ? "here" : "behind") : "ahead";
+      const approach = state==="ahead" && current.exits.some(e=>e.num===s.num);
+      if(state!=="here" && !approach) return {num:s.num,label:s.label,state};
+      const segmentOverlay = (ov && ov.find(o=>o.ref===("S"+s.num))) || {};
+      return {
+        num:s.num, label:s.label, state, approach,
+        scene:{type:s.segType,description:s.description},
+        area:{type:s.areaType,dims:s.dims,side:s.side}, encounter:s.encounter,
+        footing:s.footing, interactable:s.interactable, light:s.light,
+        resolution: segmentOverlay.encounterState==="resolved" ? segmentOverlay.encounterResolution : null
+      };
+    }),
     cast: pn.cast || null,                             // the pre-cast NPCs/object for this frontier (codex ids)
     rule: "The walk the party is ON. Narrate the CURRENT segment; the rest is the road ahead/behind. "
         + "Honor the rolls (reskin by ref, never rewrite). A SOFT prior — player intent and the live "
@@ -153,6 +160,11 @@ Add to `dmDigest()` ([dm.js:34](../src/world/dm.js)) return object:
 ```js
     activeWalk: (typeof activeWalkDigest==="function") ? activeWalkDigest(w) : null,
 ```
+
+While a walk is active, `digest.location` also follows this cursor (`segment N: segType, areaType,
+dims, light`) instead of describing only the frontier node's broad typed place. This prevents a
+memoryless DM from being told that the PC is on, for example, a water-tower platform while the live
+segment is an oval chamber.
 
 ### Event: `walk_advance`
 New `case` in `applyEvent` ([dm.js, near the prep cases ~line 563](../src/world/dm.js)):
@@ -180,6 +192,10 @@ New `case` in `applyEvent` ([dm.js, near the prep cases ~line 563](../src/world/
 - After `startPrep` + `lockOnContact`, `prepOf(w).activeWalkId` is set and `dmDigest().activeWalk` is
   non-null with `cursor.current===1`, `cursor.total===walk.segCount`.
 - `walk_advance` to seg 3 → digest cursor `current===3`, `touched` includes 1 and 3, seg 3 `state==="here"`.
+- Only real exits from the current segment receive `approach:true` and actionable scene/encounter
+  detail; farther-ahead segments remain stubs.
+- `encounter_resolved` stamps the current segment overlay. Later digests expose its method/outcome,
+  so a bypassed or defeated threat cannot silently respawn in narration.
 - A second living world's digest with no contact → `activeWalk===null`.
 - Reaching the finale seg via `walk_advance` does **not** set `done`.
 
@@ -190,70 +206,43 @@ the rolled segments instead of drifting.
 
 ---
 
-## 3. Step D — Stage-scaled walk length
+## 3. Step D — Substantive walk length (restored 2026-08-03)
 
 ### Goal
-Shorter walks early game, longer late game. Currently flat (5/4/4). Length should track the living
-PC's level within the Tier-2 cap.
+Every default prep walk should provide enough structure for genuine exploration and branching:
+8–12 actual graph segments at every character level, including its finale/arrival. The rollers retain
+their historical non-finale authoring-budget field internally; player/DM progress and provenance use
+`walk.segments.length`. Level and tier scale danger, not the amount of story space.
 
 ### Where it plugs in
-Only `pbundlePlan()` ([prep-bundle.js:42](../src/engine/prep-bundle.js)). Add a helper; keep tier
-(content/threat band) exactly as-is — this changes *length* only. `rollUrbanWalk`/etc. already clamp
-`segCount` to 2–30 ([walk.js:374](../src/engine/walk.js)), so every value below is valid.
+Only `pbundlePlan()` ([prep-bundle.js](../src/engine/prep-bundle.js)). Keep tier/content selection
+exactly as-is. Authored environment overrides remain legal for special-purpose walks.
 
-### The curve
+### Default
 ```js
-// length scales with the living PC's level (Tier-2 cap = L10). Content/threat band stays tier-driven.
-function pbundleSegCount(level){
-  const L = Math.max(1, Math.min(pbundleLevelCeiling(), level||1));
-  return Math.max(3, Math.min(7, 2 + Math.ceil(L/2)));   // L1–2:3  L3–4:4  L5–6:5  L7–8:6  L9–10:7
-}
-function pbundleLegCount(level){
-  const L = Math.max(1, Math.min(pbundleLevelCeiling(), level||1));
-  return Math.max(3, Math.min(5, 2 + Math.ceil(L/3)));   // L1–3:3  L4–6:4  L7–10:5
-}
-```
-
-| Level | urban / dungeon `segCount` | wilderness `legCount` |
-|---|---|---|
-| 1–2 | 3 | 3 |
-| 3–4 | 4 | 3 |
-| 5–6 | 5 | 4 |
-| 7–8 | 6 | 5 |
-| 9–10 | 7 | 5 |
-
-`pbundlePlan` reads the level the same way `pbundleLedger` already does (living PC's `sheet.level`,
-[prep-bundle.js:30](../src/engine/prep-bundle.js)), falling back to 1 headless:
-```js
-function pbundlePlan(opts){
-  if(opts.environments && opts.environments.length) return opts.environments;
-  const t = Math.min(TIER_CAP, opts.tier||1);
-  const pc = opts.world && (opts.world.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
-  const lvl = (pc && pc.sheet && pc.sheet.level) || opts.level || 1;
-  return [
-    { kind:"urban",      segCount: pbundleSegCount(lvl), tier:t },
-    { kind:"dungeon",    segCount: pbundleSegCount(lvl), tier:t },
-    { kind:"wilderness", legCount: pbundleLegCount(lvl), tier:t },
-  ];
-}
+function pbundleSegCount(_level){ return 10; }
+function pbundleLegCount(_level){ return 10; }
 ```
 
 ### Edge cases
 - **Topology minimums:** some topologies need ≥3–4 segments (`WALK_TOPOLOGY_MIN_SEGS`,
-  [walk.js](../src/engine/walk.js)); the existing `walkResolveTopology` fallback already downgrades a
-  too-big topology for a small `segCount`, so L1's 3-seg walks just can't roll "The Fracture" (min 4).
-  No new handling needed — note it in the verify.
-- **No PC (headless/pre-creation):** falls back to level 1 → 3 segs. Matches today's lean default.
+  [walk.js](../src/engine/walk.js)); ten supports the full topology vocabulary.
+- **No PC (headless/pre-creation):** receives the same ten-segment substantive default.
+- **Digest size:** the current segment and immediate graph exits ride in actionable form; farther
+  segments remain compact stubs. Correct transition truth outranks the 3 KiB ordinary target.
+- **Finale shape:** an actionable finale includes its nested track, scene frame, revelation/exit
+  consequence, adversary or social lead, and rolled reward. A bare `gist:"Combat"` is not sufficient
+  state for the DM to play the ending.
+- **Completed-site residue:** segment-scoped objects do not become global while the walk is active,
+  but closing the walk must not erase them. At the matching node, completed/abandoned segment custody
+  becomes locally discoverable for later revisit and exact pickup.
 
 ### Verify (extend `dev/verify-prep-bundle.mjs`)
-- `assemblePrepBundle({level:1})` → urban/dungeon walks have `segCount===3`, wild `legCount===3`.
-- `level:10` → `segCount===7`, `legCount===5`.
-- Monotonic non-decreasing across `level` 1→10.
-- A 3-seg walk never carries a topology whose min exceeds 3 (fallback held).
+- `assemblePrepBundle({level:1})` and `{level:10}` both produce 8–12 segments in every environment.
+- The full DM digest with an active substantive walk remains below 12 KB.
 
 ### Done when
-Walk length rises with level on the documented curve, verified headless. (Tune the breakpoints in
-playtest — they're provisional.)
+Default walks are substantive at every level, verified headless.
 
 ---
 
@@ -271,6 +260,10 @@ post-session wrap. Mirrors `codexProvenanceReport()` ([codex.js:249](../src/worl
   `discovery` ([dm.js:429](../src/world/dm.js)), `kill` ([dm.js:485](../src/world/dm.js)),
   `front_closed` ([dm.js:468](../src/world/dm.js)). Stamp goes on the ledger entry meta
   (`{...,walk:{id,seg}}`) — additive, ignored by everything that doesn't read it.
+  The implemented helper is a strict read: it reads `w.prep` directly and returns `null` when
+  prep state is absent. It must not call `prepOf(w)`, because `applyEvent` asks for provenance
+  before a handler is accepted; lazy creation there would make a rejected event mutate the world
+  and break failure atomicity.
 - **Per-walk log:** `walk_advance` and `walk_complete` maintain `P.walkLog` (one entry per walked
   frontier: env, topology, segCount, `touched[]`, `finaleReached`, session).
 - **Report:** new `walkProvenanceReport(w)` in `src/world/seam.js` (it already owns the wrap):

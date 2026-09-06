@@ -147,6 +147,11 @@ check("resume set GS.dm.pending", win.GS.dm.pending === true && win.GS.dm.turnId
 // and it does NOT re-resume once already pending
 resumedWith = null; win.renderWorld();
 check("resume does not double-fire while pending", resumedWith === null);
+// End this simulated in-flight request before the independent response-rendering probes below.
+// Production would clear these fields when t-inflight lands; the harness has replaced pollResponse,
+// so it must perform that lifecycle step explicitly.
+rw.dm.pendingTurnId = null;
+win.GS.dm.pending = false; win.GS.dm.turnId = null; win.GS.dm.poll = null;
 
 // 10. word-by-word streaming of a fresh DM reply
 check("streamDMText defined", typeof win.streamDMText === "function");
@@ -219,7 +224,7 @@ check("streamed narration renders **bold** as <b>", !!bEl && /<b>key<\/b>/.test(
 
   // --- 12d. the happy path (no throw) still lifts the cinematic exactly as before ---
   prepEl.classList.add("on"); win.GS.wakePrep = true; win.GS.dm.pending = true; rw.dmlog = [];
-  win.applyResponse({ turnId: "t-ok", narration: "Clean morning light.", events: [], rollRequest: null, ask: null });
+  win.applyResponse({ turnId: rw.dm.pendingTurnId, narration: "Clean morning light.", events: [], rollRequest: null, ask: null });
   check("applyResponse still lifts #wakePrep on the ordinary happy path", !prepEl.classList.contains("on"));
   check("applyResponse still clears GS.dm.pending on the ordinary happy path", win.GS.dm.pending === false);
 }

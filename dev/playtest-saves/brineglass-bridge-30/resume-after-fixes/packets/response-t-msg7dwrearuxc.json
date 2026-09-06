@@ -1,0 +1,37 @@
+{
+  "turnId": "t-msg7dwrearuxc",
+  "narration": "You let the nearer spear commit to the crate, then slip the other way. The roof ledge is barely a path—wet slate, a gutter, one blind drop—but the guards will not follow beyond the tollhouse bell. Behind you, one calls, ‘Bring that answer back and the hives will know your name.’ The stalled shipment remains theirs. The erased law and their confession remain yours.",
+  "events": [
+    {
+      "type": "action",
+      "payload": {
+        "kind": "disengage"
+      },
+      "source": "declared"
+    },
+    {
+      "type": "combat_end",
+      "payload": {
+        "outcome": "pc-fled",
+        "reason": "Mira withdraws along the roof ledge with the evidence"
+      },
+      "source": "declared"
+    }
+  ],
+  "ruling": {
+    "understoodAction": "Disengage from the guards and leave by the roof ledge with the discovered evidence.",
+    "ruling": "The legal exit is reachable without a check after Disengage; the guards do not pursue beyond their post.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "Mira escapes unharmed but leaves the shipment in hostile custody.",
+    "outcomeBranches": null,
+    "proposedEvents": [
+      {
+        "type": "action"
+      },
+      {
+        "type": "combat_end"
+      }
+    ]
+  }
+}

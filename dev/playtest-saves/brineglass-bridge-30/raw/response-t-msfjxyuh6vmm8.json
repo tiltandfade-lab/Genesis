@@ -1,0 +1,55 @@
+{
+  "turnId": "t-msfjxyuh6vmm8",
+  "narration": "Your copied breath slips into the lacquered tube and comes back thin and metallic. William\u2019s jaw tightens, but the child shakes their head. \u201cToo even,\u201d they whisper. Then the real sound answers from a drain three paces away\u2014one long pull of air against the rain. William says, \u201cThe old evacuation route runs beneath Low Sluice. It was bricked shut before I was born.\u201d Your imitation has given you a clean comparison; now you can listen for where the true cadence travels.",
+  "events": [
+    {
+      "type": "cast",
+      "payload": {
+        "spell": "Minor Illusion",
+        "level": 0,
+        "concentration": false
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    }
+  ],
+  "rollRequest": {
+    "skill": "Investigation",
+    "ability": "int",
+    "dc": 13,
+    "dcHidden": true,
+    "adv": null,
+    "branches": {
+      "success": {
+        "narration": "You separate echo from source. The breath is moving uphill through the drains from the sealed evacuation passage\u2014not being driven in by sea wind. Something under Low Sluice is pulling air from the street.",
+        "events": []
+      },
+      "nearMiss": {
+        "narration": "You prove the breath is not storm wind, but the glass-lined drains split the echo between two routes. The child scratches both suspect grates with a chip of white leather so you will not lose them.",
+        "events": []
+      },
+      "fail": {
+        "narration": "Your illusion and the hollow tube multiply the echo until every grate seems to breathe. When you end the spell, the real cadence has stopped; you have learned it can react to sound, but not where it traveled.",
+        "events": []
+      }
+    }
+  },
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Use Minor Illusion as a controlled sound to compare the strange breathing and read William's recognition.",
+    "ruling": "The cantrip creates a valid reference sound. Investigation determines how much Mira can infer from the resulting echoes; William freely confirms the known existence of the old route.",
+    "needsRoll": true,
+    "proposedCheck": {
+      "skill": "Investigation",
+      "dc": 13
+    },
+    "stakes": "Success localizes the airflow; a near miss narrows it; failure alerts or silences the source.",
+    "outcomeBranches": [
+      "success",
+      "nearMiss",
+      "fail"
+    ],
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 3: creative spell use creates an engine-owned cantrip cast plus an instant local roll branch. No second model call unless the die is a natural 1 or 20."
+}

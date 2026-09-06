@@ -165,6 +165,12 @@ function mintOriginPlaceThread(w, originId){
    per-world transient state too. */
 function gsResetWorldTransients(){
   GS.gamePanel=null; GS.combat=null; GS.chase=null; GS.cmbLastStates=null;
+  // DM UI state is world-scoped too. Its durable twin remains on the old world's w.dm and rehydrates
+  // on return; never bleed a disabled composer, roll prompt, or poll from World A into World B.
+  if(GS.dm){
+    if(GS.dm.poll){clearTimeout(GS.dm.poll);GS.dm.poll=null;}
+    GS.dm.pending=false;GS.dm.turnId=null;GS.dm.rollReq=null;GS.dm.ask=null;GS.dm.lastTurnMeta=null;
+  }
   if(GS.theaterMounted && typeof window!=="undefined" && window.Theater && typeof window.Theater.retire==="function"){
     try{ window.Theater.retire(); }catch(e){ /* best-effort */ }
   }
@@ -548,17 +554,20 @@ function restRiders(w, o){
     const activePn = (P && P.activeWalkId && P.nodes) ? P.nodes[P.activeWalkId] : null;
     const env = (activePn && activePn.walk && activePn.walk.environment) || null;
     restRisk = restRiskRoll(w, { nodeId: w.currentNodeId, kind: (dayScale ? (restKind === "long" ? "dawn" : restKind) : restKind), env });
-    if (restRisk && restRisk.ok) addLedger(w, "outcome", { kind: "rest-risk", class: restRisk.class, text: restRisk.text, severe: restRisk.severe, interrupted: restRisk.interrupted },
+    if (restRisk && restRisk.ok) addLedger(w, "outcome", { kind: "rest-risk", class: restRisk.class, table: restRisk.table||null,
+        roll:restRisk.roll||null, text: restRisk.text, severe: restRisk.severe, interrupted: restRisk.interrupted,
+        effect:restRisk.effect||null },
       `✦ Rest risk (${restRisk.class}): ${restRisk.text}${restRisk.interrupted ? " — the rest is INTERRUPTED, no recovery." : ""}`);
     // HQ3-C4 (SET-03-F1) — a severe or interrupted rest-risk is a pending obligation the DM must
     // honor next turn (e.g. "a Threat is already inside the site when you wake"); a memoryless seat
     // can't hold that in a single recentLedger line. Surfaced as a first-class digest field
     // (dmDigest, dm.js), auto-cleared once the DM answers the turn that carries it (applyResponse's
     // w.dm rebuild). Non-severe flavor rolls do NOT set it — keeps the field meaningful.
-    if (restRisk && restRisk.ok && (restRisk.severe || restRisk.interrupted)) {
+    if (restRisk && restRisk.ok && (restRisk.severe || restRisk.interrupted ||
+        (restRisk.effect && restRisk.effect.scope === "pending-situation"))) {
       w.dm = w.dm || {}; const pc = clockOf(w);
       w.dm.pendingSituation = { kind: "rest-risk", text: restRisk.text, class: restRisk.class,
-        severe: !!restRisk.severe, interrupted: !!restRisk.interrupted, day: pc.day, min: pc.min };
+        severe: !!restRisk.severe, interrupted: !!restRisk.interrupted, effect:restRisk.effect||null, day: pc.day, min: pc.min };
     }
   }
   // HQ3-C2 (SET-07-F1) — the clock minutes the CALLER should advance by (both callers advance AFTER
@@ -571,9 +580,23 @@ function restRiders(w, o){
     ? restInterruptMinutes(fullMinutes) : fullMinutes;
   // RECOVERY — restRecover + (long rest only) charge refill / −1 exhaustion / clear temp HP. Skipped
   // entirely when restRisk just interrupted the rest (E4) OR the HQ3-C3 once-per-24h gate blocks it.
-  let restored = null, recharged = 0, exhaustionAfter = null;
+  const riskEffect=(restRisk&&restRisk.effect)||null;
+  const recoveryFraction=(riskEffect&&typeof riskEffect.recoveryFraction==="number")?riskEffect.recoveryFraction:1;
+  let trackedEffect=null;
+  if(!interrupted&&!benefitGated&&restingPC&&restingPC.sheet&&riskEffect&&typeof restEffectTrack==="function")
+    trackedEffect=restEffectTrack(restingPC.sheet,riskEffect);
+  let restored = null, recharged = 0, exhaustionAfter = null, hitDice=null, bonusResource=null;
   if (!interrupted && !benefitGated && typeof restRecover === "function" && restingPC && restingPC.sheet) {
-    restored = restRecover(restingPC.sheet, restKind);
+    // Hit Dice belong inside the shared rider transaction: an interrupted rest spends none, and a
+    // half/partial-recovery row scales their healing along with every other recovery channel.
+    if(restKind==="short"&&o.spendHitDice&&typeof spendHitDice==="function"){
+      hitDice=spendHitDice(restingPC.sheet,o.spendHitDice,o.hdRolls,{fraction:recoveryFraction});
+      if(hitDice.ok)addLedger(w,"outcome",{kind:"hit-dice",pc:restingPC.name,spent:hitDice.spent,healed:hitDice.healed,hp:hitDice.hp,
+          recoveryFraction,source:(o.via==="dm")?"declared":"detected"},
+        "✦ "+restingPC.name+" spends "+hitDice.spent+" Hit "+(hitDice.spent===1?"Die":"Dice")+" — heals "+hitDice.healed+" ("+hitDice.hp+").");
+    }
+    restored = restRecover(restingPC.sheet, restKind, {fraction:recoveryFraction});
+    if(riskEffect&&riskEffect.extraResource&&typeof restoreOneResource==="function")bonusResource=restoreOneResource(restingPC.sheet);
     if (restKind === "long") {
       (restingPC.sheet.inventory || []).forEach(it => { if (it.ench && it.ench.charges && it.ench.charges.cur !== it.ench.charges.max) { it.ench.charges.cur = it.ench.charges.max; recharged++; } });
       if (typeof removeExhaustion === "function") exhaustionAfter = removeExhaustion(restingPC.sheet, 1);
@@ -615,7 +638,8 @@ function restRiders(w, o){
         logEvent(w, `New powers await — open your level-up when you're ready (or choose them with your DM).`);
     }
   }
-  return { lodging, restRisk, restored, recharged, exhaustionAfter, leveled, interrupted,
+  return { lodging, restRisk, restored, recharged, exhaustionAfter, leveled, interrupted, hitDice, bonusResource,
+    recoveryFraction, trackedEffect,
     clockMinutes, interruptedMinutes: interrupted ? clockMinutes : null };
 }
 

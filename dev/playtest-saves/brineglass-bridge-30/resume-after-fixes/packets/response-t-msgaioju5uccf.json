@@ -1,0 +1,30 @@
+{
+  "turnId": "t-msgaioju5uccf",
+  "narration": "You do not turn failure into another body. From the courtyard you score the trapped stall’s position into the hitching post and beat the district fire-call on its iron ring. Bucket runners answer from two streets. You lead them only to the safe edge, tell them exactly where the roof fell, then take the muddy west passage back. The belfry is still ringing; the office can no longer pretend nobody saw.",
+  "ruling": {
+    "understoodAction": "Mira accepts the failed rescue, transfers exact location knowledge to an arriving rescue line, and returns to segment 5 instead of entering the dam scene.",
+    "ruling": "The burning-building encounter closes as a failed rescue with a persistent trace; the chosen return route is honored.",
+    "needsRoll": false,
+    "stakes": "The deaths remain canon, but later responders now know the collapse point."
+  },
+  "events": [
+    {
+      "type": "encounter_resolved",
+      "source": "declared",
+      "payload": {
+        "foes": [],
+        "method": "failed smoke rescue followed by an exact marker and fire-call",
+        "objectiveRef": "rescue the trapped stable occupants",
+        "outcome": "failed rescue; collapse marked for responders"
+      }
+    },
+    {
+      "type": "walk_advance",
+      "source": "declared",
+      "payload": {
+        "nodeId": "frontier-s0-0",
+        "toSeg": 5
+      }
+    }
+  ]
+}

@@ -106,8 +106,18 @@ and `tables.json`. Committed **and** generated — never hand-edit (same law as 
   "unknownFieldPolicy": "kept + console.warn + one drift ledger line (kind:payload-drift) — never dropped (dmFoldPayload, dm.js:1325)",
   "unknownTypePolicy": "well-formed unknown types pass validateEvent and no-op in applyEvent (forward-compatible)",
   "digest": {
-    "topLevelKeys": ["worldId","worldName","clock","location","setting","pc","powers","fronts","recentLedger","gazetteer","codex","codexRoster","minted","revealed","sessionLean","tarot","activeWalk","combat","prepPending","levelUp","arrivalBrief"],
+    "topLevelKeys": ["worldId","worldName","clock","location","setting","pc","powers","fronts","recentLedger","gazetteer","codex","codexRoster","minted","revealed","sessionLean","tarot","activeWalk","ambientPresence","combat","prepPending","levelUp","arrivalBrief","itemLegacy","itemCustody","bastion","pendingSituation"],
     "notes": { "<key>": "one-line description (generator's DIGEST_NOTES, §2)" }
+  },
+  "turnDigest": {
+    "sourceOfTruth": "src/world/dm-digest.js",
+    "schema": "beat-digest/v1",
+    "views": ["scene","inventory","combat","travel","social"],
+    "targetBytes": 3072,
+    "potentialTopLevelKeys": ["schema","view","slices","...sparse selected full-digest keys...","retrieval"],
+    "sparse": true,
+    "omissionRule": "an omitted key was not selected for this beat; it is not false and does not erase canonical state",
+    "fullCompatibilitySurface": "digest"
   },
   "events": {
     "<type>": {
@@ -447,7 +457,8 @@ Payloads below are the exact JSON the executor copies into the dict.
 Same harness pattern as `dev/verify-dm-seam.mjs` (jsdom from `JSDOM_HOME` ∥
 `~/.genesis-jsdom`; manifest `loadOrder` sources const-via-eval into one scope; `expose`
 string surfaces `DM_EVENT_TYPES`, `DM_EVENT_SOURCES`, `DM_EVENT_FIELDS`, `DM_DIGEST_KEYS`,
-`dmFoldPayload`, `dmDigest`, `seatEventVocabulary`, `seatValidate` onto `window`). Stage ONE
+`DM_BEAT_DIGEST_KEYS`, `DM_BEAT_KINDS`, `dmFoldPayload`, `dmDigest`, `dmBeatDigest`,
+`seatEventVocabulary`, `seatValidate` onto `window`). Stage ONE
 founded world (reuse verify-dm-seam's world-staging approach) for the digest/ledger checks.
 
 **Three-way agreement, as check sections (exact counts):**
@@ -456,14 +467,18 @@ founded world (reuse verify-dm-seam's world-staging approach) for the digest/led
   A1 `execFileSync("python3", ["build/gen-dm-contract.py"])` exits 0 (check mode clean —
   regenerating from source reproduces the committed artifact byte-identically).
   A2 `dm-contract.json` parses and `contractVersion === 1`.
-- **B. artifact ↔ runtime (4 checks):**
+- **B. artifact ↔ runtime (6 checks):**
   B1 `Object.keys(contract.events)` set-equals `window.DM_EVENT_TYPES`, both length 87.
   B2 `contract.eventSources` deep-equals `DM_EVENT_SOURCES`.
   B3 `Object.keys(dmDigest())` on the staged world set-equals `contract.digest.topLevelKeys`
-  (21) **and** set-equals `DM_DIGEST_KEYS`.
+  **and** set-equals `DM_DIGEST_KEYS` (26 at the 2026-08-04 beat-digest cut; the guard uses mutual
+  equality rather than freezing the count).
   B4 for every mapped event, `contract.events[t].fields` deep-equals
   `DM_EVENT_FIELDS[t].accept` and `aliases` deep-equals `alias||{}`; the 6 pass-through
   carry `fields: null`.
+  B5 `contract.turnDigest` matches the declared beat vocabulary, five views, schema, and 3 KiB
+  target. B6 a live beat packet is schema-stamped, omits the full `codexRoster`, and emits no
+  undeclared top-level key.
 - **C. examples fold clean (88 checks):**
   C1–C87 per event: record `ledgerOf(w).length`, run
   `dmFoldPayload(w, {type, payload: contract.events[type].example.payload})`, assert **zero

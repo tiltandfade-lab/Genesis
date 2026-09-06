@@ -1,0 +1,19 @@
+{
+  "turnId": "t-msg5p0jw65pwb",
+  "local": true,
+  "narration": "Current hit points: 6 / 6. Conditions: none. Lasting marks: You were poisoned; your next save against poison has disadvantage..",
+  "route": {
+    "mode": "local-fact",
+    "reasons": [
+      "exact-fact:health"
+    ],
+    "relevantSlices": [
+      "pc",
+      "hp",
+      "conditions",
+      "marks"
+    ],
+    "modelCall": false,
+    "localKind": "health"
+  }
+}

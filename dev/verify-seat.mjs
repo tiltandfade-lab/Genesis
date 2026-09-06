@@ -358,7 +358,8 @@ function resetSeatState() {
       // approach: snapshot on the NEXT read() call, which only happens after the previous chunk's
       // seatStreamAppend has already run synchronously inside seatConsumeSSELine's onDelta callback.
       if (midStreamSnapshot === null && ci > 1) {
-        midStreamSnapshot = { text: win.GS.seat.streamText, appliedSoFar: appliedLog.length };
+        midStreamSnapshot = { text: win.GS.seat.streamText, appliedSoFar: appliedLog.length,
+          meaningfulFeedbackMs:win.GS.dm.lastTurnMeta&&win.GS.dm.lastTurnMeta.meaningfulFeedbackMs };
       }
       return Promise.resolve({ done: false, value });
     }
@@ -379,6 +380,9 @@ function resetSeatState() {
       JSON.stringify(midStreamSnapshot));
     check("applyEvent had NOT fired yet at the moment the first delta streamed in (no mid-stream apply)",
       midStreamSnapshot && midStreamSnapshot.appliedSoFar === 0,
+      JSON.stringify(midStreamSnapshot));
+    check("meaningful-feedback timing waits for visible prose, not merely request acknowledgement",
+      midStreamSnapshot && typeof midStreamSnapshot.meaningfulFeedbackMs === "number",
       JSON.stringify(midStreamSnapshot));
     check("applyEvent fires exactly once, AFTER the stream closed", appliedLog.length === 1 && appliedLog[0] === "hp_changed",
       JSON.stringify(appliedLog));

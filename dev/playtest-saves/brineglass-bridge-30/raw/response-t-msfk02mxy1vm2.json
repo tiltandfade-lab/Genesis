@@ -1,0 +1,27 @@
+{
+  "turnId": "t-msfk02mxy1vm2",
+  "narration": "The candle succeeds where the imitation failed. Over the first drains the flame gutters randomly in the rain; over the grate the child marked nearest the tannery wall, it bows straight down and burns blue at the tip. The draft is drawing street air into the sealed route. As you cup the flame closer, soot crawls across the wet fused glass and catches in a hairline seam: the grate is not mortared shut at all, but held by three translucent pegs disguised as part of the street. William kneels without touching them. \u201cThat passage was not reopened for the storm,\u201d he says. The child points downhill, where people are beginning to run toward Low Sluice carrying bedding above their heads.",
+  "events": [
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "factId": "brineglass:concealed-low-sluice-access",
+        "what": "A disguised three-peg grate beside the Cobbled Tannery draws air into the supposedly bricked Low Sluice evacuation passage."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    }
+  ],
+  "rollRequest": null,
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Use a candle flame as a physical airflow indicator after the sound-based investigation failed.",
+    "ruling": "The method directly tests the relevant fact and does not need another roll; the prior failure remains meaningful because it caused the breathing to go silent and forced a different approach.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "The concealed access creates a route, while evacuees have begun moving toward the threatened quarter.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 4: accepted an off-menu physical solution. Causal consequence is player-owned; no attempt to force Mira toward either the grate or Low Sluice."
+}

@@ -115,7 +115,7 @@ interpretive, stays declared (a fiction judgment the engine cannot make) · **M*
 | 70 | `prep_contact` | I | Player movement intent. |
 | 71 | `walk_advance` | I | "The party cleared the segment" is a fiction judgment. |
 | 72 | `walk_update` | I / P | Effect-die face capture; auto-capture from the dice tray → PL-3 (§4). |
-| 73 | `walk_complete` | I + **M** | The FINALE resolving stays declared (interpretive — WALK-CONSUMPTION's own law: "reaching a finale segment does NOT complete the walk", prep.js:437-438). The ABANDONMENT case becomes detected → DE-5 (the party walking onto a different walk/node is observable state). |
+| 73 | `walk_complete` | I | Finale resolution and abandonment remain declared fiction judgments. Switching walks is detected as suspension → DE-5; it never implies either outcome. |
 | 74 | `capture` | I | |
 | 75-77 | `chase_start` `chase_round` `chase_yield` | I | Pursuit is a choice; round math engine-owned; clock ticks are TRANSITION-CONTRACT's. |
 | 78 | `downtime` | I | Intent declared; ledger roll + payout detected inside. |
@@ -404,7 +404,15 @@ hands you; `foe_morale` remains available for fear beats you initiate."
 
 ---
 
-### DE-5 · Walk abandonment — an orphaned walk closes itself
+### DE-5 · Walk switching — suspend, never infer abandonment
+
+> **Superseded on 2026-08-03 by `TEXT-FIRST-WALK-RESTORATION.md`.** The implementation notes below
+> preserve the historical detected-event decision, but it is no longer current behavior. Switching
+> walks now stamps the prior prep node `walkState:"suspended"` and retains its exact cursor, touched/
+> ticked history, overlays, and interactable states. Reactivation resumes it. Only an explicit
+> `walk_complete {abandoned:true}` may claim abandonment; switching writes no completion ledger fact.
+
+#### Historical DE-5 design (superseded)
 
 **Declared burden today.** DM-BRIDGE.md:197-200 + 273-277 make the DM responsible for
 `walk_complete {abandoned:true}` when the party wanders off. The observable fact: activating a

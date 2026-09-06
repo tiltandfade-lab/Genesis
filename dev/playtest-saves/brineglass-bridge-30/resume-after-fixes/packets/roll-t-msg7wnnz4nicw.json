@@ -1,0 +1,55 @@
+{
+  "request": {
+    "skill": "Performance",
+    "ability": "cha",
+    "dc": 12,
+    "adv": null,
+    "branches": {
+      "success": {
+        "narration": "You repeat the flattened note. The square winces, but Room Seven answers with the correct pitch—once, sharply—from behind its closed shutter. A second figure across the square starts toward the boarding house, realizes you saw them, and turns away.",
+        "events": [
+          {
+            "type": "fact_canonized",
+            "payload": {
+              "factId": "brineglass-room-seven-answers-tune",
+              "what": "When Mira deliberately played the shared tune wrong, the supposedly empty Room Seven answered with the correct final note."
+            }
+          }
+        ]
+      },
+      "nearMiss": {
+        "narration": "The wrong note draws a dozen unconscious corrections at once. You cannot isolate the first voice, but every correcting face turns toward the boarding house before its owner remembers not to. The trap reveals a shared direction, not a culprit.",
+        "events": []
+      },
+      "fail": {
+        "narration": "The bent note sets the belfry tag rattling and the clapper answers too loudly. Irritated faces turn toward you, then away. Whatever listened from upstairs stays silent; the performer has time to move while the square blames the bard.",
+        "events": []
+      }
+    }
+  },
+  "result": {
+    "ok": true,
+    "resolvedLocally": true,
+    "liveResolutionNeeded": false,
+    "pending": null,
+    "recovered": false,
+    "resolution": {
+      "turnId": "t-msg7wnnz4nicw",
+      "skill": "Performance",
+      "total": 16,
+      "degree": "success",
+      "branch": "success"
+    },
+    "branchNarration": "You repeat the flattened note. The square winces, but Room Seven answers with the correct pitch—once, sharply—from behind its closed shutter. A second figure across the square starts toward the boarding house, realizes you saw them, and turns away.",
+    "newLedger": [
+      "◆ When Mira deliberately played the shared tune wrong, the supposedly empty Room Seven answered with the correct final note.",
+      "✦ +1 XP — 222 total."
+    ],
+    "pc": {
+      "name": "Mira Quill",
+      "hp": "6/6",
+      "conditions": [],
+      "status": "living"
+    }
+  }
+}

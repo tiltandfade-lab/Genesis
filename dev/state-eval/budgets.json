@@ -1,26 +1,34 @@
 {
   "sections": {
     "worldMeta": 256,
+    "schema": 256,
+    "view": 256,
+    "slices": 256,
     "clock": 256,
     "location": 256,
     "setting": 640,
-    "pc": 2176,
+    "pc": 512,
     "powers": 640,
     "fronts": 768,
-    "recentLedger": 1024,
-    "gazetteer": 896,
-    "codex": 38784,
-    "codexRoster": 256,
+    "recentLedger": 384,
+    "gazetteer": 256,
+    "codex": 640,
     "minted": 256,
     "revealed": 256,
     "sessionLean": 256,
     "tarot": 384,
     "activeWalk": 256,
+    "ambientPresence": 256,
     "combat": 512,
     "prepPending": 256,
     "levelUp": 256,
-    "arrivalBrief": 256
+    "arrivalBrief": 256,
+    "itemLegacy": 256,
+    "itemCustody": 256,
+    "bastion": 256,
+    "pendingSituation": 256,
+    "retrieval": 256
   },
-  "totalFounding": 32768,
-  "totalSteady": 12288
+  "totalFounding": 6144,
+  "totalSteady": 3072
 }

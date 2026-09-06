@@ -1,0 +1,38 @@
+{
+  "turnId": "t-msfki3ck9eoa9",
+  "narration": "Tessa accepts the order in her right hand and repeats your instruction exactly. At the tannery entrance, rain sheets between you and three Crier\u2019s Circle messengers in lacquered half-cloaks. William stands off to one side, jaw tight. The figure in front is strangely dry. They do not ask who opened the galleries; they look at your empty hands and say, \u201cThe order, please.\u201d Behind them, the displaced families have gone quiet enough that the underground water can be heard again.",
+  "events": [
+    {
+      "type": "item_transfer",
+      "payload": {
+        "itemId": "msfkat4zjdxcl",
+        "to": {
+          "kind": "npc",
+          "ref": "npc:tessa-rill",
+          "name": "Tessa Rill"
+        },
+        "note": "Mira entrusts the Altered Low Sluice Order to Tessa Rill with instructions to burn it on a double three-note signal."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    }
+  ],
+  "gen": [
+    {
+      "kind": "npc",
+      "opts": {}
+    }
+  ],
+  "rollRequest": null,
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Entrust the tracked order to Tessa under a contingency signal, then voluntarily meet the arriving Circle representatives without a drawn weapon.",
+    "ruling": "The custody transfer and approach happen as declared. The officials react to the opened shelter and ask for the missing document; they do not seize it or decide Mira's answer.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "The Circle has arrived without knowing where the order is, while the sheltered community is present as witnesses.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 21: Circle pressure follows the advanced faction clock and visible shelter restoration. Player's custodial handoff may be classified by item legacy as an NPC claim/recovery hook despite being voluntary\u2014a semantic edge to audit."
+}

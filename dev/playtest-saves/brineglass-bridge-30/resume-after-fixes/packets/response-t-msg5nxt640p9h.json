@@ -1,0 +1,17 @@
+{
+  "narration": "Mira is at 6 of 6 hit points and has no active conditions. She still bears the poison mark: her next save against poison has disadvantage.",
+  "events": [],
+  "rollRequest": null,
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Read Mira’s current health state.",
+    "ruling": "This is authoritative sheet state and requires no interpretation or roll.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "None; this should route locally on subsequent identical requests.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Continuation turn 44 exposed a missed combined HP/conditions local-fact phrase; the router is fixed before repeating the probe.",
+  "turnId": "t-msg5nxt640p9h"
+}

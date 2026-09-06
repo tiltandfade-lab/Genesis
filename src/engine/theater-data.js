@@ -1547,9 +1547,9 @@ function theaterSettlementBoardBuild(nodeInfo, realms, env){
    w.prep.nodes[<activeWalkId>] object D0's dmFindInteractable (src/world/dm.js) indexes by
    sourceRef to find-and-mutate a placed entity's `.state` across turns (a state_transition event
    writes straight onto the matched `pn.interactables[]` record). D2's bindWalkInteractables and D3's
-   applyRoomGrammar stay PURE re-derivable projections of (plan,walk,opts) — their own header
-   docstrings flag this exact reconciliation as the deliberately-unsettled gap ("PERSISTENCE GAP",
-   walk-interactables.js) and hand it to D4.
+   applyRoomGrammar stay PURE re-derivable projections of (plan,walk,opts). The generic reconciliation
+   owner now lives in walk-interactables.js and is invoked by prep in Story mode; this compatibility
+   wrapper lets Theater restore the same state without becoming its owner.
    ONE STORE: `prepNode.interactables[]` (dmFindInteractable's own read shape) holds ONLY minimal
    identity+state records — {sourceRef, archetype, state} — never a second content record (Law 5:
    the walk segment stays canon; this store is bookkeeping, not a noun). `interactables` (the fresh
@@ -1562,22 +1562,8 @@ function theaterSettlementBoardBuild(nodeInfo, realms, env){
    the fresh projection's own rolled starting states pass through untouched, same degrade posture
    D0's own dmFindInteractable/dmArchetypeStates already keep. */
 function trayReconcileInteractableState(prepNode, interactables){
-  if(!prepNode || !Array.isArray(interactables) || !interactables.length) return interactables;
-  const store = Array.isArray(prepNode.interactables) ? prepNode.interactables : (prepNode.interactables = []);
-  const bySourceRef = {};
-  store.forEach((rec) => { if(rec && rec.sourceRef != null) bySourceRef[rec.sourceRef] = rec; });
-  interactables.forEach((entry) => {
-    if(!entry || entry.sourceRef == null) return;
-    const persisted = bySourceRef[entry.sourceRef];
-    if(persisted){
-      entry.state = persisted.state;
-    } else {
-      const rec = { sourceRef: entry.sourceRef, archetype: entry.archetype, state: entry.state };
-      store.push(rec);
-      bySourceRef[entry.sourceRef] = rec;
-    }
-  });
-  return interactables;
+  return (typeof reconcileWalkInteractableState==="function")
+    ? reconcileWalkInteractableState(prepNode,interactables) : interactables;
 }
 
 /* VQ2-RESPEC.md §4 unit F2 (Sol P-D, ledger #11 — dev/play-lens/DEMAND-LEDGER.md row 4) —
@@ -1866,8 +1852,8 @@ function trayFrom(source, scene, opts){
     // object D0's dmFindInteractable (src/world/dm.js) indexes by sourceRef — theaterHereSourceFor
     // (src/world/render.js) hands it straight through, exactly the way it already hands through
     // pn.spatial as `source.plan` (no new prep-node convention invented). bindWalkInteractables/
-    // applyRoomGrammar stay pure re-derivable projections (their own documented "PERSISTENCE GAP");
-    // this reconciles the one real store dmFindInteractable reads against the fresh projection: a
+    // applyRoomGrammar stay pure re-derivable projections; the shared reconciliation owner restores
+    // the one real store dmFindInteractable reads against the fresh projection: a
     // sourceRef seen for the first time gets a minimal identity+state record STAMPED into the prep
     // node; a sourceRef already on record has its PERSISTED state WIN over the freshly rolled
     // starting state (a door opened by a state_transition last turn stays open on re-derivation).
@@ -3192,7 +3178,7 @@ function castFrom(w, source){
   // Companions — prepEligibleCompanionCreatures(w) (prep.js:107-114): codex creature records
   // the party travels with (attitude>=1). Read call-time/typeof-guarded — prep.js loads AFTER
   // this file in loadOrder, classic-script globals resolve fine at call time regardless.
-  const companions = (typeof prepEligibleCompanionCreatures === "function") ? (prepEligibleCompanionCreatures(w) || []) : [];
+  const companions = (w && w.codex && typeof prepEligibleCompanionCreatures === "function") ? (prepEligibleCompanionCreatures(w) || []) : [];
   companions.forEach(r => {
     const archetype = theaterArchetypeFor((r.fields && r.fields.type) || null, (r.fields && r.fields.size) || null, r.name);
     // A companion is a codex CREATURE record — it has a real stat chassis (r.dm.frame = the statId the
@@ -3210,8 +3196,8 @@ function castFrom(w, source){
   // Contacted here-NPCs (painted) — codexHereNowIds rule 1: records "at" hereNodeId, already
   // excluding untouched ambients (codex.js:415) — this IS the painted-vs-blank line (§U3).
   const contactedNpcs = [];
-  if(typeof codexHereNowIds === "function" && typeof codexOf === "function"){
-    const C = codexOf(w);
+  if(w && w.codex && typeof codexHereNowIds === "function"){
+    const C = w.codex; // projection reads never initialize canonical codex state
     const hereIds = codexHereNowIds(w, { atNodeId: hereNodeId });
     hereIds.forEach(id => {
       const r = C.records && C.records[id];
@@ -3234,7 +3220,7 @@ function castFrom(w, source){
 
   // Soft ambients (blank) — U3's shared derivation, called by REFERENCE (the same function
   // src/world/dm.js's digest calls) so the tray and the digest never drift apart on count.
-  const ambient = (typeof codexAmbientPresenceFor === "function") ? codexAmbientPresenceFor(w, hereNodeId) : null;
+  const ambient = (w && w.codex && typeof codexAmbientPresenceFor === "function") ? codexAmbientPresenceFor(w, hereNodeId) : null;
   const ambientCount = ambient ? ambient.count : 0;
   for(let i = 0; i < ambientCount; i++){
     units.push({

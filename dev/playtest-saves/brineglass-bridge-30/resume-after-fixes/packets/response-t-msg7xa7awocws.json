@@ -1,0 +1,19 @@
+{
+  "turnId": "t-msg7xa7awocws",
+  "local": true,
+  "narration": "Scorched Cloth Room Tag is held by the alley belfry (place).",
+  "route": {
+    "mode": "local-fact",
+    "reasons": [
+      "exact-fact:custody"
+    ],
+    "relevantSlices": [
+      "pc",
+      "item-custody"
+    ],
+    "modelCall": false,
+    "localKind": "custody",
+    "localRef": "msg7to0eh5tyc",
+    "localCodexId": null
+  }
+}

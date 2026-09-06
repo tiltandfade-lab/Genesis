@@ -41,7 +41,7 @@ ruling; every ideal cites its source, and unsourced entries are marked (proposed
 |---|---|---|---|---|
 | SRD mechanization (checks/conditions/rests) | BUILT | built 2026-07-01 + gauntlets | full d20 spine as built | detected>declared migration completed corpus-wide (DETECTED-EVENTS pattern continued) |
 | Advancement / XP | BUILT (L1-10) | leveling live; SRD-exact curve | tension-spine XP + rest-gated level-up (as built) | ADVANCEMENT-RETUNE numbers from soak telemetry; T3/T4 un-cap at expansion (TIER-SCOPE) |
-| Combat (current zone engine) | BUILT | live fights; combat lifecycle proven | 12-zone theater-of-mind + side initiative (as built) | exact-cell BattleMat authority; zones demote to fallback — LEDGER (BattleMat/EngagementLens rows; W7 kernel) |
+| Combat (current zone engine) | BUILT | live fights; combat lifecycle proven | 12-zone theater-of-mind + side initiative (as built; restored current authority 2026-08-03) | exact-cell BattleMat remains an optional future projection candidate, not a current cutover |
 | Crit Magnitude | BUILT | locked spec; lens tables compiled | second-die + lens cascade (as built) | W2 recalibration (15/3/1/1, d3+2, TerminalDisposition, reach profiles) at its authorized amendment — LOCKED design, unbuilt |
 | Degrees of failure / difficulty | BUILT (doctrine) | margin logic in resolvers | fixed power bands + telegraphed danger (as built) | escalation-ceiling formula + threat-signaling UI polish (DESIGN-GUIDE open queue) |
 | Consequence Ladder | PARTIAL | art-depiction pilot BUILT | legs/sink routing on examined handles (pilot scope) | full ladder + salience promotion + motif slots (CONSEQUENCE-LADDER spec) |
@@ -62,9 +62,9 @@ ruling; every ideal cites its source, and unsourced entries are marked (proposed
 | Module | Now | Proof | Playable MVP | Ideal goal |
 |---|---|---|---|---|
 | Tables pipeline (author→compile) | BUILT | check/lint/drift harnesses green | as built (386 tables) | TABLE-ROW-CONTRACT schemas + family lint built; re-authoring craft pass complete (T7 lane) |
-| Walks (dungeon/urban/wilderness) | BUILT | playtests; walk harnesses | segment walks + skins + dressing (as built) | WALK-CONSUMPTION capture/re-entry + card dealing under W4 authority — partially LEDGER |
+| Walks (dungeon/urban/wilderness) | BUILT / RESTORING | playtests; walk harnesses | substantive 8–12 segment walks; focus switch suspends/resumes; scoped current-segment digest; short errands are scene chains | multiple entrances, persistent touched objects, state-aware returns, card dealing under W4 authority |
 | Place-gen / interiors | BUILT (11 units) | merged place-gen wave | realm-true places + building interiors (as built) | PLACE-GEN addendum breadth + Part-2 sprites + interior spec (queued) |
-| Realms & breach | BUILT | breach live; 11 identities locked | breach spawns realm content (as built) | per-realm render finish under pixel canon (ART-DEPARTMENT); realm hooks system (REALM-HOOKS spec) |
+| Realms & breach | BUILT | breach live; 11 identities locked | realm semantic context drives narratable nouns independent of art; breach spawning as built | shared renderer-neutral RealmContext + realm hooks; per-realm visual finish optional |
 | Economy & items | BUILT (v1+Part I) | shop UI 46/46; items live | buy/sell spine + type/instance gear (as built) | Part II instance conditions + sinks breadth + valuables post-craft (ITEMS/ECONOMY-SINKS) |
 | Loot | BUILT (core) | remap landed | rarity-axis loot + doers/pointers (as built) | L4/L3b tiers at expansion (TIER-SCOPE); plot-item recurrence breadth |
 | Tarot / session draw | PARTIAL | minors build-ready; wiring partial | session draw as mutator (minors) | TAROT-2 strict schema + op vocabulary + receipts (SPEC-LOCKED) |
@@ -76,11 +76,11 @@ ruling; every ideal cites its source, and unsourced entries are marked (proposed
 | Module | Now | Proof | Playable MVP | Ideal goal |
 |---|---|---|---|---|
 | Event contract & bridge | BUILT | 28+21 verifies + fixture pairs | typed events, app-owned mutators (as built) | full detected migration; SEAT-ADAPTER boundary built (SPEC-LOCKED) |
-| DM seat (product) | SPECCED (3/5 units) | bridge sessions; latency data | seat live ≤15s routine + SEAT-PROMPT wired + one provider (DM-SEAT/DIRECTION gate) | provider-neutral multi-provider seat + conformance gates — LEDGER (Provider-neutral row) + W9 digest schema |
-| Digest diet | BUILT | token telemetry pre/post | scoped delta digest (as built) | G6.1 relevance-scoped retrieval + pull-by-id at scale — LEDGER (Sparse growth row) |
-| In-session UI shell | BUILT | live sessions | current shell (as built) | W10 rail/tray/chat shell at the program's cutover — LEDGER (Shared shell row) |
+| DM seat (product) | SPECCED (4/5 units); conservative route/receipt, atomic item custody, and beat-shaped turn context BUILT | bridge sessions; latency stages; mechanics-first rest/item-transfer; `verify-beat-digest` 32/32 | zero-provider replay corpus, then seat live with meaningful feedback target ≤4s, ≥8s silence failure flag, routine completion outer ceiling ≤15s + one provider (measured distributions required) | provider-neutral multi-provider seat + conformance gates — LEDGER (Provider-neutral row) + W9 digest schema |
+| Digest diet | BUILT + BEAT-SHAPED | token telemetry pre/post; all five `beat-digest/v1` views under the ordinary 3 KiB fixture target | sparse per-beat projection with full bootstrap/debug fallback and named-noun retrieval | G6.1 relevance-scoped retrieval + pull-by-id at scale — LEDGER (Sparse growth row) |
+| In-session UI shell | BUILT / RESTORING | live sessions | Story-default chat/state shell; optional Sprites; explicit Theater Lab | optional derived node map over canonical walk graph |
 | Creator/bardo UI | BUILT | playtest 2 reshape landed | guided one-roll-at-a-time bardo (as built) | TIYL-UI-PORT + Astral Folio polish + LEVELUP-PICKER in-app picks (specced trio) |
-| Graphics/theater | BUILT (lab) | convergence charter evidence chain | text-first always; theater feature-flagged (as built) | BattleMat+EngagementLens release family; theater stays laboratory — LEDGER (release-tray row; Adam's selection) |
+| Graphics/theater | BUILT (preserved lab) | convergence charter evidence chain | explicit Theater Lab opt-in; never required for play | future projection research may resume without rewriting canonical state |
 | Sprites (figure register) | BUILT (corpus) | 510/510 + 1475/1475 coverage | pixel canon register (as built) | full regen waves + GUISE swap + billboard polish under ART-DEPARTMENT law |
 | Accessibility / blind-playable | PARTIAL (doctrine) | prose twins in built surfaces | bounded equivalence suite (W10 MVP obligation) | full acceptance: one complete screen-reader session (GEN-LAW-3); funded human evidence — LEDGER |
 

@@ -1,0 +1,14 @@
+{
+  "turnId": "t-msg7ijsu7l5qr",
+  "narration": "Three things are certain. The hives were built as public dispensaries, not private storehouses. Their lawful chain ran through the Office of Amber Weights. That office used the split-honeycomb seal. The guards’ claim that ‘the hives choose’ replaces a named civic authority with superstition—or conceals whoever inherited that authority after the office vanished.",
+  "events": [],
+  "ruling": {
+    "understoodAction": "Recite only the facts already established about the hives and their former authority.",
+    "ruling": "No new fact is invented; the answer distinguishes canon from inference.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "None; this is a continuity check.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  }
+}

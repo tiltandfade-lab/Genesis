@@ -1,0 +1,91 @@
+{
+  "turnId": "t-msgab2whx04nh",
+  "narration": "The notice cage is built to preserve official lies: amber glass, iron lattice, and a warded hasp carrying the same three-click office rhythm. Your dagger can lift the spring without shattering the pane, but only if you work between the belfry’s swings. If it catches, the office bell will wake the night clerk and whoever now owns the guard seal. Make a Dexterity (Sleight of Hand) check, DC 14.",
+  "ruling": {
+    "understoodAction": "Mira tries to publish her only packet without preserving private leverage.",
+    "ruling": "The publication succeeds on success or near miss; failure leaves the packet with Mira but alerts the dominant faction.",
+    "needsRoll": true,
+    "proposedCheck": {
+      "skill": "Sleight of Hand",
+      "ability": "dex",
+      "dc": 14
+    },
+    "stakes": "Public evidence versus an alerted office network."
+  },
+  "events": [],
+  "rollRequest": {
+    "skill": "Sleight of Hand",
+    "ability": "dex",
+    "dc": 14,
+    "adv": null,
+    "branches": {
+      "success": {
+        "narration": "The spring yields between two bell strokes. You pin every copied page behind the amber glass, names and payments facing the street, then close the hasp without a sound. By morning, nobody will need your permission to know.",
+        "events": [
+          {
+            "type": "item_transfer",
+            "source": "branch",
+            "payload": {
+              "itemId": "msg89nxu08g6s",
+              "to": {
+                "kind": "object",
+                "ref": "walk:frontier-s0-0:s5:office-public-notice-cage",
+                "name": "the Office public notice cage"
+              },
+              "intent": "place",
+              "note": "Mira publishes her entire packet of Venn’s void orders in the Office notice cage and keeps no secret copy."
+            }
+          },
+          {
+            "type": "fact_canonized",
+            "source": "branch",
+            "payload": {
+              "factId": "brineglass-void-orders-public-office",
+              "what": "Mira placed her entire packet of Venn’s void orders in the Office of Amber Weights public notice cage, keeping no secret copy."
+            }
+          }
+        ]
+      },
+      "nearMiss": {
+        "narration": "The hasp opens, but the office bell gives one clipped note. You get every page behind the glass before a lamp ignites upstairs. The evidence is public; so is the fact that someone breached the cage.",
+        "events": [
+          {
+            "type": "item_transfer",
+            "source": "branch",
+            "payload": {
+              "itemId": "msg89nxu08g6s",
+              "to": {
+                "kind": "object",
+                "ref": "walk:frontier-s0-0:s5:office-public-notice-cage",
+                "name": "the Office public notice cage"
+              },
+              "intent": "place",
+              "note": "Mira publishes her entire packet of Venn’s void orders in the Office notice cage and keeps no secret copy."
+            }
+          },
+          {
+            "type": "clock_advanced",
+            "source": "branch",
+            "payload": {
+              "clockId": "The Crier’s Circle",
+              "delta": 1
+            }
+          }
+        ]
+      },
+      "fail": {
+        "narration": "The spring snaps back and the office bell rings twice. A lamp blooms behind the amber windows; boots strike the stair. The packet is still in your hand, but the office network now knows someone tried to breach its public cage.",
+        "events": [
+          {
+            "type": "clock_advanced",
+            "source": "branch",
+            "payload": {
+              "clockId": "The Crier’s Circle",
+              "delta": 1
+            }
+          }
+        ]
+      }
+    }
+  }
+}

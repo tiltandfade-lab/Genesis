@@ -1,0 +1,36 @@
+{
+  "turnId": "t-msg6esarvu8nw",
+  "narration": "Katherine teaches the test under her full name, making the crowd repeat its warning until nobody confuses an answer with truth. Tessa locks the scarf-wrapped tube beside the public order and accepts the rule: never question it alone. After noon you take Naivara’s road. By one, the raised salt stones enter a ruined quarter where old laws show beneath newer signs. Wind moans through a chained platform above a dark drop; the abandoned toll bell rings once ahead, though the street is empty.",
+  "events": [
+    {
+      "type": "advance_clock",
+      "payload": {
+        "minutes": 181,
+        "cause": "Katherine Holloway’s public Second-Click Test"
+      },
+      "source": "declared"
+    },
+    {
+      "type": "item_transfer",
+      "payload": {
+        "itemId": "msfks9i9ne5sr",
+        "to": {
+          "kind": "npc",
+          "ref": "npc:tessa-rill",
+          "name": "Tessa Rill"
+        },
+        "intent": "entrust",
+        "note": "Tessa keeps the First Answer Tube wrapped and ensures nobody questions it alone."
+      },
+      "source": "declared"
+    },
+    {
+      "type": "start_walk",
+      "payload": {
+        "nodeId": "frontier-s0-0",
+        "enter": true
+      },
+      "source": "declared"
+    }
+  ]
+}

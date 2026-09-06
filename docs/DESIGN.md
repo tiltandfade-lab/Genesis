@@ -3,7 +3,7 @@ type: design-doc
 branch: Genesis
 status: living
 created: 2026-06-17
-updated: 2026-07-27
+updated: 2026-08-05
 canonical: true
 related:
   - "[[genesis.html]]"
@@ -15,6 +15,47 @@ related:
 # Genesis — Design Doc (canonical)
 
 This is the source-of-truth design doc for the Genesis branch. `README.md` is a short orientation pointer; this file holds the thinking. Update this in the same change as any architectural decision.
+
+## Locked implementation rules (2026-08-05 — zero-provider soak before provider spend)
+
+| Decision | Choice |
+|---|---|
+| Provider gate | **A green synthetic corpus is necessary but not sufficient.** Continue a preserved campaign copy until longer play stops exposing P0/P1 engine defects. Paid comparison uses copied fixtures only and remains gated while the zero-provider soak is still finding correctness gaps. |
+| Continuity retrieval | **Action nouns and aging continuity nouns are different authority.** Exact/current action identities refresh a two-turn band; records merely carried by that band do not refresh themselves. An explicit subject pivot drops stale context unless the new utterance contains a genuine object reference. Byte fitting preserves every explicitly addressed identity and newest story fields before rolled casting boilerplate. |
+| Local facts | Exact authoritative display questions—including named custody and combined HP/conditions/lasting marks—use a zero-model local route. Any consequential clause keeps the action open for DM interpretation. |
+| Narration budget | Output ceilings are prompt guidance plus measured telemetry, never destructive truncation. Record narration words, the active maximum, and a miss flag so provider evaluation can distinguish a fast model from an overlong answer. |
+| Soak evidence | A resumable campaign soak must preserve the source save, current state, transcript/telemetry, and future exact turn/response/roll packets. Terminal history is not evidence. |
+
+## Locked decisions (2026-08-04 — mechanize bookkeeping, preserve rulings)
+
+| Decision | Choice |
+|---|---|
+| Mechanization boundary | **Mechanize nouns, numbers, and receipts—not interpretation or possibility.** The engine owns identity/state/custody, dice, arithmetic, resources, clocks, persistence, and accepted mutations. The AI DM owns intent, rule applicability, check/DC/advantage/stakes, exceptions, acting, interpretation, and meaning. “The script does rules” means it executes applicable rule math exactly; it does not decide that a novel fictional action fits a rule without adjudication. Full evidence/contract: `MECHANIZATION-INTERPRETATION-BOUNDARY.md`. |
+| Execution routing | **Three conservative modes:** `local-fact`, `declared-mechanic`, `freeform-ruling`. Only exact factual display requests and explicit UI/mechanic declarations may bypass open adjudication. Unknown or contextual free text defaults to `freeform-ruling`; verb keywords never become a closed command vocabulary. `dmTriage` remains a separate fast/deep quality floor and may not decide execution authority. |
+| Open ruling contract | A freeform turn may carry an open proposal covering understood action, ruling, roll need/check, stakes, branches, and proposed events. The proposal is not state. Only accepted top-level events/receipts can mutate the world. This preserves D&D-style flexibility while keeping the ledger exact. |
+| Mechanics-first proof | An exact declared short/long rest resolves through the real engine before narration. Its immutable `mechanical-receipt/v1` relevant-before/result/after envelope rides the digest; narration cannot replay the settled `rest` event. This is the first proof, not permission to auto-resolve attacks, item use, travel, or novel object interactions. |
+| Atomic item custody | `item_transfer` moves a whole or partial carried instance to an explicit stable holder in one engine operation. Whole moves preserve id; partial moves preserve the remainder id and mint the moved id; all item state follows identity; storied stacks cannot fork one Codex identity. PC/corpse owners keep their native stores, other holders use `w.itemCustody`, and only current-scene custody rides the digest. Natural-language placement remains open DM interpretation; only a trusted structured declaration may resolve before narration. |
+| Beat-shaped turn context | **The full `dmDigest()` is bootstrap/debug compatibility truth; ordinary turns receive sparse `beat-digest/v1`.** One deterministic view (`scene`, `inventory`, `combat`, `travel`, `social`) carries a small invariant situation core plus relevant state under a 3 KiB ordinary target. Named off-scene Codex nouns are retrieved before projection. Omission means not selected, never false; view selection cannot grant execution authority or narrow open intent. |
+| Latency acceptance | **Target meaningful feedback within 4 seconds; an 8-second silent wait is a failure signal, not a tolerable norm.** This is a measurement target, not a claimed current ceiling. Full resolution may take longer when real narration is already streaming or the player is engaged reading/rolling. Telemetry must separate route, mechanics, digest, request acknowledgement, first token/meaningful feedback, response completion, and input unlock before launch claims are made. |
+
+These rulings clarify the SPEED doctrine rather than weakening it: deterministic execution stays out
+of model loops, while AI reasoning remains available wherever applicability, intent, or meaning is
+actually open.
+
+## Locked decisions (2026-08-03 — text-first walk restoration)
+
+| Decision | Choice |
+|---|---|
+| Current product priority | **Infinite storytelling, persistent object/world state, realms, and the relevance-scoped AI digest return to the front of the build.** A battlefield or visual engine is not a prerequisite for play. This supersedes BattleMat/EngagementLens and the Golden visual campaign as the next required implementation cut, without deleting or invalidating their retained work. Full contract: `TEXT-FIRST-WALK-RESTORATION.md`. |
+| Presentation modes | **Story is the default.** Sprites are an optional 2D citizen/state layer. The full theater is preserved as explicit **Theater Lab** opt-in and future projection. Every mode consumes the same events/state; no visual failure or missing asset may narrow content or block play. |
+| Substantive walk size | **8–12 segments.** PC level controls threat, not world size. Short 1–3 beat errands remain scene chains and do not consume full-walk topologies. This supersedes the built level-scaled 3–7/3–5 prep default and executes the 2026-07-08 `HOOK-WALKS` functional-layout ruling. |
+| Walk switching | **Focus is not lifecycle.** Starting/focusing walk B suspends walk A with its cursor and state intact; only explicit abandonment or resolution closes it. This executes the adopted resume-with-staleness direction and supersedes implicit `walkCloseOrphan` abandonment. |
+| First realization priority | **Sparse persistent object assertions.** Untouched detail may re-derive; touched/named/mechanically relevant nouns gain stable identity and state. First proof: interact → leave/suspend → save/reload → resume → same state. |
+| Realms and Golden states | **Semantic/state systems first.** Realms constrain engine nouns and meaning independent of art. Golden Sites remain integration proofs; host programs and ordered state transforms remain valuable even when no geometry is materialized. |
+
+These rulings amend implementation priority, not history. Existing theater, Golden, material,
+sprite, spatial, and exact-cell work remains preserved behind its current seams and may resume
+later without an engine rewrite.
 
 > **Infra note (2026-07-18):** Repo came home to `~/Desktop/Work/projects/Genesis` (internal SSD); `/Volumes/Genesis/Genesis` is now the cold backup. **Git LFS is live** — all binaries are LFS-tracked, GitHub holds them (run `git lfs checkout` after a fresh clone). Heavy archival files (Reference PDFs, quarantine zips) live on the Google Drive **Genesis Cold Shelf** (`dev/cold-shelf/fetch-cold.mjs`). master rewritten to `e5511e98`. Full detail: CHANGELOG 2026-07-18 + HANDOFF Latest.
 

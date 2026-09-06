@@ -1,0 +1,36 @@
+{
+  "turnId": "t-msfk4ajx0324g",
+  "narration": "Your pause is half a heartbeat too long. The hidden voice says, \u201cThere is no ninth word.\u201d The inner bolt slams home. At once the warm draft reverses: your candle blows out, the loosened grate kicks upward, and a fist-thick jet of black brine punches through the gap between you and Katherine. Something pale and jointed flashes once in that water before vanishing downhill. Katherine is on the slick glass beside the open seam, one hand skidding toward it; the second peg has cracked, and the grate is now trying to lift from below.",
+  "events": [
+    {
+      "type": "clock_advanced",
+      "payload": {
+        "clockId": "the-crier-s-circle",
+        "delta": 1
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    },
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "factId": "brineglass:hidden-listener-alerted",
+        "what": "The occupant beneath the Cobbled Tannery knows Crier's Circle countersign procedure, exposed Mira's bluff, and triggered a brine reversal through the concealed grate."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    }
+  ],
+  "rollRequest": null,
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Resolve Mira's failed attempt to bluff the hidden occupant through the countersign challenge.",
+    "ruling": "A total of 9 fails the DC 14 deception. The occupant identifies the impersonation and reacts defensively; Mira's declared intent is not granted.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "Katherine is in immediate danger, the access is destabilizing, and the Circle's situation advances because someone used its protocol falsely.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 8: honest failed objective with a concrete, player-caused crisis. Stops before deciding how Mira rescues Katherine or handles the grate."
+}

@@ -1,0 +1,23 @@
+{
+  "turnId": "t-msg6k5yhimy92",
+  "narration": "The bedroll cloth deadens your first step, but the roof is laid to betray weight, not footwear: gravel shifts under the boards and clicks against a glass channel hidden in the wall. Your slow pace gives you a chance to cross between its pulses. A clean passage would reach the guard post unseen; a loud one will ring the toll bell for whoever waits beyond. Make a Dexterity (Stealth) check, DC 13—the improvised wraps have lowered the usual difficulty.",
+  "events": [],
+  "rollRequest": {
+    "skill": "Stealth",
+    "ability": "dex",
+    "dc": 13,
+    "adv": null
+  },
+  "ruling": {
+    "understoodAction": "Muffle the loose-gravel alarm with strips cut from the bedroll and cross cautiously.",
+    "ruling": "The idea helps but cannot bypass a pressure channel built under the whole passage; it lowers the Stealth DC from 15 to 13.",
+    "needsRoll": true,
+    "proposedCheck": {
+      "skill": "Stealth",
+      "dc": 13
+    },
+    "stakes": "Success reaches the next section unseen; failure rings the toll bell and gives the guards the initiative.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  }
+}

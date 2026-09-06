@@ -1,0 +1,48 @@
+{
+  "turnId": "t-msfk1t5eawavp",
+  "narration": "The first peg slides free with a glassy chirp. The grate lifts a finger\u2019s width and exhales hard enough to flatten the candle flame; warm salt air\u2014not rain-cold wind\u2014spills around your boots. William looks from the opening to the families running downhill. \u201cI\u2019ll turn them here,\u201d he says. \u201cIf this is a trap, keep it alive until I return.\u201d He sprints into the rain, striking your three-note rhythm on his message tube. The child stays, counting the two remaining pegs aloud while your candle marks the draft.",
+  "events": [
+    {
+      "type": "item_transfer",
+      "payload": {
+        "itemId": "msfjud9rqgk9r",
+        "qty": 1,
+        "to": {
+          "kind": "object",
+          "ref": "low-sluice-grate",
+          "name": "concealed Low Sluice grate"
+        },
+        "note": "Mira wedges one lit candle at the concealed grate as an airflow marker."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    },
+    {
+      "type": "fact_canonized",
+      "payload": {
+        "factId": "brineglass:low-sluice-grate-opened",
+        "what": "Mira removed the first of three glass pegs from the concealed Low Sluice grate; warm salt air exhales through the gap."
+      },
+      "source": "declared",
+      "ledgerRefs": []
+    }
+  ],
+  "gen": [
+    {
+      "kind": "npc",
+      "opts": {}
+    }
+  ],
+  "rollRequest": null,
+  "ask": null,
+  "ruling": {
+    "understoodAction": "Anchor a candle at the grate, enlist William to redirect evacuees, and begin opening the concealed access.",
+    "ruling": "The first peg is accessible and yields without a check. William's aligned goal makes the request reasonable; the remaining opening may reveal risk.",
+    "needsRoll": false,
+    "proposedCheck": null,
+    "stakes": "Two pegs remain while evacuees are being redirected to this uncertain shelter route.",
+    "outcomeBranches": null,
+    "proposedEvents": []
+  },
+  "dmNotes": "Turn 5: player divided the problem and chose the route. Candle custody is persisted; recurring child is minted now. No forced descent."
+}
